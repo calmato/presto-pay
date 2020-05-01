@@ -1,6 +1,6 @@
 # バックエンド
 
-[root](./../README.md) 
+[root](./../../README.md) 
 / [02_backend](./README.md)
 
 # 各種ドキュメント

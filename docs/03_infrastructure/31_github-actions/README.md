@@ -1,6 +1,6 @@
 # インフラストラクチャ - Github Actions
 
-[root](./../../README.md) 
+[root](./../../../README.md) 
 / [03_infrastructure](./../README.md) 
 / [31_github-actions](./README.md)
 

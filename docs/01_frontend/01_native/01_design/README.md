@@ -1,6 +1,6 @@
 # ネイティブアプリ - 設計
 
-[root](./../../../README.md) 
+[root](./../../../../README.md) 
 / [01_frontend](./../../README.md) 
 / [01_native](./../README.md) 
 / [01_design](./README.md)

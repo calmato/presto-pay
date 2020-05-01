@@ -1,6 +1,6 @@
 # バックエンド - Calc Service
 
-[root](./../../README.md) 
+[root](./../../../README.md) 
 / [02_backend](./../README.md) 
 / [12_calc](./README.md)
 

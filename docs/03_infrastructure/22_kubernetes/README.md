@@ -1,6 +1,6 @@
 # インフラストラクチャ - Kubernetes
 
-[root](./../../README.md) 
+[root](./../../../README.md) 
 / [03_infrastructure](./../README.md) 
 / [22_kubernetes](./README.md)
 

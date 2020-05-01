@@ -1,6 +1,6 @@
 # インフラストラクチャ
 
-[root](./../README.md) 
+[root](./../../README.md) 
 / [03_infrastructure](./README.md)
 
 # 各種ドキュメント

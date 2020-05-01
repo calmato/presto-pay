@@ -1,6 +1,6 @@
 # バックエンド - Swagger
 
-[root](./../../README.md) 
+[root](./../../../README.md) 
 / [02_backend](./../README.md) 
 / [21_swagger](./README.md)
 

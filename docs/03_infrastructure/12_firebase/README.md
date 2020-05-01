@@ -1,6 +1,6 @@
 # インフラストラクチャ - Firebase
 
-[root](./../../README.md) 
+[root](./../../../README.md) 
 / [03_infrastructure](./../README.md) 
 / [12_firebase](./README.md)
 
