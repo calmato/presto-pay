@@ -5,3 +5,6 @@
 / [01_design](./README.md)
 
 # 各種ドキュメント
+
+* 構成図
+  * latest: 構成図_20200502a.pdf
