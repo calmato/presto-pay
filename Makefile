@@ -17,6 +17,9 @@ install:
 start:
 	docker-compose up
 
+stop:
+	docker-compose stop
+
 logs:
 	docker-compose logs
 
