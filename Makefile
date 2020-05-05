@@ -1,7 +1,7 @@
 ##################################################
 # Container Commands - Run all containers
 ##################################################
-.PHONY: setup install start
+.PHONY: setup build install start log
 
 setup:
 	cp $(PWD)/.env.temp $(PWD)/.env
@@ -16,3 +16,17 @@ install:
 
 start:
 	docker-compose up
+
+logs:
+	docker-compose logs
+
+##################################################
+# Container Commands - Swagger
+##################################################
+.PHONY: swagger-open swagger-edit
+
+swagger-open:
+	open http://localhost:8000
+
+swagger-edit:
+	open http://localhost:8001
