@@ -1,6 +1,18 @@
 version: '3.7'
 
 services:
+  proxy:
+    container_name: presto_pay_proxy
+    build:
+      context: ./infra/docker/envoy
+      dockerfile: Dockerfile_development
+    volumes:
+      - ./infra/envoy/development.yaml:/etc/envoy/envoy.yaml:cached
+    ports:
+      - 8080:8080
+      - 9090:9090
+    command: envoy -c /etc/envoy/envoy.yaml
+
   user_api:
     container_name: presto_pay_user_api
     build:
