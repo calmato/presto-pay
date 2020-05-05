@@ -26,7 +26,7 @@ vet:
 	go vet ./... $(PACKAGES)
 
 lint:
-	$(BIN)/golangci-lint run -c .golangci.yml ./...
+	$(BIN)/golangci-lint run -c .golangci.yaml ./...
 
 test:
 	go test -v -cover ./internal/...
@@ -36,7 +36,7 @@ test:
 # * pull request -> -reporter='github-pr-review'
 .PHONY: review
 review:
-	$(BIN)/golangci-lint run -c .golangci.yml --out-format line-number ./... \
+	$(BIN)/golangci-lint run -c .golangci.yaml --out-format line-number ./... \
 	| $(BIN)/reviewdog -f=golangci-lint --name=golangci-lint ${REVIEWDOG_ARG}
 
 .PHONY: build-mocks
