@@ -1,0 +1,43 @@
+version: '3.7'
+
+services:
+  proxy:
+    container_name: presto_pay_proxy
+    build:
+      context: ./infra/docker/envoy
+      dockerfile: Dockerfile_development
+    volumes:
+      - ./infra/envoy/development.yaml:/etc/envoy/envoy.yaml:cached
+    ports:
+      - 8080:8080
+      - 9090:9090
+    command: envoy -c /etc/envoy/envoy.yaml
+
+  user_api:
+    container_name: presto_pay_user_api
+    build:
+      context: ./infra/docker/api/user
+      dockerfile: Dockerfile_development
+    working_dir: /go/src/github.com/calmato/presto-pay/api/user
+    volumes:
+      - ./api/user:/go/src/github.com/calmato/presto-pay/api/user:cached
+      - ./secrets:/secrets
+    command: realize start
+
+  swagger_viewer:
+    container_name: presto_pay_swagger_viewer
+    build:
+      context: ./infra/docker/swagger/viewer
+    volumes:
+      - ./docs/12_backend/21_swagger/apiv1.yaml:/swagger.yaml:cached
+    ports:
+      - 8000:8080
+    environment:
+      SWAGGER_JSON: /swagger.yaml
+
+  swagger_editor:
+    container_name: presto_pay_swagger_editor
+    build:
+      context: ./infra/docker/swagger/editor
+    ports:
+      - 8001:8080

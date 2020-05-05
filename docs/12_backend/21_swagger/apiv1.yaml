@@ -1,0 +1,124 @@
+openapi: '3.0.0'
+
+info:
+  title: Presto Pay
+  description: 割り勘アプリ API設計
+  version: 0.1.0
+
+servers:
+  - url: http://localhost:8080/v1
+    description: 開発環境
+
+paths:
+  /{id}:
+    post:
+      summary: Sampleエンドポイント
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: ID
+      requestBody:
+        $ref: '#/components/requestBodies/SampleRequest'
+      responses:
+        '200':
+          $ref: '#/components/responses/SampleResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/Unkown'
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+
+  schemas:
+    Error:
+      title: エラーレスポンス
+      type: object
+      properties:
+        status:
+          type: integer
+          description: HTTPステータスコード
+        code:
+          type: integer
+          description: エラー管理用ステータスコード
+        message:
+          type: string
+          description: エラーメッセージ
+        errors:
+          type: array
+          description: エラー詳細
+          items:
+            properties:
+              field:
+                type: string
+              message:
+                type: string
+
+  requestBodies:
+    SampleRequest:
+      description: サンプルフォーム
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+                description: Name
+            required:
+              - name
+
+  responses:
+    BadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Conflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unkown:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+    SampleResponse:
+      description: サンプルレスポンス
+      content:
+        application/json:
+          schema:
+            properties:
+              id:
+                type: string
+                description: ID

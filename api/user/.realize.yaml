@@ -1,0 +1,26 @@
+settings:
+  legacy:
+    force: false
+    interval: 0s
+
+schema:
+  - name: user_api
+    path: .
+    commands:
+      install:
+        status: true
+        method: go build -o app ./cmd/main.go
+      run:
+        status: true
+        method: ./app
+    watcher:
+      extensions:
+        - go
+      paths:
+        - .
+      ignore_paths:
+        - .gitignore
+        - bin
+        - mock
+        - go.mod
+        - go.sum

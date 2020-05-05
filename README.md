@@ -2,6 +2,9 @@
 
 割り勘アプリ
 
+![User API(Golang) Build and Test](https://github.com/calmato/presto-pay/workflows/User%20API(Golang)%20Build%20and%20Test/badge.svg)
+![User API(Golang) Reviewdog](https://github.com/calmato/presto-pay/workflows/User%20API(Golang)%20Reviewdog/badge.svg)  
+
 ## 各種設定
 
 <details open>
@@ -13,7 +16,24 @@
 <details open>
 <summary>環境構築</summary>
 
-* WIP
+### リポジトリのダウンロード
+
+> $ git clone https://github.com/calmato/presto-pay.git
+
+> $ cd ./presto-pay
+
+### コンテナの初期設定
+
+* コンテナの作成
+
+> $ make setup
+
+* [WIP] .envファイルの編集
+
+### コンテナの起動
+
+> $ make start
+
 </details>
 
 ## その他
@@ -21,7 +41,14 @@
 <details>
 <summary>コマンド一覧</summary>
 
-* WIP
+|     コマンド      |                                                                                        |
+| :---------------- | :------------------------------------------------------------------------------------- |
+| make setup        | * 初回のみ実行                                                                         |
+| make install      | * コンテナ内にライブラリをインストール<br>* ライブラリを更新する際はこのコマンドを使用 |
+| make start        | * コンテナの起動                                                                       |
+| make stop         | * コンテナの停止                                                                       |
+| make logs         | * コンテナのログを取得                                                                 |
+| make swagger-open | API仕様書を見る                                                                        |
 </details>
 
 <details>
