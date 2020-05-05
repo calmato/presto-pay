@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/calmato/presto-pay/api/user/config"
+	"github.com/calmato/presto-pay/api/user/registry"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -17,8 +18,10 @@ func main() {
 		log.Panic(err)
 	}
 
+	reg := registry.NewRegistry()
+
 	// サーバ起動
-	r := config.Router()
+	r := config.Router(reg)
 	if err := http.ListenAndServe(":"+e.Port, r); err != nil {
 		log.Panic(err)
 	}

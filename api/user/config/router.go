@@ -1,18 +1,20 @@
 package config
 
 import (
+	"github.com/calmato/presto-pay/api/user/registry"
 	"github.com/gin-gonic/gin"
 )
 
 // Router - ルーティングの定義
-func Router() *gin.Engine {
+func Router(reg *registry.Registry) *gin.Engine {
 	r := gin.Default()
 
-	// TODO: Cors設定
+	// Cors設定
+	r.Use(SetCors())
 
 	// TODO: Logging設定
 
-	// TODO: health checkのエンドポイント実装
+	r.GET("/health", reg.Health.HealthCheck)
 
 	return r
 }
