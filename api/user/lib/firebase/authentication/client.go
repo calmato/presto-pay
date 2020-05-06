@@ -86,7 +86,7 @@ func (a *Auth) UpdatePassword(ctx context.Context, uid string, password string) 
 // UpdateActivated - アカウントの状態を変更
 func (a *Auth) UpdateActivated(ctx context.Context, uid string, disabled bool) error {
 	params := (&auth.UserToUpdate{}).
-		disabled(disabled)
+		Disabled(disabled)
 
 	if _, err := a.Client.UpdateUser(ctx, uid, params); err != nil {
 		return err

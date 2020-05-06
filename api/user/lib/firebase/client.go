@@ -13,7 +13,7 @@ type Client struct {
 }
 
 // InitializeApp - Cloud Firebase SDKの初期化
-func InitializeApp(ctx context.Context, config *firebase.Config, opts ...option.ClientOption) (*Firebase, error) {
+func InitializeApp(ctx context.Context, config *firebase.Config, opts ...option.ClientOption) (*Client, error) {
 	app, err := firebase.NewApp(ctx, config, opts...)
 	if err != nil {
 		return nil, err
