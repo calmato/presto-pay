@@ -22,6 +22,8 @@ services:
     volumes:
       - ./api/user:/go/src/github.com/calmato/presto-pay/api/user:cached
       - ./secrets:/secrets
+    environment:
+      - GOOGLE_APPLICATION_CREDENTIALS=${GOOGLE_APPLICATION_CREDENTIALS}
     command: realize start
 
   swagger_viewer:
