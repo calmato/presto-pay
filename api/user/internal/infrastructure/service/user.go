@@ -4,8 +4,10 @@ import (
 	"context"
 	"time"
 
+	"github.com/calmato/presto-pay/api/user/internal/domain"
 	"github.com/calmato/presto-pay/api/user/internal/domain/user"
 	"github.com/google/uuid"
+	"golang.org/x/xerrors"
 )
 
 type userService struct {
@@ -30,10 +32,10 @@ func (us *userService) Create(ctx context.Context, u *user.User) error {
 		err := xerrors.New("Failed to Domain/DomainValidation")
 
 		if isContainCustomUniqueError(ves) {
-			return nil, domain.AlreadyExists.New(err, ves...)
+			return domain.AlreadyExistsInDatastore.New(err, ves...)
 		}
 
-		return nil, domain.Unknown.New(err, ves...)
+		return domain.Unknown.New(err, ves...)
 	}
 
 	current := time.Now()
@@ -62,7 +64,7 @@ func (us *userService) UploadThumbnail(ctx context.Context, data []byte) (string
 
 func isContainCustomUniqueError(ves []*domain.ValidationError) bool {
 	for _, v := range ves {
-		if v.Message == validation.CustomUniqueMessage {
+		if v.Message == domain.CustomUniqueMessage {
 			return true
 		}
 	}

@@ -9,11 +9,11 @@ import (
 )
 
 type userDomainValidation struct {
-	userRepository repository.UserRepository
+	userRepository user.UserRepository
 }
 
 // NewUserDomainValidation - UserDomainValidationの生成
-func NewUserDomainValidation(ur repository.UserRepository) user.UserDomainValidation {
+func NewUserDomainValidation(ur user.UserRepository) user.UserDomainValidation {
 	return &userDomainValidation{
 		userRepository: ur,
 	}

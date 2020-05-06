@@ -7,7 +7,9 @@ import (
 
 	"github.com/calmato/presto-pay/api/user/internal/application/request"
 	"github.com/calmato/presto-pay/api/user/internal/application/validation"
+	"github.com/calmato/presto-pay/api/user/internal/domain"
 	"github.com/calmato/presto-pay/api/user/internal/domain/user"
+	"golang.org/x/xerrors"
 )
 
 // UserApplication - UserApplicationインターフェース
@@ -53,11 +55,11 @@ func (ua *userApplication) Create(ctx context.Context, req *request.CreateUser) 
 		}
 	}
 
-	u := &domain.User{
-		Nmae:         req.Name,
+	u := &user.User{
+		Name:         req.Name,
 		DisplayName:  req.DisplayName,
 		Email:        req.Email,
-		thumbnailURL: thumbnailURL,
+		ThumbnailURL: thumbnailURL,
 		Password:     req.Password,
 	}
 

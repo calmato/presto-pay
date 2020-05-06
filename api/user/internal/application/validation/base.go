@@ -3,6 +3,7 @@ package validation
 import (
 	"fmt"
 	"reflect"
+	"regexp"
 
 	"github.com/calmato/presto-pay/api/user/internal/domain"
 	"github.com/go-playground/validator/v10"
@@ -21,10 +22,22 @@ type requestValidator struct {
 func NewRequestValidator() RequestValidator {
 	validate := validator.New()
 
+	if err := validate.RegisterValidation("password", passwordCheck); err != nil {
+		return nil
+	}
+
 	return &requestValidator{
 		validate: *validate,
 	}
 }
+
+const (
+	passwordString = "^[a-zA-Z0-9_!@#$_%^&*.?()-=+]*$"
+)
+
+var (
+	passwordRegex = regexp.MustCompile(passwordString)
+)
 
 // Run - バリデーションの実行
 func (rv *requestValidator) Run(i interface{}) []*domain.ValidationError {
@@ -58,6 +71,10 @@ func (rv *requestValidator) Run(i interface{}) []*domain.ValidationError {
 	}
 
 	return validationErrors
+}
+
+func passwordCheck(fl validator.FieldLevel) bool {
+	return passwordRegex.MatchString(fl.Field().String())
 }
 
 func validationMessage(tag string, options ...string) string {

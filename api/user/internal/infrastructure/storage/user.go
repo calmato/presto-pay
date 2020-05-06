@@ -3,6 +3,7 @@ package storage
 import (
 	"context"
 
+	"github.com/calmato/presto-pay/api/user/internal/domain/user"
 	gcs "github.com/calmato/presto-pay/api/user/lib/firebase/storage"
 )
 

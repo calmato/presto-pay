@@ -8,6 +8,7 @@ import (
 	"github.com/calmato/presto-pay/api/user/internal/domain"
 	"github.com/calmato/presto-pay/api/user/internal/interface/handler"
 	"github.com/calmato/presto-pay/api/user/middleware"
+	"github.com/gin-gonic/gin"
 )
 
 // APIV1UserHandler - Userハンドラのインターフェース
@@ -27,15 +28,14 @@ func NewAPIV1UserHandler(ua application.UserApplication) APIV1UserHandler {
 }
 
 func (uh *apiV1UserHandler) Create(ctx *gin.Context) {
-	c := middleware.GinContextToContext(ctx)
-
 	req := &request.CreateUser{}
 	if err := ctx.BindJSON(req); err != nil {
-		handler.ErrorHandling(c, domain.UnableParseJSON.New(err))
+		handler.ErrorHandling(ctx, domain.UnableParseJSON.New(err))
 		return
 	}
 
-	if err := uh.userApplication.Create(ctx, req); err != nil {
+	c := middleware.GinContextToContext(ctx)
+	if err := uh.userApplication.Create(c, req); err != nil {
 		handler.ErrorHandling(ctx, err)
 		return
 	}

@@ -15,7 +15,7 @@ type Registry struct {
 }
 
 // NewRegistry - internalディレクトリ配下のファイルを読み込み
-func NewRegistry(_ *authentication.Auth, _ *firestore.Firestore, cs *storage.Storage) *Registry {
+func NewRegistry(fa *authentication.Auth, fs *firestore.Firestore, cs *storage.Storage) *Registry {
 	health := healthInjection()
 	v1User := v1UserInjection(fa, fs, cs)
 

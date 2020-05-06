@@ -14,7 +14,7 @@ type userRepository struct {
 }
 
 // NewUserRepository - UserRepositoryの生成
-func NewUserRepository(fa *authentication.Auth, fs *firestore.Firestore) *user.UserRepository {
+func NewUserRepository(fa *authentication.Auth, fs *firestore.Firestore) user.UserRepository {
 	return &userRepository{
 		auth:      fa,
 		firestore: fs,
@@ -24,12 +24,10 @@ func NewUserRepository(fa *authentication.Auth, fs *firestore.Firestore) *user.U
 func (ur *userRepository) Create(ctx context.Context, u *user.User) error {
 	userReference := getUserReference()
 
-	uid, err := ur.auth.CreateUser(ctx, u.Email, u.Password)
+	_, err := ur.auth.CreateUser(ctx, u.ID, u.Email, u.Password)
 	if err != nil {
 		return err
 	}
-
-	u.ID = uid
 
 	if err = ur.firestore.Set(ctx, userReference, u.ID, u); err != nil {
 		return err
