@@ -1,8 +1,6 @@
 package handler
 
 import (
-	"encoding/json"
-
 	"github.com/calmato/presto-pay/api/user/internal/application/response"
 	"github.com/calmato/presto-pay/api/user/internal/domain"
 	"github.com/gin-gonic/gin"
@@ -94,8 +92,7 @@ func logging(level outputLevel, message string, err error, res *response.ErrorRe
 	}
 
 	if len(res.ValidationErrors) > 0 {
-		b, _ := json.Marshal(res.ValidationErrors)
-		fields["validationErrors"] = b
+		fields["validationErrors"] = res.ValidationErrors
 	}
 
 	switch level {
