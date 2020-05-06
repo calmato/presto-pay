@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	"github.com/calmato/presto-pay/api/user/domain/user"
+	"github.com/calmato/presto-pay/api/user/internal/domain/user"
 	"github.com/google/uuid"
 )
 
@@ -21,7 +21,7 @@ func NewUserService(
 	return &userService{
 		userDomainValidation: udv,
 		userRepository:       ur,
-		fileUploader:         fu,
+		userUploader:         uu,
 	}
 }
 
