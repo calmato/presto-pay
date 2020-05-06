@@ -13,7 +13,7 @@ import (
 type outputLevel int
 
 const (
-	debugLevel = iota
+	debugLevel outputLevel = iota
 	infoLevel
 	warnLevel
 	errorLevel
@@ -87,7 +87,7 @@ func getErrorResponse(err error) *response.ErrorResponse {
 	return &res
 }
 
-func logging(level int, message string, err error, res *response.ErrorResponse) {
+func logging(level outputLevel, message string, err error, res *response.ErrorResponse) {
 	fields := log.Fields{
 		"message":   message,
 		"errorCode": res.ErrorCode,
