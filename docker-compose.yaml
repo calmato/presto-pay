@@ -24,6 +24,7 @@ services:
       - ./secrets:/secrets
     environment:
       - GOOGLE_APPLICATION_CREDENTIALS=${GOOGLE_APPLICATION_CREDENTIALS}
+      - GCP_STORAGE_BUCKET_NAME=${GCP_STORAGE_BUCKET_NAME}
     command: realize start
 
   swagger_viewer:
