@@ -3,6 +3,7 @@ package config
 import (
 	"github.com/calmato/presto-pay/api/user/internal/domain"
 	"github.com/calmato/presto-pay/api/user/internal/interface/handler"
+	"github.com/calmato/presto-pay/api/user/middleware"
 	"github.com/calmato/presto-pay/api/user/registry"
 	"github.com/gin-gonic/gin"
 	"golang.org/x/xerrors"
@@ -15,7 +16,8 @@ func Router(reg *registry.Registry) *gin.Engine {
 	// Cors設定
 	r.Use(SetCors())
 
-	// TODO: Logging設定
+	// Logging設定
+	r.Use(middleware.Logging())
 
 	r.GET("/health", reg.Health.HealthCheck)
 
