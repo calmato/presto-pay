@@ -8,6 +8,7 @@ import (
 	"github.com/calmato/presto-pay/api/user/lib/firebase"
 	"github.com/calmato/presto-pay/api/user/lib/firebase/authentication"
 	"github.com/calmato/presto-pay/api/user/lib/firebase/firestore"
+	"github.com/calmato/presto-pay/api/user/lib/firebase/storage"
 	"github.com/calmato/presto-pay/api/user/registry"
 	log "github.com/sirupsen/logrus"
 	"google.golang.org/api/option"
@@ -47,7 +48,13 @@ func main() {
 	}
 	defer fs.Close()
 
-	reg := registry.NewRegistry(fa, fs)
+	// Cloud Storage
+	cs, err := storage.NewClient(ctx, fb.App, e.GCPStorageBucketName)
+	if err != nil {
+		panic(err)
+	}
+
+	reg := registry.NewRegistry(fa, fs, cs)
 
 	// サーバ起動
 	r := config.Router(reg)
