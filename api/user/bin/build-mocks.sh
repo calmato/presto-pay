@@ -6,25 +6,32 @@ if [ ! -f /go/bin/mockgen ]; then
   exit 1
 fi
 
-# --- Main ---
-main() {
+#############################
+# Function
+#############################
+build_mock() {
   dir_name=$1
-  mkdir -p mock/${dir_name}
+  target=$2
 
-  paths=$(find internal/$1 -name *.go \
+  paths=$(find internal/${dir_name} -name ${target} \
     | grep -vE 'test|base' \
-    | awk -v var=${dir_name} '{ print substr($0, index($0, var)) }')
+    | awk -v var=${dir_name} '{ print substr($0, index($0, var)) }') \
+    | sed -e "s/\/${target}$//"
 
   for path in ${paths}; do
-    mockgen -source internal/${path} -destination mock/${path}
+    mkdir -p mocks/${path}
+    mockgen -source internal/${path}/${target} -destination mock/${path}/${target}
   done
 }
 
+#############################
+# Target
+#############################
 # --- Domain ---
-main 'domain/repository'
-main 'domain/service'
-main 'domain/validation'
-main 'domain/uploader'
+build_mock 'domain' 'repository.go'
+build_mock 'domain' 'service.go'
+build_mock 'domain' 'uploader.go'
+build_mock 'domain' 'validation.go'
 
 # --- Application ---
-main 'application/validation'
+build_mock 'application/validation' '*.go'
