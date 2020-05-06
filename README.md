@@ -28,7 +28,13 @@
 
 > $ make setup
 
-* [WIP] .envファイルの編集
+* .envファイルの編集
+  * Firebaseの操作権限があるサービスアカウントの秘密鍵を `secretディレクトリ` にコピペ
+  * `secretsディレクトリ` にコピペしたファイル名に合わせて `GOOGLE_APPLICATION_CREDENTIALS` を編集
+
+```.env
+GOOGLE_APPLICATION_CREDENTIALS=/secrets/xxxxxx-firebase-adminsdk-xxxxxx.json
+```
 
 ### コンテナの起動
 
