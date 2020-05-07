@@ -30,10 +30,11 @@
 
 * .envファイルの編集
   * Firebaseの操作権限があるサービスアカウントの秘密鍵を `secretディレクトリ` にコピペ
-  * `secretsディレクトリ` にコピペしたファイル名に合わせて `GOOGLE_APPLICATION_CREDENTIALS` を編集
+    * -> `secretsディレクトリ` にコピペしたファイル名に合わせて `GOOGLE_APPLICATION_CREDENTIALS` を編集
 
 ```.env
 GOOGLE_APPLICATION_CREDENTIALS=/secrets/xxxxxx-firebase-adminsdk-xxxxxx.json
+GCP_STORAGE_BUCKET_NAME=xxxxxx.appspot.com
 ```
 
 ### コンテナの起動
@@ -54,7 +55,7 @@ GOOGLE_APPLICATION_CREDENTIALS=/secrets/xxxxxx-firebase-adminsdk-xxxxxx.json
 | make start        | * コンテナの起動                                                                       |
 | make stop         | * コンテナの停止                                                                       |
 | make logs         | * コンテナのログを取得                                                                 |
-| make swagger-open | API仕様書を見る                                                                        |
+| make swagger-open | * API仕様書を見る                                                                        |
 </details>
 
 <details>
