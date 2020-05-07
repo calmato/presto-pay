@@ -9,6 +9,8 @@ on:
 env:
   GCP_PROJECT_ID: ${{ secrets.STG_GCP_PROJECT_ID }}
   GCP_REGION: ${{ secrets.STG_GCP_REGION }}
+  GCP_SA_EMAIL: ${{ secrets.STG_GCP_SA_EMAIL }}
+  GCP_SA_KEY: ${{ secrets.STG_GCP_SA_KEY }}
   GCR_HOSTNAME: asia.gcr.io
   GCR_IMAGE_NAME: presto-pay-stg-user-api
   GCR_IMAGE_TAG: ${{ github.sha }}
