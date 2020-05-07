@@ -49,6 +49,7 @@ linters-settings:
 issues:
   exclude:
     - Using the variable on range scope .* in function literal
+    - func name will be used as * by other packages, and that stutters; consider calling this
   exclude-rules:
     - path: _test\.go
       linters:

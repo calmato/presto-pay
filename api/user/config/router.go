@@ -26,5 +26,11 @@ func Router(reg *registry.Registry) *gin.Engine {
 		handler.ErrorHandling(c, domain.NotFound.New(err))
 	})
 
+	// api v1 routes
+	apiV1 := r.Group("/v1")
+	{
+		apiV1.POST("/users", reg.V1User.Create)
+	}
+
 	return r
 }
