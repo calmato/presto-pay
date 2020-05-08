@@ -10,29 +10,18 @@ servers:
     description: 開発環境
 
 paths:
-  /{id}:
+  /users:
     post:
-      summary: Sampleエンドポイント
-      security:
-        - BearerAuth: []
-      parameters:
-        - in: path
-          name: id
-          schema:
-            type: string
-          required: true
-          description: ID
+      summary: ユーザー登録
       requestBody:
-        $ref: '#/components/requestBodies/SampleRequest'
+        $ref: '#/components/requestBodies/CreateUser'
       responses:
         '200':
-          $ref: '#/components/responses/SampleResponse'
+          description: OK
         '400':
           $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/Conflict'
         '500':
           $ref: '#/components/responses/Unkown'
 
@@ -67,8 +56,8 @@ components:
                 type: string
 
   requestBodies:
-    SampleRequest:
-      description: サンプルフォーム
+    CreateUser:
+      description: ユーザー作成フォーム
       required: true
       content:
         application/json:
@@ -77,9 +66,31 @@ components:
             properties:
               name:
                 type: string
-                description: Name
+                description: 氏名
+              displayName:
+                type: string
+                description: 表示名
+              email:
+                type: string
+                format: email
+                description: メールアドレス
+              thumbnail:
+                type: string
+                description: サムネイル
+              password:
+                type: string
+                format: password
+                description: パスワード
+              passwordConfirmation:
+                type: string
+                format: password
+                description: パスワード(確認用)
             required:
               - name
+              - displayName
+              - email
+              - password
+              - passwordConfirmation
 
   responses:
     BadRequest:
@@ -112,13 +123,3 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-
-    SampleResponse:
-      description: サンプルレスポンス
-      content:
-        application/json:
-          schema:
-            properties:
-              id:
-                type: string
-                description: ID
