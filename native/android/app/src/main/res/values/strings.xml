@@ -1,3 +1,12 @@
 <resources>
   <string name="app_name">PrestoPay</string>
+  <string name="create_new_account">アカウントを作成</string>
+  <string name="already_has_an_account">既にアカウントをお持ちの方</string>
+  <string name="upload_photo">写真を追加</string>
+  <string name="camera_icon">カメラのアイコン</string>
+  <string name="name">名前</string>
+  <string name="password">Password</string>
+  <string name="password_confirm">Password(確認用)</string>
+  <string name="email">Email</string>
+  <string name="username">ユーザーネーム</string>
 </resources>
