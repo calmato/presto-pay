@@ -9,4 +9,10 @@
   <string name="password_confirm">Password(確認用)</string>
   <string name="email">Email</string>
   <string name="username">ユーザーネーム</string>
+  <string name="presto_pay">Presto Pay</string>
+  <string name="mail_icon">メールのアイコン</string>
+  <string name="check_your_email">Check your email</string>
+  <string name="uses_mail_address">ユーザーのメールアドレス</string>
+  <string name="description">にメールを送信しました。\nメール内のリンクをクリックして\n登録を完了してください。</string>
+  <string name="navigate_to_login">ログイン画面へ</string>
 </resources>
