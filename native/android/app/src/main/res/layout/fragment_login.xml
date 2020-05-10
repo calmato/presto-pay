@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:background="#2BACFC"
+  tools:context=".MainActivity" >
+
+  <TextView
+    android:id="@+id/google_signin_button"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:fontFamily="sans-serif-medium"
+    android:text="@string/login_title"
+    android:textColor="@android:color/background_light"
+    android:textSize="32sp"
+    android:typeface="sans"
+    app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintHorizontal_bias="0.501"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintVertical_bias="0.789" />
+
+  <androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/constraintLayout"
+    android:layout_width="399dp"
+    android:layout_height="564dp"
+    android:background="#FFFFFF"
+    android:backgroundTint="#FFFFFF"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintVertical_bias="0.644">
+
+    <View
+      android:id="@+id/view"
+      android:layout_width="250dp"
+      android:layout_height="1dp"
+      android:background="#727474"
+      android:visibility="visible"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      app:layout_constraintVertical_bias="0.089" />
+
+    <Button
+      android:id="@+id/googleSingnin"
+      android:layout_width="337dp"
+      android:layout_height="43dp"
+      android:background="@drawable/border"
+      android:text="@string/google_signin"
+      android:textAlignment="center"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.516"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="@+id/view"
+      app:layout_constraintVertical_bias="0.07" />
+
+    <Button
+      android:id="@+id/twitterSignin"
+      android:layout_width="337dp"
+      android:layout_height="43dp"
+      android:background="@drawable/border"
+      android:text="@string/google_signin"
+      android:textAlignment="center"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.500"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/googleSingnin"
+      app:layout_constraintVertical_bias="0.067" />
+
+    <Button
+      android:id="@+id/githubSingin"
+      android:layout_width="337dp"
+      android:layout_height="43dp"
+      android:background="@drawable/border"
+      android:text="@string/google_signin"
+      android:textAlignment="center"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.500"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/twitterSignin"
+      app:layout_constraintVertical_bias="0.052" />
+
+    <ImageView
+      android:id="@+id/loginEmaiIcon"
+      android:layout_width="35dp"
+      android:layout_height="35dp"
+      android:layout_marginStart="32dp"
+      android:layout_marginBottom="20dp"
+      android:src="@drawable/mail"
+      app:layout_constraintBottom_toTopOf="@+id/loginPasswordIcon"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/githubSingin"
+      app:layout_constraintVertical_bias="1.0" />
+
+    <ImageView
+      android:id="@+id/loginPasswordIcon"
+      android:layout_width="35dp"
+      android:layout_height="35dp"
+      android:layout_marginStart="32dp"
+      android:layout_marginBottom="196dp"
+      android:src="@drawable/password"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+      android:id="@+id/loginEmail"
+      android:layout_width="286dp"
+      android:layout_height="47dp"
+      android:layout_marginTop="20dp"
+      android:ems="10"
+      android:hint="Email..."
+      android:inputType="textEmailAddress"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.152"
+      app:layout_constraintStart_toEndOf="@+id/loginEmaiIcon"
+      app:layout_constraintTop_toBottomOf="@+id/githubSingin" />
+
+    <EditText
+      android:id="@+id/loginPassword"
+      android:layout_width="286dp"
+      android:layout_height="46dp"
+      android:layout_marginTop="8dp"
+      android:autofillHints=""
+      android:ems="10"
+      android:hint="Password..."
+      android:inputType="textPassword"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.152"
+      app:layout_constraintStart_toEndOf="@+id/loginPasswordIcon"
+      app:layout_constraintTop_toBottomOf="@+id/loginEmail"
+      tools:ignore="MissingConstraints" />
+
+    <Button
+      android:id="@+id/loginButton"
+      android:layout_width="336dp"
+      android:layout_height="51dp"
+      android:layout_marginTop="16dp"
+      android:backgroundTint="#2BACFC"
+      android:fontFamily="sans-serif"
+      android:text="@string/login_button"
+      android:textColor="#FFFFFF"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.492"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/loginPassword"
+      tools:ignore="MissingConstraints" />
+
+    <EditText
+      android:id="@+id/loginNew"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:clickable="true"
+      android:ems="10"
+      android:inputType="textPersonName"
+      android:text="@string/login_new_button"
+      android:textAlignment="center"
+      android:textSize="12sp"
+      app:layout_constraintBottom_toTopOf="@+id/editText9"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/loginButton"
+      app:layout_constraintVertical_bias="0.0" />
+
+    <EditText
+      android:id="@+id/editText9"
+      android:layout_width="184dp"
+      android:layout_height="36dp"
+      android:layout_marginBottom="56dp"
+      android:ems="10"
+      android:inputType="textPersonName"
+      android:text="@string/login_forget_password"
+      android:textAlignment="center"
+      android:textSize="12sp"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.497"
+      app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+      android:id="@+id/googleSigninText"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="@string/google_signin_text"
+      android:textSize="18sp"
+      app:layout_constraintBottom_toBottomOf="@+id/googleSingnin"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="@+id/googleSingnin"
+      app:layout_constraintVertical_bias="0.526" />
+
+    <TextView
+      android:id="@+id/twitterSigninText"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="@string/twitter_signin_text"
+      android:textSize="18sp"
+      app:layout_constraintBottom_toBottomOf="@+id/twitterSignin"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="@+id/twitterSignin"
+      app:layout_constraintVertical_bias="0.473" />
+
+    <TextView
+      android:id="@+id/githubSigninText"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="@string/github_signin_text"
+      android:textSize="18sp"
+      app:layout_constraintBottom_toBottomOf="@+id/githubSingin"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.504"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="@+id/githubSingin"
+      app:layout_constraintVertical_bias="0.421" />
+
+    <ImageView
+      android:id="@+id/googleIcon"
+      android:layout_width="28dp"
+      android:layout_height="28dp"
+      android:src="@drawable/google"
+      app:layout_constraintBottom_toBottomOf="@+id/googleSingnin"
+      app:layout_constraintEnd_toStartOf="@+id/googleSigninText"
+      app:layout_constraintStart_toStartOf="@+id/googleSingnin"
+      app:layout_constraintTop_toTopOf="@+id/googleSingnin" />
+
+    <ImageView
+      android:id="@+id/twitterIcon"
+      android:layout_width="28dp"
+      android:layout_height="28dp"
+      android:src="@drawable/twitter"
+      app:layout_constraintBottom_toBottomOf="@+id/twitterSignin"
+      app:layout_constraintEnd_toStartOf="@+id/twitterSigninText"
+      app:layout_constraintStart_toStartOf="@+id/twitterSignin"
+      app:layout_constraintTop_toTopOf="@+id/twitterSignin" />
+
+    <ImageView
+      android:id="@+id/imageView11"
+      android:layout_width="28dp"
+      android:layout_height="28dp"
+      android:src="@drawable/github"
+      app:layout_constraintBottom_toBottomOf="@+id/githubSingin"
+      app:layout_constraintEnd_toStartOf="@+id/githubSigninText"
+      app:layout_constraintStart_toStartOf="@+id/githubSingin"
+      app:layout_constraintTop_toTopOf="@+id/githubSingin"
+      app:layout_constraintVertical_bias="0.423" />
+
+  </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
