@@ -6,7 +6,7 @@
   android:background="@color/ourTheme">
 
   <TextView
-    android:id="@+id/presto_pay_text"
+    android:id="@+id/prestoPayText"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:text="@string/presto_pay"
@@ -20,7 +20,7 @@
     app:layout_constraintVertical_bias="0.25" />
 
   <androidx.constraintlayout.widget.ConstraintLayout
-    android:id="@+id/parent_constraint_layout"
+    android:id="@+id/parentConstraintLayout"
     android:layout_width="0dp"
     android:layout_height="wrap_content"
     android:layout_marginStart="24dp"
@@ -29,10 +29,10 @@
     android:background="@android:color/background_light"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/presto_pay_text">
+    app:layout_constraintTop_toBottomOf="@+id/prestoPayText">
 
     <ImageView
-      android:id="@+id/mail_icon"
+      android:id="@+id/mailIcon"
       android:layout_width="61dp"
       android:layout_height="50dp"
       android:layout_marginTop="16dp"
@@ -44,7 +44,7 @@
       app:srcCompat="@android:drawable/ic_dialog_email" />
 
     <TextView
-      android:id="@+id/check_mail_text"
+      android:id="@+id/checkMailText"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginTop="32dp"
@@ -52,32 +52,32 @@
       android:textColor="@android:color/background_dark"
       android:textSize="24sp"
       android:textStyle="bold"
-      app:layout_constraintEnd_toEndOf="@+id/mail_icon"
-      app:layout_constraintStart_toStartOf="@+id/mail_icon"
-      app:layout_constraintTop_toBottomOf="@+id/mail_icon" />
+      app:layout_constraintEnd_toEndOf="@+id/mailIcon"
+      app:layout_constraintStart_toStartOf="@+id/mailIcon"
+      app:layout_constraintTop_toBottomOf="@+id/mailIcon" />
 
     <TextView
-      android:id="@+id/users_email"
+      android:id="@+id/usersEmail"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginTop="16dp"
       android:text="@string/uses_mail_address"
-      app:layout_constraintEnd_toEndOf="@+id/check_mail_text"
-      app:layout_constraintStart_toStartOf="@+id/check_mail_text"
-      app:layout_constraintTop_toBottomOf="@+id/check_mail_text" />
+      app:layout_constraintEnd_toEndOf="@+id/checkMailText"
+      app:layout_constraintStart_toStartOf="@+id/checkMailText"
+      app:layout_constraintTop_toBottomOf="@+id/checkMailText" />
 
     <TextView
-      android:id="@+id/description"
+      android:id="@+id/descriptionMailConfirmation"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:text="@string/description"
       android:textAlignment="center"
-      app:layout_constraintEnd_toEndOf="@+id/users_email"
-      app:layout_constraintStart_toStartOf="@+id/users_email"
-      app:layout_constraintTop_toBottomOf="@+id/users_email" />
+      app:layout_constraintEnd_toEndOf="@+id/usersEmail"
+      app:layout_constraintStart_toStartOf="@+id/usersEmail"
+      app:layout_constraintTop_toBottomOf="@+id/usersEmail" />
 
     <Button
-      android:id="@+id/navigate_to_login_button"
+      android:id="@+id/navigateToLoginButton"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:layout_marginStart="24dp"
@@ -89,6 +89,6 @@
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/description" />
+      app:layout_constraintTop_toBottomOf="@+id/descriptionMailConfirmation" />
   </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

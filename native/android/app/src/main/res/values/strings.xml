@@ -15,4 +15,6 @@
   <string name="uses_mail_address">ユーザーのメールアドレス</string>
   <string name="description">にメールを送信しました。\nメール内のリンクをクリックして\n登録を完了してください。</string>
   <string name="navigate_to_login">ログイン画面へ</string>
+  <string name="send_mail">メール送信</string>
+  <string name="descriptionResetPassword">パスワードを再設定するURLを送信します。\nメールアドレスを記入してください。</string>
 </resources>
