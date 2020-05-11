@@ -41,7 +41,7 @@
         app:layout_constraintBottom_toTopOf="@+id/groupFriend"
         app:layout_constraintEnd_toEndOf="@+id/groupFriend"
         app:layout_constraintStart_toStartOf="@+id/groupFriend"
-        app:srcCompat="@drawable/ic_people_black_24dp" />
+        android:src="@drawable/ic_people_black_24dp" />
 
       <TextView
         android:id="@+id/groupFriend"
@@ -68,10 +68,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:contentDescription="@string/person_icon"
+        android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@+id/account"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/ic_person_black_24dp" />
+        android:src="@drawable/ic_person_black_24dp" />
 
       <TextView
         android:id="@+id/account"
@@ -103,7 +104,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/circle_theme_color" />
+        android:src="@drawable/circle_theme_color" />
 
       <ImageView
         android:id="@+id/circleFooder"
@@ -114,7 +115,7 @@
         app:layout_constraintEnd_toEndOf="@+id/circleThemeColor"
         app:layout_constraintStart_toStartOf="@+id/circleThemeColor"
         app:layout_constraintTop_toTopOf="@+id/circleThemeColor"
-        app:srcCompat="@drawable/circle_white" />
+        android:src="@drawable/circle_white" />
 
       <ImageView
         android:id="@+id/addIcon"
@@ -125,7 +126,7 @@
         app:layout_constraintEnd_toEndOf="@+id/circleThemeColor"
         app:layout_constraintStart_toStartOf="@+id/circleThemeColor"
         app:layout_constraintTop_toTopOf="@+id/circleThemeColor"
-        app:srcCompat="@drawable/ic_add_black_50dp" />
+        android:src="@drawable/ic_add_black_50dp" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
   </androidx.constraintlayout.widget.ConstraintLayout>

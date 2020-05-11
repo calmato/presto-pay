@@ -25,10 +25,14 @@
   <string name="github_signin_text">Githubでサインイン</string>
   <string name="gourp_friend">グループ・友達</string>
   <string name="account">アカウント</string>
-  <string name="person_icon">人のアイコン</string>
   <string name="blue_circle">青色の円</string>
   <string name="white_circle">白の円</string>
   <string name="plus_icon">プラスのアイコン</string>
   <string name="login_new_text"><u>新規登録する</u></string>
   <string name="login_forget_text"><u>パスワードを忘れた</u></string>
+  <string name="lending_status">貸し借り状況</string>
+  <string name="person_icon">人のアイコン</string>
+  <string name="icon">アイコン</string>
+  <string name="price">¥XX,XXX</string>
+  <string name="lend">貸しています</string>
 </resources>
