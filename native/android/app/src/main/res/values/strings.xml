@@ -16,7 +16,7 @@
   <string name="description">にメールを送信しました。\nメール内のリンクをクリックして\n登録を完了してください。</string>
   <string name="navigate_to_login">ログイン画面へ</string>
   <string name="send_mail">メール送信</string>
-  <string name="descriptionResetPassword">パスワードを再設定するURLを送信します。\nメールアドレスを記入してください。</string
+  <string name="descriptionResetPassword">パスワードを再設定するURLを送信します。\nメールアドレスを記入してください。</string>
   <string name="login_title">Presto Pay</string>
   <string name="google_signin" />
   <string name="login_button">ログイン</string>
@@ -25,4 +25,10 @@
   <string name="google_signin_text">Googleでサインイン</string>
   <string name="twitter_signin_text">Twitterでサインイン</string>
   <string name="github_signin_text">Githubでサインイン</string>
+  <string name="gourp_friend">グループ・友達</string>
+  <string name="account">アカウント</string>
+  <string name="person_icon">人のアイコン</string>
+  <string name="blue_circle">青色の円</string>
+  <string name="white_circle">白の円</string>
+  <string name="plus_icon">プラスのアイコン</string>
 </resources>
