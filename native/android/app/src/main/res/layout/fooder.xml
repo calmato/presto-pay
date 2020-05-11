@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+  <androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/fooderBody"
+    android:layout_width="0dp"
+    android:layout_height="80dp"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintHorizontal_bias="1.0"
+    app:layout_constraintStart_toStartOf="parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+      android:id="@+id/lowerBar"
+      android:layout_width="0dp"
+      android:layout_height="60dp"
+      android:background="@color/ourTheme"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent">
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+      android:id="@+id/nestedGroupFriends"
+      android:layout_width="0dp"
+      android:layout_height="60dp"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toStartOf="@+id/nestedAddButton"
+      app:layout_constraintStart_toStartOf="parent">
+
+      <ImageView
+        android:id="@+id/peopleIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/person_icon"
+        app:layout_constraintBottom_toTopOf="@+id/groupFriend"
+        app:layout_constraintEnd_toEndOf="@+id/groupFriend"
+        app:layout_constraintStart_toStartOf="@+id/groupFriend"
+        app:srcCompat="@drawable/ic_people_black_24dp" />
+
+      <TextView
+        android:id="@+id/groupFriend"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/gourp_friend"
+        android:textColor="@android:color/background_light"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+      android:id="@+id/nestedAccount"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="@+id/lowerBar"
+      app:layout_constraintStart_toEndOf="@+id/nestedAddButton">
+
+      <ImageView
+        android:id="@+id/personIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/person_icon"
+        app:layout_constraintBottom_toTopOf="@+id/account"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/ic_person_black_24dp" />
+
+      <TextView
+        android:id="@+id/account"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/account"
+        android:textColor="@color/design_default_color_background"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+      android:id="@+id/nestedAddButton"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent">
+
+      <ImageView
+        android:id="@+id/circleThemeColor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/blue_circle"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/circle_theme_color" />
+
+      <ImageView
+        android:id="@+id/circleFooder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/white_circle"
+        app:layout_constraintBottom_toBottomOf="@+id/circleThemeColor"
+        app:layout_constraintEnd_toEndOf="@+id/circleThemeColor"
+        app:layout_constraintStart_toStartOf="@+id/circleThemeColor"
+        app:layout_constraintTop_toTopOf="@+id/circleThemeColor"
+        app:srcCompat="@drawable/circle_white" />
+
+      <ImageView
+        android:id="@+id/addIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/plus_icon"
+        app:layout_constraintBottom_toBottomOf="@+id/circleThemeColor"
+        app:layout_constraintEnd_toEndOf="@+id/circleThemeColor"
+        app:layout_constraintStart_toStartOf="@+id/circleThemeColor"
+        app:layout_constraintTop_toTopOf="@+id/circleThemeColor"
+        app:srcCompat="@drawable/ic_add_black_50dp" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+  </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
