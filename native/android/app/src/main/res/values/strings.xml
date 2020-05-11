@@ -20,8 +20,6 @@
   <string name="login_title">Presto Pay</string>
   <string name="google_signin" />
   <string name="login_button">ログイン</string>
-  <string name="login_new_button">新規登録する</string>
-  <string name="login_forget_password">パスワードを忘れた</string>
   <string name="google_signin_text">Googleでサインイン</string>
   <string name="twitter_signin_text">Twitterでサインイン</string>
   <string name="github_signin_text">Githubでサインイン</string>
@@ -31,4 +29,6 @@
   <string name="blue_circle">青色の円</string>
   <string name="white_circle">白の円</string>
   <string name="plus_icon">プラスのアイコン</string>
+  <string name="login_new_text"><u>新規登録する</u></string>
+  <string name="login_forget_text"><u>パスワードを忘れた</u></string>
 </resources>

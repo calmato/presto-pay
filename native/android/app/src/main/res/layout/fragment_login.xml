@@ -63,29 +63,29 @@
 
     <Button
       android:id="@+id/twitterSignin"
-      android:layout_width="337dp"
+      android:layout_width="0dp"
       android:layout_height="43dp"
       android:background="@drawable/border"
       android:text="@string/google_signin"
       android:textAlignment="center"
       app:layout_constraintBottom_toBottomOf="parent"
-      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintEnd_toEndOf="@+id/googleSingnin"
       app:layout_constraintHorizontal_bias="0.500"
-      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintStart_toStartOf="@+id/googleSingnin"
       app:layout_constraintTop_toBottomOf="@+id/googleSingnin"
       app:layout_constraintVertical_bias="0.067" />
 
     <Button
       android:id="@+id/githubSingin"
-      android:layout_width="337dp"
+      android:layout_width="0dp"
       android:layout_height="43dp"
       android:background="@drawable/border"
       android:text="@string/google_signin"
       android:textAlignment="center"
       app:layout_constraintBottom_toBottomOf="parent"
-      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintEnd_toEndOf="@+id/googleSingnin"
       app:layout_constraintHorizontal_bias="0.500"
-      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintStart_toStartOf="@+id/googleSingnin"
       app:layout_constraintTop_toBottomOf="@+id/twitterSignin"
       app:layout_constraintVertical_bias="0.052" />
 
@@ -126,15 +126,16 @@
 
     <EditText
       android:id="@+id/loginPassword"
-      android:layout_width="286dp"
+      android:layout_width="0dp"
       android:layout_height="46dp"
       android:layout_marginTop="8dp"
       android:autofillHints=""
       android:ems="10"
       android:hint="Password..."
       android:inputType="textPassword"
-      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintEnd_toEndOf="@+id/loginEmail"
       app:layout_constraintHorizontal_bias="0.152"
+      app:layout_constraintStart_toStartOf="@+id/loginEmail"
       app:layout_constraintStart_toEndOf="@+id/loginPasswordIcon"
       app:layout_constraintTop_toBottomOf="@+id/loginEmail"
       tools:ignore="MissingConstraints" />
@@ -153,37 +154,6 @@
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/loginPassword"
       tools:ignore="MissingConstraints" />
-
-    <EditText
-      android:id="@+id/loginNew"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:clickable="true"
-      android:ems="10"
-      android:inputType="textPersonName"
-      android:text="@string/login_new_button"
-      android:textAlignment="center"
-      android:textSize="12sp"
-      app:layout_constraintBottom_toTopOf="@+id/editText9"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/loginButton"
-      app:layout_constraintVertical_bias="0.0" />
-
-    <EditText
-      android:id="@+id/editText9"
-      android:layout_width="184dp"
-      android:layout_height="36dp"
-      android:layout_marginBottom="56dp"
-      android:ems="10"
-      android:inputType="textPersonName"
-      android:text="@string/login_forget_password"
-      android:textAlignment="center"
-      android:textSize="12sp"
-      app:layout_constraintBottom_toBottomOf="parent"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintHorizontal_bias="0.497"
-      app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
       android:id="@+id/googleSigninText"
@@ -252,6 +222,28 @@
       app:layout_constraintStart_toStartOf="@+id/githubSingin"
       app:layout_constraintTop_toTopOf="@+id/githubSingin"
       app:layout_constraintVertical_bias="0.423" />
+
+    <TextView
+      android:id="@+id/loginNewText"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:soundEffectsEnabled="true"
+      android:text="@string/login_new_text"
+      app:layout_constraintBottom_toTopOf="@+id/loginForgetText"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/loginButton"
+      app:layout_constraintVertical_bias="0.454" />
+
+    <TextView
+      android:id="@+id/loginForgetText"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginBottom="60dp"
+      android:text="@string/login_forget_text"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent" />
 
   </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
