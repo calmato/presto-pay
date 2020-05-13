@@ -64,7 +64,7 @@
       app:layout_constraintVertical_bias="0.050" />
 
     <Button
-      android:id="@+id/githubSingin"
+      android:id="@+id/facebookSingin"
       android:layout_width="0dp"
       android:layout_height="43dp"
       android:background="@drawable/border"
@@ -102,7 +102,7 @@
       android:hint="Email"
       android:inputType="textEmailAddress"
       app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/githubSingin" />
+      app:layout_constraintTop_toBottomOf="@+id/facebookSingin" />
 
     <EditText
       android:id="@+id/loginPassword"
@@ -140,16 +140,6 @@
       app:layout_constraintTop_toTopOf="@+id/twitterSignin" />
 
     <ImageView
-      android:id="@+id/loginGithubIcon"
-      android:layout_width="28dp"
-      android:layout_height="28dp"
-      android:src="@drawable/ic_github"
-      app:layout_constraintBottom_toBottomOf="@+id/githubSingin"
-      app:layout_constraintEnd_toStartOf="@+id/githubSigninText"
-      app:layout_constraintStart_toStartOf="@+id/githubSingin"
-      app:layout_constraintTop_toTopOf="@+id/githubSingin" />
-
-    <ImageView
       android:id="@+id/loginMailIcon"
       android:layout_width="30dp"
       android:layout_height="30dp"
@@ -160,7 +150,7 @@
       app:layout_constraintEnd_toStartOf="@+id/loginEmail"
       app:layout_constraintHorizontal_bias="0.74"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/githubSingin" />
+      app:layout_constraintTop_toBottomOf="@+id/facebookSingin" />
 
     <ImageView
       android:id="@+id/loginPasswordIcon"
@@ -200,17 +190,17 @@
       app:layout_constraintVertical_bias="0.473" />
 
     <TextView
-      android:id="@+id/githubSigninText"
+      android:id="@+id/facebookSigninText"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:text="@string/github_signin_text"
+      android:text="@string/facebook_signin_text"
       android:textSize="18sp"
-      app:layout_constraintBottom_toBottomOf="@+id/githubSingin"
+      app:layout_constraintBottom_toBottomOf="@+id/facebookSingin"
       app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintHorizontal_bias="0.504"
+      app:layout_constraintHorizontal_bias="0.551"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="@+id/githubSingin"
-      app:layout_constraintVertical_bias="0.421" />
+      app:layout_constraintTop_toTopOf="@+id/facebookSingin"
+      app:layout_constraintVertical_bias="0.368" />
 
     <TextView
       android:id="@+id/loginNewText"
@@ -245,6 +235,16 @@
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent"
       app:layout_constraintVertical_bias="0.089" />
+
+    <ImageView
+      android:id="@+id/loginFacebookIcon"
+      android:layout_width="28dp"
+      android:layout_height="28dp"
+      android:src="@drawable/ic_facebook"
+      app:layout_constraintBottom_toBottomOf="@+id/facebookSingin"
+      app:layout_constraintEnd_toStartOf="@+id/facebookSigninText"
+      app:layout_constraintStart_toStartOf="@+id/facebookSingin"
+      app:layout_constraintTop_toTopOf="@+id/facebookSingin" />
 
   </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

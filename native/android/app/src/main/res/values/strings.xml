@@ -30,6 +30,7 @@
   <string name="plus_icon">プラスのアイコン</string>
   <string name="login_new_text"><u>新規登録する</u></string>
   <string name="login_forget_text"><u>パスワードを忘れた</u></string>
+  <string name="facebook_signin_text">Facebookでサインイン</string>
   <string name="lending_status">貸し借り状況</string>
   <string name="person_icon">人のアイコン</string>
   <string name="icon">アイコン</string>
