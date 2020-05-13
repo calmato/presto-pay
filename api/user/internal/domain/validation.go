@@ -15,8 +15,8 @@ const (
 const (
 	RequiredMessage = "is required"
 	EqFieldMessage  = "does not match %s"
-	MinMessage      = "%s must be at least %s characters"
-	MaxMessage      = "%s must be at %s or less characters"
+	MinMessage      = "must be at least %s characters"
+	MaxMessage      = "must be at %s or less characters"
 	EmailMessage    = "should be in email format"
 	PasswordMessage = "should be in password format"
 	UniqueMessage   = "must be unique"

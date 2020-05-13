@@ -87,6 +87,10 @@ func validationMessage(tag string, options ...string) string {
 		return fmt.Sprintf(domain.MinMessage, options[0])
 	case domain.MaxTag:
 		return fmt.Sprintf(domain.MaxMessage, options[0])
+	case domain.EmailTag:
+		return domain.EmailMessage
+	case domain.PasswordTag:
+		return domain.PasswordMessage
 	case domain.UniqueTag:
 		return domain.UniqueMessage
 	default:
