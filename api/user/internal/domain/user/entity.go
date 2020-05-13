@@ -9,6 +9,7 @@ type User struct {
 	DisplayName  string    `firestore:"display_name"`
 	Email        string    `firestore:"email"`
 	ThumbnailURL string    `firestore:"thumbnail_url"`
+	Language     string    `firestore:"language,omitempty"`
 	Password     string    `firestore:"-"`
 	CreatedAt    time.Time `firestore:"created_at"`
 	UpdatedAt    time.Time `firestore:"updated_at"`
