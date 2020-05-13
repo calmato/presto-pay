@@ -18,8 +18,8 @@ func TestUserApplication_Create(t *testing.T) {
 	}{
 		"ok": {
 			Request: &request.CreateUser{
-				Name:                 "test-user",
-				DisplayName:          "testUser",
+				Name:                 "テストユーザー",
+				Username:             "test-user",
 				Email:                "test@calmato.com",
 				Thumbnail:            "",
 				Password:             "12345678",
@@ -40,7 +40,7 @@ func TestUserApplication_Create(t *testing.T) {
 
 		u := &user.User{
 			Name:         testCase.Request.Name,
-			DisplayName:  testCase.Request.DisplayName,
+			Username:     testCase.Request.Username,
 			Email:        testCase.Request.Email,
 			ThumbnailURL: "",
 			Password:     testCase.Request.Password,
