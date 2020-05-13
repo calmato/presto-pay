@@ -63,7 +63,7 @@ func (ua *userApplication) Create(ctx context.Context, req *request.CreateUser) 
 		Password:     req.Password,
 	}
 
-	if err := ua.userService.Create(ctx, u); err != nil {
+	if _, err := ua.userService.Create(ctx, u); err != nil {
 		return err
 	}
 

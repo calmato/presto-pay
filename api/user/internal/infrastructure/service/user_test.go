@@ -45,7 +45,7 @@ func TestUserService_Create(t *testing.T) {
 		t.Run(result, func(t *testing.T) {
 			target := NewUserService(udvm, urm, uum)
 
-			err := target.Create(ctx, testCase.User)
+			_, err := target.Create(ctx, testCase.User)
 			if err != nil {
 				t.Fatalf("error: %v", err)
 				return
