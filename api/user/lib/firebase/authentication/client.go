@@ -32,6 +32,16 @@ func (a *Auth) VerifyIDToken(ctx context.Context, idToken string) (string, error
 	return t.UID, nil
 }
 
+// GetUserByUID - UIDによるユーザー情報の取得
+func (a *Auth) GetUserByUID(ctx context.Context, uid string) (*auth.UserRecord, error) {
+	u, err := a.Client.GetUser(ctx, uid)
+	if err != nil {
+		return nil, err
+	}
+
+	return u, nil
+}
+
 // GetUIDByEmail - メールアドレスによるユーザーUIDの取得
 func (a *Auth) GetUIDByEmail(ctx context.Context, email string) (string, error) {
 	u, err := a.Client.GetUserByEmail(ctx, email)
