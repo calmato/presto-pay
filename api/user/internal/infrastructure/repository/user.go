@@ -25,7 +25,7 @@ func NewUserRepository(fa *authentication.Auth, fs *firestore.Firestore) user.Us
 	}
 }
 
-func (ur *userRepository) Authentiation(ctx context.Context) (*user.User, error) {
+func (ur *userRepository) Authentication(ctx context.Context) (*user.User, error) {
 	userReference := getUserReference()
 
 	t, err := getToken(ctx)

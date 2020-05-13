@@ -27,13 +27,19 @@ func NewUserService(
 	}
 }
 
-func (us *userService) Authentication(ctx context.Context, u *user.User) (*user.User, error) {
-	return nil, nil
+func (us *userService) Authentication(ctx context.Context) (*user.User, error) {
+	u, err := us.userRepository.Authentication(ctx)
+	if err != nil {
+		err = xerrors.Errorf("Failed to Repositoty")
+		return nil, domain.Unauthorized.New(err)
+	}
+
+	return u, nil
 }
 
 func (us *userService) Create(ctx context.Context, u *user.User) (*user.User, error) {
 	if ves := us.userDomainValidation.User(ctx, u); len(ves) > 0 {
-		err := xerrors.New("Failed to Domain/DomainValidation")
+		err := xerrors.New("Failed to DomainValidation")
 
 		if isContainCustomUniqueError(ves) {
 			return nil, domain.AlreadyExistsInDatastore.New(err, ves...)
@@ -49,7 +55,7 @@ func (us *userService) Create(ctx context.Context, u *user.User) (*user.User, er
 	u.UpdatedAt = current
 
 	if err := us.userRepository.Create(ctx, u); err != nil {
-		err = xerrors.Errorf("Failed to Domain/Repository: %w", err)
+		err = xerrors.Errorf("Failed to Repository: %w", err)
 		return nil, domain.ErrorInDatastore.New(err)
 	}
 
@@ -59,7 +65,7 @@ func (us *userService) Create(ctx context.Context, u *user.User) (*user.User, er
 func (us *userService) UploadThumbnail(ctx context.Context, data []byte) (string, error) {
 	thumbnailURL, err := us.userUploader.UploadThumbnail(ctx, data)
 	if err != nil {
-		err = xerrors.Errorf("Failed to Domain/Uploader: %w", err)
+		err = xerrors.Errorf("Failed to Uploader: %w", err)
 		return "", domain.ErrorInStorage.New(err)
 	}
 
