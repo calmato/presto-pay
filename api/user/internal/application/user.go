@@ -39,8 +39,7 @@ func (ua *userApplication) Create(ctx context.Context, req *request.CreateUser) 
 
 	thumbnailURL, err := getThumbnailURL(ctx, ua, req.Thumbnail)
 	if err != nil {
-		err = xerrors.Errorf("Failed to Application: %w", err)
-		return nil, domain.UnableConvertStringToByte64.New(err)
+		return nil, err
 	}
 
 	u := &user.User{
@@ -71,8 +70,7 @@ func (ua *userApplication) Update(ctx context.Context, req *request.UpdateUser) 
 
 	thumbnailURL, err := getThumbnailURL(ctx, ua, req.Thumbnail)
 	if err != nil {
-		err = xerrors.Errorf("Failed to Application: %w", err)
-		return nil, domain.UnableConvertStringToByte64.New(err)
+		return nil, err
 	}
 
 	u.Name = req.Name
@@ -98,12 +96,18 @@ func getThumbnailURL(ctx context.Context, ua *userApplication, thumbnail string)
 
 		data, err := base64.StdEncoding.DecodeString(b64data)
 		if err != nil {
-			return "", err
+			ve := &domain.ValidationError{
+				Field:   "thumbnail",
+				Message: domain.UnableConvertBase64Massage,
+			}
+
+			return "", domain.UnableConvertBase64.New(err, ve)
 		}
 
 		thumbnailURL, err = ua.userService.UploadThumbnail(ctx, data)
 		if err != nil {
-			return "", err
+			err = xerrors.Errorf("Failed to Application: %w", err)
+			return "", domain.ErrorInStorage.New(err)
 		}
 	}
 

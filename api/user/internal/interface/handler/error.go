@@ -44,9 +44,10 @@ func getErrorResponse(err error) *response.ErrorResponse {
 	case domain.UnableParseJSON:
 		res = *response.BadRequest
 		message = "Unable parse json"
-	case domain.UnableConvertStringToByte64:
+	case domain.UnableConvertBase64:
 		res = *response.BadRequest
-		message = "Unable convert from string to byte64"
+		res.ValidationErrors = getValidationErrorsInErrorReponse(err)
+		message = "Unable convert string into byte64"
 	case domain.NotEqualRequestWithDatastore:
 		res = *response.BadRequest
 		message = "Invalid request validation"

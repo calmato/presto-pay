@@ -31,8 +31,8 @@ const (
 	InvalidRequestValidation
 	// UnableParseJSON - JSON型から構造体への変換エラー
 	UnableParseJSON
-	// UnableConvertStringToByte64 - String型からByte64型への変換エラー
-	UnableConvertStringToByte64
+	// UnableConvertBase64 - Byte64型への変換エラー
+	UnableConvertBase64
 	// ErrorInDatastore - データストアでのエラー
 	ErrorInDatastore
 	// AlreadyExistsInDatastore - ユニークチェックでのエラー
