@@ -62,6 +62,29 @@ func (us *userService) Create(ctx context.Context, u *user.User) (*user.User, er
 	return u, nil
 }
 
+func (us *userService) Update(ctx context.Context, u *user.User) (*user.User, error) {
+	if ves := us.userDomainValidation.User(ctx, u); len(ves) > 0 {
+		err := xerrors.New("Failed to DomainValidation")
+
+		if isContainCustomUniqueError(ves) {
+			return nil, domain.AlreadyExistsInDatastore.New(err, ves...)
+		}
+
+		return nil, domain.Unknown.New(err, ves...)
+	}
+
+	current := time.Now()
+
+	u.UpdatedAt = current
+
+	if err := us.userRepository.Update(ctx, u); err != nil {
+		err = xerrors.Errorf("Failed to Repository: %w", err)
+		return nil, domain.ErrorInDatastore.New(err)
+	}
+
+	return u, nil
+}
+
 func (us *userService) UploadThumbnail(ctx context.Context, data []byte) (string, error) {
 	thumbnailURL, err := us.userUploader.UploadThumbnail(ctx, data)
 	if err != nil {
