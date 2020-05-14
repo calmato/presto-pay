@@ -108,6 +108,51 @@ func TestUserService_Create(t *testing.T) {
 	}
 }
 
+func TestUserService_Update(t *testing.T) {
+	testCases := map[string]struct {
+		User *user.User
+	}{
+		"ok": {
+			User: &user.User{
+				ID:           "user-id",
+				Name:         "テストユーザー",
+				Username:     "test-user",
+				Email:        "test@calmato.com",
+				ThumbnailURL: "",
+				Language:     "English",
+			},
+		},
+	}
+
+	for result, testCase := range testCases {
+		ctx, cancel := context.WithCancel(context.Background())
+		defer cancel()
+
+		ctrl := gomock.NewController(t)
+		defer ctrl.Finish()
+
+		// Defined mocks
+		udvm := mock_user.NewMockUserDomainValidation(ctrl)
+		udvm.EXPECT().User(ctx, testCase.User).Return(nil)
+
+		urm := mock_user.NewMockUserRepository(ctrl)
+		urm.EXPECT().Update(ctx, testCase.User).Return(nil)
+
+		uum := mock_user.NewMockUserUploader(ctrl)
+
+		// Start test
+		t.Run(result, func(t *testing.T) {
+			target := NewUserService(udvm, urm, uum)
+
+			_, err := target.Update(ctx, testCase.User)
+			if err != nil {
+				t.Fatalf("error: %v", err)
+				return
+			}
+		})
+	}
+}
+
 func TestUserService_UploadThumbnail(t *testing.T) {
 	testCases := map[string]struct {
 		Data     []byte

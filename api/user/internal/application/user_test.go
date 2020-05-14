@@ -65,3 +65,57 @@ func TestUserApplication_Create(t *testing.T) {
 		})
 	}
 }
+
+func TestUserApplication_Update(t *testing.T) {
+	testCases := map[string]struct {
+		Request *request.UpdateUser
+	}{
+		"ok": {
+			Request: &request.UpdateUser{
+				Name:      "テストユーザー",
+				Username:  "test-user",
+				Email:     "test@calmato.com",
+				Thumbnail: "",
+				Language:  "English",
+			},
+		},
+	}
+
+	for result, testCase := range testCases {
+		ctx, cancel := context.WithCancel(context.Background())
+		defer cancel()
+
+		ctrl := gomock.NewController(t)
+		defer ctrl.Finish()
+
+		// Defined variables
+		ves := make([]*domain.ValidationError, 0)
+
+		u := &user.User{
+			Name:         testCase.Request.Name,
+			Username:     testCase.Request.Username,
+			Email:        testCase.Request.Email,
+			ThumbnailURL: "",
+			Language:     testCase.Request.Language,
+		}
+
+		// Defined mocks
+		urvm := mock_validation.NewMockUserRequestValidation(ctrl)
+		urvm.EXPECT().UpdateUser(testCase.Request).Return(ves)
+
+		usm := mock_user.NewMockUserService(ctrl)
+		usm.EXPECT().Authentication(ctx).Return(u, nil)
+		usm.EXPECT().Update(ctx, u).Return(u, nil)
+
+		// Start test
+		t.Run(result, func(t *testing.T) {
+			target := NewUserApplication(urvm, usm)
+
+			_, err := target.Update(ctx, testCase.Request)
+			if err != nil {
+				t.Fatalf("error: %v", err)
+				return
+			}
+		})
+	}
+}

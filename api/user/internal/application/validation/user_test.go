@@ -39,3 +39,34 @@ func TestUserRequestValidation_CreateUser(t *testing.T) {
 		})
 	}
 }
+
+func TestUserRequestValidation_UpdateUser(t *testing.T) {
+	testCases := map[string]struct {
+		Request  *request.UpdateUser
+		Expected []*domain.ValidationError
+	}{
+		"ok": {
+			Request: &request.UpdateUser{
+				Name:      "テストユーザー",
+				Username:  "test-user",
+				Email:     "test@calmato.com",
+				Thumbnail: "",
+				Language:  "English",
+			},
+			Expected: make([]*domain.ValidationError, 0),
+		},
+	}
+
+	for result, testCase := range testCases {
+		// Start test
+		t.Run(result, func(t *testing.T) {
+			target := NewUserRequestValidation()
+
+			got := target.UpdateUser(testCase.Request)
+			if !reflect.DeepEqual(got, testCase.Expected) {
+				t.Fatalf("want %#v, but %#v", testCase.Expected, got)
+				return
+			}
+		})
+	}
+}
