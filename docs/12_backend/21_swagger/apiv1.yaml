@@ -179,6 +179,7 @@ components:
             properties:
               id:
                 type: string
+                format: uuid
                 description: ユーザーID
               name:
                 type: string
@@ -211,6 +212,7 @@ components:
             properties:
               id:
                 type: string
+                format: uuid
                 description: ユーザーID
               name:
                 type: string
