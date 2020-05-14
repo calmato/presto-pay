@@ -30,7 +30,7 @@ func NewUserService(
 func (us *userService) Authentication(ctx context.Context) (*user.User, error) {
 	u, err := us.userRepository.Authentication(ctx)
 	if err != nil {
-		err = xerrors.Errorf("Failed to Repositoty")
+		err = xerrors.Errorf("Failed to Repositoty: %w", err)
 		return nil, domain.Unauthorized.New(err)
 	}
 
@@ -55,6 +55,29 @@ func (us *userService) Create(ctx context.Context, u *user.User) (*user.User, er
 	u.UpdatedAt = current
 
 	if err := us.userRepository.Create(ctx, u); err != nil {
+		err = xerrors.Errorf("Failed to Repository: %w", err)
+		return nil, domain.ErrorInDatastore.New(err)
+	}
+
+	return u, nil
+}
+
+func (us *userService) Update(ctx context.Context, u *user.User) (*user.User, error) {
+	if ves := us.userDomainValidation.User(ctx, u); len(ves) > 0 {
+		err := xerrors.New("Failed to DomainValidation")
+
+		if isContainCustomUniqueError(ves) {
+			return nil, domain.AlreadyExistsInDatastore.New(err, ves...)
+		}
+
+		return nil, domain.Unknown.New(err, ves...)
+	}
+
+	current := time.Now()
+
+	u.UpdatedAt = current
+
+	if err := us.userRepository.Update(ctx, u); err != nil {
 		err = xerrors.Errorf("Failed to Repository: %w", err)
 		return nil, domain.ErrorInDatastore.New(err)
 	}

@@ -10,6 +10,7 @@ import (
 	"github.com/calmato/presto-pay/api/user/lib/firebase/firestore"
 	"github.com/calmato/presto-pay/api/user/middleware"
 	"golang.org/x/xerrors"
+	"google.golang.org/api/iterator"
 )
 
 type userRepository struct {
@@ -90,6 +91,32 @@ func (ur *userRepository) Create(ctx context.Context, u *user.User) error {
 	return nil
 }
 
+func (ur *userRepository) Update(ctx context.Context, u *user.User) error {
+	userReference := getUserReference()
+
+	au, err := ur.auth.GetUserByUID(ctx, u.ID)
+	if err != nil {
+		return err
+	}
+
+	if au.UserInfo == nil {
+		return xerrors.New("UserInfo is not exists in Firebase Authentication")
+	}
+
+	// Emailに変更があればFirebase Authenticationも更新
+	if u.Email != au.UserInfo.Email {
+		if err = ur.auth.UpdateEmail(ctx, u.ID, u.Email); err != nil {
+			return err
+		}
+	}
+
+	if err = ur.firestore.Set(ctx, userReference, u.ID, u); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (ur *userRepository) GetUIDByEmail(ctx context.Context, email string) (string, error) {
 	uid, err := ur.auth.GetUIDByEmail(ctx, email)
 	if err != nil {
@@ -97,6 +124,37 @@ func (ur *userRepository) GetUIDByEmail(ctx context.Context, email string) (stri
 	}
 
 	return uid, nil
+}
+
+func (ur *userRepository) GetUserByUsername(ctx context.Context, username string) (*user.User, error) {
+	userReference := getUserReference()
+
+	query := &firestore.Query{
+		Field:    "username",
+		Operator: "==",
+		Value:    username,
+	}
+
+	u := &user.User{}
+
+	iter := ur.firestore.GetByQuery(ctx, userReference, query)
+	for {
+		doc, err := iter.Next()
+		if err == iterator.Done {
+			break
+		}
+
+		if err != nil {
+			return nil, err
+		}
+
+		err = doc.DataTo(u)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	return u, nil
 }
 
 func getToken(ctx context.Context) (string, error) {

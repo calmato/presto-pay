@@ -24,7 +24,16 @@ func (udv *userDomainValidation) User(ctx context.Context, u *user.User) []*doma
 
 	if err := uniqueCheckEmail(ctx, udv.userRepository, u.ID, u.Email); err != nil {
 		validationError := &domain.ValidationError{
-			Field:   "メールアドレス",
+			Field:   "email",
+			Message: domain.CustomUniqueMessage,
+		}
+
+		validationErrors = append(validationErrors, validationError)
+	}
+
+	if err := uniqueCheckUsername(ctx, udv.userRepository, u.ID, u.Username); err != nil {
+		validationError := &domain.ValidationError{
+			Field:   "username",
 			Message: domain.CustomUniqueMessage,
 		}
 
@@ -41,4 +50,17 @@ func uniqueCheckEmail(ctx context.Context, ur user.UserRepository, id string, em
 	}
 
 	return xerrors.New("This email is already exists.")
+}
+
+func uniqueCheckUsername(ctx context.Context, ur user.UserRepository, id string, username string) error {
+	u, err := ur.GetUserByUsername(ctx, username)
+	if err != nil {
+		return err
+	}
+
+	if u.ID != id {
+		return nil
+	}
+
+	return xerrors.New("This username is already exists.")
 }

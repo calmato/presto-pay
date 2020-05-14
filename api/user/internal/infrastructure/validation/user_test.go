@@ -41,9 +41,13 @@ func TestUserValidation_User(t *testing.T) {
 		ctrl := gomock.NewController(t)
 		defer ctrl.Finish()
 
+		// Defined variables
+		u := &user.User{}
+
 		// Defined mocks
 		urm := mock_user.NewMockUserRepository(ctrl)
 		urm.EXPECT().GetUIDByEmail(ctx, testCase.User.Email).Return(testCase.User.ID, nil)
+		urm.EXPECT().GetUserByUsername(ctx, testCase.User.Username).Return(u, nil)
 
 		t.Run(result, func(t *testing.T) {
 			target := NewUserDomainValidation(urm)

@@ -17,7 +17,23 @@ paths:
         $ref: '#/components/requestBodies/CreateUser'
       responses:
         '200':
-          description: OK
+          $ref: '#/components/responses/CreateUser'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/Unkown'
+
+    patch:
+      summary: ユーザー編集
+      security:
+        - BearerAuth: []
+      requestBody:
+        $ref: '#/components/requestBodies/UpdateUser'
+      responses:
+        '200':
+          $ref: '#/components/responses/UpdateUser'
         '400':
           $ref: '#/components/responses/BadRequest'
         '409':
@@ -57,7 +73,7 @@ components:
 
   requestBodies:
     CreateUser:
-      description: ユーザー作成フォーム
+      description: ユーザー登録APIのリクエスト
       required: true
       content:
         application/json:
@@ -92,6 +108,36 @@ components:
               - password
               - passwordConfirmation
 
+    UpdateUser:
+      description: ユーザー編集APIのリクエスト
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+                description: 表示名
+              username:
+                type: string
+                description: ユーザー名
+              email:
+                type: string
+                format: email
+                description: メールアドレス
+              thumbnail:
+                type: string
+                description: サムネイル
+              language:
+                type: string
+                description: 使用言語
+            required:
+              - name
+              - username
+              - email
+              - language
+
   responses:
     BadRequest:
       description: Bad Request
@@ -123,3 +169,72 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
+
+    CreateUser:
+      description: ユーザー登録APIのレスポンス
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              id:
+                type: string
+                format: uuid
+                description: ユーザーID
+              name:
+                type: string
+                description: 表示名
+              username:
+                type: string
+                description: ユーザー名
+              email:
+                type: string
+                format: email
+                description: メールアドレス
+              thumbnail:
+                type: string
+                description: サムネイルURL
+              createdAt:
+                type: string
+                format: date-time
+                description: 作成日時
+              updatedAt:
+                type: string
+                format: date-time
+                description: 更新日時
+
+    UpdateUser:
+      description: ユーザー編集APIのレスポンス
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              id:
+                type: string
+                format: uuid
+                description: ユーザーID
+              name:
+                type: string
+                description: 表示名
+              username:
+                type: string
+                description: ユーザー名
+              email:
+                type: string
+                format: email
+                description: メールアドレス
+              thumbnailUrl:
+                type: string
+                description: サムネイルURL
+              language:
+                type: string
+                description: 使用言語
+              createdAt:
+                type: string
+                format: date-time
+                description: 作成日時
+              updatedAt:
+                type: string
+                format: date-time
+                description: 更新日時
