@@ -14,7 +14,7 @@ import (
 
 // UserApplication - UserApplicationインターフェース
 type UserApplication interface {
-	Create(ctx context.Context, req *request.CreateUser) error
+	Create(ctx context.Context, req *request.CreateUser) (*user.User, error)
 }
 
 type userApplication struct {
@@ -30,10 +30,10 @@ func NewUserApplication(urv validation.UserRequestValidation, us user.UserServic
 	}
 }
 
-func (ua *userApplication) Create(ctx context.Context, req *request.CreateUser) error {
+func (ua *userApplication) Create(ctx context.Context, req *request.CreateUser) (*user.User, error) {
 	if ves := ua.userRequestValidation.CreateUser(req); len(ves) > 0 {
 		err := xerrors.New("Failed to Application/RequestValidation")
-		return domain.InvalidRequestValidation.New(err, ves...)
+		return nil, domain.InvalidRequestValidation.New(err, ves...)
 	}
 
 	thumbnailURL := ""
@@ -46,12 +46,12 @@ func (ua *userApplication) Create(ctx context.Context, req *request.CreateUser) 
 		data, err := base64.StdEncoding.DecodeString(b64data)
 		if err != nil {
 			err = xerrors.Errorf("Failed to Application: %w", err)
-			return domain.Unknown.New(err) // TODO: error handling
+			return nil, domain.Unknown.New(err) // TODO: error handling
 		}
 
 		thumbnailURL, err = ua.userService.UploadThumbnail(ctx, data)
 		if err != nil {
-			return err
+			return nil, err
 		}
 	}
 
@@ -64,8 +64,8 @@ func (ua *userApplication) Create(ctx context.Context, req *request.CreateUser) 
 	}
 
 	if _, err := ua.userService.Create(ctx, u); err != nil {
-		return err
+		return nil, err
 	}
 
-	return nil
+	return u, nil
 }

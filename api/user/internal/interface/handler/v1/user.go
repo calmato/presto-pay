@@ -5,6 +5,7 @@ import (
 
 	"github.com/calmato/presto-pay/api/user/internal/application"
 	"github.com/calmato/presto-pay/api/user/internal/application/request"
+	"github.com/calmato/presto-pay/api/user/internal/application/response"
 	"github.com/calmato/presto-pay/api/user/internal/domain"
 	"github.com/calmato/presto-pay/api/user/internal/interface/handler"
 	"github.com/calmato/presto-pay/api/user/middleware"
@@ -35,10 +36,21 @@ func (uh *apiV1UserHandler) Create(ctx *gin.Context) {
 	}
 
 	c := middleware.GinContextToContext(ctx)
-	if err := uh.userApplication.Create(c, req); err != nil {
+	u, err := uh.userApplication.Create(c, req)
+	if err != nil {
 		handler.ErrorHandling(ctx, err)
 		return
 	}
 
-	ctx.JSON(http.StatusOK, gin.H{})
+	res := &response.CreateUser{
+		ID:           u.ID,
+		Name:         u.Name,
+		Username:     u.Username,
+		Email:        u.Email,
+		ThumbnailURL: u.ThumbnailURL,
+		CreatedAt:    u.CreatedAt,
+		UpdatedAt:    u.UpdatedAt,
+	}
+
+	ctx.JSON(http.StatusOK, res)
 }

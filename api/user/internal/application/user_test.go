@@ -57,7 +57,7 @@ func TestUserApplication_Create(t *testing.T) {
 		t.Run(result, func(t *testing.T) {
 			target := NewUserApplication(urvm, usm)
 
-			err := target.Create(ctx, testCase.Request)
+			_, err := target.Create(ctx, testCase.Request)
 			if err != nil {
 				t.Fatalf("error: %v", err)
 				return
