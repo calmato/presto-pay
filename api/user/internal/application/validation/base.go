@@ -53,7 +53,7 @@ func (rv *requestValidator) Run(i interface{}) []*domain.ValidationError {
 
 	for i, v := range errors {
 		errorField, _ := rt.FieldByName(v.Field())
-		errorFieldName := errorField.Tag.Get("label")
+		errorFieldName := errorField.Tag.Get("json")
 		errorMessage := ""
 
 		switch v.Tag() {

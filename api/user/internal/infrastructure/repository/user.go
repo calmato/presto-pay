@@ -45,7 +45,6 @@ func (ur *userRepository) Authentication(ctx context.Context) (*user.User, error
 		if err = doc.DataTo(u); err != nil {
 			return nil, err
 		}
-
 	} else {
 		// err: Firebase Authentication にはデータがあるが、Firestore にはない
 		// -> Authentication のデータを Firestore に登録
