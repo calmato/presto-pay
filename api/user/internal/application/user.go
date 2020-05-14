@@ -40,7 +40,7 @@ func (ua *userApplication) Create(ctx context.Context, req *request.CreateUser) 
 	thumbnailURL, err := getThumbnailURL(ctx, ua, req.Thumbnail)
 	if err != nil {
 		err = xerrors.Errorf("Failed to Application: %w", err)
-		return nil, domain.Unknown.New(err) // TODO: error handling
+		return nil, domain.UnableConvertStringToByte64.New(err)
 	}
 
 	u := &user.User{
@@ -72,7 +72,7 @@ func (ua *userApplication) Update(ctx context.Context, req *request.UpdateUser) 
 	thumbnailURL, err := getThumbnailURL(ctx, ua, req.Thumbnail)
 	if err != nil {
 		err = xerrors.Errorf("Failed to Application: %w", err)
-		return nil, domain.Unknown.New(err) // TODO: error handling
+		return nil, domain.UnableConvertStringToByte64.New(err)
 	}
 
 	u.Name = req.Name
