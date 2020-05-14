@@ -8,6 +8,7 @@ import (
 // UserRequestValidation - ユーザー関連のバリデーション
 type UserRequestValidation interface {
 	CreateUser(req *request.CreateUser) []*domain.ValidationError
+	UpdateUser(req *request.UpdateUser) []*domain.ValidationError
 }
 
 type userRequestValidation struct {
@@ -24,5 +25,9 @@ func NewUserRequestValidation() UserRequestValidation {
 }
 
 func (urv *userRequestValidation) CreateUser(req *request.CreateUser) []*domain.ValidationError {
+	return urv.validator.Run(req)
+}
+
+func (urv *userRequestValidation) UpdateUser(req *request.UpdateUser) []*domain.ValidationError {
 	return urv.validator.Run(req)
 }

@@ -63,6 +63,20 @@ func (mr *MockUserRepositoryMockRecorder) Create(ctx, u interface{}) *gomock.Cal
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockUserRepository)(nil).Create), ctx, u)
 }
 
+// Update mocks base method
+func (m *MockUserRepository) Update(ctx context.Context, u *user.User) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Update", ctx, u)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// Update indicates an expected call of Update
+func (mr *MockUserRepositoryMockRecorder) Update(ctx, u interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Update", reflect.TypeOf((*MockUserRepository)(nil).Update), ctx, u)
+}
+
 // GetUIDByEmail mocks base method
 func (m *MockUserRepository) GetUIDByEmail(ctx context.Context, email string) (string, error) {
 	m.ctrl.T.Helper()
@@ -76,4 +90,19 @@ func (m *MockUserRepository) GetUIDByEmail(ctx context.Context, email string) (s
 func (mr *MockUserRepositoryMockRecorder) GetUIDByEmail(ctx, email interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetUIDByEmail", reflect.TypeOf((*MockUserRepository)(nil).GetUIDByEmail), ctx, email)
+}
+
+// GetUserByUsername mocks base method
+func (m *MockUserRepository) GetUserByUsername(ctx context.Context, username string) (*user.User, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetUserByUsername", ctx, username)
+	ret0, _ := ret[0].(*user.User)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetUserByUsername indicates an expected call of GetUserByUsername
+func (mr *MockUserRepositoryMockRecorder) GetUserByUsername(ctx, username interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetUserByUsername", reflect.TypeOf((*MockUserRepository)(nil).GetUserByUsername), ctx, username)
 }

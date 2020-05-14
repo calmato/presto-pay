@@ -15,6 +15,7 @@ import (
 // UserApplication - UserApplicationインターフェース
 type UserApplication interface {
 	Create(ctx context.Context, req *request.CreateUser) (*user.User, error)
+	Update(ctx context.Context, req *request.UpdateUser) (*user.User, error)
 }
 
 type userApplication struct {
@@ -32,27 +33,14 @@ func NewUserApplication(urv validation.UserRequestValidation, us user.UserServic
 
 func (ua *userApplication) Create(ctx context.Context, req *request.CreateUser) (*user.User, error) {
 	if ves := ua.userRequestValidation.CreateUser(req); len(ves) > 0 {
-		err := xerrors.New("Failed to Application/RequestValidation")
+		err := xerrors.New("Failed to RequestValidation")
 		return nil, domain.InvalidRequestValidation.New(err, ves...)
 	}
 
-	thumbnailURL := ""
-
-	if req.Thumbnail != "" {
-		// data:image/png;base64,iVBORw0KGgoAAAA... みたいなのうちの
-		// `data:image/png;base64,` の部分を無くした []byte を取得
-		b64data := req.Thumbnail[strings.IndexByte(req.Thumbnail, ',')+1:]
-
-		data, err := base64.StdEncoding.DecodeString(b64data)
-		if err != nil {
-			err = xerrors.Errorf("Failed to Application: %w", err)
-			return nil, domain.Unknown.New(err) // TODO: error handling
-		}
-
-		thumbnailURL, err = ua.userService.UploadThumbnail(ctx, data)
-		if err != nil {
-			return nil, err
-		}
+	thumbnailURL, err := getThumbnailURL(ctx, ua, req.Thumbnail)
+	if err != nil {
+		err = xerrors.Errorf("Failed to Application: %w", err)
+		return nil, domain.Unknown.New(err) // TODO: error handling
 	}
 
 	u := &user.User{
@@ -68,4 +56,56 @@ func (ua *userApplication) Create(ctx context.Context, req *request.CreateUser) 
 	}
 
 	return u, nil
+}
+
+func (ua *userApplication) Update(ctx context.Context, req *request.UpdateUser) (*user.User, error) {
+	u, err := ua.userService.Authentication(ctx)
+	if err != nil {
+		return nil, domain.Unauthorized.New(err)
+	}
+
+	if ves := ua.userRequestValidation.UpdateUser(req); len(ves) > 0 {
+		err := xerrors.New("Failed to RequestValidation")
+		return nil, domain.InvalidRequestValidation.New(err, ves...)
+	}
+
+	thumbnailURL, err := getThumbnailURL(ctx, ua, req.Thumbnail)
+	if err != nil {
+		err = xerrors.Errorf("Failed to Application: %w", err)
+		return nil, domain.Unknown.New(err) // TODO: error handling
+	}
+
+	u.Name = req.Name
+	u.Username = req.Username
+	u.Email = req.Email
+	u.Language = req.Language
+	u.ThumbnailURL = thumbnailURL
+
+	if _, err := ua.userService.Update(ctx, u); err != nil {
+		return nil, err
+	}
+
+	return u, nil
+}
+
+func getThumbnailURL(ctx context.Context, ua *userApplication, thumbnail string) (string, error) {
+	thumbnailURL := ""
+
+	if thumbnail != "" {
+		// data:image/png;base64,iVBORw0KGgoAAAA... みたいなのうちの
+		// `data:image/png;base64,` の部分を無くした []byte を取得
+		b64data := thumbnail[strings.IndexByte(thumbnail, ',')+1:]
+
+		data, err := base64.StdEncoding.DecodeString(b64data)
+		if err != nil {
+			return "", err
+		}
+
+		thumbnailURL, err = ua.userService.UploadThumbnail(ctx, data)
+		if err != nil {
+			return "", err
+		}
+	}
+
+	return thumbnailURL, nil
 }

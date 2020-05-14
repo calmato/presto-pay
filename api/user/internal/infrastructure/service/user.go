@@ -30,7 +30,7 @@ func NewUserService(
 func (us *userService) Authentication(ctx context.Context) (*user.User, error) {
 	u, err := us.userRepository.Authentication(ctx)
 	if err != nil {
-		err = xerrors.Errorf("Failed to Repositoty")
+		err = xerrors.Errorf("Failed to Repositoty: %w", err)
 		return nil, domain.Unauthorized.New(err)
 	}
 

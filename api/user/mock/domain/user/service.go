@@ -64,6 +64,21 @@ func (mr *MockUserServiceMockRecorder) Create(ctx, u interface{}) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockUserService)(nil).Create), ctx, u)
 }
 
+// Update mocks base method
+func (m *MockUserService) Update(ctx context.Context, u *user.User) (*user.User, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Update", ctx, u)
+	ret0, _ := ret[0].(*user.User)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// Update indicates an expected call of Update
+func (mr *MockUserServiceMockRecorder) Update(ctx, u interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Update", reflect.TypeOf((*MockUserService)(nil).Update), ctx, u)
+}
+
 // UploadThumbnail mocks base method
 func (m *MockUserService) UploadThumbnail(ctx context.Context, data []byte) (string, error) {
 	m.ctrl.T.Helper()

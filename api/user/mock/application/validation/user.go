@@ -47,3 +47,17 @@ func (mr *MockUserRequestValidationMockRecorder) CreateUser(req interface{}) *go
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateUser", reflect.TypeOf((*MockUserRequestValidation)(nil).CreateUser), req)
 }
+
+// UpdateUser mocks base method
+func (m *MockUserRequestValidation) UpdateUser(req *request.UpdateUser) []*domain.ValidationError {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdateUser", req)
+	ret0, _ := ret[0].([]*domain.ValidationError)
+	return ret0
+}
+
+// UpdateUser indicates an expected call of UpdateUser
+func (mr *MockUserRequestValidationMockRecorder) UpdateUser(req interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateUser", reflect.TypeOf((*MockUserRequestValidation)(nil).UpdateUser), req)
+}
