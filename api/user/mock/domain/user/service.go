@@ -34,12 +34,28 @@ func (m *MockUserService) EXPECT() *MockUserServiceMockRecorder {
 	return m.recorder
 }
 
+// Authentication mocks base method
+func (m *MockUserService) Authentication(ctx context.Context) (*user.User, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Authentication", ctx)
+	ret0, _ := ret[0].(*user.User)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// Authentication indicates an expected call of Authentication
+func (mr *MockUserServiceMockRecorder) Authentication(ctx interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Authentication", reflect.TypeOf((*MockUserService)(nil).Authentication), ctx)
+}
+
 // Create mocks base method
-func (m *MockUserService) Create(ctx context.Context, u *user.User) error {
+func (m *MockUserService) Create(ctx context.Context, u *user.User) (*user.User, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Create", ctx, u)
-	ret0, _ := ret[0].(error)
-	return ret0
+	ret0, _ := ret[0].(*user.User)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
 }
 
 // Create indicates an expected call of Create

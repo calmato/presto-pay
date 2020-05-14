@@ -15,8 +15,8 @@ func TestUserRequestValidation_CreateUser(t *testing.T) {
 	}{
 		"ok": {
 			Request: &request.CreateUser{
-				Name:                 "test-user",
-				DisplayName:          "testUser",
+				Name:                 "テストユーザー",
+				Username:             "test-user",
 				Email:                "test@calmato.com",
 				Thumbnail:            "",
 				Password:             "12345678",

@@ -53,7 +53,7 @@ func (rv *requestValidator) Run(i interface{}) []*domain.ValidationError {
 
 	for i, v := range errors {
 		errorField, _ := rt.FieldByName(v.Field())
-		errorFieldName := errorField.Tag.Get("label")
+		errorFieldName := errorField.Tag.Get("json")
 		errorMessage := ""
 
 		switch v.Tag() {
@@ -87,6 +87,10 @@ func validationMessage(tag string, options ...string) string {
 		return fmt.Sprintf(domain.MinMessage, options[0])
 	case domain.MaxTag:
 		return fmt.Sprintf(domain.MaxMessage, options[0])
+	case domain.EmailTag:
+		return domain.EmailMessage
+	case domain.PasswordTag:
+		return domain.PasswordMessage
 	case domain.UniqueTag:
 		return domain.UniqueMessage
 	default:

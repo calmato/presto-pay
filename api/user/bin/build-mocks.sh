@@ -15,11 +15,8 @@ ignore_lists='test|base|domain/validation.go'
 # Function
 #############################
 build_mock() {
-  echo '- start -----'
-  echo "target: $1"
-  echo '-------------'
-
   target=$1
+
   mockgen -source internal/${target} -destination mock/${target}
 }
 

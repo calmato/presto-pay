@@ -4,11 +4,65 @@ import (
 	"context"
 	"reflect"
 	"testing"
+	"time"
 
 	"github.com/calmato/presto-pay/api/user/internal/domain/user"
 	mock_user "github.com/calmato/presto-pay/api/user/mock/domain/user"
 	"github.com/golang/mock/gomock"
 )
+
+func TestUserService_Authentication(t *testing.T) {
+	current := time.Now()
+
+	testCases := map[string]struct {
+		Expected *user.User
+	}{
+		"ok": {
+			Expected: &user.User{
+				ID:           "user-id",
+				Name:         "テストユーザー",
+				Username:     "test-user",
+				Email:        "test@calmato.com",
+				ThumbnailURL: "",
+				Password:     "",
+				CreatedAt:    current,
+				UpdatedAt:    current,
+			},
+		},
+	}
+
+	for result, testCase := range testCases {
+		ctx, cancel := context.WithCancel(context.Background())
+		defer cancel()
+
+		ctrl := gomock.NewController(t)
+		defer ctrl.Finish()
+
+		// Defined mocks
+		udvm := mock_user.NewMockUserDomainValidation(ctrl)
+
+		urm := mock_user.NewMockUserRepository(ctrl)
+		urm.EXPECT().Authentication(ctx).Return(testCase.Expected, nil)
+
+		uum := mock_user.NewMockUserUploader(ctrl)
+
+		// Start test
+		t.Run(result, func(t *testing.T) {
+			target := NewUserService(udvm, urm, uum)
+
+			got, err := target.Authentication(ctx)
+			if err != nil {
+				t.Fatalf("error: %v", err)
+				return
+			}
+
+			if !reflect.DeepEqual(got, testCase.Expected) {
+				t.Fatalf("want %#v, but %#v", testCase.Expected, got)
+				return
+			}
+		})
+	}
+}
 
 func TestUserService_Create(t *testing.T) {
 	testCases := map[string]struct {
@@ -16,8 +70,8 @@ func TestUserService_Create(t *testing.T) {
 	}{
 		"ok": {
 			User: &user.User{
-				Name:         "test-user",
-				DisplayName:  "testUser",
+				Name:         "テストユーザー",
+				Username:     "test-user",
 				Email:        "test@calmato.com",
 				ThumbnailURL: "",
 				Password:     "!Qaz2wsx",
@@ -45,7 +99,7 @@ func TestUserService_Create(t *testing.T) {
 		t.Run(result, func(t *testing.T) {
 			target := NewUserService(udvm, urm, uum)
 
-			err := target.Create(ctx, testCase.User)
+			_, err := target.Create(ctx, testCase.User)
 			if err != nil {
 				t.Fatalf("error: %v", err)
 				return

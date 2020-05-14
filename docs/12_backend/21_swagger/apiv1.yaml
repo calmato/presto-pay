@@ -66,10 +66,10 @@ components:
             properties:
               name:
                 type: string
-                description: 氏名
-              displayName:
-                type: string
                 description: 表示名
+              username:
+                type: string
+                description: ユーザー名
               email:
                 type: string
                 format: email
@@ -87,7 +87,7 @@ components:
                 description: パスワード(確認用)
             required:
               - name
-              - displayName
+              - username
               - email
               - password
               - passwordConfirmation

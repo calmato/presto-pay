@@ -22,8 +22,8 @@ func TestUserValidation_User(t *testing.T) {
 		"ok": {
 			User: &user.User{
 				ID:           "user-id",
-				Name:         "test-user",
-				DisplayName:  "testUser",
+				Name:         "テストユーザー",
+				Username:     "test-user",
 				Email:        "test@calmato.com",
 				ThumbnailURL: "",
 				Password:     "!Qaz2wsx",

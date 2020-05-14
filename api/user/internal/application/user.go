@@ -57,13 +57,13 @@ func (ua *userApplication) Create(ctx context.Context, req *request.CreateUser) 
 
 	u := &user.User{
 		Name:         req.Name,
-		DisplayName:  req.DisplayName,
+		Username:     req.Username,
 		Email:        req.Email,
 		ThumbnailURL: thumbnailURL,
 		Password:     req.Password,
 	}
 
-	if err := ua.userService.Create(ctx, u); err != nil {
+	if _, err := ua.userService.Create(ctx, u); err != nil {
 		return err
 	}
 
