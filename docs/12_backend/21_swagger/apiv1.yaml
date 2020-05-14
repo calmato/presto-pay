@@ -17,7 +17,7 @@ paths:
         $ref: '#/components/requestBodies/CreateUser'
       responses:
         '200':
-          description: OK
+          $ref: '#/components/responses/CreateUser'
         '400':
           $ref: '#/components/responses/BadRequest'
         '409':
@@ -57,7 +57,7 @@ components:
 
   requestBodies:
     CreateUser:
-      description: ユーザー作成フォーム
+      description: ユーザー登録APIのリクエスト
       required: true
       content:
         application/json:
@@ -123,3 +123,35 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
+
+    CreateUser:
+      description: ユーザー登録APIのレスポンス
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              id:
+                type: string
+                description: ユーザーID
+              name:
+                type: string
+                description: 表示名
+              username:
+                type: string
+                description: ユーザー名
+              email:
+                type: string
+                format: email
+                description: メールアドレス
+              thumbnail:
+                type: string
+                description: サムネイル
+              createdAt:
+                type: string
+                format: date-time
+                description: 作成日時
+              updatedAt:
+                type: string
+                format: date-time
+                description: 更新日時
