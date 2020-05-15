@@ -28,8 +28,8 @@ jobs:
         uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
         with:
           version: '281.0.0'
-          service_account_email: ${{ secrets.GCP_SA_EMAIL }}
-          service_account_key: ${{ secrets.GCP_SA_KEY }}
+          service_account_email: ${GCP_SA_EMAIL}
+          service_account_key: ${GCP_SA_KEY}
           export_default_credentials: true
 
       - name: Configure gcloud
