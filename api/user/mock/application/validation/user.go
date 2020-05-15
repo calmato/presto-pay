@@ -75,3 +75,31 @@ func (mr *MockUserRequestValidationMockRecorder) UpdatePassword(req interface{})
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdatePassword", reflect.TypeOf((*MockUserRequestValidation)(nil).UpdatePassword), req)
 }
+
+// UniqueCheckEmail mocks base method
+func (m *MockUserRequestValidation) UniqueCheckEmail(req *request.UniqueCheckUserEmail) []*domain.ValidationError {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UniqueCheckEmail", req)
+	ret0, _ := ret[0].([]*domain.ValidationError)
+	return ret0
+}
+
+// UniqueCheckEmail indicates an expected call of UniqueCheckEmail
+func (mr *MockUserRequestValidationMockRecorder) UniqueCheckEmail(req interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UniqueCheckEmail", reflect.TypeOf((*MockUserRequestValidation)(nil).UniqueCheckEmail), req)
+}
+
+// UniqueCheckUsername mocks base method
+func (m *MockUserRequestValidation) UniqueCheckUsername(req *request.UniqueCheckUserUsername) []*domain.ValidationError {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UniqueCheckUsername", req)
+	ret0, _ := ret[0].([]*domain.ValidationError)
+	return ret0
+}
+
+// UniqueCheckUsername indicates an expected call of UniqueCheckUsername
+func (mr *MockUserRequestValidationMockRecorder) UniqueCheckUsername(req interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UniqueCheckUsername", reflect.TypeOf((*MockUserRequestValidation)(nil).UniqueCheckUsername), req)
+}

@@ -117,7 +117,9 @@ func (ua *userApplication) UniqueCheckEmail(ctx context.Context, req *request.Un
 	return ua.userService.UniqueCheckEmail(ctx, u, req.Email), nil
 }
 
-func (ua *userApplication) UniqueCheckUsername(ctx context.Context, req *request.UniqueCheckUserUsername) (bool, error) {
+func (ua *userApplication) UniqueCheckUsername(
+	ctx context.Context, req *request.UniqueCheckUserUsername,
+) (bool, error) {
 	if ves := ua.userRequestValidation.UniqueCheckUsername(req); len(ves) > 0 {
 		err := xerrors.New("Failed to RequestValidation")
 		return false, domain.InvalidRequestValidation.New(err, ves...)

@@ -185,5 +185,5 @@ func getToken(ctx context.Context) (string, error) {
 // e.g.) 12345678-qwer-asdf-zxcv-uiophjklvbnm -> user12345678qwerasdf
 func getName(uid string) string {
 	str := strings.Replace(uid, "-", "", -1)
-	return fmt.Sprintf("user%s%s%s", str[0:16])
+	return fmt.Sprintf("user%s", str[0:16])
 }

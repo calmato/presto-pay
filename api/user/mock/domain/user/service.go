@@ -107,3 +107,31 @@ func (mr *MockUserServiceMockRecorder) UploadThumbnail(ctx, data interface{}) *g
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UploadThumbnail", reflect.TypeOf((*MockUserService)(nil).UploadThumbnail), ctx, data)
 }
+
+// UniqueCheckEmail mocks base method
+func (m *MockUserService) UniqueCheckEmail(ctx context.Context, auth *user.User, email string) bool {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UniqueCheckEmail", ctx, auth, email)
+	ret0, _ := ret[0].(bool)
+	return ret0
+}
+
+// UniqueCheckEmail indicates an expected call of UniqueCheckEmail
+func (mr *MockUserServiceMockRecorder) UniqueCheckEmail(ctx, auth, email interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UniqueCheckEmail", reflect.TypeOf((*MockUserService)(nil).UniqueCheckEmail), ctx, auth, email)
+}
+
+// UniqueCheckUsername mocks base method
+func (m *MockUserService) UniqueCheckUsername(ctx context.Context, auth *user.User, username string) bool {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UniqueCheckUsername", ctx, auth, username)
+	ret0, _ := ret[0].(bool)
+	return ret0
+}
+
+// UniqueCheckUsername indicates an expected call of UniqueCheckUsername
+func (mr *MockUserServiceMockRecorder) UniqueCheckUsername(ctx, auth, username interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UniqueCheckUsername", reflect.TypeOf((*MockUserService)(nil).UniqueCheckUsername), ctx, auth, username)
+}
