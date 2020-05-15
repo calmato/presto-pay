@@ -12,7 +12,13 @@
 <details open>
 <summary>依存関係</summary>
 
-* WIP
+* API
+  * Golang: 1.14.2
+* Envoy
+  * 1.14.1
+* Swagger
+  * Swagger Editor: 3.8.1
+  * Swagger UI: 3.25.1
 </details>
 
 <details open>
