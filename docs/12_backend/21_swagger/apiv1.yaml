@@ -43,18 +43,44 @@ paths:
 
   /users/password:
     patch:
-      summary: ユーザーパスワード編集
+      summary: ユーザー パスワード編集
       security:
         - BearerAuth: []
       requestBody:
         $ref: '#/components/requestBodies/UpdateUserPassword'
       responses:
         '200':
-          $ref: '#/components/responses/EmptyResponse'
+          $ref: '#/components/responses/Empty'
         '400':
           $ref: '#/components/responses/BadRequest'
         '409':
           $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/Unkown'
+
+  /users/check-email:
+    post:
+      summary: ユーザー メールアドレスユニーク検証
+      requestBody:
+        $ref: '#/components/requestBodies/UniqueCheckUserEmail'
+      responses:
+        '200':
+          $ref: '#/components/responses/UniqueCheck'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/Unkown'
+
+  /users/check-username:
+    post:
+      summary: ユーザー ユーザー名ユニーク検証
+      requestBody:
+        $ref: '#/components/requestBodies/UniqueCheckUserUsername'
+      responses:
+        '200':
+          $ref: '#/components/responses/UniqueCheck'
+        '400':
+          $ref: '#/components/responses/BadRequest'
         '500':
           $ref: '#/components/responses/Unkown'
 
@@ -156,7 +182,7 @@ components:
               - language
 
     UpdateUserPassword:
-      description: ユーザーパスワード編集APIのリクエスト
+      description: ユーザー パスワード編集APIのリクエスト
       required: true
       content:
         application/json:
@@ -174,6 +200,30 @@ components:
             required:
               - password
               - passwordConfirmation
+
+    UniqueCheckUserEmail:
+      description: ユーザー メールアドレスユニーク検証APIのリクエスト
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              email:
+                type: string
+                description: メールアドレス
+
+    UniqueCheckUserUsername:
+      description: ユーザー ユーザー名ユニーク検証APIのリクエスト
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              username:
+                type: string
+                description: ユーザー名
 
   responses:
     BadRequest:
@@ -207,12 +257,23 @@ components:
           schema:
             $ref: '#/components/schemas/Error'
 
-    EmptyResponse:
+    Empty:
       description: 空のレスポンス
       content:
         application/json:
           schema:
             type: object
+
+    UniqueCheck:
+      description: ユニーク検証のレスポンス
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              uniqueCheck:
+                type: boolean
+                description: ユニーク検証結果
 
     CreateUser:
       description: ユーザー登録APIのレスポンス
