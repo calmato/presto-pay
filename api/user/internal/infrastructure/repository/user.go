@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"fmt"
 	"strings"
 	"time"
 
@@ -180,7 +181,9 @@ func getToken(ctx context.Context) (string, error) {
 	return t, nil
 }
 
-// OAuth認証による初回User登録時、UIDの先頭8文字を取得
+// OAuth認証による初回User登録時、UIDの先頭16文字を取得
+// e.g.) 12345678-qwer-asdf-zxcv-uiophjklvbnm -> user12345678qwerasdf
 func getName(uid string) string {
-	return uid[0:8]
+	str := strings.Replace(uid, "-", "", -1)
+	return fmt.Sprintf("user%s%s%s", str[0:16])
 }
