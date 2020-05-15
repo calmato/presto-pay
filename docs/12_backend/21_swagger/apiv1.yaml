@@ -41,6 +41,23 @@ paths:
         '500':
           $ref: '#/components/responses/Unkown'
 
+  /users/password:
+    patch:
+      summary: ユーザーパスワード編集
+      security:
+        - BearerAuth: []
+      requestBody:
+        $ref: '#/components/requestBodies/UpdateUserPassword'
+      responses:
+        '200':
+          $ref: '#/components/responses/EmptyResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/Unkown'
+
 components:
   securitySchemes:
     BearerAuth:
@@ -138,6 +155,26 @@ components:
               - email
               - language
 
+    UpdateUserPassword:
+      description: ユーザーパスワード編集APIのリクエスト
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              password:
+                type: string
+                format: password
+                description: パスワード
+              passwordConfirmation:
+                type: string
+                format: password
+                description: パスワード(確認用)
+            required:
+              - password
+              - passwordConfirmation
+
   responses:
     BadRequest:
       description: Bad Request
@@ -169,6 +206,13 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
+
+    EmptyResponse:
+      description: 空のレスポンス
+      content:
+        application/json:
+          schema:
+            type: object
 
     CreateUser:
       description: ユーザー登録APIのレスポンス
