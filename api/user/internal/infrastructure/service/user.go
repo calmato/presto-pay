@@ -85,6 +85,14 @@ func (us *userService) Update(ctx context.Context, u *user.User) (*user.User, er
 	return u, nil
 }
 
+func (us *userService) UpdatePassword(ctx context.Context, uid string, password string) error {
+	if err := us.userRepository.UpdatePassword(ctx, uid, password); err != nil {
+		return domain.ErrorInDatastore.New(err)
+	}
+
+	return nil
+}
+
 func (us *userService) UploadThumbnail(ctx context.Context, data []byte) (string, error) {
 	thumbnailURL, err := us.userUploader.UploadThumbnail(ctx, data)
 	if err != nil {

@@ -16,6 +16,7 @@ import (
 type APIV1UserHandler interface {
 	Create(ctx *gin.Context)
 	Update(ctx *gin.Context)
+	UpdatePassword(ctx *gin.Context)
 }
 
 type apiV1UserHandler struct {
@@ -81,4 +82,21 @@ func (uh *apiV1UserHandler) Update(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, res)
+}
+
+func (uh *apiV1UserHandler) UpdatePassword(ctx *gin.Context) {
+	req := &request.UpdateUserPassword{}
+	if err := ctx.BindJSON(req); err != nil {
+		handler.ErrorHandling(ctx, domain.UnableParseJSON.New(err))
+		return
+	}
+
+	c := middleware.GinContextToContext(ctx)
+	_, err := uh.userApplication.UpdatePassword(c, req)
+	if err != nil {
+		handler.ErrorHandling(ctx, err)
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{})
 }
