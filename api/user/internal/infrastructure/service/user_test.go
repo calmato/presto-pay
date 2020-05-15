@@ -235,3 +235,188 @@ func TestUserService_UploadThumbnail(t *testing.T) {
 		})
 	}
 }
+
+func TestUserService_UniqueCheckEmail(t *testing.T) {
+	testCases := map[string]struct {
+		AuthUser           *user.User
+		Email              string
+		RepositoryResponse string
+		Expected           bool
+	}{
+		"ok01": {
+			AuthUser: &user.User{
+				ID:           "user-id",
+				Name:         "テストユーザー",
+				Username:     "test-user",
+				Email:        "test@calmato.com",
+				ThumbnailURL: "",
+				Language:     "English",
+			},
+			Email:              "test@calmato.com",
+			RepositoryResponse: "user-id",
+			Expected:           true,
+		},
+		"ok02": {
+			AuthUser: &user.User{
+				ID:           "user-id",
+				Name:         "テストユーザー",
+				Username:     "test-user",
+				Email:        "test@calmato.com",
+				ThumbnailURL: "",
+				Language:     "English",
+			},
+			Email:              "aiueo@calmato.com",
+			RepositoryResponse: "",
+			Expected:           true,
+		},
+		"ng01": {
+			AuthUser:           &user.User{},
+			Email:              "aiueo@calmato.com",
+			RepositoryResponse: "aiueo-id",
+			Expected:           false,
+		},
+		"ng02": {
+			AuthUser: &user.User{
+				ID:           "user-id",
+				Name:         "テストユーザー",
+				Username:     "test-user",
+				Email:        "test@calmato.com",
+				ThumbnailURL: "",
+				Language:     "English",
+			},
+			Email:              "aiueo@calmato.com",
+			RepositoryResponse: "aiueo-id",
+			Expected:           false,
+		},
+	}
+
+	for result, testCase := range testCases {
+		ctx, cancel := context.WithCancel(context.Background())
+		defer cancel()
+
+		ctrl := gomock.NewController(t)
+		defer ctrl.Finish()
+
+		// Defined mocks
+		udvm := mock_user.NewMockUserDomainValidation(ctrl)
+
+		urm := mock_user.NewMockUserRepository(ctrl)
+		urm.EXPECT().GetUIDByEmail(ctx, testCase.Email).Return(testCase.RepositoryResponse, nil)
+
+		uum := mock_user.NewMockUserUploader(ctrl)
+
+		// Start test
+		t.Run(result, func(t *testing.T) {
+			target := NewUserService(udvm, urm, uum)
+
+			got := target.UniqueCheckEmail(ctx, testCase.AuthUser, testCase.Email)
+			if !reflect.DeepEqual(got, testCase.Expected) {
+				t.Fatalf("want %#v, but %#v", testCase.Expected, got)
+				return
+			}
+		})
+	}
+}
+
+func TestUserService_UniqueCheckUsername(t *testing.T) {
+	testCases := map[string]struct {
+		AuthUser           *user.User
+		Username           string
+		RepositoryResponse *user.User
+		Expected           bool
+	}{
+		"ok01": {
+			AuthUser: &user.User{
+				ID:           "user-id",
+				Name:         "テストユーザー",
+				Username:     "test-user",
+				Email:        "test@calmato.com",
+				ThumbnailURL: "",
+				Language:     "English",
+			},
+			Username: "test-user",
+			RepositoryResponse: &user.User{
+				ID:           "user-id",
+				Name:         "テストユーザー",
+				Username:     "test-user",
+				Email:        "test@calmato.com",
+				ThumbnailURL: "",
+				Language:     "English",
+			},
+			Expected: true,
+		},
+		"ok02": {
+			AuthUser: &user.User{
+				ID:           "user-id",
+				Name:         "テストユーザー",
+				Username:     "test-user",
+				Email:        "test@calmato.com",
+				ThumbnailURL: "",
+				Language:     "English",
+			},
+			Username:           "aiueo-user",
+			RepositoryResponse: nil,
+			Expected:           true,
+		},
+		"ng01": {
+			AuthUser: &user.User{},
+			Username: "aiueo-user",
+			RepositoryResponse: &user.User{
+				ID:           "aiueo-id",
+				Name:         "あいうえお",
+				Username:     "aiueo-user",
+				Email:        "aiueo@calmato.com",
+				ThumbnailURL: "",
+				Language:     "English",
+			},
+			Expected: false,
+		},
+		"ng02": {
+			AuthUser: &user.User{
+				ID:           "user-id",
+				Name:         "テストユーザー",
+				Username:     "test-user",
+				Email:        "test@calmato.com",
+				ThumbnailURL: "",
+				Language:     "English",
+			},
+			Username: "aiueo-user",
+			RepositoryResponse: &user.User{
+				ID:           "aiueo-id",
+				Name:         "あいうえお",
+				Username:     "aiueo-user",
+				Email:        "aiueo@calmato.com",
+				ThumbnailURL: "",
+				Language:     "English",
+			},
+			Expected: false,
+		},
+	}
+
+	for result, testCase := range testCases {
+		ctx, cancel := context.WithCancel(context.Background())
+		defer cancel()
+
+		ctrl := gomock.NewController(t)
+		defer ctrl.Finish()
+
+		// Defined mocks
+		udvm := mock_user.NewMockUserDomainValidation(ctrl)
+
+		urm := mock_user.NewMockUserRepository(ctrl)
+		urm.EXPECT().GetUserByUsername(ctx, testCase.Username).Return(testCase.RepositoryResponse, nil)
+
+		uum := mock_user.NewMockUserUploader(ctrl)
+
+		// Start test
+		t.Run(result, func(t *testing.T) {
+			target := NewUserService(udvm, urm, uum)
+
+			got := target.UniqueCheckUsername(ctx, testCase.AuthUser, testCase.Username)
+			if !reflect.DeepEqual(got, testCase.Expected) {
+				t.Fatalf("want %#v, but %#v", testCase.Expected, got)
+				return
+			}
+		})
+	}
+}
