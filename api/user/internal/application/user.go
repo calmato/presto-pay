@@ -17,6 +17,8 @@ type UserApplication interface {
 	Create(ctx context.Context, req *request.CreateUser) (*user.User, error)
 	Update(ctx context.Context, req *request.UpdateUser) (*user.User, error)
 	UpdatePassword(ctx context.Context, req *request.UpdateUserPassword) (*user.User, error)
+	UniqueCheckEmail(ctx context.Context, req *request.UniqueCheckUserEmail) (bool, error)
+	UniqueCheckUsername(ctx context.Context, req *request.UniqueCheckUserUsername) (bool, error)
 }
 
 type userApplication struct {
@@ -103,6 +105,26 @@ func (ua *userApplication) UpdatePassword(ctx context.Context, req *request.Upda
 	}
 
 	return u, nil
+}
+
+func (ua *userApplication) UniqueCheckEmail(ctx context.Context, req *request.UniqueCheckUserEmail) (bool, error) {
+	if ves := ua.userRequestValidation.UniqueCheckEmail(req); len(ves) > 0 {
+		err := xerrors.New("Failed to RequestValidation")
+		return false, domain.InvalidRequestValidation.New(err, ves...)
+	}
+
+	u, _ := ua.userService.Authentication(ctx)
+	return ua.userService.UniqueCheckEmail(ctx, u, req.Email), nil
+}
+
+func (ua *userApplication) UniqueCheckUsername(ctx context.Context, req *request.UniqueCheckUserUsername) (bool, error) {
+	if ves := ua.userRequestValidation.UniqueCheckUsername(req); len(ves) > 0 {
+		err := xerrors.New("Failed to RequestValidation")
+		return false, domain.InvalidRequestValidation.New(err, ves...)
+	}
+
+	u, _ := ua.userService.Authentication(ctx)
+	return ua.userService.UniqueCheckUsername(ctx, u, req.Username), nil
 }
 
 func getThumbnailURL(ctx context.Context, ua *userApplication, thumbnail string) (string, error) {

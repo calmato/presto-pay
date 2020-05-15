@@ -103,6 +103,36 @@ func (us *userService) UploadThumbnail(ctx context.Context, data []byte) (string
 	return thumbnailURL, nil
 }
 
+func (us *userService) UniqueCheckEmail(ctx context.Context, au *user.User, email string) bool {
+	uid, _ := us.userRepository.GetUIDByEmail(ctx, email)
+	if uid == "" {
+		if au == nil {
+			return false
+		}
+
+		if au.ID == uid {
+			return true
+		}
+	}
+
+	return false
+}
+
+func (us *userService) UniqueCheckUsername(ctx context.Context, au *user.User, username string) bool {
+	u, _ := us.userRepository.GetUserByUsername(ctx, username)
+	if u == nil {
+		if au == nil {
+			return false
+		}
+
+		if au.ID == u.ID {
+			return true
+		}
+	}
+
+	return false
+}
+
 func isContainCustomUniqueError(ves []*domain.ValidationError) bool {
 	for _, v := range ves {
 		if v.Message == domain.CustomUniqueMessage {
