@@ -5,6 +5,8 @@
 ![User API(Golang) Build and Test](https://github.com/calmato/presto-pay/workflows/User%20API(Golang)%20Build%20and%20Test/badge.svg)
 ![User API(Golang) Reviewdog](https://github.com/calmato/presto-pay/workflows/User%20API(Golang)%20Reviewdog/badge.svg)  
 
+![User API(Golang) Deploy to Staging](https://github.com/calmato/presto-pay/workflows/User%20API(Golang)%20Deploy%20to%20Staging/badge.svg)
+
 ## 各種設定
 
 <details open>
