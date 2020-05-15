@@ -16,6 +16,7 @@ import (
 type UserApplication interface {
 	Create(ctx context.Context, req *request.CreateUser) (*user.User, error)
 	Update(ctx context.Context, req *request.UpdateUser) (*user.User, error)
+	UpdatePassword(ctx context.Context, req *request.UpdateUserPassword) (*user.User, error)
 }
 
 type userApplication struct {
@@ -80,6 +81,24 @@ func (ua *userApplication) Update(ctx context.Context, req *request.UpdateUser) 
 	u.ThumbnailURL = thumbnailURL
 
 	if _, err := ua.userService.Update(ctx, u); err != nil {
+		return nil, err
+	}
+
+	return u, nil
+}
+
+func (ua *userApplication) UpdatePassword(ctx context.Context, req *request.UpdateUserPassword) (*user.User, error) {
+	u, err := ua.userService.Authentication(ctx)
+	if err != nil {
+		return nil, domain.Unauthorized.New(err)
+	}
+
+	if ves := ua.userRequestValidation.UpdatePassword(req); len(ves) > 0 {
+		err := xerrors.New("Failed to RequestValidation")
+		return nil, domain.InvalidRequestValidation.New(err, ves...)
+	}
+
+	if err := ua.userService.UpdatePassword(ctx, u.ID, req.Password); err != nil {
 		return nil, err
 	}
 

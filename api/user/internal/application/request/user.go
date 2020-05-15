@@ -18,3 +18,9 @@ type UpdateUser struct {
 	Thumbnail string `Json:"thumbnail"`
 	Language  string `json:"language" validate:"required"`
 }
+
+// UpdateUserPassword - パスワード編集APIのリクエスト
+type UpdateUserPassword struct {
+	Password             string `json:"password" validate:"password,required,min=6,max=32"`
+	PasswordConfirmation string `json:"passwordConfirmation" validate:"required,eqfield=Password"`
+}

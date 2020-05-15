@@ -9,6 +9,7 @@ import (
 type UserRequestValidation interface {
 	CreateUser(req *request.CreateUser) []*domain.ValidationError
 	UpdateUser(req *request.UpdateUser) []*domain.ValidationError
+	UpdatePassword(req *request.UpdateUserPassword) []*domain.ValidationError
 }
 
 type userRequestValidation struct {
@@ -29,5 +30,9 @@ func (urv *userRequestValidation) CreateUser(req *request.CreateUser) []*domain.
 }
 
 func (urv *userRequestValidation) UpdateUser(req *request.UpdateUser) []*domain.ValidationError {
+	return urv.validator.Run(req)
+}
+
+func (urv *userRequestValidation) UpdatePassword(req *request.UpdateUserPassword) []*domain.ValidationError {
 	return urv.validator.Run(req)
 }

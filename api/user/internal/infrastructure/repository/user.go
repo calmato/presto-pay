@@ -117,6 +117,14 @@ func (ur *userRepository) Update(ctx context.Context, u *user.User) error {
 	return nil
 }
 
+func (ur *userRepository) UpdatePassword(ctx context.Context, uid string, password string) error {
+	if err := ur.auth.UpdatePassword(ctx, uid, password); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (ur *userRepository) GetUIDByEmail(ctx context.Context, email string) (string, error) {
 	uid, err := ur.auth.GetUIDByEmail(ctx, email)
 	if err != nil {
