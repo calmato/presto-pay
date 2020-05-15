@@ -118,7 +118,7 @@ func (us *userService) UniqueCheckEmail(ctx context.Context, au *user.User, emai
 
 func (us *userService) UniqueCheckUsername(ctx context.Context, au *user.User, username string) bool {
 	u, _ := us.userRepository.GetUserByUsername(ctx, username)
-	if u == nil {
+	if u == nil || u.ID == "" {
 		return true
 	}
 
