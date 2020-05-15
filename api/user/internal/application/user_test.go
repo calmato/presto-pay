@@ -2,7 +2,9 @@ package application
 
 import (
 	"context"
+	"reflect"
 	"testing"
+	"time"
 
 	"github.com/calmato/presto-pay/api/user/internal/application/request"
 	"github.com/calmato/presto-pay/api/user/internal/domain"
@@ -114,6 +116,78 @@ func TestUserApplication_Update(t *testing.T) {
 			_, err := target.Update(ctx, testCase.Request)
 			if err != nil {
 				t.Fatalf("error: %v", err)
+				return
+			}
+		})
+	}
+}
+
+func TestUserApplication_UpdatePassword(t *testing.T) {
+	current := time.Now()
+
+	testCases := map[string]struct {
+		Request  *request.UpdateUserPassword
+		Auth     *user.User
+		Expected *user.User
+	}{
+		"ok": {
+			Request: &request.UpdateUserPassword{
+				Password:             "12345678",
+				PasswordConfirmation: "12345678",
+			},
+			Auth: &user.User{
+				ID:           "user-id",
+				Name:         "テストユーザー",
+				Username:     "test-user",
+				Email:        "test@calmato.com",
+				ThumbnailURL: "",
+				Language:     "English",
+				CreatedAt:    current,
+				UpdatedAt:    current,
+			},
+			Expected: &user.User{
+				ID:           "user-id",
+				Name:         "テストユーザー",
+				Username:     "test-user",
+				Email:        "test@calmato.com",
+				ThumbnailURL: "",
+				Language:     "English",
+				CreatedAt:    current,
+				UpdatedAt:    current,
+			},
+		},
+	}
+
+	for result, testCase := range testCases {
+		ctx, cancel := context.WithCancel(context.Background())
+		defer cancel()
+
+		ctrl := gomock.NewController(t)
+		defer ctrl.Finish()
+
+		// Defined variables
+		ves := make([]*domain.ValidationError, 0)
+
+		// Defined mocks
+		urvm := mock_validation.NewMockUserRequestValidation(ctrl)
+		urvm.EXPECT().UpdatePassword(testCase.Request).Return(ves)
+
+		usm := mock_user.NewMockUserService(ctrl)
+		usm.EXPECT().Authentication(ctx).Return(testCase.Expected, nil)
+		usm.EXPECT().UpdatePassword(ctx, testCase.Auth.ID, testCase.Request.Password).Return(nil)
+
+		// Start test
+		t.Run(result, func(t *testing.T) {
+			target := NewUserApplication(urvm, usm)
+
+			got, err := target.UpdatePassword(ctx, testCase.Request)
+			if err != nil {
+				t.Fatalf("error: %v", err)
+				return
+			}
+
+			if !reflect.DeepEqual(got, testCase.Expected) {
+				t.Fatalf("want %#v, but %#v", testCase.Expected, got)
 				return
 			}
 		})

@@ -153,6 +153,45 @@ func TestUserService_Update(t *testing.T) {
 	}
 }
 
+func TestUserService_UpdatePassword(t *testing.T) {
+	testCases := map[string]struct {
+		ID       string
+		Password string
+	}{
+		"ok": {
+			ID:       "user-id",
+			Password: "!Qaz2wsx",
+		},
+	}
+
+	for result, testCase := range testCases {
+		ctx, cancel := context.WithCancel(context.Background())
+		defer cancel()
+
+		ctrl := gomock.NewController(t)
+		defer ctrl.Finish()
+
+		// Defined mocks
+		udvm := mock_user.NewMockUserDomainValidation(ctrl)
+
+		urm := mock_user.NewMockUserRepository(ctrl)
+		urm.EXPECT().UpdatePassword(ctx, testCase.ID, testCase.Password).Return(nil)
+
+		uum := mock_user.NewMockUserUploader(ctrl)
+
+		// Start test
+		t.Run(result, func(t *testing.T) {
+			target := NewUserService(udvm, urm, uum)
+
+			err := target.UpdatePassword(ctx, testCase.ID, testCase.Password)
+			if err != nil {
+				t.Fatalf("error: %v", err)
+				return
+			}
+		})
+	}
+}
+
 func TestUserService_UploadThumbnail(t *testing.T) {
 	testCases := map[string]struct {
 		Data     []byte
