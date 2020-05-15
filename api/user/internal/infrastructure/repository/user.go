@@ -27,7 +27,7 @@ func NewUserRepository(fa *authentication.Auth, fs *firestore.Firestore) user.Us
 }
 
 func (ur *userRepository) Authentication(ctx context.Context) (*user.User, error) {
-	userReference := getUserReference()
+	userReference := getUserCollection()
 
 	t, err := getToken(ctx)
 	if err != nil {
@@ -77,7 +77,7 @@ func (ur *userRepository) Authentication(ctx context.Context) (*user.User, error
 }
 
 func (ur *userRepository) Create(ctx context.Context, u *user.User) error {
-	userReference := getUserReference()
+	userReference := getUserCollection()
 
 	_, err := ur.auth.CreateUser(ctx, u.ID, u.Email, u.Password)
 	if err != nil {
@@ -92,7 +92,7 @@ func (ur *userRepository) Create(ctx context.Context, u *user.User) error {
 }
 
 func (ur *userRepository) Update(ctx context.Context, u *user.User) error {
-	userReference := getUserReference()
+	userReference := getUserCollection()
 
 	au, err := ur.auth.GetUserByUID(ctx, u.ID)
 	if err != nil {
@@ -135,7 +135,7 @@ func (ur *userRepository) GetUIDByEmail(ctx context.Context, email string) (stri
 }
 
 func (ur *userRepository) GetUserByUsername(ctx context.Context, username string) (*user.User, error) {
-	userReference := getUserReference()
+	userReference := getUserCollection()
 
 	query := &firestore.Query{
 		Field:    "username",

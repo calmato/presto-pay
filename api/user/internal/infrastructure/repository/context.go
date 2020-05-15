@@ -5,6 +5,6 @@ const (
 	UserCollection = "users"
 )
 
-func getUserReference() string {
+func getUserCollection() string {
 	return UserCollection
 }
