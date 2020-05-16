@@ -10,6 +10,7 @@
 		A555DE52247040DA00AF0A82 /* SocialButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A555DE51247040DA00AF0A82 /* SocialButton.swift */; };
 		A555DE562470429400AF0A82 /* LoginForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = A555DE552470429400AF0A82 /* LoginForm.swift */; };
 		A555DE5A247046A000AF0A82 /* ColorComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = A555DE59247046A000AF0A82 /* ColorComponent.swift */; };
+		A555DE5C2470486200AF0A82 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A555DE5B2470486200AF0A82 /* ContentView.swift */; };
 		A5C0D22B246F05EB00D1AEC4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C0D22A246F05EB00D1AEC4 /* AppDelegate.swift */; };
 		A5C0D22D246F05EB00D1AEC4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C0D22C246F05EB00D1AEC4 /* SceneDelegate.swift */; };
 		A5C0D230246F05EB00D1AEC4 /* PrestoPay.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A5C0D22E246F05EB00D1AEC4 /* PrestoPay.xcdatamodeld */; };
@@ -24,6 +25,7 @@
 		A555DE51247040DA00AF0A82 /* SocialButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialButton.swift; sourceTree = "<group>"; };
 		A555DE552470429400AF0A82 /* LoginForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginForm.swift; sourceTree = "<group>"; };
 		A555DE59247046A000AF0A82 /* ColorComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorComponent.swift; sourceTree = "<group>"; };
+		A555DE5B2470486200AF0A82 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		A5C0D227246F05EB00D1AEC4 /* PrestoPay.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PrestoPay.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A5C0D22A246F05EB00D1AEC4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A5C0D22C246F05EB00D1AEC4 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -125,6 +127,7 @@
 				A5C0D231246F05EB00D1AEC4 /* LoginView.swift */,
 				A555DE51247040DA00AF0A82 /* SocialButton.swift */,
 				A555DE552470429400AF0A82 /* LoginForm.swift */,
+				A555DE5B2470486200AF0A82 /* ContentView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -242,6 +245,7 @@
 			files = (
 				A5C0D230246F05EB00D1AEC4 /* PrestoPay.xcdatamodeld in Sources */,
 				A555DE562470429400AF0A82 /* LoginForm.swift in Sources */,
+				A555DE5C2470486200AF0A82 /* ContentView.swift in Sources */,
 				A5C0D22B246F05EB00D1AEC4 /* AppDelegate.swift in Sources */,
 				A555DE52247040DA00AF0A82 /* SocialButton.swift in Sources */,
 				A5C0D232246F05EB00D1AEC4 /* LoginView.swift in Sources */,
