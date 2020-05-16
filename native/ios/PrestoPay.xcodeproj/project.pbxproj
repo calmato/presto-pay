@@ -7,10 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A555DE52247040DA00AF0A82 /* SocialButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A555DE51247040DA00AF0A82 /* SocialButton.swift */; };
+		A555DE562470429400AF0A82 /* LoginForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = A555DE552470429400AF0A82 /* LoginForm.swift */; };
+		A555DE5A247046A000AF0A82 /* ColorComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = A555DE59247046A000AF0A82 /* ColorComponent.swift */; };
 		A5C0D22B246F05EB00D1AEC4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C0D22A246F05EB00D1AEC4 /* AppDelegate.swift */; };
 		A5C0D22D246F05EB00D1AEC4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C0D22C246F05EB00D1AEC4 /* SceneDelegate.swift */; };
 		A5C0D230246F05EB00D1AEC4 /* PrestoPay.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A5C0D22E246F05EB00D1AEC4 /* PrestoPay.xcdatamodeld */; };
-		A5C0D232246F05EB00D1AEC4 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C0D231246F05EB00D1AEC4 /* ContentView.swift */; };
+		A5C0D232246F05EB00D1AEC4 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C0D231246F05EB00D1AEC4 /* LoginView.swift */; };
 		A5C0D234246F05ED00D1AEC4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A5C0D233246F05ED00D1AEC4 /* Assets.xcassets */; };
 		A5C0D237246F05ED00D1AEC4 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A5C0D236246F05ED00D1AEC4 /* Preview Assets.xcassets */; };
 		A5C0D23A246F05ED00D1AEC4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A5C0D238246F05ED00D1AEC4 /* LaunchScreen.storyboard */; };
@@ -18,11 +21,14 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		A555DE51247040DA00AF0A82 /* SocialButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialButton.swift; sourceTree = "<group>"; };
+		A555DE552470429400AF0A82 /* LoginForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginForm.swift; sourceTree = "<group>"; };
+		A555DE59247046A000AF0A82 /* ColorComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorComponent.swift; sourceTree = "<group>"; };
 		A5C0D227246F05EB00D1AEC4 /* PrestoPay.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PrestoPay.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A5C0D22A246F05EB00D1AEC4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A5C0D22C246F05EB00D1AEC4 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		A5C0D22F246F05EB00D1AEC4 /* PrestoPay.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = PrestoPay.xcdatamodel; sourceTree = "<group>"; };
-		A5C0D231246F05EB00D1AEC4 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		A5C0D231246F05EB00D1AEC4 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		A5C0D233246F05ED00D1AEC4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A5C0D236246F05ED00D1AEC4 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		A5C0D239246F05ED00D1AEC4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -50,7 +56,6 @@
 				E66C7C04893B06EB2843B5BD /* Pods-PrestoPay.debug.xcconfig */,
 				DA4B1890C1866262DCA2E578 /* Pods-PrestoPay.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -60,6 +65,14 @@
 				FC5F735FE5D99B8AAC7A640C /* Pods_PrestoPay.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		A555DE582470468A00AF0A82 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				A555DE59247046A000AF0A82 /* ColorComponent.swift */,
+			);
+			path = Utils;
 			sourceTree = "<group>";
 		};
 		A5C0D21E246F05EB00D1AEC4 = {
@@ -83,6 +96,7 @@
 		A5C0D229246F05EB00D1AEC4 /* PrestoPay */ = {
 			isa = PBXGroup;
 			children = (
+				A555DE582470468A00AF0A82 /* Utils */,
 				A5C0D244246F070200D1AEC4 /* Models */,
 				A5C0D243246F06F400D1AEC4 /* ViewModels */,
 				A5C0D241246F06A000D1AEC4 /* Views */,
@@ -108,7 +122,9 @@
 		A5C0D241246F06A000D1AEC4 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				A5C0D231246F05EB00D1AEC4 /* ContentView.swift */,
+				A5C0D231246F05EB00D1AEC4 /* LoginView.swift */,
+				A555DE51247040DA00AF0A82 /* SocialButton.swift */,
+				A555DE552470429400AF0A82 /* LoginForm.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -225,9 +241,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				A5C0D230246F05EB00D1AEC4 /* PrestoPay.xcdatamodeld in Sources */,
+				A555DE562470429400AF0A82 /* LoginForm.swift in Sources */,
 				A5C0D22B246F05EB00D1AEC4 /* AppDelegate.swift in Sources */,
-				A5C0D232246F05EB00D1AEC4 /* ContentView.swift in Sources */,
+				A555DE52247040DA00AF0A82 /* SocialButton.swift in Sources */,
+				A5C0D232246F05EB00D1AEC4 /* LoginView.swift in Sources */,
 				A5C0D22D246F05EB00D1AEC4 /* SceneDelegate.swift in Sources */,
+				A555DE5A247046A000AF0A82 /* ColorComponent.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
