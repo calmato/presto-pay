@@ -17,8 +17,45 @@ struct ContentView: View {
           .fontWeight(.bold)
           .foregroundColor(.white)
 
-        VStack(spacing: 16) {
-          VStack {
+        VStack {
+          VStack(spacing: 16) {
+            HStack {
+              Image("mail")
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(height: 28)
+              TextField("Email", text: $email)
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+            }
+              .frame(width: 348)
+            HStack {
+              Image("password")
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(height: 28)
+              TextField("Password", text: $password)
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+            }
+              .frame(width: 348)
+
+            Button(action: {}) {
+              Text("ログイン")
+            }
+              .frame(width: 348, height: 32)
+              .foregroundColor(.white)
+              .background(primaryColor)
+
+            NavigationLink(destination: ContentView()) {
+              Text("パスワードを忘れた方")
+                .font(.system(size: 14))
+                .foregroundColor(primaryColor)
+            }
+          }
+
+          Divider()
+            .padding(.all)
+
+          VStack(spacing: 16) {
             Button(action: {}) {
               HStack {
                 Image("google")
@@ -72,45 +109,12 @@ struct ContentView: View {
                 RoundedRectangle(cornerRadius: 3)
                   .stroke(Color.gray, lineWidth: 1)
               )
-          }
 
-          Divider()
-            .padding(.all)
-
-          HStack {
-            Image("mail")
-              .resizable()
-              .aspectRatio(contentMode: .fit)
-              .frame(height: 28)
-            TextField("Email", text: $email)
-              .textFieldStyle(RoundedBorderTextFieldStyle())
-          }
-            .frame(width: 348)
-          HStack {
-            Image("password")
-              .resizable()
-              .aspectRatio(contentMode: .fit)
-              .frame(height: 28)
-            TextField("Password", text: $password)
-              .textFieldStyle(RoundedBorderTextFieldStyle())
-          }
-            .frame(width: 348)
-
-          Button(action: {}) {
-            Text("ログイン")
-          }
-            .frame(width: 348, height: 32)
-            .foregroundColor(.white)
-            .background(primaryColor)
-
-          VStack(spacing: 2) {
-            Text("新規登録する")
-              .fontWeight(.light)
-              .font(.system(size: 14))
-
-            Text("パスワードを忘れた")
-              .fontWeight(.light)
-              .font(.system(size: 14))
+            NavigationLink(destination: ContentView()) {
+              Text("アカウントをお持ちでない方")
+                .font(.system(size: 14))
+                .foregroundColor(primaryColor)
+            }
           }
         }
           .frame(width: 380, height: 460)
