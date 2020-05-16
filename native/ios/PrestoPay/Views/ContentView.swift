@@ -3,9 +3,9 @@ import SwiftUI
 struct ContentView: View {
   @State var email: String = ""
   @State var password: String = ""
-  
+
   let primaryColor: Color = Color(red: 43/255, green: 172/255, blue: 252/255)
-  
+
   var body: some View {
     ZStack {
       primaryColor
@@ -16,7 +16,7 @@ struct ContentView: View {
           .font(.largeTitle)
           .fontWeight(.bold)
           .foregroundColor(.white)
-        
+
         VStack(spacing: 16) {
           VStack {
             Button(action: {}) {
@@ -36,7 +36,7 @@ struct ContentView: View {
                 RoundedRectangle(cornerRadius: 3)
                   .stroke(Color.gray, lineWidth: 1)
               )
-          
+
             Button(action: {}) {
               HStack {
                 Image("twitter")
@@ -54,7 +54,7 @@ struct ContentView: View {
                 RoundedRectangle(cornerRadius: 3)
                   .stroke(Color.gray, lineWidth: 1)
               )
-            
+
             Button(action: {}) {
               HStack {
                 Image("facebook")
@@ -76,7 +76,7 @@ struct ContentView: View {
 
           Divider()
             .padding(.all)
-          
+
           HStack {
             Image("mail")
               .resizable()
@@ -95,14 +95,14 @@ struct ContentView: View {
               .textFieldStyle(RoundedBorderTextFieldStyle())
           }
             .frame(width: 348)
-          
+
           Button(action: {}) {
             Text("ログイン")
           }
             .frame(width: 348, height: 32)
             .foregroundColor(.white)
             .background(primaryColor)
-          
+
           VStack(spacing: 2) {
             Text("新規登録する")
               .fontWeight(.light)
