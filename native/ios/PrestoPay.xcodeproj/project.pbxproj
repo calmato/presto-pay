@@ -7,25 +7,37 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A555DE52247040DA00AF0A82 /* SocialButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A555DE51247040DA00AF0A82 /* SocialButton.swift */; };
+		A555DE562470429400AF0A82 /* LoginForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = A555DE552470429400AF0A82 /* LoginForm.swift */; };
+		A555DE5A247046A000AF0A82 /* ColorComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = A555DE59247046A000AF0A82 /* ColorComponent.swift */; };
+		A555DE5C2470486200AF0A82 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A555DE5B2470486200AF0A82 /* ContentView.swift */; };
 		A5C0D22B246F05EB00D1AEC4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C0D22A246F05EB00D1AEC4 /* AppDelegate.swift */; };
 		A5C0D22D246F05EB00D1AEC4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C0D22C246F05EB00D1AEC4 /* SceneDelegate.swift */; };
 		A5C0D230246F05EB00D1AEC4 /* PrestoPay.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A5C0D22E246F05EB00D1AEC4 /* PrestoPay.xcdatamodeld */; };
-		A5C0D232246F05EB00D1AEC4 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C0D231246F05EB00D1AEC4 /* ContentView.swift */; };
+		A5C0D232246F05EB00D1AEC4 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C0D231246F05EB00D1AEC4 /* LoginView.swift */; };
 		A5C0D234246F05ED00D1AEC4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A5C0D233246F05ED00D1AEC4 /* Assets.xcassets */; };
 		A5C0D237246F05ED00D1AEC4 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A5C0D236246F05ED00D1AEC4 /* Preview Assets.xcassets */; };
 		A5C0D23A246F05ED00D1AEC4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A5C0D238246F05ED00D1AEC4 /* LaunchScreen.storyboard */; };
+		DE5846462200E6969C11D4D4 /* Pods_PrestoPay.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC5F735FE5D99B8AAC7A640C /* Pods_PrestoPay.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		A555DE51247040DA00AF0A82 /* SocialButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialButton.swift; sourceTree = "<group>"; };
+		A555DE552470429400AF0A82 /* LoginForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginForm.swift; sourceTree = "<group>"; };
+		A555DE59247046A000AF0A82 /* ColorComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorComponent.swift; sourceTree = "<group>"; };
+		A555DE5B2470486200AF0A82 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		A5C0D227246F05EB00D1AEC4 /* PrestoPay.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PrestoPay.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A5C0D22A246F05EB00D1AEC4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A5C0D22C246F05EB00D1AEC4 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		A5C0D22F246F05EB00D1AEC4 /* PrestoPay.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = PrestoPay.xcdatamodel; sourceTree = "<group>"; };
-		A5C0D231246F05EB00D1AEC4 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		A5C0D231246F05EB00D1AEC4 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		A5C0D233246F05ED00D1AEC4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A5C0D236246F05ED00D1AEC4 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		A5C0D239246F05ED00D1AEC4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A5C0D23B246F05ED00D1AEC4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DA4B1890C1866262DCA2E578 /* Pods-PrestoPay.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PrestoPay.release.xcconfig"; path = "Target Support Files/Pods-PrestoPay/Pods-PrestoPay.release.xcconfig"; sourceTree = "<group>"; };
+		E66C7C04893B06EB2843B5BD /* Pods-PrestoPay.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PrestoPay.debug.xcconfig"; path = "Target Support Files/Pods-PrestoPay/Pods-PrestoPay.debug.xcconfig"; sourceTree = "<group>"; };
+		FC5F735FE5D99B8AAC7A640C /* Pods_PrestoPay.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PrestoPay.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -33,17 +45,45 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DE5846462200E6969C11D4D4 /* Pods_PrestoPay.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		179143DCE626A2B619EAFD4C /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				E66C7C04893B06EB2843B5BD /* Pods-PrestoPay.debug.xcconfig */,
+				DA4B1890C1866262DCA2E578 /* Pods-PrestoPay.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		1C2B784A54753DDCDC687F93 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				FC5F735FE5D99B8AAC7A640C /* Pods_PrestoPay.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		A555DE582470468A00AF0A82 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				A555DE59247046A000AF0A82 /* ColorComponent.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
 		A5C0D21E246F05EB00D1AEC4 = {
 			isa = PBXGroup;
 			children = (
 				A5C0D229246F05EB00D1AEC4 /* PrestoPay */,
 				A5C0D228246F05EB00D1AEC4 /* Products */,
+				179143DCE626A2B619EAFD4C /* Pods */,
+				1C2B784A54753DDCDC687F93 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -58,6 +98,7 @@
 		A5C0D229246F05EB00D1AEC4 /* PrestoPay */ = {
 			isa = PBXGroup;
 			children = (
+				A555DE582470468A00AF0A82 /* Utils */,
 				A5C0D244246F070200D1AEC4 /* Models */,
 				A5C0D243246F06F400D1AEC4 /* ViewModels */,
 				A5C0D241246F06A000D1AEC4 /* Views */,
@@ -83,7 +124,10 @@
 		A5C0D241246F06A000D1AEC4 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				A5C0D231246F05EB00D1AEC4 /* ContentView.swift */,
+				A5C0D231246F05EB00D1AEC4 /* LoginView.swift */,
+				A555DE51247040DA00AF0A82 /* SocialButton.swift */,
+				A555DE552470429400AF0A82 /* LoginForm.swift */,
+				A555DE5B2470486200AF0A82 /* ContentView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -109,6 +153,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = A5C0D23E246F05ED00D1AEC4 /* Build configuration list for PBXNativeTarget "PrestoPay" */;
 			buildPhases = (
+				C7A622B2DE0A4B6E2A5C1AB7 /* [CP] Check Pods Manifest.lock */,
 				A5C0D223246F05EB00D1AEC4 /* Sources */,
 				A5C0D224246F05EB00D1AEC4 /* Frameworks */,
 				A5C0D225246F05EB00D1AEC4 /* Resources */,
@@ -168,15 +213,44 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		C7A622B2DE0A4B6E2A5C1AB7 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-PrestoPay-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		A5C0D223246F05EB00D1AEC4 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				A5C0D230246F05EB00D1AEC4 /* PrestoPay.xcdatamodeld in Sources */,
+				A555DE562470429400AF0A82 /* LoginForm.swift in Sources */,
+				A555DE5C2470486200AF0A82 /* ContentView.swift in Sources */,
 				A5C0D22B246F05EB00D1AEC4 /* AppDelegate.swift in Sources */,
-				A5C0D232246F05EB00D1AEC4 /* ContentView.swift in Sources */,
+				A555DE52247040DA00AF0A82 /* SocialButton.swift in Sources */,
+				A5C0D232246F05EB00D1AEC4 /* LoginView.swift in Sources */,
 				A5C0D22D246F05EB00D1AEC4 /* SceneDelegate.swift in Sources */,
+				A555DE5A247046A000AF0A82 /* ColorComponent.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -310,6 +384,7 @@
 		};
 		A5C0D23F246F05ED00D1AEC4 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E66C7C04893B06EB2843B5BD /* Pods-PrestoPay.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -330,6 +405,7 @@
 		};
 		A5C0D240246F05ED00D1AEC4 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = DA4B1890C1866262DCA2E578 /* Pods-PrestoPay.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
