@@ -8,6 +8,10 @@ struct ContentView: View {
 
 struct ContentView_Previews: PreviewProvider {
   static var previews: some View {
-    ContentView()
+    ForEach(["iPad Pro (11-inch) (2nd generation)", "iPhone 11", "iPhone SE (2nd generation)"], id: \.self) { device in
+      ContentView()
+        .previewDisplayName(device)
+        .previewDevice(PreviewDevice(rawValue: device))
+    }
   }
 }

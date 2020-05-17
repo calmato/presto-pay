@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		A554000624710B190066A9F2 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A554000524710B190066A9F2 /* LoginViewModel.swift */; };
+		A55400082471103D0066A9F2 /* AuthProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A55400072471103D0066A9F2 /* AuthProvider.swift */; };
+		A554000B247159520066A9F2 /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = A554000A247159520066A9F2 /* CustomTextField.swift */; };
+		A554000D24715B420066A9F2 /* ViewComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = A554000C24715B420066A9F2 /* ViewComponent.swift */; };
+		A554000F24716DC40066A9F2 /* CustomSecureField.swift in Sources */ = {isa = PBXBuildFile; fileRef = A554000E24716DC40066A9F2 /* CustomSecureField.swift */; };
 		A555DE52247040DA00AF0A82 /* SocialButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A555DE51247040DA00AF0A82 /* SocialButton.swift */; };
 		A555DE562470429400AF0A82 /* LoginForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = A555DE552470429400AF0A82 /* LoginForm.swift */; };
 		A555DE5A247046A000AF0A82 /* ColorComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = A555DE59247046A000AF0A82 /* ColorComponent.swift */; };
@@ -24,6 +28,10 @@
 
 /* Begin PBXFileReference section */
 		A554000524710B190066A9F2 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
+		A55400072471103D0066A9F2 /* AuthProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthProvider.swift; sourceTree = "<group>"; };
+		A554000A247159520066A9F2 /* CustomTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
+		A554000C24715B420066A9F2 /* ViewComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewComponent.swift; sourceTree = "<group>"; };
+		A554000E24716DC40066A9F2 /* CustomSecureField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSecureField.swift; sourceTree = "<group>"; };
 		A555DE51247040DA00AF0A82 /* SocialButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialButton.swift; sourceTree = "<group>"; };
 		A555DE552470429400AF0A82 /* LoginForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginForm.swift; sourceTree = "<group>"; };
 		A555DE59247046A000AF0A82 /* ColorComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorComponent.swift; sourceTree = "<group>"; };
@@ -75,6 +83,7 @@
 			isa = PBXGroup;
 			children = (
 				A555DE59247046A000AF0A82 /* ColorComponent.swift */,
+				A554000C24715B420066A9F2 /* ViewComponent.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -130,6 +139,8 @@
 				A555DE51247040DA00AF0A82 /* SocialButton.swift */,
 				A555DE552470429400AF0A82 /* LoginForm.swift */,
 				A555DE5B2470486200AF0A82 /* ContentView.swift */,
+				A554000A247159520066A9F2 /* CustomTextField.swift */,
+				A554000E24716DC40066A9F2 /* CustomSecureField.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -145,6 +156,7 @@
 		A5C0D244246F070200D1AEC4 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				A55400072471103D0066A9F2 /* AuthProvider.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -247,14 +259,18 @@
 			buildActionMask = 2147483647;
 			files = (
 				A5C0D230246F05EB00D1AEC4 /* PrestoPay.xcdatamodeld in Sources */,
+				A554000B247159520066A9F2 /* CustomTextField.swift in Sources */,
 				A555DE562470429400AF0A82 /* LoginForm.swift in Sources */,
+				A55400082471103D0066A9F2 /* AuthProvider.swift in Sources */,
 				A555DE5C2470486200AF0A82 /* ContentView.swift in Sources */,
 				A5C0D22B246F05EB00D1AEC4 /* AppDelegate.swift in Sources */,
 				A555DE52247040DA00AF0A82 /* SocialButton.swift in Sources */,
 				A5C0D232246F05EB00D1AEC4 /* LoginView.swift in Sources */,
+				A554000D24715B420066A9F2 /* ViewComponent.swift in Sources */,
 				A5C0D22D246F05EB00D1AEC4 /* SceneDelegate.swift in Sources */,
 				A555DE5A247046A000AF0A82 /* ColorComponent.swift in Sources */,
 				A554000624710B190066A9F2 /* LoginViewModel.swift in Sources */,
+				A554000F24716DC40066A9F2 /* CustomSecureField.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

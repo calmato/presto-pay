@@ -14,30 +14,24 @@ struct LoginForm: View {
 
   var body: some View {
     VStack(spacing: 16) {
-      HStack {
-        Image("mail")
-          .resizable()
-          .aspectRatio(contentMode: .fit)
-          .frame(height: 28)
-        TextField("Email", text: $email)
-          .textFieldStyle(RoundedBorderTextFieldStyle())
-      }
-        .frame(width: 348)
-      
-      HStack {
-        Image("password")
-          .resizable()
-          .aspectRatio(contentMode: .fit)
-          .frame(height: 28)
-        SecureField("Password", text: $password)
-          .textFieldStyle(RoundedBorderTextFieldStyle())
-      }
-        .frame(width: 348)
+      CustomTextField(
+        text: .constant("Email"),
+        value: $email,
+        image: .constant("email")
+      )
+
+      CustomSecureField(
+        text: .constant("Password"),
+        value: $password,
+        image: .constant("password")
+      )
 
       Button(action: {}) {
+        Spacer()
         Text("ログイン")
+        Spacer()
       }
-        .frame(width: 348, height: 32)
+        .frame(height: 32)
         .foregroundColor(.white)
         .background(PrimaryColor)
     }
