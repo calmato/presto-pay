@@ -1,8 +1,7 @@
 import SwiftUI
 
 struct LoginView: View {
-  @State private var email: String = ""
-  @State private var password: String = ""
+  @ObservedObject private var loginViewModel = LoginViewModel()
 
   var body: some View {
     ZStack {
@@ -17,7 +16,10 @@ struct LoginView: View {
 
         VStack {
           VStack(spacing: 16) {
-            LoginForm(email: self.$email, password: self.$password)
+            LoginForm(
+              email: self.$loginViewModel.email,
+              password: self.$loginViewModel.password
+            )
 
             NavigationLink(destination: LoginView()) {
               Text("パスワードを忘れた方")

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A554000624710B190066A9F2 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A554000524710B190066A9F2 /* LoginViewModel.swift */; };
 		A555DE52247040DA00AF0A82 /* SocialButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A555DE51247040DA00AF0A82 /* SocialButton.swift */; };
 		A555DE562470429400AF0A82 /* LoginForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = A555DE552470429400AF0A82 /* LoginForm.swift */; };
 		A555DE5A247046A000AF0A82 /* ColorComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = A555DE59247046A000AF0A82 /* ColorComponent.swift */; };
@@ -22,6 +23,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		A554000524710B190066A9F2 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
 		A555DE51247040DA00AF0A82 /* SocialButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialButton.swift; sourceTree = "<group>"; };
 		A555DE552470429400AF0A82 /* LoginForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginForm.swift; sourceTree = "<group>"; };
 		A555DE59247046A000AF0A82 /* ColorComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorComponent.swift; sourceTree = "<group>"; };
@@ -135,6 +137,7 @@
 		A5C0D243246F06F400D1AEC4 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				A554000524710B190066A9F2 /* LoginViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -251,6 +254,7 @@
 				A5C0D232246F05EB00D1AEC4 /* LoginView.swift in Sources */,
 				A5C0D22D246F05EB00D1AEC4 /* SceneDelegate.swift in Sources */,
 				A555DE5A247046A000AF0A82 /* ColorComponent.swift in Sources */,
+				A554000624710B190066A9F2 /* LoginViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
