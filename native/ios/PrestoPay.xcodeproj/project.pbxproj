@@ -20,7 +20,8 @@
 		A5856FCE2472BCF5009F5C10 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5856FCD2472BCF5009F5C10 /* User.swift */; };
 		A5856FD12472D48D009F5C10 /* BaseAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5856FD02472D48D009F5C10 /* BaseAPI.swift */; };
 		A5856FD42472D555009F5C10 /* UserForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5856FD32472D555009F5C10 /* UserForm.swift */; };
-		A5856FD62472D87B009F5C10 /* LoginForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5856FD52472D87B009F5C10 /* LoginForm.swift */; };
+		A5856FD62472D87B009F5C10 /* AuthForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5856FD52472D87B009F5C10 /* AuthForm.swift */; };
+		A5856FDB2472DE0E009F5C10 /* SignUpForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5856FDA2472DE0E009F5C10 /* SignUpForm.swift */; };
 		A5C0D22B246F05EB00D1AEC4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C0D22A246F05EB00D1AEC4 /* AppDelegate.swift */; };
 		A5C0D22D246F05EB00D1AEC4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C0D22C246F05EB00D1AEC4 /* SceneDelegate.swift */; };
 		A5C0D230246F05EB00D1AEC4 /* PrestoPay.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A5C0D22E246F05EB00D1AEC4 /* PrestoPay.xcdatamodeld */; };
@@ -45,7 +46,8 @@
 		A5856FCD2472BCF5009F5C10 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		A5856FD02472D48D009F5C10 /* BaseAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseAPI.swift; sourceTree = "<group>"; };
 		A5856FD32472D555009F5C10 /* UserForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserForm.swift; sourceTree = "<group>"; };
-		A5856FD52472D87B009F5C10 /* LoginForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginForm.swift; sourceTree = "<group>"; };
+		A5856FD52472D87B009F5C10 /* AuthForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthForm.swift; sourceTree = "<group>"; };
+		A5856FDA2472DE0E009F5C10 /* SignUpForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpForm.swift; sourceTree = "<group>"; };
 		A5C0D227246F05EB00D1AEC4 /* PrestoPay.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PrestoPay.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A5C0D22A246F05EB00D1AEC4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A5C0D22C246F05EB00D1AEC4 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -128,9 +130,17 @@
 			isa = PBXGroup;
 			children = (
 				A5856FD32472D555009F5C10 /* UserForm.swift */,
-				A5856FD52472D87B009F5C10 /* LoginForm.swift */,
+				A5856FD52472D87B009F5C10 /* AuthForm.swift */,
 			);
 			path = Forms;
+			sourceTree = "<group>";
+		};
+		A5856FD72472DD70009F5C10 /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+				A554000524710B190066A9F2 /* LoginViewModel.swift */,
+			);
+			path = Auth;
 			sourceTree = "<group>";
 		};
 		A5C0D21E246F05EB00D1AEC4 = {
@@ -185,6 +195,7 @@
 				A555DE5B2470486200AF0A82 /* ContentView.swift */,
 				A554000A247159520066A9F2 /* CustomTextField.swift */,
 				A554000E24716DC40066A9F2 /* CustomSecureField.swift */,
+				A5856FDA2472DE0E009F5C10 /* SignUpForm.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -192,7 +203,7 @@
 		A5C0D243246F06F400D1AEC4 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
-				A554000524710B190066A9F2 /* LoginViewModel.swift */,
+				A5856FD72472DD70009F5C10 /* Auth */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -312,7 +323,7 @@
 				A555DE5C2470486200AF0A82 /* ContentView.swift in Sources */,
 				A5C0D22B246F05EB00D1AEC4 /* AppDelegate.swift in Sources */,
 				A555DE52247040DA00AF0A82 /* SocialButton.swift in Sources */,
-				A5856FD62472D87B009F5C10 /* LoginForm.swift in Sources */,
+				A5856FD62472D87B009F5C10 /* AuthForm.swift in Sources */,
 				A5C0D232246F05EB00D1AEC4 /* LoginView.swift in Sources */,
 				A5856FCE2472BCF5009F5C10 /* User.swift in Sources */,
 				A554000D24715B420066A9F2 /* ViewComponent.swift in Sources */,
@@ -320,6 +331,7 @@
 				A554000624710B190066A9F2 /* LoginViewModel.swift in Sources */,
 				A554000F24716DC40066A9F2 /* CustomSecureField.swift in Sources */,
 				A5856FD12472D48D009F5C10 /* BaseAPI.swift in Sources */,
+				A5856FDB2472DE0E009F5C10 /* SignUpForm.swift in Sources */,
 				A5856FC72472B112009F5C10 /* ColorComponent.swift in Sources */,
 				A5856FD42472D555009F5C10 /* UserForm.swift in Sources */,
 				A5856FCC2472BCC9009F5C10 /* AuthProtocol.swift in Sources */,
