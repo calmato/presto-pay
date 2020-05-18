@@ -16,11 +16,26 @@ struct LoginView: View {
 
         VStack {
           VStack(spacing: 16) {
+            Text(loginViewModel.validationError)
+              .font(.caption)
+              .foregroundColor(.red)
+
             LoginForm(
               email: self.$loginViewModel.email,
               password: self.$loginViewModel.password
             )
               .frame(width: 348)
+
+            Button(action: {
+              self.loginViewModel.login()
+            }) {
+              Spacer()
+              Text("ログイン")
+              Spacer()
+            }
+              .frame(width: 348, height: 32)
+              .foregroundColor(.white)
+              .background(PrimaryColor)
 
             NavigationLink(destination: LoginView()) {
               Text("パスワードを忘れた方")

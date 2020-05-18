@@ -25,15 +25,6 @@ struct LoginForm: View {
         value: $password,
         image: .constant("password")
       )
-
-      Button(action: {}) {
-        Spacer()
-        Text("ログイン")
-        Spacer()
-      }
-        .frame(height: 32)
-        .foregroundColor(.white)
-        .background(PrimaryColor)
     }
   }
 }

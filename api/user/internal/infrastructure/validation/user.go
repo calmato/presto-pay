@@ -45,7 +45,7 @@ func (udv *userDomainValidation) User(ctx context.Context, u *user.User) []*doma
 
 func uniqueCheckEmail(ctx context.Context, ur user.UserRepository, id string, email string) error {
 	uid, _ := ur.GetUIDByEmail(ctx, email)
-	if uid == "" || uid == id {
+	if uid == "" || id == uid {
 		return nil
 	}
 
@@ -53,14 +53,14 @@ func uniqueCheckEmail(ctx context.Context, ur user.UserRepository, id string, em
 }
 
 func uniqueCheckUsername(ctx context.Context, ur user.UserRepository, id string, username string) error {
-	u, err := ur.GetUserByUsername(ctx, username)
-	if err != nil {
-		return err
-	}
-
-	if u.ID != id {
+	u, _ := ur.GetUserByUsername(ctx, username)
+	if u == nil || u.ID == "" {
 		return nil
 	}
 
-	return xerrors.New("This username is already exists.")
+	if id == "" || id != u.ID {
+		return xerrors.New("This username is already exists.")
+	}
+
+	return nil
 }
