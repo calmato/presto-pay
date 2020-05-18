@@ -1,8 +1,7 @@
 import SwiftUI
 
 struct LoginView: View {
-  @State private var email: String = ""
-  @State private var password: String = ""
+  @ObservedObject private var loginViewModel = LoginViewModel()
 
   var body: some View {
     ZStack {
@@ -17,7 +16,26 @@ struct LoginView: View {
 
         VStack {
           VStack(spacing: 16) {
-            LoginForm(email: self.$email, password: self.$password)
+            Text(loginViewModel.validationError)
+              .font(.caption)
+              .foregroundColor(.red)
+
+            LoginForm(
+              email: self.$loginViewModel.email,
+              password: self.$loginViewModel.password
+            )
+              .frame(width: 348)
+
+            Button(action: {
+              self.loginViewModel.login()
+            }) {
+              Spacer()
+              Text("ログイン")
+              Spacer()
+            }
+              .frame(width: 348, height: 32)
+              .foregroundColor(.white)
+              .background(PrimaryColor)
 
             NavigationLink(destination: LoginView()) {
               Text("パスワードを忘れた方")
@@ -50,9 +68,6 @@ struct LoginView: View {
 
 struct LoginView_Previews: PreviewProvider {
   static var previews: some View {
-    ForEach(["iPhone 11", "iPhone SE"], id: \.self) { device in
-      LoginView()
-        .previewDevice(PreviewDevice(rawValue: device))
-    }
+    LoginView()
   }
 }
