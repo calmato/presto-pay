@@ -20,7 +20,7 @@ final class LoginViewModel: ObservableObject {
 
   // MARK: Action
   func login() {
-    validationError = "test"
+    validationError = "test" // TODO: Edit
     
     cancellable = authProvider.login(email: email, password: password)
       .receive(on: RunLoop.main)
