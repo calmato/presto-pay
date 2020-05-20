@@ -7,10 +7,13 @@ struct CustomSecureField: View {
 
   var body: some View {
     HStack {
-      Image(self.image)
-        .resizable()
-        .aspectRatio(contentMode: .fit)
-        .frame(height: 28)
+      if image != "" {
+        Image(self.image)
+          .resizable()
+          .aspectRatio(contentMode: .fit)
+          .frame(height: 28)
+      }
+      
       SecureField(self.text, text: $value)
         .textFieldStyle(DefaultTextFieldStyle())
         .underline()

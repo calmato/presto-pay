@@ -22,6 +22,8 @@
 		A5856FD42472D555009F5C10 /* UserForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5856FD32472D555009F5C10 /* UserForm.swift */; };
 		A5856FD62472D87B009F5C10 /* AuthForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5856FD52472D87B009F5C10 /* AuthForm.swift */; };
 		A5856FDB2472DE0E009F5C10 /* SignUpForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5856FDA2472DE0E009F5C10 /* SignUpForm.swift */; };
+		A5856FDD24741587009F5C10 /* SignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5856FDC24741587009F5C10 /* SignUpView.swift */; };
+		A5856FDF247415B9009F5C10 /* SIgnUpViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5856FDE247415B9009F5C10 /* SIgnUpViewModel.swift */; };
 		A5C0D22B246F05EB00D1AEC4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C0D22A246F05EB00D1AEC4 /* AppDelegate.swift */; };
 		A5C0D22D246F05EB00D1AEC4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C0D22C246F05EB00D1AEC4 /* SceneDelegate.swift */; };
 		A5C0D230246F05EB00D1AEC4 /* PrestoPay.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A5C0D22E246F05EB00D1AEC4 /* PrestoPay.xcdatamodeld */; };
@@ -48,6 +50,8 @@
 		A5856FD32472D555009F5C10 /* UserForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserForm.swift; sourceTree = "<group>"; };
 		A5856FD52472D87B009F5C10 /* AuthForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthForm.swift; sourceTree = "<group>"; };
 		A5856FDA2472DE0E009F5C10 /* SignUpForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpForm.swift; sourceTree = "<group>"; };
+		A5856FDC24741587009F5C10 /* SignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpView.swift; sourceTree = "<group>"; };
+		A5856FDE247415B9009F5C10 /* SIgnUpViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SIgnUpViewModel.swift; sourceTree = "<group>"; };
 		A5C0D227246F05EB00D1AEC4 /* PrestoPay.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PrestoPay.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A5C0D22A246F05EB00D1AEC4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A5C0D22C246F05EB00D1AEC4 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -139,6 +143,7 @@
 			isa = PBXGroup;
 			children = (
 				A554000524710B190066A9F2 /* LoginViewModel.swift */,
+				A5856FDE247415B9009F5C10 /* SIgnUpViewModel.swift */,
 			);
 			path = Auth;
 			sourceTree = "<group>";
@@ -196,6 +201,7 @@
 				A554000A247159520066A9F2 /* CustomTextField.swift */,
 				A554000E24716DC40066A9F2 /* CustomSecureField.swift */,
 				A5856FDA2472DE0E009F5C10 /* SignUpForm.swift */,
+				A5856FDC24741587009F5C10 /* SignUpView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -332,7 +338,9 @@
 				A554000F24716DC40066A9F2 /* CustomSecureField.swift in Sources */,
 				A5856FD12472D48D009F5C10 /* BaseAPI.swift in Sources */,
 				A5856FDB2472DE0E009F5C10 /* SignUpForm.swift in Sources */,
+				A5856FDD24741587009F5C10 /* SignUpView.swift in Sources */,
 				A5856FC72472B112009F5C10 /* ColorComponent.swift in Sources */,
+				A5856FDF247415B9009F5C10 /* SIgnUpViewModel.swift in Sources */,
 				A5856FD42472D555009F5C10 /* UserForm.swift in Sources */,
 				A5856FCC2472BCC9009F5C10 /* AuthProtocol.swift in Sources */,
 			);
