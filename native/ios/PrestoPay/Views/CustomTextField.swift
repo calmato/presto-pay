@@ -7,10 +7,13 @@ struct CustomTextField: View {
 
   var body: some View {
     HStack {
-      Image(self.image)
-        .resizable()
-        .aspectRatio(contentMode: .fit)
-        .frame(height: 28)
+      if image != "" {
+        Image(self.image)
+          .resizable()
+          .aspectRatio(contentMode: .fit)
+          .frame(height: 28)
+      }
+      
       TextField(self.text, text: $value)
         .textFieldStyle(DefaultTextFieldStyle())
         .underline()

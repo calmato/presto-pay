@@ -10,25 +10,52 @@ struct SignUpForm: View {
   
   var body: some View {
     VStack(spacing: 16) {
-      TextField("Name", text: $name)
-        .textFieldStyle(DefaultTextFieldStyle())
-        .underline()
+      VStack {
+        ZStack {
+          Color.backgroundColor
+            .edgesIgnoringSafeArea(.all)
+          
+          Image("photo")
+            .resizable()
+            .frame(width: 48, height: 48)
+            .aspectRatio(contentMode: .fit)
+        }
+          .frame(width: 120, height: 120)
+          .border(Color.gray, width: 1)
+        
+        Text("[WIP] Select Thumbnail")
+      }
+      .padding(.bottom, 48)
 
-      TextField("Username", text: $username)
-        .textFieldStyle(DefaultTextFieldStyle())
-        .underline()
+      CustomTextField(
+        text: .constant("Name"),
+        value: $name,
+        image: .constant("")
+      )
 
-      TextField("Email", text: $email)
-        .textFieldStyle(DefaultTextFieldStyle())
-        .underline()
+      CustomTextField(
+        text: .constant("Username"),
+        value: $username,
+        image: .constant("")
+      )
+      
+      CustomTextField(
+        text: .constant("Email"),
+        value: $email,
+        image: .constant("")
+      )
 
-      SecureField("Password", text: $password)
-        .textFieldStyle(DefaultTextFieldStyle())
-        .underline()
+      CustomSecureField(
+        text: .constant("Password"),
+        value: $password,
+        image: .constant("")
+      )
 
-      SecureField("Password(Confirmation)", text: $passwordConfirmation)
-        .textFieldStyle(DefaultTextFieldStyle())
-        .underline()
+      CustomSecureField(
+        text: .constant("Password (Confirmation)"),
+        value: $passwordConfirmation,
+        image: .constant("")
+      )
     }
   }
 }

@@ -1,11 +1,12 @@
 {
   "images" : [
     {
-      "filename" : "mail.png",
+      "filename" : "baseline_email_black_18dp.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
+      "filename" : "baseline_email_black_18dp-1.png",
       "idiom" : "universal",
       "scale" : "2x"
     },

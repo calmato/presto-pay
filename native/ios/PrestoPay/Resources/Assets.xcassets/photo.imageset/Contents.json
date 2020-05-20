@@ -1,12 +1,12 @@
 {
   "images" : [
     {
-      "filename" : "baseline_lock_black_18dp.png",
+      "filename" : "baseline_add_a_photo_black_18dp.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "baseline_lock_black_18dp-1.png",
+      "filename" : "baseline_add_a_photo_black_18dp-1.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
