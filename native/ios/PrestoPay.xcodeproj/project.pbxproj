@@ -10,15 +10,15 @@
 		A554000624710B190066A9F2 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A554000524710B190066A9F2 /* LoginViewModel.swift */; };
 		A55400082471103D0066A9F2 /* AuthProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A55400072471103D0066A9F2 /* AuthProvider.swift */; };
 		A554000B247159520066A9F2 /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = A554000A247159520066A9F2 /* CustomTextField.swift */; };
-		A554000D24715B420066A9F2 /* ViewComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = A554000C24715B420066A9F2 /* ViewComponent.swift */; };
+		A554000D24715B420066A9F2 /* ViewModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = A554000C24715B420066A9F2 /* ViewModule.swift */; };
 		A554000F24716DC40066A9F2 /* CustomSecureField.swift in Sources */ = {isa = PBXBuildFile; fileRef = A554000E24716DC40066A9F2 /* CustomSecureField.swift */; };
 		A555DE52247040DA00AF0A82 /* SocialButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A555DE51247040DA00AF0A82 /* SocialButton.swift */; };
 		A555DE562470429400AF0A82 /* LoginForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = A555DE552470429400AF0A82 /* LoginForm.swift */; };
 		A555DE5C2470486200AF0A82 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A555DE5B2470486200AF0A82 /* ContentView.swift */; };
-		A5856FC72472B112009F5C10 /* ColorComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5856FC62472B112009F5C10 /* ColorComponent.swift */; };
+		A5856FC72472B112009F5C10 /* ColorModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5856FC62472B112009F5C10 /* ColorModule.swift */; };
 		A5856FCC2472BCC9009F5C10 /* AuthProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5856FCB2472BCC9009F5C10 /* AuthProtocol.swift */; };
 		A5856FCE2472BCF5009F5C10 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5856FCD2472BCF5009F5C10 /* User.swift */; };
-		A5856FD12472D48D009F5C10 /* BaseAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5856FD02472D48D009F5C10 /* BaseAPI.swift */; };
+		A5856FD12472D48D009F5C10 /* APIModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5856FD02472D48D009F5C10 /* APIModule.swift */; };
 		A5856FD42472D555009F5C10 /* UserForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5856FD32472D555009F5C10 /* UserForm.swift */; };
 		A5856FD62472D87B009F5C10 /* AuthForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5856FD52472D87B009F5C10 /* AuthForm.swift */; };
 		A5856FDB2472DE0E009F5C10 /* SignUpForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5856FDA2472DE0E009F5C10 /* SignUpForm.swift */; };
@@ -38,15 +38,15 @@
 		A554000524710B190066A9F2 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
 		A55400072471103D0066A9F2 /* AuthProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthProvider.swift; sourceTree = "<group>"; };
 		A554000A247159520066A9F2 /* CustomTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
-		A554000C24715B420066A9F2 /* ViewComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewComponent.swift; sourceTree = "<group>"; };
+		A554000C24715B420066A9F2 /* ViewModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModule.swift; sourceTree = "<group>"; };
 		A554000E24716DC40066A9F2 /* CustomSecureField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSecureField.swift; sourceTree = "<group>"; };
 		A555DE51247040DA00AF0A82 /* SocialButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialButton.swift; sourceTree = "<group>"; };
 		A555DE552470429400AF0A82 /* LoginForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginForm.swift; sourceTree = "<group>"; };
 		A555DE5B2470486200AF0A82 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		A5856FC62472B112009F5C10 /* ColorComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorComponent.swift; sourceTree = "<group>"; };
+		A5856FC62472B112009F5C10 /* ColorModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorModule.swift; sourceTree = "<group>"; };
 		A5856FCB2472BCC9009F5C10 /* AuthProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthProtocol.swift; sourceTree = "<group>"; };
 		A5856FCD2472BCF5009F5C10 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
-		A5856FD02472D48D009F5C10 /* BaseAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseAPI.swift; sourceTree = "<group>"; };
+		A5856FD02472D48D009F5C10 /* APIModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIModule.swift; sourceTree = "<group>"; };
 		A5856FD32472D555009F5C10 /* UserForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserForm.swift; sourceTree = "<group>"; };
 		A5856FD52472D87B009F5C10 /* AuthForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthForm.swift; sourceTree = "<group>"; };
 		A5856FDA2472DE0E009F5C10 /* SignUpForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpForm.swift; sourceTree = "<group>"; };
@@ -98,9 +98,9 @@
 		A555DE582470468A00AF0A82 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
-				A554000C24715B420066A9F2 /* ViewComponent.swift */,
-				A5856FC62472B112009F5C10 /* ColorComponent.swift */,
-				A5856FD02472D48D009F5C10 /* BaseAPI.swift */,
+				A554000C24715B420066A9F2 /* ViewModule.swift */,
+				A5856FC62472B112009F5C10 /* ColorModule.swift */,
+				A5856FD02472D48D009F5C10 /* APIModule.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -332,14 +332,14 @@
 				A5856FD62472D87B009F5C10 /* AuthForm.swift in Sources */,
 				A5C0D232246F05EB00D1AEC4 /* LoginView.swift in Sources */,
 				A5856FCE2472BCF5009F5C10 /* User.swift in Sources */,
-				A554000D24715B420066A9F2 /* ViewComponent.swift in Sources */,
+				A554000D24715B420066A9F2 /* ViewModule.swift in Sources */,
 				A5C0D22D246F05EB00D1AEC4 /* SceneDelegate.swift in Sources */,
 				A554000624710B190066A9F2 /* LoginViewModel.swift in Sources */,
 				A554000F24716DC40066A9F2 /* CustomSecureField.swift in Sources */,
-				A5856FD12472D48D009F5C10 /* BaseAPI.swift in Sources */,
+				A5856FD12472D48D009F5C10 /* APIModule.swift in Sources */,
 				A5856FDB2472DE0E009F5C10 /* SignUpForm.swift in Sources */,
 				A5856FDD24741587009F5C10 /* SignUpView.swift in Sources */,
-				A5856FC72472B112009F5C10 /* ColorComponent.swift in Sources */,
+				A5856FC72472B112009F5C10 /* ColorModule.swift in Sources */,
 				A5856FDF247415B9009F5C10 /* SIgnUpViewModel.swift in Sources */,
 				A5856FD42472D555009F5C10 /* UserForm.swift in Sources */,
 				A5856FCC2472BCC9009F5C10 /* AuthProtocol.swift in Sources */,

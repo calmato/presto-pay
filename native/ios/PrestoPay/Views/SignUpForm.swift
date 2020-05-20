@@ -12,7 +12,7 @@ struct SignUpForm: View {
     VStack(spacing: 16) {
       VStack {
         ZStack {
-          Color.myBackground
+          Color.backgroundColor
             .edgesIgnoringSafeArea(.all)
           
           Image("photo")

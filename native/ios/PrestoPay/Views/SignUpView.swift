@@ -38,8 +38,8 @@ struct SignUpView: View {
 //            .foregroundColor(Color.myPrimary)
 //        }
       }
+        // FIXME: ナビゲーションバーに戻るボタンが表示されない
         .navigationBarTitle(Text("Sign Up"), displayMode: .inline)
-        .navigationBarBackButtonHidden(false)
         .navigationBarColor(Color.primaryColor)
     }
   }
