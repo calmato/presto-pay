@@ -2,7 +2,8 @@ import SwiftUI
 
 struct SignUpView: View {
   @ObservedObject private var signUpViewModel = SignUpViewModel()
-
+  @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+    
   var body: some View {
       VStack(spacing: 16) {
         Text(signUpViewModel.validationError)
@@ -31,11 +32,13 @@ struct SignUpView: View {
           .foregroundColor(.white)
           .background(Color.primaryColor)
 
-//        NavigationLink(destination: LoginView()) {
-//          Text("既にアカウントをお持ちの方")
-//            .font(.system(size: 14))
-//            .foregroundColor(Color.myPrimary)
-//        }
+        Button(action: {
+            self.presentationMode.wrappedValue.dismiss()
+        }) {
+            Text("既にアカウントをお持ちの方")
+                .font(.system(size: 14))
+                .foregroundColor(Color.primaryColor)
+        }
       }
         // FIXME: ナビゲーションバーに戻るボタンが表示されない
         .navigationBarTitle(Text("Sign Up"), displayMode: .inline)
