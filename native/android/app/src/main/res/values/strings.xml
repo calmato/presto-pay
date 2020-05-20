@@ -36,4 +36,6 @@
   <string name="icon">アイコン</string>
   <string name="price">¥XX,XXX</string>
   <string name="lend">貸しています</string>
+  <string name="profile_photo">profile photo</string>
+  <string name="change_profile_photo">プロフィール写真を変更</string>
 </resources>
