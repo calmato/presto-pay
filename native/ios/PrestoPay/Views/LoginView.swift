@@ -64,9 +64,9 @@ struct LoginView: View {
             .background(Color.white)
         }
       }
-        .navigationBarHidden(true)
-        .navigationBarTitle("Login")
-//        .edgesIgnoringSafeArea([.top, .bottom])
+        .navigationBarTitle(Text(""), displayMode: .inline)
+        .navigationBarColor(Color.primaryColor)
+        .edgesIgnoringSafeArea([.top, .bottom])
     }
   }
 }

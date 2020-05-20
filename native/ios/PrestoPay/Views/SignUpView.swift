@@ -4,7 +4,6 @@ struct SignUpView: View {
   @ObservedObject private var signUpViewModel = SignUpViewModel()
 
   var body: some View {
-    NavigationView {
       VStack(spacing: 16) {
         Text(signUpViewModel.validationError)
           .font(.caption)
@@ -40,8 +39,8 @@ struct SignUpView: View {
       }
         // FIXME: ナビゲーションバーに戻るボタンが表示されない
         .navigationBarTitle(Text("Sign Up"), displayMode: .inline)
+        .edgesIgnoringSafeArea([.top, .bottom])
         .navigationBarColor(Color.primaryColor)
-    }
   }
 }
 
