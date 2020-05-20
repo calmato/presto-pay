@@ -30,7 +30,7 @@ struct SignUpView: View {
         }
           .frame(width: 348, height: 32)
           .foregroundColor(.white)
-          .background(Color.myPrimary)
+          .background(Color.primaryColor)
 
 //        NavigationLink(destination: LoginView()) {
 //          Text("既にアカウントをお持ちの方")
@@ -40,7 +40,7 @@ struct SignUpView: View {
       }
         .navigationBarTitle(Text("Sign Up"), displayMode: .inline)
         .navigationBarBackButtonHidden(false)
-        .navigationBarColor(Color.myPrimary)
+        .navigationBarColor(Color.primaryColor)
     }
   }
 }

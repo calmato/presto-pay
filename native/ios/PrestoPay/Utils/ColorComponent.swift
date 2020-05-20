@@ -2,14 +2,14 @@ import SwiftUI
 
 extension Color {
   // MARK: Primary - #03A9F4
-  static let myPrimary: Color = Color(
+  static let primaryColor: Color = Color(
     red: 43/255,
     green: 172/255,
     blue: 252/255
   )
   
   // MARK: Background - #E5E5E5
-  static let myBackground: Color = Color(
+  static let backgroundColor: Color = Color(
     red: 229/255,
     green: 229/255,
     blue: 229/255

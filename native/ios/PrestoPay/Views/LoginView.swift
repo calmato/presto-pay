@@ -6,7 +6,7 @@ struct LoginView: View {
   var body: some View {
     NavigationView {
       ZStack {
-        Color.myPrimary
+        Color.primaryColor
           .edgesIgnoringSafeArea(.all)
 
         VStack(alignment: .center) {
@@ -36,12 +36,12 @@ struct LoginView: View {
               }
                 .frame(width: 348, height: 32)
                 .foregroundColor(.white)
-                .background(Color.myPrimary)
+                .background(Color.primaryColor)
 
               NavigationLink(destination: LoginView()) {
                 Text("パスワードを忘れた方")
                   .font(.system(size: 14))
-                  .foregroundColor(Color.myPrimary)
+                  .foregroundColor(Color.primaryColor)
               }
             }
 
@@ -56,7 +56,7 @@ struct LoginView: View {
               NavigationLink(destination: SignUpView()) {
                 Text("アカウントをお持ちでない方")
                   .font(.system(size: 14))
-                  .foregroundColor(Color.myPrimary)
+                  .foregroundColor(Color.primaryColor)
               }
             }
           }
