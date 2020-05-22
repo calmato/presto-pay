@@ -36,4 +36,16 @@
   <string name="icon">アイコン</string>
   <string name="price">¥XX,XXX</string>
   <string name="lend">貸しています</string>
+  <string name="profile_photo">profile photo</string>
+  <string name="change_profile_photo">プロフィール写真を変更</string>
+  <string name="get_friend_request">友達リクエストの受信</string>
+  <string name="accept_friend_request">友達リクエストの受諾</string>
+  <string name="invited_group">グループへの招待</string>
+  <string name="someone_join_group">誰かのグループへの参加</string>
+  <string name="payment">支払い</string>
+  <string name="register_new_payment">新しい支払いの登録</string>
+  <string name="edit_payment">支払いの編集</string>
+  <string name="delete_payment">支払いの削除</string>
+  <string name="group">グループ</string>
+  <string name="friend">友達</string>
 </resources>

@@ -9,7 +9,7 @@ class MainActivity : Activity() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    setContentView(R.layout.fragment_login)
+    setContentView(R.layout.fragment_notification_setting)
 
   }
 }

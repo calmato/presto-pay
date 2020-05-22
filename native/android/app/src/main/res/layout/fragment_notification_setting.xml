@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  >
+
+  <TextView
+    android:id="@+id/friendText"
+    style="@style/notificationTitle"
+    android:text="@string/friend"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent" />
+
+  <Switch
+    android:id="@+id/switchGetRequest"
+    style="@style/notificationSettingLists"
+    android:text="@string/get_friend_request"
+    app:layout_constraintEnd_toEndOf="@+id/friendText"
+    app:layout_constraintStart_toStartOf="@+id/friendText"
+    app:layout_constraintTop_toBottomOf="@+id/friendText" />
+
+  <Switch
+    android:id="@+id/switchAcceptRequest"
+    style="@style/notificationSettingLists"
+    android:text="@string/accept_friend_request"
+    app:layout_constraintEnd_toEndOf="@+id/switchGetRequest"
+    app:layout_constraintStart_toStartOf="@+id/switchGetRequest"
+    app:layout_constraintTop_toBottomOf="@+id/switchGetRequest" />
+
+  <TextView
+    android:id="@+id/groupText"
+    style="@style/notificationTitle"
+    android:layout_marginTop="@dimen/margin_normal"
+    android:text="@string/group"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/switchAcceptRequest" />
+
+  <Switch
+    android:id="@+id/switchGroupInvitation"
+    style="@style/notificationSettingLists"
+    android:layout_marginTop="16dp"
+    android:text="@string/invited_group"
+    app:layout_constraintEnd_toEndOf="@+id/switchGetRequest"
+    app:layout_constraintStart_toStartOf="@+id/switchGetRequest"
+    app:layout_constraintTop_toBottomOf="@+id/groupText" />
+
+  <Switch
+    android:id="@+id/switchGroupJoin"
+    style="@style/notificationSettingLists"
+    android:text="@string/someone_join_group"
+    app:layout_constraintEnd_toEndOf="@+id/switchGetRequest"
+    app:layout_constraintStart_toStartOf="@+id/switchGetRequest"
+    app:layout_constraintTop_toBottomOf="@+id/switchGroupInvitation" />
+
+  <TextView
+    android:id="@+id/paymentText"
+    style="@style/notificationTitle"
+    android:layout_marginTop="16dp"
+    android:text="@string/payment"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/switchGroupJoin" />
+
+  <Switch
+    android:id="@+id/switchNewPayment"
+    style="@style/notificationSettingLists"
+    android:text="@string/register_new_payment"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/paymentText" />
+
+  <Switch
+    android:id="@+id/switchEditPayment"
+    style="@style/notificationSettingLists"
+    android:text="@string/edit_payment"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="@+id/paymentText"
+    app:layout_constraintTop_toBottomOf="@+id/switchNewPayment" />
+
+  <Switch
+    android:id="@+id/switchDeletePayment"
+    style="@style/notificationSettingLists"
+    android:text="@string/delete_payment"
+    app:layout_constraintEnd_toEndOf="@+id/paymentText"
+    app:layout_constraintStart_toStartOf="@+id/paymentText"
+    app:layout_constraintTop_toBottomOf="@+id/switchEditPayment" />
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
