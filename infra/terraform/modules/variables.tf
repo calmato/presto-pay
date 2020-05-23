@@ -24,7 +24,7 @@ variable "gke_cluster_description" {
 
 variable "gke_cluster_min_master_version" {
   description = "GKE クラスタ最低バージョン"
-  default     = "1.14.10-gke.17"
+  default     = "1.14.10-gke.36"
 }
 
 variable "gke_cluster_ipv4_cidr" {

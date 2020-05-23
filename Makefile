@@ -33,3 +33,26 @@ swagger-open:
 
 swagger-edit:
 	open http://localhost:8001
+
+##################################################
+# Container Commands - Terraform
+##################################################
+.PHONY: terraform-stg-setup
+terraform-stg-setup:
+	docker-compose run --rm terraform make init ENV=stg
+
+.PHONY: terraform-stg-lint
+terraform-stg-lint:
+	docker-compose run --rm terraform make fmt ENV=stg
+
+.PHONY: terraform-stg-plan
+terraform-stg-plan:
+	docker-compose run --rm terraform make plan ENV=stg
+
+.PHONY: terraform-stg-apply
+terraform-stg-apply:
+	docker-compose run --rm terraform make apply ENV=stg
+
+.PHONY: terraform-stg-destroy
+terraform-stg-destroy:
+	docker-compose run --rm terraform make destroy ENV=stg

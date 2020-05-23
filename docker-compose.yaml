@@ -47,7 +47,7 @@ services:
 
   terraform:
     container_name: presto_pay_terraform
-    build: ./container/terraform
+    build: ./infra/docker/terraform
     working_dir: /terraform
     volumes:
       - ./infra/terraform:/terraform:cached
