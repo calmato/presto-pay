@@ -3,7 +3,6 @@ kind: ManagedCertificate
 
 metadata:
   name: presto-pay-certificate
-  namespace: presto-pay
 
 spec:
   domains:

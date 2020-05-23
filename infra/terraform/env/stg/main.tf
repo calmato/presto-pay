@@ -30,11 +30,11 @@ module "this" {
     },
     {
       name         = "presto-pay-spot-node"
-      count        = 2
+      count        = 1
       preemptible  = true
       machine_type = "g1-small"
       disk_type    = "pd-standard"
-      disk_size_gb = 20
+      disk_size_gb = 10
     },
   ]
 

@@ -3,7 +3,6 @@ kind: Service
 
 metadata:
   name: user-api
-  namespace: presto-pay
 
 spec:
   selector:

@@ -18,7 +18,7 @@ generate-private-key:
 		-subj "/CN=${EXTERNAL_IP}"
 
 generate-deployment:
-	cd ./${ENV}; sed 's/<PROJECT-ID>/${GCP_STORAGE_BUCKET_NAME}/' deployment-user-api.yaml.sample > deployment-user-api.yaml
+	cd ./${ENV}; sed 's/<PROJECT-ID>/${GCP_STORAGE_BUCKET_NAME}/' deployment-user-api.yaml.temp > deployment-user-api.yaml
 
 #############################
 # Update
