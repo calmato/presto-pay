@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: user-api
+  labels:
+    app: user-api
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: user-api
+
+  template:
+    metadata:
+      labels:
+        app: user-api
+
+    spec:
+      containers:
+        - name: user-api
+          image: asia.gcr.io/<PROJECT-ID>/presto-pay-stg-user-api:latest
+          imagePullPolicy: Always
+          ports:
+            - name: user-api
+              containerPort: 8080
+          resources:
+            limits:
+              cpu: '0.1'
+              memory: 100Mi
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 3
+            periodSeconds: 3
+          env:
+            - name: PORT
+              value: '8080'
+            - name: GOOGLE_APPLICATION_CREDENTIALS
+              value: '/secret/firebase-adminsdk.json'
+            - name: GCP_STORAGE_BUCKET_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: gcp-secret
+                  key: GCP_STORAGE_BUCKET_NAME
+          volumeMounts:
+            - mountPath: /secret
+              name: firebase-secret-volume
+              readOnly: true
+      volumes:
+        - name: firebase-secret-volume
+          secret:
+            secretName: firebase-secret

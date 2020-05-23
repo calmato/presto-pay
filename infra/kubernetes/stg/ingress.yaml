@@ -1,0 +1,22 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+
+metadata:
+  name: presto-pay-ingress
+  annotations:
+    networking.gke.io/managed-certificates: presto-pay-certificate
+    kubernetes.io/ingress.allow-http: "false"
+    kubernetes.io/ingress.global-static-ip-name: presto-pay-ip-address
+
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /v1/users
+            backend:
+              serviceName: user-api
+              servicePort: 80
+          - path: /v1/users/*
+            backend:
+              serviceName: user-api
+              servicePort: 80
