@@ -3,6 +3,7 @@ kind: Ingress
 
 metadata:
   name: presto-pay-ingress
+  namespace: presto-pay
   annotations:
     networking.gke.io/managed-certificates: presto-pay-certificate
     kubernetes.io/ingress.allow-http: "false"

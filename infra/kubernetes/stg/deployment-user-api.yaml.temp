@@ -3,6 +3,7 @@ kind: Deployment
 
 metadata:
   name: user-api
+  namespace: presto-pay
   labels:
     app: user-api
 

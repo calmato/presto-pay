@@ -3,7 +3,8 @@ kind: ManagedCertificate
 
 metadata:
   name: presto-pay-certificate
+  namespace: presto-pay
 
 spec:
   domains:
-    - api.presto-pay.calmato.work
+    - api.presto-pay-stg.calmato.work
