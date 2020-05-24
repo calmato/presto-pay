@@ -44,3 +44,16 @@ services:
       context: ./infra/docker/swagger/editor
     ports:
       - 8001:8080
+
+  terraform:
+    container_name: presto_pay_terraform
+    build: ./infra/docker/terraform
+    working_dir: /terraform
+    volumes:
+      - ./infra/terraform:/terraform:cached
+      - ./secrets:/secrets
+    tty: true
+    stdin_open: true
+    environment:
+      - GOOGLE_CLOUD_KEYFILE_JSON=${TERRAFORM_CREDENTIALS}
+      - GOOGLE_APPLICATION_CREDENTIALS=${TERRAFORM_CREDENTIALS}

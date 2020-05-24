@@ -7,4 +7,10 @@ target 'PrestoPay' do
 
   # Pods for PrestoPay
   # pod 'FontAwesome.swift'
+
+  # add the Firebase pod for Google Analytics
+  # add pods for any other desired Firebase products
+  # https://firebase.google.com/docs/ios/setup#available-pods
+  pod 'Firebase/Analytics', '~> 6.25.0'
+  pod 'Firebase/Auth',      '~> 6.25.0'
 end

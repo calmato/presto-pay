@@ -1,0 +1,9 @@
+apiVersion: networking.gke.io/v1beta1
+kind: ManagedCertificate
+
+metadata:
+  name: presto-pay-certificate
+
+spec:
+  domains:
+    - api.presto-pay-stg.calmato.work
