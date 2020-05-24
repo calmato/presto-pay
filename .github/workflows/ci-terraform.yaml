@@ -7,13 +7,13 @@ on:
 
 env:
   tf_version: 'latest'
-  tf_working_dir: 'terraform/env/stg'
+  tf_working_dir: 'infra/terraform/env/stg'
   tf_actions_comment: true
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  GCP_PROJECT_ID: ${{ secrets.GCP_PROJET_ID }}
-  GOOGLE_CREDENTIALS: ${{ secrets.TERRAFORM_CREDENTIALS }}
-  GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.TERRAFORM_CREDENTIALS }}
-  TERRAFORM_BUCKET: ${{ secrets.TERRAFORM_BUCKET }}
+  GCP_PROJECT_ID: ${{ secrets.STG_GCP_PROJET_ID }}
+  GOOGLE_CREDENTIALS: ${{ secrets.STG_TERRAFORM_CREDENTIALS }}
+  GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.STG_TERRAFORM_CREDENTIALS }}
+  TERRAFORM_BUCKET: ${{ secrets.STG_TERRAFORM_BUCKET }}
 
 jobs:
   terraform:
