@@ -38,10 +38,11 @@
 
 * .envファイルの編集
   * Firebaseの操作権限があるサービスアカウントの秘密鍵を `secretディレクトリ` にコピペ
-    * -> `secretsディレクトリ` にコピペしたファイル名に合わせて `GOOGLE_APPLICATION_CREDENTIALS` を編集
+    * -> `secretsディレクトリ` にコピペしたファイル名に合わせて `GOOGLE_APPLICATION_CREDENTIALS`, `TERRAFORM_CREDENTIALS` を編集
 
 ```.env
 GOOGLE_APPLICATION_CREDENTIALS=/secrets/xxxxxx-firebase-adminsdk-xxxxxx.json
+TERRAFORM_CREDENTIALS=/secrets/xxxxxx-terraform-xxxxxx.json
 GCP_STORAGE_BUCKET_NAME=xxxxxx.appspot.com
 ```
 
