@@ -1,0 +1,67 @@
+name: Terraform(stg) Test
+on:
+  pull_request:
+    paths:
+      - 'infra/terraform/env/stg/**'
+      - 'infra/terraform/modules/**'
+
+env:
+  tf_version: 'latest'
+  tf_working_dir: 'terraform/env/stg'
+  tf_actions_comment: true
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  GCP_PROJECT_ID: ${{ secrets.GCP_PROJET_ID }}
+  GOOGLE_CREDENTIALS: ${{ secrets.TERRAFORM_CREDENTIALS }}
+  GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.TERRAFORM_CREDENTIALS }}
+  TERRAFORM_BUCKET: ${{ secrets.TERRAFORM_BUCKET }}
+
+jobs:
+  terraform:
+    name: Terraform
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+
+      - name: Terraform Format
+        uses: hashicorp/terraform-github-actions@master
+        with:
+          tf_actions_version: ${{ env.tf_version }}
+          tf_actions_working_dir: ${{ env.tf_working_dir }}
+          tf_actions_comment: ${ env.tf_action_comment }
+          tf_actions_subcommand: 'fmt'
+
+      - name: Create backend.tf
+        working-directory: ${{ env.tf_working_dir }}
+        run:
+          cp backend.tf.ci backend.tf
+
+      - name: Terraform Init
+        uses: hashicorp/terraform-github-actions@master
+        with:
+          tf_actions_version: ${{ env.tf_version }}
+          tf_actions_working_dir: ${{ env.tf_working_dir }}
+          tf_actions_comment: ${ env.tf_action_comment }
+          tf_actions_subcommand: 'init'
+          args:
+            -backend-config="bucket=${{ env.TERRAFORM_BUCKET }}"
+            -backend-config="prefix=terraform/staging"
+
+      - name: Terraform Validate
+        uses: hashicorp/terraform-github-actions@master
+        with:
+          tf_actions_version: ${{ env.tf_version }}
+          tf_actions_working_dir: ${{ env.tf_working_dir }}
+          tf_actions_comment: ${ env.tf_action_comment }
+          tf_actions_subcommand: 'validate'
+
+      - name: Terraform Plan
+        uses: hashicorp/terraform-github-actions@master
+        with:
+          tf_actions_version: ${{ env.tf_version }}
+          tf_actions_working_dir: ${{ env.tf_working_dir }}
+          tf_actions_comment: ${ env.tf_action_comment }
+          tf_actions_subcommand: 'plan'
+        env:
+          TF_VAR_project_id: ${{ env.GCP_PROJECT_ID }}
