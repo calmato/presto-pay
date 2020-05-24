@@ -4,6 +4,7 @@
 
 ![User API(Golang) Build and Test](https://github.com/calmato/presto-pay/workflows/User%20API(Golang)%20Build%20and%20Test/badge.svg)
 ![User API(Golang) Reviewdog](https://github.com/calmato/presto-pay/workflows/User%20API(Golang)%20Reviewdog/badge.svg)  
+![Terraform(stg) Test](https://github.com/calmato/presto-pay/workflows/Terraform(stg)%20Test/badge.svg)  
 
 ![User API(Golang) Deploy to Staging](https://github.com/calmato/presto-pay/workflows/User%20API(Golang)%20Deploy%20to%20Staging/badge.svg)
 
@@ -19,6 +20,8 @@
 * Swagger
   * Swagger Editor: 3.8.1
   * Swagger UI: 3.25.1
+* Terraform
+  * Terraform: 0.12.25
 </details>
 
 <details open>
