@@ -4,6 +4,8 @@ import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.os.AsyncTask
 import android.os.Bundle
@@ -14,15 +16,16 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.toBitmap
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_create_new_account.*
 import work.calmato.prestopay.R
-
+import java.io.ByteArrayOutputStream
 
 class CreateNewAccount : AppCompatActivity() {
   val serverUrl: String = "https://api.presto-pay-stg.calmato.work/v1/users"
   var jsonText: String = ""
-
+  var setThumbnail = false
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -32,7 +35,10 @@ class CreateNewAccount : AppCompatActivity() {
 
     // buttonを押した時の処理を記述
     createButton.setOnClickListener {
-      val thumbnails = ""
+      var thumbnails = ""
+      if (setThumbnail){
+        thumbnails = encodeImage2Base64()
+      }
       val name = fullNameEditText.text.toString()
       val userName = userNameEditText.text.toString()
       val email = emailEditText.text.toString()
@@ -44,7 +50,7 @@ class CreateNewAccount : AppCompatActivity() {
         map.put("name", name)
         map.put("username", userName)
         map.put("email", email)
-        map.put("thumbnail", "")
+        map.put("thumbnail", thumbnails)
         map.put("password", password)
         map.put("passwordConfirmation", passwordConfirmation)
 
@@ -80,8 +86,6 @@ class CreateNewAccount : AppCompatActivity() {
         //permission already granted
         pickImageFromGallery()
       }
-    }
-    hasAccountText.setOnClickListener{
     }
   }
 
@@ -123,6 +127,7 @@ class CreateNewAccount : AppCompatActivity() {
     val intent = Intent(Intent.ACTION_PICK)
     intent.type = "image/*"
     startActivityForResult(intent, IMAGE_PICK_CODE)
+    setThumbnail = true
   }
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -133,5 +138,15 @@ class CreateNewAccount : AppCompatActivity() {
       editPhotoText.setText("写真を変更")
     }
   }
-
+  private fun encodeImage2Base64() : String{
+    val bitmap : Bitmap = thumbnail.drawable.toBitmap()
+    val baos = ByteArrayOutputStream()
+    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+    val imageBytes: ByteArray = baos.toByteArray()
+    return Base64.encodeToString(imageBytes, Base64.DEFAULT)
+    //decode base64 string to image
+    //    val imageBytesDecode = Base64.decode(imageString, Base64.DEFAULT)
+    //    val decodedImage = BitmapFactory.decodeByteArray(imageBytesDecode, 0, imageBytesDecode.size)
+    //    testImageView.setImageBitmap(decodedImage)
+  }
 }
