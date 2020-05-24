@@ -1,4 +1,4 @@
-package work.calmato.prestopay.login
+package work.calmato.prestopay.ui.login
 
 import android.os.AsyncTask
 import android.os.Bundle
