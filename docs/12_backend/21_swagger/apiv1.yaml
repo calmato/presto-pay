@@ -3,9 +3,11 @@ openapi: '3.0.0'
 info:
   title: Presto Pay
   description: 割り勘アプリ API設計
-  version: 0.1.0
+  version: 0.2.0
 
 servers:
+  - url: https://api.presto-pay-stg.calmato.work/v1
+    description: 検証環境
   - url: http://localhost:8080/v1
     description: 開発環境
 

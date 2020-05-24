@@ -5,7 +5,7 @@ metadata:
   name: presto-pay-ingress
   annotations:
     networking.gke.io/managed-certificates: presto-pay-certificate
-    kubernetes.io/ingress.allow-http: "false"
+    # kubernetes.io/ingress.allow-http: "false"
     kubernetes.io/ingress.global-static-ip-name: presto-pay-ip-address
 
 spec:
