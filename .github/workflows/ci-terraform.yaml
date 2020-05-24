@@ -7,7 +7,7 @@ on:
 
 env:
   tf_version: 'latest'
-  tf_working_dir: 'terraform/env/stg'
+  tf_working_dir: 'infra/terraform/env/stg'
   tf_actions_comment: true
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   GCP_PROJECT_ID: ${{ secrets.GCP_PROJET_ID }}
