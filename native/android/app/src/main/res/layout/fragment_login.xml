@@ -44,10 +44,9 @@
       android:textAlignment="center"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintHorizontal_bias="0.516"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="@+id/view"
-      app:layout_constraintVertical_bias="0.07" />
+      app:layout_constraintVertical_bias="0.092" />
 
     <Button
       android:id="@+id/twitterSignin"
@@ -58,10 +57,10 @@
       android:textAlignment="center"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="@+id/googleSingnin"
-      app:layout_constraintHorizontal_bias="0.500"
+      app:layout_constraintHorizontal_bias="0.0"
       app:layout_constraintStart_toStartOf="@+id/googleSingnin"
       app:layout_constraintTop_toBottomOf="@+id/googleSingnin"
-      app:layout_constraintVertical_bias="0.050" />
+      app:layout_constraintVertical_bias="0.132" />
 
     <Button
       android:id="@+id/facebookSingin"
@@ -75,7 +74,7 @@
       app:layout_constraintHorizontal_bias="0.0"
       app:layout_constraintStart_toStartOf="@+id/googleSingnin"
       app:layout_constraintTop_toBottomOf="@+id/twitterSignin"
-      app:layout_constraintVertical_bias="0.050" />
+      app:layout_constraintVertical_bias="0.204" />
 
     <Button
       android:id="@+id/loginButton"
@@ -86,29 +85,31 @@
       android:fontFamily="sans-serif"
       android:text="@string/login_button"
       android:textColor="#FFFFFF"
+      app:layout_constraintBottom_toTopOf="@+id/view"
       app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintHorizontal_bias="0.492"
+      app:layout_constraintHorizontal_bias="0.507"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/loginPassword"
+      app:layout_constraintVertical_bias="0.0"
       tools:ignore="MissingConstraints" />
 
     <EditText
       android:id="@+id/loginEmail"
       android:layout_width="270dp"
       android:layout_height="47dp"
-      android:layout_marginTop="24dp"
-      android:layout_marginEnd="36dp"
+      android:layout_marginTop="52dp"
+      android:layout_marginEnd="52dp"
       android:ems="10"
       android:hint="Email"
       android:inputType="textEmailAddress"
       app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/facebookSingin" />
+      app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
       android:id="@+id/loginPassword"
       android:layout_width="0dp"
       android:layout_height="46dp"
-      android:layout_marginTop="8dp"
+      android:layout_marginTop="16dp"
       android:autofillHints=""
       android:ems="10"
       android:hint="Password"
@@ -141,29 +142,28 @@
 
     <ImageView
       android:id="@+id/loginMailIcon"
-      android:layout_width="30dp"
-      android:layout_height="30dp"
-      android:layout_marginTop="28dp"
-      android:layout_marginBottom="20dp"
+      android:layout_width="28dp"
+      android:layout_height="28dp"
+      android:layout_marginTop="68dp"
       android:src="@drawable/ic_mail"
-      app:layout_constraintBottom_toTopOf="@+id/loginPasswordIcon"
       app:layout_constraintEnd_toStartOf="@+id/loginEmail"
-      app:layout_constraintHorizontal_bias="0.74"
+      app:layout_constraintHorizontal_bias="0.795"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/facebookSingin" />
+      app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
       android:id="@+id/loginPasswordIcon"
       android:layout_width="30dp"
       android:layout_height="30dp"
-      android:layout_marginStart="16dp"
-      android:layout_marginBottom="30dp"
+      android:layout_marginTop="28dp"
+      android:layout_marginEnd="10dp"
       android:src="@drawable/ic_password"
       app:layout_constraintBottom_toTopOf="@+id/loginButton"
       app:layout_constraintEnd_toStartOf="@+id/loginPassword"
-      app:layout_constraintHorizontal_bias="0.631"
+      app:layout_constraintHorizontal_bias="1.0"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/loginMailIcon" />
+      app:layout_constraintTop_toBottomOf="@+id/loginMailIcon"
+      app:layout_constraintVertical_bias="0.0" />
 
     <TextView
       android:id="@+id/googleSigninText"
@@ -175,7 +175,7 @@
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="@+id/googleSingnin"
-      app:layout_constraintVertical_bias="0.526" />
+      app:layout_constraintVertical_bias="0.421" />
 
     <TextView
       android:id="@+id/twitterSigninText"
@@ -208,33 +208,36 @@
       android:layout_height="wrap_content"
       android:soundEffectsEnabled="true"
       android:text="@string/login_new_text"
-      app:layout_constraintBottom_toTopOf="@+id/loginForgetText"
+      android:textColor="#2BACFC"
+      app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/loginButton"
-      app:layout_constraintVertical_bias="0.454" />
+      app:layout_constraintTop_toBottomOf="@+id/facebookSingin"
+      app:layout_constraintVertical_bias="0.238" />
 
     <TextView
       android:id="@+id/loginForgetText"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_marginBottom="60dp"
       android:text="@string/login_forget_text"
-      app:layout_constraintBottom_toBottomOf="parent"
+      android:textColor="#2BACFC"
+      app:layout_constraintBottom_toTopOf="@+id/googleSingnin"
       app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toStartOf="parent" />
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/loginButton"
+      app:layout_constraintVertical_bias="0.304" />
 
     <View
       android:id="@+id/view"
-      android:layout_width="250dp"
+      android:layout_width="350dp"
       android:layout_height="1dp"
-      android:background="#727474"
+      android:background="#A4A7A7"
       android:visibility="visible"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.496"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="parent"
-      app:layout_constraintVertical_bias="0.089" />
+      app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
       android:id="@+id/loginFacebookIcon"
