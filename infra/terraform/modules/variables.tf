@@ -41,7 +41,7 @@ variable "gke_node_configs" {
     name         = string # ノード名
     count        = number # ノード数
     preemptible  = bool   # プリエンプティブの利用
-    machine_type = string # マシンタイプ e.g.) f1-micro, n1-standard-1, etc..
+    machine_type = string # マシンタイプ e.g.) n1-standard-1, etc..
     disk_type    = string # ディスクタイプ e.g.) pd-standard or pd-ssd
     disk_size_gb = number # ディスクサイズ[GB] min: 10GB
   }))
