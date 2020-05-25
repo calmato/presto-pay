@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent">
 
@@ -39,23 +40,24 @@
     android:textSize="12sp"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/imageView" />
+    app:layout_constraintTop_toBottomOf="@+id/thumbnail" />
 
   <ImageView
-    android:id="@+id/imageView"
+    android:id="@+id/thumbnail"
     android:layout_width="94dp"
     android:layout_height="81dp"
     android:layout_marginTop="100dp"
     android:background="@drawable/back"
     android:contentDescription="@string/camera_icon"
     android:padding="0dp"
+    android:src="@android:drawable/ic_menu_camera"
     android:visibility="visible"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent"
-    android:src="@android:drawable/ic_menu_camera" />
+    app:layout_constraintTop_toTopOf="parent" />
 
   <androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/constraintLayout2"
     android:layout_width="0dp"
     android:layout_height="wrap_content"
     app:layout_constraintBottom_toTopOf="@+id/createAccountButton"
@@ -67,25 +69,25 @@
       android:id="@+id/fullNameEditText"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
+      android:autofillHints=""
       android:ems="10"
       android:hint="@string/name"
       android:inputType="textPersonName"
       app:layout_constraintEnd_toEndOf="@+id/userNameEditText"
       app:layout_constraintStart_toStartOf="@+id/userNameEditText"
-      app:layout_constraintTop_toTopOf="parent"
-      android:autofillHints="" />
+      app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
       android:id="@+id/passEditText"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
+      android:autofillHints=""
       android:ems="10"
       android:hint="@string/password"
       android:inputType="textPassword"
       app:layout_constraintEnd_toEndOf="@+id/passConfirmEditText"
       app:layout_constraintStart_toStartOf="@+id/passConfirmEditText"
-      app:layout_constraintTop_toBottomOf="@+id/emailEditText"
-      android:autofillHints="" />
+      app:layout_constraintTop_toBottomOf="@+id/emailEditText" />
 
     <EditText
       android:id="@+id/passConfirmEditText"
@@ -93,38 +95,38 @@
       android:layout_height="wrap_content"
       android:layout_marginStart="16dp"
       android:layout_marginEnd="16dp"
+      android:autofillHints=""
       android:ems="10"
       android:hint="@string/password_confirm"
       android:inputType="textPassword"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintHorizontal_bias="0.0"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/passEditText"
-      android:autofillHints="" />
+      app:layout_constraintTop_toBottomOf="@+id/passEditText" />
 
     <EditText
       android:id="@+id/emailEditText"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
+      android:autofillHints=""
       android:ems="10"
       android:hint="@string/email"
       android:inputType="textEmailAddress"
       app:layout_constraintEnd_toEndOf="@+id/passEditText"
       app:layout_constraintStart_toStartOf="@+id/passEditText"
-      app:layout_constraintTop_toBottomOf="@+id/userNameEditText"
-      android:autofillHints="" />
+      app:layout_constraintTop_toBottomOf="@+id/userNameEditText" />
 
     <EditText
       android:id="@+id/userNameEditText"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
+      android:autofillHints=""
       android:ems="10"
       android:hint="@string/username"
       android:inputType="textPersonName"
       app:layout_constraintEnd_toEndOf="@+id/emailEditText"
       app:layout_constraintStart_toStartOf="@+id/emailEditText"
-      app:layout_constraintTop_toBottomOf="@+id/fullNameEditText"
-      android:autofillHints="" />
+      app:layout_constraintTop_toBottomOf="@+id/fullNameEditText" />
   </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
