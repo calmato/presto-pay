@@ -9,9 +9,16 @@
     android:id="@+id/login_fragment"
     android:name="work.calmato.prestopay.ui.login.LoginFragment"
     android:label="fragment_login"
-    tools:layout="@layout/fragment_login" />
+    tools:layout="@layout/fragment_login" >
+    <action
+      android:id="@+id/action_loginFragment_to_newAccountFragment"
+      app:destination="@+id/new_account_fragment" />
+  </fragment>
   <fragment
-    android:id="@+id/new_account_fragment">
+    android:id="@+id/new_account_fragment"
+    android:name="work.calmato.prestopay.ui.newAccount.NewAccountFragment"
+    android:label="fragment_new_account"
+    tools:layout="@layout/fragment_new_account">
 
   </fragment>
 </navigation>
