@@ -1,4 +1,4 @@
-package work.calmato.prestopay.ui.login
+package work.calmato.prestopay.util
 
 import okhttp3.MediaType
 import okhttp3.OkHttpClient
