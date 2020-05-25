@@ -5,7 +5,6 @@ import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.os.AsyncTask
 import android.os.Bundle
@@ -36,7 +35,7 @@ class CreateNewAccount : AppCompatActivity() {
     // buttonを押した時の処理を記述
     createButton.setOnClickListener {
       var thumbnails = ""
-      if (setThumbnail){
+      if (setThumbnail) {
         thumbnails = encodeImage2Base64()
       }
       val name = fullNameEditText.text.toString()
@@ -64,32 +63,37 @@ class CreateNewAccount : AppCompatActivity() {
       }
     }
 
-    editPhotoText.setOnClickListener{
+    editPhotoText.setOnClickListener {
       //check runtime permission
       if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
-        != PackageManager.PERMISSION_GRANTED) {
+        != PackageManager.PERMISSION_GRANTED
+      ) {
         // Permission is not granted
-        if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-            Manifest.permission.READ_EXTERNAL_STORAGE)) {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(
+            this,
+            Manifest.permission.READ_EXTERNAL_STORAGE
+          )
+        ) {
           // Show an explanation to the user *asynchronously* -- don't block
           // this thread waiting for the user's response! After the user
           // sees the explanation, try again to request the permission.
-          Toast.makeText(this,"設定からギャラリーへのアクセスを許可してください",Toast.LENGTH_LONG).show()
+          Toast.makeText(this, "設定からギャラリーへのアクセスを許可してください", Toast.LENGTH_LONG).show()
         } else {
           // No explanation needed, we can request the permission.
-          ActivityCompat.requestPermissions(this,
+          ActivityCompat.requestPermissions(
+            this,
             arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
-            MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE)
+            MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE
+          )
         }
-      }
-      else{
+      } else {
         //permission already granted
         pickImageFromGallery()
       }
     }
   }
 
-  inner class MyAsyncTask: AsyncTask<Void, Void, String>() {
+  inner class MyAsyncTask : AsyncTask<Void, Void, String>() {
     override fun doInBackground(vararg params: Void?): String? {
       RestClient().postExecute(jsonText, serverUrl)
       return RestClient().getResult()
@@ -101,18 +105,19 @@ class CreateNewAccount : AppCompatActivity() {
     private val IMAGE_PICK_CODE = 1000
     private val MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1001
   }
+
   override fun onRequestPermissionsResult(
     requestCode: Int,
     permissions: Array<String>,
     grantResults: IntArray
   ) {
-    when(requestCode){
+    when (requestCode) {
       MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE -> {
         // If request is cancelled, the result arrays are empty.
         if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
           pickImageFromGallery()
         } else {
-          Toast.makeText(this,"permission denied",Toast.LENGTH_LONG).show()
+          Toast.makeText(this, "permission denied", Toast.LENGTH_LONG).show()
         }
         return
       }
@@ -132,14 +137,15 @@ class CreateNewAccount : AppCompatActivity() {
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     super.onActivityResult(requestCode, resultCode, data)
-    if (resultCode == Activity.RESULT_OK && requestCode == IMAGE_PICK_CODE){
+    if (resultCode == Activity.RESULT_OK && requestCode == IMAGE_PICK_CODE) {
       thumbnail.setImageURI(data?.data)
       thumbnail.setBackgroundColor(Color.TRANSPARENT)
       editPhotoText.setText("写真を変更")
     }
   }
-  private fun encodeImage2Base64() : String{
-    val bitmap : Bitmap = thumbnail.drawable.toBitmap()
+
+  private fun encodeImage2Base64(): String {
+    val bitmap: Bitmap = thumbnail.drawable.toBitmap()
     val baos = ByteArrayOutputStream()
     bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
     val imageBytes: ByteArray = baos.toByteArray()
