@@ -34,6 +34,19 @@
   > $ kubectl logs deployment/user-api | grep -v health
 
 ---
+* 環境構築 (log確認用)
+- google-cloud-sdkをいれる  
+> ./install.sh  
+yを選択  
+> gcloud init  
+2を選択（1~2)  
+4を選択　(1~5)  
+y  
+34を選択 (1~50)  
+> gcloud container clusters get-credentials presto-pay-cluster --zone asia-northeast1-a --project presto-pay-dev  
+> kubectl get all -o wide  
+> kubectl logs deployment/user-api | grep -v health  
+これで確認できるようになる
 
 ## 参考
 
