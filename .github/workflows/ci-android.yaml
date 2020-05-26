@@ -5,9 +5,9 @@ on:
     branches:
       - 'master'
       - 'develop'
-#   push:
-#     paths:
-#       - 'native/android/**'
+  push:
+    paths:
+      - 'native/android/**'
 
 env:
   ANDROID_SECRET: ${{ secrets.STG_ANDROID_SECRET }}
@@ -52,7 +52,7 @@ jobs:
       - name: Create google-services.json
         working-directory: ./native/android/app
         env:
-          ANDROID_SECRET: ${{ secret.STG_ANDROID_SECRET }}
+          ANDROID_SECRET: ${{ secrets.STG_ANDROID_SECRET }}
         run: |
           echo ${ANDROID_SECRET} > google-services.json
           echo '--- debug --------'
