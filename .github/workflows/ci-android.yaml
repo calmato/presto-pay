@@ -25,6 +25,10 @@ jobs:
         with:
           java-version: 1.8
 
+      - name: Create google-services.json
+        working-directory: ./native/android/app
+        run: echo ${ANDROID_SECRET} > google-services.json
+
       - name: Run Unit tests
         working-directory: native/android
         run: ./gradlew test --stacktrace
