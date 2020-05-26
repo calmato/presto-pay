@@ -24,7 +24,7 @@ jobs:
 
       - name: Run Unit tests
         working-directory: native/android
-        run: |
+        run: ./gradlew test --stacktrace
           ls -la .
           ./gradlew test
 
@@ -42,7 +42,7 @@ jobs:
 
       - name: Build debug APK
         working-directory: naitive/android
-        run: ./gradlew assembleDebug
+        run: ./gradlew assembleDebug　--stacktrace
 
       - name: Create APK artifact
         uses: actions/upload-artifact@v1
