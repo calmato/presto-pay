@@ -9,6 +9,9 @@ on:
     paths:
       - 'native/android/**'
 
+env:
+  ANDROID_SECRET: ${{ secrets.STG_ANDROID_SECRET }}
+
 jobs:
   test:
     name: Unit Tests
