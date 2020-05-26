@@ -50,7 +50,7 @@ dependencies {
   def nav_version = "2.3.0-alpha05"
   implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
   implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
-// Dynamic Feature Module Support
+  // Dynamic Feature Module Support
   implementation "androidx.navigation:navigation-dynamic-features-fragment:$nav_version"
   // Testing Navigation
   androidTestImplementation "androidx.navigation:navigation-testing:$nav_version"
