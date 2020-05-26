@@ -7,7 +7,7 @@ on:
       - 'develop'
   push:
     paths:
-      - 'naitive/android/**'
+      - 'native/android/**'
 
 jobs:
   test:
@@ -23,7 +23,7 @@ jobs:
           java-version: 1.8
 
       - name: Run Unit tests
-        working-directory: naitive/android
+        working-directory: native/android
         run: |
           ls -la .
           ./gradlew test
