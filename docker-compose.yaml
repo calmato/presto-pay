@@ -51,6 +51,8 @@ services:
       context: ./infra/docker/web/admin
       dockerfile: Dockerfile_development
     working_dir: /web/admin
+    volumes:
+      - ./web/admin:/web/admin:cached
     ports:
       - 3000:3000
     environment:

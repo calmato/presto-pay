@@ -17,7 +17,7 @@ const configuration: Configuration = {
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
   },
   loading: { color: '#fff' },
-  plugins: [],
+  plugins: ['~/plugins/firebase'],
   buildModules: ['@nuxt/typescript-build'],
   typescript: {
     typeCheck: {
