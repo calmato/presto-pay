@@ -2,14 +2,10 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.google.gms.google-services'
-apply plugin: 'kotlin-kapt'
-apply plugin: 'androidx.navigation.safeargs'
 
 android {
   compileSdkVersion 28
-  dataBinding {
-    enabled = true
-  }
+
 
   defaultConfig {
     applicationId "work.calmato.prestopay"
@@ -54,5 +50,4 @@ dependencies {
   implementation "androidx.navigation:navigation-dynamic-features-fragment:$nav_version"
   // Testing Navigation
   androidTestImplementation "androidx.navigation:navigation-testing:$nav_version"
-
 }
