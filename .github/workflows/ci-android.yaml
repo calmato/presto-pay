@@ -12,7 +12,7 @@ on:
 jobs:
   test:
     name: Unit Tests
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v1
@@ -28,7 +28,7 @@ jobs:
 
   apk:
     name: Generate APK
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v1
@@ -40,7 +40,7 @@ jobs:
 
       - name: Build debug APK
         working-directory: naitive/android
-        run: bash ./gradlew assembleDebug
+        run: ./gradlew assembleDebug
 
       - name: Create APK artifact
         uses: actions/upload-artifact@v1
