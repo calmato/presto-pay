@@ -5,9 +5,9 @@ on:
     branches:
       - 'master'
       - 'develop'
-  push:
-    paths:
-      - 'native/android/**'
+#   push:
+#     paths:
+#       - 'native/android/**'
 
 env:
   ANDROID_SECRET: ${{ secrets.STG_ANDROID_SECRET }}
