@@ -24,7 +24,9 @@ jobs:
 
       - name: Run Unit tests
         working-directory: naitive/android
-        run: ./gradlew test
+        run: |
+          ls -la .
+          ./gradlew test
 
   apk:
     name: Generate APK
