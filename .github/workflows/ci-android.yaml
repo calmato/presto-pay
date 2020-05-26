@@ -5,14 +5,14 @@ on:
     branches:
       - 'master'
       - 'develop'
-  push:
-    paths:
-      - 'native/android/**'
+  # push:
+  #   paths:
+  #     - 'naitive/android/**'
 
 jobs:
   test:
     name: Unit Tests
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18.04
 
     steps:
       - uses: actions/checkout@v1
@@ -23,12 +23,12 @@ jobs:
           java-version: 1.8
 
       - name: Run Unit tests
-        working-directory: native/android
-        run: ./gradlew test --stacktrace
+        working-directory: naitive/android
+        run: bash ./gradlew test --stacktrace
 
   apk:
     name: Generate APK
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18.04
 
     steps:
       - uses: actions/checkout@v1
@@ -39,8 +39,8 @@ jobs:
           java-version: 1.8
 
       - name: Build debug APK
-        working-directory: native/android
-        run: ./gradlew assembleDebug --stacktrace
+        working-directory: naitive/android
+        run: bash ./gradlew assembleDebug --stacktrace
 
       - name: Create APK artifact
         uses: actions/upload-artifact@v1
