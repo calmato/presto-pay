@@ -3,6 +3,7 @@
     "target": "es2018",
     "module": "esnext",
     "moduleResolution": "node",
+    "resolveJsonModule": true,
     "lib": [
       "esnext",
       "esnext.asynciterable",
@@ -12,16 +13,16 @@
     "allowJs": true,
     "sourceMap": true,
     "strict": true,
+    "noImplicitAny": false,
+    "noImplicitThis": false,
     "noEmit": true,
     "experimentalDecorators": true,
-    "baseUrl": ".",
+    "baseUrl": "./app",
     "paths": {
-      "~/*": [
-        "./*"
-      ],
-      "@/*": [
-        "./*"
-      ]
+      "~/*": ["./*"],
+      "@/*": ["./*"],
+      "~~/*": ["./../*"],
+      "@@/*": ["./../*"]
     },
     "types": [
       "@types/node",

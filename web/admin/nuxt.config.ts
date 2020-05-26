@@ -1,8 +1,8 @@
-export default {
+import { Configuration } from '@nuxt/types'
+
+const configuration: Configuration = {
   mode: 'spa',
-  /*
-   ** Headers of the page
-   */
+  srcDir: 'app',
   head: {
     title: process.env.npm_package_name || '',
     meta: [
@@ -16,38 +16,14 @@ export default {
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
   },
-  /*
-   ** Customize the progress-bar color
-   */
   loading: { color: '#fff' },
-  /*
-   ** Global CSS
-   */
-  css: [],
-  /*
-   ** Plugins to load before mounting the App
-   */
   plugins: [],
-  /*
-   ** Nuxt.js dev-modules
-   */
   buildModules: ['@nuxt/typescript-build'],
-  /*
-   ** Nuxt.js modules
-   */
-  modules: [],
   typescript: {
     typeCheck: {
       eslint: true
     }
-  },
-  /*
-   ** Build configuration
-   */
-  build: {
-    /*
-     ** You can extend webpack config here
-     */
-    extend(config, ctx) {}
   }
 }
+
+export default configuration
