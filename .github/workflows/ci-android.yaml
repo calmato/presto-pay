@@ -5,9 +5,9 @@ on:
     branches:
       - 'master'
       - 'develop'
-  # push:
-  #   paths:
-  #     - 'naitive/android/**'
+  push:
+    paths:
+      - 'naitive/android/**'
 
 jobs:
   test:
@@ -24,7 +24,7 @@ jobs:
 
       - name: Run Unit tests
         working-directory: naitive/android
-        run: bash ./gradlew test --stacktrace
+        run: ./gradlew test --stacktrace
 
   apk:
     name: Generate APK
