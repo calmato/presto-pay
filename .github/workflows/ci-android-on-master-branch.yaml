@@ -41,7 +41,7 @@ jobs:
 
   firebase_test_lab:
     name: Run UI tests with Firebase Test Lab
-    needs: apk
+    needs: build
     runs-on: ubuntu-18.04
 
     steps:
