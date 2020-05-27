@@ -9,6 +9,9 @@ on:
     paths:
       - 'native/android/**'
 
+env:
+  ANDROID_SECRET: ${{ secrets.STG_ANDROID_SECRET }}
+
 jobs:
   test:
     name: Unit Tests
@@ -21,6 +24,14 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 1.8
+
+      - name: Create google-services.json
+        working-directory: ./native/android/app
+        run: |
+          echo -n ${ANDROID_SECRET} > google-services.json
+          echo '--- debug --------'
+          cat google-services.json
+          echo '------------------'
 
       - name: Run Unit tests
         working-directory: native/android
@@ -38,6 +49,16 @@ jobs:
         with:
           java-version: 1.8
 
+      - name: Create google-services.json
+        working-directory: ./native/android/app
+        env:
+          ANDROID_SECRET: ${{ secrets.STG_ANDROID_SECRET }}
+        run: |
+          echo -n ${ANDROID_SECRET} > google-services.json
+          echo '--- debug --------'
+          cat google-services.json
+          echo '------------------'
+
       - name: Build debug APK
         working-directory: native/android
         run: ./gradlew assembleDebug --stacktrace
@@ -46,4 +67,4 @@ jobs:
         uses: actions/upload-artifact@v1
         with:
           name: app
-          path: app/build/outputs/apk/debug/app-debug.apk
+          path: native/android/app/build/outputs/apk/debug/app-debug.apk

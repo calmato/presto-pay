@@ -2,10 +2,16 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.google.gms.google-services'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'androidx.navigation.safeargs'
 
 android {
   compileSdkVersion 28
+  buildToolsVersion "28.0.3"
 
+  dataBinding {
+    enabled = true
+  }
 
   defaultConfig {
     applicationId "work.calmato.prestopay"
@@ -18,6 +24,9 @@ android {
   }
 
   buildTypes {
+    customDebugType {
+      debuggable true
+    }
     release {
       minifyEnabled false
       proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
@@ -43,4 +52,11 @@ dependencies {
   implementation 'com.squareup.retrofit2:retrofit:2.3.0'
   implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
   implementation 'com.squareup.okhttp3:okhttp:3.9.0'
+  def nav_version = "2.3.0-alpha05"
+  implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
+  implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
+  // Dynamic Feature Module Support
+  implementation "androidx.navigation:navigation-dynamic-features-fragment:$nav_version"
+  // Testing Navigation
+  androidTestImplementation "androidx.navigation:navigation-testing:$nav_version"
 }
