@@ -45,6 +45,24 @@ services:
     ports:
       - 8001:8080
 
+  prometheus:
+    container_name: presto_pay_prometheus
+    build:
+      context: ./infra/docker/prometheus
+      dockerfile: Dockerfile_development
+    volumes:
+      - ./infra/prometheus/development.yaml:/etc/prometheus/prometheus.yml:cached
+    ports:
+      - 9100:9090
+
+  grafana:
+    container_name: presto_pay_grafana
+    build:
+      context: ./infra/docker/grafana
+      dockerfile: Dockerfile_development
+    ports:
+      - 9080:3000
+
   admin:
     container_name: presto_pay_admin
     build:
