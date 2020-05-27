@@ -9,6 +9,7 @@ on:
 env:
   ANDROID_SECRET: ${{ secrets.STG_ANDROID_SECRET }}
   GCP_PROJECT_ID: ${{ secrets.STG_GCP_PROJECT_ID }}
+  GCP_REGION: ${{ secrets.STG_GCP_REGION }}
 
 jobs:
   build:
@@ -60,8 +61,11 @@ jobs:
           service_account_key: ${{ secrets.STG_GCP_SA_KEY }}
           export_default_credentials: true
 
-      - name: Set current project
-        run: gcloud config set project ${GCP_PROJECT_ID}
+      - name: Configure gcloud
+        run: |
+          gcloud config set project ${GCP_PROJECT_ID}
+          gcloud config set run/platform managed
+          gcloud config set run/region ${GCP_REGION}
 
       - name: Run Instrumentation Tests in Firebase Test Lab
         run: |
