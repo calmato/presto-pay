@@ -3,7 +3,7 @@
 割り勘アプリ
 
 ![Android Github Action](https://github.com/calmato/presto-pay/workflows/Android%20Build%20and%20Test/badge.svg)
-![Admin(Nuxt.js) Build on Test](https://github.com/calmato/presto-pay/workflows/Admin(Nuxt.js)%20Build%20on%20Test/badge.svg)  
+![Admin(Nuxt.js) Build on Test](https://github.com/calmato/presto-pay/workflows/Admin(Nuxt.js)%20Build%20and%20Test/badge.svg)  
 ![User API(Golang) Build and Test](https://github.com/calmato/presto-pay/workflows/User%20API(Golang)%20Build%20and%20Test/badge.svg)
 ![User API(Golang) Reviewdog](https://github.com/calmato/presto-pay/workflows/User%20API(Golang)%20Reviewdog/badge.svg)  
 ![Terraform(stg) Test](https://github.com/calmato/presto-pay/workflows/Terraform(stg)%20Test/badge.svg)  
