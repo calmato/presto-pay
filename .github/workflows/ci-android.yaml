@@ -1,10 +1,5 @@
 name: Android Build and Test
-
 on:
-  pull_request:
-    branches:
-      - 'master'
-      - 'develop'
   push:
     paths:
       - 'native/android/**'
@@ -27,17 +22,13 @@ jobs:
 
       - name: Create google-services.json
         working-directory: ./native/android/app
-        run: |
-          echo -n ${ANDROID_SECRET} > google-services.json
-          echo '--- debug --------'
-          cat google-services.json
-          echo '------------------'
+        run: echo -n ${ANDROID_SECRET} > google-services.json
 
       - name: Run Unit tests
         working-directory: native/android
         run: ./gradlew test --stacktrace
 
-  apk:
+  build:
     name: Generate APK
     runs-on: ubuntu-latest
 
@@ -53,11 +44,7 @@ jobs:
         working-directory: ./native/android/app
         env:
           ANDROID_SECRET: ${{ secrets.STG_ANDROID_SECRET }}
-        run: |
-          echo -n ${ANDROID_SECRET} > google-services.json
-          echo '--- debug --------'
-          cat google-services.json
-          echo '------------------'
+        run: echo -n ${ANDROID_SECRET} > google-services.json
 
       - name: Build debug APK
         working-directory: native/android
