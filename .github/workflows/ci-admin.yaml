@@ -1,4 +1,4 @@
-name: Admin(Nuxt.js) Build on Test
+name: Admin(Nuxt.js) Build and Test
 on:
   push:
     paths:
