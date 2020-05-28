@@ -1,8 +1,8 @@
 name: Android Test with Firebase
 on:
   push:
-    paths:
-      - 'native/android/**'
+#     paths:
+#       - 'native/android/**'
     branches:
       - master
 
