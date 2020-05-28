@@ -28,3 +28,8 @@ scrape_configs:
     static_configs:
     - targets:
         - 0.0.0.0:9090
+
+  - job_name: 'user-api'
+    static_configs:
+      - targets:
+        - user_api:8080
