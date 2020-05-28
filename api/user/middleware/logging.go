@@ -43,6 +43,8 @@ func requestLogging(reader io.Reader) {
 	if err := json.Unmarshal(data, &params); err != nil {
 		fields["request"] = "ng"
 		log.WithFields(fields).Info("JSONの整形に失敗しました")
+
+		SendFluentd("request", fields)
 		return
 	}
 
@@ -70,4 +72,6 @@ func requestLogging(reader io.Reader) {
 	// fields["params"] = fmt.Frintf("{ %s}", message)
 	fields["params"] = params
 	log.WithFields(fields).Info()
+
+	SendFluentd("request", fields)
 }

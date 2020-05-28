@@ -3,6 +3,7 @@ package handler
 import (
 	"github.com/calmato/presto-pay/api/user/internal/application/response"
 	"github.com/calmato/presto-pay/api/user/internal/domain"
+	"github.com/calmato/presto-pay/api/user/middleware"
 	"github.com/gin-gonic/gin"
 	log "github.com/sirupsen/logrus"
 )
@@ -109,6 +110,8 @@ func logging(level outputLevel, message string, err error, res *response.ErrorRe
 	default:
 		log.WithFields(fields).Error(getError(err))
 	}
+
+	middleware.SendFluentd("response", fields)
 }
 
 func getError(err error) string {
