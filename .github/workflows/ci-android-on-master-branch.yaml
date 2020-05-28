@@ -57,8 +57,8 @@ jobs:
         uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
         with:
           version: '281.0.0'
-          service_account_email: ${{ secrets.STG_FIREBASE_SA_EMAIL }}
-          service_account_key: ${{ secrets.STG_FIREBASE_SA_KEY }}
+          service_account_email: ${{ secrets.STG_GCP_SA_EMAIL }}
+          service_account_key: ${{ secrets.STG_GCP_SA_KEY }}
           export_default_credentials: true
 
       - name: Configure gcloud
