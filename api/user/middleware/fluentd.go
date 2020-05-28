@@ -7,7 +7,12 @@ import (
 
 // SendFluentd - Fluentdにログの転送
 func SendFluentd(tag string, data interface{}) {
-	fluentd, err := fluent.New(fluent.Config{})
+	config := fluent.Config{
+		FluentHost: "fluentd",
+		FluentPort: 24224,
+	}
+
+	fluentd, err := fluent.New(config)
 	if err != nil {
 		log.Error(err)
 		return
