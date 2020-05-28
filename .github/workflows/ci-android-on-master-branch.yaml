@@ -1,8 +1,8 @@
 name: Android Test with Firebase
 on:
   push:
-#     paths:
-#       - 'native/android/**'
+    paths:
+      - 'native/android/**'
     branches:
       - master
 
@@ -72,5 +72,5 @@ jobs:
           gcloud firebase test android run \
             --type robo \
             --app app-debug/app-debug.apk \
-            --device model=Pixel2,version=29,locale=ja_JP
+            --device model=Pixel2,version=29,locale=ja_JP \
             --timeout 300s
