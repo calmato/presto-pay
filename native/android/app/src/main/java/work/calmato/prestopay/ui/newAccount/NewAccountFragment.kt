@@ -13,20 +13,21 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_new_account.*
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentNewAccountBinding
+import work.calmato.prestopay.ui.login.LoginFragmentDirections
 import work.calmato.prestopay.util.RestClient
 import java.io.ByteArrayOutputStream
+import kotlin.math.roundToInt
 
 class NewAccountFragment : Fragment() {
   val serverUrl: String = "https://api.presto-pay-stg.calmato.work/v1/users"
@@ -76,7 +77,13 @@ class NewAccountFragment : Fragment() {
         jsonText = gson.toJson(map)
         Log.d("New Account Post Json", jsonText)
 
-        MyAsyncTask().execute()
+        val responseCode = MyAsyncTask().execute().get()
+        when ((responseCode.toDouble() / 100).roundToInt() * 100) {
+          200 -> this.findNavController().navigate(
+            NewAccountFragmentDirections.actionNewAccountFragmentToMailCheckFragment()
+          )
+          else -> Log.d("HTTP Response", responseCode.toString())
+        }
       } else {
         println("The password and the confirmation password did not match.")
       }
@@ -115,10 +122,11 @@ class NewAccountFragment : Fragment() {
     }
   }
 
-  inner class MyAsyncTask : AsyncTask<Void, Void, String>() {
-    override fun doInBackground(vararg params: Void?): String? {
-      RestClient().postExecute(jsonText, serverUrl)
-      return RestClient().getResult()
+  inner class MyAsyncTask : AsyncTask<Void, Void, Int>() {
+    override fun doInBackground(vararg params: Void?): Int? {
+      val responseCode = RestClient().postExecute(jsonText, serverUrl)
+//      return RestClient().getResult()
+      return responseCode
     }
   }
 
