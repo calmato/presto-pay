@@ -69,16 +69,16 @@ services:
       context: ./infra/docker/monitoring/loki
       dockerfile: Dockerfile_development
 
-  fluentd:
-    container_name: presto_pay_fluentd
-    build:
-      context: ./infra/docker/monitoring/fluentd
-      dockerfile: Dockerfile_development
-    volumes:
-      - ./infra/fluentd/development.conf:/fluentd/etc/fluent.conf:cached
-      - ./infra/fluentd/plugin/out_loki_dev.rb:/etc/fluent/plugin/out_loki.rb:cached
-    environment:
-      - FLUENT_CONF=/fluentd/etc/fluent.conf
+  # fluentd:
+  #   container_name: presto_pay_fluentd
+  #   build:
+  #     context: ./infra/docker/monitoring/fluentd
+  #     dockerfile: Dockerfile_development
+  #   volumes:
+  #     - ./infra/fluentd/development.conf:/fluentd/etc/fluent.conf:cached
+  #     - ./infra/fluentd/plugin/out_loki_dev.rb:/etc/fluent/plugin/out_loki.rb:cached
+  #   environment:
+  #     - FLUENT_CONF=/fluentd/etc/fluent.conf
 
   admin:
     container_name: presto_pay_admin
