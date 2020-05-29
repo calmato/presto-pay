@@ -44,7 +44,7 @@ func requestLogging(reader io.Reader) {
 		fields["request"] = "ng"
 		log.WithFields(fields).Info("JSONの整形に失敗しました")
 
-		SendFluentd("request", fields)
+		sendLogs(fields)
 		return
 	}
 
@@ -73,5 +73,10 @@ func requestLogging(reader io.Reader) {
 	fields["params"] = params
 	log.WithFields(fields).Info()
 
+	// Fluentdへ転送用
+	sendLogs(fields)
+}
+
+func sendLogs(fields map[string]interface{}) {
 	SendFluentd("request", fields)
 }

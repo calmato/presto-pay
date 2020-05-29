@@ -1,8 +1,11 @@
 package handler
 
 import (
+	"encoding/json"
+
 	"github.com/calmato/presto-pay/api/user/internal/application/response"
 	"github.com/calmato/presto-pay/api/user/internal/domain"
+	"github.com/calmato/presto-pay/api/user/middleware"
 	"github.com/gin-gonic/gin"
 	log "github.com/sirupsen/logrus"
 )
@@ -110,8 +113,8 @@ func logging(level outputLevel, message string, err error, res *response.ErrorRe
 		log.WithFields(fields).Error(getError(err))
 	}
 
-	// TODO: Fluentdへ転送用
-	// middleware.SendFluentd("response")
+	// Fluentdへ転送用
+	sendLogs(err, res)
 }
 
 func getError(err error) string {
@@ -144,4 +147,17 @@ func getValidationErrorsInErrorReponse(err error) []*response.ValidationError {
 	}
 
 	return []*response.ValidationError{}
+}
+
+func sendLogs(err error, res *response.ErrorResponse) {
+	log := make(map[string]interface{})
+
+	params, _ := json.Marshal(res.ValidationErrors)
+
+	log["status"] = res.StatusCode
+	log["code"] = getErrorCode(err)
+	log["message"] = res.Message
+	log["errors"] = params
+
+	middleware.SendFluentd("response", log)
 }

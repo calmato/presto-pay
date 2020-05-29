@@ -8,8 +8,8 @@ import (
 // SendFluentd - Fluentdにログの転送
 func SendFluentd(tag string, data interface{}) {
 	config := fluent.Config{
-		FluentHost: "fluentd",
-		FluentPort: 24224,
+		FluentHost: "fluentd", // TODO: 環境変数へ
+		FluentPort: 24224,     // TODO: 環境変数へ
 	}
 
 	fluentd, err := fluent.New(config)

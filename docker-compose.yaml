@@ -53,15 +53,15 @@ services:
     ports:
       - 9080:3000
 
-  # prometheus:
-  #   container_name: presto_pay_prometheus
-  #   build:
-  #     context: ./infra/docker/monitoring/prometheus
-  #     dockerfile: Dockerfile_development
-  #   volumes:
-  #     - ./infra/prometheus/development.yaml:/etc/prometheus/prometheus.yml:cached
-  #   ports:
-  #     - 9100:9090
+  prometheus:
+    container_name: presto_pay_prometheus
+    build:
+      context: ./infra/docker/monitoring/prometheus
+      dockerfile: Dockerfile_development
+    volumes:
+      - ./infra/prometheus/development.yaml:/etc/prometheus/prometheus.yml:cached
+    ports:
+      - 9100:9090
 
   loki:
     container_name: presto_pay_loki
