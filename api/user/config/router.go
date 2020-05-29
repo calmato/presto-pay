@@ -6,6 +6,7 @@ import (
 	"github.com/calmato/presto-pay/api/user/middleware"
 	"github.com/calmato/presto-pay/api/user/registry"
 	"github.com/gin-gonic/gin"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"golang.org/x/xerrors"
 )
 
@@ -20,6 +21,7 @@ func Router(reg *registry.Registry) *gin.Engine {
 	r.Use(middleware.Logging())
 
 	r.GET("/health", reg.Health.HealthCheck)
+	r.GET("/metrics", prometheusHandler())
 
 	r.NoRoute(func(c *gin.Context) {
 		err := xerrors.New("NotFound")
@@ -39,4 +41,12 @@ func Router(reg *registry.Registry) *gin.Engine {
 	}
 
 	return r
+}
+
+func prometheusHandler() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		h := promhttp.Handler()
+
+		h.ServeHTTP(c.Writer, c.Request)
+	}
 }
