@@ -63,11 +63,11 @@ services:
     ports:
       - 9100:9090
 
-  loki:
-    container_name: presto_pay_loki
-    build:
-      context: ./infra/docker/monitoring/loki
-      dockerfile: Dockerfile_development
+  # loki:
+  #   container_name: presto_pay_loki
+  #   build:
+  #     context: ./infra/docker/monitoring/loki
+  #     dockerfile: Dockerfile_development
 
   # fluentd:
   #   container_name: presto_pay_fluentd
