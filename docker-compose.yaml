@@ -93,8 +93,6 @@ services:
     container_name: presto_pay_loki
     build:
       context: ./infra/docker/monitoring/loki
-    ports:
-      - 9080:3100
     networks:
       - loki
 
