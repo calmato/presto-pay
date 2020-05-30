@@ -1,0 +1,104 @@
+apiVersion: v1
+kind: Service
+
+metadata:
+  name: user-api
+
+spec:
+  selector:
+    app: user-api
+
+  type: NodePort
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: 8080
+
+---
+
+apiVersion: v1
+kind: Service
+
+metadata:
+  name: grafana
+  namespace: monitoring
+
+spec:
+  selector:
+    app: grafana
+
+  type: LoadBalancer
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: 3000
+
+---
+
+apiVersion: v1
+kind: Service
+
+metadata:
+  name: prometheus
+  namespace: monitoring
+  annotations:
+    prometheus.io/scrape: 'true'
+
+spec:
+  selector:
+    app: prometheus
+
+  type: NodePort
+  ports:
+    - name: tcp
+      protocol: TCP
+      port: 9090
+      targetPort: 9090
+
+---
+
+apiVersion: v1
+kind: Service
+
+metadata:
+  name: kube-state-metrics
+  namespace: monitoring
+  annotations:
+    prometheus.io/scrape: 'true'
+
+spec:
+  selector:
+    app: kube-state-metrics
+
+  type: NodePort
+  ports:
+    - name: tcp
+      protocol: TCP
+      port: 8080
+      targetPort: 8080
+
+---
+
+apiVersion: v1
+kind: Service
+
+metadata:
+  name: prometheus-node-exporter
+  namespace: monitoring
+  annotations:
+    prometheus.io/scrape: 'true'
+
+spec:
+  selector:
+    app: prometheus
+    component: node-exporter
+
+  type: ClusterIP
+  clusterIP: None
+  ports:
+    - name: tcp
+      protocol: TCP
+      port: 9100
+      targetPort: 9100
