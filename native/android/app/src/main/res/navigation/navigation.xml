@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   android:id="@+id/navigation"
   app:startDestination="@id/login_fragment">
@@ -9,16 +9,41 @@
     android:id="@+id/login_fragment"
     android:name="work.calmato.prestopay.ui.login.LoginFragment"
     android:label="fragment_login"
-    tools:layout="@layout/fragment_login" >
+    tools:layout="@layout/fragment_login">
     <action
       android:id="@+id/action_loginFragment_to_newAccountFragment"
-      app:destination="@+id/new_account_fragment" />
+      app:destination="@+id/new_account_fragment"
+      />
+    <action
+      android:id="@+id/action_login_fragment_to_home_fragment"
+      app:destination="@id/home_fragment" />
   </fragment>
   <fragment
     android:id="@+id/new_account_fragment"
     android:name="work.calmato.prestopay.ui.newAccount.NewAccountFragment"
     android:label="fragment_new_account"
     tools:layout="@layout/fragment_new_account">
+    <action
+      android:id="@+id/action_newAccountFragment_to_mailCheckFragment"
+      app:destination="@+id/mail_check_fragment" />
+  </fragment>
+  <fragment
+    android:id="@+id/mail_check_fragment"
+    android:name="work.calmato.prestopay.ui.mailCheck.MailCheckFragment"
+    android:label="fragment_mail_check"
+    tools:layout="@layout/fragment_mail_check">
+    <action
+      android:id="@+id/action_mailCheckFragment_to_loginFragment"
+      app:destination="@+id/login_fragment" />
+  </fragment>
+    <fragment
+    android:id="@+id/home_fragment"
+    android:name="work.calmato.prestopay.ui.home.HomeFragment"
+    android:label="fragment_home"
+    tools:layout="@layout/fragment_home">
 
   </fragment>
+
+
+
 </navigation>
