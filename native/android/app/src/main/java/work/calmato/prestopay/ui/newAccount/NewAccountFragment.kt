@@ -14,19 +14,26 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.constraintlayout.widget.Constraints.TAG
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.gson.Gson
+import com.google.gson.JsonObject
 import kotlinx.android.synthetic.main.fragment_new_account.*
+import okhttp3.Response
+import org.json.JSONObject
+import org.xml.sax.Parser
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentNewAccountBinding
 import work.calmato.prestopay.ui.login.LoginFragmentDirections
 import work.calmato.prestopay.util.RestClient
 import java.io.ByteArrayOutputStream
+import java.lang.StringBuilder
 import kotlin.math.roundToInt
 
 class NewAccountFragment : Fragment() {
@@ -77,12 +84,23 @@ class NewAccountFragment : Fragment() {
         jsonText = gson.toJson(map)
         Log.d("New Account Post Json", jsonText)
 
-        val responseCode = MyAsyncTask().execute().get()
-        when ((responseCode.toDouble() / 100).roundToInt() * 100) {
-          200 -> this.findNavController().navigate(
+        val response = MyAsyncTask().execute().get()
+        if(response.isSuccessful){
+          this.findNavController().navigate(
             NewAccountFragmentDirections.actionNewAccountFragmentToMailCheckFragment()
           )
-          else -> Log.d("HTTP Response", responseCode.toString())
+        } else{
+          var errorMessage = ""
+          val jsonArray = JSONObject(response.body()!!.string()).getJSONArray("errors")
+          for (i in 0 until jsonArray.length()){
+            val jsonObject = jsonArray.getJSONObject(i)
+            errorMessage += jsonObject.getString("field") + " " + jsonObject.getString("message")
+            if (i != jsonArray.length() - 1){
+              errorMessage += "\n"
+            }
+          }
+          Toast.makeText(requireActivity(), errorMessage, Toast.LENGTH_LONG).show()
+
         }
       } else {
         println("The password and the confirmation password did not match.")
@@ -122,10 +140,9 @@ class NewAccountFragment : Fragment() {
     }
   }
 
-  inner class MyAsyncTask : AsyncTask<Void, Void, Int>() {
-    override fun doInBackground(vararg params: Void?): Int? {
+  inner class MyAsyncTask : AsyncTask<Void, Void, Response>() {
+    override fun doInBackground(vararg params: Void?): Response {
       val responseCode = RestClient().postExecute(jsonText, serverUrl)
-//      return RestClient().getResult()
       return responseCode
     }
   }
