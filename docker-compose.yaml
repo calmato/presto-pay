@@ -1,6 +1,7 @@
 version: '3.7'
 
 services:
+  # Application
   proxy:
     container_name: presto_pay_proxy
     build:
@@ -10,8 +11,10 @@ services:
       - ./infra/envoy/development.yaml:/etc/envoy/envoy.yaml:cached
     ports:
       - 8080:8080
-      - 9090:9090
+      - 8081:9090
     command: envoy -c /etc/envoy/envoy.yaml
+    networks:
+      - api
 
   user_api:
     container_name: presto_pay_user_api
@@ -26,59 +29,9 @@ services:
       - GOOGLE_APPLICATION_CREDENTIALS=${GOOGLE_APPLICATION_CREDENTIALS}
       - GCP_STORAGE_BUCKET_NAME=${GCP_STORAGE_BUCKET_NAME}
     command: realize start
-
-  swagger_viewer:
-    container_name: presto_pay_swagger_viewer
-    build:
-      context: ./infra/docker/swagger/viewer
-    volumes:
-      - ./docs/12_backend/21_swagger/apiv1.yaml:/swagger.yaml:cached
-    ports:
-      - 8000:8080
-    environment:
-      SWAGGER_JSON: /swagger.yaml
-
-  swagger_editor:
-    container_name: presto_pay_swagger_editor
-    build:
-      context: ./infra/docker/swagger/editor
-    ports:
-      - 8001:8080
-
-  grafana:
-    container_name: presto_pay_grafana
-    build:
-      context: ./infra/docker/monitoring/grafana
-      dockerfile: Dockerfile_development
-    ports:
-      - 9080:3000
-
-  prometheus:
-    container_name: presto_pay_prometheus
-    build:
-      context: ./infra/docker/monitoring/prometheus
-      dockerfile: Dockerfile_development
-    volumes:
-      - ./infra/prometheus/development.yaml:/etc/prometheus/prometheus.yml:cached
-    ports:
-      - 9100:9090
-
-  # loki:
-  #   container_name: presto_pay_loki
-  #   build:
-  #     context: ./infra/docker/monitoring/loki
-  #     dockerfile: Dockerfile_development
-
-  # fluentd:
-  #   container_name: presto_pay_fluentd
-  #   build:
-  #     context: ./infra/docker/monitoring/fluentd
-  #     dockerfile: Dockerfile_development
-  #   volumes:
-  #     - ./infra/fluentd/development.conf:/fluentd/etc/fluent.conf:cached
-  #     - ./infra/fluentd/plugin/out_loki_dev.rb:/etc/fluent/plugin/out_loki.rb:cached
-  #   environment:
-  #     - FLUENT_CONF=/fluentd/etc/fluent.conf
+    networks:
+      - api
+      - loki
 
   admin:
     container_name: presto_pay_admin
@@ -89,13 +42,82 @@ services:
     volumes:
       - ./web/admin:/web/admin:cached
     ports:
-      - 3000:3000
+      - 8100:3000
     environment:
       - FIREBASE_API_KEY=${FIREBASE_API_KEY}
       - FIREBASE_PROJECT_ID=${FIREBASE_PROJECT_ID}
       - FIREBASE_MESSAGING_SENDER_ID=${FIREBASE_MESSAGING_SENDER_ID}
     command: yarn dev -H 0.0.0.0 -p 3000
 
+  swagger_viewer:
+    container_name: presto_pay_swagger_viewer
+    build:
+      context: ./infra/docker/swagger/viewer
+    volumes:
+      - ./docs/12_backend/21_swagger/apiv1.yaml:/swagger.yaml:cached
+    ports:
+      - 8000:8080
+    environment:
+      SWAGGER_JSON: /swagger.yam
+
+  swagger_editor:
+    container_name: presto_pay_swagger_editor
+    build:
+      context: ./infra/docker/swagger/editor
+    ports:
+      - 8001:8080
+
+  # Monitoring
+  grafana:
+    container_name: presto_pay_grafana
+    build:
+      context: ./infra/docker/monitoring/grafana
+    ports:
+      - 9100:3000
+    networks:
+      - loki
+
+  prometheus:
+    container_name: presto_pay_prometheus
+    build:
+      context: ./infra/docker/monitoring/prometheus
+    volumes:
+      - ./infra/prometheus/development.yaml:/etc/prometheus/prometheus.yml:cached
+    ports:
+      - 9090:9090
+    networks:
+      - loki
+
+  loki:
+    container_name: presto_pay_loki
+    build:
+      context: ./infra/docker/monitoring/loki
+    ports:
+      - 9080:3100
+    networks:
+      - loki
+
+  promtail:
+    container_name: presto_pay_promtail
+    build:
+      context: ./infra/docker/monitoring/promtail
+    volumes:
+      - /var/log:/var/log
+    command: -config.file=/etc/promtail/docker-config.yaml
+    networks:
+      - loki
+
+  # fluentd:
+  #   container_name: presto_pay_fluentd
+  #   build:
+  #     context: ./infra/docker/monitoring/fluentd
+  #   volumes:
+  #     - ./infra/fluentd/development.conf:/fluentd/etc/fluent.conf:cached
+  #     - ./infra/fluentd/plugin/out_loki_dev.rb:/etc/fluent/plugin/out_loki.rb:cached
+  #   environment:
+  #     - FLUENT_CONF=/fluentd/etc/fluent.conf
+
+  # Management
   terraform:
     container_name: presto_pay_terraform
     build: ./infra/docker/terraform
@@ -108,3 +130,7 @@ services:
     environment:
       - GOOGLE_CLOUD_KEYFILE_JSON=${TERRAFORM_CREDENTIALS}
       - GOOGLE_APPLICATION_CREDENTIALS=${TERRAFORM_CREDENTIALS}
+
+networks:
+  api: {}
+  loki: {}
