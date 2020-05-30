@@ -54,6 +54,14 @@ func main() {
 		panic(err)
 	}
 
+	// メトリクス公開用サーバ起動
+	mr := config.MetricsRouter()
+	go func() {
+		if err := http.ListenAndServe(":"+e.MetricsPort, mr); err != nil {
+			log.Panic(err)
+		}
+	}()
+
 	reg := registry.NewRegistry(fa, fs, cs)
 
 	// サーバ起動

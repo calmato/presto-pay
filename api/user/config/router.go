@@ -21,7 +21,6 @@ func Router(reg *registry.Registry) *gin.Engine {
 	r.Use(middleware.Logging())
 
 	r.GET("/health", reg.Health.HealthCheck)
-	r.GET("/metrics", prometheusHandler())
 
 	r.NoRoute(func(c *gin.Context) {
 		err := xerrors.New("NotFound")
@@ -43,10 +42,19 @@ func Router(reg *registry.Registry) *gin.Engine {
 	return r
 }
 
-func prometheusHandler() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		h := promhttp.Handler()
+// MetricsRouter - メトリクス公開用ルーティングの定義
+func MetricsRouter() *gin.Engine {
+	r := gin.Default()
 
+	r.GET("/metrics", func(c *gin.Context) {
+		h := promhttp.Handler()
 		h.ServeHTTP(c.Writer, c.Request)
-	}
+	})
+
+	r.NoRoute(func(c *gin.Context) {
+		err := xerrors.New("NotFound")
+		handler.ErrorHandling(c, domain.NotFound.New(err))
+	})
+
+	return r
 }

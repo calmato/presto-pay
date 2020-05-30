@@ -32,4 +32,4 @@ scrape_configs:
   - job_name: 'user-api'
     static_configs:
       - targets:
-        - user_api:8080
+        - user_api:8081
