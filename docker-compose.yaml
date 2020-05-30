@@ -15,6 +15,7 @@ services:
     command: envoy -c /etc/envoy/envoy.yaml
     networks:
       - api
+      - loki
 
   user_api:
     container_name: presto_pay_user_api
