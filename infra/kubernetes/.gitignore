@@ -1,5 +1,6 @@
+deployment-user-api.yaml
+
 secret-*.yaml
-deployment-*.yaml
 
 cert.pem
 privkey.pem

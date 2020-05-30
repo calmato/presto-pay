@@ -1,0 +1,74 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: prometheus
+  namespace: monitoring
+  labels:
+    app: prometheus
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: prometheus
+
+  template:
+    metadata:
+      labels:
+        app: prometheus
+
+    spec:
+      containers:
+        - name: prometheus
+          image: prom/prometheus:v2.18.1
+          ports:
+            - name: prometheus
+              containerPort: 9090
+          resources:
+            limits:
+              cpu: 100m
+              memory: 200Mi
+          args:
+            - '--config.file=/etc/prometheus/prometheus.yaml'
+          volumeMounts:
+            - mountPath: /etc/prometheus
+              name: prometheus-config
+              readOnly: true
+      volumes:
+        - name: prometheus-config
+          configMap:
+            name: prometheus
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: kube-state-metrics
+  namespace: monitoring
+  labels:
+    app: kube-state-metrics
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kube-state-metrics
+
+  template:
+    metadata:
+      labels:
+        app: kube-state-metrics
+
+    spec:
+      containers:
+        - name: kube-state-metrics
+          image: gcr.io/google_containers/kube-state-metrics:v1.8.0
+          ports:
+            - containerPort: 8080
+          resources:
+            limits:
+              cpu: 50m
+              memory: 100Mi
