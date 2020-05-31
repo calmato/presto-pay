@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: DaemonSet
+
+metadata:
+  name: prometheus-node-exporter
+  namespace: monitoring
+  labels:
+    app: prometheus
+    component: node-exporter
+
+spec:
+  selector:
+    matchLabels:
+      app: prometheus-node-exporter
+
+  template:
+    metadata:
+      labels:
+        app: prometheus-node-exporter
+        component: node-exporter
+
+    spec:
+      containers:
+        - name: prometheus-node-exporter
+          image: prom/node-exporter:v1.0.0
+          ports:
+            - name: prom-node-exp
+              containerPort: 9100
+              hostPort: 9100
+          resources:
+            limits:
+              cpu: 50m
+              memory: 100Mi
+      hostNetwork: true
+      hostPID: true

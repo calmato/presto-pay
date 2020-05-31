@@ -45,6 +45,57 @@ services:
     ports:
       - 8001:8080
 
+  grafana:
+    container_name: presto_pay_grafana
+    build:
+      context: ./infra/docker/monitoring/grafana
+      dockerfile: Dockerfile_development
+    ports:
+      - 9080:3000
+
+  prometheus:
+    container_name: presto_pay_prometheus
+    build:
+      context: ./infra/docker/monitoring/prometheus
+      dockerfile: Dockerfile_development
+    volumes:
+      - ./infra/prometheus/development.yaml:/etc/prometheus/prometheus.yml:cached
+    ports:
+      - 9100:9090
+
+  # loki:
+  #   container_name: presto_pay_loki
+  #   build:
+  #     context: ./infra/docker/monitoring/loki
+  #     dockerfile: Dockerfile_development
+
+  # fluentd:
+  #   container_name: presto_pay_fluentd
+  #   build:
+  #     context: ./infra/docker/monitoring/fluentd
+  #     dockerfile: Dockerfile_development
+  #   volumes:
+  #     - ./infra/fluentd/development.conf:/fluentd/etc/fluent.conf:cached
+  #     - ./infra/fluentd/plugin/out_loki_dev.rb:/etc/fluent/plugin/out_loki.rb:cached
+  #   environment:
+  #     - FLUENT_CONF=/fluentd/etc/fluent.conf
+
+  admin:
+    container_name: presto_pay_admin
+    build:
+      context: ./infra/docker/web/admin
+      dockerfile: Dockerfile_development
+    working_dir: /web/admin
+    volumes:
+      - ./web/admin:/web/admin:cached
+    ports:
+      - 3000:3000
+    environment:
+      - FIREBASE_API_KEY=${FIREBASE_API_KEY}
+      - FIREBASE_PROJECT_ID=${FIREBASE_PROJECT_ID}
+      - FIREBASE_MESSAGING_SENDER_ID=${FIREBASE_MESSAGING_SENDER_ID}
+    command: yarn dev -H 0.0.0.0 -p 3000
+
   terraform:
     container_name: presto_pay_terraform
     build: ./infra/docker/terraform

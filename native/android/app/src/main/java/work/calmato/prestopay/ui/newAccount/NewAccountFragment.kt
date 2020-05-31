@@ -1,4 +1,4 @@
-package work.calmato.prestopay.ui.login
+package work.calmato.prestopay.ui.newAccount
 
 import android.Manifest
 import android.app.Activity
@@ -10,30 +10,57 @@ import android.os.AsyncTask
 import android.os.Bundle
 import android.util.Base64
 import android.util.Log
-import android.widget.Button
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.Constraints.TAG
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
+import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.gson.Gson
-import kotlinx.android.synthetic.main.fragment_create_new_account.*
+import com.google.gson.JsonObject
+import kotlinx.android.synthetic.main.fragment_new_account.*
+import okhttp3.Response
+import org.json.JSONObject
+import org.xml.sax.Parser
 import work.calmato.prestopay.R
+import work.calmato.prestopay.databinding.FragmentNewAccountBinding
+import work.calmato.prestopay.ui.login.LoginFragmentDirections
+import work.calmato.prestopay.util.RestClient
 import java.io.ByteArrayOutputStream
+import java.lang.StringBuilder
+import kotlin.math.roundToInt
 
-class CreateNewAccount : AppCompatActivity() {
+class NewAccountFragment : Fragment() {
   val serverUrl: String = "https://api.presto-pay-stg.calmato.work/v1/users"
   var jsonText: String = ""
   var setThumbnail = false
+  override fun onCreateView(
+    inflater: LayoutInflater,
+    container: ViewGroup?,
+    savedInstanceState: Bundle?
+  ): View? {
+    val binding: FragmentNewAccountBinding = DataBindingUtil.inflate(
+      inflater, R.layout.fragment_new_account, container, false
+    )
 
-  override fun onCreate(savedInstanceState: Bundle?) {
+    return binding.root
+  }
+
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+//
+//
+//  override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    setContentView(R.layout.fragment_create_new_account)
-
-    val createButton: Button = findViewById(R.id.createAccountButton)
 
     // buttonを押した時の処理を記述
-    createButton.setOnClickListener {
+    createAccountButton.setOnClickListener {
       var thumbnails = ""
       if (setThumbnail) {
         thumbnails = encodeImage2Base64()
@@ -57,7 +84,24 @@ class CreateNewAccount : AppCompatActivity() {
         jsonText = gson.toJson(map)
         Log.d("New Account Post Json", jsonText)
 
-        MyAsyncTask().execute()
+        val response = MyAsyncTask().execute().get()
+        if(response.isSuccessful){
+          this.findNavController().navigate(
+            NewAccountFragmentDirections.actionNewAccountFragmentToMailCheckFragment()
+          )
+        } else{
+          var errorMessage = ""
+          val jsonArray = JSONObject(response.body()!!.string()).getJSONArray("errors")
+          for (i in 0 until jsonArray.length()){
+            val jsonObject = jsonArray.getJSONObject(i)
+            errorMessage += jsonObject.getString("field") + " " + jsonObject.getString("message")
+            if (i != jsonArray.length() - 1){
+              errorMessage += "\n"
+            }
+          }
+          Toast.makeText(requireActivity(), errorMessage, Toast.LENGTH_LONG).show()
+
+        }
       } else {
         println("The password and the confirmation password did not match.")
       }
@@ -65,23 +109,26 @@ class CreateNewAccount : AppCompatActivity() {
 
     editPhotoText.setOnClickListener {
       //check runtime permission
-      if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+      if (ContextCompat.checkSelfPermission(
+          requireActivity(),
+          Manifest.permission.READ_EXTERNAL_STORAGE
+        )
         != PackageManager.PERMISSION_GRANTED
       ) {
         // Permission is not granted
         if (ActivityCompat.shouldShowRequestPermissionRationale(
-            this,
+            requireActivity(),
             Manifest.permission.READ_EXTERNAL_STORAGE
           )
         ) {
           // Show an explanation to the user *asynchronously* -- don't block
           // this thread waiting for the user's response! After the user
           // sees the explanation, try again to request the permission.
-          Toast.makeText(this, "設定からギャラリーへのアクセスを許可してください", Toast.LENGTH_LONG).show()
+          Toast.makeText(requireActivity(), "設定からギャラリーへのアクセスを許可してください", Toast.LENGTH_LONG).show()
         } else {
           // No explanation needed, we can request the permission.
           ActivityCompat.requestPermissions(
-            this,
+            requireActivity(),
             arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
             MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE
           )
@@ -93,10 +140,10 @@ class CreateNewAccount : AppCompatActivity() {
     }
   }
 
-  inner class MyAsyncTask : AsyncTask<Void, Void, String>() {
-    override fun doInBackground(vararg params: Void?): String? {
-      RestClient().postExecute(jsonText, serverUrl)
-      return RestClient().getResult()
+  inner class MyAsyncTask : AsyncTask<Void, Void, Response>() {
+    override fun doInBackground(vararg params: Void?): Response {
+      val responseCode = RestClient().postExecute(jsonText, serverUrl)
+      return responseCode
     }
   }
 
@@ -117,7 +164,7 @@ class CreateNewAccount : AppCompatActivity() {
         if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
           pickImageFromGallery()
         } else {
-          Toast.makeText(this, "permission denied", Toast.LENGTH_LONG).show()
+          Toast.makeText(requireActivity(), "permission denied", Toast.LENGTH_LONG).show()
         }
         return
       }
@@ -131,7 +178,10 @@ class CreateNewAccount : AppCompatActivity() {
     //Intent to pick image
     val intent = Intent(Intent.ACTION_PICK)
     intent.type = "image/*"
-    startActivityForResult(intent, IMAGE_PICK_CODE)
+    startActivityForResult(
+      intent,
+      IMAGE_PICK_CODE
+    )
     setThumbnail = true
   }
 

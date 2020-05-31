@@ -6,6 +6,7 @@ import (
 	"github.com/calmato/presto-pay/api/user/middleware"
 	"github.com/calmato/presto-pay/api/user/registry"
 	"github.com/gin-gonic/gin"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"golang.org/x/xerrors"
 )
 
@@ -37,6 +38,23 @@ func Router(reg *registry.Registry) *gin.Engine {
 		apiV1.POST("/users/check-email", reg.V1User.UniqueCheckEmail)
 		apiV1.POST("/users/check-username", reg.V1User.UniqueCheckUsername)
 	}
+
+	return r
+}
+
+// MetricsRouter - メトリクス公開用ルーティングの定義
+func MetricsRouter() *gin.Engine {
+	r := gin.Default()
+
+	r.GET("/metrics", func(c *gin.Context) {
+		h := promhttp.Handler()
+		h.ServeHTTP(c.Writer, c.Request)
+	})
+
+	r.NoRoute(func(c *gin.Context) {
+		err := xerrors.New("NotFound")
+		handler.ErrorHandling(c, domain.NotFound.New(err))
+	})
 
 	return r
 }

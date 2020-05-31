@@ -1,18 +1,16 @@
-name: Android Github Action
-
+name: Android Build and Test
 on:
-  pull_request:
-    branches:
-      - 'master'
-      - 'develop'
-  # push:
-  #   paths:
-  #     - 'naitive/android/**'
+  push:
+    paths:
+      - 'native/android/**'
+
+env:
+  ANDROID_SECRET: ${{ secrets.STG_ANDROID_SECRET }}
 
 jobs:
   test:
     name: Unit Tests
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v1
@@ -21,14 +19,18 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 1.8
+
+      - name: Create google-services.json
+        working-directory: ./native/android/app
+        run: echo -n ${ANDROID_SECRET} > google-services.json
 
       - name: Run Unit tests
-        working-directory: naitive/android
-        run: bash ./gradlew test --stacktrace
+        working-directory: native/android
+        run: ./gradlew test --stacktrace
 
-  apk:
+  build:
     name: Generate APK
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v1
@@ -38,12 +40,18 @@ jobs:
         with:
           java-version: 1.8
 
+      - name: Create google-services.json
+        working-directory: ./native/android/app
+        env:
+          ANDROID_SECRET: ${{ secrets.STG_ANDROID_SECRET }}
+        run: echo -n ${ANDROID_SECRET} > google-services.json
+
       - name: Build debug APK
-        working-directory: naitive/android
-        run: bash ./gradlew assembleDebug --stacktrace
+        working-directory: native/android
+        run: ./gradlew assembleDebug --stacktrace
 
       - name: Create APK artifact
         uses: actions/upload-artifact@v1
         with:
           name: app
-          path: app/build/outputs/apk/debug/app-debug.apk
+          path: native/android/app/build/outputs/apk/debug/app-debug.apk
