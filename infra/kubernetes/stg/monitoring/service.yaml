@@ -24,8 +24,8 @@ kind: Service
 metadata:
   name: prometheus
   namespace: monitoring
-  annotations:
-    prometheus.io/scrape: 'true'
+  # annotations:
+  #   prometheus.io/scrape: 'true'
 
 spec:
   selector:
@@ -51,11 +51,12 @@ spec:
   selector:
     app: loki
 
+  type: ClusterIP
   ports:
-  - name: tcp
-    protocol: TCP
-    port: 3100
-    targetPort: 3100
+    - name: tcp
+      protocol: TCP
+      port: 3100
+      targetPort: 3100
 
 ---
 
@@ -70,54 +71,55 @@ spec:
   selector:
     app: promtail
 
-  ports:
-  - name: tcp
-    protocol: TCP
-    port: 9080
-    targetPort: 9080
-
----
-
-apiVersion: v1
-kind: Service
-
-metadata:
-  name: kube-state-metrics
-  namespace: monitoring
-  annotations:
-    prometheus.io/scrape: 'true'
-
-spec:
-  selector:
-    app: kube-state-metrics
-
-  type: NodePort
-  ports:
-    - name: tcp
-      protocol: TCP
-      port: 8080
-      targetPort: 8080
-
----
-
-apiVersion: v1
-kind: Service
-
-metadata:
-  name: prometheus-node-exporter
-  namespace: monitoring
-  annotations:
-    prometheus.io/scrape: 'true'
-
-spec:
-  selector:
-    app: prometheus
-    component: node-exporter
-
   type: ClusterIP
-  clusterIP: None
   ports:
     - name: tcp
       protocol: TCP
-      port: 9100
-      targetPort: 9100
+      port: 9080
+      targetPort: 9080
+
+# ---
+
+# apiVersion: v1
+# kind: Service
+
+# metadata:
+#   name: kube-state-metrics
+#   namespace: monitoring
+#   annotations:
+#     prometheus.io/scrape: 'true'
+
+# spec:
+#   selector:
+#     app: kube-state-metrics
+
+#   type: NodePort
+#   ports:
+#     - name: tcp
+#       protocol: TCP
+#       port: 8080
+#       targetPort: 8080
+
+# ---
+
+# apiVersion: v1
+# kind: Service
+
+# metadata:
+#   name: prometheus-node-exporter
+#   namespace: monitoring
+#   annotations:
+#     prometheus.io/scrape: 'true'
+
+# spec:
+#   selector:
+#     app: prometheus
+#     component: node-exporter
+
+#   type: ClusterIP
+#   clusterIP: None
+#   ports:
+#     - name: tcp
+#       protocol: TCP
+#       port: 9100
+#       targetPort: 9100
