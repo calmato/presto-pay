@@ -27,8 +27,8 @@ spec:
               containerPort: 3000
           resources:
             limits:
-              memory: 108Mi
               cpu: 100m
+              memory: 100Mi
           readinessProbe:
             httpGet:
               path: /login
