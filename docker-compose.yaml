@@ -102,7 +102,8 @@ services:
       context: ./infra/docker/monitoring/promtail
     volumes:
       - /var/log:/var/log
-    command: -config.file=/etc/promtail/docker-config.yaml
+      - ./infra/promtail/development.yaml:/etc/promtail/promtail.yaml:cached
+    command: -config.file=/etc/promtail/promtail.yaml
     networks:
       - loki
 
