@@ -2,38 +2,19 @@ apiVersion: v1
 kind: Service
 
 metadata:
-  name: user-api
+  name: grafana
+  namespace: monitoring
 
 spec:
   selector:
-    app: user-api
+    app: grafana
 
   type: NodePort
   ports:
-    - name: http
+    - name: tcp
       protocol: TCP
-      port: 80
-      targetPort: 8080
-
-# ---
-
-# apiVersion: v1
-# kind: Service
-
-# metadata:
-#   name: grafana
-#   namespace: monitoring
-
-# spec:
-#   selector:
-#     app: grafana
-
-#   type: LoadBalancer
-#   ports:
-#     - name: http
-#       protocol: TCP
-#       port: 80
-#       targetPort: 3000
+      port: 3000
+      targetPort: 3000
 
 ---
 
@@ -43,38 +24,57 @@ kind: Service
 metadata:
   name: prometheus
   namespace: monitoring
+  annotations:
+    prometheus.io/scrape: 'true'
 
 spec:
   selector:
     app: prometheus
 
-  type: LoadBalancer
+  type: NodePort
   ports:
-  - name: http
+    - name: tcp
+      protocol: TCP
+      port: 9090
+      targetPort: 9090
+
+---
+
+apiVersion: v1
+kind: Service
+
+metadata:
+  name: loki
+  namespace: monitoring
+
+spec:
+  selector:
+    app: loki
+
+  ports:
+  - name: tcp
     protocol: TCP
-    port: 80
-    targetPort: 9090
+    port: 3100
+    targetPort: 3100
 
+---
 
-# apiVersion: v1
-# kind: Service
+apiVersion: v1
+kind: Service
 
-# metadata:
-#   name: prometheus
-#   namespace: monitoring
-#   annotations:
-#     prometheus.io/scrape: 'true'
+metadata:
+  name: promtail
+  namespace: monitoring
 
-# spec:
-#   selector:
-#     app: prometheus
+spec:
+  selector:
+    app: promtail
 
-#   type: NodePort
-#   ports:
-#     - name: tcp
-#       protocol: TCP
-#       port: 9090
-#       targetPort: 9090
+  ports:
+  - name: tcp
+    protocol: TCP
+    port: 9080
+    targetPort: 9080
 
 ---
 

@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: DaemonSet
+
+metadata:
+  name: promtail
+  namespace: monitoring
+
+spec:
+  selector:
+    matchLabels:
+      app: promtail
+
+  template:
+    metadata:
+      labels:
+        app: promtail
+
+    spec:
+      containers:
+        - name: promtail
+          image: grafana/promtail:1.5.0
+          ports:
+            - name: promtail
+              containerPort: 9080
+          resources:
+            limits:
+              cpu: 50m
+              memory: 100Mi
+          args:
+            - '--config.file=/etc/promtail/promtail.yaml'
+          volumeMounts:
+            - name: promtail-config
+              mountPath: /etc/promtail
+            - name: varlog
+              mountPath: /var/log
+            - name: secret-volume
+              mountPath: /var/run/secrets
+            - name: run
+              mountPath: /run/promtail
+      volumes:
+        - name: promtail-config
+          configMap:
+            name: promtail
+        - name: varlog
+          hostPath:
+            path: /var/log
+        - name: secret-volume
+          hostPath:
+            path: /var/run/secrets
+        - name: run
+          hostPath:
+            path: /run/promtail
+      hostNetwork: true
+      hostPID: true
+      dnsPolicy: ClusterFirstWithHostNet
