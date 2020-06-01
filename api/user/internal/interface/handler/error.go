@@ -3,6 +3,7 @@ package handler
 import (
 	"github.com/calmato/presto-pay/api/user/internal/application/response"
 	"github.com/calmato/presto-pay/api/user/internal/domain"
+	"github.com/calmato/presto-pay/api/user/middleware"
 	"github.com/gin-gonic/gin"
 	log "github.com/sirupsen/logrus"
 )
@@ -20,6 +21,9 @@ const (
 // ErrorHandling - エラーレスポンスを返す
 func ErrorHandling(ctx *gin.Context, err error) {
 	res := getErrorResponse(err)
+
+	// Fluent Bitへのログ転送
+	sendFluent(ctx, res)
 
 	ctx.JSON(res.StatusCode, res)
 	ctx.Abort()
@@ -141,4 +145,20 @@ func getValidationErrorsInErrorReponse(err error) []*response.ValidationError {
 	}
 
 	return []*response.ValidationError{}
+}
+
+func sendFluent(c *gin.Context, res *response.ErrorResponse) {
+	logger := make(map[string]interface{})
+
+	validationErrors := make(map[string]string)
+	for _, ve := range res.ValidationErrors {
+		validationErrors[ve.Field] = ve.Message
+	}
+
+	logger["status"] = res.StatusCode
+	// logger["code"] = res.ErrorCode
+	logger["errors"] = validationErrors
+	logger["path"] = c.Request.URL.Path
+
+	middleware.SendFluent("response", logger)
 }
