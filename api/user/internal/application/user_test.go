@@ -79,7 +79,6 @@ func TestUserApplication_Update(t *testing.T) {
 				Username:  "test-user",
 				Email:     "test@calmato.com",
 				Thumbnail: "",
-				Language:  "English",
 			},
 		},
 	}
@@ -99,7 +98,6 @@ func TestUserApplication_Update(t *testing.T) {
 			Username:     testCase.Request.Username,
 			Email:        testCase.Request.Email,
 			ThumbnailURL: "",
-			Language:     testCase.Request.Language,
 		}
 
 		// Defined mocks
@@ -142,7 +140,6 @@ func TestUserApplication_UpdatePassword(t *testing.T) {
 				Username:     "test-user",
 				Email:        "test@calmato.com",
 				ThumbnailURL: "",
-				Language:     "English",
 				CreatedAt:    current,
 				UpdatedAt:    current,
 			},
@@ -152,7 +149,6 @@ func TestUserApplication_UpdatePassword(t *testing.T) {
 				Username:     "test-user",
 				Email:        "test@calmato.com",
 				ThumbnailURL: "",
-				Language:     "English",
 				CreatedAt:    current,
 				UpdatedAt:    current,
 			},
@@ -209,7 +205,6 @@ func TestUserApplication_UniqueCheckEmail(t *testing.T) {
 				Username:     "test-user",
 				Email:        "test@calmato.com",
 				ThumbnailURL: "",
-				Language:     "English",
 			},
 			Request: &request.UniqueCheckUserEmail{
 				Email: "test@calmato.com",
@@ -285,7 +280,6 @@ func TestUserApplication_UniqueCheckUsername(t *testing.T) {
 				Username:     "test-user",
 				Email:        "test@calmato.com",
 				ThumbnailURL: "",
-				Language:     "English",
 			},
 			Request: &request.UniqueCheckUserUsername{
 				Username: "test-user",

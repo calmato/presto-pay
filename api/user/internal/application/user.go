@@ -79,7 +79,6 @@ func (ua *userApplication) Update(ctx context.Context, req *request.UpdateUser) 
 	u.Name = req.Name
 	u.Username = req.Username
 	u.Email = req.Email
-	u.Language = req.Language
 	u.ThumbnailURL = thumbnailURL
 
 	if _, err := ua.userService.Update(ctx, u); err != nil {
