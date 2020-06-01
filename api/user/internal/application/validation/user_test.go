@@ -51,7 +51,6 @@ func TestUserRequestValidation_UpdateUser(t *testing.T) {
 				Username:  "test-user",
 				Email:     "test@calmato.com",
 				Thumbnail: "",
-				Language:  "English",
 			},
 			Expected: make([]*domain.ValidationError, 0),
 		},

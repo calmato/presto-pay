@@ -20,7 +20,6 @@ type UpdateUser struct {
 	Username     string    `json:"username"`
 	Email        string    `json:"email"`
 	ThumbnailURL string    `json:"thumbnailUrl"`
-	Language     string    `json:"language"`
 	CreatedAt    time.Time `json:"createdAt"`
 	UpdatedAt    time.Time `json:"updatedAt"`
 }

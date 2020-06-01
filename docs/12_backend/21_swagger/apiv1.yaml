@@ -174,14 +174,10 @@ components:
               thumbnail:
                 type: string
                 description: サムネイル
-              language:
-                type: string
-                description: 使用言語
             required:
               - name
               - username
               - email
-              - language
 
     UpdateUserPassword:
       description: ユーザー パスワード編集APIのリクエスト
@@ -334,9 +330,6 @@ components:
               thumbnailUrl:
                 type: string
                 description: サムネイルURL
-              language:
-                type: string
-                description: 使用言語
               createdAt:
                 type: string
                 format: date-time
