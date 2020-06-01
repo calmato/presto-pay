@@ -1,6 +1,8 @@
 package handler
 
 import (
+	"fmt"
+
 	"github.com/calmato/presto-pay/api/user/internal/application/response"
 	"github.com/calmato/presto-pay/api/user/internal/domain"
 	"github.com/calmato/presto-pay/api/user/middleware"
@@ -150,13 +152,15 @@ func getValidationErrorsInErrorReponse(err error) []*response.ValidationError {
 func sendFluent(c *gin.Context, res *response.ErrorResponse) {
 	logger := make(map[string]interface{})
 
+	errorCode := fmt.Sprint(res.ErrorCode)
+
 	validationErrors := make(map[string]string)
 	for _, ve := range res.ValidationErrors {
 		validationErrors[ve.Field] = ve.Message
 	}
 
 	logger["status"] = res.StatusCode
-	// logger["code"] = res.ErrorCode
+	logger["code"] = errorCode
 	logger["errors"] = validationErrors
 	logger["path"] = c.Request.URL.Path
 
