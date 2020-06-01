@@ -16,7 +16,6 @@ type UpdateUser struct {
 	Username  string `json:"username" validate:"required,max=32"`
 	Email     string `json:"email" validate:"required,email,max=256"`
 	Thumbnail string `Json:"thumbnail"`
-	Language  string `json:"language" validate:"required"`
 }
 
 // UpdateUserPassword - パスワード編集APIのリクエスト
