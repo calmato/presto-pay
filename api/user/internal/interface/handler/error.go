@@ -24,7 +24,7 @@ const (
 func ErrorHandling(ctx *gin.Context, err error) {
 	res := getErrorResponse(err)
 
-	// Fluent Bitへのログ転送
+	// Fluentへのログ転送
 	sendFluent(ctx, res)
 
 	ctx.JSON(res.StatusCode, res)

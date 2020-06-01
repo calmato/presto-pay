@@ -9,6 +9,8 @@ import (
 type Environment struct {
 	Port                         string `envconfig:"PORT" default:"8080"`
 	MetricsPort                  string `envconfig:"METRICS_PORT" default:"8081"`
+	FluentHost                   string `envconfig:"FLUENT_HOST" default:"fluent"`
+	FluentPort                   int    `envconfig:"FLUENT_PORT" default:"24224"`
 	GoogleApplicationCredentials string `envconfig:"GOOGLE_APPLICATION_CREDENTIALS" required:"true"`
 	GCPStorageBucketName         string `envconfig:"GCP_STORAGE_BUCKET_NAME" required:"true"`
 }

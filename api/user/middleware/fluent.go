@@ -5,11 +5,22 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-// SendFluent - Fluent Bitへログを転送
+var (
+	fluentHost = ""
+	fluentPort = 0
+)
+
+// SetupFluent - ログ転送先の設定
+func SetupFluent(host string, port int) {
+	fluentHost = host
+	fluentPort = port
+}
+
+// SendFluent - Fluentへログを転送
 func SendFluent(tag string, data interface{}) {
 	config := fluent.Config{
-		FluentHost: "fluent", // TODO: Edit
-		FluentPort: 24224,    // TODO: Edit
+		FluentHost: fluentHost,
+		FluentPort: fluentPort,
 	}
 
 	fluentd, err := fluent.New(config)
