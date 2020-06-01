@@ -9,6 +9,7 @@ import (
 	"github.com/calmato/presto-pay/api/user/lib/firebase/authentication"
 	"github.com/calmato/presto-pay/api/user/lib/firebase/firestore"
 	"github.com/calmato/presto-pay/api/user/lib/firebase/storage"
+	"github.com/calmato/presto-pay/api/user/middleware"
 	"github.com/calmato/presto-pay/api/user/registry"
 	log "github.com/sirupsen/logrus"
 	"google.golang.org/api/option"
@@ -26,6 +27,9 @@ func main() {
 	if err != nil {
 		log.Panic(err)
 	}
+
+	// ログ転送設定の初期化
+	middleware.SetupFluent(e.FluentHost, e.FluentPort)
 
 	// Firebaseの初期化
 	opt := option.WithCredentialsFile(e.GoogleApplicationCredentials)

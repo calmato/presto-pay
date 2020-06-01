@@ -21,14 +21,14 @@ func Logging() gin.HandlerFunc {
 		rdr1 := ioutil.NopCloser(bytes.NewBuffer(buf)) // ログ出力で使用する用
 		rdr2 := ioutil.NopCloser(bytes.NewBuffer(buf)) // ログ出力以降で使用する用
 
-		requestLogging(rdr1)
+		requestLogging(c, rdr1)
 
 		c.Request.Body = rdr2
 		c.Next()
 	}
 }
 
-func requestLogging(reader io.Reader) {
+func requestLogging(c *gin.Context, reader io.Reader) {
 	// json ファイルの読み込み -> 値がなければ return
 	data, _ := ioutil.ReadAll(reader)
 	if len(data) == 0 {
@@ -70,4 +70,8 @@ func requestLogging(reader io.Reader) {
 	// fields["params"] = fmt.Frintf("{ %s}", message)
 	fields["params"] = params
 	log.WithFields(fields).Info()
+
+	// FLuent Bitへログ転送
+	fields["path"] = c.Request.URL.Path
+	SendFluent("request", fields)
 }
