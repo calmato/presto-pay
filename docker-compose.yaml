@@ -112,8 +112,8 @@ services:
     build:
       context: ./infra/docker/monitoring/fluentd
     volumes:
-      - ./infra/fluentd/development.conf:/fluentd/etc/fluent.conf:cached
-      - ./infra/fluentd/plugin/out_loki_dev.rb:/etc/fluent/plugin/out_loki.rb:cached
+      - ./infra/fluentd/dev/fluent.conf:/fluentd/etc/fluent.conf:cached
+      - ./infra/fluentd/dev/plugin/out_loki_dev.rb:/etc/fluent/plugin/out_loki.rb:cached
     environment:
       - FLUENT_CONF=/fluentd/etc/fluent.conf
     networks:
