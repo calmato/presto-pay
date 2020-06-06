@@ -1,10 +1,13 @@
 package config
 
 import (
+	"github.com/calmato/presto-pay/api/calc/internal/domain"
+	"github.com/calmato/presto-pay/api/calc/internal/interface/handler"
 	"github.com/calmato/presto-pay/api/calc/middleware"
 	"github.com/calmato/presto-pay/api/calc/registry"
 	"github.com/gin-gonic/gin"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
+	"golang.org/x/xerrors"
 )
 
 // Router - ルーティングの定義
@@ -20,8 +23,8 @@ func Router(reg *registry.Registry) *gin.Engine {
 	r.GET("/health", reg.Health.HealthCheck)
 
 	r.NoRoute(func(c *gin.Context) {
-		// err := xerrors.New("NotFound")
-		// handler.ErrorHandling(c, domain.NotFound.New(err))
+		err := xerrors.New("NotFound")
+		handler.ErrorHandling(c, domain.NotFound.New(err))
 	})
 
 	// api v1 routes
@@ -40,8 +43,8 @@ func MetricsRouter() *gin.Engine {
 	})
 
 	r.NoRoute(func(c *gin.Context) {
-		// err := xerrors.New("NotFound")
-		// handler.ErrorHandling(c, domain.NotFound.New(err))
+		err := xerrors.New("NotFound")
+		handler.ErrorHandling(c, domain.NotFound.New(err))
 	})
 
 	return r
