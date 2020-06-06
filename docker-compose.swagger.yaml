@@ -1,0 +1,13 @@
+version: '3.7'
+
+services:
+  swagger:
+    container_name: presto_pay_swagger
+    build:
+      context: ./infra/docker/swagger/viewer
+    volumes:
+      - ./docs/12_backend/21_swagger/apiv1.yaml:/swagger.yaml:cached
+    ports:
+      - 8000:8080
+    environment:
+      SWAGGER_JSON: /swagger.yaml

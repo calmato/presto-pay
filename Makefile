@@ -26,7 +26,10 @@ logs:
 ##################################################
 # Container Commands - Swagger
 ##################################################
-.PHONY: swagger-open swagger-edit
+.PHONY: swagger-start swagger-open swagger-edit
+
+swagger-start:
+	docker-compose -f docker-compose.swagger.yaml up
 
 swagger-open:
 	open http://localhost:8000
