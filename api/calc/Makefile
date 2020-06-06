@@ -34,11 +34,9 @@ test:
 # REVIEWDOG_ARG
 # * local -> -diff='git diff master'
 # * pull request -> -reporter='github-pr-review'
-.PHONY: review
 review:
 	$(BIN)/golangci-lint run -c .golangci.yaml --out-format line-number ./... \
 	| $(BIN)/reviewdog -f=golangci-lint --name=golangci-lint ${REVIEWDOG_ARG}
 
-.PHONY: build-mocks
 build-mocks:
 	$(BIN)/build-mocks.sh
