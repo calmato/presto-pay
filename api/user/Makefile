@@ -6,7 +6,6 @@ PACKAGES := $(shell go list ./... | grep -v mock)
 
 .PHONY: setup run build fmt vet lint test review build-mocks
 
-.PHONY: setup
 setup:
 	wget -O - -nv https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s v${GOLANGCI_VERSION}
 	wget -O - -q https://raw.githubusercontent.com/reviewdog/reviewdog/master/install.sh | sh -s v${REVEWDOG_VERSION}
@@ -34,11 +33,9 @@ test:
 # REVIEWDOG_ARG
 # * local -> -diff='git diff master'
 # * pull request -> -reporter='github-pr-review'
-.PHONY: review
 review:
 	$(BIN)/golangci-lint run -c .golangci.yaml --out-format line-number ./... \
 	| $(BIN)/reviewdog -f=golangci-lint --name=golangci-lint ${REVIEWDOG_ARG}
 
-.PHONY: build-mocks
 build-mocks:
 	$(BIN)/build-mocks.sh

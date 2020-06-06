@@ -6,7 +6,6 @@ PACKAGES := $(shell go list ./... | grep -v mock)
 
 .PHONY: setup run build fmt vet lint test review build-mocks
 
-.PHONY: setup
 setup:
 	wget -O - -nv https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s v${GOLANGCI_VERSION}
 	wget -O - -q https://raw.githubusercontent.com/reviewdog/reviewdog/master/install.sh | sh -s v${REVEWDOG_VERSION}
