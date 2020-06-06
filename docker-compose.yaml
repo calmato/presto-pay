@@ -34,6 +34,23 @@ services:
       - api
       - loki
 
+  calc_api:
+    container_name: presto_pay_calc_api
+    build:
+      context: ./infra/docker/api/calc
+      dockerfile: Dockerfile_development
+    working_dir: /go/src/github.com/calmato/presto-pay/api/calc
+    volumes:
+      - ./api/user:/go/src/github.com/calmato/presto-pay/api/calc:cached
+      - ./secrets:/secrets
+    environment:
+      - GOOGLE_APPLICATION_CREDENTIALS=${GOOGLE_APPLICATION_CREDENTIALS}
+      - GCP_STORAGE_BUCKET_NAME=${GCP_STORAGE_BUCKET_NAME}
+    command: realize start
+    networks:
+      - api
+      - loki
+
   admin:
     container_name: presto_pay_admin
     build:
