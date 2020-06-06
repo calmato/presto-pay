@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: loki
+  namespace: monitoring
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: loki
+
+  template:
+    metadata:
+      labels:
+        app: loki
+
+    spec:
+      containers:
+        - name: loki
+          image: grafana/loki:1.5.0
+          resources:
+            requests:
+              cpu: 20m
+              memory: 50Mi
+            limits:
+              cpu: 50m
+              memory: 100Mi
+          ports:
+            - name: loki
+              containerPort: 3100

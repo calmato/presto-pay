@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: fluentd
+  namespace: monitoring
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fluentd
+
+  template:
+    metadata:
+      labels:
+        app: fluentd
+
+    spec:
+      containers:
+        - name: fluentd
+          image: grafana/fluent-plugin-loki:master
+          resources:
+            requests:
+              cpu: 20m
+              memory: 50Mi
+            limits:
+              cpu: 50m
+              memory: 100Mi
+          ports:
+            - name: fluentd
+              containerPort: 24224
+          env:
+            - name: LOKI_URL
+              value: "http://loki:3100"
+          volumeMounts:
+            - name: fluentd-config
+              mountPath: /fluentd/etc
+      volumes:
+        - name: fluentd-config
+          configMap:
+            name: fluentd
