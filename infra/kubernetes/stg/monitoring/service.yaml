@@ -2,18 +2,105 @@ apiVersion: v1
 kind: Service
 
 metadata:
-  name: elasticsearch
+  name: grafana
   namespace: monitoring
 
 spec:
   selector:
-    app: elasticsearch
+    app: grafana
 
-  clusterIP: None
   ports:
-  - name: rest
-    protocol: TCP
-    port: 9200
-  - name: inter-node
-    protocol: TCP
-    port: 9300
+    - name: tcp
+      protocol: TCP
+      port: 3000
+      targetPort: 3000
+
+---
+apiVersion: v1
+kind: Service
+
+metadata:
+  name: prometheus
+  namespace: monitoring
+
+spec:
+  selector:
+    app: prometheus
+
+  ports:
+    - name: tcp
+      protocol: TCP
+      port: 9090
+      targetPort: 9090
+
+---
+apiVersion: v1
+kind: Service
+
+metadata:
+  name: loki
+  namespace: monitoring
+
+spec:
+  selector:
+    app: loki
+
+  ports:
+    - name: tcp
+      protocol: TCP
+      port: 3100
+      targetPort: 3100
+
+---
+apiVersion: v1
+kind: Service
+
+metadata:
+  name: fluentd
+  namespace: monitoring
+
+spec:
+  selector:
+    app: fluentd
+
+  ports:
+    - name: tcp
+      protocol: TCP
+      port: 24224
+      targetPort: 24224
+
+---
+apiVersion: v1
+kind: Service
+
+metadata:
+  name: node-exporter
+  namespace: monitoring
+
+spec:
+  selector:
+    app: node-exporter
+
+  ports:
+    - name: tcp
+      protocol: TCP
+      port: 9100
+      targetPort: 9100
+
+---
+apiVersion: v1
+kind: Service
+
+metadata:
+  name: kube-metrics
+  namespace: monitoring
+
+spec:
+  selector:
+    app: kube-state-metrics
+
+  ports:
+    - name: tcp
+      protocol: TCP
+      port: 8080
+      targetPort: 8080
