@@ -41,7 +41,7 @@ services:
       dockerfile: Dockerfile_development
     working_dir: /go/src/github.com/calmato/presto-pay/api/calc
     volumes:
-      - ./api/user:/go/src/github.com/calmato/presto-pay/api/calc:cached
+      - ./api/calc:/go/src/github.com/calmato/presto-pay/api/calc:cached
       - ./secrets:/secrets
     environment:
       - GOOGLE_APPLICATION_CREDENTIALS=${GOOGLE_APPLICATION_CREDENTIALS}
