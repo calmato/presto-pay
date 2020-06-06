@@ -1,25 +1,26 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: DaemonSet
 
 metadata:
-  name: loki
+  name: node-exporter
   namespace: monitoring
+  labels:
+    app: node-exporter
 
 spec:
-  replicas: 1
   selector:
     matchLabels:
-      app: loki
+      app: node-exporter
 
   template:
     metadata:
       labels:
-        app: loki
+        app: node-exporter
 
     spec:
       containers:
-        - name: loki
-          image: grafana/loki:1.5.0
+        - name: node-exporter
+          image: prom/node-exporter:v1.0.0
           resources:
             requests:
               cpu: 20m
@@ -28,5 +29,7 @@ spec:
               cpu: 50m
               memory: 100Mi
           ports:
-            - name: loki
-              containerPort: 3100
+            - name: node-exporter
+              containerPort: 9100
+      hostNetwork: true
+      hostPID: true

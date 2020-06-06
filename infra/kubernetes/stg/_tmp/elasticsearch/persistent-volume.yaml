@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+
+metadata:
+  name: elasticsearch
+  namespace: monitoring
+  labels:
+    app: elasticsearch
+    kubernetes.io/cluster-service: "true"
+
+spec:
+  accessModes:
+    - ReadWriteOnce
+
+  resources:
+    requests:
+      storage: 5Gi

@@ -39,6 +39,10 @@ spec:
           env:
             - name: PORT
               value: '8080'
+            - name: FLUENT_HOST
+              value: 'fluentd.monitoring.svc.cluster.local'
+            - name: FLUENT_PORT
+              value: '24224'
             - name: GOOGLE_APPLICATION_CREDENTIALS
               value: '/secret/firebase-adminsdk.json'
             - name: GCP_STORAGE_BUCKET_NAME

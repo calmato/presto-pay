@@ -9,7 +9,6 @@ spec:
   selector:
     app: grafana
 
-  type: NodePort
   ports:
     - name: tcp
       protocol: TCP
@@ -17,21 +16,17 @@ spec:
       targetPort: 3000
 
 ---
-
 apiVersion: v1
 kind: Service
 
 metadata:
   name: prometheus
   namespace: monitoring
-  # annotations:
-  #   prometheus.io/scrape: 'true'
 
 spec:
   selector:
     app: prometheus
 
-  type: NodePort
   ports:
     - name: tcp
       protocol: TCP
@@ -39,7 +34,6 @@ spec:
       targetPort: 9090
 
 ---
-
 apiVersion: v1
 kind: Service
 
@@ -51,7 +45,6 @@ spec:
   selector:
     app: loki
 
-  type: ClusterIP
   ports:
     - name: tcp
       protocol: TCP
@@ -59,67 +52,55 @@ spec:
       targetPort: 3100
 
 ---
-
 apiVersion: v1
 kind: Service
 
 metadata:
-  name: promtail
+  name: fluentd
   namespace: monitoring
 
 spec:
   selector:
-    app: promtail
+    app: fluentd
 
-  type: ClusterIP
   ports:
     - name: tcp
       protocol: TCP
-      port: 9080
-      targetPort: 9080
+      port: 24224
+      targetPort: 24224
 
-# ---
+---
+apiVersion: v1
+kind: Service
 
-# apiVersion: v1
-# kind: Service
+metadata:
+  name: node-exporter
+  namespace: monitoring
 
-# metadata:
-#   name: kube-state-metrics
-#   namespace: monitoring
-#   annotations:
-#     prometheus.io/scrape: 'true'
+spec:
+  selector:
+    app: node-exporter
 
-# spec:
-#   selector:
-#     app: kube-state-metrics
+  ports:
+    - name: tcp
+      protocol: TCP
+      port: 9100
+      targetPort: 9100
 
-#   type: NodePort
-#   ports:
-#     - name: tcp
-#       protocol: TCP
-#       port: 8080
-#       targetPort: 8080
+---
+apiVersion: v1
+kind: Service
 
-# ---
+metadata:
+  name: kube-metrics
+  namespace: monitoring
 
-# apiVersion: v1
-# kind: Service
+spec:
+  selector:
+    app: kube-state-metrics
 
-# metadata:
-#   name: prometheus-node-exporter
-#   namespace: monitoring
-#   annotations:
-#     prometheus.io/scrape: 'true'
-
-# spec:
-#   selector:
-#     app: prometheus
-#     component: node-exporter
-
-#   type: ClusterIP
-#   clusterIP: None
-#   ports:
-#     - name: tcp
-#       protocol: TCP
-#       port: 9100
-#       targetPort: 9100
+  ports:
+    - name: tcp
+      protocol: TCP
+      port: 8080
+      targetPort: 8080
