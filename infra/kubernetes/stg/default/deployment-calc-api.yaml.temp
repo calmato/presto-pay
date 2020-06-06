@@ -2,28 +2,28 @@ apiVersion: apps/v1
 kind: Deployment
 
 metadata:
-  name: user-api
+  name: calc-api
   labels:
-    app: user-api
+    app: calc-api
 
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: user-api
+      app: calc-api
 
   template:
     metadata:
       labels:
-        app: user-api
+        app: calc-api
 
     spec:
       containers:
-        - name: user-api
-          image: asia.gcr.io/<PROJECT-ID>/presto-pay-stg-user-api:latest
+        - name: calc-api
+          image: asia.gcr.io/<PROJECT-ID>/presto-pay-stg-calc-api:latest
           imagePullPolicy: Always
           ports:
-            - name: user-api
+            - name: calc-api
               containerPort: 8080
             - name: monitoring
               containerPort: 8081
