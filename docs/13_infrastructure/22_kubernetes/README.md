@@ -7,3 +7,4 @@
 ## 各種ドキュメント
 
 * [setup](./setup.md)
+* [grafana](./grafana.md)
