@@ -1,0 +1,6 @@
+# build output
+app
+
+# bin file
+bin
+!bin/build-mocks.sh
