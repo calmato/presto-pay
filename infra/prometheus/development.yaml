@@ -33,3 +33,11 @@ scrape_configs:
     static_configs:
       - targets:
         - user_api:8081
+
+  - job_name: 'calc-api'
+    honor_timestamps: true
+    scheme: http
+    metrics_path: /metrics
+    static_configs:
+      - targets:
+        - calc_api:8081
