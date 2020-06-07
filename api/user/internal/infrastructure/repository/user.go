@@ -43,7 +43,7 @@ func (ur *userRepository) Authentication(ctx context.Context) (*user.User, error
 	u := &user.User{}
 
 	doc, err := ur.firestore.Get(ctx, userReference, uid)
-	if err != nil {
+	if err == nil {
 		if err = doc.DataTo(u); err != nil {
 			return nil, err
 		}
