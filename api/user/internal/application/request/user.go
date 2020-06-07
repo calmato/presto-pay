@@ -10,8 +10,8 @@ type CreateUser struct {
 	PasswordConfirmation string `json:"passwordConfirmation" validate:"required,eqfield=Password"`
 }
 
-// UpdateUser - ユーザー編集APIのリクエスト
-type UpdateUser struct {
+// UpdateProfile - ログインユーザー編集APIのリクエスト
+type UpdateProfile struct {
 	Name      string `json:"name" validate:"required,max=32"`
 	Username  string `json:"username" validate:"required,max=32"`
 	Email     string `json:"email" validate:"required,email,max=256"`

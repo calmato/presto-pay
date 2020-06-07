@@ -15,7 +15,7 @@ import (
 // UserApplication - UserApplicationインターフェース
 type UserApplication interface {
 	Create(ctx context.Context, req *request.CreateUser) (*user.User, error)
-	Update(ctx context.Context, req *request.UpdateUser) (*user.User, error)
+	UpdateProfile(ctx context.Context, req *request.UpdateProfile) (*user.User, error)
 	UpdatePassword(ctx context.Context, req *request.UpdateUserPassword) (*user.User, error)
 	UniqueCheckEmail(ctx context.Context, req *request.UniqueCheckUserEmail) (bool, error)
 	UniqueCheckUsername(ctx context.Context, req *request.UniqueCheckUserUsername) (bool, error)
@@ -60,13 +60,13 @@ func (ua *userApplication) Create(ctx context.Context, req *request.CreateUser) 
 	return u, nil
 }
 
-func (ua *userApplication) Update(ctx context.Context, req *request.UpdateUser) (*user.User, error) {
+func (ua *userApplication) UpdateProfile(ctx context.Context, req *request.UpdateProfile) (*user.User, error) {
 	u, err := ua.userService.Authentication(ctx)
 	if err != nil {
 		return nil, domain.Unauthorized.New(err)
 	}
 
-	if ves := ua.userRequestValidation.UpdateUser(req); len(ves) > 0 {
+	if ves := ua.userRequestValidation.UpdateProfile(req); len(ves) > 0 {
 		err := xerrors.New("Failed to RequestValidation")
 		return nil, domain.InvalidRequestValidation.New(err, ves...)
 	}

@@ -15,7 +15,7 @@ import (
 // APIV1UserHandler - Userハンドラのインターフェース
 type APIV1UserHandler interface {
 	Create(ctx *gin.Context)
-	Update(ctx *gin.Context)
+	UpdateProfile(ctx *gin.Context)
 	UpdatePassword(ctx *gin.Context)
 	UniqueCheckEmail(ctx *gin.Context)
 	UniqueCheckUsername(ctx *gin.Context)
@@ -59,21 +59,21 @@ func (uh *apiV1UserHandler) Create(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, res)
 }
 
-func (uh *apiV1UserHandler) Update(ctx *gin.Context) {
-	req := &request.UpdateUser{}
+func (uh *apiV1UserHandler) UpdateProfile(ctx *gin.Context) {
+	req := &request.UpdateProfile{}
 	if err := ctx.BindJSON(req); err != nil {
 		handler.ErrorHandling(ctx, domain.UnableParseJSON.New(err))
 		return
 	}
 
 	c := middleware.GinContextToContext(ctx)
-	u, err := uh.userApplication.Update(c, req)
+	u, err := uh.userApplication.UpdateProfile(c, req)
 	if err != nil {
 		handler.ErrorHandling(ctx, err)
 		return
 	}
 
-	res := &response.UpdateUser{
+	res := &response.UpdateProfile{
 		ID:           u.ID,
 		Name:         u.Name,
 		Username:     u.Username,

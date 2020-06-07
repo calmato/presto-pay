@@ -31,7 +31,7 @@ func Router(reg *registry.Registry) *gin.Engine {
 	apiV1 := r.Group("/v1")
 	{
 		apiV1.POST("/users", reg.V1User.Create)
-		apiV1.PATCH("/users", reg.V1User.Update)
+		apiV1.PATCH("/users", reg.V1User.UpdateProfile)
 
 		apiV1.PATCH("/users/password", reg.V1User.UpdatePassword)
 

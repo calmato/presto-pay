@@ -13,8 +13,8 @@ type CreateUser struct {
 	UpdatedAt    time.Time `json:"updatedAt"`
 }
 
-// UpdateUser - ユーザー編集APIのレスポンス
-type UpdateUser struct {
+// UpdateProfile - ログインユーザー編集APIのレスポンス
+type UpdateProfile struct {
 	ID           string    `json:"id"`
 	Name         string    `json:"name"`
 	Username     string    `json:"username"`
