@@ -1,4 +1,4 @@
-deployment-user-api.yaml
+deployment-*-api.yaml
 
 secret-*.yaml
 
