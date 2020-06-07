@@ -28,7 +28,10 @@ func Router(reg *registry.Registry) *gin.Engine {
 	})
 
 	// api v1 routes
-	r.Group("/v1")
+	apiV1 := r.Group("/v1")
+	{
+		apiV1.POST("/groups", reg.V1Group.Create)
+	}
 
 	return r
 }
