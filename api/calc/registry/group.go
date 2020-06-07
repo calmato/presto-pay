@@ -9,7 +9,7 @@ import (
 	gcs "github.com/calmato/presto-pay/api/calc/lib/firebase/storage"
 )
 
-func v1GroupInjection(fs *firestore.Firestore, cs *gcs.Storage, ac *api.Client) v1.APIV1GroupHandler {
+func v1GroupInjection(_ *firestore.Firestore, _ *gcs.Storage, ac *api.Client) v1.APIV1GroupHandler {
 	us := service.NewUserService(ac)
 	ga := application.NewGroupApplication(us)
 	gh := v1.NewAPIV1GroupHandler(ga)
