@@ -14,6 +14,7 @@ import (
 
 // APIV1UserHandler - Userハンドラのインターフェース
 type APIV1UserHandler interface {
+	ShowProfile(ctx *gin.Context)
 	Create(ctx *gin.Context)
 	UpdateProfile(ctx *gin.Context)
 	UpdatePassword(ctx *gin.Context)
@@ -30,6 +31,27 @@ func NewAPIV1UserHandler(ua application.UserApplication) APIV1UserHandler {
 	return &apiV1UserHandler{
 		userApplication: ua,
 	}
+}
+
+func (uh *apiV1UserHandler) ShowProfile(ctx *gin.Context) {
+	c := middleware.GinContextToContext(ctx)
+	u, err := uh.userApplication.ShowProfile(c)
+	if err != nil {
+		handler.ErrorHandling(ctx, err)
+		return
+	}
+
+	res := &response.ShowProfile{
+		ID:           u.ID,
+		Name:         u.Name,
+		Username:     u.Username,
+		Email:        u.Email,
+		ThumbnailURL: u.ThumbnailURL,
+		CreatedAt:    u.CreatedAt,
+		UpdatedAt:    u.UpdatedAt,
+	}
+
+	ctx.JSON(http.StatusOK, res)
 }
 
 func (uh *apiV1UserHandler) Create(ctx *gin.Context) {

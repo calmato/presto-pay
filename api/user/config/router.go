@@ -30,6 +30,7 @@ func Router(reg *registry.Registry) *gin.Engine {
 	// api v1 routes
 	apiV1 := r.Group("/v1")
 	{
+		apiV1.GET("/users", reg.V1User.ShowProfile)
 		apiV1.POST("/users", reg.V1User.Create)
 		apiV1.PATCH("/users", reg.V1User.UpdateProfile)
 
