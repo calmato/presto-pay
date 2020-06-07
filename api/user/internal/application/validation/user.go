@@ -8,7 +8,7 @@ import (
 // UserRequestValidation - ユーザー関連のバリデーション
 type UserRequestValidation interface {
 	CreateUser(req *request.CreateUser) []*domain.ValidationError
-	UpdateUser(req *request.UpdateUser) []*domain.ValidationError
+	UpdateProfile(req *request.UpdateProfile) []*domain.ValidationError
 	UpdatePassword(req *request.UpdateUserPassword) []*domain.ValidationError
 	UniqueCheckEmail(req *request.UniqueCheckUserEmail) []*domain.ValidationError
 	UniqueCheckUsername(req *request.UniqueCheckUserUsername) []*domain.ValidationError
@@ -31,7 +31,7 @@ func (urv *userRequestValidation) CreateUser(req *request.CreateUser) []*domain.
 	return urv.validator.Run(req)
 }
 
-func (urv *userRequestValidation) UpdateUser(req *request.UpdateUser) []*domain.ValidationError {
+func (urv *userRequestValidation) UpdateProfile(req *request.UpdateProfile) []*domain.ValidationError {
 	return urv.validator.Run(req)
 }
 
