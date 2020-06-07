@@ -4,12 +4,12 @@ import "time"
 
 // User - Userエンティティ
 type User struct {
-	ID           string    `firestore:"id"`            // Firebase AuthenticationのUID
-	Name         string    `firestore:"name"`          // 表示名
-	Username     string    `firestore:"username"`      // ユーザー名 [unique]
-	Email        string    `firestore:"email"`         // メールアドレス
-	ThumbnailURL string    `firestore:"thumbnail_url"` // サムネイル
-	Password     string    `firestore:"-"`             // パスワード
-	CreatedAt    time.Time `firestore:"created_at"`    // 作成日時
-	UpdatedAt    time.Time `firestore:"updated_at"`    // 更新日時
+	ID           string    `json:"id"`            // Firebase AuthenticationのUID
+	Name         string    `json:"name"`          // 表示名
+	Username     string    `json:"username"`      // ユーザー名 [unique]
+	Email        string    `json:"email"`         // メールアドレス
+	ThumbnailURL string    `json:"thumbnail_url"` // サムネイル
+	Password     string    `json:"-"`             // パスワード
+	CreatedAt    time.Time `json:"created_at"`    // 作成日時
+	UpdatedAt    time.Time `json:"updated_at"`    // 更新日時
 }

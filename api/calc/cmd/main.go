@@ -5,8 +5,8 @@ import (
 	"net/http"
 
 	"github.com/calmato/presto-pay/api/calc/config"
+	"github.com/calmato/presto-pay/api/calc/internal/infrastructure/api"
 	"github.com/calmato/presto-pay/api/calc/lib/firebase"
-	"github.com/calmato/presto-pay/api/calc/lib/firebase/authentication"
 	"github.com/calmato/presto-pay/api/calc/lib/firebase/firestore"
 	"github.com/calmato/presto-pay/api/calc/lib/firebase/storage"
 	"github.com/calmato/presto-pay/api/calc/middleware"
@@ -39,12 +39,6 @@ func main() {
 		panic(err)
 	}
 
-	// Firebase Authentication
-	fa, err := authentication.NewClient(ctx, fb.App)
-	if err != nil {
-		panic(err)
-	}
-
 	// Firestore
 	fs, err := firestore.NewClient(ctx, fb.App)
 	if err != nil {
@@ -58,6 +52,9 @@ func main() {
 		panic(err)
 	}
 
+	// API Client
+	ac := api.NewAPIClient(e.UserAPIURL)
+
 	// メトリクス公開用サーバ起動
 	mr := config.MetricsRouter()
 	go func() {
@@ -66,7 +63,7 @@ func main() {
 		}
 	}()
 
-	reg := registry.NewRegistry(fa, fs, cs)
+	reg := registry.NewRegistry(fs, cs, ac)
 
 	// サーバ起動
 	r := config.Router(reg)

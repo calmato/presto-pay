@@ -41,6 +41,8 @@ const (
 	NotEqualRequestWithDatastore
 	// ErrorInStorage - ストレージでのエラー
 	ErrorInStorage
+	// ErrorInOtherAPI - 別APIへのリクエストでのエラー
+	ErrorInOtherAPI
 )
 
 // New - 指定したErrorCodeを持つCustomErrorを返す
