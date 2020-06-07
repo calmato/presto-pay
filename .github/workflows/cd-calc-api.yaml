@@ -12,10 +12,13 @@ env:
   GCR_HOSTNAME: asia.gcr.io
   GCR_IMAGE_NAME: presto-pay-stg-calc-api
   GCR_IMAGE_TAG: ${{ github.sha }}
+  GKE_ZONE: ${{ secrets.STG_GKE_ZONE }}
+  GKE_CLUSTER_NAME: ${{ secrets.STG_GKE_CLUSTER_NAME }}
+  GKE_DEPLOYMENT_NAME: calc-api
 
 jobs:
   deploy_for_stg:
-    name: Deploy to Staging
+    name: Deploy container image to staging
     runs-on: ubuntu-latest
 
     steps:
@@ -49,3 +52,37 @@ jobs:
       - name: Push Google Cloud Registry for Staging
         run: |
           docker push ${GCR_HOSTNAME}/${GCP_PROJECT_ID}/${GCR_IMAGE_NAME}
+
+  update_pod_for_stg:
+    name: Update pod image for staging
+    needs: deploy_image_for_stg
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Setup gcloud CLI
+        uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+        with:
+          version: '281.0.0'
+          service_account_email: ${{ secrets.STG_GCP_SA_EMAIL }}
+          service_account_key: ${{ secrets.STG_GCP_SA_KEY }}
+          export_default_credentials: true
+
+      - name: Configure gcloud
+        run: |
+          gcloud config set project ${GCP_PROJECT_ID}
+          gcloud config set run/platform managed
+          gcloud config set run/region ${GCP_REGION}
+          gcloud components install kubectl
+
+      - name: Connect to GKE cluster
+        run: |
+          gcloud container clusters get-credentials ${GKE_CLUSTER_NAME} \
+            --zone ${GKE_ZONE} \
+            --project ${GCP_PROJECT_ID}
+
+      - name: Udpate pod image
+        working-directory: ./infra/kubernetes
+        run: make update-deployment APP_NAME=${GKE_DEPLOYMENT_NAME}

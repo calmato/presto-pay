@@ -25,6 +25,7 @@ jobs:
           key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
           restore-keys: |
             ${{ runner.os }}-go-
+
       - name: Download modules
         if: steps.cache.outputs.cache-hit != 'true'
         working-directory: ./api/user

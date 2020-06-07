@@ -15,6 +15,40 @@ import (
 	"golang.org/x/xerrors"
 )
 
+func TestUserApplication_ShowProfile(t *testing.T) {
+	testCases := map[string]struct{}{
+		"ok": {},
+	}
+
+	for result := range testCases {
+		ctx, cancel := context.WithCancel(context.Background())
+		defer cancel()
+
+		ctrl := gomock.NewController(t)
+		defer ctrl.Finish()
+
+		// Defined variables
+		u := &user.User{}
+
+		// Defined mocks
+		urvm := mock_validation.NewMockUserRequestValidation(ctrl)
+
+		usm := mock_user.NewMockUserService(ctrl)
+		usm.EXPECT().Authentication(ctx).Return(u, nil)
+
+		// Start test
+		t.Run(result, func(t *testing.T) {
+			target := NewUserApplication(urvm, usm)
+
+			_, err := target.ShowProfile(ctx)
+			if err != nil {
+				t.Fatalf("error: %v", err)
+				return
+			}
+		})
+	}
+}
+
 func TestUserApplication_Create(t *testing.T) {
 	testCases := map[string]struct {
 		Request *request.CreateUser
@@ -69,12 +103,12 @@ func TestUserApplication_Create(t *testing.T) {
 	}
 }
 
-func TestUserApplication_Update(t *testing.T) {
+func TestUserApplication_UpdateProfile(t *testing.T) {
 	testCases := map[string]struct {
-		Request *request.UpdateUser
+		Request *request.UpdateProfile
 	}{
 		"ok": {
-			Request: &request.UpdateUser{
+			Request: &request.UpdateProfile{
 				Name:      "テストユーザー",
 				Username:  "test-user",
 				Email:     "test@calmato.com",
@@ -102,7 +136,7 @@ func TestUserApplication_Update(t *testing.T) {
 
 		// Defined mocks
 		urvm := mock_validation.NewMockUserRequestValidation(ctrl)
-		urvm.EXPECT().UpdateUser(testCase.Request).Return(ves)
+		urvm.EXPECT().UpdateProfile(testCase.Request).Return(ves)
 
 		usm := mock_user.NewMockUserService(ctrl)
 		usm.EXPECT().Authentication(ctx).Return(u, nil)
@@ -112,7 +146,7 @@ func TestUserApplication_Update(t *testing.T) {
 		t.Run(result, func(t *testing.T) {
 			target := NewUserApplication(urvm, usm)
 
-			_, err := target.Update(ctx, testCase.Request)
+			_, err := target.UpdateProfile(ctx, testCase.Request)
 			if err != nil {
 				t.Fatalf("error: %v", err)
 				return
