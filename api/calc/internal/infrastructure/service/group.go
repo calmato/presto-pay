@@ -44,6 +44,8 @@ func (gs *groupService) Create(ctx context.Context, g *group.Group) (*group.Grou
 		return nil, domain.ErrorInDatastore.New(err)
 	}
 
+	// TODO: User.GroupIDsの更新
+
 	return g, nil
 }
 

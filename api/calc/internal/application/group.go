@@ -49,6 +49,7 @@ func (ga *groupApplication) Create(ctx context.Context, req *request.CreateGroup
 	g := &group.Group{
 		Name:         req.Name,
 		ThumbnailURL: thumbnailURL,
+		UserIDs:      req.UserIDs,
 	}
 
 	if _, err = ga.groupService.Create(ctx, g); err != nil {
