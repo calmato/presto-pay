@@ -55,6 +55,12 @@ func (c *Client) Authentication(ctx context.Context) (*user.User, error) {
 	return u, nil
 }
 
+// UserIDExists - ユーザーIDの存在性検証
+func (c *Client) UserIDExists(ctx context.Context) (bool, error) {
+	// TODO: Edit
+	return true, nil
+}
+
 func getResponse(req *http.Request) (*http.Response, error) {
 	client := &http.Client{}
 
