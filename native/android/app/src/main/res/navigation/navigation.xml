@@ -3,7 +3,7 @@
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   android:id="@+id/navigation"
-  app:startDestination="@id/login_fragment">
+  app:startDestination="@id/account_home">
 
   <fragment
     android:id="@+id/login_fragment"
@@ -43,7 +43,13 @@
     tools:layout="@layout/fragment_home">
 
   </fragment>
+  <fragment
+    android:id="@+id/account_home"
+    android:name="work.calmato.prestopay.ui.accountHome.AccountHomeFragment"
+    android:label="fragment_account_home"
+    tools:layout="@layout/fragment_account_home">
 
+  </fragment>
 
 
 </navigation>
