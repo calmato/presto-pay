@@ -28,7 +28,7 @@ func NewUserRepository(fa *authentication.Auth, fs *firestore.Firestore) user.Us
 }
 
 func (ur *userRepository) Authentication(ctx context.Context) (*user.User, error) {
-	userReference := getUserCollection()
+	userCollection := getUserCollection()
 
 	t, err := getToken(ctx)
 	if err != nil {
@@ -42,7 +42,7 @@ func (ur *userRepository) Authentication(ctx context.Context) (*user.User, error
 
 	u := &user.User{}
 
-	doc, err := ur.firestore.Get(ctx, userReference, uid)
+	doc, err := ur.firestore.Get(ctx, userCollection, uid)
 	if err == nil {
 		if err = doc.DataTo(u); err != nil {
 			return nil, err
@@ -69,7 +69,7 @@ func (ur *userRepository) Authentication(ctx context.Context) (*user.User, error
 		u.CreatedAt = current
 		u.UpdatedAt = current
 
-		if err = ur.firestore.Set(ctx, userReference, u.ID, u); err != nil {
+		if err = ur.firestore.Set(ctx, userCollection, u.ID, u); err != nil {
 			return nil, err
 		}
 	}
@@ -78,14 +78,14 @@ func (ur *userRepository) Authentication(ctx context.Context) (*user.User, error
 }
 
 func (ur *userRepository) Create(ctx context.Context, u *user.User) error {
-	userReference := getUserCollection()
+	userCollection := getUserCollection()
 
 	_, err := ur.auth.CreateUser(ctx, u.ID, u.Email, u.Password)
 	if err != nil {
 		return err
 	}
 
-	if err = ur.firestore.Set(ctx, userReference, u.ID, u); err != nil {
+	if err = ur.firestore.Set(ctx, userCollection, u.ID, u); err != nil {
 		return err
 	}
 
@@ -93,7 +93,7 @@ func (ur *userRepository) Create(ctx context.Context, u *user.User) error {
 }
 
 func (ur *userRepository) Update(ctx context.Context, u *user.User) error {
-	userReference := getUserCollection()
+	userCollection := getUserCollection()
 
 	au, err := ur.auth.GetUserByUID(ctx, u.ID)
 	if err != nil {
@@ -111,7 +111,7 @@ func (ur *userRepository) Update(ctx context.Context, u *user.User) error {
 		}
 	}
 
-	if err = ur.firestore.Set(ctx, userReference, u.ID, u); err != nil {
+	if err = ur.firestore.Set(ctx, userCollection, u.ID, u); err != nil {
 		return err
 	}
 
@@ -136,7 +136,7 @@ func (ur *userRepository) GetUIDByEmail(ctx context.Context, email string) (stri
 }
 
 func (ur *userRepository) GetUserByUsername(ctx context.Context, username string) (*user.User, error) {
-	userReference := getUserCollection()
+	userCollection := getUserCollection()
 
 	query := &firestore.Query{
 		Field:    "username",
@@ -146,7 +146,7 @@ func (ur *userRepository) GetUserByUsername(ctx context.Context, username string
 
 	u := &user.User{}
 
-	iter := ur.firestore.GetByQuery(ctx, userReference, query)
+	iter := ur.firestore.GetByQuery(ctx, userCollection, query)
 	for {
 		doc, err := iter.Next()
 		if err == iterator.Done {
