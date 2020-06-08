@@ -6,9 +6,11 @@ import (
 	"strings"
 
 	"github.com/calmato/presto-pay/api/calc/internal/application/request"
+	"github.com/calmato/presto-pay/api/calc/internal/application/validation"
 	"github.com/calmato/presto-pay/api/calc/internal/domain"
 	"github.com/calmato/presto-pay/api/calc/internal/domain/group"
 	"github.com/calmato/presto-pay/api/calc/internal/domain/user"
+	"golang.org/x/xerrors"
 )
 
 // GroupApplication - GroupApplicationインターフェース
@@ -17,13 +19,19 @@ type GroupApplication interface {
 }
 
 type groupApplication struct {
-	userService user.UserService
+	groupRequestValidation validation.GroupRequestValidation
+	userService            user.UserService
+	groupService           group.GroupService
 }
 
 // NewGroupApplication - GroupApplicationの生成
-func NewGroupApplication(us user.UserService) GroupApplication {
+func NewGroupApplication(
+	grv validation.GroupRequestValidation, us user.UserService, gs group.GroupService,
+) GroupApplication {
 	return &groupApplication{
-		userService: us,
+		groupRequestValidation: grv,
+		userService:            us,
+		groupService:           gs,
 	}
 }
 
