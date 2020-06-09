@@ -124,44 +124,44 @@ func (mr *MockUserServiceMockRecorder) UploadThumbnail(ctx, data interface{}) *g
 }
 
 // UniqueCheckEmail mocks base method
-func (m *MockUserService) UniqueCheckEmail(ctx context.Context, auth *user.User, email string) bool {
+func (m *MockUserService) UniqueCheckEmail(ctx context.Context, u *user.User, email string) bool {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "UniqueCheckEmail", ctx, auth, email)
+	ret := m.ctrl.Call(m, "UniqueCheckEmail", ctx, u, email)
 	ret0, _ := ret[0].(bool)
 	return ret0
 }
 
 // UniqueCheckEmail indicates an expected call of UniqueCheckEmail
-func (mr *MockUserServiceMockRecorder) UniqueCheckEmail(ctx, auth, email interface{}) *gomock.Call {
+func (mr *MockUserServiceMockRecorder) UniqueCheckEmail(ctx, u, email interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UniqueCheckEmail", reflect.TypeOf((*MockUserService)(nil).UniqueCheckEmail), ctx, auth, email)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UniqueCheckEmail", reflect.TypeOf((*MockUserService)(nil).UniqueCheckEmail), ctx, u, email)
 }
 
 // UniqueCheckUsername mocks base method
-func (m *MockUserService) UniqueCheckUsername(ctx context.Context, auth *user.User, username string) bool {
+func (m *MockUserService) UniqueCheckUsername(ctx context.Context, u *user.User, username string) bool {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "UniqueCheckUsername", ctx, auth, username)
+	ret := m.ctrl.Call(m, "UniqueCheckUsername", ctx, u, username)
 	ret0, _ := ret[0].(bool)
 	return ret0
 }
 
 // UniqueCheckUsername indicates an expected call of UniqueCheckUsername
-func (mr *MockUserServiceMockRecorder) UniqueCheckUsername(ctx, auth, username interface{}) *gomock.Call {
+func (mr *MockUserServiceMockRecorder) UniqueCheckUsername(ctx, u, username interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UniqueCheckUsername", reflect.TypeOf((*MockUserService)(nil).UniqueCheckUsername), ctx, auth, username)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UniqueCheckUsername", reflect.TypeOf((*MockUserService)(nil).UniqueCheckUsername), ctx, u, username)
 }
 
 // ContainsGroupID mocks base method
-func (m *MockUserService) ContainsGroupID(ctx context.Context, userID, groupID string) (bool, error) {
+func (m *MockUserService) ContainsGroupID(ctx context.Context, u *user.User, groupID string) (bool, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "ContainsGroupID", ctx, userID, groupID)
+	ret := m.ctrl.Call(m, "ContainsGroupID", ctx, u, groupID)
 	ret0, _ := ret[0].(bool)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // ContainsGroupID indicates an expected call of ContainsGroupID
-func (mr *MockUserServiceMockRecorder) ContainsGroupID(ctx, userID, groupID interface{}) *gomock.Call {
+func (mr *MockUserServiceMockRecorder) ContainsGroupID(ctx, u, groupID interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ContainsGroupID", reflect.TypeOf((*MockUserService)(nil).ContainsGroupID), ctx, userID, groupID)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ContainsGroupID", reflect.TypeOf((*MockUserService)(nil).ContainsGroupID), ctx, u, groupID)
 }

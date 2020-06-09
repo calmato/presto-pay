@@ -10,7 +10,7 @@ type UserService interface {
 	Update(ctx context.Context, u *User) (*User, error)
 	UpdatePassword(ctx context.Context, uid string, password string) error
 	UploadThumbnail(ctx context.Context, data []byte) (string, error)
-	UniqueCheckEmail(ctx context.Context, auth *User, email string) bool
-	UniqueCheckUsername(ctx context.Context, auth *User, username string) bool
-	ContainsGroupID(ctx context.Context, userID string, groupID string) (bool, error)
+	UniqueCheckEmail(ctx context.Context, u *User, email string) bool
+	UniqueCheckUsername(ctx context.Context, u *User, username string) bool
+	ContainsGroupID(ctx context.Context, u *User, groupID string) (bool, error)
 }

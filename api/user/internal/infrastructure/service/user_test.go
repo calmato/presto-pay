@@ -464,12 +464,11 @@ func TestUserService_UniqueCheckUsername(t *testing.T) {
 
 func TestUserService_ContainsGroupID(t *testing.T) {
 	testCases := map[string]struct {
-		GroupID  string
 		User     *user.User
+		GroupID  string
 		Expected bool
 	}{
 		"ok": {
-			GroupID: "group-id",
 			User: &user.User{
 				ID:           "user-id",
 				Name:         "テストユーザー",
@@ -478,10 +477,10 @@ func TestUserService_ContainsGroupID(t *testing.T) {
 				GroupIDs:     []string{"group-id"},
 				ThumbnailURL: "",
 			},
+			GroupID:  "group-id",
 			Expected: true,
 		},
 		"ng": {
-			GroupID: "group-id",
 			User: &user.User{
 				ID:           "user-id",
 				Name:         "テストユーザー",
@@ -490,6 +489,7 @@ func TestUserService_ContainsGroupID(t *testing.T) {
 				GroupIDs:     []string{},
 				ThumbnailURL: "",
 			},
+			GroupID:  "group-id",
 			Expected: false,
 		},
 	}
@@ -505,7 +505,6 @@ func TestUserService_ContainsGroupID(t *testing.T) {
 		udvm := mock_user.NewMockUserDomainValidation(ctrl)
 
 		urm := mock_user.NewMockUserRepository(ctrl)
-		urm.EXPECT().GetUserByUserID(ctx, testCase.User.ID).Return(testCase.User, nil)
 
 		uum := mock_user.NewMockUserUploader(ctrl)
 
@@ -513,7 +512,7 @@ func TestUserService_ContainsGroupID(t *testing.T) {
 		t.Run(result, func(t *testing.T) {
 			target := NewUserService(udvm, urm, uum)
 
-			got, err := target.ContainsGroupID(ctx, testCase.User.ID, testCase.GroupID)
+			got, err := target.ContainsGroupID(ctx, testCase.User, testCase.GroupID)
 			if err != nil {
 				t.Fatalf("error: %v", err)
 				return

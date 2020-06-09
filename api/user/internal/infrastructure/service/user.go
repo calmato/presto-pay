@@ -113,55 +113,50 @@ func (us *userService) UploadThumbnail(ctx context.Context, data []byte) (string
 	return thumbnailURL, nil
 }
 
-func (us *userService) UniqueCheckEmail(ctx context.Context, au *user.User, email string) bool {
+func (us *userService) UniqueCheckEmail(ctx context.Context, u *user.User, email string) bool {
 	uid, _ := us.userRepository.GetUIDByEmail(ctx, email)
 	if uid == "" {
 		return true
 	}
 
-	if au == nil || au.ID != uid {
+	if u == nil || u.ID != uid {
 		return false
 	}
 
 	return true
 }
 
-func (us *userService) UniqueCheckUsername(ctx context.Context, au *user.User, username string) bool {
-	u, _ := us.userRepository.GetUserByUsername(ctx, username)
-	if u == nil || u.ID == "" {
+func (us *userService) UniqueCheckUsername(ctx context.Context, u *user.User, username string) bool {
+	res, _ := us.userRepository.GetUserByUsername(ctx, username)
+	if res == nil || res.ID == "" {
 		return true
 	}
 
-	if au == nil || au.ID != u.ID {
+	if u == nil || u.ID != res.ID {
 		return false
 	}
 
 	return true
 }
 
-func (us *userService) ContainsGroupID(ctx context.Context, userID string, groupID string) (bool, error) {
-	u, err := us.userRepository.GetUserByUserID(ctx, userID)
-	if err != nil {
-		err = xerrors.Errorf("Failed to Repository: %w", err)
+func (us *userService) ContainsGroupID(ctx context.Context, u *user.User, groupID string) (bool, error) {
+	if u == nil {
+		err := xerrors.New("User is empty")
 		return false, domain.NotFound.New(err)
 	}
 
-	return isContainGroupID(u, groupID), nil
+	for _, v := range u.GroupIDs {
+		if v == groupID {
+			return true, nil
+		}
+	}
+
+	return false, nil
 }
 
 func isContainCustomUniqueError(ves []*domain.ValidationError) bool {
 	for _, v := range ves {
 		if v.Message == domain.CustomUniqueMessage {
-			return true
-		}
-	}
-
-	return false
-}
-
-func isContainGroupID(u *user.User, groupID string) bool {
-	for _, v := range u.GroupIDs {
-		if v == groupID {
 			return true
 		}
 	}
