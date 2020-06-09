@@ -151,17 +151,17 @@ func (mr *MockUserServiceMockRecorder) UserIDExists(ctx, userID interface{}) *go
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UserIDExists", reflect.TypeOf((*MockUserService)(nil).UserIDExists), ctx, userID)
 }
 
-// GroupIDExists mocks base method
-func (m *MockUserService) GroupIDExists(ctx context.Context, userID, groupID string) (bool, error) {
+// ContainsGroupID mocks base method
+func (m *MockUserService) ContainsGroupID(ctx context.Context, userID, groupID string) (bool, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GroupIDExists", ctx, userID, groupID)
+	ret := m.ctrl.Call(m, "ContainsGroupID", ctx, userID, groupID)
 	ret0, _ := ret[0].(bool)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// GroupIDExists indicates an expected call of GroupIDExists
-func (mr *MockUserServiceMockRecorder) GroupIDExists(ctx, userID, groupID interface{}) *gomock.Call {
+// ContainsGroupID indicates an expected call of ContainsGroupID
+func (mr *MockUserServiceMockRecorder) ContainsGroupID(ctx, userID, groupID interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GroupIDExists", reflect.TypeOf((*MockUserService)(nil).GroupIDExists), ctx, userID, groupID)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ContainsGroupID", reflect.TypeOf((*MockUserService)(nil).ContainsGroupID), ctx, userID, groupID)
 }

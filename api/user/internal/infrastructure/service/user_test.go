@@ -462,7 +462,7 @@ func TestUserService_UserIDExists(t *testing.T) {
 	}
 }
 
-func TestUserService_GroupIDExists(t *testing.T) {
+func TestUserService_ContainsGroupID(t *testing.T) {
 	testCases := map[string]struct {
 		GroupID  string
 		User     *user.User
@@ -513,7 +513,7 @@ func TestUserService_GroupIDExists(t *testing.T) {
 		t.Run(result, func(t *testing.T) {
 			target := NewUserService(udvm, urm, uum)
 
-			got, err := target.GroupIDExists(ctx, testCase.User.ID, testCase.GroupID)
+			got, err := target.ContainsGroupID(ctx, testCase.User.ID, testCase.GroupID)
 			if err != nil {
 				t.Fatalf("error: %v", err)
 				return

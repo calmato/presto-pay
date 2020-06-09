@@ -139,7 +139,7 @@ func (us *userService) UserIDExists(ctx context.Context, userID string) (bool, e
 	return true, nil
 }
 
-func (us *userService) GroupIDExists(ctx context.Context, userID string, groupID string) (bool, error) {
+func (us *userService) ContainsGroupID(ctx context.Context, userID string, groupID string) (bool, error) {
 	u, err := us.userRepository.GetUserByUserID(ctx, userID)
 	if err != nil {
 		err = xerrors.Errorf("Failed to Repository: %w", err)
