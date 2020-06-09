@@ -9,6 +9,7 @@ import (
 	"github.com/calmato/presto-pay/api/user/internal/application/validation"
 	"github.com/calmato/presto-pay/api/user/internal/domain"
 	"github.com/calmato/presto-pay/api/user/internal/domain/user"
+	"github.com/calmato/presto-pay/api/user/lib/common"
 	"golang.org/x/xerrors"
 )
 
@@ -21,6 +22,8 @@ type UserApplication interface {
 	UpdatePassword(ctx context.Context, req *request.UpdateUserPassword) (*user.User, error)
 	UniqueCheckEmail(ctx context.Context, req *request.UniqueCheckUserEmail) (bool, error)
 	UniqueCheckUsername(ctx context.Context, req *request.UniqueCheckUserUsername) (bool, error)
+	AddGroupID(ctx context.Context, userID string, groupID string) (*user.User, error)
+	RemoveGroupID(ctx context.Context, userID string, groupID string) (*user.User, error)
 }
 
 type userApplication struct {
@@ -150,6 +153,64 @@ func (ua *userApplication) UniqueCheckUsername(
 
 	u, _ := ua.userService.Authentication(ctx)
 	return ua.userService.UniqueCheckUsername(ctx, u, req.Username), nil
+}
+
+func (ua *userApplication) AddGroupID(ctx context.Context, userID string, groupID string) (*user.User, error) {
+	if _, err := ua.userService.Authentication(ctx); err != nil {
+		return nil, domain.Unauthorized.New(err)
+	}
+
+	u, err := ua.userService.Show(ctx, userID)
+	if err != nil {
+		return nil, err
+	}
+
+	contains, err := ua.userService.ContainsGroupID(ctx, u, groupID)
+	if err != nil {
+		return nil, err
+	}
+
+	if contains {
+		err := xerrors.New("Failed to Service")
+		return nil, domain.AlreadyExistsInDatastore.New(err)
+	}
+
+	u.GroupIDs = append(u.GroupIDs, groupID)
+
+	if _, err := ua.userService.Update(ctx, u); err != nil {
+		return nil, err
+	}
+
+	return u, nil
+}
+
+func (ua *userApplication) RemoveGroupID(ctx context.Context, userID string, groupID string) (*user.User, error) {
+	if _, err := ua.userService.Authentication(ctx); err != nil {
+		return nil, domain.Unauthorized.New(err)
+	}
+
+	u, err := ua.userService.Show(ctx, userID)
+	if err != nil {
+		return nil, err
+	}
+
+	contains, err := ua.userService.ContainsGroupID(ctx, u, groupID)
+	if err != nil {
+		return nil, err
+	}
+
+	if !contains {
+		err := xerrors.New("Failed to Service")
+		return u, domain.NotFound.New(err)
+	}
+
+	u.GroupIDs = common.RemoveString(u.GroupIDs, groupID)
+
+	if _, err := ua.userService.Update(ctx, u); err != nil {
+		return nil, err
+	}
+
+	return u, nil
 }
 
 func getThumbnailURL(ctx context.Context, ua *userApplication, thumbnail string) (string, error) {
