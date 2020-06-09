@@ -85,4 +85,4 @@ jobs:
 
       - name: Udpate pod image
         working-directory: ./infra/kubernetes
-        run: make update-deployment APP_NAME=${GKE_CLUSTER_NAME}
+        run: make update-deployment APP_NAME=${GKE_DEPLOYMENT_NAME}

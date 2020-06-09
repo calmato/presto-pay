@@ -27,6 +27,7 @@ func TestUserValidation_User(t *testing.T) {
 				Email:        "test@calmato.com",
 				ThumbnailURL: "",
 				Password:     "!Qaz2wsx",
+				GroupIDs:     []string{},
 				CreatedAt:    current,
 				UpdatedAt:    current,
 			},

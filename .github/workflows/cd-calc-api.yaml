@@ -17,7 +17,7 @@ env:
   GKE_DEPLOYMENT_NAME: calc-api
 
 jobs:
-  deploy_for_stg:
+  deploy_image_for_stg:
     name: Deploy container image to staging
     runs-on: ubuntu-latest
 

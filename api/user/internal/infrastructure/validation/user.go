@@ -40,6 +40,15 @@ func (udv *userDomainValidation) User(ctx context.Context, u *user.User) []*doma
 		validationErrors = append(validationErrors, validationError)
 	}
 
+	if err := uniqueCheckGroupIDs(u.GroupIDs); err != nil {
+		validationError := &domain.ValidationError{
+			Field:   "groupIds",
+			Message: domain.CustomUniqueMessage,
+		}
+
+		validationErrors = append(validationErrors, validationError)
+	}
+
 	return validationErrors
 }
 
@@ -60,6 +69,20 @@ func uniqueCheckUsername(ctx context.Context, ur user.UserRepository, id string,
 
 	if id == "" || id != u.ID {
 		return xerrors.New("This username is already exists.")
+	}
+
+	return nil
+}
+
+func uniqueCheckGroupIDs(groupIDs []string) error {
+	m := make(map[string]struct{})
+
+	for _, v := range groupIDs {
+		if _, ok := m[v]; ok {
+			return xerrors.New("There are duplicate values.")
+		}
+
+		m[v] = struct{}{}
 	}
 
 	return nil
