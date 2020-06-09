@@ -15,41 +15,7 @@ import (
 	"golang.org/x/xerrors"
 )
 
-func TestUserApplication_ShowProfile(t *testing.T) {
-	testCases := map[string]struct{}{
-		"ok": {},
-	}
-
-	for result := range testCases {
-		ctx, cancel := context.WithCancel(context.Background())
-		defer cancel()
-
-		ctrl := gomock.NewController(t)
-		defer ctrl.Finish()
-
-		// Defined variables
-		u := &user.User{}
-
-		// Defined mocks
-		urvm := mock_validation.NewMockUserRequestValidation(ctrl)
-
-		usm := mock_user.NewMockUserService(ctrl)
-		usm.EXPECT().Authentication(ctx).Return(u, nil)
-
-		// Start test
-		t.Run(result, func(t *testing.T) {
-			target := NewUserApplication(urvm, usm)
-
-			_, err := target.ShowProfile(ctx)
-			if err != nil {
-				t.Fatalf("error: %v", err)
-				return
-			}
-		})
-	}
-}
-
-func TestUserApplication_ShowProfile(t *testing.T) {
+func TestUserApplication_Show(t *testing.T) {
 	testCases := map[string]struct {
 		UserID   string
 		Expected *user.User
@@ -96,6 +62,40 @@ func TestUserApplication_ShowProfile(t *testing.T) {
 
 			if !reflect.DeepEqual(got, testCase.Expected) {
 				t.Fatalf("want %#v, but %#v", testCase.Expected, got)
+				return
+			}
+		})
+	}
+}
+
+func TestUserApplication_ShowProfile(t *testing.T) {
+	testCases := map[string]struct{}{
+		"ok": {},
+	}
+
+	for result := range testCases {
+		ctx, cancel := context.WithCancel(context.Background())
+		defer cancel()
+
+		ctrl := gomock.NewController(t)
+		defer ctrl.Finish()
+
+		// Defined variables
+		u := &user.User{}
+
+		// Defined mocks
+		urvm := mock_validation.NewMockUserRequestValidation(ctrl)
+
+		usm := mock_user.NewMockUserService(ctrl)
+		usm.EXPECT().Authentication(ctx).Return(u, nil)
+
+		// Start test
+		t.Run(result, func(t *testing.T) {
+			target := NewUserApplication(urvm, usm)
+
+			_, err := target.ShowProfile(ctx)
+			if err != nil {
+				t.Fatalf("error: %v", err)
 				return
 			}
 		})
