@@ -37,6 +37,16 @@ func (us *userService) Authentication(ctx context.Context) (*user.User, error) {
 	return u, nil
 }
 
+func (us *userService) Show(ctx context.Context, userID string) (*user.User, error) {
+	u, err := us.userRepository.GetUserByUserID(ctx, userID)
+	if err != nil {
+		err = xerrors.Errorf("Failed to Repository: %w", err)
+		return nil, domain.NotFound.New(err)
+	}
+
+	return u, nil
+}
+
 func (us *userService) Create(ctx context.Context, u *user.User) (*user.User, error) {
 	if ves := us.userDomainValidation.User(ctx, u); len(ves) > 0 {
 		err := xerrors.New("Failed to DomainValidation")
@@ -127,16 +137,6 @@ func (us *userService) UniqueCheckUsername(ctx context.Context, au *user.User, u
 	}
 
 	return true
-}
-
-func (us *userService) UserIDExists(ctx context.Context, userID string) (bool, error) {
-	_, err := us.userRepository.GetUserByUserID(ctx, userID)
-	if err != nil {
-		err = xerrors.Errorf("Failed to Repository: %w", err)
-		return false, domain.NotFound.New(err)
-	}
-
-	return true, nil
 }
 
 func (us *userService) ContainsGroupID(ctx context.Context, userID string, groupID string) (bool, error) {
