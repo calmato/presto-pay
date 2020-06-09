@@ -14,6 +14,7 @@ import (
 
 // UserApplication - UserApplicationインターフェース
 type UserApplication interface {
+	Show(ctx context.Context, userID string) (*user.User, error)
 	ShowProfile(ctx context.Context) (*user.User, error)
 	Create(ctx context.Context, req *request.CreateUser) (*user.User, error)
 	UpdateProfile(ctx context.Context, req *request.UpdateProfile) (*user.User, error)
@@ -33,6 +34,19 @@ func NewUserApplication(urv validation.UserRequestValidation, us user.UserServic
 		userRequestValidation: urv,
 		userService:           us,
 	}
+}
+
+func (ua *userApplication) Show(ctx context.Context, userID string) (*user.User, error) {
+	if _, err := ua.userService.Authentication(ctx); err != nil {
+		return nil, domain.Unauthorized.New(err)
+	}
+
+	u, err := ua.userService.Show(ctx, userID)
+	if err != nil {
+		return nil, err
+	}
+
+	return u, nil
 }
 
 func (ua *userApplication) ShowProfile(ctx context.Context) (*user.User, error) {
