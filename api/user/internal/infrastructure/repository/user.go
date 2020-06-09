@@ -166,6 +166,37 @@ func (ur *userRepository) GetUserByUsername(ctx context.Context, username string
 	return u, nil
 }
 
+func (ur *userRepository) GetUserByUserID(ctx context.Context, userID string) (*user.User, error) {
+	userCollection := getUserCollection()
+
+	query := &firestore.Query{
+		Field:    "id",
+		Operator: "==",
+		Value:    userID,
+	}
+
+	u := &user.User{}
+
+	iter := ur.firestore.GetByQuery(ctx, userCollection, query)
+	for {
+		doc, err := iter.Next()
+		if err == iterator.Done {
+			break
+		}
+
+		if err != nil {
+			return nil, err
+		}
+
+		err = doc.DataTo(u)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	return u, nil
+}
+
 func getToken(ctx context.Context) (string, error) {
 	gc, err := middleware.GinContextFromContext(ctx)
 	if err != nil {

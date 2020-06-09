@@ -31,6 +31,7 @@ func Router(reg *registry.Registry) *gin.Engine {
 	apiV1 := r.Group("/v1")
 	{
 		apiV1.GET("/users", reg.V1User.ShowProfile)
+		apiV1.GET("/users/:userID", reg.V1User.Show)
 		apiV1.POST("/users", reg.V1User.Create)
 		apiV1.PATCH("/users", reg.V1User.UpdateProfile)
 
@@ -38,6 +39,13 @@ func Router(reg *registry.Registry) *gin.Engine {
 
 		apiV1.POST("/users/check-email", reg.V1User.UniqueCheckEmail)
 		apiV1.POST("/users/check-username", reg.V1User.UniqueCheckUsername)
+	}
+
+	// internal routes
+	internal := r.Group("/internal")
+	{
+		internal.POST("/users/:userID/groups/:groupID")
+		internal.DELETE("/users/:userID/groups/:groupID")
 	}
 
 	return r
