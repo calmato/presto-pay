@@ -9,6 +9,7 @@ type ShowProfile struct {
 	Username     string    `json:"username"`
 	Email        string    `json:"email"`
 	ThumbnailURL string    `json:"thumbnailUrl"`
+	GroupIDs     []string  `json:"groupIds"`
 	CreatedAt    time.Time `json:"createdAt"`
 	UpdatedAt    time.Time `json:"updatedAt"`
 }
@@ -20,6 +21,7 @@ type CreateUser struct {
 	Username     string    `json:"username"`
 	Email        string    `json:"email"`
 	ThumbnailURL string    `json:"thumbnailUrl"`
+	GroupIDs     []string  `json:"groupIds"`
 	CreatedAt    time.Time `json:"createdAt"`
 	UpdatedAt    time.Time `json:"updatedAt"`
 }
@@ -31,6 +33,7 @@ type UpdateProfile struct {
 	Username     string    `json:"username"`
 	Email        string    `json:"email"`
 	ThumbnailURL string    `json:"thumbnailUrl"`
+	GroupIDs     []string  `json:"groupIds"`
 	CreatedAt    time.Time `json:"createdAt"`
 	UpdatedAt    time.Time `json:"updatedAt"`
 }

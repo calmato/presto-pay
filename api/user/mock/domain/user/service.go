@@ -135,3 +135,18 @@ func (mr *MockUserServiceMockRecorder) UniqueCheckUsername(ctx, auth, username i
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UniqueCheckUsername", reflect.TypeOf((*MockUserService)(nil).UniqueCheckUsername), ctx, auth, username)
 }
+
+// GroupIDExists mocks base method
+func (m *MockUserService) GroupIDExists(ctx context.Context, userID, groupID string) (bool, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GroupIDExists", ctx, userID, groupID)
+	ret0, _ := ret[0].(bool)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GroupIDExists indicates an expected call of GroupIDExists
+func (mr *MockUserServiceMockRecorder) GroupIDExists(ctx, userID, groupID interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GroupIDExists", reflect.TypeOf((*MockUserService)(nil).GroupIDExists), ctx, userID, groupID)
+}

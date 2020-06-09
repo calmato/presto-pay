@@ -129,9 +129,29 @@ func (us *userService) UniqueCheckUsername(ctx context.Context, au *user.User, u
 	return true
 }
 
+func (us *userService) GroupIDExists(ctx context.Context, userID string, groupID string) (bool, error) {
+	u, err := us.userRepository.GetUserByUserID(ctx, userID)
+	if err != nil {
+		err = xerrors.Errorf("Failed to Repository: %w", err)
+		return false, domain.NotFound.New(err)
+	}
+
+	return isContainGroupID(u, groupID), nil
+}
+
 func isContainCustomUniqueError(ves []*domain.ValidationError) bool {
 	for _, v := range ves {
 		if v.Message == domain.CustomUniqueMessage {
+			return true
+		}
+	}
+
+	return false
+}
+
+func isContainGroupID(u *user.User, groupID string) bool {
+	for _, v := range u.GroupIDs {
+		if v == groupID {
 			return true
 		}
 	}
