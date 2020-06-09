@@ -64,5 +64,10 @@ func uniqueCheckUserIDs(userIDs []string) error {
 }
 
 func userIDExists(ctx context.Context, ac *api.Client, userID string) bool {
-	return true // TODO: Edit
+	exists, err := ac.UserExists(ctx, userID)
+	if err != nil {
+		return false
+	}
+
+	return exists
 }

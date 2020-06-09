@@ -23,6 +23,12 @@ func NewAPIClient(userAPIURL string) *Client {
 	}
 }
 
+/*
+ * ###########################
+ *  User API
+ * ###########################
+ */
+
 // Authentication - ログインユーザー情報の取得
 func (c *Client) Authentication(ctx context.Context) (*user.User, error) {
 	url := c.userAPIURL + "/v1/users"
@@ -55,11 +61,32 @@ func (c *Client) Authentication(ctx context.Context) (*user.User, error) {
 	return u, nil
 }
 
-// UserIDExists - ユーザーIDの存在性検証
-func (c *Client) UserIDExists(ctx context.Context) (bool, error) {
-	// TODO: Edit
+// UserExists - ユーザーの存在性検証
+func (c *Client) UserExists(ctx context.Context, userID string) (bool, error) {
+	url := c.userAPIURL + "/internal/users/" + userID
+	req, _ := http.NewRequest("GET", url, nil)
+
+	if err := setHeader(ctx, req); err != nil {
+		return false, err
+	}
+
+	res, err := getResponse(req)
+	if err != nil {
+		return false, err
+	}
+
+	if res.StatusCode < 200 || res.StatusCode > 299 {
+		return false, xerrors.New("Failed to request to user api")
+	}
+
 	return true, nil
 }
+
+/*
+ * ###########################
+ *  Private
+ * ###########################
+ */
 
 func getResponse(req *http.Request) (*http.Response, error) {
 	client := &http.Client{}
