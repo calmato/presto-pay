@@ -129,6 +129,16 @@ func (us *userService) UniqueCheckUsername(ctx context.Context, au *user.User, u
 	return true
 }
 
+func (us *userService) UserIDExists(ctx context.Context, userID string) (bool, error) {
+	_, err := us.userRepository.GetUserByUserID(ctx, userID)
+	if err != nil {
+		err = xerrors.Errorf("Failed to Repository: %w", err)
+		return false, domain.NotFound.New(err)
+	}
+
+	return true, nil
+}
+
 func (us *userService) GroupIDExists(ctx context.Context, userID string, groupID string) (bool, error) {
 	u, err := us.userRepository.GetUserByUserID(ctx, userID)
 	if err != nil {

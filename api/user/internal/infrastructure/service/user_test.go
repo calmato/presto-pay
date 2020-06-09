@@ -411,6 +411,57 @@ func TestUserService_UniqueCheckUsername(t *testing.T) {
 	}
 }
 
+func TestUserService_UserIDExists(t *testing.T) {
+	testCases := map[string]struct {
+		User     *user.User
+		Expected bool
+	}{
+		"ok": {
+			User: &user.User{
+				ID:           "user-id",
+				Name:         "テストユーザー",
+				Username:     "test-user",
+				Email:        "test@calmato.com",
+				GroupIDs:     []string{"group-id"},
+				ThumbnailURL: "",
+			},
+			Expected: true,
+		},
+	}
+
+	for result, testCase := range testCases {
+		ctx, cancel := context.WithCancel(context.Background())
+		defer cancel()
+
+		ctrl := gomock.NewController(t)
+		defer ctrl.Finish()
+
+		// Defined mocks
+		udvm := mock_user.NewMockUserDomainValidation(ctrl)
+
+		urm := mock_user.NewMockUserRepository(ctrl)
+		urm.EXPECT().GetUserByUserID(ctx, testCase.User.ID).Return(testCase.User, nil)
+
+		uum := mock_user.NewMockUserUploader(ctrl)
+
+		// Start test
+		t.Run(result, func(t *testing.T) {
+			target := NewUserService(udvm, urm, uum)
+
+			got, err := target.UserIDExists(ctx, testCase.User.ID)
+			if err != nil {
+				t.Fatalf("error: %v", err)
+				return
+			}
+
+			if !reflect.DeepEqual(got, testCase.Expected) {
+				t.Fatalf("want %#v, but %#v", testCase.Expected, got)
+				return
+			}
+		})
+	}
+}
+
 func TestUserService_GroupIDExists(t *testing.T) {
 	testCases := map[string]struct {
 		GroupID  string
