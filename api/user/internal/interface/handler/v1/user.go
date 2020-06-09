@@ -21,6 +21,8 @@ type APIV1UserHandler interface {
 	UpdatePassword(ctx *gin.Context)
 	UniqueCheckEmail(ctx *gin.Context)
 	UniqueCheckUsername(ctx *gin.Context)
+	AddGroup(ctx *gin.Context)
+	RemoveGroup(ctx *gin.Context)
 }
 
 type apiV1UserHandler struct {
@@ -186,6 +188,54 @@ func (uh *apiV1UserHandler) UniqueCheckUsername(ctx *gin.Context) {
 
 	res := &response.UniqueCheck{
 		UniqueCheck: uniqueCheck,
+	}
+
+	ctx.JSON(http.StatusOK, res)
+}
+
+func (uh *apiV1UserHandler) AddGroup(ctx *gin.Context) {
+	userID := ctx.Params.ByName("userID")
+	groupID := ctx.Params.ByName("groupID")
+
+	c := middleware.GinContextToContext(ctx)
+	u, err := uh.userApplication.AddGroupID(c, userID, groupID)
+	if err != nil {
+		handler.ErrorHandling(ctx, err)
+		return
+	}
+
+	res := &response.AddGroupUser{
+		ID:           u.ID,
+		Name:         u.Name,
+		Username:     u.Username,
+		Email:        u.Email,
+		ThumbnailURL: u.ThumbnailURL,
+		CreatedAt:    u.CreatedAt,
+		UpdatedAt:    u.UpdatedAt,
+	}
+
+	ctx.JSON(http.StatusOK, res)
+}
+
+func (uh *apiV1UserHandler) RemoveGroup(ctx *gin.Context) {
+	userID := ctx.Params.ByName("userID")
+	groupID := ctx.Params.ByName("groupID")
+
+	c := middleware.GinContextToContext(ctx)
+	u, err := uh.userApplication.RemoveGroupID(c, userID, groupID)
+	if err != nil {
+		handler.ErrorHandling(ctx, err)
+		return
+	}
+
+	res := &response.RemoveGroupUser{
+		ID:           u.ID,
+		Name:         u.Name,
+		Username:     u.Username,
+		Email:        u.Email,
+		ThumbnailURL: u.ThumbnailURL,
+		CreatedAt:    u.CreatedAt,
+		UpdatedAt:    u.UpdatedAt,
 	}
 
 	ctx.JSON(http.StatusOK, res)

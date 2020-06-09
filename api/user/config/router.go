@@ -41,6 +41,13 @@ func Router(reg *registry.Registry) *gin.Engine {
 		apiV1.POST("/users/check-username", reg.V1User.UniqueCheckUsername)
 	}
 
+	// internal routes
+	internal := r.Group("/internal")
+	{
+		internal.POST("/users/:userID/groups/:groupID")
+		internal.DELETE("/users/:userID/groups/:groupID")
+	}
+
 	return r
 }
 
