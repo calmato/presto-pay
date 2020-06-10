@@ -11,13 +11,19 @@ import (
 	"golang.org/x/xerrors"
 )
 
+// APIClient - 他のAPI操作用インターフェース
+type APIClient interface {
+	Authentication(ctx context.Context) (*user.User, error)
+	UserExists(ctx context.Context, userID string) (bool, error)
+}
+
 // Client - 他のAPI管理用の構造体
 type Client struct {
 	userAPIURL string
 }
 
 // NewAPIClient - API Clientの初期化
-func NewAPIClient(userAPIURL string) *Client {
+func NewAPIClient(userAPIURL string) APIClient {
 	return &Client{
 		userAPIURL: userAPIURL,
 	}

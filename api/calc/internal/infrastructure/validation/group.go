@@ -11,11 +11,11 @@ import (
 
 type groupDomainValidation struct {
 	groupRepository group.GroupRepository
-	apiClient       *api.Client
+	apiClient       api.APIClient
 }
 
 // NewGroupDomainValidation - GroupDomainValidationの生成
-func NewGroupDomainValidation(gr group.GroupRepository, ac *api.Client) group.GroupDomainValidation {
+func NewGroupDomainValidation(gr group.GroupRepository, ac api.APIClient) group.GroupDomainValidation {
 	return &groupDomainValidation{
 		groupRepository: gr,
 		apiClient:       ac,
@@ -63,7 +63,7 @@ func uniqueCheckUserIDs(userIDs []string) error {
 	return nil
 }
 
-func userIDExists(ctx context.Context, ac *api.Client, userID string) bool {
+func userIDExists(ctx context.Context, ac api.APIClient, userID string) bool {
 	exists, err := ac.UserExists(ctx, userID)
 	if err != nil {
 		return false
