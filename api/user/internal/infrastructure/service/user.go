@@ -37,6 +37,16 @@ func (us *userService) Authentication(ctx context.Context) (*user.User, error) {
 	return u, nil
 }
 
+func (us *userService) Show(ctx context.Context, userID string) (*user.User, error) {
+	u, err := us.userRepository.GetUserByUserID(ctx, userID)
+	if err != nil {
+		err = xerrors.Errorf("Failed to Repository: %w", err)
+		return nil, domain.NotFound.New(err)
+	}
+
+	return u, nil
+}
+
 func (us *userService) Create(ctx context.Context, u *user.User) (*user.User, error) {
 	if ves := us.userDomainValidation.User(ctx, u); len(ves) > 0 {
 		err := xerrors.New("Failed to DomainValidation")
@@ -103,30 +113,45 @@ func (us *userService) UploadThumbnail(ctx context.Context, data []byte) (string
 	return thumbnailURL, nil
 }
 
-func (us *userService) UniqueCheckEmail(ctx context.Context, au *user.User, email string) bool {
+func (us *userService) UniqueCheckEmail(ctx context.Context, u *user.User, email string) bool {
 	uid, _ := us.userRepository.GetUIDByEmail(ctx, email)
 	if uid == "" {
 		return true
 	}
 
-	if au == nil || au.ID != uid {
+	if u == nil || u.ID != uid {
 		return false
 	}
 
 	return true
 }
 
-func (us *userService) UniqueCheckUsername(ctx context.Context, au *user.User, username string) bool {
-	u, _ := us.userRepository.GetUserByUsername(ctx, username)
-	if u == nil || u.ID == "" {
+func (us *userService) UniqueCheckUsername(ctx context.Context, u *user.User, username string) bool {
+	res, _ := us.userRepository.GetUserByUsername(ctx, username)
+	if res == nil || res.ID == "" {
 		return true
 	}
 
-	if au == nil || au.ID != u.ID {
+	if u == nil || u.ID != res.ID {
 		return false
 	}
 
 	return true
+}
+
+func (us *userService) ContainsGroupID(ctx context.Context, u *user.User, groupID string) (bool, error) {
+	if u == nil {
+		err := xerrors.New("User is empty")
+		return false, domain.NotFound.New(err)
+	}
+
+	for _, v := range u.GroupIDs {
+		if v == groupID {
+			return true, nil
+		}
+	}
+
+	return false, nil
 }
 
 func isContainCustomUniqueError(ves []*domain.ValidationError) bool {
