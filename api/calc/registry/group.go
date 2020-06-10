@@ -20,7 +20,7 @@ func v1GroupInjection(fs *firestore.Firestore, cs *gcs.Storage, ac api.APIClient
 	gdv := dv.NewGroupDomainValidation(gr, ac)
 	gu := storage.NewGroupUploader(cs)
 	grv := rv.NewGroupRequestValidation()
-	gs := service.NewGroupService(gdv, gr, gu)
+	gs := service.NewGroupService(gdv, gr, gu, ac)
 	ga := application.NewGroupApplication(grv, us, gs)
 	gh := v1.NewAPIV1GroupHandler(ga)
 

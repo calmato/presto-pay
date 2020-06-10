@@ -34,3 +34,21 @@ func (us *userService) Authentication(ctx context.Context) (*user.User, error) {
 
 	return u, nil
 }
+
+func (us *userService) AddGroup(ctx context.Context, userID string, groupID string) error {
+	if err := us.apiClient.AddGroup(ctx, userID, groupID); err != nil {
+		err = xerrors.Errorf("Failed to API Client: %w", err)
+		return domain.ErrorInOtherAPI.New(err)
+	}
+
+	return nil
+}
+
+func (us *userService) RemoveGroup(ctx context.Context, userID string, groupID string) error {
+	if err := us.apiClient.RemoveGroup(ctx, userID, groupID); err != nil {
+		err = xerrors.Errorf("Failed to API Client: %w", err)
+		return domain.ErrorInOtherAPI.New(err)
+	}
+
+	return nil
+}

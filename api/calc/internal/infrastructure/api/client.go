@@ -15,6 +15,8 @@ import (
 type APIClient interface {
 	Authentication(ctx context.Context) (*user.User, error)
 	UserExists(ctx context.Context, userID string) (bool, error)
+	AddGroup(ctx context.Context, userID string, groupID string) error
+	RemoveGroup(ctx context.Context, userID string, groupID string) error
 }
 
 // Client - 他のAPI管理用の構造体
@@ -49,8 +51,8 @@ func (c *Client) Authentication(ctx context.Context) (*user.User, error) {
 		return nil, err
 	}
 
-	if res.StatusCode < 200 || res.StatusCode > 299 {
-		return nil, xerrors.New("Failed to request to user api")
+	if _, err := getStatus(res); err != nil {
+		return nil, err
 	}
 
 	defer res.Body.Close()
@@ -81,11 +83,53 @@ func (c *Client) UserExists(ctx context.Context, userID string) (bool, error) {
 		return false, err
 	}
 
-	if res.StatusCode < 200 || res.StatusCode > 299 {
-		return false, xerrors.New("Failed to request to user api")
+	if _, err := getStatus(res); err != nil {
+		return false, err
 	}
 
 	return true, nil
+}
+
+// AddGroup - ユーザーをグループに追加
+func (c *Client) AddGroup(ctx context.Context, userID string, groupID string) error {
+	url := c.userAPIURL + "/internal/users/" + userID + "/groups/" + groupID
+	req, _ := http.NewRequest("POST", url, nil)
+
+	if err := setHeader(ctx, req); err != nil {
+		return err
+	}
+
+	res, err := getResponse(req)
+	if err != nil {
+		return err
+	}
+
+	if _, err := getStatus(res); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// RemoveGroup - ユーザーをグループから削除
+func (c *Client) RemoveGroup(ctx context.Context, userID string, groupID string) error {
+	url := c.userAPIURL + "/internal/users/" + userID + "/groups/" + groupID
+	req, _ := http.NewRequest("DELETE", url, nil)
+
+	if err := setHeader(ctx, req); err != nil {
+		return err
+	}
+
+	res, err := getResponse(req)
+	if err != nil {
+		return err
+	}
+
+	if _, err := getStatus(res); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 /*
@@ -121,4 +165,13 @@ func setHeader(ctx context.Context, req *http.Request) error {
 	req.Header.Set("Authorization", authorization)
 
 	return nil
+}
+
+func getStatus(res *http.Response) (int, error) {
+	status := res.StatusCode
+	if status < 200 || status > 299 {
+		return status, xerrors.New("Failed to request to user api")
+	}
+
+	return status, nil
 }

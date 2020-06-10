@@ -6,6 +6,7 @@ import (
 
 	"github.com/calmato/presto-pay/api/calc/internal/domain"
 	"github.com/calmato/presto-pay/api/calc/internal/domain/group"
+	"github.com/calmato/presto-pay/api/calc/internal/infrastructure/api"
 	"github.com/google/uuid"
 	"golang.org/x/xerrors"
 )
@@ -14,16 +15,19 @@ type groupService struct {
 	groupDomainValidation group.GroupDomainValidation
 	groupRepository       group.GroupRepository
 	groupUploader         group.GroupUploader
+	apiClient             api.APIClient
 }
 
 // NewGroupService - GroupServiceの生成
 func NewGroupService(
 	gdv group.GroupDomainValidation, gr group.GroupRepository, gu group.GroupUploader,
+	ac api.APIClient,
 ) group.GroupService {
 	return &groupService{
 		groupDomainValidation: gdv,
 		groupRepository:       gr,
 		groupUploader:         gu,
+		apiClient:             ac,
 	}
 }
 
@@ -44,7 +48,12 @@ func (gs *groupService) Create(ctx context.Context, g *group.Group) (*group.Grou
 		return nil, domain.ErrorInDatastore.New(err)
 	}
 
-	// TODO: User.GroupIDsの更新
+	for _, userID := range g.UserIDs {
+		if err := gs.apiClient.AddGroup(ctx, userID, g.ID); err != nil {
+			err = xerrors.Errorf("Failed to API Client: %w", err)
+			return nil, domain.ErrorInOtherAPI.New(err)
+		}
+	}
 
 	return g, nil
 }
