@@ -3,7 +3,7 @@
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   android:id="@+id/navigation"
-  app:startDestination="@id/login_fragment">
+  app:startDestination="@id/new_account_fragment">
 
   <fragment
     android:id="@+id/login_fragment"
@@ -26,6 +26,9 @@
     <action
       android:id="@+id/action_newAccountFragment_to_mailCheckFragment"
       app:destination="@+id/mail_check_fragment" />
+    <action
+      android:id="@+id/action_new_account_fragment_to_login_fragment"
+      app:destination="@id/login_fragment" />
   </fragment>
   <fragment
     android:id="@+id/mail_check_fragment"
@@ -44,6 +47,9 @@
       <action
         android:id="@+id/action_home_fragment_to_account_home"
         app:destination="@id/account_home" />
+      <action
+        android:id="@+id/action_home_fragment_to_createGroupFragment"
+        app:destination="@id/createGroupFragment" />
     </fragment>
   <fragment
     android:id="@+id/account_home"
@@ -55,6 +61,11 @@
       android:id="@+id/action_account_home_to_login_fragment"
       app:destination="@id/login_fragment" />
   </fragment>
+  <fragment
+    android:id="@+id/createGroupFragment"
+    android:name="work.calmato.prestopay.ui.createGroup.CreateGroupFragment"
+    android:label="fragment_create_group"
+    tools:layout="@layout/fragment_create_group" />
 
 
 </navigation>

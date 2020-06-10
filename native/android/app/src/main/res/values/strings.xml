@@ -48,4 +48,8 @@
   <string name="delete_payment">支払いの削除</string>
   <string name="group">グループ</string>
   <string name="friend">友達</string>
+  <string name="register_group_name">グループ名を入力</string>
+  <string name="add_member">メンバーを追加する</string>
+  <string name="add_friend">add friend</string>
+  <string name="right_arrow">right arrow</string>
 </resources>

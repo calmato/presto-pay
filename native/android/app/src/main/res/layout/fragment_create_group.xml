@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  tools:context=".ui.createGroup.CreateGroupFragment">
+
+  <androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:backgroundTint="#875D5D">
+
+    <ImageView
+      android:id="@+id/thumbnail"
+      android:layout_width="83dp"
+      android:layout_height="85dp"
+      android:layout_marginTop="64dp"
+
+      android:background="@drawable/circle_theme_color"
+      android:backgroundTint="#4B000000"
+      android:contentDescription="@string/profile_photo"
+      android:padding="4dp"
+      android:src="@android:drawable/ic_menu_camera"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+      android:id="@+id/groupName"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="24dp"
+      android:ems="10"
+      android:hint="@string/register_group_name"
+      android:inputType="textPersonName"
+      android:textAlignment="center"
+      android:textSize="24sp"
+      app:layout_constraintEnd_toEndOf="@+id/thumbnail"
+      app:layout_constraintStart_toStartOf="@+id/thumbnail"
+      app:layout_constraintTop_toBottomOf="@+id/thumbnail"
+      android:importantForAutofill="no" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="8dp"
+      android:layout_marginTop="32dp"
+      android:layout_marginEnd="8dp"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/groupName">
+
+      <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:contentDescription="@string/add_friend"
+        android:src="@drawable/ic_person_add_black_24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+      <TextView
+        android:id="@+id/addMember"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="@string/add_member"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imageView"
+        app:layout_constraintTop_toTopOf="parent" />
+
+      <ImageView
+        android:id="@+id/rightArrow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:contentDescription="@string/right_arrow"
+        android:src="@drawable/ic_baseline_chevron_right_24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+  </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>
