@@ -4,39 +4,29 @@ import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
 import android.graphics.Color
 import android.os.AsyncTask
 import android.os.Bundle
-import android.util.Base64
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.constraintlayout.widget.Constraints.TAG
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.graphics.drawable.toBitmap
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.gson.Gson
-import com.google.gson.JsonObject
 import kotlinx.android.synthetic.main.fragment_new_account.*
 import okhttp3.Response
 import org.json.JSONObject
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentNewAccountBinding
-import work.calmato.prestopay.ui.login.LoginFragmentDirections
 import work.calmato.prestopay.util.Constant.Companion.IMAGE_PICK_CODE
 import work.calmato.prestopay.util.Constant.Companion.MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE
 import work.calmato.prestopay.util.RestClient
 import work.calmato.prestopay.util.encodeImage2Base64
-import java.io.ByteArrayOutputStream
-import java.lang.StringBuilder
-import kotlin.math.roundToInt
 
 class NewAccountFragment : Fragment() {
   val serverUrl: String = "https://api.presto-pay-stg.calmato.work/v1/users"
@@ -85,7 +75,7 @@ class NewAccountFragment : Fragment() {
         val response = MyAsyncTask().execute().get()
         if (response.isSuccessful) {
           this.findNavController().navigate(
-            NewAccountFragmentDirections.actionNewAccountFragmentToMailCheckFragment()
+            NewAccountFragmentDirections.actionNewAccountFragmentToLoginFragment()
           )
         } else {
           var errorMessage = ""
@@ -149,8 +139,6 @@ class NewAccountFragment : Fragment() {
       return responseCode
     }
   }
-
-
 
 
   override fun onRequestPermissionsResult(
