@@ -27,7 +27,7 @@ class AccountHomeFragment : Fragment() {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    setUserNameText.setOnClickListener {
+    logoutButton.setOnClickListener {
       showAlertDialog()
     }
   }
