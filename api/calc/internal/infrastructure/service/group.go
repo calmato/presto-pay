@@ -67,3 +67,18 @@ func (gs *groupService) UploadThumbnail(ctx context.Context, data []byte) (strin
 
 	return thumbnailURL, nil
 }
+
+func (gs *groupService) ContainsUserID(ctx context.Context, g *group.Group, userID string) (bool, error) {
+	if g == nil {
+		err := xerrors.New("Group is empty")
+		return false, domain.NotFound.New(err)
+	}
+
+	for _, v := range g.UserIDs {
+		if v == userID {
+			return true, nil
+		}
+	}
+
+	return false, nil
+}

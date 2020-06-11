@@ -36,7 +36,7 @@ func NewGroupApplication(
 }
 
 func (ga *groupApplication) Create(ctx context.Context, req *request.CreateGroup) (*group.Group, error) {
-	_, err := ga.userService.Authentication(ctx)
+	u, err := ga.userService.Authentication(ctx)
 	if err != nil {
 		return nil, domain.Unauthorized.New(err)
 	}
@@ -57,7 +57,14 @@ func (ga *groupApplication) Create(ctx context.Context, req *request.CreateGroup
 		UserIDs:      req.UserIDs,
 	}
 
-	// TODO: g.UserIDsとu.IDの比較してなければ足すってのしたい
+	contrains, err := ga.groupService.ContainsUserID(ctx, g, u.ID)
+	if err != nil {
+		return nil, err
+	}
+
+	if !contrains {
+		g.UserIDs = append(g.UserIDs, u.ID)
+	}
 
 	if _, err = ga.groupService.Create(ctx, g); err != nil {
 		return nil, err

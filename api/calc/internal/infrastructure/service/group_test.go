@@ -108,3 +108,65 @@ func TestGroupService_UploadThumbnail(t *testing.T) {
 		})
 	}
 }
+
+func TestGroupService_ContainsUserID(t *testing.T) {
+	testCases := map[string]struct {
+		Group    *group.Group
+		UserID   string
+		Expected bool
+	}{
+		"ok": {
+			Group: &group.Group{
+				ID:           "group-id",
+				Name:         "テストグループ",
+				ThumbnailURL: "",
+				UserIDs:      []string{"user-id"},
+			},
+			UserID:   "user-id",
+			Expected: true,
+		},
+		"ng": {
+			Group: &group.Group{
+				ID:           "group-id",
+				Name:         "テストグループ",
+				ThumbnailURL: "",
+				UserIDs:      []string{},
+			},
+			UserID:   "user-id",
+			Expected: false,
+		},
+	}
+
+	for result, testCase := range testCases {
+		ctx, cancel := context.WithCancel(context.Background())
+		defer cancel()
+
+		ctrl := gomock.NewController(t)
+		defer ctrl.Finish()
+
+		// Defined mocks
+		gdvm := mock_group.NewMockGroupDomainValidation(ctrl)
+
+		grm := mock_group.NewMockGroupRepository(ctrl)
+
+		gum := mock_group.NewMockGroupUploader(ctrl)
+
+		acm := mock_api.NewMockAPIClient(ctrl)
+
+		// Start test
+		t.Run(result, func(t *testing.T) {
+			target := NewGroupService(gdvm, grm, gum, acm)
+
+			got, err := target.ContainsUserID(ctx, testCase.Group, testCase.UserID)
+			if err != nil {
+				t.Fatalf("error: %v", err)
+				return
+			}
+
+			if !reflect.DeepEqual(got, testCase.Expected) {
+				t.Fatalf("want %#v, but %#v", testCase.Expected, got)
+				return
+			}
+		})
+	}
+}

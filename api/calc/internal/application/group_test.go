@@ -56,6 +56,7 @@ func TestGroupApplication_Create(t *testing.T) {
 
 		gsm := mock_group.NewMockGroupService(ctrl)
 		gsm.EXPECT().Create(ctx, g).Return(g, nil)
+		gsm.EXPECT().ContainsUserID(ctx, g, u.ID).Return(true, nil)
 
 		// Start test
 		t.Run(result, func(t *testing.T) {

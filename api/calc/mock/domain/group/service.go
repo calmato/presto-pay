@@ -63,3 +63,18 @@ func (mr *MockGroupServiceMockRecorder) UploadThumbnail(ctx, data interface{}) *
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UploadThumbnail", reflect.TypeOf((*MockGroupService)(nil).UploadThumbnail), ctx, data)
 }
+
+// ContainsUserID mocks base method
+func (m *MockGroupService) ContainsUserID(ctx context.Context, g *group.Group, userID string) (bool, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ContainsUserID", ctx, g, userID)
+	ret0, _ := ret[0].(bool)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ContainsUserID indicates an expected call of ContainsUserID
+func (mr *MockGroupServiceMockRecorder) ContainsUserID(ctx, g, userID interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ContainsUserID", reflect.TypeOf((*MockGroupService)(nil).ContainsUserID), ctx, g, userID)
+}
