@@ -12,26 +12,27 @@
       android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:layout_marginStart="16dp"
+      android:layout_marginTop="24dp"
       android:layout_marginEnd="16dp"
-      android:layout_marginBottom="16dp"
       android:backgroundTint="@color/ourTheme"
       android:text="@string/create_new_account"
       android:textColor="@android:color/white"
       android:textSize="18sp"
-      app:layout_constraintBottom_toTopOf="@+id/hasAccountText"
       app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toStartOf="parent" />
+      app:layout_constraintHorizontal_bias="0.0"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/constraintLayout2" />
 
     <TextView
       android:id="@+id/hasAccountText"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_marginBottom="80dp"
+      android:layout_marginTop="24dp"
       android:text="@string/already_has_an_account"
       android:textSize="18sp"
-      app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toStartOf="parent" />
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/createAccountButton" />
 
     <TextView
       android:id="@+id/editPhotoText"
@@ -62,8 +63,8 @@
       android:id="@+id/constraintLayout2"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
-      app:layout_constraintBottom_toTopOf="@+id/createAccountButton"
       app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="1.0"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/editPhotoText">
 
@@ -101,6 +102,7 @@
         android:ems="10"
         android:hint="@string/password_confirm"
         android:inputType="textPassword"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
