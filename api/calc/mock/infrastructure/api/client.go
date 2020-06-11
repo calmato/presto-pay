@@ -63,3 +63,31 @@ func (mr *MockAPIClientMockRecorder) UserExists(ctx, userID interface{}) *gomock
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UserExists", reflect.TypeOf((*MockAPIClient)(nil).UserExists), ctx, userID)
 }
+
+// AddGroup mocks base method
+func (m *MockAPIClient) AddGroup(ctx context.Context, userID, groupID string) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "AddGroup", ctx, userID, groupID)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// AddGroup indicates an expected call of AddGroup
+func (mr *MockAPIClientMockRecorder) AddGroup(ctx, userID, groupID interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AddGroup", reflect.TypeOf((*MockAPIClient)(nil).AddGroup), ctx, userID, groupID)
+}
+
+// RemoveGroup mocks base method
+func (m *MockAPIClient) RemoveGroup(ctx context.Context, userID, groupID string) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "RemoveGroup", ctx, userID, groupID)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// RemoveGroup indicates an expected call of RemoveGroup
+func (mr *MockAPIClientMockRecorder) RemoveGroup(ctx, userID, groupID interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RemoveGroup", reflect.TypeOf((*MockAPIClient)(nil).RemoveGroup), ctx, userID, groupID)
+}
