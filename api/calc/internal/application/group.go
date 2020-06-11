@@ -57,6 +57,8 @@ func (ga *groupApplication) Create(ctx context.Context, req *request.CreateGroup
 		UserIDs:      req.UserIDs,
 	}
 
+	// TODO: g.UserIDsとu.IDの比較してなければ足すってのしたい
+
 	if _, err = ga.groupService.Create(ctx, g); err != nil {
 		return nil, err
 	}
