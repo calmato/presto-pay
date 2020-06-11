@@ -41,6 +41,11 @@ func (ga *groupApplication) Create(ctx context.Context, req *request.CreateGroup
 		return nil, domain.Unauthorized.New(err)
 	}
 
+	if ves := ga.groupRequestValidation.CreateGroup(req); len(ves) > 0 {
+		err := xerrors.New("Failed to RequestValidation")
+		return nil, domain.InvalidRequestValidation.New(err, ves...)
+	}
+
 	thumbnailURL, err := getThumbnailURL(ctx, ga, req.Thumbnail)
 	if err != nil {
 		return nil, err
