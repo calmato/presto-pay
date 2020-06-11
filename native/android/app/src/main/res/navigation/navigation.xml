@@ -3,7 +3,7 @@
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   android:id="@+id/navigation"
-  app:startDestination="@id/new_account_fragment">
+  app:startDestination="@id/mail_check_fragment">
 
   <fragment
     android:id="@+id/login_fragment"
@@ -12,20 +12,19 @@
     tools:layout="@layout/fragment_login">
     <action
       android:id="@+id/action_loginFragment_to_newAccountFragment"
-      app:destination="@+id/new_account_fragment"
-      />
+      app:destination="@+id/new_account_fragment" />
     <action
       android:id="@+id/action_login_fragment_to_home_fragment"
       app:destination="@id/home_fragment" />
+    <action
+      android:id="@+id/action_login_fragment_to_resetPassFragment"
+      app:destination="@id/resetPassFragment" />
   </fragment>
   <fragment
     android:id="@+id/new_account_fragment"
     android:name="work.calmato.prestopay.ui.newAccount.NewAccountFragment"
     android:label="fragment_new_account"
     tools:layout="@layout/fragment_new_account">
-    <action
-      android:id="@+id/action_newAccountFragment_to_mailCheckFragment"
-      app:destination="@+id/mail_check_fragment" />
     <action
       android:id="@+id/action_new_account_fragment_to_login_fragment"
       app:destination="@id/login_fragment" />
@@ -39,18 +38,18 @@
       android:id="@+id/action_mailCheckFragment_to_loginFragment"
       app:destination="@+id/login_fragment" />
   </fragment>
-    <fragment
+  <fragment
     android:id="@+id/home_fragment"
     android:name="work.calmato.prestopay.ui.home.HomeFragment"
     android:label="fragment_home"
     tools:layout="@layout/fragment_home">
-      <action
-        android:id="@+id/action_home_fragment_to_account_home"
-        app:destination="@id/account_home" />
-      <action
-        android:id="@+id/action_home_fragment_to_createGroupFragment"
-        app:destination="@id/createGroupFragment" />
-    </fragment>
+    <action
+      android:id="@+id/action_home_fragment_to_account_home"
+      app:destination="@id/account_home" />
+    <action
+      android:id="@+id/action_home_fragment_to_createGroupFragment"
+      app:destination="@id/createGroupFragment" />
+  </fragment>
   <fragment
     android:id="@+id/account_home"
     android:name="work.calmato.prestopay.ui.accountHome.AccountHomeFragment"
@@ -66,6 +65,14 @@
     android:name="work.calmato.prestopay.ui.createGroup.CreateGroupFragment"
     android:label="fragment_create_group"
     tools:layout="@layout/fragment_create_group" />
-
+  <fragment
+    android:id="@+id/resetPassFragment"
+    android:name="work.calmato.prestopay.ui.resetPass.ResetPassFragment"
+    android:label="ResetPassFragment"
+    tools:layout="@layout/fragment_reset_pass">
+    <action
+      android:id="@+id/action_resetPassFragment_to_mail_check_fragment"
+      app:destination="@id/mail_check_fragment" />
+  </fragment>
 
 </navigation>
