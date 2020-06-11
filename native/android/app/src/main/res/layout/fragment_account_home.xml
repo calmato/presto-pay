@@ -242,6 +242,7 @@
         android:id="@+id/displayHelpButton"
         android:layout_width="0dp"
         android:layout_height="64dp"
+        android:alpha="0.2"
         android:background="@drawable/clear_button_bg"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
