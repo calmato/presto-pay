@@ -16,10 +16,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.iid.FirebaseInstanceId
 import kotlinx.android.synthetic.main.fragment_login.*
-import work.calmato.prestopay.MainActivity
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentLoginBinding
-import work.calmato.prestopay.ui.newAccount.NewAccountFragmentDirections
 
 
 class LoginFragment : Fragment() {
@@ -53,13 +51,21 @@ class LoginFragment : Fragment() {
     val value = sharedPreferences.getString("token", null)
     Log.d(TAG, "token default: " + value)
     auth = FirebaseAuth.getInstance()
+
+    loginForgetText.setOnClickListener {
+      this.findNavController().navigate(
+        LoginFragmentDirections.actionLoginFragmentToResetPassFragment()
+      )
+    }
   }
-    override fun onStart() {
+
+  override fun onStart() {
     super.onStart()
     // Check if user is signed in (non-null) and update UI accordingly.
     val currentUser = auth.currentUser
     updateUI(currentUser)
   }
+
   @SuppressLint("ShowToast")
   private fun singInAccount(email: String, password: String) {
     Log.d(TAG, "signInAccount:$email")
@@ -96,16 +102,18 @@ class LoginFragment : Fragment() {
     }
     // [END create_user_with_email]
   }
+
   private fun updateUI(user: FirebaseUser?) {
     if (user != null) {
       //home pageの遷移
-      Log.d(TAG,user.email)
+      Log.d(TAG, user.email)
       user.getIdToken(true)
       this.findNavController().navigate(
         LoginFragmentDirections.actionLoginFragmentToHomeFragment()
       )
     }
   }
+
   companion object {
     internal const val TAG = "EmailPassword"
   }
