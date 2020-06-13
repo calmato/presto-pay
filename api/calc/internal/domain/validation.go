@@ -25,5 +25,6 @@ const (
 // カスタムバリデーションメッセージ
 const (
 	CustomUniqueMessage        = "already exists"
+	CustomNotExistsMessage     = "contains a value that does not exist"
 	UnableConvertBase64Massage = "cannot be converted to base64"
 )
