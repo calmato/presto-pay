@@ -10,7 +10,7 @@ RUN apk add --no-cache \
       git \
       make
 
-ADD ./api/user ./
+ADD ./api/calc ./
 RUN make build
 
 # 実行用コンテナ
