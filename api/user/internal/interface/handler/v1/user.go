@@ -52,6 +52,7 @@ func (uh *apiV1UserHandler) Show(ctx *gin.Context) {
 		Username:     u.Username,
 		Email:        u.Email,
 		ThumbnailURL: u.ThumbnailURL,
+		GroupIDs:     u.GroupIDs,
 		CreatedAt:    u.CreatedAt,
 		UpdatedAt:    u.UpdatedAt,
 	}
@@ -73,6 +74,7 @@ func (uh *apiV1UserHandler) ShowProfile(ctx *gin.Context) {
 		Username:     u.Username,
 		Email:        u.Email,
 		ThumbnailURL: u.ThumbnailURL,
+		GroupIDs:     u.GroupIDs,
 		CreatedAt:    u.CreatedAt,
 		UpdatedAt:    u.UpdatedAt,
 	}
@@ -100,6 +102,7 @@ func (uh *apiV1UserHandler) Create(ctx *gin.Context) {
 		Username:     u.Username,
 		Email:        u.Email,
 		ThumbnailURL: u.ThumbnailURL,
+		GroupIDs:     u.GroupIDs,
 		CreatedAt:    u.CreatedAt,
 		UpdatedAt:    u.UpdatedAt,
 	}
@@ -127,6 +130,7 @@ func (uh *apiV1UserHandler) UpdateProfile(ctx *gin.Context) {
 		Username:     u.Username,
 		Email:        u.Email,
 		ThumbnailURL: u.ThumbnailURL,
+		GroupIDs:     u.GroupIDs,
 		CreatedAt:    u.CreatedAt,
 		UpdatedAt:    u.UpdatedAt,
 	}
@@ -210,6 +214,7 @@ func (uh *apiV1UserHandler) AddGroup(ctx *gin.Context) {
 		Username:     u.Username,
 		Email:        u.Email,
 		ThumbnailURL: u.ThumbnailURL,
+		GroupIDs:     u.GroupIDs,
 		CreatedAt:    u.CreatedAt,
 		UpdatedAt:    u.UpdatedAt,
 	}
@@ -234,6 +239,7 @@ func (uh *apiV1UserHandler) RemoveGroup(ctx *gin.Context) {
 		Username:     u.Username,
 		Email:        u.Email,
 		ThumbnailURL: u.ThumbnailURL,
+		GroupIDs:     u.GroupIDs,
 		CreatedAt:    u.CreatedAt,
 		UpdatedAt:    u.UpdatedAt,
 	}
