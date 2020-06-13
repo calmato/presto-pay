@@ -31,4 +31,5 @@ update-deployment:
 	kubectl patch deploy ${APP_NAME} -p "{\"spec\": {\"template\": {\"metadata\": {\"labels\": {\"date\": \"${CURRENT}\" }}}}}"
 
 update-deployment-all:
-	$(MAKE) update-deployment APPNAME=user-api
+	$(MAKE) update-deployment APP_NAME=user-api
+	$(MAKE) update-deployment APP_NAME=calc-api
