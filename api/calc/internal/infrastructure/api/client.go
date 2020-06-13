@@ -51,8 +51,14 @@ func (c *Client) Authentication(ctx context.Context) (*user.User, error) {
 		return nil, err
 	}
 
-	if _, err := getStatus(res); err != nil {
+	status, err := getStatus(res)
+	if err != nil {
 		return nil, err
+	}
+
+	// TODO: refactor
+	if status < 200 || status > 299 {
+		return nil, xerrors.New("Unknown error")
 	}
 
 	defer res.Body.Close()
