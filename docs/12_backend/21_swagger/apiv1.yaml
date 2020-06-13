@@ -288,7 +288,7 @@ components:
                 description: ユーザー名
 
     CreateGroup:
-      description: グループ作成:w
+      description: グループ作成
       required: true
       content:
         application/json:
