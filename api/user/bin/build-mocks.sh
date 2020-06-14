@@ -20,9 +20,9 @@ build_mock() {
   mockgen -source internal/${target} -destination mock/${target}
 }
 
-domain() {
-  dir_name='domain'
-  file_name=$1
+build_file() {
+  dir_name=$1
+  file_name=$2
 
   paths=$(find internal/${dir_name} -name ${file_name} \
     | grep -vE ${ignore_lists} \
@@ -35,8 +35,8 @@ domain() {
   done
 }
 
-application() {
-  dir_name="application/$1"
+build_package() {
+  dir_name="$1/$2"
   mkdir -p mock/${dir_name}
 
   paths=$(find internal/${dir_name} -name '*.go' \
@@ -52,10 +52,13 @@ application() {
 # Target
 #############################
 # --- Domain ---
-domain 'repository.go'
-domain 'service.go'
-domain 'uploader.go'
-domain 'validation.go'
+build_file 'domain' 'repository.go'
+build_file 'domain' 'service.go'
+build_file 'domain' 'uploader.go'
+build_file 'domain' 'validation.go'
 
 # --- Application ---
-application 'validation'
+build_package 'application' 'validation'
+
+# --- Infrastructure ---
+# build_package 'infrastructure' 'api'

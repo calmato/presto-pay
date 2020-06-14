@@ -11,3 +11,19 @@ services:
       - 8000:8080
     environment:
       SWAGGER_JSON: /swagger.yaml
+
+  console:
+    container_name: presto_pay_admin
+    build:
+      context: ./infra/docker/web/admin
+      dockerfile: Dockerfile_development
+    working_dir: /web/admin
+    volumes:
+      - ./web/admin:/web/admin:cached
+    ports:
+      - 8100:3000
+    environment:
+      - FIREBASE_API_KEY=${FIREBASE_API_KEY}
+      - FIREBASE_PROJECT_ID=${FIREBASE_PROJECT_ID}
+      - FIREBASE_MESSAGING_SENDER_ID=${FIREBASE_MESSAGING_SENDER_ID}
+    command: yarn dev -H 0.0.0.0 -p 3000

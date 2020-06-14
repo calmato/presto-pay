@@ -51,8 +51,10 @@ github.com/calmato/gran v0.0.0-20200511134047-18998a6ce8a1 h1:6m0XGKeHCOwuCf6a1k
 github.com/calmato/gran/api/user v0.0.0-20200511134047-18998a6ce8a1 h1:wYeDCw68fVp3ZtftpZGp7L5oEBhGFqVzoHuTGroZPvw=
 github.com/calmato/gran/api/user v0.0.0-20200511134047-18998a6ce8a1/go.mod h1:Qgpniby3zsJicOvOCMohyFFQcjgHsTW/MqzZHKNJOOw=
 github.com/calmato/presto-pay v0.0.0-20200607104734-4491a3f72edc h1:O/2FQ7LHtXgBwRiO11JuOEoPRhcw3wH/XKismK6ZlsU=
+github.com/calmato/presto-pay v0.0.0-20200609160232-20877c45a805 h1:76TPZGRNQu0emycSxnWrV2W2rmQ83s64oONisu5W6lA=
 github.com/calmato/presto-pay/api/user v0.0.0-20200607104734-4491a3f72edc h1:LAEOmRqAFn54uESDRzVoZglzXRs5B7BSsjphfewFo8A=
 github.com/calmato/presto-pay/api/user v0.0.0-20200607104734-4491a3f72edc/go.mod h1:Biv6ej/C2nU0ekHGPw8OGN11eMSawSiVVTh3mO8LdK4=
+github.com/calmato/presto-pay/api/user v0.0.0-20200609160232-20877c45a805 h1:9eEFew72Hn493OQA2tMpvJfX0EYXKDFNP1aGBQri9SI=
 github.com/census-instrumentation/opencensus-proto v0.2.1/go.mod h1:f6KPmirojxKA12rnyqOA5BBL4O983OfeGPqjHWSTneU=
 github.com/cespare/xxhash/v2 v2.1.1 h1:6MnRN8NT7+YBpUIWxHtefFZOKTAPgGjpQSxqLNn0+qY=
 github.com/cespare/xxhash/v2 v2.1.1/go.mod h1:VGX0DQ3Q6kWi7AoAeZDth3/j3BFtOZR5XLFGgcrjCOs=

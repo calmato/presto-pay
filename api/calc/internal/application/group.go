@@ -36,9 +36,14 @@ func NewGroupApplication(
 }
 
 func (ga *groupApplication) Create(ctx context.Context, req *request.CreateGroup) (*group.Group, error) {
-	_, err := ga.userService.Authentication(ctx)
+	u, err := ga.userService.Authentication(ctx)
 	if err != nil {
 		return nil, domain.Unauthorized.New(err)
+	}
+
+	if ves := ga.groupRequestValidation.CreateGroup(req); len(ves) > 0 {
+		err := xerrors.New("Failed to RequestValidation")
+		return nil, domain.InvalidRequestValidation.New(err, ves...)
 	}
 
 	thumbnailURL, err := getThumbnailURL(ctx, ga, req.Thumbnail)
@@ -50,6 +55,15 @@ func (ga *groupApplication) Create(ctx context.Context, req *request.CreateGroup
 		Name:         req.Name,
 		ThumbnailURL: thumbnailURL,
 		UserIDs:      req.UserIDs,
+	}
+
+	contrains, err := ga.groupService.ContainsUserID(ctx, g, u.ID)
+	if err != nil {
+		return nil, err
+	}
+
+	if !contrains {
+		g.UserIDs = append(g.UserIDs, u.ID)
 	}
 
 	if _, err = ga.groupService.Create(ctx, g); err != nil {
