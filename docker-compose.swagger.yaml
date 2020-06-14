@@ -12,7 +12,7 @@ services:
     environment:
       SWAGGER_JSON: /swagger.yaml
 
-  console:
+  admin:
     container_name: presto_pay_admin
     build:
       context: ./infra/docker/web/admin

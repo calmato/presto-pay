@@ -18,8 +18,8 @@ const configuration: Configuration = {
   },
   loading: { color: '#fff' },
   css: ['firebaseui/dist/firebaseui.css'],
-  plugins: ['~/plugins/firebase'],
-  buildModules: ['@nuxt/typescript-build'],
+  plugins: ['~/plugins/firebase', '~/plugins/vuetify'],
+  buildModules: ['@nuxt/typescript-build', '@nuxtjs/vuetify'],
   typescript: {
     typeCheck: {
       eslint: true
