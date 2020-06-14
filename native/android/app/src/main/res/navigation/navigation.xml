@@ -61,7 +61,7 @@
       app:destination="@id/login_fragment" />
     <action
       android:id="@+id/action_account_home_to_resetPassLoginFragment"
-      app:destination="@id/resetPassLoginFragment" />
+      app:destination="@id/updatePassLoginFragment" />
   </fragment>
   <fragment
     android:id="@+id/createGroupFragment"
@@ -78,12 +78,12 @@
       app:destination="@id/mail_check_fragment" />
   </fragment>
   <fragment
-    android:id="@+id/resetPassLoginFragment"
-    android:name="work.calmato.prestopay.ui.resetPassLogin.ResetPassLoginFragment"
-    android:label="ResetPassLoginFragment"
-    tools:layout="@layout/fragment_reset_pass_login">
+    android:id="@+id/updatePassLoginFragment"
+    android:name="work.calmato.prestopay.ui.resetPassLogin.UpdatePassLoginFragment"
+    android:label="UpdatePassLoginFragment"
+    tools:layout="@layout/fragment_update_pass_login">
     <action
-      android:id="@+id/action_resetPassLoginFragment_to_account_home"
+      android:id="@+id/action_updatePassLoginFragment_to_account_home"
       app:destination="@id/account_home" />
   </fragment>
 </navigation>

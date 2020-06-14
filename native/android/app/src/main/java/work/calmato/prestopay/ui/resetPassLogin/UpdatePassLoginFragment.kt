@@ -10,18 +10,18 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
-import kotlinx.android.synthetic.main.fragment_reset_pass_login.*
+import kotlinx.android.synthetic.main.fragment_update_pass_login.*
 import work.calmato.prestopay.R
-import work.calmato.prestopay.databinding.FragmentResetPassLoginBinding
+import work.calmato.prestopay.databinding.FragmentUpdatePassLoginBinding
 
-class ResetPassLoginFragment : Fragment() {
+class UpdatePassLoginFragment : Fragment() {
   override fun onCreateView(
     inflater: LayoutInflater,
     container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View? {
-    val binding: FragmentResetPassLoginBinding = DataBindingUtil.inflate(
-      inflater, R.layout.fragment_reset_pass_login, container, false
+    val binding: FragmentUpdatePassLoginBinding = DataBindingUtil.inflate(
+      inflater, R.layout.fragment_update_pass_login, container, false
     )
     return binding.root
   }
@@ -46,7 +46,8 @@ class ResetPassLoginFragment : Fragment() {
             if (it.isSuccessful) {
               Toast.makeText(requireContext(), "パスワードを変更しました", Toast.LENGTH_SHORT).show()
               this.findNavController().navigate(
-                ResetPassLoginFragmentDirections.actionResetPassLoginFragmentToAccountHome()
+                UpdatePassLoginFragmentDirections.actionUpdatePassLoginFragmentToAccountHome()
+
               )
             } else {
               Toast.makeText(requireContext(), it.exception!!.message.toString(), Toast.LENGTH_LONG)
