@@ -52,4 +52,6 @@
   <string name="add_member">メンバーを追加する</string>
   <string name="add_friend">add friend</string>
   <string name="right_arrow">right arrow</string>
+    <string name="email_address">Email address</string>
+  <string name="description_reset_pass">にパスワードを変更するリンクを送信します。\n現在のパスワードを入力してください。</string>
 </resources>
