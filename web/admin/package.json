@@ -28,6 +28,7 @@
     "eslint-config-prettier": "^6.10.0",
     "eslint-plugin-nuxt": ">=0.4.2",
     "eslint-plugin-prettier": "^3.1.2",
+    "nuxt-clipboard2": "^0.2.1",
     "prettier": "^1.19.1"
   }
 }

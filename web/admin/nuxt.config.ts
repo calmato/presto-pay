@@ -20,6 +20,7 @@ const configuration: Configuration = {
   loading: { color: '#fff' },
   css: ['firebaseui/dist/firebaseui.css'],
   plugins: ['~/plugins/firebase', '~/plugins/vuetify'],
+  modules: ['nuxt-clipboard2'],
   buildModules: ['@nuxt/typescript-build', '@nuxtjs/vuetify'],
   typescript: {
     typeCheck: {
