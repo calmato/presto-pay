@@ -5,6 +5,7 @@ import (
 
 	"github.com/calmato/presto-pay/api/calc/internal/application"
 	"github.com/calmato/presto-pay/api/calc/internal/application/request"
+	"github.com/calmato/presto-pay/api/calc/internal/application/response"
 	"github.com/calmato/presto-pay/api/calc/internal/domain"
 	"github.com/calmato/presto-pay/api/calc/internal/interface/handler"
 	"github.com/calmato/presto-pay/api/calc/middleware"
@@ -35,11 +36,20 @@ func (gh *apiV1GroupHandler) Create(ctx *gin.Context) {
 	}
 
 	c := middleware.GinContextToContext(ctx)
-	_, err := gh.groupApplication.Create(c, req)
+	g, err := gh.groupApplication.Create(c, req)
 	if err != nil {
 		handler.ErrorHandling(ctx, err)
 		return
 	}
 
-	ctx.JSON(http.StatusOK, gin.H{})
+	res := &response.CreateGroup{
+		ID:           g.ID,
+		Name:         g.Name,
+		ThumbnailURL: g.ThumbnailURL,
+		UserIDs:      g.UserIDs,
+		CreatedAt:    g.CreatedAt,
+		UpdatedAt:    g.UpdatedAt,
+	}
+
+	ctx.JSON(http.StatusOK, res)
 }

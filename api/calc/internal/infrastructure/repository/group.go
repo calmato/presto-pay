@@ -25,9 +25,5 @@ func (gr *groupRepository) Create(ctx context.Context, g *group.Group) error {
 		return err
 	}
 
-	// TODO: UserIDsのユニーク検証
-
-	// TODO: UserIDの存在性検証
-
 	return nil
 }

@@ -41,6 +41,7 @@ swagger-edit:
 # Container Commands - Terraform
 ##################################################
 .PHONY: terraform-stg-setup
+
 terraform-stg-setup:
 	docker-compose run --rm terraform make init ENV=stg
 

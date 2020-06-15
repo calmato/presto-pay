@@ -3,7 +3,7 @@
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   android:id="@+id/navigation"
-  app:startDestination="@id/account_home">
+  app:startDestination="@id/login_fragment">
 
   <fragment
     android:id="@+id/login_fragment"
@@ -59,6 +59,9 @@
     <action
       android:id="@+id/action_account_home_to_login_fragment"
       app:destination="@id/login_fragment" />
+    <action
+      android:id="@+id/action_account_home_to_resetPassLoginFragment"
+      app:destination="@id/updatePassLoginFragment" />
   </fragment>
   <fragment
     android:id="@+id/createGroupFragment"
@@ -74,5 +77,13 @@
       android:id="@+id/action_resetPassFragment_to_mail_check_fragment"
       app:destination="@id/mail_check_fragment" />
   </fragment>
-
+  <fragment
+    android:id="@+id/updatePassLoginFragment"
+    android:name="work.calmato.prestopay.ui.resetPassLogin.UpdatePassLoginFragment"
+    android:label="UpdatePassLoginFragment"
+    tools:layout="@layout/fragment_update_pass_login">
+    <action
+      android:id="@+id/action_updatePassLoginFragment_to_account_home"
+      app:destination="@id/account_home" />
+  </fragment>
 </navigation>

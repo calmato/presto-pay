@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto">
+
+  <androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <EditText
+      android:id="@+id/currentPassEdit"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="32dp"
+      android:layout_marginEnd="32dp"
+      android:autofillHints=""
+      android:ems="10"
+      android:hint="Current Password"
+      android:inputType="textPassword"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      app:layout_constraintVertical_bias="0.30" />
+
+    <TextView
+      android:id="@+id/currentPassText"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="現在のパスワード"
+      android:textColor="@android:color/background_dark"
+      android:textSize="18sp"
+      app:layout_constraintBottom_toTopOf="@+id/currentPassEdit"
+      app:layout_constraintStart_toStartOf="@+id/currentPassEdit" />
+
+    <Button
+      android:id="@+id/changePassButton"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="16dp"
+      android:layout_marginTop="32dp"
+      android:layout_marginEnd="16dp"
+      android:background="@color/ourTheme"
+      android:text="パスワードの変更"
+      android:textColor="@android:color/background_light"
+      app:layout_constraintEnd_toEndOf="@+id/passConfirmEdit"
+      app:layout_constraintStart_toStartOf="@+id/passConfirmEdit"
+      app:layout_constraintTop_toBottomOf="@+id/passConfirmEdit" />
+
+    <TextView
+      android:id="@+id/newPassText"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="新しいパスワード"
+      android:textColor="@android:color/black"
+      android:textSize="18sp"
+      app:layout_constraintBottom_toTopOf="@+id/newPassEdit"
+      app:layout_constraintStart_toStartOf="@+id/newPassEdit" />
+
+    <EditText
+      android:id="@+id/newPassEdit"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="32dp"
+      android:ems="10"
+      android:hint="New Password"
+      android:inputType="textPassword"
+      app:layout_constraintEnd_toEndOf="@+id/currentPassEdit"
+      app:layout_constraintStart_toStartOf="@+id/currentPassEdit"
+      app:layout_constraintTop_toBottomOf="@+id/currentPassEdit"
+      android:autofillHints="" />
+
+    <TextView
+      android:id="@+id/passConfirmText"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="新しいパスワードの確認"
+      android:textColor="@android:color/black"
+      android:textSize="18sp"
+      app:layout_constraintBottom_toTopOf="@+id/passConfirmEdit"
+      app:layout_constraintStart_toStartOf="@+id/passConfirmEdit" />
+
+    <EditText
+      android:id="@+id/passConfirmEdit"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="32dp"
+      android:ems="10"
+      android:hint="Confirm Password"
+      android:inputType="textPassword"
+      app:layout_constraintEnd_toEndOf="@+id/newPassEdit"
+      app:layout_constraintStart_toStartOf="@+id/newPassEdit"
+      app:layout_constraintTop_toBottomOf="@+id/newPassEdit"
+      android:autofillHints="" />
+
+  </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -1,0 +1,224 @@
+openapi: '3.0.0'
+
+info:
+  title: Presto Pay
+  description: 割り勘アプリ API設計 (サービス間通信用)
+  version: 0.1.0
+
+servers:
+  - url: https://api.presto-pay-stg.calmato.work/internal
+    description: 検証環境
+  - url: http://localhost:8080/internal
+    description: 開発環境
+
+paths:
+  /users/{userId}/groups/{groupId}:
+    post:
+      summary: ユーザー グループ追加
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: userId
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: ユーザーUUID
+        - in: path
+          name: groupId
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: グループUUID
+      responses:
+        '200':
+          $ref: '#/components/responses/AddGroupUser'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/Unkown'
+
+    delete:
+      summary: ユーザー グループ削除
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: userId
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: ユーザーUUID
+        - in: path
+          name: groupId
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: グループUUID
+      responses:
+        '200':
+          $ref: '#/components/responses/RemoveGroupUser'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/Unkown'
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+
+  schemas:
+    Error:
+      title: エラーレスポンス
+      type: object
+      properties:
+        status:
+          type: integer
+          description: HTTPステータスコード
+        code:
+          type: integer
+          description: エラー管理用ステータスコード
+        message:
+          type: string
+          description: エラーメッセージ
+        errors:
+          type: array
+          description: エラー詳細
+          items:
+            properties:
+              field:
+                type: string
+              message:
+                type: string
+
+  responses:
+    BadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: NotFound
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Conflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unkown:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+    Empty:
+      description: 空のレスポンス
+      content:
+        application/json:
+          schema:
+            type: object
+
+    AddGroupUser:
+      description: ユーザー グループ追加APIのレスポンス
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              id:
+                type: string
+                format: uuid
+                description: ユーザーID
+              name:
+                type: string
+                description: 表示名
+              username:
+                type: string
+                description: ユーザー名
+              email:
+                type: string
+                format: email
+                description: メールアドレス
+              thumbnail:
+                type: string
+                description: サムネイルURL
+              groupIds:
+                type: array
+                description: グループID一覧
+                items:
+                  type: string
+              createdAt:
+                type: string
+                format: date-time
+                description: 作成日時
+              updatedAt:
+                type: string
+                format: date-time
+                description: 更新日時
+
+    RemoveGroupUser:
+      description: ユーザー グループ削除APIのレスポンス
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              id:
+                type: string
+                format: uuid
+                description: ユーザーID
+              name:
+                type: string
+                description: 表示名
+              username:
+                type: string
+                description: ユーザー名
+              email:
+                type: string
+                format: email
+                description: メールアドレス
+              thumbnail:
+                type: string
+                description: サムネイルURL
+              groupIds:
+                type: array
+                description: グループID一覧
+                items:
+                  type: string
+                  format: uuid
+              createdAt:
+                type: string
+                format: date-time
+                description: 作成日時
+              updatedAt:
+                type: string
+                format: date-time
+                description: 更新日時
