@@ -4,6 +4,7 @@ const configuration: Configuration = {
   mode: 'spa',
   srcDir: 'app',
   head: {
+    titleTemplate: '%s - ' + process.env.npm_package_name,
     title: process.env.npm_package_name || '',
     meta: [
       { charset: 'utf-8' },
@@ -18,8 +19,9 @@ const configuration: Configuration = {
   },
   loading: { color: '#fff' },
   css: ['firebaseui/dist/firebaseui.css'],
-  plugins: ['~/plugins/firebase'],
-  buildModules: ['@nuxt/typescript-build'],
+  plugins: ['~/plugins/firebase', '~/plugins/vuetify'],
+  modules: ['nuxt-clipboard2'],
+  buildModules: ['@nuxt/typescript-build', '@nuxtjs/vuetify'],
   typescript: {
     typeCheck: {
       eslint: true

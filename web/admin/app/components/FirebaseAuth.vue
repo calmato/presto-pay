@@ -3,9 +3,14 @@
     <div v-show="token == ''" id="firebaseui-auth-container" />
     <div v-show="token != ''">
       <p>UID: {{ id }}</p>
-      <p class="token">Token: {{ token }}</p>
+      <p class="token">
+        Token: {{ token | truncate }}
+        <v-btn icon @click="handleCopy">
+          <v-icon>mdi-clipboard-text</v-icon>
+        </v-btn>
+      </p>
 
-      <button @click="handleLogout">ログアウト</button>
+      <v-btn class="primary" @click="handleLogout">ログアウト</v-btn>
     </div>
   </div>
 </template>
@@ -16,6 +21,19 @@ import { mapActions, mapGetters } from 'vuex'
 import * as firebaseUI from 'firebaseui'
 
 export default Vue.extend({
+  filters: {
+    truncate: (value: string) => {
+      const length: number = 30
+      const ommision: string = '...'
+
+      if (value.length <= length) {
+        return value
+      }
+
+      return value.substring(0, length) + ommision
+    }
+  },
+
   computed: {
     ...mapGetters('auth', ['id', 'token'])
   },
@@ -40,6 +58,10 @@ export default Vue.extend({
   },
 
   methods: {
+    handleCopy() {
+      this.$copyText(this.token)
+    },
+
     handleLogout() {
       this.logout()
       this.$firebase.auth().signOut()
