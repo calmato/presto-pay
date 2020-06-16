@@ -50,3 +50,7 @@ login画面が表示されれば成功
 
 # Firebase Test Labの使い方
 > https://firebase.google.com/docs/test-lab/android/command-line?hl=ja
+
+# GoogleアカウントでのOauth認証の方法  
+実装後、以下のURLを参考にfirebase でフィンガープリントを追加する
+> https://medium.com/@riscait/apiexception-10-error-in-sign-in-with-google-using-firebase-auth-in-flutter-1be6a44a2086
