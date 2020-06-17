@@ -38,44 +38,34 @@
 
     <Button
       android:id="@+id/googleSingnin"
-      android:layout_width="337dp"
-      android:layout_height="43dp"
+      android:layout_width="248dp"
+      android:layout_height="53dp"
+      android:layout_marginStart="16dp"
+      android:layout_marginTop="20dp"
+      android:layout_marginEnd="16dp"
       android:background="@drawable/border"
       android:text="@string/google_signin"
       android:textAlignment="center"
-      app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.495"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="@+id/view"
-      app:layout_constraintVertical_bias="0.092" />
-
-    <Button
-      android:id="@+id/twitterSignin"
-      android:layout_width="0dp"
-      android:layout_height="43dp"
-      android:background="@drawable/border"
-      android:text="@string/google_signin"
-      android:textAlignment="center"
-      app:layout_constraintBottom_toBottomOf="parent"
-      app:layout_constraintEnd_toEndOf="@+id/googleSingnin"
-      app:layout_constraintHorizontal_bias="0.0"
-      app:layout_constraintStart_toStartOf="@+id/googleSingnin"
-      app:layout_constraintTop_toBottomOf="@+id/googleSingnin"
-      app:layout_constraintVertical_bias="0.132" />
+      app:layout_constraintTop_toTopOf="@+id/view" />
 
     <Button
       android:id="@+id/facebookSingin"
       android:layout_width="0dp"
       android:layout_height="43dp"
+      android:layout_marginTop="16dp"
+      android:layout_marginBottom="64dp"
       android:background="@drawable/border"
       android:text="@string/google_signin"
       android:textAlignment="center"
       app:layout_constraintBottom_toBottomOf="parent"
-      app:layout_constraintEnd_toEndOf="@+id/googleSingnin"
+      app:layout_constraintEnd_toEndOf="@+id/twitterLogInButton"
       app:layout_constraintHorizontal_bias="0.0"
-      app:layout_constraintStart_toStartOf="@+id/googleSingnin"
-      app:layout_constraintTop_toBottomOf="@+id/twitterSignin"
-      app:layout_constraintVertical_bias="0.204" />
+      app:layout_constraintStart_toStartOf="@+id/twitterLogInButton"
+      app:layout_constraintTop_toBottomOf="@+id/twitterLogInButton"
+      app:layout_constraintVertical_bias="0.0" />
 
     <Button
       android:id="@+id/loginButton"
@@ -122,26 +112,6 @@
       tools:ignore="MissingConstraints" />
 
     <ImageView
-      android:id="@+id/loginGoogleIcon"
-      android:layout_width="28dp"
-      android:layout_height="28dp"
-      android:src="@drawable/ic_google"
-      app:layout_constraintBottom_toBottomOf="@+id/googleSingnin"
-      app:layout_constraintEnd_toStartOf="@+id/googleSigninText"
-      app:layout_constraintStart_toStartOf="@+id/googleSingnin"
-      app:layout_constraintTop_toTopOf="@+id/googleSingnin" />
-
-    <ImageView
-      android:id="@+id/loginTwitterIcon"
-      android:layout_width="28dp"
-      android:layout_height="28dp"
-      android:src="@drawable/ic_twitter"
-      app:layout_constraintBottom_toBottomOf="@+id/twitterSignin"
-      app:layout_constraintEnd_toStartOf="@+id/twitterSigninText"
-      app:layout_constraintStart_toStartOf="@+id/twitterSignin"
-      app:layout_constraintTop_toTopOf="@+id/twitterSignin" />
-
-    <ImageView
       android:id="@+id/loginMailIcon"
       android:layout_width="28dp"
       android:layout_height="28dp"
@@ -174,21 +144,10 @@
       android:textSize="18sp"
       app:layout_constraintBottom_toBottomOf="@+id/googleSingnin"
       app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.543"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="@+id/googleSingnin"
-      app:layout_constraintVertical_bias="0.421" />
-
-    <TextView
-      android:id="@+id/twitterSigninText"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:text="@string/twitter_signin_text"
-      android:textSize="18sp"
-      app:layout_constraintBottom_toBottomOf="@+id/twitterSignin"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="@+id/twitterSignin"
-      app:layout_constraintVertical_bias="0.473" />
+      app:layout_constraintVertical_bias="0.448" />
 
     <TextView
       android:id="@+id/facebookSigninText"
@@ -198,7 +157,7 @@
       android:textSize="18sp"
       app:layout_constraintBottom_toBottomOf="@+id/facebookSingin"
       app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintHorizontal_bias="0.551"
+      app:layout_constraintHorizontal_bias="0.595"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="@+id/facebookSingin"
       app:layout_constraintVertical_bias="0.368" />
@@ -249,6 +208,26 @@
       app:layout_constraintEnd_toStartOf="@+id/facebookSigninText"
       app:layout_constraintStart_toStartOf="@+id/facebookSingin"
       app:layout_constraintTop_toTopOf="@+id/facebookSingin" />
+
+    <com.twitter.sdk.android.core.identity.TwitterLoginButton
+      android:id="@+id/twitterLogInButton"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="16dp"
+      app:layout_constraintEnd_toEndOf="@+id/googleSingnin"
+      app:layout_constraintHorizontal_bias="1.0"
+      app:layout_constraintStart_toStartOf="@+id/googleSingnin"
+      app:layout_constraintTop_toBottomOf="@+id/googleSingnin" />
+
+    <ImageView
+      android:id="@+id/loginGoogleIcon"
+      android:layout_width="28dp"
+      android:layout_height="28dp"
+      app:layout_constraintBottom_toBottomOf="@+id/googleSingnin"
+      app:layout_constraintEnd_toStartOf="@+id/googleSigninText"
+      app:layout_constraintStart_toStartOf="@+id/googleSingnin"
+      app:layout_constraintTop_toTopOf="@+id/googleSingnin"
+      app:srcCompat="@drawable/ic_google" />
 
   </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

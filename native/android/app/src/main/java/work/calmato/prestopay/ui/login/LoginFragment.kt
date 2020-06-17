@@ -21,7 +21,9 @@ import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.auth.TwitterAuthProvider
 import com.google.firebase.iid.FirebaseInstanceId
+import com.twitter.sdk.android.core.*
 import kotlinx.android.synthetic.main.fragment_login.*
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentLoginBinding
@@ -44,12 +46,14 @@ class LoginFragment : Fragment() {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
+
     loginNewText.setOnClickListener {
       this.findNavController().navigate(
         LoginFragmentDirections.actionLoginFragmentToNewAccountFragment()
       )
     }
 
+    //Google sign in
     val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
       .requestIdToken(getString(R.string.default_web_client_id))
       .requestEmail()
@@ -57,11 +61,41 @@ class LoginFragment : Fragment() {
 
     googleSignInClient = GoogleSignIn.getClient(requireContext(), gso)
 
+    //Twitter sign in
+    val mTwitterAuthConfig = TwitterAuthConfig(CONSUMER_KEY, CONSUMER_SECRET)
+    val twitterConfig = TwitterConfig.Builder(requireContext())
+      .twitterAuthConfig(mTwitterAuthConfig)
+      .build()
+    Twitter.initialize(twitterConfig)
+
+    twitterLogInButton.callback = object : Callback<TwitterSession>() {
+      override fun success(result: Result<TwitterSession>?) {
+        Log.d(TWITTER_TAG, "success")
+        if (result != null) {
+          firebaseAuthWithTwitter(result.data)
+        } else {
+          Toast.makeText(
+            requireContext(), "It couldn't be processed again please",
+            Toast.LENGTH_SHORT
+          ).show()
+        }
+      }
+
+      override fun failure(exception: TwitterException?) {
+        Toast.makeText(
+          requireContext(), "Login failed. No internet or No Twitter app found on your phone",
+          Toast.LENGTH_LONG
+        ).show()
+      }
+    }
+
+    //Auth check
     val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
     val value = sharedPreferences.getString("token", null)
-    Log.d(DEFAULTTAG, "token default: " + value)
+    Log.d(DEFAULT_TAG, "token default: " + value)
     auth = FirebaseAuth.getInstance()
 
+    //email password sign in
     loginButton.setOnClickListener {
       defaultSignIn(
         loginEmailFileld.text.toString(),
@@ -71,10 +105,6 @@ class LoginFragment : Fragment() {
 
     googleSingnin.setOnClickListener {
       googleSignIn()
-    }
-
-    twitterSignin.setOnClickListener {
-      twitterSignIn()
     }
 
     facebookSingin.setOnClickListener {
@@ -90,6 +120,7 @@ class LoginFragment : Fragment() {
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     super.onActivityResult(requestCode, resultCode, data)
+    twitterLogInButton.onActivityResult(requestCode, resultCode, data)
 
     if (requestCode == RC_SIGN_IN) {
       val task = GoogleSignIn.getSignedInAccountFromIntent(data)
@@ -99,7 +130,7 @@ class LoginFragment : Fragment() {
         firebaseAuthWithGoogle(account!!)
       } catch (e: ApiException) {
         // Google Sign In failed, update UI appropriately
-        Log.w(GOOGLETAG, "Google sign in failed", e)
+        Log.w(GOOGLE_TAG, "Google sign in failed", e)
         // [START_EXCLUDE]
         updateUI(null)
         // [END_EXCLUDE]
@@ -116,7 +147,7 @@ class LoginFragment : Fragment() {
 
   @SuppressLint("ShowToast")
   private fun defaultSignIn(email: String, password: String) {
-    Log.d(DEFAULTTAG, "signInAccount:$email")
+    Log.d(DEFAULT_TAG, "signInAccount:$email")
     // [START create_user_with_email]
     if (email != "" && password != "") {
       FirebaseInstanceId.getInstance().instanceId
@@ -124,7 +155,7 @@ class LoginFragment : Fragment() {
           auth.signInWithEmailAndPassword(email, password)
           if (task.isSuccessful) {
             // Sign in success, update UI with the signed-in user's information
-            Log.d(DEFAULTTAG, "signInWithEmail:success")
+            Log.d(DEFAULT_TAG, "signInWithEmail:success")
             val user = auth.currentUser
             user?.getIdToken(true)?.addOnCompleteListener(requireActivity()) { task ->
               val idToken = task.getResult()?.token
@@ -136,7 +167,7 @@ class LoginFragment : Fragment() {
             updateUI(user)
           } else {
             // If sign in fails, display a message to the user.
-            Log.w(DEFAULTTAG, "signInWithEmail:failure", task.exception)
+            Log.w(DEFAULT_TAG, "signInWithEmail:failure", task.exception)
             Toast.makeText(
               requireContext(), "Authentication failed.",
               Toast.LENGTH_SHORT
@@ -152,19 +183,19 @@ class LoginFragment : Fragment() {
   }
 
   private fun firebaseAuthWithGoogle(acct: GoogleSignInAccount) {
-    Log.d(GOOGLETAG, "firebaseAuthWithGoogle:" + acct.id)
+    Log.d(GOOGLE_TAG, "firebaseAuthWithGoogle:" + acct.id)
 
     val credential = GoogleAuthProvider.getCredential(acct.idToken, null)
     auth.signInWithCredential(credential)
       .addOnCompleteListener({ task ->
         if (task.isSuccessful) {
           // Sign in success, update UI with the signed-in user's information
-          Log.d(GOOGLETAG, "signInWithGoogle:success")
+          Log.d(GOOGLE_TAG, "signInWithGoogle:success")
           val user = auth.currentUser
           updateUI(user)
         } else {
           // If sign in fails, display a message to the user.
-          Log.w(GOOGLETAG, "signInWithCredential:failure", task.exception)
+          Log.w(GOOGLE_TAG, "signInWithCredential:failure", task.exception)
           Toast.makeText(
             requireContext(), "Authentication failed.",
             Toast.LENGTH_SHORT
@@ -179,8 +210,29 @@ class LoginFragment : Fragment() {
     startActivityForResult(signInIntent, RC_SIGN_IN)
   }
 
-  private fun twitterSignIn() {
+  private fun firebaseAuthWithTwitter(session: TwitterSession) {
+    val credential = TwitterAuthProvider.getCredential(
+      session.authToken.token,
+      session.authToken.secret
+    )
 
+    auth.signInWithCredential(credential)
+      .addOnCompleteListener({ task ->
+        if (task.isSuccessful) {
+          // Sign in success, update UI with the signed-in user's information
+          Log.d(TWITTER_TAG, "signInWithTwitter:success")
+          val user = auth.currentUser
+          updateUI(user)
+        } else {
+          // If sign in fails, display a message to the user.
+          Log.w(TWITTER_TAG, "signInWithCredential:failure", task.exception)
+          Toast.makeText(
+            requireContext(), "Authentication failed.",
+            Toast.LENGTH_SHORT
+          ).show()
+          updateUI(null)
+        }
+      })
   }
 
   private fun facebookSignIn() {
@@ -190,7 +242,7 @@ class LoginFragment : Fragment() {
   private fun updateUI(user: FirebaseUser?) {
     if (user != null) {
       //home pageの遷移
-      Log.d(DEFAULTTAG, user.email)
+      Log.d(DEFAULT_TAG, user.email)
       user.getIdToken(true)
       this.findNavController().navigate(
         LoginFragmentDirections.actionLoginFragmentToHomeFragment()
@@ -199,9 +251,11 @@ class LoginFragment : Fragment() {
   }
 
   companion object {
-    private const val DEFAULTTAG = "EmailPassword"
-    private const val GOOGLETAG = "GoogleActivity"
-    private const val TwitterTAG = "TWITTERActｋjkivity"
+    private const val DEFAULT_TAG = "EmailPassword"
+    private const val GOOGLE_TAG = "GoogleActivity"
+    private const val TWITTER_TAG = "TwitterActivity"
+    private const val CONSUMER_KEY = "OAMOPD8qs87lILvuu2JGEHuFU"
+    private const val CONSUMER_SECRET = "uuliUQSaxLZygMafGCzPE3xXLfY2RZrL26wmwSkNwHgFHV3Ab4"
     private const val RC_SIGN_IN = 9001
   }
 }
