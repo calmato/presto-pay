@@ -254,8 +254,8 @@ class LoginFragment : Fragment() {
     private const val DEFAULT_TAG = "EmailPassword"
     private const val GOOGLE_TAG = "GoogleActivity"
     private const val TWITTER_TAG = "TwitterActivity"
-    private const val CONSUMER_KEY = "OAMOPD8qs87lILvuu2JGEHuFU"
-    private const val CONSUMER_SECRET = "uuliUQSaxLZygMafGCzPE3xXLfY2RZrL26wmwSkNwHgFHV3Ab4"
+    private const val CONSUMER_KEY = "xxxxx"
+    private const val CONSUMER_SECRET = "xxxxx"
     private const val RC_SIGN_IN = 9001
   }
 }
