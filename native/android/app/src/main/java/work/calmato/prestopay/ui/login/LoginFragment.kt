@@ -36,7 +36,7 @@ class LoginFragment : Fragment() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     //Twitter sign in
-    val mTwitterAuthConfig = TwitterAuthConfig(CONSUMER_KEY, CONSUMER_SECRET)
+    val mTwitterAuthConfig = TwitterAuthConfig(getString(R.string.twitter_consumer_key), getString(R.string.twitter_consumer_secret))
     val twitterConfig = TwitterConfig.Builder(requireContext())
       .twitterAuthConfig(mTwitterAuthConfig)
       .debug(true)
@@ -56,8 +56,6 @@ class LoginFragment : Fragment() {
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
-
     super.onViewCreated(view, savedInstanceState)
 
     loginNewText.setOnClickListener {
@@ -66,6 +64,7 @@ class LoginFragment : Fragment() {
       )
     }
 
+    auth = FirebaseAuth.getInstance()
 
     //Google sign in
     val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -74,7 +73,6 @@ class LoginFragment : Fragment() {
       .build()
 
     googleSignInClient = GoogleSignIn.getClient(requireContext(), gso)
-
 
     twitterLogInButton.callback = object : Callback<TwitterSession>() {
       override fun success(result: Result<TwitterSession>?) {
@@ -117,7 +115,6 @@ class LoginFragment : Fragment() {
     val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
     val value = sharedPreferences.getString("token", null)
     Log.d(DEFAULT_TAG, "token default: " + value)
-    auth = FirebaseAuth.getInstance()
 
     loginForgetText.setOnClickListener {
       this.findNavController().navigate(

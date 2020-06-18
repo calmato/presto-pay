@@ -1,4 +1,6 @@
 <resources>
+  <string name="twitter_consumer_key" translatable="false">OAMOPD8qs87lILvuu2JGEHuFU</string>
+  <string name="twitter_consumer_secret" translatable="false">uuliUQSaxLZygMafGCzPE3xXLfY2RZrL26wmwSkNwHgFHV3Ab4</string>
   <string name="app_name">PrestoPay</string>
   <string name="create_new_account">アカウントを作成</string>
   <string name="already_has_an_account">既にアカウントをお持ちの方</string>
