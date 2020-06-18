@@ -56,9 +56,9 @@ dependencies {
   implementation 'com.google.firebase:firebase-analytics:17.4.3'
   implementation 'com.google.firebase:firebase-auth:19.3.1'
   implementation 'com.google.android.gms:play-services-auth:18.0.0'
+
   //Twitter SDK
-  implementation 'com.twitter.sdk.android:twitter:3.1.1'
-  implementation 'com.twitter.sdk.android:twitter-mopub:3.1.1'
+  compile 'com.twitter.sdk.android:twitter-core:3.1.1'
 
   implementation 'com.google.code.gson:gson:2.8.6'
   implementation 'com.squareup.retrofit2:retrofit:2.5.0'

@@ -33,6 +33,17 @@ class LoginFragment : Fragment() {
   private lateinit var auth: FirebaseAuth
   private lateinit var googleSignInClient: GoogleSignInClient
 
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    //Twitter sign in
+    val mTwitterAuthConfig = TwitterAuthConfig(CONSUMER_KEY, CONSUMER_SECRET)
+    val twitterConfig = TwitterConfig.Builder(requireContext())
+      .twitterAuthConfig(mTwitterAuthConfig)
+      .debug(true)
+      .build()
+    Twitter.initialize(twitterConfig)
+  }
+
   override fun onCreateView(
     inflater: LayoutInflater,
     container: ViewGroup?,
@@ -45,6 +56,8 @@ class LoginFragment : Fragment() {
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+
     super.onViewCreated(view, savedInstanceState)
 
     loginNewText.setOnClickListener {
@@ -52,6 +65,7 @@ class LoginFragment : Fragment() {
         LoginFragmentDirections.actionLoginFragmentToNewAccountFragment()
       )
     }
+
 
     //Google sign in
     val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -61,12 +75,6 @@ class LoginFragment : Fragment() {
 
     googleSignInClient = GoogleSignIn.getClient(requireContext(), gso)
 
-    //Twitter sign in
-    val mTwitterAuthConfig = TwitterAuthConfig(CONSUMER_KEY, CONSUMER_SECRET)
-    val twitterConfig = TwitterConfig.Builder(requireContext())
-      .twitterAuthConfig(mTwitterAuthConfig)
-      .build()
-    Twitter.initialize(twitterConfig)
 
     twitterLogInButton.callback = object : Callback<TwitterSession>() {
       override fun success(result: Result<TwitterSession>?) {
@@ -89,12 +97,6 @@ class LoginFragment : Fragment() {
       }
     }
 
-    //Auth check
-    val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
-    val value = sharedPreferences.getString("token", null)
-    Log.d(DEFAULT_TAG, "token default: " + value)
-    auth = FirebaseAuth.getInstance()
-
     //email password sign in
     loginButton.setOnClickListener {
       defaultSignIn(
@@ -110,6 +112,12 @@ class LoginFragment : Fragment() {
     facebookSingin.setOnClickListener {
       facebookSignIn()
     }
+
+    //Auth check
+    val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
+    val value = sharedPreferences.getString("token", null)
+    Log.d(DEFAULT_TAG, "token default: " + value)
+    auth = FirebaseAuth.getInstance()
 
     loginForgetText.setOnClickListener {
       this.findNavController().navigate(
@@ -254,8 +262,8 @@ class LoginFragment : Fragment() {
     private const val DEFAULT_TAG = "EmailPassword"
     private const val GOOGLE_TAG = "GoogleActivity"
     private const val TWITTER_TAG = "TwitterActivity"
-    private const val CONSUMER_KEY = "xxxxx"
-    private const val CONSUMER_SECRET = "xxxxx"
+    private const val CONSUMER_KEY = "OAMOPD8qs87lILvuu2JGEHuFU"
+    private const val CONSUMER_SECRET = "uuliUQSaxLZygMafGCzPE3xXLfY2RZrL26wmwSkNwHgFHV3Ab4"
     private const val RC_SIGN_IN = 9001
   }
 }
