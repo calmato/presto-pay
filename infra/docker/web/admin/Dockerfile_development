@@ -1,4 +1,9 @@
-FROM node:12.8.0-alpine
+FROM node:14.4.0-alpine
+
+RUN apk add \
+  g++ \
+  make \
+  python
 
 ENV LANG C.UTF-8
 ENV TZ Asia/Tokyo
