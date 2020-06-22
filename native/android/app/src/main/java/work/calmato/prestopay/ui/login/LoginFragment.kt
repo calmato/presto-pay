@@ -21,9 +21,8 @@ import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
-import com.google.firebase.auth.TwitterAuthProvider
 import com.google.firebase.iid.FirebaseInstanceId
-import com.twitter.sdk.android.core.*
+import com.twitter.sdk.android.core.TwitterAuthConfig
 import kotlinx.android.synthetic.main.fragment_login.*
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentLoginBinding
@@ -40,12 +39,12 @@ class LoginFragment : Fragment() {
       getString(R.string.twitter_consumer_key),
       getString(R.string.twitter_consumer_secret)
     )
-    val twitterConfig = TwitterConfig.Builder(requireContext())
+/*    val twitterConfig = TwitterConfig.Builder(requireContext())
       .logger(DefaultLogger(Log.DEBUG))
       .twitterAuthConfig(mTwitterAuthConfig)
       .debug(true)
       .build()
-    Twitter.initialize(twitterConfig)
+    Twitter.initialize(twitterConfig)*/
   }
 
   override fun onCreateView(
@@ -78,7 +77,7 @@ class LoginFragment : Fragment() {
 
     googleSignInClient = GoogleSignIn.getClient(requireContext(), gso)
 
-    twitterLogInButton.callback = object : Callback<TwitterSession>() {
+/*    twitterLogInButton.callback = object : Callback<TwitterSession>() {
       override fun success(result: Result<TwitterSession>?) {
         Log.d(TWITTER_TAG, "success")
         if (result != null) {
@@ -98,6 +97,7 @@ class LoginFragment : Fragment() {
         ).show()
       }
     }
+    */
     //email password sign in
     loginButton.setOnClickListener {
       defaultSignIn(
@@ -129,10 +129,10 @@ class LoginFragment : Fragment() {
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     super.onActivityResult(requestCode, resultCode, data)
 
-    if (requestCode == RC_TWITTER) {
+/*    if (requestCode == RC_TWITTER) {
       // Pass the activity result to the Twitter login button.
       twitterLogInButton.onActivityResult(requestCode, resultCode, data);
-    }
+    }*/
     if (requestCode == RC_SIGN_IN) {
       val task = GoogleSignIn.getSignedInAccountFromIntent(data)
       try {
@@ -221,7 +221,7 @@ class LoginFragment : Fragment() {
     startActivityForResult(signInIntent, RC_SIGN_IN)
   }
 
-  private fun firebaseAuthWithTwitter(session: TwitterSession) {
+ /* private fun firebaseAuthWithTwitter(session: TwitterSession) {
     val credential = TwitterAuthProvider.getCredential(
       session.authToken.token,
       session.authToken.secret
@@ -245,7 +245,7 @@ class LoginFragment : Fragment() {
         }
       })
   }
-
+*/
   private fun facebookSignIn() {
 
   }

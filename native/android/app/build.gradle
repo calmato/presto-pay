@@ -58,7 +58,7 @@ dependencies {
   implementation 'com.google.android.gms:play-services-auth:18.0.0'
 
   //Twitter SDK
-  compile 'com.twitter.sdk.android:twitter-core:3.1.1'
+  implementation 'com.twitter.sdk.android:twitter-core:3.1.1'
 
   implementation 'com.google.code.gson:gson:2.8.6'
   implementation 'com.squareup.retrofit2:retrofit:2.5.0'
