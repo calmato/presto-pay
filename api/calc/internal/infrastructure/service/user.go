@@ -10,11 +10,11 @@ import (
 )
 
 type userService struct {
-	apiClient *api.Client
+	apiClient api.APIClient
 }
 
 // NewUserService - UserServiceの生成
-func NewUserService(apiClient *api.Client) user.UserService {
+func NewUserService(apiClient api.APIClient) user.UserService {
 	return &userService{
 		apiClient: apiClient,
 	}
