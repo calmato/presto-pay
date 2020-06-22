@@ -26,6 +26,11 @@ class HomeFragment : Fragment() {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
+    floatingActionButton.setOnClickListener {
+      this.findNavController().navigate(
+        HomeFragmentDirections.actionHomeFragmentToCreateGroupFragment()
+      )
+    }
     bottom_navigation.setOnNavigationItemSelectedListener { item ->
       when (item.itemId) {
         R.id.action_person -> {

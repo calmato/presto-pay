@@ -13,7 +13,7 @@
 
     <ImageView
       android:id="@+id/thumbnail"
-      android:layout_width="83dp"
+      android:layout_width="85dp"
       android:layout_height="85dp"
       android:layout_marginTop="64dp"
 
@@ -22,7 +22,8 @@
       android:contentDescription="@string/profile_photo"
       android:padding="4dp"
       android:src="@android:drawable/ic_menu_camera"
-      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintEnd_toStartOf="@+id/groupName"
+      app:layout_constraintHorizontal_bias="0.5"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent" />
 
@@ -30,61 +31,28 @@
       android:id="@+id/groupName"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_marginTop="24dp"
       android:ems="10"
       android:hint="@string/register_group_name"
+      android:importantForAutofill="no"
       android:inputType="textPersonName"
       android:textAlignment="center"
       android:textSize="24sp"
+      app:layout_constraintBottom_toBottomOf="@+id/thumbnail"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.5"
+      app:layout_constraintStart_toEndOf="@+id/thumbnail"
+      app:layout_constraintTop_toTopOf="@+id/thumbnail" />
+
+    <ImageView
+      android:id="@+id/imageView2"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="32dp"
+      android:src="@drawable/ic_baseline_add_circle_outline_60"
       app:layout_constraintEnd_toEndOf="@+id/thumbnail"
       app:layout_constraintStart_toStartOf="@+id/thumbnail"
-      app:layout_constraintTop_toBottomOf="@+id/thumbnail"
-      android:importantForAutofill="no" />
+      app:layout_constraintTop_toBottomOf="@+id/thumbnail" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-      android:layout_width="0dp"
-      android:layout_height="wrap_content"
-      android:layout_marginStart="8dp"
-      android:layout_marginTop="32dp"
-      android:layout_marginEnd="8dp"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/groupName">
-
-      <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:contentDescription="@string/add_friend"
-        android:src="@drawable/ic_person_add_black_24dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-      <TextView
-        android:id="@+id/addMember"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:text="@string/add_member"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imageView"
-        app:layout_constraintTop_toTopOf="parent" />
-
-      <ImageView
-        android:id="@+id/rightArrow"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:contentDescription="@string/right_arrow"
-        android:src="@drawable/ic_baseline_chevron_right_24"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
   </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>
