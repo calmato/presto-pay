@@ -5,6 +5,7 @@ import "context"
 // UserRepository - UserRepositoryインターフェース
 type UserRepository interface {
 	Authentication(ctx context.Context) (*User, error)
+	Index(ctx context.Context, startAt string) ([]*User, error)
 	Create(ctx context.Context, u *User) error
 	Update(ctx context.Context, u *User) error
 	UpdatePassword(ctx context.Context, uid string, password string) error
