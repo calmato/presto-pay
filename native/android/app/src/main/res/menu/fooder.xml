@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+  <item
+    android:id="@+id/action_people"
+    android:title="グループ・友達"
+    android:icon="@drawable/ic_people_black_24dp"
+    android:enabled="true"/>
+  <item
+    android:id="@+id/dummy"
+    android:title=""
+    android:enabled="false"/>
+  <item
+  android:id="@+id/action_person"
+  android:title="アカウント"
+  android:icon="@drawable/ic_person_black_24dp"
+  android:enabled="true"/>
+</menu>

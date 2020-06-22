@@ -4,37 +4,29 @@ import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
 import android.graphics.Color
 import android.os.AsyncTask
 import android.os.Bundle
-import android.util.Base64
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.constraintlayout.widget.Constraints.TAG
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.graphics.drawable.toBitmap
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.gson.Gson
-import com.google.gson.JsonObject
 import kotlinx.android.synthetic.main.fragment_new_account.*
 import okhttp3.Response
 import org.json.JSONObject
-import org.xml.sax.Parser
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentNewAccountBinding
-import work.calmato.prestopay.ui.login.LoginFragmentDirections
+import work.calmato.prestopay.util.Constant.Companion.IMAGE_PICK_CODE
+import work.calmato.prestopay.util.Constant.Companion.MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE
 import work.calmato.prestopay.util.RestClient
-import java.io.ByteArrayOutputStream
-import java.lang.StringBuilder
-import kotlin.math.roundToInt
+import work.calmato.prestopay.util.encodeImage2Base64
 
 class NewAccountFragment : Fragment() {
   val serverUrl: String = "https://api.presto-pay-stg.calmato.work/v1/users"
@@ -53,17 +45,13 @@ class NewAccountFragment : Fragment() {
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
-//
-//
-//  override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
 
     // buttonを押した時の処理を記述
     createAccountButton.setOnClickListener {
       var thumbnails = ""
       if (setThumbnail) {
-        thumbnails = encodeImage2Base64()
+        thumbnails = encodeImage2Base64(thumbnail)
       }
       val name = fullNameEditText.text.toString()
       val userName = userNameEditText.text.toString()
@@ -72,7 +60,7 @@ class NewAccountFragment : Fragment() {
       val passwordConfirmation = passConfirmEditText.text.toString()
 
       if (password == passwordConfirmation) {
-        var map: MutableMap<String, Any> = mutableMapOf()
+        val map: MutableMap<String, Any> = mutableMapOf()
         map.put("name", name)
         map.put("username", userName)
         map.put("email", email)
@@ -85,17 +73,17 @@ class NewAccountFragment : Fragment() {
         Log.d("New Account Post Json", jsonText)
 
         val response = MyAsyncTask().execute().get()
-        if(response.isSuccessful){
+        if (response.isSuccessful) {
           this.findNavController().navigate(
-            NewAccountFragmentDirections.actionNewAccountFragmentToMailCheckFragment()
+            NewAccountFragmentDirections.actionNewAccountFragmentToLoginFragment()
           )
-        } else{
+        } else {
           var errorMessage = ""
           val jsonArray = JSONObject(response.body()!!.string()).getJSONArray("errors")
-          for (i in 0 until jsonArray.length()){
+          for (i in 0 until jsonArray.length()) {
             val jsonObject = jsonArray.getJSONObject(i)
             errorMessage += jsonObject.getString("field") + " " + jsonObject.getString("message")
-            if (i != jsonArray.length() - 1){
+            if (i != jsonArray.length() - 1) {
               errorMessage += "\n"
             }
           }
@@ -138,6 +126,11 @@ class NewAccountFragment : Fragment() {
         pickImageFromGallery()
       }
     }
+    hasAccountText.setOnClickListener {
+      this.findNavController().navigate(
+        NewAccountFragmentDirections.actionNewAccountFragmentToLoginFragment()
+      )
+    }
   }
 
   inner class MyAsyncTask : AsyncTask<Void, Void, Response>() {
@@ -145,12 +138,6 @@ class NewAccountFragment : Fragment() {
       val responseCode = RestClient().postExecute(jsonText, serverUrl)
       return responseCode
     }
-  }
-
-
-  companion object {
-    private val IMAGE_PICK_CODE = 1000
-    private val MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1001
   }
 
   override fun onRequestPermissionsResult(
@@ -192,17 +179,5 @@ class NewAccountFragment : Fragment() {
       thumbnail.setBackgroundColor(Color.TRANSPARENT)
       editPhotoText.setText("写真を変更")
     }
-  }
-
-  private fun encodeImage2Base64(): String {
-    val bitmap: Bitmap = thumbnail.drawable.toBitmap()
-    val baos = ByteArrayOutputStream()
-    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
-    val imageBytes: ByteArray = baos.toByteArray()
-    return Base64.encodeToString(imageBytes, Base64.DEFAULT)
-    //decode base64 string to image
-    //    val imageBytesDecode = Base64.decode(imageString, Base64.DEFAULT)
-    //    val decodedImage = BitmapFactory.decodeByteArray(imageBytesDecode, 0, imageBytesDecode.size)
-    //    testImageView.setImageBitmap(decodedImage)
   }
 }

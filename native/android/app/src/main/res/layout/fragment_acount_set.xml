@@ -2,11 +2,12 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
     android:layout_height="match_parent">
 
   <ImageView
-    android:id="@+id/profilePhoto"
+    android:id="@+id/thumbnail"
     android:layout_width="83dp"
     android:layout_height="85dp"
     android:layout_marginTop="64dp"
@@ -28,9 +29,9 @@
     android:text="@string/change_profile_photo"
     android:textColor="@color/ourTheme"
     android:textSize="12sp"
-    app:layout_constraintEnd_toEndOf="@+id/profilePhoto"
-    app:layout_constraintStart_toStartOf="@+id/profilePhoto"
-    app:layout_constraintTop_toBottomOf="@+id/profilePhoto" />
+    app:layout_constraintEnd_toEndOf="@+id/thumbnail"
+    app:layout_constraintStart_toStartOf="@+id/thumbnail"
+    app:layout_constraintTop_toBottomOf="@+id/thumbnail" />
 
   <EditText
     android:id="@+id/nameEditText"
@@ -81,4 +82,5 @@
     app:layout_constraintEnd_toEndOf="@+id/mailEditText"
     app:layout_constraintStart_toStartOf="@+id/mailEditText"
     app:layout_constraintTop_toBottomOf="@+id/mailEditText" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

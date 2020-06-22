@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  tools:context=".ui.createGroup.CreateGroupFragment">
+
+  <androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:backgroundTint="#875D5D">
+
+    <ImageView
+      android:id="@+id/thumbnail"
+      android:layout_width="85dp"
+      android:layout_height="85dp"
+      android:layout_marginTop="64dp"
+
+      android:background="@drawable/circle_theme_color"
+      android:backgroundTint="#4B000000"
+      android:contentDescription="@string/profile_photo"
+      android:padding="4dp"
+      android:src="@android:drawable/ic_menu_camera"
+      app:layout_constraintEnd_toStartOf="@+id/groupName"
+      app:layout_constraintHorizontal_bias="0.5"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+      android:id="@+id/groupName"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:ems="10"
+      android:hint="@string/register_group_name"
+      android:importantForAutofill="no"
+      android:inputType="textPersonName"
+      android:textAlignment="center"
+      android:textSize="24sp"
+      app:layout_constraintBottom_toBottomOf="@+id/thumbnail"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.5"
+      app:layout_constraintStart_toEndOf="@+id/thumbnail"
+      app:layout_constraintTop_toTopOf="@+id/thumbnail" />
+
+    <ImageView
+      android:id="@+id/imageView2"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="32dp"
+      android:src="@drawable/ic_baseline_add_circle_outline_60"
+      app:layout_constraintEnd_toEndOf="@+id/thumbnail"
+      app:layout_constraintStart_toStartOf="@+id/thumbnail"
+      app:layout_constraintTop_toBottomOf="@+id/thumbnail" />
+
+  </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>

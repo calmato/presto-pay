@@ -1,298 +1,343 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
-  xmlns:tools="http://schemas.android.com/tools"
-  android:layout_width="match_parent"
-  android:layout_height="match_parent">
+  xmlns:tools="http://schemas.android.com/tools">
 
   <ScrollView
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
-      android:id="@+id/UserAccountThumnail"
-      android:layout_width="78dp"
-      android:layout_height="76dp"
-      android:layout_marginStart="16dp"
+    <androidx.constraintlayout.widget.ConstraintLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      tools:layout_editor_absoluteX="0dp"
+      tools:layout_editor_absoluteY="1dp">
 
-      android:layout_marginTop="76dp"
-      android:background="@drawable/circle_theme_color"
-      android:backgroundTint="#4B000000"
-      android:contentDescription="@string/profile_photo"
-      android:padding="4dp"
-      android:src="@android:drawable/ic_menu_camera"
-      app:layout_constraintBottom_toBottomOf="@id/horizonBar"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="parent"
-      app:layout_constraintVertical_bias="0.0" />
+      <ImageView
+        android:id="@+id/UserAccountThumnail"
+        android:layout_width="78dp"
+        android:layout_height="76dp"
+        android:layout_marginStart="16dp"
 
-    <TextView
-      android:id="@+id/setUserNameText"
-      android:layout_width="240dp"
-      android:layout_height="wrap_content"
-      android:layout_marginStart="8dp"
-      android:layout_marginTop="90dp"
-      android:text="ユーザーネーム"
-      android:textSize="20sp"
-      android:textStyle="bold"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintHorizontal_bias="0.0"
-      app:layout_constraintStart_toEndOf="@+id/UserAccountThumnail"
-      app:layout_constraintTop_toTopOf="parent" />
+        android:layout_marginTop="76dp"
+        android:background="@drawable/circle_theme_color"
+        android:backgroundTint="#4B000000"
+        android:contentDescription="@string/profile_photo"
+        android:padding="4dp"
+        android:src="@android:drawable/ic_menu_camera"
+        app:layout_constraintBottom_toBottomOf="@id/horizonBar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
-    <TextView
-      android:id="@+id/displayProfile"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginTop="8dp"
-      android:text="プロフィールを表示"
-      android:textColor="@color/ourTheme"
-      app:layout_constraintStart_toEndOf="@+id/UserAccountThumnail"
-      app:layout_constraintStart_toStartOf="@+id/setUserNameText"
-      app:layout_constraintTop_toBottomOf="@+id/setUserNameText" />
+      <TextView
+        android:id="@+id/setUserNameText"
+        android:layout_width="240dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="90dp"
+        android:text="ユーザーネーム"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/UserAccountThumnail"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-      android:id="@+id/displayProfileButton"
-      android:layout_width="0dp"
-      android:layout_height="64dp"
-      android:layout_marginTop="16dp"
-      android:background="@drawable/clear_button_bg"
-      app:layout_constraintBottom_toBottomOf="@+id/horizonBar2"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintHorizontal_bias="0.0"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/accountSettingText"
-      app:layout_constraintVertical_bias="0.0" />
+      <TextView
+        android:id="@+id/displayProfile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="プロフィールを表示"
+        android:textColor="@color/ourTheme"
+        app:layout_constraintStart_toEndOf="@+id/UserAccountThumnail"
+        app:layout_constraintStart_toStartOf="@+id/setUserNameText"
+        app:layout_constraintTop_toBottomOf="@+id/setUserNameText" />
 
-    <View
-      android:id="@+id/horizonBar"
-      android:layout_width="0dp"
-      android:layout_height="1dp"
-      android:layout_marginTop="24dp"
-      android:background="#A4A7A7"
-      android:visibility="visible"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintHorizontal_bias="0.0"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/displayProfile" />
+      <View
+        android:id="@+id/horizonBar"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="24dp"
+        android:background="#A4A7A7"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/displayProfile" />
 
-    <View
-      android:id="@+id/horizonBar7"
-      android:layout_width="0dp"
-      android:layout_height="1dp"
-      android:layout_marginStart="16dp"
-      android:layout_marginEnd="16dp"
-      android:background="#A4A7A7"
-      android:visibility="visible"
-      app:layout_constraintBottom_toBottomOf="@+id/displayInviteButton"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintHorizontal_bias="0.0"
-      app:layout_constraintStart_toStartOf="parent" />
+      <View
+        android:id="@+id/horizonBar3"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="#A4A7A7"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@+id/displayNotificationButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
 
-    <View
-      android:id="@+id/horizonBar2"
-      android:layout_width="0dp"
-      android:layout_height="1dp"
-      android:layout_marginStart="16dp"
-      android:layout_marginEnd="16dp"
-      android:background="#A4A7A7"
-      android:visibility="visible"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/displayProfileButton" />
+      <View
+        android:id="@+id/horizonBar4"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="#A4A7A7"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/displayPasswordButton" />
 
-    <View
-      android:id="@+id/horizonBar3"
-      android:layout_width="0dp"
-      android:layout_height="1dp"
-      android:layout_marginStart="16dp"
-      android:layout_marginEnd="16dp"
-      android:background="#A4A7A7"
-      android:visibility="visible"
-      app:layout_constraintBottom_toBottomOf="@+id/displayNotificationButton"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintHorizontal_bias="0.0"
-      app:layout_constraintStart_toStartOf="parent" />
+      <View
+        android:id="@+id/horizonBar5"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="#A4A7A7"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@+id/displayPrestoPayButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent" />
 
-    <View
-      android:id="@+id/horizonBar4"
-      android:layout_width="0dp"
-      android:layout_height="1dp"
-      android:layout_marginStart="16dp"
-      android:layout_marginEnd="16dp"
-      android:background="#A4A7A7"
-      android:visibility="visible"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintHorizontal_bias="0.0"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/displayPasswordButton" />
+      <View
+        android:id="@+id/horizonBar6"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="#A4A7A7"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@+id/displayHelpButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
 
-    <View
-      android:id="@+id/horizonBar5"
-      android:layout_width="0dp"
-      android:layout_height="1dp"
-      android:layout_marginStart="16dp"
-      android:layout_marginEnd="16dp"
-      android:background="#A4A7A7"
-      android:visibility="visible"
-      app:layout_constraintBottom_toBottomOf="@+id/displayPrestoPayButton"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintHorizontal_bias="1.0"
-      app:layout_constraintStart_toStartOf="parent" />
+      <View
+        android:id="@+id/horizonBar7"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="#A4A7A7"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@+id/displayInviteButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
 
-    <View
-      android:id="@+id/horizonBar6"
-      android:layout_width="0dp"
-      android:layout_height="1dp"
-      android:layout_marginStart="16dp"
-      android:layout_marginEnd="16dp"
-      android:background="#A4A7A7"
-      android:visibility="visible"
-      app:layout_constraintBottom_toBottomOf="@+id/displayHelpButton"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintHorizontal_bias="0.0"
-      app:layout_constraintStart_toStartOf="parent" />
+      <TextView
+        android:id="@+id/profileText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="個人情報"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/displayProfileButton"
+        app:layout_constraintStart_toStartOf="@+id/accountSettingText"
+        app:layout_constraintTop_toTopOf="@+id/displayProfileButton"
+        app:layout_constraintVertical_bias="0.571" />
 
-    <TextView
-      android:id="@+id/profileText"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:text="個人情報"
-      android:textSize="18sp"
-      app:layout_constraintBottom_toBottomOf="@+id/displayProfileButton"
-      app:layout_constraintStart_toStartOf="@+id/accountSettingText"
-      app:layout_constraintTop_toTopOf="@+id/displayProfileButton"
-      app:layout_constraintVertical_bias="0.571" />
+      <TextView
+        android:id="@+id/accountSettingText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="アカウントの設定"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="@+id/UserAccountThumnail"
+        app:layout_constraintTop_toBottomOf="@+id/horizonBar" />
 
-    <TextView
-      android:id="@+id/accountSettingText"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginTop="24dp"
-      android:text="アカウントの設定"
-      android:textSize="12sp"
-      app:layout_constraintStart_toStartOf="@+id/UserAccountThumnail"
-      app:layout_constraintTop_toBottomOf="@+id/horizonBar" />
+      <TextView
+        android:id="@+id/applicationSettingText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="アプリの設定"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="@+id/profileText"
+        app:layout_constraintTop_toBottomOf="@+id/displayProfileButton" />
 
-    <TextView
-      android:id="@+id/applicationSettingText"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginTop="24dp"
-      android:text="アプリの設定"
-      android:textSize="12sp"
-      app:layout_constraintStart_toStartOf="@+id/profileText"
-      app:layout_constraintTop_toBottomOf="@+id/displayProfileButton" />
+      <TextView
+        android:id="@+id/textView14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="通知の設定"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/displayNotificationButton"
+        app:layout_constraintStart_toStartOf="@+id/applicationSettingText"
+        app:layout_constraintTop_toTopOf="@+id/displayNotificationButton" />
 
-    <TextView
-      android:id="@+id/textView14"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:text="通知の設定"
-      android:textSize="18sp"
-      app:layout_constraintBottom_toBottomOf="@+id/displayNotificationButton"
-      app:layout_constraintStart_toStartOf="@+id/applicationSettingText"
-      app:layout_constraintTop_toTopOf="@+id/displayNotificationButton" />
+      <Button
+        android:id="@+id/displayPasswordButton"
+        android:layout_width="0dp"
+        android:layout_height="64dp"
+        android:alpha="0.2"
+        android:background="@drawable/clear_button_bg"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/horizonBar3" />
 
-    <Button
-      android:id="@+id/displayPasswordButton"
-      android:layout_width="0dp"
-      android:layout_height="64dp"
-      android:background="@drawable/clear_button_bg"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintHorizontal_bias="1.0"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="@+id/horizonBar3" />
+      <Button
+        android:id="@+id/displayNotificationButton"
+        android:layout_width="0dp"
+        android:layout_height="64dp"
+        android:layout_marginTop="16dp"
+        android:alpha="0.2"
+        android:background="@drawable/clear_button_bg"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/applicationSettingText" />
 
-    <Button
-      android:id="@+id/displayNotificationButton"
-      android:layout_width="0dp"
-      android:layout_height="64dp"
-      android:layout_marginTop="16dp"
-      android:background="@drawable/clear_button_bg"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintHorizontal_bias="0.0"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/applicationSettingText" />
+      <TextView
+        android:id="@+id/passwordChangeText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="パスワードの変更"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/displayPasswordButton"
+        app:layout_constraintStart_toStartOf="@+id/textView14"
+        app:layout_constraintTop_toTopOf="@+id/displayPasswordButton" />
 
-    <TextView
-      android:id="@+id/passwordChangeText"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:text="パスワードの変更"
-      android:textSize="18sp"
-      app:layout_constraintBottom_toBottomOf="@+id/displayPasswordButton"
-      app:layout_constraintStart_toStartOf="@+id/textView14"
-      app:layout_constraintTop_toTopOf="@+id/displayPasswordButton" />
+      <TextView
+        android:id="@+id/informationText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="情報"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="@+id/passwordChangeText"
+        app:layout_constraintTop_toBottomOf="@+id/horizonBar4" />
 
-    <TextView
-      android:id="@+id/informationText"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginTop="24dp"
-      android:text="情報"
-      android:textSize="12sp"
-      app:layout_constraintStart_toStartOf="@+id/passwordChangeText"
-      app:layout_constraintTop_toBottomOf="@+id/horizonBar4" />
+      <Button
+        android:id="@+id/displayPrestoPayButton"
+        android:layout_width="0dp"
+        android:layout_height="64dp"
+        android:layout_marginTop="16dp"
+        android:alpha="0.2"
+        android:background="@drawable/clear_button_bg"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/informationText" />
 
-    <Button
-      android:id="@+id/displayPrestoPayButton"
-      android:layout_width="0dp"
-      android:layout_height="64dp"
-      android:layout_marginTop="16dp"
-      android:background="@drawable/clear_button_bg"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintHorizontal_bias="0.0"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/informationText" />
+      <TextView
+        android:id="@+id/prestoPayText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Presto Payについて"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/horizonBar5"
+        app:layout_constraintStart_toStartOf="@+id/informationText"
+        app:layout_constraintTop_toTopOf="@+id/displayPrestoPayButton" />
 
-    <TextView
-      android:id="@+id/prestoPayText"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:text="Presto Payについて"
-      android:textSize="18sp"
-      app:layout_constraintBottom_toTopOf="@+id/horizonBar5"
-      app:layout_constraintStart_toStartOf="@+id/informationText"
-      app:layout_constraintTop_toTopOf="@+id/displayPrestoPayButton" />
+      <Button
+        android:id="@+id/displayHelpButton"
+        android:layout_width="0dp"
+        android:layout_height="64dp"
+        android:alpha="0.2"
+        android:background="@drawable/clear_button_bg"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/horizonBar5" />
 
-    <Button
-      android:id="@+id/displayHelpButton"
-      android:layout_width="0dp"
-      android:layout_height="64dp"
-      android:background="@drawable/clear_button_bg"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/horizonBar5" />
+      <TextView
+        android:id="@+id/helpText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ヘルプ"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/horizonBar6"
+        app:layout_constraintStart_toStartOf="@+id/prestoPayText"
+        app:layout_constraintTop_toBottomOf="@+id/horizonBar5" />
 
-    <TextView
-      android:id="@+id/helpText"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:text="ヘルプ"
-      android:textSize="18sp"
-      app:layout_constraintBottom_toBottomOf="@+id/horizonBar6"
-      app:layout_constraintStart_toStartOf="@+id/prestoPayText"
-      app:layout_constraintTop_toBottomOf="@+id/horizonBar5" />
+      <Button
+        android:id="@+id/displayInviteButton"
+        android:layout_width="0dp"
+        android:layout_height="64dp"
+        android:alpha="0.2"
+        android:background="@drawable/clear_button_bg"
+        android:cursorVisible="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/horizonBar6" />
 
-    <Button
-      android:id="@+id/displayInviteButton"
-      android:layout_width="0dp"
-      android:layout_height="64dp"
-      android:background="@drawable/clear_button_bg"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/horizonBar6" />
+      <TextView
+        android:id="@+id/inviteText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Presto Payに誘う"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/displayInviteButton"
+        app:layout_constraintStart_toStartOf="@+id/helpText"
+        app:layout_constraintTop_toBottomOf="@+id/horizonBar6" />
 
-    <TextView
-      android:id="@+id/inviteText"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:text="Presto Payに誘う"
-      android:textSize="18sp"
-      app:layout_constraintBottom_toBottomOf="@+id/displayInviteButton"
-      app:layout_constraintStart_toStartOf="@+id/helpText"
-      app:layout_constraintTop_toBottomOf="@+id/horizonBar6" />
+      <TextView
+        android:id="@+id/logoutText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ログアウト"
+        android:textColor="@color/ourTheme"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/logoutButton"
+        app:layout_constraintStart_toStartOf="@+id/inviteText"
+        app:layout_constraintTop_toBottomOf="@+id/displayInviteButton" />
+
+      <Button
+        android:id="@+id/logoutButton"
+        android:layout_width="0dp"
+        android:layout_height="64dp"
+        android:alpha="0.2"
+        android:background="@drawable/clear_button_bg"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/horizonBar7" />
+
+      <View
+        android:id="@+id/horizonBar10"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="#A4A7A7"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/displayProfileButton" />
+
+      <Button
+        android:id="@+id/displayProfileButton"
+        android:layout_width="0dp"
+        android:layout_height="64dp"
+        android:layout_marginTop="12dp"
+        android:alpha="0.2"
+        android:background="@drawable/clear_button_bg"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/accountSettingText" />
+
+      <View
+        android:id="@+id/horizonBar2"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="#A4A7A7"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@+id/logoutButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
   </ScrollView>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -1,46 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
-  android:layout_width="match_parent"
+  xmlns:tools="http://schemas.android.com/tools">
+
+  <androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-  <TextView
-    android:id="@+id/descriptionText"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginBottom="16dp"
-    android:text="@string/descriptionResetPassword"
-    android:textColor="@android:color/background_dark"
-    android:textSize="18sp"
-    app:layout_constraintBottom_toTopOf="@+id/emailEditText"
-    app:layout_constraintEnd_toEndOf="@+id/emailEditText"
-    app:layout_constraintStart_toStartOf="@+id/emailEditText" />
+    <TextView
+      android:id="@+id/descriptionText"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginBottom="16dp"
+      android:text="@string/descriptionResetPassword"
+      android:textColor="@android:color/background_dark"
+      android:textSize="18sp"
+      app:layout_constraintBottom_toTopOf="@+id/emailEditText"
+      app:layout_constraintEnd_toEndOf="@+id/emailEditText"
+      app:layout_constraintStart_toStartOf="@+id/emailEditText" />
 
-  <EditText
-    android:id="@+id/emailEditText"
-    android:layout_width="0dp"
-    android:layout_height="wrap_content"
-    android:layout_marginStart="48dp"
-    android:layout_marginEnd="48dp"
-    android:ems="10"
-    android:hint="@string/email"
-    android:inputType="textEmailAddress"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent"
-    android:autofillHints="" />
+    <EditText
+      android:id="@+id/emailEditText"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="48dp"
+      android:layout_marginEnd="48dp"
+      android:autofillHints=""
+      android:ems="10"
+      android:hint="@string/email"
+      android:inputType="textEmailAddress"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent" />
 
-  <Button
-    android:id="@+id/sendMailButton"
-    android:layout_width="0dp"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="32dp"
-    android:background="@color/ourTheme"
-    android:text="@string/send_mail"
-    android:textColor="@android:color/background_light"
-    app:layout_constraintEnd_toEndOf="@+id/emailEditText"
-    app:layout_constraintStart_toStartOf="@+id/emailEditText"
-    app:layout_constraintTop_toBottomOf="@+id/emailEditText" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <Button
+      android:id="@+id/sendMailButton"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="32dp"
+      android:background="@color/ourTheme"
+      android:text="@string/send_mail"
+      android:textColor="@android:color/background_light"
+      app:layout_constraintEnd_toEndOf="@+id/emailEditText"
+      app:layout_constraintStart_toStartOf="@+id/emailEditText"
+      app:layout_constraintTop_toBottomOf="@+id/emailEditText" />
+  </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
