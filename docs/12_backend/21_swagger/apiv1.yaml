@@ -13,6 +13,20 @@ servers:
 
 paths:
   /users:
+    get:
+      summary: 認証情報取得
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          $ref: '#/components/responses/ShowProfile'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/Unkown'
+
     post:
       summary: ユーザー登録
       requestBody:
@@ -38,8 +52,33 @@ paths:
           $ref: '#/components/responses/UpdateUser'
         '400':
           $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
         '409':
           $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/Unkown'
+
+  /users/{userId}:
+    get:
+      summary: ユーザー情報取得
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: userId
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: ユーザーUUID
+      responses:
+        '200':
+          $ref: '#/components/responses/ShowUser'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
         '500':
           $ref: '#/components/responses/Unkown'
 
@@ -55,6 +94,8 @@ paths:
           $ref: '#/components/responses/Empty'
         '400':
           $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
         '409':
           $ref: '#/components/responses/Conflict'
         '500':
@@ -63,6 +104,8 @@ paths:
   /users/check-email:
     post:
       summary: ユーザー メールアドレスユニーク検証
+      security:
+        - BearerAuth: []
       requestBody:
         $ref: '#/components/requestBodies/UniqueCheckUserEmail'
       responses:
@@ -76,6 +119,8 @@ paths:
   /users/check-username:
     post:
       summary: ユーザー ユーザー名ユニーク検証
+      security:
+        - BearerAuth: []
       requestBody:
         $ref: '#/components/requestBodies/UniqueCheckUserUsername'
       responses:
@@ -83,6 +128,25 @@ paths:
           $ref: '#/components/responses/UniqueCheck'
         '400':
           $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/Unkown'
+
+  /groups:
+    post:
+      summary: グループ作成
+      security:
+        - BearerAuth: []
+      requestBody:
+        $ref: '#/components/requestBodies/CreateGroup'
+      responses:
+        '200':
+          $ref: '#/components/responses/CreateGroup'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '409':
+          $ref: '#/components/responses/Conflict'
         '500':
           $ref: '#/components/responses/Unkown'
 
@@ -223,6 +287,29 @@ components:
                 type: string
                 description: ユーザー名
 
+    CreateGroup:
+      description: グループ作成
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+                description: グループ名
+              thumbnail:
+                type: string
+                description: サムネイル
+              userIds:
+                type: array
+                description: ユーザーID一覧
+                items:
+                  type: string
+                  format: uuid
+            required:
+              - name
+
   responses:
     BadRequest:
       description: Bad Request
@@ -238,6 +325,12 @@ components:
             $ref: '#/components/schemas/Error'
     Forbidden:
       description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: NotFound
       content:
         application/json:
           schema:
@@ -273,6 +366,84 @@ components:
                 type: boolean
                 description: ユニーク検証結果
 
+    ShowProfile:
+      description: 認証情報取得APIのレスポンス
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              id:
+                type: string
+                format: uuid
+                description: ユーザーID
+              name:
+                type: string
+                description: 表示名
+              username:
+                type: string
+                description: ユーザー名
+              email:
+                type: string
+                format: email
+                description: メールアドレス
+              thumbnail:
+                type: string
+                description: サムネイルURL
+              groupIds:
+                type: array
+                description: グループID一覧
+                items:
+                  type: string
+                  format: uuid
+              createdAt:
+                type: string
+                format: date-time
+                description: 作成日時
+              updatedAt:
+                type: string
+                format: date-time
+                description: 更新日時
+
+    ShowUser:
+      description: ユーザー情報取得APIのレスポンス
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              id:
+                type: string
+                format: uuid
+                description: ユーザーID
+              name:
+                type: string
+                description: 表示名
+              username:
+                type: string
+                description: ユーザー名
+              email:
+                type: string
+                format: email
+                description: メールアドレス
+              thumbnail:
+                type: string
+                description: サムネイルURL
+              groupIds:
+                type: array
+                description: グループID一覧
+                items:
+                  type: string
+                  format: uuid
+              createdAt:
+                type: string
+                format: date-time
+                description: 作成日時
+              updatedAt:
+                type: string
+                format: date-time
+                description: 更新日時
+
     CreateUser:
       description: ユーザー登録APIのレスポンス
       content:
@@ -297,6 +468,12 @@ components:
               thumbnail:
                 type: string
                 description: サムネイルURL
+              groupIds:
+                type: array
+                description: グループID一覧
+                items:
+                  type: string
+                  format: uuid
               createdAt:
                 type: string
                 format: date-time
@@ -330,6 +507,44 @@ components:
               thumbnailUrl:
                 type: string
                 description: サムネイルURL
+              groupIds:
+                type: array
+                description: グループID一覧
+                items:
+                  type: string
+                  format: uuid
+              createdAt:
+                type: string
+                format: date-time
+                description: 作成日時
+              updatedAt:
+                type: string
+                format: date-time
+                description: 更新日時
+
+    CreateGroup:
+      description: グループ作成APIのレスポンス
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              id:
+                type: string
+                format: uuid
+                description: ユーザーID
+              name:
+                type: string
+                description: 表示
+              thumbnailUrl:
+                type: string
+                description: サムネイルURL
+              userIds:
+                type: array
+                description: ユーザーID一覧
+                items:
+                  type: string
+                  format: uuid
               createdAt:
                 type: string
                 format: date-time

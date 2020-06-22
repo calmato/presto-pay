@@ -47,6 +47,8 @@ spec:
               value: 'fluentd.monitoring.svc.cluster.local'
             - name: FLUENT_PORT
               value: '24224'
+            - name: USER_API_URL
+              value: 'http://user-api'
             - name: GOOGLE_APPLICATION_CREDENTIALS
               value: '/secret/firebase-adminsdk.json'
             - name: GCP_STORAGE_BUCKET_NAME

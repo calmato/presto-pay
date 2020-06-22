@@ -13,9 +13,9 @@
     "allowJs": true,
     "sourceMap": true,
     "strict": true,
+    "noEmit": true,
     "noImplicitAny": false,
     "noImplicitThis": false,
-    "noEmit": true,
     "experimentalDecorators": true,
     "baseUrl": "./app",
     "paths": {
@@ -26,7 +26,8 @@
     },
     "types": [
       "@types/node",
-      "@nuxt/types"
+      "@nuxt/types",
+      "@nuxtjs/vuetify"
     ]
   },
   "exclude": [

@@ -66,12 +66,13 @@ func requestLogging(c *gin.Context, reader io.Reader) {
 	// 	message += fmt.Sprintf("%s:'%s' ", key, value)
 	// }
 
+	fields["path"] = c.Request.URL.Path
 	fields["request"] = "ok"
 	// fields["params"] = fmt.Frintf("{ %s}", message)
 	fields["params"] = params
+
 	log.WithFields(fields).Info()
 
 	// FLuent Bitへログ転送
-	fields["path"] = c.Request.URL.Path
 	SendFluent("request", fields)
 }

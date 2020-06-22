@@ -1,6 +1,6 @@
 # presto-pay
 
-> admin for presto-pay
+> admin page
 
 ## Build Setup
 

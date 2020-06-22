@@ -11,17 +11,31 @@ import (
 	"golang.org/x/xerrors"
 )
 
+// APIClient - 他のAPI操作用インターフェース
+type APIClient interface {
+	Authentication(ctx context.Context) (*user.User, error)
+	UserExists(ctx context.Context, userID string) (bool, error)
+	AddGroup(ctx context.Context, userID string, groupID string) error
+	RemoveGroup(ctx context.Context, userID string, groupID string) error
+}
+
 // Client - 他のAPI管理用の構造体
 type Client struct {
 	userAPIURL string
 }
 
 // NewAPIClient - API Clientの初期化
-func NewAPIClient(userAPIURL string) *Client {
+func NewAPIClient(userAPIURL string) APIClient {
 	return &Client{
 		userAPIURL: userAPIURL,
 	}
 }
+
+/*
+ * ###########################
+ *  User API
+ * ###########################
+ */
 
 // Authentication - ログインユーザー情報の取得
 func (c *Client) Authentication(ctx context.Context) (*user.User, error) {
@@ -37,8 +51,14 @@ func (c *Client) Authentication(ctx context.Context) (*user.User, error) {
 		return nil, err
 	}
 
-	if res.StatusCode < 200 || res.StatusCode > 299 {
-		return nil, xerrors.New("Failed to request to user api")
+	status, err := getStatus(res)
+	if err != nil {
+		return nil, err
+	}
+
+	// TODO: refactor
+	if status < 200 || status > 299 {
+		return nil, xerrors.New("Unknown error")
 	}
 
 	defer res.Body.Close()
@@ -54,6 +74,75 @@ func (c *Client) Authentication(ctx context.Context) (*user.User, error) {
 
 	return u, nil
 }
+
+// UserExists - ユーザーの存在性検証
+func (c *Client) UserExists(ctx context.Context, userID string) (bool, error) {
+	url := c.userAPIURL + "/v1/users/" + userID
+	req, _ := http.NewRequest("GET", url, nil)
+
+	if err := setHeader(ctx, req); err != nil {
+		return false, err
+	}
+
+	res, err := getResponse(req)
+	if err != nil {
+		return false, err
+	}
+
+	if _, err := getStatus(res); err != nil {
+		return false, err
+	}
+
+	return true, nil
+}
+
+// AddGroup - ユーザーをグループに追加
+func (c *Client) AddGroup(ctx context.Context, userID string, groupID string) error {
+	url := c.userAPIURL + "/internal/users/" + userID + "/groups/" + groupID
+	req, _ := http.NewRequest("POST", url, nil)
+
+	if err := setHeader(ctx, req); err != nil {
+		return err
+	}
+
+	res, err := getResponse(req)
+	if err != nil {
+		return err
+	}
+
+	if _, err := getStatus(res); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// RemoveGroup - ユーザーをグループから削除
+func (c *Client) RemoveGroup(ctx context.Context, userID string, groupID string) error {
+	url := c.userAPIURL + "/internal/users/" + userID + "/groups/" + groupID
+	req, _ := http.NewRequest("DELETE", url, nil)
+
+	if err := setHeader(ctx, req); err != nil {
+		return err
+	}
+
+	res, err := getResponse(req)
+	if err != nil {
+		return err
+	}
+
+	if _, err := getStatus(res); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+/*
+ * ###########################
+ *  Private
+ * ###########################
+ */
 
 func getResponse(req *http.Request) (*http.Response, error) {
 	client := &http.Client{}
@@ -82,4 +171,13 @@ func setHeader(ctx context.Context, req *http.Request) error {
 	req.Header.Set("Authorization", authorization)
 
 	return nil
+}
+
+func getStatus(res *http.Response) (int, error) {
+	status := res.StatusCode
+	if status < 200 || status > 299 {
+		return status, xerrors.New("Failed to request to user api")
+	}
+
+	return status, nil
 }
