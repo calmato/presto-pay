@@ -1,4 +1,6 @@
 <resources>
+  <string name="twitter_consumer_key" translatable="false">OAMOPD8qs87lILvuu2JGEHuFU</string>
+  <string name="twitter_consumer_secret" translatable="false">uuliUQSaxLZygMafGCzPE3xXLfY2RZrL26wmwSkNwHgFHV3Ab4</string>
   <string name="app_name">PrestoPay</string>
   <string name="create_new_account">アカウントを作成</string>
   <string name="already_has_an_account">既にアカウントをお持ちの方</string>
@@ -20,9 +22,9 @@
   <string name="login_title">Presto Pay</string>
   <string name="google_signin" />
   <string name="login_button">ログイン</string>
-  <string name="google_signin_text">Googleでサインイン</string>
+  <string name="google_signin_text">Log in with Google</string>
   <string name="twitter_signin_text">Twitterでサインイン</string>
-  <string name="github_signin_text">Githubでサインイン</string>
+  <string name="github_signin_text">Log in with Github</string>
   <string name="gourp_friend">グループ・友達</string>
   <string name="account">アカウント</string>
   <string name="blue_circle">青色の円</string>
@@ -30,7 +32,7 @@
   <string name="plus_icon">プラスのアイコン</string>
   <string name="login_new_text">アカウントをお持ちでない方</string>
   <string name="login_forget_text">パスワードを忘れた方</string>
-  <string name="facebook_signin_text">Facebookでサインイン</string>
+  <string name="facebook_signin_text">Log in with Facebook</string>
   <string name="lending_status">貸し借り状況</string>
   <string name="person_icon">人のアイコン</string>
   <string name="icon">アイコン</string>
@@ -52,6 +54,6 @@
   <string name="add_member">メンバーを追加する</string>
   <string name="add_friend">add friend</string>
   <string name="right_arrow">right arrow</string>
-    <string name="email_address">Email address</string>
+  <string name="email_address">Email address</string>
   <string name="description_reset_pass">にパスワードを変更するリンクを送信します。\n現在のパスワードを入力してください。</string>
 </resources>
