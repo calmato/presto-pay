@@ -140,7 +140,6 @@ class NewAccountFragment : Fragment() {
     }
   }
 
-
   override fun onRequestPermissionsResult(
     requestCode: Int,
     permissions: Array<String>,
