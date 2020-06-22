@@ -36,8 +36,12 @@ class LoginFragment : Fragment() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     //Twitter sign in
-    val mTwitterAuthConfig = TwitterAuthConfig(getString(R.string.twitter_consumer_key), getString(R.string.twitter_consumer_secret))
+    val mTwitterAuthConfig = TwitterAuthConfig(
+      getString(R.string.twitter_consumer_key),
+      getString(R.string.twitter_consumer_secret)
+    )
     val twitterConfig = TwitterConfig.Builder(requireContext())
+      .logger(DefaultLogger(Log.DEBUG))
       .twitterAuthConfig(mTwitterAuthConfig)
       .debug(true)
       .build()
@@ -81,7 +85,7 @@ class LoginFragment : Fragment() {
           firebaseAuthWithTwitter(result.data)
         } else {
           Toast.makeText(
-            requireContext(), "It couldn't be processed again please",
+            requireContext(), "処理できませんでした.もう一度お願いします",
             Toast.LENGTH_SHORT
           ).show()
         }
@@ -89,12 +93,11 @@ class LoginFragment : Fragment() {
 
       override fun failure(exception: TwitterException?) {
         Toast.makeText(
-          requireContext(), "Login failed. No internet or No Twitter app found on your phone",
+          requireContext(), "ログインが失敗しました.インターネットが接続されているか,Twitterのアプリがダウンロードされているか確認してください",
           Toast.LENGTH_LONG
         ).show()
       }
     }
-
     //email password sign in
     loginButton.setOnClickListener {
       defaultSignIn(
@@ -125,8 +128,11 @@ class LoginFragment : Fragment() {
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     super.onActivityResult(requestCode, resultCode, data)
-    twitterLogInButton.onActivityResult(requestCode, resultCode, data)
 
+    if (requestCode == RC_TWITTER) {
+      // Pass the activity result to the Twitter login button.
+      twitterLogInButton.onActivityResult(requestCode, resultCode, data);
+    }
     if (requestCode == RC_SIGN_IN) {
       val task = GoogleSignIn.getSignedInAccountFromIntent(data)
       try {
@@ -174,15 +180,15 @@ class LoginFragment : Fragment() {
             // If sign in fails, display a message to the user.
             Log.w(DEFAULT_TAG, "signInWithEmail:failure", task.exception)
             Toast.makeText(
-              requireContext(), "Authentication failed.",
+              requireContext(), "認証が失敗しました",
               Toast.LENGTH_SHORT
             ).show()
-            Toast.makeText(requireContext(), "Type it again", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "もう一度お願いします", Toast.LENGTH_SHORT).show()
             updateUI(null)
           }
         })
     } else {
-      Toast.makeText(requireContext(), "email and password input", Toast.LENGTH_SHORT).show()
+      Toast.makeText(requireContext(), "emailとpasswordを入力してください", Toast.LENGTH_SHORT).show()
     }
     // [END create_user_with_email]
   }
@@ -202,7 +208,7 @@ class LoginFragment : Fragment() {
           // If sign in fails, display a message to the user.
           Log.w(GOOGLE_TAG, "signInWithCredential:failure", task.exception)
           Toast.makeText(
-            requireContext(), "Authentication failed.",
+            requireContext(), "認証が失敗しました",
             Toast.LENGTH_SHORT
           ).show()
           updateUI(null)
@@ -232,7 +238,7 @@ class LoginFragment : Fragment() {
           // If sign in fails, display a message to the user.
           Log.w(TWITTER_TAG, "signInWithCredential:failure", task.exception)
           Toast.makeText(
-            requireContext(), "Authentication failed.",
+            requireContext(), "認証が失敗しました",
             Toast.LENGTH_SHORT
           ).show()
           updateUI(null)
@@ -259,8 +265,7 @@ class LoginFragment : Fragment() {
     private const val DEFAULT_TAG = "EmailPassword"
     private const val GOOGLE_TAG = "GoogleActivity"
     private const val TWITTER_TAG = "TwitterActivity"
-    private const val CONSUMER_KEY = "OAMOPD8qs87lILvuu2JGEHuFU"
-    private const val CONSUMER_SECRET = "uuliUQSaxLZygMafGCzPE3xXLfY2RZrL26wmwSkNwHgFHV3Ab4"
     private const val RC_SIGN_IN = 9001
+    private const val RC_TWITTER = 9002
   }
 }
