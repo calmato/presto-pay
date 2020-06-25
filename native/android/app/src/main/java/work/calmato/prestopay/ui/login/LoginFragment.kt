@@ -12,26 +12,30 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.facebook.*
+import com.facebook.login.LoginManager
+import com.facebook.login.LoginResult
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.OnCompleteListener
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.auth.GoogleAuthProvider
-import com.google.firebase.auth.TwitterAuthProvider
+import com.google.firebase.auth.*
 import com.google.firebase.iid.FirebaseInstanceId
 import com.twitter.sdk.android.core.*
 import kotlinx.android.synthetic.main.fragment_login.*
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentLoginBinding
+import java.util.*
 
 
+@Suppress("UNREACHABLE_CODE")
 class LoginFragment : Fragment() {
   private lateinit var auth: FirebaseAuth
   private lateinit var googleSignInClient: GoogleSignInClient
+  private lateinit var callbackManager: CallbackManager
+  var fbLoginButton: View? = null
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -46,6 +50,7 @@ class LoginFragment : Fragment() {
       .debug(true)
       .build()
     Twitter.initialize(twitterConfig)
+    FacebookSdk.sdkInitialize(activity)
   }
 
   override fun onCreateView(
@@ -70,7 +75,7 @@ class LoginFragment : Fragment() {
 
     auth = FirebaseAuth.getInstance()
 
-    //Google sign in
+    //Google Oauth
     val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
       .requestIdToken(getString(R.string.default_web_client_id))
       .requestEmail()
@@ -78,6 +83,39 @@ class LoginFragment : Fragment() {
 
     googleSignInClient = GoogleSignIn.getClient(requireContext(), gso)
 
+    //Facebook Oauth
+    facebookSingin?.setOnClickListener(View.OnClickListener {
+      callbackManager = CallbackManager.Factory.create()
+      LoginManager.getInstance()
+        .logInWithReadPermissions(this, Arrays.asList("public_profile", "email"))
+
+      LoginManager.getInstance().registerCallback(callbackManager,
+        object : FacebookCallback<LoginResult> {
+          override fun onSuccess(result: LoginResult?) {
+            Log.d(FACEBOOK_TAG, "facebook:onSuccess:$result")
+            if (result != null) {
+              handleFacebookAccessToken(result.accessToken)
+            } else {
+              Toast.makeText(
+                requireContext(), "認証に失敗しました.もう一度お願いします",
+                Toast.LENGTH_SHORT
+              ).show()
+            }
+          }
+
+          override fun onCancel() {
+            Log.d(FACEBOOK_TAG, "facebook:onCancel")
+            updateUI(null)
+          }
+
+          override fun onError(error: FacebookException?) {
+            Log.d(FACEBOOK_TAG, "facebook:onError", error)
+            updateUI(null)
+          }
+        })
+    })
+
+    //Twitter Oauth
     twitterLogInButton.callback = object : Callback<TwitterSession>() {
       override fun success(result: Result<TwitterSession>?) {
         Log.d(TWITTER_TAG, "success")
@@ -110,10 +148,6 @@ class LoginFragment : Fragment() {
       googleSignIn()
     }
 
-    facebookSingin.setOnClickListener {
-      facebookSignIn()
-    }
-
     //Auth check
     val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
     val value = sharedPreferences.getString("token", null)
@@ -129,10 +163,12 @@ class LoginFragment : Fragment() {
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     super.onActivityResult(requestCode, resultCode, data)
 
+
     if (requestCode == RC_TWITTER) {
       // Pass the activity result to the Twitter login button.
       twitterLogInButton.onActivityResult(requestCode, resultCode, data);
     }
+
     if (requestCode == RC_SIGN_IN) {
       val task = GoogleSignIn.getSignedInAccountFromIntent(data)
       try {
@@ -146,6 +182,8 @@ class LoginFragment : Fragment() {
         updateUI(null)
         // [END_EXCLUDE]
       }
+    } else {
+      callbackManager.onActivityResult(requestCode, resultCode, data)
     }
   }
 
@@ -246,14 +284,32 @@ class LoginFragment : Fragment() {
       })
   }
 
-  private fun facebookSignIn() {
+  private fun handleFacebookAccessToken(token: AccessToken) {
+    Log.d(FACEBOOK_TAG, "handleFacebookAccessToken:$token")
 
+    val credential = FacebookAuthProvider.getCredential(token.token)
+    auth.signInWithCredential(credential)
+      .addOnCompleteListener({ task ->
+        if (task.isSuccessful) {
+          // Sign in success, update UI with the signed-in user's information
+          Log.d(FACEBOOK_TAG, "signInWithFacebook:success")
+          val user = auth.currentUser
+          updateUI(user)
+        } else {
+          // If sign in fails, display a message to the user.
+          Log.w(FACEBOOK_TAG, "signInWithCredential:failure", task.exception)
+          Toast.makeText(
+            requireContext(), "認証が失敗しました",
+            Toast.LENGTH_SHORT
+          ).show()
+          updateUI(null)
+        }
+      })
   }
 
   private fun updateUI(user: FirebaseUser?) {
     if (user != null) {
       //home pageの遷移
-      Log.d(DEFAULT_TAG, user.email)
       user.getIdToken(true)
       this.findNavController().navigate(
         LoginFragmentDirections.actionLoginFragmentToHomeFragment()
@@ -265,6 +321,7 @@ class LoginFragment : Fragment() {
     private const val DEFAULT_TAG = "EmailPassword"
     private const val GOOGLE_TAG = "GoogleActivity"
     private const val TWITTER_TAG = "TwitterActivity"
+    private const val FACEBOOK_TAG = "FacebookActivity"
     private const val RC_SIGN_IN = 9001
     private const val RC_TWITTER = 9002
   }
