@@ -1,6 +1,5 @@
 package work.calmato.prestopay.ui.login
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.preference.PreferenceManager
@@ -33,7 +32,6 @@ import work.calmato.prestopay.databinding.FragmentLoginBinding
 import java.util.*
 
 
-@Suppress("UNREACHABLE_CODE")
 class LoginFragment : Fragment() {
   private lateinit var auth: FirebaseAuth
   private lateinit var googleSignInClient: GoogleSignInClient
@@ -198,7 +196,6 @@ class LoginFragment : Fragment() {
     updateUI(currentUser)
   }
 
-  @SuppressLint("ShowToast")
   private fun defaultSignIn(email: String, password: String) {
     Log.d(DEFAULT_TAG, "signInAccount:$email")
     // [START create_user_with_email]
