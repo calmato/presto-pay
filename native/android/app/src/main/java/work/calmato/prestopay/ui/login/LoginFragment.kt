@@ -23,7 +23,7 @@ import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.*
 import com.google.firebase.iid.FirebaseInstanceId
-import com.twitter.sdk.android.core.*
+import com.twitter.sdk.android.core.TwitterAuthConfig
 import kotlinx.android.synthetic.main.fragment_login.*
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentLoginBinding
@@ -83,6 +83,7 @@ class LoginFragment : Fragment() {
 
     googleSignInClient = GoogleSignIn.getClient(requireContext(), gso)
 
+
     //Facebook Oauth
     facebookSingin?.setOnClickListener(View.OnClickListener {
       callbackManager = CallbackManager.Factory.create()
@@ -136,6 +137,7 @@ class LoginFragment : Fragment() {
         ).show()
       }
     }
+    
     //email password sign in
     loginButton.setOnClickListener {
       defaultSignIn(
@@ -163,12 +165,16 @@ class LoginFragment : Fragment() {
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     super.onActivityResult(requestCode, resultCode, data)
 
-
     if (requestCode == RC_TWITTER) {
       // Pass the activity result to the Twitter login button.
       twitterLogInButton.onActivityResult(requestCode, resultCode, data);
     }
 
+    if (requestCode == RC_TWITTER) {
+      // Pass the activity result to the Twitter login button.
+      twitterLogInButton.onActivityResult(requestCode, resultCode, data);
+    }
+    
     if (requestCode == RC_SIGN_IN) {
       val task = GoogleSignIn.getSignedInAccountFromIntent(data)
       try {
