@@ -199,9 +199,8 @@ class LoginFragment : Fragment() {
     Log.d(DEFAULT_TAG, "signInAccount:$email")
     // [START create_user_with_email]
     if (email != "" && password != "") {
-      FirebaseInstanceId.getInstance().instanceId
-        .addOnCompleteListener(OnCompleteListener { task ->
           auth.signInWithEmailAndPassword(email, password)
+            .addOnCompleteListener(OnCompleteListener { task ->
           if (task.isSuccessful) {
             // Sign in success, update UI with the signed-in user's information
             Log.d(DEFAULT_TAG, "signInWithEmail:success")
