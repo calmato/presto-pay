@@ -36,7 +36,6 @@ class LoginFragment : Fragment() {
   private lateinit var auth: FirebaseAuth
   private lateinit var googleSignInClient: GoogleSignInClient
   private lateinit var callbackManager: CallbackManager
-  var fbLoginButton: View? = null
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
