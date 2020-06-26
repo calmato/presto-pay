@@ -60,6 +60,9 @@ dependencies {
   //Twitter SDK
   implementation 'com.twitter.sdk.android:twitter-core:3.1.1'
 
+  //Facebook
+  implementation 'com.facebook.android:facebook-android-sdk:4.42.0'
+
   implementation 'com.google.code.gson:gson:2.8.6'
   implementation 'com.squareup.retrofit2:retrofit:2.5.0'
   implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
