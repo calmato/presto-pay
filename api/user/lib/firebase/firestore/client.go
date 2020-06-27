@@ -50,14 +50,23 @@ func (f *Firestore) GetAll(ctx context.Context, collection string) *firestore.Do
 }
 
 // GetAllFirst - 初めから指定の件数分ドキュメントを取得
-func (f *Firestore) GetAllFirst(ctx context.Context, collection string, length int) *Firestore.DocumentIterator {
-	return f.Client.Collection(collection).OrderBy("id", firestore.Asc).Limit(length).Documents(ctx).GetAll()
+func (f *Firestore) GetAllFirst(
+	ctx context.Context, collection string, length int,
+) ([]*firestore.DocumentSnapshot, error) {
+	dsnap := f.Client.Collection(collection).OrderBy("id", firestore.Asc).Limit(length).Documents(ctx)
+
+	docs, err := dsnap.GetAll()
+	if err != nil {
+		return nil, err
+	}
+
+	return docs, nil
 }
 
 // GetAllFromStartAt - 指定した箇所から指定の件数分ドキュメントを取得
 func (f *Firestore) GetAllFromStartAt(
 	ctx context.Context, collection string, orderBy string, document string, length int,
-) (*firestore.DocumentIterator, error) {
+) ([]*firestore.DocumentSnapshot, error) {
 	col := f.Client.Collection(collection)
 
 	doc, err := col.Doc(document).Get(ctx)
@@ -65,8 +74,14 @@ func (f *Firestore) GetAllFromStartAt(
 		return nil, err
 	}
 
-	iter := col.OrderBy(orderBy, firestore.Asc).StartAfter(doc.Data()[orderBy]).Limit(length)
-	return iter, nil
+	dsnap := col.OrderBy(orderBy, firestore.Asc).StartAfter(doc.Data()[orderBy]).Limit(length)
+
+	docs, err := dsnap.GetAll()
+	if err != nil {
+		return nil, err
+	}
+
+	return docs, nil
 }
 
 // GetByQuery - where()を使用して、特定の条件を満たすすべてのドキュメントを取得
@@ -86,17 +101,25 @@ func (f *Firestore) GetByQueries(ctx context.Context, collection string, queries
 }
 
 // Search - 前方一致検索
-func (f *Firestore) Search(ctx context.Context, collection string, orderBy string, query string, length int) *firestore.DocumentIterator {
-	return f.Client.Collection(collection).
-		OrderBy(orderBy, firestore.Asc).
+func (f *Firestore) Search(
+	ctx context.Context, collection string, orderBy string, query string, length int
+) ([]*firestore.DocumentSnapshot, error) {
+	dsnap := f.Client.Collection(collection).OrderBy(orderBy, firestore.Asc).
 		StartAt(query).EndAt("\uf8ff").
 		Limit(length).Documents(ctx)
+
+	docs, err := dsnap.GetAll()
+	if err != nil {
+		return nil, err
+	}
+
+	return docs, nil
 }
 
 // SearchFromStartAt - ()指定した箇所から)前方一致検索
 func (f *Firestore) SearchFromStartAt(
 	ctx context.Context, collection string, orderBy string, query string, document string, length int,
-) (*firestore.DocumentIterator, error) {
+) ([]*firestore.DocumentSnapshot, error) {
 	col := f.Client.Collection(collection)
 
 	doc, err := col.Doc(document).Get(ctx)
@@ -104,11 +127,16 @@ func (f *Firestore) SearchFromStartAt(
 		return nil, err
 	}
 
-	iter := f.Client.Collection(collection).
-		OrderBy(orderBy, firestore.Asc).StartAfter(doc.Data()[orderBy]).
-		StartAt(query).EndAt("\uf8ff").
+	dsnap := f.Client.Collection(collection).OrderBy(orderBy, firestore.Asc).
+		StartAfter(doc.Data()[orderBy]).StartAt(query).EndAt("\uf8ff").
 		Limit(length).Documents(ctx)
-	return iter, nil
+
+	docs, err := dsnap.GetAll()
+	if err != nil {
+		return nil, err
+	}
+
+	return docs, nil
 }
 
 // Set - 単一のドキュメントを作成または上書き
