@@ -45,14 +45,14 @@ func (us *userService) IndexByUsername(ctx context.Context, username string, sta
 		}
 
 		return u, nil
-	} else {
-		u, err := us.userRepository.IndexByUsernameFromStartAt(ctx, username, startAt)
-		if err != nil {
-			return nil, err
-		}
-
-		return u, nil
 	}
+
+	u, err := us.userRepository.IndexByUsernameFromStartAt(ctx, username, startAt)
+	if err != nil {
+		return nil, err
+	}
+
+	return u, nil
 }
 
 func (us *userService) Show(ctx context.Context, userID string) (*user.User, error) {

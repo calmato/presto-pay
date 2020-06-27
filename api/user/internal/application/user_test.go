@@ -26,7 +26,7 @@ func TestUserApplication_IndexByUsername(t *testing.T) {
 				StartAt:  "",
 			},
 			Expected: []*user.User{
-				&user.User{
+				{
 					ID:           "user-id",
 					Name:         "テストユーザー",
 					Username:     "test-user",

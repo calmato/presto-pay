@@ -74,7 +74,7 @@ func TestUserService_IndexByUsername(t *testing.T) {
 			Username: "test",
 			StartAt:  "",
 			Expected: []*user.User{
-				&user.User{
+				{
 					ID:           "user-id",
 					Name:         "テストユーザー",
 					Username:     "test-user",
@@ -88,7 +88,7 @@ func TestUserService_IndexByUsername(t *testing.T) {
 			Username: "test",
 			StartAt:  "test",
 			Expected: []*user.User{
-				&user.User{
+				{
 					ID:           "user-id",
 					Name:         "テストユーザー",
 					Username:     "test-user",
