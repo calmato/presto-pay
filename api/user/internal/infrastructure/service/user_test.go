@@ -115,6 +115,81 @@ func TestUserService_Show(t *testing.T) {
 	}
 }
 
+func TestUserService_SearchUsers(t *testing.T) {
+	testCases := map[string]struct {
+		Username string
+		StartAt  string
+		Expected []*user.User
+	}{
+		"ok01": {
+			Username: "test",
+			StartAt:  "",
+			Expected: []*user.User{
+				&user.User{
+					ID:           "user-id",
+					Name:         "テストユーザー",
+					Username:     "test-user",
+					Email:        "test@calmato.com",
+					GroupIDs:     []string{"group-id"},
+					ThumbnailURL: "",
+				},
+			},
+		},
+		"ok02": {
+			Username: "test",
+			StartAt:  "test",
+			Expected: []*user.User{
+				&user.User{
+					ID:           "user-id",
+					Name:         "テストユーザー",
+					Username:     "test-user",
+					Email:        "test@calmato.com",
+					GroupIDs:     []string{"group-id"},
+					ThumbnailURL: "",
+				},
+			},
+		},
+	}
+
+	for result, testCase := range testCases {
+		ctx, cancel := context.WithCancel(context.Background())
+		defer cancel()
+
+		ctrl := gomock.NewController(t)
+		defer ctrl.Finish()
+
+		// Defined mocks
+		udvm := mock_user.NewMockUserDomainValidation(ctrl)
+
+		urm := mock_user.NewMockUserRepository(ctrl)
+		if testCase.StartAt == "" {
+			urm.EXPECT().SearchUsersByUsername(ctx, testCase.Username).Return(testCase.Expected, nil)
+		} else {
+			urm.EXPECT().
+				SearchUsersByUsernameFromStartAt(ctx, testCase.Username, testCase.StartAt).
+				Return(testCase.Expected, nil)
+		}
+
+		uum := mock_user.NewMockUserUploader(ctrl)
+
+		// Start test
+		t.Run(result, func(t *testing.T) {
+			target := NewUserService(udvm, urm, uum)
+
+			got, err := target.SearchUsers(ctx, testCase.Username, testCase.StartAt)
+			if err != nil {
+				t.Fatalf("error: %v", err)
+				return
+			}
+
+			if !reflect.DeepEqual(got, testCase.Expected) {
+				t.Fatalf("want %#v, but %#v", testCase.Expected, got)
+				return
+			}
+		})
+	}
+}
+
 func TestUserService_Create(t *testing.T) {
 	testCases := map[string]struct {
 		User *user.User

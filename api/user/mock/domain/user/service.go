@@ -64,6 +64,21 @@ func (mr *MockUserServiceMockRecorder) Show(ctx, userID interface{}) *gomock.Cal
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Show", reflect.TypeOf((*MockUserService)(nil).Show), ctx, userID)
 }
 
+// SearchUsers mocks base method
+func (m *MockUserService) SearchUsers(ctx context.Context, username, startAt string) ([]*user.User, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "SearchUsers", ctx, username, startAt)
+	ret0, _ := ret[0].([]*user.User)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// SearchUsers indicates an expected call of SearchUsers
+func (mr *MockUserServiceMockRecorder) SearchUsers(ctx, username, startAt interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SearchUsers", reflect.TypeOf((*MockUserService)(nil).SearchUsers), ctx, username, startAt)
+}
+
 // Create mocks base method
 func (m *MockUserService) Create(ctx context.Context, u *user.User) (*user.User, error) {
 	m.ctrl.T.Helper()

@@ -221,7 +221,7 @@ func (ur *userRepository) SearchUsersByUsername(ctx context.Context, username st
 }
 
 func (ur *userRepository) SearchUsersByUsernameFromStartAt(
-	ctx context.Context, query string, startAt string,
+	ctx context.Context, username string, startAt string,
 ) ([]*user.User, error) {
 	userCollection := getUserCollection()
 

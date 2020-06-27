@@ -135,3 +135,33 @@ func (mr *MockUserRepositoryMockRecorder) GetUserByUserID(ctx, userID interface{
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetUserByUserID", reflect.TypeOf((*MockUserRepository)(nil).GetUserByUserID), ctx, userID)
 }
+
+// SearchUsersByUsername mocks base method
+func (m *MockUserRepository) SearchUsersByUsername(ctx context.Context, username string) ([]*user.User, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "SearchUsersByUsername", ctx, username)
+	ret0, _ := ret[0].([]*user.User)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// SearchUsersByUsername indicates an expected call of SearchUsersByUsername
+func (mr *MockUserRepositoryMockRecorder) SearchUsersByUsername(ctx, username interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SearchUsersByUsername", reflect.TypeOf((*MockUserRepository)(nil).SearchUsersByUsername), ctx, username)
+}
+
+// SearchUsersByUsernameFromStartAt mocks base method
+func (m *MockUserRepository) SearchUsersByUsernameFromStartAt(ctx context.Context, username, startAt string) ([]*user.User, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "SearchUsersByUsernameFromStartAt", ctx, username, startAt)
+	ret0, _ := ret[0].([]*user.User)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// SearchUsersByUsernameFromStartAt indicates an expected call of SearchUsersByUsernameFromStartAt
+func (mr *MockUserRepositoryMockRecorder) SearchUsersByUsernameFromStartAt(ctx, username, startAt interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SearchUsersByUsernameFromStartAt", reflect.TypeOf((*MockUserRepository)(nil).SearchUsersByUsernameFromStartAt), ctx, username, startAt)
+}
