@@ -51,7 +51,7 @@ func (uh *apiV1UserHandler) IndexByUsername(ctx *gin.Context) {
 		return
 	}
 
-	res := &response.IndexUser{}
+	res := &response.IndexUsers{}
 	for _, u := range us {
 		ur := &response.ShowUser{
 			ID:           u.ID,

@@ -2,8 +2,8 @@ package response
 
 import "time"
 
-// IndexUser - ユーザー一覧取得APIのレスポンス
-type IndexUser struct {
+// IndexUsers - ユーザー一覧取得APIのレスポンス
+type IndexUsers struct {
 	Users []*ShowUser `json:"users"`
 }
 
