@@ -53,8 +53,6 @@ func (uh *apiV1UserHandler) Show(ctx *gin.Context) {
 		Email:        u.Email,
 		ThumbnailURL: u.ThumbnailURL,
 		GroupIDs:     u.GroupIDs,
-		CreatedAt:    u.CreatedAt,
-		UpdatedAt:    u.UpdatedAt,
 	}
 
 	ctx.JSON(http.StatusOK, res)
