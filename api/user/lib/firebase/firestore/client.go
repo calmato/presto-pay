@@ -74,7 +74,7 @@ func (f *Firestore) GetAllFromStartAt(
 		return nil, err
 	}
 
-	dsnap := col.OrderBy(orderBy, firestore.Asc).StartAfter(doc.Data()[orderBy]).Limit(length)
+	dsnap := col.OrderBy(orderBy, firestore.Asc).StartAfter(doc.Data()[orderBy]).Limit(length).Documents(ctx)
 
 	docs, err := dsnap.GetAll()
 	if err != nil {
@@ -102,7 +102,7 @@ func (f *Firestore) GetByQueries(ctx context.Context, collection string, queries
 
 // Search - 前方一致検索
 func (f *Firestore) Search(
-	ctx context.Context, collection string, orderBy string, query string, length int
+	ctx context.Context, collection string, orderBy string, query string, length int,
 ) ([]*firestore.DocumentSnapshot, error) {
 	dsnap := f.Client.Collection(collection).OrderBy(orderBy, firestore.Asc).
 		StartAt(query).EndAt("\uf8ff").
