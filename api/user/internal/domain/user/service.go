@@ -5,7 +5,6 @@ import "context"
 // UserService - UserServiceインターフェース
 type UserService interface {
 	Authentication(ctx context.Context) (*User, error)
-	Index(ctx context.Context, startAt string) ([]*User, error)
 	Show(ctx context.Context, userID string) (*User, error)
 	Create(ctx context.Context, u *User) (*User, error)
 	Update(ctx context.Context, u *User) (*User, error)
