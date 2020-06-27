@@ -14,9 +14,9 @@ import (
 
 // APIV1UserHandler - Userハンドラのインターフェース
 type APIV1UserHandler interface {
+	IndexByUsername(ctx *gin.Context)
 	Show(ctx *gin.Context)
 	ShowProfile(ctx *gin.Context)
-	SearchUsersByUsername(ctx *gin.Context)
 	Create(ctx *gin.Context)
 	UpdateProfile(ctx *gin.Context)
 	UpdatePassword(ctx *gin.Context)
@@ -35,6 +35,37 @@ func NewAPIV1UserHandler(ua application.UserApplication) APIV1UserHandler {
 	return &apiV1UserHandler{
 		userApplication: ua,
 	}
+}
+
+func (uh *apiV1UserHandler) IndexByUsername(ctx *gin.Context) {
+	req := &request.IndexByUsername{}
+	if err := ctx.BindJSON(req); err != nil {
+		handler.ErrorHandling(ctx, domain.UnableParseJSON.New(err))
+		return
+	}
+
+	c := middleware.GinContextToContext(ctx)
+	us, err := uh.userApplication.IndexByUsername(c, req)
+	if err != nil {
+		handler.ErrorHandling(ctx, err)
+		return
+	}
+
+	res := &response.IndexUser{}
+	for _, u := range us {
+		ur := &response.ShowUser{
+			ID:           u.ID,
+			Name:         u.Name,
+			Username:     u.Username,
+			Email:        u.Email,
+			ThumbnailURL: u.ThumbnailURL,
+			GroupIDs:     u.GroupIDs,
+		}
+
+		res.Users = append(res.Users, ur)
+	}
+
+	ctx.JSON(http.StatusOK, res)
 }
 
 func (uh *apiV1UserHandler) Show(ctx *gin.Context) {
@@ -76,37 +107,6 @@ func (uh *apiV1UserHandler) ShowProfile(ctx *gin.Context) {
 		GroupIDs:     u.GroupIDs,
 		CreatedAt:    u.CreatedAt,
 		UpdatedAt:    u.UpdatedAt,
-	}
-
-	ctx.JSON(http.StatusOK, res)
-}
-
-func (uh *apiV1UserHandler) SearchUsersByUsername(ctx *gin.Context) {
-	req := &request.SearchUsersByUsername{}
-	if err := ctx.BindJSON(req); err != nil {
-		handler.ErrorHandling(ctx, domain.UnableParseJSON.New(err))
-		return
-	}
-
-	c := middleware.GinContextToContext(ctx)
-	us, err := uh.userApplication.SearchUsersByUsername(c, req)
-	if err != nil {
-		handler.ErrorHandling(ctx, err)
-		return
-	}
-
-	res := &response.SearchUsers{}
-	for _, u := range us {
-		ur := &response.ShowUser{
-			ID:           u.ID,
-			Name:         u.Name,
-			Username:     u.Username,
-			Email:        u.Email,
-			ThumbnailURL: u.ThumbnailURL,
-			GroupIDs:     u.GroupIDs,
-		}
-
-		res.Users = append(res.Users, ur)
 	}
 
 	ctx.JSON(http.StatusOK, res)

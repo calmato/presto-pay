@@ -49,6 +49,21 @@ func (mr *MockUserServiceMockRecorder) Authentication(ctx interface{}) *gomock.C
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Authentication", reflect.TypeOf((*MockUserService)(nil).Authentication), ctx)
 }
 
+// IndexByUsername mocks base method
+func (m *MockUserService) IndexByUsername(ctx context.Context, username, startAt string) ([]*user.User, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "IndexByUsername", ctx, username, startAt)
+	ret0, _ := ret[0].([]*user.User)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// IndexByUsername indicates an expected call of IndexByUsername
+func (mr *MockUserServiceMockRecorder) IndexByUsername(ctx, username, startAt interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "IndexByUsername", reflect.TypeOf((*MockUserService)(nil).IndexByUsername), ctx, username, startAt)
+}
+
 // Show mocks base method
 func (m *MockUserService) Show(ctx context.Context, userID string) (*user.User, error) {
 	m.ctrl.T.Helper()
@@ -62,21 +77,6 @@ func (m *MockUserService) Show(ctx context.Context, userID string) (*user.User, 
 func (mr *MockUserServiceMockRecorder) Show(ctx, userID interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Show", reflect.TypeOf((*MockUserService)(nil).Show), ctx, userID)
-}
-
-// SearchUsers mocks base method
-func (m *MockUserService) SearchUsers(ctx context.Context, username, startAt string) ([]*user.User, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "SearchUsers", ctx, username, startAt)
-	ret0, _ := ret[0].([]*user.User)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// SearchUsers indicates an expected call of SearchUsers
-func (mr *MockUserServiceMockRecorder) SearchUsers(ctx, username, startAt interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SearchUsers", reflect.TypeOf((*MockUserService)(nil).SearchUsers), ctx, username, startAt)
 }
 
 // Create mocks base method

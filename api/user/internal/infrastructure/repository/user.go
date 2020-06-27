@@ -77,6 +77,54 @@ func (ur *userRepository) Authentication(ctx context.Context) (*user.User, error
 	return u, nil
 }
 
+func (ur *userRepository) IndexByUsername(ctx context.Context, username string) ([]*user.User, error) {
+	userCollection := getUserCollection()
+
+	docs, err := ur.firestore.Search(ctx, userCollection, "username", username, 50)
+	if err != nil {
+		return nil, err
+	}
+
+	us := make([]*user.User, len(docs))
+
+	for i, doc := range docs {
+		u := &user.User{}
+
+		if err = doc.DataTo(u); err != nil {
+			return nil, err
+		}
+
+		us[i] = u
+	}
+
+	return us, nil
+}
+
+func (ur *userRepository) IndexByUsernameFromStartAt(
+	ctx context.Context, username string, startAt string,
+) ([]*user.User, error) {
+	userCollection := getUserCollection()
+
+	docs, err := ur.firestore.SearchFromStartAt(ctx, userCollection, "username", username, startAt, 50)
+	if err != nil {
+		return nil, err
+	}
+
+	us := make([]*user.User, len(docs))
+
+	for i, doc := range docs {
+		u := &user.User{}
+
+		if err = doc.DataTo(u); err != nil {
+			return nil, err
+		}
+
+		us[i] = u
+	}
+
+	return us, nil
+}
+
 func (ur *userRepository) Create(ctx context.Context, u *user.User) error {
 	userCollection := getUserCollection()
 
@@ -195,54 +243,6 @@ func (ur *userRepository) GetUserByUserID(ctx context.Context, userID string) (*
 	}
 
 	return u, nil
-}
-
-func (ur *userRepository) SearchUsersByUsername(ctx context.Context, username string) ([]*user.User, error) {
-	userCollection := getUserCollection()
-
-	docs, err := ur.firestore.Search(ctx, userCollection, "username", username, 50)
-	if err != nil {
-		return nil, err
-	}
-
-	us := make([]*user.User, len(docs))
-
-	for i, doc := range docs {
-		u := &user.User{}
-
-		if err = doc.DataTo(u); err != nil {
-			return nil, err
-		}
-
-		us[i] = u
-	}
-
-	return us, nil
-}
-
-func (ur *userRepository) SearchUsersByUsernameFromStartAt(
-	ctx context.Context, username string, startAt string,
-) ([]*user.User, error) {
-	userCollection := getUserCollection()
-
-	docs, err := ur.firestore.SearchFromStartAt(ctx, userCollection, "username", username, startAt, 50)
-	if err != nil {
-		return nil, err
-	}
-
-	us := make([]*user.User, len(docs))
-
-	for i, doc := range docs {
-		u := &user.User{}
-
-		if err = doc.DataTo(u); err != nil {
-			return nil, err
-		}
-
-		us[i] = u
-	}
-
-	return us, nil
 }
 
 func getToken(ctx context.Context) (string, error) {

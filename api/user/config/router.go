@@ -33,7 +33,7 @@ func Router(reg *registry.Registry) *gin.Engine {
 		apiV1.GET("/auth", reg.V1User.ShowProfile)
 		apiV1.PATCH("/auth/password", reg.V1User.UpdatePassword)
 
-		apiV1.GET("/users", reg.V1User.SearchUsersByUsername)
+		apiV1.GET("/users", reg.V1User.IndexByUsername)
 		apiV1.GET("/users/:userID", reg.V1User.Show)
 		apiV1.POST("/users", reg.V1User.Create)
 		apiV1.PATCH("/users", reg.V1User.UpdateProfile)

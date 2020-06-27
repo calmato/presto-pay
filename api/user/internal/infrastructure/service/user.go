@@ -37,6 +37,24 @@ func (us *userService) Authentication(ctx context.Context) (*user.User, error) {
 	return u, nil
 }
 
+func (us *userService) IndexByUsername(ctx context.Context, username string, startAt string) ([]*user.User, error) {
+	if startAt == "" {
+		u, err := us.userRepository.IndexByUsername(ctx, username)
+		if err != nil {
+			return nil, err
+		}
+
+		return u, nil
+	} else {
+		u, err := us.userRepository.IndexByUsernameFromStartAt(ctx, username, startAt)
+		if err != nil {
+			return nil, err
+		}
+
+		return u, nil
+	}
+}
+
 func (us *userService) Show(ctx context.Context, userID string) (*user.User, error) {
 	u, err := us.userRepository.GetUserByUserID(ctx, userID)
 	if err != nil {
@@ -45,24 +63,6 @@ func (us *userService) Show(ctx context.Context, userID string) (*user.User, err
 	}
 
 	return u, nil
-}
-
-func (us *userService) SearchUsers(ctx context.Context, username string, startAt string) ([]*user.User, error) {
-	if startAt == "" {
-		u, err := us.userRepository.SearchUsersByUsername(ctx, username)
-		if err != nil {
-			return nil, err
-		}
-
-		return u, nil
-	} else {
-		u, err := us.userRepository.SearchUsersByUsernameFromStartAt(ctx, username, startAt)
-		if err != nil {
-			return nil, err
-		}
-
-		return u, nil
-	}
 }
 
 func (us *userService) Create(ctx context.Context, u *user.User) (*user.User, error) {

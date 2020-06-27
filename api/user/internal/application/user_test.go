@@ -15,6 +15,68 @@ import (
 	"golang.org/x/xerrors"
 )
 
+func TestUserApplication_IndexByUsername(t *testing.T) {
+	testCases := map[string]struct {
+		Request  *request.IndexByUsername
+		Expected []*user.User
+	}{
+		"ok": {
+			Request: &request.IndexByUsername{
+				Username: "test-user",
+				StartAt:  "",
+			},
+			Expected: []*user.User{
+				&user.User{
+					ID:           "user-id",
+					Name:         "テストユーザー",
+					Username:     "test-user",
+					Email:        "test@calmato.com",
+					GroupIDs:     []string{"group-id"},
+					ThumbnailURL: "",
+				},
+			},
+		},
+	}
+
+	for result, testCase := range testCases {
+		ctx, cancel := context.WithCancel(context.Background())
+		defer cancel()
+
+		ctrl := gomock.NewController(t)
+		defer ctrl.Finish()
+
+		// Defined variables
+		ves := make([]*domain.ValidationError, 0)
+
+		u := &user.User{}
+
+		// Defined mocks
+		urvm := mock_validation.NewMockUserRequestValidation(ctrl)
+		urvm.EXPECT().IndexByUsername(testCase.Request).Return(ves)
+
+		usm := mock_user.NewMockUserService(ctrl)
+		usm.EXPECT().Authentication(ctx).Return(u, nil)
+		usm.EXPECT().IndexByUsername(ctx, testCase.Request.Username, testCase.Request.StartAt).
+			Return(testCase.Expected, nil)
+
+		// Start test
+		t.Run(result, func(t *testing.T) {
+			target := NewUserApplication(urvm, usm)
+
+			got, err := target.IndexByUsername(ctx, testCase.Request)
+			if err != nil {
+				t.Fatalf("error: %v", err)
+				return
+			}
+
+			if !reflect.DeepEqual(got, testCase.Expected) {
+				t.Fatalf("want %#v, but %#v", testCase.Expected, got)
+				return
+			}
+		})
+	}
+}
+
 func TestUserApplication_Show(t *testing.T) {
 	testCases := map[string]struct {
 		UserID   string
@@ -96,68 +158,6 @@ func TestUserApplication_ShowProfile(t *testing.T) {
 			_, err := target.ShowProfile(ctx)
 			if err != nil {
 				t.Fatalf("error: %v", err)
-				return
-			}
-		})
-	}
-}
-
-func TestUserApplication_SearchUsersByUsername(t *testing.T) {
-	testCases := map[string]struct {
-		Request  *request.SearchUsersByUsername
-		Expected []*user.User
-	}{
-		"ok": {
-			Request: &request.SearchUsersByUsername{
-				Username: "test-user",
-				StartAt:  "",
-			},
-			Expected: []*user.User{
-				&user.User{
-					ID:           "user-id",
-					Name:         "テストユーザー",
-					Username:     "test-user",
-					Email:        "test@calmato.com",
-					GroupIDs:     []string{"group-id"},
-					ThumbnailURL: "",
-				},
-			},
-		},
-	}
-
-	for result, testCase := range testCases {
-		ctx, cancel := context.WithCancel(context.Background())
-		defer cancel()
-
-		ctrl := gomock.NewController(t)
-		defer ctrl.Finish()
-
-		// Defined variables
-		ves := make([]*domain.ValidationError, 0)
-
-		u := &user.User{}
-
-		// Defined mocks
-		urvm := mock_validation.NewMockUserRequestValidation(ctrl)
-		urvm.EXPECT().SearchUsersByUsername(testCase.Request).Return(ves)
-
-		usm := mock_user.NewMockUserService(ctrl)
-		usm.EXPECT().Authentication(ctx).Return(u, nil)
-		usm.EXPECT().SearchUsers(ctx, testCase.Request.Username, testCase.Request.StartAt).
-			Return(testCase.Expected, nil)
-
-		// Start test
-		t.Run(result, func(t *testing.T) {
-			target := NewUserApplication(urvm, usm)
-
-			got, err := target.SearchUsersByUsername(ctx, testCase.Request)
-			if err != nil {
-				t.Fatalf("error: %v", err)
-				return
-			}
-
-			if !reflect.DeepEqual(got, testCase.Expected) {
-				t.Fatalf("want %#v, but %#v", testCase.Expected, got)
 				return
 			}
 		})

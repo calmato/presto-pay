@@ -2,6 +2,11 @@ package response
 
 import "time"
 
+// IndexUser - ユーザー一覧取得APIのレスポンス
+type IndexUser struct {
+	Users []*ShowUser `json:"users"`
+}
+
 // ShowUser - ユーザー取得APIのレスポンス
 type ShowUser struct {
 	ID           string   `json:"id"`
@@ -22,11 +27,6 @@ type ShowProfile struct {
 	GroupIDs     []string  `json:"groupIds"`
 	CreatedAt    time.Time `json:"createdAt"`
 	UpdatedAt    time.Time `json:"updatedAt"`
-}
-
-// SearchUsers - ユーザー検索APIのレスポンス
-type SearchUsers struct {
-	Users []*ShowUser `json:"users"`
 }
 
 // CreateUser - ユーザー登録APIのレスポンス

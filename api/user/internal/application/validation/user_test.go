@@ -8,13 +8,13 @@ import (
 	"github.com/calmato/presto-pay/api/user/internal/domain"
 )
 
-func TestUserRequestValidation_SearchUsersByUsername(t *testing.T) {
+func TestUserRequestValidation_IndexByUsername(t *testing.T) {
 	testCases := map[string]struct {
-		Request  *request.SearchUsersByUsername
+		Request  *request.IndexByUsername
 		Expected []*domain.ValidationError
 	}{
 		"ok": {
-			Request: &request.SearchUsersByUsername{
+			Request: &request.IndexByUsername{
 				Username: "test-user",
 				StartAt:  "",
 			},
@@ -27,7 +27,7 @@ func TestUserRequestValidation_SearchUsersByUsername(t *testing.T) {
 		t.Run(result, func(t *testing.T) {
 			target := NewUserRequestValidation()
 
-			got := target.SearchUsersByUsername(testCase.Request)
+			got := target.IndexByUsername(testCase.Request)
 			if !reflect.DeepEqual(got, testCase.Expected) {
 				t.Fatalf("want %#v, but %#v", testCase.Expected, got)
 				return
