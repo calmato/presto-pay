@@ -38,10 +38,12 @@ func NewAPIV1UserHandler(ua application.UserApplication) APIV1UserHandler {
 }
 
 func (uh *apiV1UserHandler) IndexByUsername(ctx *gin.Context) {
-	req := &request.IndexByUsername{}
-	if err := ctx.BindJSON(req); err != nil {
-		handler.ErrorHandling(ctx, domain.UnableParseJSON.New(err))
-		return
+	username := ctx.DefaultQuery("username", "")
+	startAt := ctx.DefaultQuery("after", "")
+
+	req := &request.IndexByUsername{
+		Username: username,
+		StartAt:  startAt,
 	}
 
 	c := middleware.GinContextToContext(ctx)
