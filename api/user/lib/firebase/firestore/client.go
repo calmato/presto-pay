@@ -105,7 +105,7 @@ func (f *Firestore) Search(
 	ctx context.Context, collection string, orderBy string, query string, length int,
 ) ([]*firestore.DocumentSnapshot, error) {
 	dsnap := f.Client.Collection(collection).OrderBy(orderBy, firestore.Asc).
-		StartAt(query).EndAt("\uf8ff").
+		StartAt(query).EndAt(query + "\uf8ff").
 		Limit(length).Documents(ctx)
 
 	docs, err := dsnap.GetAll()
@@ -128,7 +128,8 @@ func (f *Firestore) SearchFromStartAt(
 	}
 
 	dsnap := f.Client.Collection(collection).OrderBy(orderBy, firestore.Asc).
-		StartAfter(doc.Data()[orderBy]).StartAt(query).EndAt("\uf8ff").
+		StartAt(query).EndAt(query + "\uf8ff").
+		StartAfter(doc.Data()[orderBy]).
 		Limit(length).Documents(ctx)
 
 	docs, err := dsnap.GetAll()
