@@ -39,7 +39,7 @@ func NewAPIClient(userAPIURL string) APIClient {
 
 // Authentication - ログインユーザー情報の取得
 func (c *Client) Authentication(ctx context.Context) (*user.User, error) {
-	url := c.userAPIURL + "/v1/users"
+	url := c.userAPIURL + "/v1/auth"
 	req, _ := http.NewRequest("GET", url, nil)
 
 	if err := setHeader(ctx, req); err != nil {

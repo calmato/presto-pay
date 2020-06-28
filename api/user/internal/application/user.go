@@ -15,6 +15,7 @@ import (
 
 // UserApplication - UserApplicationインターフェース
 type UserApplication interface {
+	IndexByUsername(ctx context.Context, req *request.IndexByUsername) ([]*user.User, error)
 	Show(ctx context.Context, userID string) (*user.User, error)
 	ShowProfile(ctx context.Context) (*user.User, error)
 	Create(ctx context.Context, req *request.CreateUser) (*user.User, error)
@@ -37,6 +38,24 @@ func NewUserApplication(urv validation.UserRequestValidation, us user.UserServic
 		userRequestValidation: urv,
 		userService:           us,
 	}
+}
+
+func (ua *userApplication) IndexByUsername(ctx context.Context, req *request.IndexByUsername) ([]*user.User, error) {
+	if _, err := ua.userService.Authentication(ctx); err != nil {
+		return nil, domain.Unauthorized.New(err)
+	}
+
+	if ves := ua.userRequestValidation.IndexByUsername(req); len(ves) > 0 {
+		err := xerrors.New("Failed to RequestValidation")
+		return nil, domain.InvalidRequestValidation.New(err, ves...)
+	}
+
+	us, err := ua.userService.IndexByUsername(ctx, req.Username, req.StartAt)
+	if err != nil {
+		return nil, err
+	}
+
+	return us, nil
 }
 
 func (ua *userApplication) Show(ctx context.Context, userID string) (*user.User, error) {

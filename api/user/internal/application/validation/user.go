@@ -7,6 +7,7 @@ import (
 
 // UserRequestValidation - ユーザー関連のバリデーション
 type UserRequestValidation interface {
+	IndexByUsername(req *request.IndexByUsername) []*domain.ValidationError
 	CreateUser(req *request.CreateUser) []*domain.ValidationError
 	UpdateProfile(req *request.UpdateProfile) []*domain.ValidationError
 	UpdatePassword(req *request.UpdateUserPassword) []*domain.ValidationError
@@ -25,6 +26,10 @@ func NewUserRequestValidation() UserRequestValidation {
 	return &userRequestValidation{
 		validator: rv,
 	}
+}
+
+func (urv *userRequestValidation) IndexByUsername(req *request.IndexByUsername) []*domain.ValidationError {
+	return urv.validator.Run(req)
 }
 
 func (urv *userRequestValidation) CreateUser(req *request.CreateUser) []*domain.ValidationError {
