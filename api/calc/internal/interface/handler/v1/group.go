@@ -37,7 +37,9 @@ func (gh *apiV1GroupHandler) Index(ctx *gin.Context) {
 		return
 	}
 
-	res := &response.IndexGroups{}
+	res := &response.IndexGroups{
+		Groups: make([]*response.ShowGroup, len(gs)),
+	}
 
 	for i, g := range gs {
 		urs := make([]*response.UserToShowGroup, len(g.Users))
