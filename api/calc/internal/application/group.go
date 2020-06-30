@@ -15,7 +15,7 @@ import (
 
 // GroupApplication - GroupApplicationインターフェース
 type GroupApplication interface {
-	IndexJoinGroups(ctx context.Context) ([]*group.Group, error)
+	Index(ctx context.Context) ([]*group.Group, error)
 	Create(ctx context.Context, req *request.CreateGroup) (*group.Group, error)
 }
 
@@ -36,7 +36,7 @@ func NewGroupApplication(
 	}
 }
 
-func (ga *groupApplication) IndexJoinGroups(ctx context.Context) ([]*group.Group, error) {
+func (ga *groupApplication) Index(ctx context.Context) ([]*group.Group, error) {
 	u, err := ga.userService.Authentication(ctx)
 	if err != nil {
 		return nil, domain.Unauthorized.New(err)

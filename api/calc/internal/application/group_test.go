@@ -16,7 +16,7 @@ import (
 )
 
 // TODO: そのうちちゃんとしたテスト書く
-func TestGroupApplication_IndexJoinGroups(t *testing.T) {
+func TestGroupApplication_Index(t *testing.T) {
 	testCases := map[string]struct {
 		Expected []*group.Group
 	}{
@@ -50,7 +50,7 @@ func TestGroupApplication_IndexJoinGroups(t *testing.T) {
 		t.Run(result, func(t *testing.T) {
 			target := NewGroupApplication(grvm, usm, gsm)
 
-			got, err := target.IndexJoinGroups(ctx)
+			got, err := target.Index(ctx)
 			if err != nil {
 				t.Fatalf("error: %v", err)
 				return
