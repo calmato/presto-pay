@@ -1,4 +1,4 @@
-package work.calmato.prestopay.ui.newAccount
+package work.calmato.prestopay.ui.accountEdit
 
 import android.Manifest
 import android.app.Activity
@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.AsyncTask
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -18,83 +19,65 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.gson.Gson
-import kotlinx.android.synthetic.main.fragment_new_account.*
+import kotlinx.android.synthetic.main.fragment_account_edit.*
 import okhttp3.Response
-import org.json.JSONObject
 import work.calmato.prestopay.R
-import work.calmato.prestopay.databinding.FragmentNewAccountBinding
-import work.calmato.prestopay.util.Constant.Companion.IMAGE_PICK_CODE
-import work.calmato.prestopay.util.Constant.Companion.MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE
+import work.calmato.prestopay.databinding.FragmentAccountEditBindingImpl
+import work.calmato.prestopay.util.Constant
 import work.calmato.prestopay.util.RestClient
 import work.calmato.prestopay.util.encodeImage2Base64
 
-class NewAccountFragment : Fragment() {
+class AccountEditFragment : Fragment() {
   val serverUrl: String = "https://api.presto-pay-stg.calmato.work/v1/users"
   var jsonText: String = ""
   var setThumbnail = false
+
   override fun onCreateView(
     inflater: LayoutInflater,
     container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View? {
-    val binding: FragmentNewAccountBinding = DataBindingUtil.inflate(
-      inflater, R.layout.fragment_new_account, container, false
+    val binding: FragmentAccountEditBindingImpl = DataBindingUtil.inflate(
+      inflater, R.layout.fragment_account_edit, container, false
     )
-
     return binding.root
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
+    super.onViewCreated(view, savedInstanceState)
 
-    // buttonを押した時の処理を記述
-    createAccountButton.setOnClickListener {
+    //保存buttonを押した時の処理を記述
+    savaButton.setOnClickListener {
       var thumbnails = ""
       if (setThumbnail) {
         thumbnails = encodeImage2Base64(thumbnailEdit)
       }
-      val name = fullNameEditText.text.toString()
-      val userName = userNameEditText.text.toString()
-      val email = emailEditText.text.toString()
-      val password = passEditText.text.toString()
-      val passwordConfirmation = passConfirmEditText.text.toString()
+      val name: String = nameEditText.text.toString()
+      val userName: String = userNameEditText.text.toString()
+      val email: String = mailEditText.text.toString()
 
-      if (password == passwordConfirmation) {
-        val map: MutableMap<String, Any> = mutableMapOf()
-        map.put("name", name)
-        map.put("username", userName)
-        map.put("email", email)
-        map.put("thumbnail", thumbnails)
-        map.put("password", password)
-        map.put("passwordConfirmation", passwordConfirmation)
+      val map: MutableMap<String, Any> = mutableMapOf()
+      map.put("name", name)
+      map.put("username", userName)
+      map.put("email", email)
+      map.put("thumbnail", thumbnails)
 
-        val gson = Gson()
-        jsonText = gson.toJson(map)
-        Log.d("New Account Post Json", jsonText)
+      val gson = Gson()
+      jsonText = gson.toJson(map)
+      Log.d("Edit Account Patch Json", jsonText)
 
-        val response = MyAsyncTask().execute().get()
-        if (response.isSuccessful) {
-          this.findNavController().navigate(
-            NewAccountFragmentDirections.actionNewAccountFragmentToLoginFragment()
-          )
-        } else {
-          var errorMessage = ""
-          val jsonArray = JSONObject(response.body()!!.string()).getJSONArray("errors")
-          for (i in 0 until jsonArray.length()) {
-            val jsonObject = jsonArray.getJSONObject(i)
-            errorMessage += jsonObject.getString("field") + " " + jsonObject.getString("message")
-            if (i != jsonArray.length() - 1) {
-              errorMessage += "\n"
-            }
-          }
-          Toast.makeText(requireActivity(), errorMessage, Toast.LENGTH_LONG).show()
-        }
+      val response = MyAsyncTask().execute().get()
+      if (response.isSuccessful) {
+        this.findNavController().navigate(
+          AccountEditFragmentDirections.actionEditAccountFragmentToAccountHome()
+        )
       } else {
-        Toast.makeText(requireContext(), "パスワードが一致しません", Toast.LENGTH_SHORT).show()
+        Log.i("responseActivity", "responseBody: " + response.body()!!.string())
+        Toast.makeText(requireActivity(), "変更に失敗しました。", Toast.LENGTH_LONG).show()
       }
     }
 
-    editPhotoText.setOnClickListener {
+    thumbnailEdit.setOnClickListener {
       //check runtime permission
       if (ContextCompat.checkSelfPermission(
           requireActivity(),
@@ -117,7 +100,7 @@ class NewAccountFragment : Fragment() {
           ActivityCompat.requestPermissions(
             requireActivity(),
             arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
-            MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE
+            Constant.MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE
           )
         }
       } else {
@@ -125,16 +108,13 @@ class NewAccountFragment : Fragment() {
         pickImageFromGallery()
       }
     }
-    hasAccountText.setOnClickListener {
-      this.findNavController().navigate(
-        NewAccountFragmentDirections.actionNewAccountFragmentToLoginFragment()
-      )
-    }
   }
 
   inner class MyAsyncTask : AsyncTask<Void, Void, Response>() {
     override fun doInBackground(vararg params: Void?): Response {
-      val responseCode = RestClient().postExecute(jsonText, serverUrl)
+      val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
+      val token = sharedPreferences.getString("token", null)
+      val responseCode = RestClient().patchExecute(jsonText, serverUrl, token)
       return responseCode
     }
   }
@@ -145,7 +125,7 @@ class NewAccountFragment : Fragment() {
     grantResults: IntArray
   ) {
     when (requestCode) {
-      MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE -> {
+      Constant.MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE -> {
         // If request is cancelled, the result arrays are empty.
         if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
           pickImageFromGallery()
@@ -166,17 +146,18 @@ class NewAccountFragment : Fragment() {
     intent.type = "image/*"
     startActivityForResult(
       intent,
-      IMAGE_PICK_CODE
+      Constant.IMAGE_PICK_CODE
     )
     setThumbnail = true
   }
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     super.onActivityResult(requestCode, resultCode, data)
-    if (resultCode == Activity.RESULT_OK && requestCode == IMAGE_PICK_CODE) {
+    if (resultCode == Activity.RESULT_OK && requestCode == Constant.IMAGE_PICK_CODE) {
       thumbnailEdit.setImageURI(data?.data)
       thumbnailEdit.setBackgroundColor(Color.TRANSPARENT)
-      editPhotoText.setText("写真を変更")
+      changeProfilePicture.setText("写真を変更")
     }
   }
 }
+

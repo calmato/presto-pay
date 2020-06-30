@@ -22,7 +22,7 @@
   <string name="send_mail">メール送信</string>
   <string name="descriptionResetPassword">パスワードを再設定するURLを送信します。\nメールアドレスを記入してください。</string>
   <string name="login_title">Presto Pay</string>
-  <string name="google_signin" />
+  <string name="google_signin"/>
   <string name="login_button">ログイン</string>
   <string name="google_signin_text">Log in with Google</string>
   <string name="twitter_signin_text">Twitterでサインイン</string>
@@ -58,4 +58,5 @@
   <string name="right_arrow">right arrow</string>
   <string name="email_address">Email address</string>
   <string name="description_reset_pass">にパスワードを変更するリンクを送信します。\n現在のパスワードを入力してください。</string>
+  <string name="save_button"><u>保存</u></string>
 </resources>
