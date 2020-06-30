@@ -27,6 +27,24 @@ paths:
         '500':
           $ref: '#/components/responses/Unkown'
 
+    patch:
+      summary: ユーザー編集
+      security:
+        - BearerAuth: []
+      requestBody:
+        $ref: '#/components/requestBodies/UpdateUser'
+      responses:
+        '200':
+          $ref: '#/components/responses/UpdateUser'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/Unkown'
+
   /auth/password:
     patch:
       summary: ユーザー パスワード編集
@@ -83,24 +101,6 @@ paths:
           $ref: '#/components/responses/CreateUser'
         '400':
           $ref: '#/components/responses/BadRequest'
-        '409':
-          $ref: '#/components/responses/Conflict'
-        '500':
-          $ref: '#/components/responses/Unkown'
-
-    patch:
-      summary: ユーザー編集
-      security:
-        - BearerAuth: []
-      requestBody:
-        $ref: '#/components/requestBodies/UpdateUser'
-      responses:
-        '200':
-          $ref: '#/components/responses/UpdateUser'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
         '409':
           $ref: '#/components/responses/Conflict'
         '500':
