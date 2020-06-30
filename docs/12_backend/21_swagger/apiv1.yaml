@@ -160,6 +160,18 @@ paths:
           $ref: '#/components/responses/Unkown'
 
   /groups:
+    get:
+      summary: グループ一覧
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          $ref: '#/components/responses/IndexGroups'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/Unkown'
+
     post:
       summary: グループ作成
       security:
@@ -579,6 +591,59 @@ components:
                 format: date-time
                 description: 更新日時
 
+    IndexGroups:
+      description: グループ一覧取得APIのレスポンス
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              groups:
+                type: array
+                description: グループ一覧
+                items:
+                  properties:
+                    id:
+                      type: string
+                      format: uuid
+                      description: グループID
+                    name:
+                      type: string
+                      description: グループ名
+                    thumbnailUrl:
+                      type: string
+                      description: サムネイルURL
+                    users:
+                      type: array
+                      description: ユーザー一覧
+                      items:
+                        properties:
+                          id:
+                            type: string
+                            format: uuid
+                            description: ユーザーID
+                          name:
+                            type: string
+                            description: 表示名
+                          username:
+                            type: string
+                            description: ユーザー名
+                          email:
+                            type: string
+                            format: email
+                            description: メールアドレス
+                          thumbnail:
+                            type: string
+                            description: サムネイルURL
+                    createdAt:
+                      type: string
+                      format: date-time
+                      description: 作成日時
+                    updatedAt:
+                      type: string
+                      format: date-time
+                      description: 更新日時
+
     CreateGroup:
       description: グループ作成APIのレスポンス
       content:
@@ -589,10 +654,10 @@ components:
               id:
                 type: string
                 format: uuid
-                description: ユーザーID
+                description: グループID
               name:
                 type: string
-                description: 表示
+                description: グループ名
               thumbnailUrl:
                 type: string
                 description: サムネイルURL

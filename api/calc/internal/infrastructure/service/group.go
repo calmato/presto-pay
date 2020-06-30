@@ -6,6 +6,7 @@ import (
 
 	"github.com/calmato/presto-pay/api/calc/internal/domain"
 	"github.com/calmato/presto-pay/api/calc/internal/domain/group"
+	"github.com/calmato/presto-pay/api/calc/internal/domain/user"
 	"github.com/calmato/presto-pay/api/calc/internal/infrastructure/api"
 	"github.com/google/uuid"
 	"golang.org/x/xerrors"
@@ -29,6 +30,35 @@ func NewGroupService(
 		groupUploader:         gu,
 		apiClient:             ac,
 	}
+}
+
+func (gs *groupService) IndexJoinGroups(ctx context.Context, u *user.User) ([]*group.Group, error) {
+	users := map[string]*user.User{}
+	groups := make([]*group.Group, len(u.GroupIDs))
+
+	for i, groupID := range u.GroupIDs {
+		g, err := gs.groupRepository.Show(ctx, groupID)
+		if err != nil {
+			return nil, domain.ErrorInDatastore.New(err)
+		}
+
+		for _, userID := range g.UserIDs {
+			if users[userID] == nil {
+				u, err := gs.apiClient.ShowUser(ctx, userID)
+				if err != nil {
+					return nil, domain.ErrorInDatastore.New(err)
+				}
+
+				users[userID] = u
+			}
+
+			g.Users = append(g.Users, users[userID])
+		}
+
+		groups[i] = g
+	}
+
+	return groups, nil
 }
 
 func (gs *groupService) Create(ctx context.Context, g *group.Group) (*group.Group, error) {

@@ -49,6 +49,21 @@ func (mr *MockAPIClientMockRecorder) Authentication(ctx interface{}) *gomock.Cal
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Authentication", reflect.TypeOf((*MockAPIClient)(nil).Authentication), ctx)
 }
 
+// ShowUser mocks base method
+func (m *MockAPIClient) ShowUser(ctx context.Context, userID string) (*user.User, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ShowUser", ctx, userID)
+	ret0, _ := ret[0].(*user.User)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ShowUser indicates an expected call of ShowUser
+func (mr *MockAPIClientMockRecorder) ShowUser(ctx, userID interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ShowUser", reflect.TypeOf((*MockAPIClient)(nil).ShowUser), ctx, userID)
+}
+
 // UserExists mocks base method
 func (m *MockAPIClient) UserExists(ctx context.Context, userID string) (bool, error) {
 	m.ctrl.T.Helper()

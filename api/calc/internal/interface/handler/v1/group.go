@@ -14,6 +14,7 @@ import (
 
 // APIV1GroupHandler - Groupハンドラのインターフェース
 type APIV1GroupHandler interface {
+	Index(ctx *gin.Context)
 	Create(ctx *gin.Context)
 }
 
@@ -26,6 +27,47 @@ func NewAPIV1GroupHandler(ga application.GroupApplication) APIV1GroupHandler {
 	return &apiV1GroupHandler{
 		groupApplication: ga,
 	}
+}
+
+func (gh *apiV1GroupHandler) Index(ctx *gin.Context) {
+	c := middleware.GinContextToContext(ctx)
+	gs, err := gh.groupApplication.Index(c)
+	if err != nil {
+		handler.ErrorHandling(ctx, err)
+		return
+	}
+
+	res := &response.IndexGroups{
+		Groups: make([]*response.ShowGroup, len(gs)),
+	}
+
+	for i, g := range gs {
+		urs := make([]*response.UserToShowGroup, len(g.Users))
+		for j, u := range g.Users {
+			ur := &response.UserToShowGroup{
+				ID:           u.ID,
+				Name:         u.Name,
+				Username:     u.Username,
+				Email:        u.Email,
+				ThumbnailURL: u.ThumbnailURL,
+			}
+
+			urs[j] = ur
+		}
+
+		gr := &response.ShowGroup{
+			ID:           g.ID,
+			Name:         g.Name,
+			ThumbnailURL: g.ThumbnailURL,
+			Users:        urs,
+			CreatedAt:    g.CreatedAt,
+			UpdatedAt:    g.UpdatedAt,
+		}
+
+		res.Groups[i] = gr
+	}
+
+	ctx.JSON(http.StatusOK, res)
 }
 
 func (gh *apiV1GroupHandler) Create(ctx *gin.Context) {
