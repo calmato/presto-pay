@@ -52,7 +52,7 @@ class CreateGroupFragment : Fragment() {
     val groupName = groupName.text.toString()
     val userList = listOf("1924e4ce-cbfd-4420-a902-ba83653f7d4e","bb942b57-3ff3-4d0a-b1c7-a3ec20e86899")
     if (groupName.length in 1..31){
-      if(userList.size in 2..100){
+      if(userList.size in 1..100){
         val gson = Gson()
         val map: MutableMap<String, Any> = mutableMapOf()
         map["name"] = groupName
