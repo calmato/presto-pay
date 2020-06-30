@@ -7,6 +7,7 @@ package mock_group
 import (
 	context "context"
 	group "github.com/calmato/presto-pay/api/calc/internal/domain/group"
+	user "github.com/calmato/presto-pay/api/calc/internal/domain/user"
 	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
 )
@@ -32,6 +33,21 @@ func NewMockGroupService(ctrl *gomock.Controller) *MockGroupService {
 // EXPECT returns an object that allows the caller to indicate expected use
 func (m *MockGroupService) EXPECT() *MockGroupServiceMockRecorder {
 	return m.recorder
+}
+
+// IndexJoinGroups mocks base method
+func (m *MockGroupService) IndexJoinGroups(ctx context.Context, u *user.User) ([]*group.Group, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "IndexJoinGroups", ctx, u)
+	ret0, _ := ret[0].([]*group.Group)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// IndexJoinGroups indicates an expected call of IndexJoinGroups
+func (mr *MockGroupServiceMockRecorder) IndexJoinGroups(ctx, u interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "IndexJoinGroups", reflect.TypeOf((*MockGroupService)(nil).IndexJoinGroups), ctx, u)
 }
 
 // Create mocks base method

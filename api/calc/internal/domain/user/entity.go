@@ -9,6 +9,7 @@ type User struct {
 	Username     string    `json:"username"`      // ユーザー名 [unique]
 	Email        string    `json:"email"`         // メールアドレス
 	ThumbnailURL string    `json:"thumbnail_url"` // サムネイル
+	GroupIDs     []string  `json:"group_ids"`     // グループID一覧
 	Password     string    `json:"-"`             // パスワード
 	CreatedAt    time.Time `json:"created_at"`    // 作成日時
 	UpdatedAt    time.Time `json:"updated_at"`    // 更新日時
