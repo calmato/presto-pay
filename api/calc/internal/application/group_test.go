@@ -2,6 +2,7 @@ package application
 
 import (
 	"context"
+	"reflect"
 	"testing"
 
 	"github.com/calmato/presto-pay/api/calc/internal/application/request"
@@ -13,6 +14,55 @@ import (
 	mock_user "github.com/calmato/presto-pay/api/calc/mock/domain/user"
 	"github.com/golang/mock/gomock"
 )
+
+// TODO: そのうちちゃんとしたテスト書く
+func TestGroupApplication_IndexJoinGroups(t *testing.T) {
+	testCases := map[string]struct {
+		Expected []*group.Group
+	}{
+		"ok": {
+			Expected: []*group.Group{},
+		},
+	}
+
+	for result, testCase := range testCases {
+		ctx, cancel := context.WithCancel(context.Background())
+		defer cancel()
+
+		ctrl := gomock.NewController(t)
+		defer ctrl.Finish()
+
+		// Defined variables
+		u := &user.User{
+			ID: "user-id",
+		}
+
+		// Defined mocks
+		grvm := mock_validation.NewMockGroupRequestValidation(ctrl)
+
+		usm := mock_user.NewMockUserService(ctrl)
+		usm.EXPECT().Authentication(ctx).Return(u, nil)
+
+		gsm := mock_group.NewMockGroupService(ctrl)
+		gsm.EXPECT().IndexJoinGroups(ctx, u).Return(testCase.Expected, nil)
+
+		// Start test
+		t.Run(result, func(t *testing.T) {
+			target := NewGroupApplication(grvm, usm, gsm)
+
+			got, err := target.IndexJoinGroups(ctx)
+			if err != nil {
+				t.Fatalf("error: %v", err)
+				return
+			}
+
+			if !reflect.DeepEqual(got, testCase.Expected) {
+				t.Fatalf("want %#v, but %#v", testCase.Expected, got)
+				return
+			}
+		})
+	}
+}
 
 func TestGroupApplication_Create(t *testing.T) {
 	testCases := map[string]struct {

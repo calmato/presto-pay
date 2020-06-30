@@ -39,14 +39,14 @@ func (gs *groupService) IndexJoinGroups(ctx context.Context, u *user.User) ([]*g
 	for i, groupID := range u.GroupIDs {
 		g, err := gs.groupRepository.Show(ctx, groupID)
 		if err != nil {
-			return nil, err
+			return nil, domain.ErrorInDatastore.New(err)
 		}
 
 		for _, userID := range g.UserIDs {
 			if users[userID] == nil {
 				u, err := gs.apiClient.ShowUser(ctx, userID)
 				if err != nil {
-					return nil, err
+					return nil, domain.ErrorInDatastore.New(err)
 				}
 
 				users[userID] = u
