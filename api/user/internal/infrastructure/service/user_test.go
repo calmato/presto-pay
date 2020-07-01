@@ -168,7 +168,7 @@ func TestUserService_Show(t *testing.T) {
 		udvm := mock_user.NewMockUserDomainValidation(ctrl)
 
 		urm := mock_user.NewMockUserRepository(ctrl)
-		urm.EXPECT().GetUserByUserID(ctx, testCase.UserID).Return(testCase.Expected, nil)
+		urm.EXPECT().ShowByUserID(ctx, testCase.UserID).Return(testCase.Expected, nil)
 
 		uum := mock_user.NewMockUserUploader(ctrl)
 
@@ -520,7 +520,7 @@ func TestUserService_UniqueCheckUsername(t *testing.T) {
 		udvm := mock_user.NewMockUserDomainValidation(ctrl)
 
 		urm := mock_user.NewMockUserRepository(ctrl)
-		urm.EXPECT().GetUserByUsername(ctx, testCase.Username).Return(testCase.RepositoryResponse, nil)
+		urm.EXPECT().ShowByUsername(ctx, testCase.Username).Return(testCase.RepositoryResponse, nil)
 
 		uum := mock_user.NewMockUserUploader(ctrl)
 

@@ -47,8 +47,8 @@ func TestUserValidation_User(t *testing.T) {
 
 		// Defined mocks
 		urm := mock_user.NewMockUserRepository(ctrl)
+		urm.EXPECT().ShowByUsername(ctx, testCase.User.Username).Return(u, nil)
 		urm.EXPECT().GetUIDByEmail(ctx, testCase.User.Email).Return(testCase.User.ID, nil)
-		urm.EXPECT().GetUserByUsername(ctx, testCase.User.Username).Return(u, nil)
 
 		t.Run(result, func(t *testing.T) {
 			target := NewUserDomainValidation(urm)

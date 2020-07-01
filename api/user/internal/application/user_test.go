@@ -490,7 +490,7 @@ func TestUserApplication_UniqueCheckUsername(t *testing.T) {
 	}
 }
 
-func TestUserApplication_AddGroupID(t *testing.T) {
+func TestUserApplication_AddGroup(t *testing.T) {
 	current := time.Now()
 
 	testCases := map[string]struct {
@@ -537,7 +537,7 @@ func TestUserApplication_AddGroupID(t *testing.T) {
 		t.Run(result, func(t *testing.T) {
 			target := NewUserApplication(urvm, usm)
 
-			got, err := target.AddGroupID(ctx, testCase.UserID, testCase.GroupID)
+			got, err := target.AddGroup(ctx, testCase.UserID, testCase.GroupID)
 			if err != nil {
 				t.Fatalf("error: %v", err)
 				return
@@ -551,7 +551,7 @@ func TestUserApplication_AddGroupID(t *testing.T) {
 	}
 }
 
-func TestUserApplication_RemoveGroupID(t *testing.T) {
+func TestUserApplication_RemoveGroup(t *testing.T) {
 	current := time.Now()
 
 	testCases := map[string]struct {
@@ -598,7 +598,7 @@ func TestUserApplication_RemoveGroupID(t *testing.T) {
 		t.Run(result, func(t *testing.T) {
 			target := NewUserApplication(urvm, usm)
 
-			got, err := target.RemoveGroupID(ctx, testCase.UserID, testCase.GroupID)
+			got, err := target.RemoveGroup(ctx, testCase.UserID, testCase.GroupID)
 			if err != nil {
 				t.Fatalf("error: %v", err)
 				return
