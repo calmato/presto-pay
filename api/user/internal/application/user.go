@@ -249,7 +249,7 @@ func (ua *userApplication) AddFriend(ctx context.Context, req *request.AddFriend
 		return nil, err
 	}
 
-	contains, err := ua.userService.ContainsFriendID(ctx, au, u.UserID)
+	contains, err := ua.userService.ContainsFriendID(ctx, au, u.ID)
 	if err != nil {
 		return nil, err
 	}
@@ -259,7 +259,7 @@ func (ua *userApplication) AddFriend(ctx context.Context, req *request.AddFriend
 		return nil, domain.AlreadyExistsInDatastore.New(err)
 	}
 
-	au.FriendIDs = append(au.FriendIDs, u.UserID)
+	au.FriendIDs = append(au.FriendIDs, u.ID)
 
 	if _, err := ua.userService.Update(ctx, au); err != nil {
 		return nil, err
