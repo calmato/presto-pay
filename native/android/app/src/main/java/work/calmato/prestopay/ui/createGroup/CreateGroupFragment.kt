@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.google.firebase.auth.FirebaseAuth
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_create_group.*
 import kotlinx.android.synthetic.main.fragment_create_group.thumbnail
@@ -29,6 +30,8 @@ class CreateGroupFragment : Fragment() {
   val serverUrl: String = "https://api.presto-pay-stg.calmato.work/v1/groups"
   var jsonText: String = ""
   var setThumbnail = false
+  var idToken = ""
+
 
   override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?,
@@ -63,7 +66,6 @@ class CreateGroupFragment : Fragment() {
         jsonText = gson.toJson(map)
         Log.i(TAG, "sendGroupInfo: $jsonText")
         val response = MyAsyncTask().execute().get()
-        Log.i(TAG, "MyAsyncTask: " + response.isSuccessful)
         if (response.isSuccessful) {
           Toast.makeText(requireContext(), "新しいグループを作成しました", Toast.LENGTH_SHORT).show()
         } else {
@@ -109,7 +111,10 @@ class CreateGroupFragment : Fragment() {
       }
     }
     setHasOptionsMenu(true)
-
+    val mUser = FirebaseAuth.getInstance().currentUser
+    mUser?.getIdToken(true)?.addOnCompleteListener(requireActivity()){
+      idToken = it.result?.token!!
+    }
   }
 
   override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -160,9 +165,7 @@ class CreateGroupFragment : Fragment() {
 
   inner class MyAsyncTask : AsyncTask<Void, Void, Response>() {
     override fun doInBackground(vararg params: Void?): Response {
-      val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
-      val token = sharedPreferences.getString("token", null)
-      return RestClient().postAuthExecute(jsonText, serverUrl, token!!)
+      return RestClient().postAuthExecute(jsonText, serverUrl, idToken)
     }
   }
 
