@@ -180,3 +180,18 @@ func (mr *MockUserServiceMockRecorder) ContainsGroupID(ctx, u, groupID interface
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ContainsGroupID", reflect.TypeOf((*MockUserService)(nil).ContainsGroupID), ctx, u, groupID)
 }
+
+// ContainsFriendID mocks base method
+func (m *MockUserService) ContainsFriendID(ctx context.Context, u *user.User, friendID string) (bool, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ContainsFriendID", ctx, u, friendID)
+	ret0, _ := ret[0].(bool)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ContainsFriendID indicates an expected call of ContainsFriendID
+func (mr *MockUserServiceMockRecorder) ContainsFriendID(ctx, u, friendID interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ContainsFriendID", reflect.TypeOf((*MockUserService)(nil).ContainsFriendID), ctx, u, friendID)
+}

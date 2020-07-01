@@ -11,6 +11,7 @@ type User struct {
 	Email         string    `firestore:"email"`          // メールアドレス
 	ThumbnailURL  string    `firestore:"thumbnail_url"`  // サムネイル
 	GroupIDs      []string  `firestore:"group_ids"`      // グループID一覧
+	FriendIDs     []string  `firestore:"friend_ids"`     // 友達のユーザーID一覧
 	Password      string    `firestore:"-"`              // パスワード
 	CreatedAt     time.Time `firestore:"created_at"`     // 作成日時
 	UpdatedAt     time.Time `firestore:"updated_at"`     // 更新日時

@@ -23,8 +23,9 @@ type UserApplication interface {
 	UpdatePassword(ctx context.Context, req *request.UpdateUserPassword) (*user.User, error)
 	UniqueCheckEmail(ctx context.Context, req *request.UniqueCheckUserEmail) (bool, error)
 	UniqueCheckUsername(ctx context.Context, req *request.UniqueCheckUserUsername) (bool, error)
-	AddGroupID(ctx context.Context, userID string, groupID string) (*user.User, error)
-	RemoveGroupID(ctx context.Context, userID string, groupID string) (*user.User, error)
+	AddGroup(ctx context.Context, userID string, groupID string) (*user.User, error)
+	RemoveGroup(ctx context.Context, userID string, groupID string) (*user.User, error)
+	AddFriend(ctx context.Context, req *request.AddFriend) (*user.User, error)
 }
 
 type userApplication struct {
@@ -174,7 +175,7 @@ func (ua *userApplication) UniqueCheckUsername(
 	return ua.userService.UniqueCheckUsername(ctx, u, req.Username), nil
 }
 
-func (ua *userApplication) AddGroupID(ctx context.Context, userID string, groupID string) (*user.User, error) {
+func (ua *userApplication) AddGroup(ctx context.Context, userID string, groupID string) (*user.User, error) {
 	if _, err := ua.userService.Authentication(ctx); err != nil {
 		return nil, domain.Unauthorized.New(err)
 	}
@@ -203,7 +204,7 @@ func (ua *userApplication) AddGroupID(ctx context.Context, userID string, groupI
 	return u, nil
 }
 
-func (ua *userApplication) RemoveGroupID(ctx context.Context, userID string, groupID string) (*user.User, error) {
+func (ua *userApplication) RemoveGroup(ctx context.Context, userID string, groupID string) (*user.User, error) {
 	if _, err := ua.userService.Authentication(ctx); err != nil {
 		return nil, domain.Unauthorized.New(err)
 	}
@@ -224,6 +225,40 @@ func (ua *userApplication) RemoveGroupID(ctx context.Context, userID string, gro
 	}
 
 	u.GroupIDs = common.RemoveString(u.GroupIDs, groupID)
+
+	if _, err := ua.userService.Update(ctx, u); err != nil {
+		return nil, err
+	}
+
+	return u, nil
+}
+
+func (ua *userApplication) AddFriend(ctx context.Context, req *request.AddFriend) (*user.User, error) {
+	if _, err := ua.userService.Authentication(ctx); err != nil {
+		return nil, domain.Unauthorized.New(err)
+	}
+
+	if ves := ua.userRequestValidation.AddFriend(req); len(ves) > 0 {
+		err := xerrors.New("Failed to RequestValidation")
+		return nil, domain.InvalidRequestValidation.New(err, ves...)
+	}
+
+	u, err := ua.userService.Show(ctx, req.UserID)
+	if err != nil {
+		return nil, err
+	}
+
+	contains, err := ua.userService.ContainsFriendID(ctx, u, req.UserID)
+	if err != nil {
+		return nil, err
+	}
+
+	if contains {
+		err := xerrors.New("Failed to Service")
+		return nil, domain.AlreadyExistsInDatastore.New(err)
+	}
+
+	u.FriendIDs = append(u.FriendIDs, req.UserID)
 
 	if _, err := ua.userService.Update(ctx, u); err != nil {
 		return nil, err
