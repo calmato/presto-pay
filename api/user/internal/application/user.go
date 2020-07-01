@@ -234,7 +234,8 @@ func (ua *userApplication) RemoveGroup(ctx context.Context, userID string, group
 }
 
 func (ua *userApplication) AddFriend(ctx context.Context, req *request.AddFriend) (*user.User, error) {
-	if _, err := ua.userService.Authentication(ctx); err != nil {
+	au, err := ua.userService.Authentication(ctx)
+	if err != nil {
 		return nil, domain.Unauthorized.New(err)
 	}
 
@@ -248,7 +249,7 @@ func (ua *userApplication) AddFriend(ctx context.Context, req *request.AddFriend
 		return nil, err
 	}
 
-	contains, err := ua.userService.ContainsFriendID(ctx, u, req.UserID)
+	contains, err := ua.userService.ContainsFriendID(ctx, au, u.ID)
 	if err != nil {
 		return nil, err
 	}
@@ -258,13 +259,13 @@ func (ua *userApplication) AddFriend(ctx context.Context, req *request.AddFriend
 		return nil, domain.AlreadyExistsInDatastore.New(err)
 	}
 
-	u.FriendIDs = append(u.FriendIDs, req.UserID)
+	au.FriendIDs = append(au.FriendIDs, u.ID)
 
-	if _, err := ua.userService.Update(ctx, u); err != nil {
+	if _, err := ua.userService.Update(ctx, au); err != nil {
 		return nil, err
 	}
 
-	return u, nil
+	return au, nil
 }
 
 func getThumbnailURL(ctx context.Context, ua *userApplication, thumbnail string) (string, error) {

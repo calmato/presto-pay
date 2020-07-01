@@ -616,15 +616,15 @@ func TestUserApplication_AddFriend(t *testing.T) {
 	current := time.Now()
 
 	testCases := map[string]struct {
-		Request  *request.AddFriend
-		Expected *user.User
+		Request *request.AddFriend
+		User    *user.User
 	}{
 		"ok": {
 			Request: &request.AddFriend{
 				UserID: "friend-id",
 			},
-			Expected: &user.User{
-				ID:           "user-id",
+			User: &user.User{
+				ID:           "friend-id",
 				Name:         "テストユーザー",
 				Username:     "test-user",
 				Email:        "test@calmato.com",
@@ -654,22 +654,17 @@ func TestUserApplication_AddFriend(t *testing.T) {
 
 		usm := mock_user.NewMockUserService(ctrl)
 		usm.EXPECT().Authentication(ctx).Return(u, nil)
-		usm.EXPECT().Show(ctx, testCase.Request.UserID).Return(testCase.Expected, nil)
-		usm.EXPECT().Update(ctx, testCase.Expected).Return(testCase.Expected, nil)
-		usm.EXPECT().ContainsFriendID(ctx, testCase.Expected, testCase.Request.UserID).Return(false, nil)
+		usm.EXPECT().Show(ctx, testCase.Request.UserID).Return(testCase.User, nil)
+		usm.EXPECT().Update(ctx, u).Return(u, nil)
+		usm.EXPECT().ContainsFriendID(ctx, u, testCase.Request.UserID).Return(false, nil)
 
 		// Start test
 		t.Run(result, func(t *testing.T) {
 			target := NewUserApplication(urvm, usm)
 
-			got, err := target.AddFriend(ctx, testCase.Request)
+			_, err := target.AddFriend(ctx, testCase.Request)
 			if err != nil {
 				t.Fatalf("error: %v", err)
-				return
-			}
-
-			if !reflect.DeepEqual(got, testCase.Expected) {
-				t.Fatalf("want %#v, but %#v", testCase.Expected, got)
 				return
 			}
 		})
