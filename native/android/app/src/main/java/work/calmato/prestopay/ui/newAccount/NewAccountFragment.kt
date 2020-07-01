@@ -29,7 +29,7 @@ import work.calmato.prestopay.util.RestClient
 import work.calmato.prestopay.util.encodeImage2Base64
 
 class NewAccountFragment : Fragment() {
-  val serverUrl: String = "https://api.presto-pay-stg.calmato.work/v1/users"
+  val serverUrl: String = "https://api.presto-pay-stg.calmato.work/v1/auth"
   var jsonText: String = ""
   var setThumbnail = false
   override fun onCreateView(
