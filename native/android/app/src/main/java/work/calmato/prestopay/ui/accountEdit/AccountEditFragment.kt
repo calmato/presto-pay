@@ -73,7 +73,7 @@ class AccountEditFragment : Fragment() {
         )
       } else {
         Log.i("responseActivity", "responseBody: " + response.body()!!.string())
-        Toast.makeText(requireActivity(), response.body()!!.string(), Toast.LENGTH_LONG).show()
+        Toast.makeText(requireActivity(), "変更に失敗しました", Toast.LENGTH_LONG).show()
       }
     }
 
