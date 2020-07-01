@@ -80,7 +80,9 @@ func (ur *userRepository) Authentication(ctx context.Context) (*user.User, error
 func (ur *userRepository) IndexByUsername(ctx context.Context, username string) ([]*user.User, error) {
 	userCollection := getUserCollection()
 
-	docs, err := ur.firestore.Search(ctx, userCollection, "username", username, 50)
+	usernameLower := strings.ToLower(username)
+
+	docs, err := ur.firestore.Search(ctx, userCollection, "username_lower", usernameLower, 50)
 	if err != nil {
 		return nil, err
 	}
@@ -105,7 +107,9 @@ func (ur *userRepository) IndexByUsernameFromStartAt(
 ) ([]*user.User, error) {
 	userCollection := getUserCollection()
 
-	docs, err := ur.firestore.SearchFromStartAt(ctx, userCollection, "username", username, startAt, 50)
+	usernameLower := strings.ToLower(username)
+
+	docs, err := ur.firestore.SearchFromStartAt(ctx, userCollection, "username_lower", usernameLower, startAt, 50)
 	if err != nil {
 		return nil, err
 	}
