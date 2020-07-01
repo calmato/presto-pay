@@ -10,13 +10,12 @@ import android.os.Bundle
 import android.preference.PreferenceManager
 import android.util.Log
 import android.view.*
-import androidx.fragment.app.Fragment
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_create_group.*
-import kotlinx.android.synthetic.main.fragment_create_group.thumbnail
 import okhttp3.Response
 import org.json.JSONObject
 import work.calmato.prestopay.R
@@ -44,7 +43,7 @@ class CreateGroupFragment : Fragment() {
   }
 
   private fun sendGroupInfo() {
-    val thumbnail = encodeImage2Base64(thumbnail)
+    val thumbnail = encodeImage2Base64(thumbnailEdit)
     val groupName = groupName.text.toString()
     val gson = Gson()
     val map: MutableMap<String, Any> = mutableMapOf()
@@ -75,7 +74,7 @@ class CreateGroupFragment : Fragment() {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    thumbnail.setOnClickListener {
+    thumbnailEdit.setOnClickListener {
       //check runtime permission
       if (ContextCompat.checkSelfPermission(
           requireActivity(),
@@ -147,8 +146,8 @@ class CreateGroupFragment : Fragment() {
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     super.onActivityResult(requestCode, resultCode, data)
     if (resultCode == Activity.RESULT_OK && requestCode == IMAGE_PICK_CODE) {
-      thumbnail.setImageURI(data?.data)
-      thumbnail.setBackgroundColor(Color.TRANSPARENT)
+      thumbnailEdit.setImageURI(data?.data)
+      thumbnailEdit.setBackgroundColor(Color.TRANSPARENT)
     }
   }
 
