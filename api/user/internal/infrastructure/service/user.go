@@ -57,7 +57,7 @@ func (us *userService) IndexByUsername(ctx context.Context, username string, sta
 }
 
 func (us *userService) Show(ctx context.Context, userID string) (*user.User, error) {
-	u, err := us.userRepository.GetUserByUserID(ctx, userID)
+	u, err := us.userRepository.ShowByUserID(ctx, userID)
 	if err != nil {
 		err = xerrors.Errorf("Failed to Repository: %w", err)
 		return nil, domain.NotFound.New(err)
@@ -152,7 +152,7 @@ func (us *userService) UniqueCheckEmail(ctx context.Context, u *user.User, email
 }
 
 func (us *userService) UniqueCheckUsername(ctx context.Context, u *user.User, username string) bool {
-	res, _ := us.userRepository.GetUserByUsername(ctx, username)
+	res, _ := us.userRepository.ShowByUsername(ctx, username)
 	if res == nil || res.ID == "" {
 		return true
 	}

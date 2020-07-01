@@ -241,13 +241,13 @@ func (uh *apiV1UserHandler) AddGroup(ctx *gin.Context) {
 	groupID := ctx.Params.ByName("groupID")
 
 	c := middleware.GinContextToContext(ctx)
-	u, err := uh.userApplication.AddGroupID(c, userID, groupID)
+	u, err := uh.userApplication.AddGroup(c, userID, groupID)
 	if err != nil {
 		handler.ErrorHandling(ctx, err)
 		return
 	}
 
-	res := &response.AddGroupUser{
+	res := &response.AddGroup{
 		ID:           u.ID,
 		Name:         u.Name,
 		Username:     u.Username,
@@ -267,13 +267,13 @@ func (uh *apiV1UserHandler) RemoveGroup(ctx *gin.Context) {
 	groupID := ctx.Params.ByName("groupID")
 
 	c := middleware.GinContextToContext(ctx)
-	u, err := uh.userApplication.RemoveGroupID(c, userID, groupID)
+	u, err := uh.userApplication.RemoveGroup(c, userID, groupID)
 	if err != nil {
 		handler.ErrorHandling(ctx, err)
 		return
 	}
 
-	res := &response.RemoveGroupUser{
+	res := &response.RemoveGroup{
 		ID:           u.ID,
 		Name:         u.Name,
 		Username:     u.Username,
