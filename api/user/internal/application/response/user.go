@@ -2,16 +2,19 @@ package response
 
 import "time"
 
+// IndexUsers - ユーザー一覧取得APIのレスポンス
+type IndexUsers struct {
+	Users []*ShowUser `json:"users"`
+}
+
 // ShowUser - ユーザー取得APIのレスポンス
 type ShowUser struct {
-	ID           string    `json:"id"`
-	Name         string    `json:"name"`
-	Username     string    `json:"username"`
-	Email        string    `json:"email"`
-	ThumbnailURL string    `json:"thumbnailUrl"`
-	GroupIDs     []string  `json:"groupIds"`
-	CreatedAt    time.Time `json:"createdAt"`
-	UpdatedAt    time.Time `json:"updatedAt"`
+	ID           string   `json:"id"`
+	Name         string   `json:"name"`
+	Username     string   `json:"username"`
+	Email        string   `json:"email"`
+	ThumbnailURL string   `json:"thumbnailUrl"`
+	GroupIDs     []string `json:"groupIds"`
 }
 
 // ShowProfile - ログインユーザー取得APIのレスポンス

@@ -14,6 +14,7 @@ import (
 // APIClient - 他のAPI操作用インターフェース
 type APIClient interface {
 	Authentication(ctx context.Context) (*user.User, error)
+	ShowUser(ctx context.Context, userID string) (*user.User, error)
 	UserExists(ctx context.Context, userID string) (bool, error)
 	AddGroup(ctx context.Context, userID string, groupID string) error
 	RemoveGroup(ctx context.Context, userID string, groupID string) error
@@ -39,7 +40,7 @@ func NewAPIClient(userAPIURL string) APIClient {
 
 // Authentication - ログインユーザー情報の取得
 func (c *Client) Authentication(ctx context.Context) (*user.User, error) {
-	url := c.userAPIURL + "/v1/users"
+	url := c.userAPIURL + "/v1/auth"
 	req, _ := http.NewRequest("GET", url, nil)
 
 	if err := setHeader(ctx, req); err != nil {
@@ -59,6 +60,38 @@ func (c *Client) Authentication(ctx context.Context) (*user.User, error) {
 	// TODO: refactor
 	if status < 200 || status > 299 {
 		return nil, xerrors.New("Unknown error")
+	}
+
+	defer res.Body.Close()
+	body, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	u := &user.User{}
+	if err = json.Unmarshal(body, u); err != nil {
+		return nil, err
+	}
+
+	return u, nil
+}
+
+// ShowUser - ユーザー情報取得
+func (c *Client) ShowUser(ctx context.Context, userID string) (*user.User, error) {
+	url := c.userAPIURL + "/v1/users/" + userID
+	req, _ := http.NewRequest("GET", url, nil)
+
+	if err := setHeader(ctx, req); err != nil {
+		return nil, err
+	}
+
+	res, err := getResponse(req)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, err := getStatus(res); err != nil {
+		return nil, err
 	}
 
 	defer res.Body.Close()

@@ -18,6 +18,23 @@ func NewGroupRepository(fs *firestore.Firestore) group.GroupRepository {
 	}
 }
 
+func (gr *groupRepository) Show(ctx context.Context, groupID string) (*group.Group, error) {
+	groupCollection := getGroupCollection()
+
+	doc, err := gr.firestore.Get(ctx, groupCollection, groupID)
+	if err != nil {
+		return nil, err
+	}
+
+	g := &group.Group{}
+
+	if err := doc.DataTo(g); err != nil {
+		return nil, err
+	}
+
+	return g, nil
+}
+
 func (gr *groupRepository) Create(ctx context.Context, g *group.Group) error {
 	groupCollection := getGroupCollection()
 

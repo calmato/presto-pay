@@ -20,6 +20,14 @@ spec:
             backend:
               serviceName: user-api
               servicePort: 80
+          - path: /v1/auth
+            backend:
+              serviceName: user-api
+              servicePort: 80
+          - path: /v1/auth/*
+            backend:
+              serviceName: user-api
+              servicePort: 80
           - path: /v1/*
             backend:
               serviceName: calc-api

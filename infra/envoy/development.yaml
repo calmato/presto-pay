@@ -63,6 +63,15 @@ static_resources:
                           route:
                             cluster: user_service
                         - match:
+                            prefix: "/v1/auth"
+                          route:
+                            cluster: user_service
+                        - match:
+                            prefix: "/v1/auth/"
+                          route:
+                            cluster: user_service
+                        # Calc Service
+                        - match:
                             prefix: "/v1/"
                           route:
                             cluster: calc_service

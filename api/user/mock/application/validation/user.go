@@ -34,6 +34,20 @@ func (m *MockUserRequestValidation) EXPECT() *MockUserRequestValidationMockRecor
 	return m.recorder
 }
 
+// IndexByUsername mocks base method
+func (m *MockUserRequestValidation) IndexByUsername(req *request.IndexByUsername) []*domain.ValidationError {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "IndexByUsername", req)
+	ret0, _ := ret[0].([]*domain.ValidationError)
+	return ret0
+}
+
+// IndexByUsername indicates an expected call of IndexByUsername
+func (mr *MockUserRequestValidationMockRecorder) IndexByUsername(req interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "IndexByUsername", reflect.TypeOf((*MockUserRequestValidation)(nil).IndexByUsername), req)
+}
+
 // CreateUser mocks base method
 func (m *MockUserRequestValidation) CreateUser(req *request.CreateUser) []*domain.ValidationError {
 	m.ctrl.T.Helper()

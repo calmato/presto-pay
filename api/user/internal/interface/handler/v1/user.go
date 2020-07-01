@@ -14,6 +14,7 @@ import (
 
 // APIV1UserHandler - Userハンドラのインターフェース
 type APIV1UserHandler interface {
+	IndexByUsername(ctx *gin.Context)
 	Show(ctx *gin.Context)
 	ShowProfile(ctx *gin.Context)
 	Create(ctx *gin.Context)
@@ -36,6 +37,42 @@ func NewAPIV1UserHandler(ua application.UserApplication) APIV1UserHandler {
 	}
 }
 
+func (uh *apiV1UserHandler) IndexByUsername(ctx *gin.Context) {
+	username := ctx.DefaultQuery("username", "")
+	startAt := ctx.DefaultQuery("after", "")
+
+	req := &request.IndexByUsername{
+		Username: username,
+		StartAt:  startAt,
+	}
+
+	c := middleware.GinContextToContext(ctx)
+	us, err := uh.userApplication.IndexByUsername(c, req)
+	if err != nil {
+		handler.ErrorHandling(ctx, err)
+		return
+	}
+
+	res := &response.IndexUsers{
+		Users: []*response.ShowUser{},
+	}
+
+	for _, u := range us {
+		ur := &response.ShowUser{
+			ID:           u.ID,
+			Name:         u.Name,
+			Username:     u.Username,
+			Email:        u.Email,
+			ThumbnailURL: u.ThumbnailURL,
+			GroupIDs:     u.GroupIDs,
+		}
+
+		res.Users = append(res.Users, ur)
+	}
+
+	ctx.JSON(http.StatusOK, res)
+}
+
 func (uh *apiV1UserHandler) Show(ctx *gin.Context) {
 	userID := ctx.Params.ByName("userID")
 
@@ -53,8 +90,6 @@ func (uh *apiV1UserHandler) Show(ctx *gin.Context) {
 		Email:        u.Email,
 		ThumbnailURL: u.ThumbnailURL,
 		GroupIDs:     u.GroupIDs,
-		CreatedAt:    u.CreatedAt,
-		UpdatedAt:    u.UpdatedAt,
 	}
 
 	ctx.JSON(http.StatusOK, res)

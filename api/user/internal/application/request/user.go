@@ -1,5 +1,11 @@
 package request
 
+// IndexByUsername - ユーザー名検索によるユーザー一覧取得APIのリクエスト
+type IndexByUsername struct {
+	Username string `json:"username" validate:"required,max=32"`
+	StartAt  string `json:"startAt"` // 検索開始箇所の指定 (もっとみるみたいなの実装したい時用)
+}
+
 // CreateUser - ユーザー登録APIのリクエスト
 type CreateUser struct {
 	Name                 string `json:"name" validate:"required,max=32"`

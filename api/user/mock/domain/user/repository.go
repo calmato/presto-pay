@@ -49,6 +49,36 @@ func (mr *MockUserRepositoryMockRecorder) Authentication(ctx interface{}) *gomoc
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Authentication", reflect.TypeOf((*MockUserRepository)(nil).Authentication), ctx)
 }
 
+// IndexByUsername mocks base method
+func (m *MockUserRepository) IndexByUsername(ctx context.Context, username string) ([]*user.User, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "IndexByUsername", ctx, username)
+	ret0, _ := ret[0].([]*user.User)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// IndexByUsername indicates an expected call of IndexByUsername
+func (mr *MockUserRepositoryMockRecorder) IndexByUsername(ctx, username interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "IndexByUsername", reflect.TypeOf((*MockUserRepository)(nil).IndexByUsername), ctx, username)
+}
+
+// IndexByUsernameFromStartAt mocks base method
+func (m *MockUserRepository) IndexByUsernameFromStartAt(ctx context.Context, username, startAt string) ([]*user.User, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "IndexByUsernameFromStartAt", ctx, username, startAt)
+	ret0, _ := ret[0].([]*user.User)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// IndexByUsernameFromStartAt indicates an expected call of IndexByUsernameFromStartAt
+func (mr *MockUserRepositoryMockRecorder) IndexByUsernameFromStartAt(ctx, username, startAt interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "IndexByUsernameFromStartAt", reflect.TypeOf((*MockUserRepository)(nil).IndexByUsernameFromStartAt), ctx, username, startAt)
+}
+
 // Create mocks base method
 func (m *MockUserRepository) Create(ctx context.Context, u *user.User) error {
 	m.ctrl.T.Helper()
