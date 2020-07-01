@@ -57,7 +57,7 @@ func (a *Auth) CreateUser(ctx context.Context, uid string, email string, passwor
 	params := (&auth.UserToCreate{}).
 		UID(uid).
 		Email(email).
-		EmailVerified(emailVerified(ctx, a, "", email)).
+		EmailVerified(false).
 		Password(password).
 		Disabled(false)
 
