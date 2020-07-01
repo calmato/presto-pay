@@ -14,7 +14,7 @@ servers:
 paths:
   /auth:
     get:
-      summary: 認証情報取得
+      summary: ログインユーザー情報取得
       security:
         - BearerAuth: []
       responses:
@@ -27,8 +27,22 @@ paths:
         '500':
           $ref: '#/components/responses/Unkown'
 
+    post:
+      summary: ユーザー登録
+      requestBody:
+        $ref: '#/components/requestBodies/CreateUser'
+      responses:
+        '200':
+          $ref: '#/components/responses/CreateUser'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/Unkown'
+
     patch:
-      summary: ユーザー編集
+      summary: ログインユーザー情報編集
       security:
         - BearerAuth: []
       requestBody:
@@ -47,7 +61,7 @@ paths:
 
   /auth/password:
     patch:
-      summary: ユーザー パスワード編集
+      summary: ログインユーザーパスワード編集
       security:
         - BearerAuth: []
       requestBody:
@@ -89,20 +103,6 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
-        '500':
-          $ref: '#/components/responses/Unkown'
-
-    post:
-      summary: ユーザー登録
-      requestBody:
-        $ref: '#/components/requestBodies/CreateUser'
-      responses:
-        '200':
-          $ref: '#/components/responses/CreateUser'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '409':
-          $ref: '#/components/responses/Conflict'
         '500':
           $ref: '#/components/responses/Unkown'
 
