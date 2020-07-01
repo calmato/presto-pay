@@ -4,8 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import kotlinx.android.synthetic.main.fragment_mail_check.*
 import work.calmato.prestopay.R
@@ -24,9 +26,23 @@ class MailCheckFragment : Fragment() {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     navigateToLoginButton.setOnClickListener {
-      this.findNavController().navigate(
-        MailCheckFragmentDirections.actionMailCheckFragmentToLoginFragment()
-      )
+      navigateToLogin()
     }
+    requireActivity().onBackPressedDispatcher.addCallback(
+      viewLifecycleOwner,
+      object:OnBackPressedCallback(true){
+        override fun handleOnBackPressed() {
+          navigateToLogin()
+        }
+
+      }
+    )
   }
+
+  private fun navigateToLogin(){
+    this.findNavController().navigate(
+      MailCheckFragmentDirections.actionMailCheckFragmentToLoginFragment()
+    )
+  }
+
 }
