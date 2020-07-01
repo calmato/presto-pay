@@ -73,7 +73,7 @@ class AccountEditFragment : Fragment() {
         )
       } else {
         Log.i("responseActivity", "responseBody: " + response.body()!!.string())
-        Toast.makeText(requireActivity(), "変更に失敗しました。", Toast.LENGTH_LONG).show()
+        Toast.makeText(requireActivity(), response.body()!!.string(), Toast.LENGTH_LONG).show()
       }
     }
 
@@ -130,7 +130,7 @@ class AccountEditFragment : Fragment() {
         if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
           pickImageFromGallery()
         } else {
-          Toast.makeText(requireActivity(), "permission denied", Toast.LENGTH_LONG).show()
+          Toast.makeText(requireActivity(), "アクセスが拒否されました", Toast.LENGTH_LONG).show()
         }
         return
       }
