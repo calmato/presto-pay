@@ -12,6 +12,69 @@ import (
 	"github.com/golang/mock/gomock"
 )
 
+func TestGroupService_IndexJoinGroups(t *testing.T) {
+	testCases := map[string]struct {
+		User     *user.User
+		Expected []*group.Group
+	}{
+		"ok": {
+			User: &user.User{
+				ID:           "user-id",
+				Name:         "テストユーザー",
+				Username:     "test-user",
+				Email:        "test@calmato.com",
+				GroupIDs:     []string{"group-id"},
+				ThumbnailURL: "",
+			},
+			Expected: []*group.Group{
+				{
+					ID:           "group-id",
+					Name:         "テストグループ",
+					ThumbnailURL: "",
+					UserIDs:      []string{},
+					Users:        []*user.User{},
+				},
+			},
+		},
+	}
+
+	for result, testCase := range testCases {
+		ctx, cancel := context.WithCancel(context.Background())
+		defer cancel()
+
+		ctrl := gomock.NewController(t)
+		defer ctrl.Finish()
+
+		// Defined mocks
+		gdvm := mock_group.NewMockGroupDomainValidation(ctrl)
+
+		grm := mock_group.NewMockGroupRepository(ctrl)
+		for i, groupID := range testCase.User.GroupIDs {
+			grm.EXPECT().Show(ctx, groupID).Return(testCase.Expected[i], nil)
+		}
+
+		gum := mock_group.NewMockGroupUploader(ctrl)
+
+		acm := mock_api.NewMockAPIClient(ctrl)
+
+		// Start test
+		t.Run(result, func(t *testing.T) {
+			target := NewGroupService(gdvm, grm, gum, acm)
+
+			got, err := target.IndexJoinGroups(ctx, testCase.User)
+			if err != nil {
+				t.Fatalf("error: %v", err)
+				return
+			}
+
+			if !reflect.DeepEqual(got, testCase.Expected) {
+				t.Fatalf("want %#v, but %#v", testCase.Expected, got)
+				return
+			}
+		})
+	}
+}
+
 func TestGroupService_Create(t *testing.T) {
 	testCases := map[string]struct {
 		Group *group.Group

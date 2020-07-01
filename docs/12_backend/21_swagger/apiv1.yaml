@@ -14,7 +14,7 @@ servers:
 paths:
   /auth:
     get:
-      summary: 認証情報取得
+      summary: ログインユーザー情報取得
       security:
         - BearerAuth: []
       responses:
@@ -27,9 +27,41 @@ paths:
         '500':
           $ref: '#/components/responses/Unkown'
 
+    post:
+      summary: ユーザー登録
+      requestBody:
+        $ref: '#/components/requestBodies/CreateUser'
+      responses:
+        '200':
+          $ref: '#/components/responses/CreateUser'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/Unkown'
+
+    patch:
+      summary: ログインユーザー情報編集
+      security:
+        - BearerAuth: []
+      requestBody:
+        $ref: '#/components/requestBodies/UpdateUser'
+      responses:
+        '200':
+          $ref: '#/components/responses/UpdateUser'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/Unkown'
+
   /auth/password:
     patch:
-      summary: ユーザー パスワード編集
+      summary: ログインユーザーパスワード編集
       security:
         - BearerAuth: []
       requestBody:
@@ -71,38 +103,6 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
-        '500':
-          $ref: '#/components/responses/Unkown'
-
-    post:
-      summary: ユーザー登録
-      requestBody:
-        $ref: '#/components/requestBodies/CreateUser'
-      responses:
-        '200':
-          $ref: '#/components/responses/CreateUser'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '409':
-          $ref: '#/components/responses/Conflict'
-        '500':
-          $ref: '#/components/responses/Unkown'
-
-    patch:
-      summary: ユーザー編集
-      security:
-        - BearerAuth: []
-      requestBody:
-        $ref: '#/components/requestBodies/UpdateUser'
-      responses:
-        '200':
-          $ref: '#/components/responses/UpdateUser'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '409':
-          $ref: '#/components/responses/Conflict'
         '500':
           $ref: '#/components/responses/Unkown'
 
@@ -160,6 +160,18 @@ paths:
           $ref: '#/components/responses/Unkown'
 
   /groups:
+    get:
+      summary: グループ一覧
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          $ref: '#/components/responses/IndexGroups'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/Unkown'
+
     post:
       summary: グループ作成
       security:
@@ -579,6 +591,59 @@ components:
                 format: date-time
                 description: 更新日時
 
+    IndexGroups:
+      description: グループ一覧取得APIのレスポンス
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              groups:
+                type: array
+                description: グループ一覧
+                items:
+                  properties:
+                    id:
+                      type: string
+                      format: uuid
+                      description: グループID
+                    name:
+                      type: string
+                      description: グループ名
+                    thumbnailUrl:
+                      type: string
+                      description: サムネイルURL
+                    users:
+                      type: array
+                      description: ユーザー一覧
+                      items:
+                        properties:
+                          id:
+                            type: string
+                            format: uuid
+                            description: ユーザーID
+                          name:
+                            type: string
+                            description: 表示名
+                          username:
+                            type: string
+                            description: ユーザー名
+                          email:
+                            type: string
+                            format: email
+                            description: メールアドレス
+                          thumbnail:
+                            type: string
+                            description: サムネイルURL
+                    createdAt:
+                      type: string
+                      format: date-time
+                      description: 作成日時
+                    updatedAt:
+                      type: string
+                      format: date-time
+                      description: 更新日時
+
     CreateGroup:
       description: グループ作成APIのレスポンス
       content:
@@ -589,10 +654,10 @@ components:
               id:
                 type: string
                 format: uuid
-                description: ユーザーID
+                description: グループID
               name:
                 type: string
-                description: 表示
+                description: グループ名
               thumbnailUrl:
                 type: string
                 description: サムネイルURL

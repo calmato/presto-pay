@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"strings"
 	"time"
 
 	"github.com/calmato/presto-pay/api/user/internal/domain"
@@ -79,6 +80,9 @@ func (us *userService) Create(ctx context.Context, u *user.User) (*user.User, er
 	current := time.Now()
 
 	u.ID = uuid.New().String()
+	u.UsernameLower = strings.ToLower(u.Username)
+	u.Email = strings.ToLower(u.Email)
+	u.GroupIDs = make([]string, 0)
 	u.CreatedAt = current
 	u.UpdatedAt = current
 
@@ -103,6 +107,8 @@ func (us *userService) Update(ctx context.Context, u *user.User) (*user.User, er
 
 	current := time.Now()
 
+	u.UsernameLower = strings.ToLower(u.Username)
+	u.Email = strings.ToLower(u.Email)
 	u.UpdatedAt = current
 
 	if err := us.userRepository.Update(ctx, u); err != nil {
