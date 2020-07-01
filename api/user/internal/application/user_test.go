@@ -611,3 +611,67 @@ func TestUserApplication_RemoveGroupID(t *testing.T) {
 		})
 	}
 }
+
+func TestUserApplication_AddFriend(t *testing.T) {
+	current := time.Now()
+
+	testCases := map[string]struct {
+		Request  *request.AddFriend
+		Expected *user.User
+	}{
+		"ok": {
+			Request: &request.AddFriend{
+				UserID: "friend-id",
+			},
+			Expected: &user.User{
+				ID:           "user-id",
+				Name:         "テストユーザー",
+				Username:     "test-user",
+				Email:        "test@calmato.com",
+				ThumbnailURL: "",
+				GroupIDs:     []string{},
+				CreatedAt:    current,
+				UpdatedAt:    current,
+			},
+		},
+	}
+
+	for result, testCase := range testCases {
+		ctx, cancel := context.WithCancel(context.Background())
+		defer cancel()
+
+		ctrl := gomock.NewController(t)
+		defer ctrl.Finish()
+
+		// Defined variables
+		ves := make([]*domain.ValidationError, 0)
+
+		u := &user.User{}
+
+		// Defined mocks
+		urvm := mock_validation.NewMockUserRequestValidation(ctrl)
+		urvm.EXPECT().AddFriend(testCase.Request).Return(ves)
+
+		usm := mock_user.NewMockUserService(ctrl)
+		usm.EXPECT().Authentication(ctx).Return(u, nil)
+		usm.EXPECT().Show(ctx, testCase.Request.UserID).Return(testCase.Expected, nil)
+		usm.EXPECT().Update(ctx, testCase.Expected).Return(testCase.Expected, nil)
+		usm.EXPECT().ContainsFriendID(ctx, testCase.Expected, testCase.Request.UserID).Return(false, nil)
+
+		// Start test
+		t.Run(result, func(t *testing.T) {
+			target := NewUserApplication(urvm, usm)
+
+			got, err := target.AddFriend(ctx, testCase.Request)
+			if err != nil {
+				t.Fatalf("error: %v", err)
+				return
+			}
+
+			if !reflect.DeepEqual(got, testCase.Expected) {
+				t.Fatalf("want %#v, but %#v", testCase.Expected, got)
+				return
+			}
+		})
+	}
+}

@@ -76,3 +76,15 @@ type RemoveGroupUser struct {
 	CreatedAt    time.Time `json:"createdAt"`
 	UpdatedAt    time.Time `json:"updatedAt"`
 }
+
+// AddFriend - 友達追加APIのレスポンス
+type AddFriend struct {
+	ID           string    `json:"id"`
+	Name         string    `json:"name"`
+	Username     string    `json:"username"`
+	Email        string    `json:"email"`
+	ThumbnailURL string    `json:"thumbnailUrl"`
+	GroupIDs     []string  `json:"groupIds"`
+	CreatedAt    time.Time `json:"createdAt"`
+	UpdatedAt    time.Time `json:"updatedAt"`
+}

@@ -83,6 +83,7 @@ func (us *userService) Create(ctx context.Context, u *user.User) (*user.User, er
 	u.UsernameLower = strings.ToLower(u.Username)
 	u.Email = strings.ToLower(u.Email)
 	u.GroupIDs = make([]string, 0)
+	u.FriendIDs = make([]string, 0)
 	u.CreatedAt = current
 	u.UpdatedAt = current
 
