@@ -32,6 +32,7 @@ func Router(reg *registry.Registry) *gin.Engine {
 	{
 		apiV1.GET("/auth", reg.V1User.ShowProfile)
 		apiV1.POST("/auth", reg.V1User.Create)
+		apiV1.POST("/auth/friend", reg.V1User.AddFriend)
 		apiV1.PATCH("/auth", reg.V1User.UpdateProfile)
 		apiV1.PATCH("/auth/password", reg.V1User.UpdatePassword)
 

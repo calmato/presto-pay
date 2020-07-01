@@ -25,6 +25,7 @@ type ShowProfile struct {
 	Email        string    `json:"email"`
 	ThumbnailURL string    `json:"thumbnailUrl"`
 	GroupIDs     []string  `json:"groupIds"`
+	FriendIDs    []string  `json:"friendIds"`
 	CreatedAt    time.Time `json:"createdAt"`
 	UpdatedAt    time.Time `json:"updatedAt"`
 }
@@ -37,6 +38,7 @@ type CreateUser struct {
 	Email        string    `json:"email"`
 	ThumbnailURL string    `json:"thumbnailUrl"`
 	GroupIDs     []string  `json:"groupIds"`
+	FriendIDs    []string  `json:"friendIds"`
 	CreatedAt    time.Time `json:"createdAt"`
 	UpdatedAt    time.Time `json:"updatedAt"`
 }
@@ -49,6 +51,7 @@ type UpdateProfile struct {
 	Email        string    `json:"email"`
 	ThumbnailURL string    `json:"thumbnailUrl"`
 	GroupIDs     []string  `json:"groupIds"`
+	FriendIDs    []string  `json:"friendIds"`
 	CreatedAt    time.Time `json:"createdAt"`
 	UpdatedAt    time.Time `json:"updatedAt"`
 }
@@ -61,6 +64,7 @@ type AddGroupUser struct {
 	Email        string    `json:"email"`
 	ThumbnailURL string    `json:"thumbnailUrl"`
 	GroupIDs     []string  `json:"groupIds"`
+	FriendIDs    []string  `json:"friendIds"`
 	CreatedAt    time.Time `json:"createdAt"`
 	UpdatedAt    time.Time `json:"updatedAt"`
 }
@@ -73,6 +77,7 @@ type RemoveGroupUser struct {
 	Email        string    `json:"email"`
 	ThumbnailURL string    `json:"thumbnailUrl"`
 	GroupIDs     []string  `json:"groupIds"`
+	FriendIDs    []string  `json:"friendIds"`
 	CreatedAt    time.Time `json:"createdAt"`
 	UpdatedAt    time.Time `json:"updatedAt"`
 }
@@ -85,6 +90,7 @@ type AddFriend struct {
 	Email        string    `json:"email"`
 	ThumbnailURL string    `json:"thumbnailUrl"`
 	GroupIDs     []string  `json:"groupIds"`
+	FriendIDs    []string  `json:"friendIds"`
 	CreatedAt    time.Time `json:"createdAt"`
 	UpdatedAt    time.Time `json:"updatedAt"`
 }
