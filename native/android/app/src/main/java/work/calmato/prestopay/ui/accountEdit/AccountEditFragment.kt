@@ -7,7 +7,6 @@ import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.AsyncTask
 import android.os.Bundle
-import android.preference.PreferenceManager
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -18,6 +17,7 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.google.firebase.auth.FirebaseAuth
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_account_edit.*
 import okhttp3.Response
@@ -31,6 +31,7 @@ class AccountEditFragment : Fragment() {
   val serverUrl: String = "https://api.presto-pay-stg.calmato.work/v1/auth"
   var jsonText: String = ""
   var setThumbnail = false
+  var idToken = ""
 
   override fun onCreateView(
     inflater: LayoutInflater,
@@ -108,13 +109,15 @@ class AccountEditFragment : Fragment() {
         pickImageFromGallery()
       }
     }
+    val mUser = FirebaseAuth.getInstance().currentUser
+    mUser?.getIdToken(true)?.addOnCompleteListener(requireActivity()) {
+      idToken = it.result?.token!!
+    }
   }
 
   inner class MyAsyncTask : AsyncTask<Void, Void, Response>() {
     override fun doInBackground(vararg params: Void?): Response {
-      val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
-      val token = sharedPreferences.getString("token", null)
-      val responseCode = RestClient().patchExecute(jsonText, serverUrl, token)
+      val responseCode = RestClient().patchExecute(jsonText, serverUrl, idToken)
       return responseCode
     }
   }
