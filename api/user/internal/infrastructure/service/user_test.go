@@ -600,3 +600,69 @@ func TestUserService_ContainsGroupID(t *testing.T) {
 		})
 	}
 }
+
+func TestUserService_ContainsFriendID(t *testing.T) {
+	testCases := map[string]struct {
+		User     *user.User
+		FriendID string
+		Expected bool
+	}{
+		"ok": {
+			User: &user.User{
+				ID:           "user-id",
+				Name:         "テストユーザー",
+				Username:     "test-user",
+				Email:        "test@calmato.com",
+				GroupIDs:     []string{"group-id"},
+				FriendIDs:    []string{"friend-id"},
+				ThumbnailURL: "",
+			},
+			FriendID: "friend-id",
+			Expected: true,
+		},
+		"ng": {
+			User: &user.User{
+				ID:           "user-id",
+				Name:         "テストユーザー",
+				Username:     "test-user",
+				Email:        "test@calmato.com",
+				GroupIDs:     []string{},
+				FriendIDs:    []string{},
+				ThumbnailURL: "",
+			},
+			FriendID: "friend-id",
+			Expected: false,
+		},
+	}
+
+	for result, testCase := range testCases {
+		ctx, cancel := context.WithCancel(context.Background())
+		defer cancel()
+
+		ctrl := gomock.NewController(t)
+		defer ctrl.Finish()
+
+		// Defined mocks
+		udvm := mock_user.NewMockUserDomainValidation(ctrl)
+
+		urm := mock_user.NewMockUserRepository(ctrl)
+
+		uum := mock_user.NewMockUserUploader(ctrl)
+
+		// Start test
+		t.Run(result, func(t *testing.T) {
+			target := NewUserService(udvm, urm, uum)
+
+			got, err := target.ContainsFriendID(ctx, testCase.User, testCase.FriendID)
+			if err != nil {
+				t.Fatalf("error: %v", err)
+				return
+			}
+
+			if !reflect.DeepEqual(got, testCase.Expected) {
+				t.Fatalf("want %#v, but %#v", testCase.Expected, got)
+				return
+			}
+		})
+	}
+}
