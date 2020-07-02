@@ -82,7 +82,7 @@ func (uh *apiV1UserHandler) IndexFriends(ctx *gin.Context) {
 		return
 	}
 
-	res := &response.IndexFriends{}
+	res := &response.IndexUsers{}
 	res.Users = make([]*response.ShowUser, len(us))
 
 	for i, u := range us {
