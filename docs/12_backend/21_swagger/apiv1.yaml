@@ -484,7 +484,7 @@ components:
                   format: uuid
               friendIds:
                 type: array
-                description: 友達ユーザーID一覧
+                description: 友達ID一覧
                 items:
                   type: string
                   format: uuid
@@ -526,13 +526,6 @@ components:
                     thumbnail:
                       type: string
                       description: サムネイルURL
-                    groupIds:
-                      type: array
-                      description: グループID一覧
-                      items:
-                        type: string
-                        format: uuid
-
 
     ShowUser:
       description: ユーザー情報取得APIのレスポンス
@@ -558,12 +551,6 @@ components:
               thumbnail:
                 type: string
                 description: サムネイルURL
-              groupIds:
-                type: array
-                description: グループID一覧
-                items:
-                  type: string
-                  format: uuid
 
     CreateUser:
       description: ユーザー登録APIのレスポンス
@@ -597,7 +584,7 @@ components:
                   format: uuid
               friendIds:
                 type: array
-                description: 友達ユーザーID一覧
+                description: 友達ID一覧
                 items:
                   type: string
                   format: uuid
@@ -642,7 +629,7 @@ components:
                   format: uuid
               friendIds:
                 type: array
-                description: 友達ユーザーID一覧
+                description: 友達ID一覧
                 items:
                   type: string
                   format: uuid
@@ -687,7 +674,7 @@ components:
                   format: uuid
               friendIds:
                 type: array
-                description: 友達ユーザーID一覧
+                description: 友達ID一覧
                 items:
                   type: string
                   format: uuid
