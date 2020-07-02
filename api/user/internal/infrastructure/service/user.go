@@ -56,6 +56,26 @@ func (us *userService) IndexByUsername(ctx context.Context, username string, sta
 	return u, nil
 }
 
+func (us *userService) IndexInFriends(ctx context.Context, u *user.User) ([]*user.User, error) {
+	if u == nil {
+		err := xerrors.New("User is empty")
+		return nil, domain.NotFound.New(err)
+	}
+
+	users := make([]*user.User, len(u.FriendIDs))
+	for i, friendID := range u.FriendIDs {
+		user, err := us.userRepository.ShowByUserID(ctx, friendID)
+		if err != nil {
+			err = xerrors.Errorf("Failed to Repository: %w", err)
+			return nil, domain.NotFound.New(err)
+		}
+
+		users[i] = user
+	}
+
+	return users, nil
+}
+
 func (us *userService) Show(ctx context.Context, userID string) (*user.User, error) {
 	u, err := us.userRepository.ShowByUserID(ctx, userID)
 	if err != nil {

@@ -139,6 +139,81 @@ func TestUserService_IndexByUsername(t *testing.T) {
 	}
 }
 
+func TestUserService_IndexInFriends(t *testing.T) {
+	testCases := map[string]struct {
+		User     *user.User
+		Expected []*user.User
+	}{
+		"ok": {
+			User: &user.User{
+				ID:           "user-id",
+				Name:         "テストユーザー",
+				Username:     "test-user",
+				Email:        "test@calmato.com",
+				GroupIDs:     []string{"group-id"},
+				FriendIDs:    []string{"friend01-id", "friend02-id"},
+				ThumbnailURL: "",
+			},
+			Expected: []*user.User{
+				{
+					ID:           "frien01-id",
+					Name:         "テストユーザー",
+					Username:     "test-user",
+					Email:        "test@calmato.com",
+					GroupIDs:     []string{"group-id"},
+					FriendIDs:    []string{},
+					ThumbnailURL: "",
+				},
+				{
+					ID:           "friend02-id",
+					Name:         "テストユーザー",
+					Username:     "test-user",
+					Email:        "test@calmato.com",
+					GroupIDs:     []string{"group-id"},
+					FriendIDs:    []string{},
+					ThumbnailURL: "",
+				},
+			},
+		},
+	}
+
+	for result, testCase := range testCases {
+		ctx, cancel := context.WithCancel(context.Background())
+		defer cancel()
+
+		ctrl := gomock.NewController(t)
+		defer ctrl.Finish()
+
+		// Defined mocks
+		udvm := mock_user.NewMockUserDomainValidation(ctrl)
+
+		urm := mock_user.NewMockUserRepository(ctrl)
+		for i, frinedID := range testCase.User.FriendIDs {
+			urm.EXPECT().
+				ShowByUserID(ctx, frinedID).
+				Return(testCase.Expected[i], nil)
+		}
+
+		uum := mock_user.NewMockUserUploader(ctrl)
+
+		// Start test
+		t.Run(result, func(t *testing.T) {
+			target := NewUserService(udvm, urm, uum)
+
+			got, err := target.IndexInFriends(ctx, testCase.User)
+			if err != nil {
+				t.Fatalf("error: %v", err)
+				return
+			}
+
+			if !reflect.DeepEqual(got, testCase.Expected) {
+				t.Fatalf("want %#v, but %#v", testCase.Expected, got)
+				return
+			}
+		})
+	}
+}
+
 func TestUserService_Show(t *testing.T) {
 	testCases := map[string]struct {
 		UserID   string
