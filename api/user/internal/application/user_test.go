@@ -79,17 +79,19 @@ func TestUserApplication_IndexByUsername(t *testing.T) {
 
 func TestUserApplication_IndexFriends(t *testing.T) {
 	testCases := map[string]struct {
-		Expected *user.User
+		Expected []*user.User
 	}{
 		"ok": {
-			Expected: &user.User{
-				ID:           "user-id",
-				Name:         "テストユーザー",
-				Username:     "test-user",
-				Email:        "test@calmato.com",
-				GroupIDs:     []string{"group-id"},
-				FriendIDs:    []string{},
-				ThumbnailURL: "",
+			Expected: []*user.User{
+				{
+					ID:           "user-id",
+					Name:         "テストユーザー",
+					Username:     "test-user",
+					Email:        "test@calmato.com",
+					GroupIDs:     []string{"group-id"},
+					FriendIDs:    []string{},
+					ThumbnailURL: "",
+				},
 			},
 		},
 	}
