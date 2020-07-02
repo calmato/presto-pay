@@ -77,7 +77,7 @@ func TestUserApplication_IndexByUsername(t *testing.T) {
 	}
 }
 
-func TestUserApplication_Show(t *testing.T) {
+func TestUserApplication_IndexFriends(t *testing.T) {
 	testCases := map[string]struct {
 		Expected *user.User
 	}{
