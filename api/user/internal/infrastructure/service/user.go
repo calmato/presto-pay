@@ -56,7 +56,7 @@ func (us *userService) IndexByUsername(ctx context.Context, username string, sta
 	return u, nil
 }
 
-func (us *userService) IndexInFriends(ctx context.Context, u *user.User) ([]*user.User, error) {
+func (us *userService) IndexFriends(ctx context.Context, u *user.User) ([]*user.User, error) {
 	if u == nil {
 		err := xerrors.New("User is empty")
 		return nil, domain.NotFound.New(err)

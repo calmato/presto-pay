@@ -7,6 +7,11 @@ type IndexUsers struct {
 	Users []*ShowUser `json:"users"`
 }
 
+// IndexFriends - 友達一覧取得APIのレスポンス
+type IndexFriends struct {
+	Users []*ShowUser `json:"users"`
+}
+
 // ShowUser - ユーザー取得APIのレスポンス
 type ShowUser struct {
 	ID           string   `json:"id"`

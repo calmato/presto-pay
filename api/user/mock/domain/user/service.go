@@ -64,19 +64,19 @@ func (mr *MockUserServiceMockRecorder) IndexByUsername(ctx, username, startAt in
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "IndexByUsername", reflect.TypeOf((*MockUserService)(nil).IndexByUsername), ctx, username, startAt)
 }
 
-// IndexInFriends mocks base method
-func (m *MockUserService) IndexInFriends(ctx context.Context, u *user.User) ([]*user.User, error) {
+// IndexFriends mocks base method
+func (m *MockUserService) IndexFriends(ctx context.Context, u *user.User) ([]*user.User, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "IndexInFriends", ctx, u)
+	ret := m.ctrl.Call(m, "IndexFriends", ctx, u)
 	ret0, _ := ret[0].([]*user.User)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// IndexInFriends indicates an expected call of IndexInFriends
-func (mr *MockUserServiceMockRecorder) IndexInFriends(ctx, u interface{}) *gomock.Call {
+// IndexFriends indicates an expected call of IndexFriends
+func (mr *MockUserServiceMockRecorder) IndexFriends(ctx, u interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "IndexInFriends", reflect.TypeOf((*MockUserService)(nil).IndexInFriends), ctx, u)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "IndexFriends", reflect.TypeOf((*MockUserService)(nil).IndexFriends), ctx, u)
 }
 
 // Show mocks base method

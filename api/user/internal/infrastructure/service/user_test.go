@@ -139,7 +139,7 @@ func TestUserService_IndexByUsername(t *testing.T) {
 	}
 }
 
-func TestUserService_IndexInFriends(t *testing.T) {
+func TestUserService_IndexFriends(t *testing.T) {
 	testCases := map[string]struct {
 		User     *user.User
 		Expected []*user.User
@@ -200,7 +200,7 @@ func TestUserService_IndexInFriends(t *testing.T) {
 		t.Run(result, func(t *testing.T) {
 			target := NewUserService(udvm, urm, uum)
 
-			got, err := target.IndexInFriends(ctx, testCase.User)
+			got, err := target.IndexFriends(ctx, testCase.User)
 			if err != nil {
 				t.Fatalf("error: %v", err)
 				return
