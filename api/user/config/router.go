@@ -47,6 +47,8 @@ func Router(reg *registry.Registry) *gin.Engine {
 	// internal routes
 	internal := r.Group("/internal")
 	{
+		internal.GET("/users/:userID", reg.V1User.ShowInternal)
+
 		internal.POST("/users/:userID/groups/:groupID", reg.V1User.AddGroup)
 		internal.DELETE("/users/:userID/groups/:groupID", reg.V1User.RemoveGroup)
 	}

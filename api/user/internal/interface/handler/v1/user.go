@@ -17,6 +17,7 @@ type APIV1UserHandler interface {
 	IndexByUsername(ctx *gin.Context)
 	IndexFriends(ctx *gin.Context)
 	Show(ctx *gin.Context)
+	ShowInternal(ctx *gin.Context)
 	ShowProfile(ctx *gin.Context)
 	Create(ctx *gin.Context)
 	UpdateProfile(ctx *gin.Context)
@@ -65,7 +66,6 @@ func (uh *apiV1UserHandler) IndexByUsername(ctx *gin.Context) {
 			Username:     u.Username,
 			Email:        u.Email,
 			ThumbnailURL: u.ThumbnailURL,
-			GroupIDs:     u.GroupIDs,
 		}
 
 		res.Users = append(res.Users, ur)
@@ -92,7 +92,6 @@ func (uh *apiV1UserHandler) IndexFriends(ctx *gin.Context) {
 			Username:     u.Username,
 			Email:        u.Email,
 			ThumbnailURL: u.ThumbnailURL,
-			GroupIDs:     u.GroupIDs,
 		}
 
 		res.Users[i] = ur
@@ -117,7 +116,31 @@ func (uh *apiV1UserHandler) Show(ctx *gin.Context) {
 		Username:     u.Username,
 		Email:        u.Email,
 		ThumbnailURL: u.ThumbnailURL,
+	}
+
+	ctx.JSON(http.StatusOK, res)
+}
+
+func (uh *apiV1UserHandler) ShowInternal(ctx *gin.Context) {
+	userID := ctx.Params.ByName("userID")
+
+	c := middleware.GinContextToContext(ctx)
+	u, err := uh.userApplication.Show(c, userID)
+	if err != nil {
+		handler.ErrorHandling(ctx, err)
+		return
+	}
+
+	res := &response.ShowUserInternal{
+		ID:           u.ID,
+		Name:         u.Name,
+		Username:     u.Username,
+		Email:        u.Email,
+		ThumbnailURL: u.ThumbnailURL,
 		GroupIDs:     u.GroupIDs,
+		FriendIDs:    u.FriendIDs,
+		CreatedAt:    u.CreatedAt,
+		UpdatedAt:    u.UpdatedAt,
 	}
 
 	ctx.JSON(http.StatusOK, res)
