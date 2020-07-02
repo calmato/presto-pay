@@ -77,6 +77,60 @@ func TestUserApplication_IndexByUsername(t *testing.T) {
 	}
 }
 
+func TestUserApplication_IndexFriends(t *testing.T) {
+	testCases := map[string]struct {
+		Expected []*user.User
+	}{
+		"ok": {
+			Expected: []*user.User{
+				{
+					ID:           "user-id",
+					Name:         "テストユーザー",
+					Username:     "test-user",
+					Email:        "test@calmato.com",
+					GroupIDs:     []string{"group-id"},
+					FriendIDs:    []string{},
+					ThumbnailURL: "",
+				},
+			},
+		},
+	}
+
+	for result, testCase := range testCases {
+		ctx, cancel := context.WithCancel(context.Background())
+		defer cancel()
+
+		ctrl := gomock.NewController(t)
+		defer ctrl.Finish()
+
+		// Defined variables
+		u := &user.User{}
+
+		// Defined mocks
+		urvm := mock_validation.NewMockUserRequestValidation(ctrl)
+
+		usm := mock_user.NewMockUserService(ctrl)
+		usm.EXPECT().Authentication(ctx).Return(u, nil)
+		usm.EXPECT().IndexFriends(ctx, u).Return(testCase.Expected, nil)
+
+		// Start test
+		t.Run(result, func(t *testing.T) {
+			target := NewUserApplication(urvm, usm)
+
+			got, err := target.IndexFriends(ctx)
+			if err != nil {
+				t.Fatalf("error: %v", err)
+				return
+			}
+
+			if !reflect.DeepEqual(got, testCase.Expected) {
+				t.Fatalf("want %#v, but %#v", testCase.Expected, got)
+				return
+			}
+		})
+	}
+}
+
 func TestUserApplication_Show(t *testing.T) {
 	testCases := map[string]struct {
 		UserID   string

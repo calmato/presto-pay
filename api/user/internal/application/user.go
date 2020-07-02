@@ -16,6 +16,7 @@ import (
 // UserApplication - UserApplicationインターフェース
 type UserApplication interface {
 	IndexByUsername(ctx context.Context, req *request.IndexByUsername) ([]*user.User, error)
+	IndexFriends(ctx context.Context) ([]*user.User, error)
 	Show(ctx context.Context, userID string) (*user.User, error)
 	ShowProfile(ctx context.Context) (*user.User, error)
 	Create(ctx context.Context, req *request.CreateUser) (*user.User, error)
@@ -52,6 +53,20 @@ func (ua *userApplication) IndexByUsername(ctx context.Context, req *request.Ind
 	}
 
 	us, err := ua.userService.IndexByUsername(ctx, req.Username, req.StartAt)
+	if err != nil {
+		return nil, err
+	}
+
+	return us, nil
+}
+
+func (ua *userApplication) IndexFriends(ctx context.Context) ([]*user.User, error) {
+	u, err := ua.userService.Authentication(ctx)
+	if err != nil {
+		return nil, domain.Unauthorized.New(err)
+	}
+
+	us, err := ua.userService.IndexFriends(ctx, u)
 	if err != nil {
 		return nil, err
 	}

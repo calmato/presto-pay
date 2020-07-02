@@ -79,6 +79,18 @@ paths:
           $ref: '#/components/responses/Unkown'
 
   /auth/friends:
+    get:
+      summary: 友達一覧
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          $ref: '#/components/responses/IndexUsers'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/Unkown'
+
     post:
       summary: 友達追加
       security:

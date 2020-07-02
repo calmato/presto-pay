@@ -15,6 +15,7 @@ import (
 // APIV1UserHandler - Userハンドラのインターフェース
 type APIV1UserHandler interface {
 	IndexByUsername(ctx *gin.Context)
+	IndexFriends(ctx *gin.Context)
 	Show(ctx *gin.Context)
 	ShowProfile(ctx *gin.Context)
 	Create(ctx *gin.Context)
@@ -54,9 +55,8 @@ func (uh *apiV1UserHandler) IndexByUsername(ctx *gin.Context) {
 		return
 	}
 
-	res := &response.IndexUsers{
-		Users: []*response.ShowUser{},
-	}
+	res := &response.IndexUsers{}
+	res.Users = make([]*response.ShowUser, len(us))
 
 	for _, u := range us {
 		ur := &response.ShowUser{
@@ -69,6 +69,33 @@ func (uh *apiV1UserHandler) IndexByUsername(ctx *gin.Context) {
 		}
 
 		res.Users = append(res.Users, ur)
+	}
+
+	ctx.JSON(http.StatusOK, res)
+}
+
+func (uh *apiV1UserHandler) IndexFriends(ctx *gin.Context) {
+	c := middleware.GinContextToContext(ctx)
+	us, err := uh.userApplication.IndexFriends(c)
+	if err != nil {
+		handler.ErrorHandling(ctx, err)
+		return
+	}
+
+	res := &response.IndexUsers{}
+	res.Users = make([]*response.ShowUser, len(us))
+
+	for i, u := range us {
+		ur := &response.ShowUser{
+			ID:           u.ID,
+			Name:         u.Name,
+			Username:     u.Username,
+			Email:        u.Email,
+			ThumbnailURL: u.ThumbnailURL,
+			GroupIDs:     u.GroupIDs,
+		}
+
+		res.Users[i] = ur
 	}
 
 	ctx.JSON(http.StatusOK, res)
