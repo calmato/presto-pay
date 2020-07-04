@@ -9,12 +9,24 @@ type IndexUsers struct {
 
 // ShowUser - ユーザー取得APIのレスポンス
 type ShowUser struct {
-	ID           string   `json:"id"`
-	Name         string   `json:"name"`
-	Username     string   `json:"username"`
-	Email        string   `json:"email"`
-	ThumbnailURL string   `json:"thumbnailUrl"`
-	GroupIDs     []string `json:"groupIds"`
+	ID           string `json:"id"`
+	Name         string `json:"name"`
+	Username     string `json:"username"`
+	Email        string `json:"email"`
+	ThumbnailURL string `json:"thumbnailUrl"`
+}
+
+// ShowUserInternal - 内部向けユーザー取得APIのレスポンス
+type ShowUserInternal struct {
+	ID           string    `json:"id"`
+	Name         string    `json:"name"`
+	Username     string    `json:"username"`
+	Email        string    `json:"email"`
+	ThumbnailURL string    `json:"thumbnailUrl"`
+	GroupIDs     []string  `json:"groupIds"`
+	FriendIDs    []string  `json:"friendIds"`
+	CreatedAt    time.Time `json:"createdAt"`
+	UpdatedAt    time.Time `json:"updatedAt"`
 }
 
 // ShowProfile - ログインユーザー取得APIのレスポンス
@@ -25,6 +37,7 @@ type ShowProfile struct {
 	Email        string    `json:"email"`
 	ThumbnailURL string    `json:"thumbnailUrl"`
 	GroupIDs     []string  `json:"groupIds"`
+	FriendIDs    []string  `json:"friendIds"`
 	CreatedAt    time.Time `json:"createdAt"`
 	UpdatedAt    time.Time `json:"updatedAt"`
 }
@@ -37,6 +50,7 @@ type CreateUser struct {
 	Email        string    `json:"email"`
 	ThumbnailURL string    `json:"thumbnailUrl"`
 	GroupIDs     []string  `json:"groupIds"`
+	FriendIDs    []string  `json:"friendIds"`
 	CreatedAt    time.Time `json:"createdAt"`
 	UpdatedAt    time.Time `json:"updatedAt"`
 }
@@ -49,30 +63,59 @@ type UpdateProfile struct {
 	Email        string    `json:"email"`
 	ThumbnailURL string    `json:"thumbnailUrl"`
 	GroupIDs     []string  `json:"groupIds"`
+	FriendIDs    []string  `json:"friendIds"`
 	CreatedAt    time.Time `json:"createdAt"`
 	UpdatedAt    time.Time `json:"updatedAt"`
 }
 
-// AddGroupUser - グループ追加APIのレスポンス
-type AddGroupUser struct {
+// AddGroup - グループ追加APIのレスポンス
+type AddGroup struct {
 	ID           string    `json:"id"`
 	Name         string    `json:"name"`
 	Username     string    `json:"username"`
 	Email        string    `json:"email"`
 	ThumbnailURL string    `json:"thumbnailUrl"`
 	GroupIDs     []string  `json:"groupIds"`
+	FriendIDs    []string  `json:"friendIds"`
 	CreatedAt    time.Time `json:"createdAt"`
 	UpdatedAt    time.Time `json:"updatedAt"`
 }
 
-// RemoveGroupUser - グループ削除APIのレスポンス
-type RemoveGroupUser struct {
+// RemoveGroup - グループ削除APIのレスポンス
+type RemoveGroup struct {
 	ID           string    `json:"id"`
 	Name         string    `json:"name"`
 	Username     string    `json:"username"`
 	Email        string    `json:"email"`
 	ThumbnailURL string    `json:"thumbnailUrl"`
 	GroupIDs     []string  `json:"groupIds"`
+	FriendIDs    []string  `json:"friendIds"`
+	CreatedAt    time.Time `json:"createdAt"`
+	UpdatedAt    time.Time `json:"updatedAt"`
+}
+
+// AddFriend - 友達追加APIのレスポンス
+type AddFriend struct {
+	ID           string    `json:"id"`
+	Name         string    `json:"name"`
+	Username     string    `json:"username"`
+	Email        string    `json:"email"`
+	ThumbnailURL string    `json:"thumbnailUrl"`
+	GroupIDs     []string  `json:"groupIds"`
+	FriendIDs    []string  `json:"friendIds"`
+	CreatedAt    time.Time `json:"createdAt"`
+	UpdatedAt    time.Time `json:"updatedAt"`
+}
+
+// RemoveFriend - 友達削除APIのレスポンス
+type RemoveFriend struct {
+	ID           string    `json:"id"`
+	Name         string    `json:"name"`
+	Username     string    `json:"username"`
+	Email        string    `json:"email"`
+	ThumbnailURL string    `json:"thumbnailUrl"`
+	GroupIDs     []string  `json:"groupIds"`
+	FriendIDs    []string  `json:"friendIds"`
 	CreatedAt    time.Time `json:"createdAt"`
 	UpdatedAt    time.Time `json:"updatedAt"`
 }

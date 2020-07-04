@@ -56,8 +56,28 @@ func (us *userService) IndexByUsername(ctx context.Context, username string, sta
 	return u, nil
 }
 
+func (us *userService) IndexFriends(ctx context.Context, u *user.User) ([]*user.User, error) {
+	if u == nil {
+		err := xerrors.New("User is empty")
+		return nil, domain.NotFound.New(err)
+	}
+
+	users := make([]*user.User, len(u.FriendIDs))
+	for i, friendID := range u.FriendIDs {
+		user, err := us.userRepository.ShowByUserID(ctx, friendID)
+		if err != nil {
+			err = xerrors.Errorf("Failed to Repository: %w", err)
+			return nil, domain.NotFound.New(err)
+		}
+
+		users[i] = user
+	}
+
+	return users, nil
+}
+
 func (us *userService) Show(ctx context.Context, userID string) (*user.User, error) {
-	u, err := us.userRepository.GetUserByUserID(ctx, userID)
+	u, err := us.userRepository.ShowByUserID(ctx, userID)
 	if err != nil {
 		err = xerrors.Errorf("Failed to Repository: %w", err)
 		return nil, domain.NotFound.New(err)
@@ -83,6 +103,7 @@ func (us *userService) Create(ctx context.Context, u *user.User) (*user.User, er
 	u.UsernameLower = strings.ToLower(u.Username)
 	u.Email = strings.ToLower(u.Email)
 	u.GroupIDs = make([]string, 0)
+	u.FriendIDs = make([]string, 0)
 	u.CreatedAt = current
 	u.UpdatedAt = current
 
@@ -151,7 +172,7 @@ func (us *userService) UniqueCheckEmail(ctx context.Context, u *user.User, email
 }
 
 func (us *userService) UniqueCheckUsername(ctx context.Context, u *user.User, username string) bool {
-	res, _ := us.userRepository.GetUserByUsername(ctx, username)
+	res, _ := us.userRepository.ShowByUsername(ctx, username)
 	if res == nil || res.ID == "" {
 		return true
 	}
@@ -171,6 +192,21 @@ func (us *userService) ContainsGroupID(ctx context.Context, u *user.User, groupI
 
 	for _, v := range u.GroupIDs {
 		if v == groupID {
+			return true, nil
+		}
+	}
+
+	return false, nil
+}
+
+func (us *userService) ContainsFriendID(ctx context.Context, u *user.User, friendID string) (bool, error) {
+	if u == nil {
+		err := xerrors.New("User is empty")
+		return false, domain.NotFound.New(err)
+	}
+
+	for _, v := range u.FriendIDs {
+		if v == friendID {
 			return true, nil
 		}
 	}

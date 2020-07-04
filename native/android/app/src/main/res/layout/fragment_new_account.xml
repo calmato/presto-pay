@@ -43,10 +43,10 @@
       android:textSize="12sp"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/thumbnail" />
+      app:layout_constraintTop_toBottomOf="@+id/thumbnailEdit" />
 
     <ImageView
-      android:id="@+id/thumbnail"
+      android:id="@+id/thumbnailEdit"
       android:layout_width="94dp"
       android:layout_height="81dp"
       android:layout_marginTop="100dp"

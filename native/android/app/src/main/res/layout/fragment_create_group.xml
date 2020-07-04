@@ -12,7 +12,7 @@
     android:backgroundTint="#875D5D">
 
     <ImageView
-      android:id="@+id/thumbnail"
+      android:id="@+id/thumbnailEdit"
       android:layout_width="85dp"
       android:layout_height="85dp"
       android:layout_marginTop="64dp"
@@ -37,11 +37,11 @@
       android:inputType="textPersonName"
       android:textAlignment="center"
       android:textSize="24sp"
-      app:layout_constraintBottom_toBottomOf="@+id/thumbnail"
+      app:layout_constraintBottom_toBottomOf="@+id/thumbnailEdit"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintHorizontal_bias="0.5"
-      app:layout_constraintStart_toEndOf="@+id/thumbnail"
-      app:layout_constraintTop_toTopOf="@+id/thumbnail" />
+      app:layout_constraintStart_toEndOf="@+id/thumbnailEdit"
+      app:layout_constraintTop_toTopOf="@+id/thumbnailEdit" />
 
     <ImageView
       android:id="@+id/imageView2"
@@ -49,9 +49,9 @@
       android:layout_height="wrap_content"
       android:layout_marginTop="32dp"
       android:src="@drawable/ic_baseline_add_circle_outline_60"
-      app:layout_constraintEnd_toEndOf="@+id/thumbnail"
-      app:layout_constraintStart_toStartOf="@+id/thumbnail"
-      app:layout_constraintTop_toBottomOf="@+id/thumbnail" />
+      app:layout_constraintEnd_toEndOf="@+id/thumbnailEdit"
+      app:layout_constraintStart_toStartOf="@+id/thumbnailEdit"
+      app:layout_constraintTop_toBottomOf="@+id/thumbnailEdit" />
 
   </androidx.constraintlayout.widget.ConstraintLayout>
 

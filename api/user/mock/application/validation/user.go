@@ -90,6 +90,20 @@ func (mr *MockUserRequestValidationMockRecorder) UpdatePassword(req interface{})
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdatePassword", reflect.TypeOf((*MockUserRequestValidation)(nil).UpdatePassword), req)
 }
 
+// AddFriend mocks base method
+func (m *MockUserRequestValidation) AddFriend(req *request.AddFriend) []*domain.ValidationError {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "AddFriend", req)
+	ret0, _ := ret[0].([]*domain.ValidationError)
+	return ret0
+}
+
+// AddFriend indicates an expected call of AddFriend
+func (mr *MockUserRequestValidationMockRecorder) AddFriend(req interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AddFriend", reflect.TypeOf((*MockUserRequestValidation)(nil).AddFriend), req)
+}
+
 // UniqueCheckEmail mocks base method
 func (m *MockUserRequestValidation) UniqueCheckEmail(req *request.UniqueCheckUserEmail) []*domain.ValidationError {
 	m.ctrl.T.Helper()

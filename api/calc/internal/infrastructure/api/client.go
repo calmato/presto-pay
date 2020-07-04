@@ -78,7 +78,7 @@ func (c *Client) Authentication(ctx context.Context) (*user.User, error) {
 
 // ShowUser - ユーザー情報取得
 func (c *Client) ShowUser(ctx context.Context, userID string) (*user.User, error) {
-	url := c.userAPIURL + "/v1/users/" + userID
+	url := c.userAPIURL + "/internal/users/" + userID
 	req, _ := http.NewRequest("GET", url, nil)
 
 	if err := setHeader(ctx, req); err != nil {
@@ -110,7 +110,7 @@ func (c *Client) ShowUser(ctx context.Context, userID string) (*user.User, error
 
 // UserExists - ユーザーの存在性検証
 func (c *Client) UserExists(ctx context.Context, userID string) (bool, error) {
-	url := c.userAPIURL + "/v1/users/" + userID
+	url := c.userAPIURL + "/internal/users/" + userID
 	req, _ := http.NewRequest("GET", url, nil)
 
 	if err := setHeader(ctx, req); err != nil {

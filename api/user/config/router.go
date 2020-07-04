@@ -32,6 +32,9 @@ func Router(reg *registry.Registry) *gin.Engine {
 	{
 		apiV1.GET("/auth", reg.V1User.ShowProfile)
 		apiV1.POST("/auth", reg.V1User.Create)
+		apiV1.GET("/auth/friends", reg.V1User.IndexFriends)
+		apiV1.POST("/auth/friends", reg.V1User.AddFriend)
+		apiV1.DELETE("/auth/friends/:userID", reg.V1User.RemoveFriend)
 		apiV1.PATCH("/auth", reg.V1User.UpdateProfile)
 		apiV1.PATCH("/auth/password", reg.V1User.UpdatePassword)
 
@@ -45,6 +48,8 @@ func Router(reg *registry.Registry) *gin.Engine {
 	// internal routes
 	internal := r.Group("/internal")
 	{
+		internal.GET("/users/:userID", reg.V1User.ShowInternal)
+
 		internal.POST("/users/:userID/groups/:groupID", reg.V1User.AddGroup)
 		internal.DELETE("/users/:userID/groups/:groupID", reg.V1User.RemoveGroup)
 	}

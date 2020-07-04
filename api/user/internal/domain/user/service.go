@@ -6,6 +6,7 @@ import "context"
 type UserService interface {
 	Authentication(ctx context.Context) (*User, error)
 	IndexByUsername(ctx context.Context, username string, startAt string) ([]*User, error)
+	IndexFriends(ctx context.Context, u *User) ([]*User, error)
 	Show(ctx context.Context, userID string) (*User, error)
 	Create(ctx context.Context, u *User) (*User, error)
 	Update(ctx context.Context, u *User) (*User, error)
@@ -14,4 +15,5 @@ type UserService interface {
 	UniqueCheckEmail(ctx context.Context, u *User, email string) bool
 	UniqueCheckUsername(ctx context.Context, u *User, username string) bool
 	ContainsGroupID(ctx context.Context, u *User, groupID string) (bool, error)
+	ContainsFriendID(ctx context.Context, u *User, friendID string) (bool, error)
 }
