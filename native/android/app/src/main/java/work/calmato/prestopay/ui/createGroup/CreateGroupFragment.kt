@@ -13,8 +13,8 @@ import android.view.*
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.google.firebase.auth.FirebaseAuth
 import androidx.fragment.app.Fragment
+import com.google.firebase.auth.FirebaseAuth
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_create_group.*
 import okhttp3.Response
@@ -49,7 +49,7 @@ class CreateGroupFragment : Fragment() {
   private fun sendGroupInfo() {
     var thumbnailStr = encodeImage2Base64(thumbnailEdit)
     if(setThumbnail) {
-      thumbnailStr = encodeImage2Base64(thumbnail)
+      thumbnailStr = encodeImage2Base64(thumbnailEdit)
     }
     val groupName = groupName.text.toString()
     val userList = listOf("1924e4ce-cbfd-4420-a902-ba83653f7d4e","bb942b57-3ff3-4d0a-b1c7-a3ec20e86899")
