@@ -109,6 +109,7 @@ paths:
         '500':
           $ref: '#/components/responses/Unkown'
 
+  /auth/friends/{userId}:
     delete:
       summary: 友達削除
       security:
@@ -122,7 +123,7 @@ paths:
           description: ユーザーID
       responses:
         '200':
-          $ref: '#/components/responses/AddFriend'
+          $ref: '#/components/responses/RemoveFriend'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
