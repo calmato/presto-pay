@@ -58,6 +58,9 @@
     <action
       android:id="@+id/action_home_fragment_to_createGroupFragment"
       app:destination="@id/createGroupFragment" />
+    <action
+      android:id="@+id/action_home_fragment_to_groupFriendFragment"
+      app:destination="@id/groupFriendFragment" />
   </fragment>
   <fragment
     android:id="@+id/account_home"
@@ -98,4 +101,18 @@
       android:id="@+id/action_updatePassLoginFragment_to_account_home"
       app:destination="@id/account_home" />
   </fragment>
+  <fragment
+    android:id="@+id/groupFriendFragment"
+    android:name="work.calmato.prestopay.ui.groupFriend.GroupFriendFragment"
+    android:label="GroupFriendFragment"
+    tools:layout="@layout/fragment_group_friend">
+    <action
+      android:id="@+id/action_groupFriendFragment_to_addFriendFragment"
+      app:destination="@id/addFriendFragment" />
+  </fragment>
+  <fragment
+    android:id="@+id/addFriendFragment"
+    android:name="work.calmato.prestopay.ui.addFriend.AddFriendFragment"
+    android:label="AddFriendFragment"
+    tools:layout="@layout/fragment_add_friend"/>
 </navigation>

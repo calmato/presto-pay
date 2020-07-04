@@ -39,6 +39,12 @@ class HomeFragment : Fragment() {
           )
           true
         }
+        R.id.action_people -> {
+          this.findNavController().navigate(
+            HomeFragmentDirections.actionHomeFragmentToGroupFriendFragment()
+          )
+          true
+        }
         else -> false
       }
     }
