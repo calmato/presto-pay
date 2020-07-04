@@ -27,6 +27,7 @@ type APIV1UserHandler interface {
 	AddGroup(ctx *gin.Context)
 	RemoveGroup(ctx *gin.Context)
 	AddFriend(ctx *gin.Context)
+	RemoveFriend(ctx *gin.Context)
 }
 
 type apiV1UserHandler struct {
@@ -353,6 +354,31 @@ func (uh *apiV1UserHandler) AddFriend(ctx *gin.Context) {
 	}
 
 	res := &response.AddFriend{
+		ID:           u.ID,
+		Name:         u.Name,
+		Username:     u.Username,
+		Email:        u.Email,
+		ThumbnailURL: u.ThumbnailURL,
+		GroupIDs:     u.GroupIDs,
+		FriendIDs:    u.FriendIDs,
+		CreatedAt:    u.CreatedAt,
+		UpdatedAt:    u.UpdatedAt,
+	}
+
+	ctx.JSON(http.StatusOK, res)
+}
+
+func (uh *apiV1UserHandler) RemoveFriend(ctx *gin.Context) {
+	userID := ctx.Params.ByName("userID")
+
+	c := middleware.GinContextToContext(ctx)
+	u, err := uh.userApplication.RemoveFriend(c, userID)
+	if err != nil {
+		handler.ErrorHandling(ctx, err)
+		return
+	}
+
+	res := &response.RemoveFriend{
 		ID:           u.ID,
 		Name:         u.Name,
 		Username:     u.Username,
