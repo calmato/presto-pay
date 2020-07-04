@@ -115,7 +115,7 @@ paths:
       security:
         - BearerAuth: []
       parameters:
-        - in: query
+        - in: path
           name: userId
           schema:
             type: string
