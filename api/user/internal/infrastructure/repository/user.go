@@ -80,7 +80,9 @@ func (ur *userRepository) Authentication(ctx context.Context) (*user.User, error
 func (ur *userRepository) IndexByUsername(ctx context.Context, username string) ([]*user.User, error) {
 	userCollection := getUserCollection()
 
-	docs, err := ur.firestore.Search(ctx, userCollection, "username", username, 50)
+	usernameLower := strings.ToLower(username)
+
+	docs, err := ur.firestore.Search(ctx, userCollection, "username_lower", usernameLower, 50)
 	if err != nil {
 		return nil, err
 	}
@@ -105,7 +107,9 @@ func (ur *userRepository) IndexByUsernameFromStartAt(
 ) ([]*user.User, error) {
 	userCollection := getUserCollection()
 
-	docs, err := ur.firestore.SearchFromStartAt(ctx, userCollection, "username", username, startAt, 50)
+	usernameLower := strings.ToLower(username)
+
+	docs, err := ur.firestore.SearchFromStartAt(ctx, userCollection, "username_lower", usernameLower, startAt, 50)
 	if err != nil {
 		return nil, err
 	}
@@ -123,6 +127,68 @@ func (ur *userRepository) IndexByUsernameFromStartAt(
 	}
 
 	return us, nil
+}
+
+func (ur *userRepository) ShowByUsername(ctx context.Context, username string) (*user.User, error) {
+	userCollection := getUserCollection()
+
+	query := &firestore.Query{
+		Field:    "username",
+		Operator: "==",
+		Value:    username,
+	}
+
+	u := &user.User{}
+
+	iter := ur.firestore.GetByQuery(ctx, userCollection, query)
+	for {
+		doc, err := iter.Next()
+		if err == iterator.Done {
+			break
+		}
+
+		if err != nil {
+			return nil, err
+		}
+
+		err = doc.DataTo(u)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	return u, nil
+}
+
+func (ur *userRepository) ShowByUserID(ctx context.Context, userID string) (*user.User, error) {
+	userCollection := getUserCollection()
+
+	query := &firestore.Query{
+		Field:    "id",
+		Operator: "==",
+		Value:    userID,
+	}
+
+	u := &user.User{}
+
+	iter := ur.firestore.GetByQuery(ctx, userCollection, query)
+	for {
+		doc, err := iter.Next()
+		if err == iterator.Done {
+			break
+		}
+
+		if err != nil {
+			return nil, err
+		}
+
+		err = doc.DataTo(u)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	return u, nil
 }
 
 func (ur *userRepository) Create(ctx context.Context, u *user.User) error {
@@ -181,68 +247,6 @@ func (ur *userRepository) GetUIDByEmail(ctx context.Context, email string) (stri
 	}
 
 	return uid, nil
-}
-
-func (ur *userRepository) GetUserByUsername(ctx context.Context, username string) (*user.User, error) {
-	userCollection := getUserCollection()
-
-	query := &firestore.Query{
-		Field:    "username",
-		Operator: "==",
-		Value:    username,
-	}
-
-	u := &user.User{}
-
-	iter := ur.firestore.GetByQuery(ctx, userCollection, query)
-	for {
-		doc, err := iter.Next()
-		if err == iterator.Done {
-			break
-		}
-
-		if err != nil {
-			return nil, err
-		}
-
-		err = doc.DataTo(u)
-		if err != nil {
-			return nil, err
-		}
-	}
-
-	return u, nil
-}
-
-func (ur *userRepository) GetUserByUserID(ctx context.Context, userID string) (*user.User, error) {
-	userCollection := getUserCollection()
-
-	query := &firestore.Query{
-		Field:    "id",
-		Operator: "==",
-		Value:    userID,
-	}
-
-	u := &user.User{}
-
-	iter := ur.firestore.GetByQuery(ctx, userCollection, query)
-	for {
-		doc, err := iter.Next()
-		if err == iterator.Done {
-			break
-		}
-
-		if err != nil {
-			return nil, err
-		}
-
-		err = doc.DataTo(u)
-		if err != nil {
-			return nil, err
-		}
-	}
-
-	return u, nil
 }
 
 func getToken(ctx context.Context) (string, error) {

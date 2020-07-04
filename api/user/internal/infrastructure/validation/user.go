@@ -62,7 +62,7 @@ func uniqueCheckEmail(ctx context.Context, ur user.UserRepository, id string, em
 }
 
 func uniqueCheckUsername(ctx context.Context, ur user.UserRepository, id string, username string) error {
-	u, _ := ur.GetUserByUsername(ctx, username)
+	u, _ := ur.ShowByUsername(ctx, username)
 	if u == nil || u.ID == "" {
 		return nil
 	}

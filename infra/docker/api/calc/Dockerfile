@@ -16,6 +16,10 @@ RUN make build
 # 実行用コンテナ
 FROM alpine
 
+ENV LANG C.UTF-8
+ENV TZ Asia/Tokyo
+ENV GIN_MODE release
+
 RUN apk add --no-cache \
       ca-certificates
 

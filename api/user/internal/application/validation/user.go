@@ -11,6 +11,7 @@ type UserRequestValidation interface {
 	CreateUser(req *request.CreateUser) []*domain.ValidationError
 	UpdateProfile(req *request.UpdateProfile) []*domain.ValidationError
 	UpdatePassword(req *request.UpdateUserPassword) []*domain.ValidationError
+	AddFriend(req *request.AddFriend) []*domain.ValidationError
 	UniqueCheckEmail(req *request.UniqueCheckUserEmail) []*domain.ValidationError
 	UniqueCheckUsername(req *request.UniqueCheckUserUsername) []*domain.ValidationError
 }
@@ -41,6 +42,10 @@ func (urv *userRequestValidation) UpdateProfile(req *request.UpdateProfile) []*d
 }
 
 func (urv *userRequestValidation) UpdatePassword(req *request.UpdateUserPassword) []*domain.ValidationError {
+	return urv.validator.Run(req)
+}
+
+func (urv *userRequestValidation) AddFriend(req *request.AddFriend) []*domain.ValidationError {
 	return urv.validator.Run(req)
 }
 

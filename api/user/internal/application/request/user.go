@@ -30,6 +30,11 @@ type UpdateUserPassword struct {
 	PasswordConfirmation string `json:"passwordConfirmation" validate:"required,eqfield=Password"`
 }
 
+// AddFriend - 友達追加APIのリクエスト
+type AddFriend struct {
+	UserID string `json:"userId" validate:"required"`
+}
+
 // UniqueCheckUserEmail - メールアドレスのユニーク検証APIのリクエスト
 type UniqueCheckUserEmail struct {
 	Email string `json:"email" validate:"required,email,max=256"`

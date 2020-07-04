@@ -12,6 +12,29 @@ servers:
     description: 開発環境
 
 paths:
+  /users/{userId}:
+    get:
+      summary: ユーザー情報取得
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: userId
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: ユーザーUUID
+      responses:
+        '200':
+          $ref: '#/components/responses/ShowUser'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/Unkown'
+
   /users/{userId}/groups/{groupId}:
     post:
       summary: ユーザー グループ追加
@@ -146,6 +169,51 @@ components:
           schema:
             type: object
 
+    ShowProfile:
+      description: 認証情報取得APIのレスポンス
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              id:
+                type: string
+                format: uuid
+                description: ユーザーID
+              name:
+                type: string
+                description: 表示名
+              username:
+                type: string
+                description: ユーザー名
+              email:
+                type: string
+                format: email
+                description: メールアドレス
+              thumbnail:
+                type: string
+                description: サムネイルURL
+              groupIds:
+                type: array
+                description: グループID一覧
+                items:
+                  type: string
+                  format: uuid
+              friendIds:
+                type: array
+                description: 友達ID一覧
+                items:
+                  type: string
+                  format: uuid
+              createdAt:
+                type: string
+                format: date-time
+                description: 作成日時
+              updatedAt:
+                type: string
+                format: date-time
+                description: 更新日時
+
     AddGroupUser:
       description: ユーザー グループ追加APIのレスポンス
       content:
@@ -175,6 +243,12 @@ components:
                 description: グループID一覧
                 items:
                   type: string
+              friendIds:
+                type: array
+                description: 友達ID一覧
+                items:
+                  type: string
+                  format: uuid
               createdAt:
                 type: string
                 format: date-time
@@ -211,6 +285,12 @@ components:
               groupIds:
                 type: array
                 description: グループID一覧
+                items:
+                  type: string
+                  format: uuid
+              friendIds:
+                type: array
+                description: 友達ID一覧
                 items:
                   type: string
                   format: uuid

@@ -15,7 +15,9 @@ import (
 // APIV1UserHandler - Userハンドラのインターフェース
 type APIV1UserHandler interface {
 	IndexByUsername(ctx *gin.Context)
+	IndexFriends(ctx *gin.Context)
 	Show(ctx *gin.Context)
+	ShowInternal(ctx *gin.Context)
 	ShowProfile(ctx *gin.Context)
 	Create(ctx *gin.Context)
 	UpdateProfile(ctx *gin.Context)
@@ -24,6 +26,8 @@ type APIV1UserHandler interface {
 	UniqueCheckUsername(ctx *gin.Context)
 	AddGroup(ctx *gin.Context)
 	RemoveGroup(ctx *gin.Context)
+	AddFriend(ctx *gin.Context)
+	RemoveFriend(ctx *gin.Context)
 }
 
 type apiV1UserHandler struct {
@@ -54,6 +58,8 @@ func (uh *apiV1UserHandler) IndexByUsername(ctx *gin.Context) {
 	}
 
 	res := &response.IndexUsers{}
+	res.Users = make([]*response.ShowUser, len(us))
+
 	for _, u := range us {
 		ur := &response.ShowUser{
 			ID:           u.ID,
@@ -61,10 +67,35 @@ func (uh *apiV1UserHandler) IndexByUsername(ctx *gin.Context) {
 			Username:     u.Username,
 			Email:        u.Email,
 			ThumbnailURL: u.ThumbnailURL,
-			GroupIDs:     u.GroupIDs,
 		}
 
 		res.Users = append(res.Users, ur)
+	}
+
+	ctx.JSON(http.StatusOK, res)
+}
+
+func (uh *apiV1UserHandler) IndexFriends(ctx *gin.Context) {
+	c := middleware.GinContextToContext(ctx)
+	us, err := uh.userApplication.IndexFriends(c)
+	if err != nil {
+		handler.ErrorHandling(ctx, err)
+		return
+	}
+
+	res := &response.IndexUsers{}
+	res.Users = make([]*response.ShowUser, len(us))
+
+	for i, u := range us {
+		ur := &response.ShowUser{
+			ID:           u.ID,
+			Name:         u.Name,
+			Username:     u.Username,
+			Email:        u.Email,
+			ThumbnailURL: u.ThumbnailURL,
+		}
+
+		res.Users[i] = ur
 	}
 
 	ctx.JSON(http.StatusOK, res)
@@ -86,7 +117,31 @@ func (uh *apiV1UserHandler) Show(ctx *gin.Context) {
 		Username:     u.Username,
 		Email:        u.Email,
 		ThumbnailURL: u.ThumbnailURL,
+	}
+
+	ctx.JSON(http.StatusOK, res)
+}
+
+func (uh *apiV1UserHandler) ShowInternal(ctx *gin.Context) {
+	userID := ctx.Params.ByName("userID")
+
+	c := middleware.GinContextToContext(ctx)
+	u, err := uh.userApplication.Show(c, userID)
+	if err != nil {
+		handler.ErrorHandling(ctx, err)
+		return
+	}
+
+	res := &response.ShowUserInternal{
+		ID:           u.ID,
+		Name:         u.Name,
+		Username:     u.Username,
+		Email:        u.Email,
+		ThumbnailURL: u.ThumbnailURL,
 		GroupIDs:     u.GroupIDs,
+		FriendIDs:    u.FriendIDs,
+		CreatedAt:    u.CreatedAt,
+		UpdatedAt:    u.UpdatedAt,
 	}
 
 	ctx.JSON(http.StatusOK, res)
@@ -107,6 +162,7 @@ func (uh *apiV1UserHandler) ShowProfile(ctx *gin.Context) {
 		Email:        u.Email,
 		ThumbnailURL: u.ThumbnailURL,
 		GroupIDs:     u.GroupIDs,
+		FriendIDs:    u.FriendIDs,
 		CreatedAt:    u.CreatedAt,
 		UpdatedAt:    u.UpdatedAt,
 	}
@@ -135,6 +191,7 @@ func (uh *apiV1UserHandler) Create(ctx *gin.Context) {
 		Email:        u.Email,
 		ThumbnailURL: u.ThumbnailURL,
 		GroupIDs:     u.GroupIDs,
+		FriendIDs:    u.FriendIDs,
 		CreatedAt:    u.CreatedAt,
 		UpdatedAt:    u.UpdatedAt,
 	}
@@ -163,6 +220,7 @@ func (uh *apiV1UserHandler) UpdateProfile(ctx *gin.Context) {
 		Email:        u.Email,
 		ThumbnailURL: u.ThumbnailURL,
 		GroupIDs:     u.GroupIDs,
+		FriendIDs:    u.FriendIDs,
 		CreatedAt:    u.CreatedAt,
 		UpdatedAt:    u.UpdatedAt,
 	}
@@ -234,19 +292,20 @@ func (uh *apiV1UserHandler) AddGroup(ctx *gin.Context) {
 	groupID := ctx.Params.ByName("groupID")
 
 	c := middleware.GinContextToContext(ctx)
-	u, err := uh.userApplication.AddGroupID(c, userID, groupID)
+	u, err := uh.userApplication.AddGroup(c, userID, groupID)
 	if err != nil {
 		handler.ErrorHandling(ctx, err)
 		return
 	}
 
-	res := &response.AddGroupUser{
+	res := &response.AddGroup{
 		ID:           u.ID,
 		Name:         u.Name,
 		Username:     u.Username,
 		Email:        u.Email,
 		ThumbnailURL: u.ThumbnailURL,
 		GroupIDs:     u.GroupIDs,
+		FriendIDs:    u.FriendIDs,
 		CreatedAt:    u.CreatedAt,
 		UpdatedAt:    u.UpdatedAt,
 	}
@@ -259,19 +318,74 @@ func (uh *apiV1UserHandler) RemoveGroup(ctx *gin.Context) {
 	groupID := ctx.Params.ByName("groupID")
 
 	c := middleware.GinContextToContext(ctx)
-	u, err := uh.userApplication.RemoveGroupID(c, userID, groupID)
+	u, err := uh.userApplication.RemoveGroup(c, userID, groupID)
 	if err != nil {
 		handler.ErrorHandling(ctx, err)
 		return
 	}
 
-	res := &response.RemoveGroupUser{
+	res := &response.RemoveGroup{
 		ID:           u.ID,
 		Name:         u.Name,
 		Username:     u.Username,
 		Email:        u.Email,
 		ThumbnailURL: u.ThumbnailURL,
 		GroupIDs:     u.GroupIDs,
+		FriendIDs:    u.FriendIDs,
+		CreatedAt:    u.CreatedAt,
+		UpdatedAt:    u.UpdatedAt,
+	}
+
+	ctx.JSON(http.StatusOK, res)
+}
+
+func (uh *apiV1UserHandler) AddFriend(ctx *gin.Context) {
+	req := &request.AddFriend{}
+	if err := ctx.BindJSON(req); err != nil {
+		handler.ErrorHandling(ctx, domain.UnableParseJSON.New(err))
+		return
+	}
+
+	c := middleware.GinContextToContext(ctx)
+	u, err := uh.userApplication.AddFriend(c, req)
+	if err != nil {
+		handler.ErrorHandling(ctx, err)
+		return
+	}
+
+	res := &response.AddFriend{
+		ID:           u.ID,
+		Name:         u.Name,
+		Username:     u.Username,
+		Email:        u.Email,
+		ThumbnailURL: u.ThumbnailURL,
+		GroupIDs:     u.GroupIDs,
+		FriendIDs:    u.FriendIDs,
+		CreatedAt:    u.CreatedAt,
+		UpdatedAt:    u.UpdatedAt,
+	}
+
+	ctx.JSON(http.StatusOK, res)
+}
+
+func (uh *apiV1UserHandler) RemoveFriend(ctx *gin.Context) {
+	userID := ctx.Params.ByName("userID")
+
+	c := middleware.GinContextToContext(ctx)
+	u, err := uh.userApplication.RemoveFriend(c, userID)
+	if err != nil {
+		handler.ErrorHandling(ctx, err)
+		return
+	}
+
+	res := &response.RemoveFriend{
+		ID:           u.ID,
+		Name:         u.Name,
+		Username:     u.Username,
+		Email:        u.Email,
+		ThumbnailURL: u.ThumbnailURL,
+		GroupIDs:     u.GroupIDs,
+		FriendIDs:    u.FriendIDs,
 		CreatedAt:    u.CreatedAt,
 		UpdatedAt:    u.UpdatedAt,
 	}

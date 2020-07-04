@@ -126,6 +126,33 @@ func TestUserRequestValidation_UpdatePassword(t *testing.T) {
 	}
 }
 
+func TestUserRequestValidation_AddFriend(t *testing.T) {
+	testCases := map[string]struct {
+		Request  *request.AddFriend
+		Expected []*domain.ValidationError
+	}{
+		"ok": {
+			Request: &request.AddFriend{
+				UserID: "user-id",
+			},
+			Expected: make([]*domain.ValidationError, 0),
+		},
+	}
+
+	for result, testCase := range testCases {
+		// Start test
+		t.Run(result, func(t *testing.T) {
+			target := NewUserRequestValidation()
+
+			got := target.AddFriend(testCase.Request)
+			if !reflect.DeepEqual(got, testCase.Expected) {
+				t.Fatalf("want %#v, but %#v", testCase.Expected, got)
+				return
+			}
+		})
+	}
+}
+
 func TestUserRequestValidation_UniqueCheckEmail(t *testing.T) {
 	testCases := map[string]struct {
 		Request  *request.UniqueCheckUserEmail

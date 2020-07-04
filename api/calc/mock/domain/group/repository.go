@@ -34,6 +34,21 @@ func (m *MockGroupRepository) EXPECT() *MockGroupRepositoryMockRecorder {
 	return m.recorder
 }
 
+// Show mocks base method
+func (m *MockGroupRepository) Show(ctx context.Context, groupID string) (*group.Group, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Show", ctx, groupID)
+	ret0, _ := ret[0].(*group.Group)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// Show indicates an expected call of Show
+func (mr *MockGroupRepositoryMockRecorder) Show(ctx, groupID interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Show", reflect.TypeOf((*MockGroupRepository)(nil).Show), ctx, groupID)
+}
+
 // Create mocks base method
 func (m *MockGroupRepository) Create(ctx context.Context, g *group.Group) error {
 	m.ctrl.T.Helper()

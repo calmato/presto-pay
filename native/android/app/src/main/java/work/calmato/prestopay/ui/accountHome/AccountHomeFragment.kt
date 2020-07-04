@@ -30,10 +30,16 @@ class AccountHomeFragment : Fragment() {
     logoutButton.setOnClickListener {
       showAlertDialog()
     }
-    
+
     displayPasswordButton.setOnClickListener {
       this.findNavController().navigate(
         AccountHomeFragmentDirections.actionAccountHomeToResetPassLoginFragment()
+      )
+    }
+
+    displayProfileButton.setOnClickListener {
+      this.findNavController().navigate(
+        AccountHomeFragmentDirections.actionAccountHomeToAccountEditFragment()
       )
     }
   }

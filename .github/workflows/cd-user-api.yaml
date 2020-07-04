@@ -3,6 +3,8 @@ on:
   push:
     paths:
       - 'api/user/**'
+      - 'infra/docker/api/user/Dockerfile'
+      - 'infra/kubernetes/stg/default/**'
     branches:
       - master
 
