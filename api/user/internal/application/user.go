@@ -297,7 +297,7 @@ func (ua *userApplication) RemoveFriend(ctx context.Context, userID string) (*us
 
 	if !contains {
 		err := xerrors.New("Failed to Service")
-		return nil, domain.AlreadyExistsInDatastore.New(err)
+		return nil, domain.NotFound.New(err)
 	}
 
 	u.FriendIDs = common.RemoveString(u.FriendIDs, userID)
