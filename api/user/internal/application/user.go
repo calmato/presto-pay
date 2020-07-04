@@ -27,6 +27,7 @@ type UserApplication interface {
 	AddGroup(ctx context.Context, userID string, groupID string) (*user.User, error)
 	RemoveGroup(ctx context.Context, userID string, groupID string) (*user.User, error)
 	AddFriend(ctx context.Context, req *request.AddFriend) (*user.User, error)
+	RemoveFriend(ctx context.Context, userID string) (*user.User, error)
 }
 
 type userApplication struct {
@@ -281,6 +282,31 @@ func (ua *userApplication) AddFriend(ctx context.Context, req *request.AddFriend
 	}
 
 	return au, nil
+}
+
+func (ua *userApplication) RemoveFriend(ctx context.Context, userID string) (*user.User, error) {
+	u, err := ua.userService.Authentication(ctx)
+	if err != nil {
+		return nil, domain.Unauthorized.New(err)
+	}
+
+	contains, err := ua.userService.ContainsFriendID(ctx, u, userID)
+	if err != nil {
+		return nil, err
+	}
+
+	if !contains {
+		err := xerrors.New("Failed to Service")
+		return nil, domain.NotFound.New(err)
+	}
+
+	u.FriendIDs = common.RemoveString(u.FriendIDs, userID)
+
+	if _, err := ua.userService.Update(ctx, u); err != nil {
+		return nil, err
+	}
+
+	return u, nil
 }
 
 func getThumbnailURL(ctx context.Context, ua *userApplication, thumbnail string) (string, error) {

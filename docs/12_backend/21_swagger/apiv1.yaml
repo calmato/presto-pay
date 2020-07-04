@@ -109,6 +109,27 @@ paths:
         '500':
           $ref: '#/components/responses/Unkown'
 
+    delete:
+      summary: 友達削除
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: query
+          name: userId
+          schema:
+            type: string
+          required: true
+          description: ユーザーID
+      responses:
+        '200':
+          $ref: '#/components/responses/AddFriend'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/Unkown'
+
   /users:
     get:
       summary: ユーザー検索
@@ -644,6 +665,51 @@ components:
 
     AddFriend:
       description: 友達追加APIのレスポンス
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              id:
+                type: string
+                format: uuid
+                description: ユーザーID
+              name:
+                type: string
+                description: 表示名
+              username:
+                type: string
+                description: ユーザー名
+              email:
+                type: string
+                format: email
+                description: メールアドレス
+              thumbnail:
+                type: string
+                description: サムネイルURL
+              groupIds:
+                type: array
+                description: グループID一覧
+                items:
+                  type: string
+                  format: uuid
+              friendIds:
+                type: array
+                description: 友達ID一覧
+                items:
+                  type: string
+                  format: uuid
+              createdAt:
+                type: string
+                format: date-time
+                description: 作成日時
+              updatedAt:
+                type: string
+                format: date-time
+                description: 更新日時
+
+    RemoveFriend:
+      description: 友達削除APIのレスポンス
       content:
         application/json:
           schema:
