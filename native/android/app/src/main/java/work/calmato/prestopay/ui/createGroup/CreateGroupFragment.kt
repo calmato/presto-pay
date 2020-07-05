@@ -14,6 +14,7 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import com.google.firebase.auth.FirebaseAuth
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_create_group.*
 import okhttp3.Response
@@ -27,6 +28,9 @@ import work.calmato.prestopay.util.encodeImage2Base64
 class CreateGroupFragment : Fragment() {
   val serverUrl: String = "https://api.presto-pay-stg.calmato.work/v1/groups"
   var jsonText: String = ""
+  var setThumbnail = false
+  var idToken = ""
+
 
   override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?,
@@ -43,32 +47,35 @@ class CreateGroupFragment : Fragment() {
   }
 
   private fun sendGroupInfo() {
-    val thumbnail = encodeImage2Base64(thumbnailEdit)
+    var thumbnailStr = encodeImage2Base64(thumbnailEdit)
+    if(setThumbnail) {
+      thumbnailStr = encodeImage2Base64(thumbnailEdit)
+    }
     val groupName = groupName.text.toString()
-    val gson = Gson()
-    val map: MutableMap<String, Any> = mutableMapOf()
-    map.put("name", groupName)
-    map.put("thumbnail", thumbnail)
-    map.put("userIds", listOf("1924e4ce-cbfd-4420-a902-ba83653f7d4e"))
-    //TODO ユーザー検索をできるように
-    jsonText = gson.toJson(map)
-    Log.i(TAG, "sendGroupInfo: " + jsonText)
-    val response = MyAsyncTask().execute().get()
-    Log.i(TAG, "MyAsyncTask: " + response.isSuccessful)
-    if (response.isSuccessful) {
-      Toast.makeText(requireContext(), "新しいグループを作成しました", Toast.LENGTH_SHORT).show()
-    } else {
-      var errorMessage = ""
-      Log.i(TAG, "responseBody: " + response.body()!!.string())
-      val jsonArray = JSONObject(response.body()!!.string()).getJSONArray("errors")
-      for (i in 0 until jsonArray.length()) {
-        val jsonObject = jsonArray.getJSONObject(i)
-        errorMessage += jsonObject.getString("field") + " " + jsonObject.getString("message")
-        if (i != jsonArray.length() - 1) {
-          errorMessage += "\n"
+    val userList = listOf("1924e4ce-cbfd-4420-a902-ba83653f7d4e","bb942b57-3ff3-4d0a-b1c7-a3ec20e86899")
+    if (groupName.length in 1..31){
+      if(userList.size in 1..100){
+        val gson = Gson()
+        val map: MutableMap<String, Any> = mutableMapOf()
+        map["name"] = groupName
+        map["thumbnail"] = thumbnailStr
+        map["userIds"] = userList
+        //TODO ユーザー検索をできるように
+        //TODO ユーザーIDがユニークか確認バリデーション
+        jsonText = gson.toJson(map)
+        Log.i(TAG, "sendGroupInfo: $jsonText")
+        val response = MyAsyncTask().execute().get()
+        if (response.isSuccessful) {
+          Toast.makeText(requireContext(), "新しいグループを作成しました", Toast.LENGTH_SHORT).show()
+        } else {
+          Log.i(TAG, "responseBody: " + response.body()!!.string())
+          Toast.makeText(requireActivity(), "グループ作成に失敗しました", Toast.LENGTH_LONG).show()
         }
+      }else{
+        Toast.makeText(requireContext(),"2~100人のグループメンバーを選択してください",Toast.LENGTH_LONG).show()
       }
-      Toast.makeText(requireActivity(), "sippai", Toast.LENGTH_LONG).show()
+    }else{
+      Toast.makeText(requireContext(),"1〜31文字のグループ名を入力してください",Toast.LENGTH_LONG).show()
     }
   }
 
@@ -103,7 +110,10 @@ class CreateGroupFragment : Fragment() {
       }
     }
     setHasOptionsMenu(true)
-
+    val mUser = FirebaseAuth.getInstance().currentUser
+    mUser?.getIdToken(true)?.addOnCompleteListener(requireActivity()){
+      idToken = it.result?.token!!
+    }
   }
 
   override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -141,6 +151,7 @@ class CreateGroupFragment : Fragment() {
       intent,
       IMAGE_PICK_CODE
     )
+    setThumbnail = true
   }
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -153,10 +164,7 @@ class CreateGroupFragment : Fragment() {
 
   inner class MyAsyncTask : AsyncTask<Void, Void, Response>() {
     override fun doInBackground(vararg params: Void?): Response {
-      val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
-      val token = sharedPreferences.getString("token", null)
-      val responseCode = RestClient().postAuthExecute(jsonText, serverUrl, token)
-      return responseCode
+      return RestClient().postAuthExecute(jsonText, serverUrl, idToken)
     }
   }
 
