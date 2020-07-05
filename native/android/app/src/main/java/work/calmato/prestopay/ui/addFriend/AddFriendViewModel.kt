@@ -1,14 +1,14 @@
 package work.calmato.prestopay.ui.addFriend
 
-import android.widget.Toast
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.*
 import work.calmato.prestopay.network.Api
-import work.calmato.prestopay.network.userProperty
+import work.calmato.prestopay.network.UserProperty
 import java.lang.Exception
+import kotlin.concurrent.thread
 
 enum class ApiStatus { LOADING, ERROR, DONE }
 class AddFriendViewModel:ViewModel(){
@@ -20,9 +20,9 @@ class AddFriendViewModel:ViewModel(){
 
   // Internally, we use a MutableLiveData, because we will be updating the List of MarsProperty
   // with new values
-  private val _userProperties = MutableLiveData<List<userProperty>>()
+  private val _userProperties = MutableLiveData<UserProperty>()
   // The external LiveData interface to the property is immutable, so only this class can modify
-  val userProperties:LiveData<List<userProperty>>
+  val userProperties:LiveData<UserProperty>
     get() = _userProperties
 
   // Create a Coroutine scope using a job to be able to cancel when needed
@@ -37,16 +37,20 @@ class AddFriendViewModel:ViewModel(){
    */
   fun getUserProperties(userName:String,idToken:String){
     coroutineScope.launch{
-      var getPropertiesDeferred = Api.retrofitService.getProperties(userName)
-      try{
-        _status.value = ApiStatus.LOADING
-        val listResult = getPropertiesDeferred.await()
-        _status.value = ApiStatus.DONE
-        _userProperties.value = listResult
-      } catch (e:Exception){
-        _status.value = ApiStatus.ERROR
-        _userProperties.value = ArrayList()
-      }
+      val getPropertries = Api.retrofitService.getProperties("Bearer $idToken",userName)
+      Thread(Runnable {
+//        try {
+//          _status.value = ApiStatus.LOADING
+          val listResult = getPropertries.execute().body()
+//          _status.value = ApiStatus.DONE
+//          _userProperties.value = listResult.body()
+          Log.i(TAG, "getUserProperties: ${listResult!!}")
+//        } catch (e: Exception) {
+//          _status.value = ApiStatus.ERROR
+//          _userProperties.value = null
+//          Log.i(TAG, "getUserProperties: Fail")
+//        }
+      }).start()
     }
   }
   /**
@@ -57,5 +61,7 @@ class AddFriendViewModel:ViewModel(){
     super.onCleared()
     viewModelJob.cancel()
   }
-
+  companion object {
+    internal const val TAG = "AddFriendViewModel"
+  }
 }
