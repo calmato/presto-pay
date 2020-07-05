@@ -47,8 +47,7 @@ interface ApiService{
   @GET("users")
   fun getProperties(@Header("Authorization")token:String, @Query("username") username: String):
   // The Coroutine Call Adapter allows us to return a Deferred, a Job with a result
-//    Call<UserProperty>
-//    Call<String>
+//    Call<List<UserProperty>>
     Call<Users>
 }
 

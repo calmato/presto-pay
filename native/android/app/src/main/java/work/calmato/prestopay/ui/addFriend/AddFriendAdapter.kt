@@ -29,8 +29,10 @@ class AddFriendAdapter(private val mUsersProperties: Users) : RecyclerView.Adapt
   }
 
   override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-    val item = mUsersProperties.users.get(position)
-    holder.bind(item)
+    val item = mUsersProperties.users[position]
+    if (item != null) {
+      holder.bind(item)
+    }
   }
 
   override fun getItemCount()=mUsersProperties.users.size

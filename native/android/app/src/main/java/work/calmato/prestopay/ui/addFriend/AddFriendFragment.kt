@@ -48,10 +48,10 @@ class AddFriendFragment:Fragment() {
       idToken = it.result?.token!!
     }
     search.setOnClickListener {
-//      viewModel.getUserProperties(userName.text.toString(),idToken)
-      users = Users(listOf(UserProperty("1","namewow!","name","email","thumbnail"),UserProperty("1","nam!","name","email","thumbnail")))
-      usersRecycleView.swapAdapter(AddFriendAdapter(users),false)
-      Log.i(TAG, "onViewCreated: presssed")
+      val users = viewModel.getUserProperties(userName.text.toString(),idToken)
+      users?.let {
+        usersRecycleView.swapAdapter(AddFriendAdapter(it),false)
+      }
     }
 
   }

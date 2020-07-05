@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.*
 import work.calmato.prestopay.network.Api
 import work.calmato.prestopay.network.UserProperty
+import work.calmato.prestopay.network.Users
 import java.lang.Exception
 import kotlin.concurrent.thread
 
@@ -35,23 +36,27 @@ class AddFriendViewModel:ViewModel(){
    * updates the [userProperties] [List] and [ApiStatus] [LiveData]. The Retrofit service
    * returns a coroutine Deferred, which we await to get the result of the transaction.
    */
-  fun getUserProperties(userName:String,idToken:String){
-    coroutineScope.launch{
+  fun getUserProperties(userName:String,idToken:String): Users? {
+    var users : Users? = null
+//    coroutineScope.launch{
       val getPropertries = Api.retrofitService.getProperties("Bearer $idToken",userName)
-      Thread(Runnable {
+      val thread = Thread(Runnable {
 //        try {
 //          _status.value = ApiStatus.LOADING
-          val listResult = getPropertries.execute().body()
+        users = getPropertries.execute().body()
 //          _status.value = ApiStatus.DONE
 //          _userProperties.value = listResult.body()
-          Log.i(TAG, "getUserProperties: ${listResult!!}")
+        Log.i(TAG, "getUserProperties: ${users!!}")
 //        } catch (e: Exception) {
 //          _status.value = ApiStatus.ERROR
 //          _userProperties.value = null
 //          Log.i(TAG, "getUserProperties: Fail")
 //        }
-      }).start()
-    }
+      })
+      thread.start()
+//    }
+    thread.join()
+    return users
   }
   /**
    * When the [ViewModel] is finished, we cancel our coroutine [viewModelJob], which tells the
