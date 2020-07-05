@@ -8,8 +8,6 @@ import kotlinx.coroutines.*
 import work.calmato.prestopay.network.Api
 import work.calmato.prestopay.network.UserProperty
 import work.calmato.prestopay.network.Users
-import java.lang.Exception
-import kotlin.concurrent.thread
 
 enum class ApiStatus { LOADING, ERROR, DONE }
 class AddFriendViewModel:ViewModel(){
@@ -39,11 +37,11 @@ class AddFriendViewModel:ViewModel(){
   fun getUserProperties(userName:String,idToken:String): Users? {
     var users : Users? = null
 //    coroutineScope.launch{
-      val getPropertries = Api.retrofitService.getProperties("Bearer $idToken",userName)
+      val getProperties = Api.retrofitService.getProperties("Bearer $idToken",userName)
       val thread = Thread(Runnable {
 //        try {
 //          _status.value = ApiStatus.LOADING
-        users = getPropertries.execute().body()
+        users = getProperties.execute().body()
 //          _status.value = ApiStatus.DONE
 //          _userProperties.value = listResult.body()
         Log.i(TAG, "getUserProperties: ${users!!}")

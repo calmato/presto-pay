@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -49,7 +50,11 @@ class AddFriendFragment:Fragment() {
     }
     search.setOnClickListener {
       val users = viewModel.getUserProperties(userName.text.toString(),idToken)
+      Log.i(TAG, "onViewCreated: ${users.toString()}")
       users?.let {
+        if(users.users.isEmpty()){
+          Toast.makeText(requireContext(),"ユーザーが見つかりません",Toast.LENGTH_SHORT).show()
+        }
         usersRecycleView.swapAdapter(AddFriendAdapter(it),false)
       }
     }

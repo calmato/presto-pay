@@ -1,4 +1,4 @@
-package work.calmato.prestopay.ui.addFriend
+package work.calmato.prestopay.util
 
 import android.widget.ImageView
 import android.widget.TextView
