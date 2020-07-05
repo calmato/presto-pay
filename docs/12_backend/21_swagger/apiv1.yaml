@@ -495,7 +495,7 @@ components:
                 type: string
                 format: email
                 description: メールアドレス
-              thumbnail:
+              thumbnailUrl:
                 type: string
                 description: サムネイルURL
               groupIds:
@@ -545,7 +545,7 @@ components:
                       type: string
                       format: email
                       description: メールアドレス
-                    thumbnail:
+                    thumbnailUrl:
                       type: string
                       description: サムネイルURL
 
@@ -570,7 +570,7 @@ components:
                 type: string
                 format: email
                 description: メールアドレス
-              thumbnail:
+              thumbnailUrl:
                 type: string
                 description: サムネイルURL
 
@@ -595,7 +595,7 @@ components:
                 type: string
                 format: email
                 description: メールアドレス
-              thumbnail:
+              thumbnailUrl:
                 type: string
                 description: サムネイルURL
               groupIds:
@@ -685,7 +685,7 @@ components:
                 type: string
                 format: email
                 description: メールアドレス
-              thumbnail:
+              thumbnailUrl:
                 type: string
                 description: サムネイルURL
               groupIds:
@@ -730,7 +730,7 @@ components:
                 type: string
                 format: email
                 description: メールアドレス
-              thumbnail:
+              thumbnailUrl:
                 type: string
                 description: サムネイルURL
               groupIds:
@@ -795,7 +795,7 @@ components:
                             type: string
                             format: email
                             description: メールアドレス
-                          thumbnail:
+                          thumbnailUrl:
                             type: string
                             description: サムネイルURL
                     createdAt:
