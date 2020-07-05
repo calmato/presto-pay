@@ -17,21 +17,22 @@ import work.calmato.prestopay.databinding.FragmentAddFriendBinding
 import work.calmato.prestopay.network.UserProperty
 import work.calmato.prestopay.network.Users
 
-class AddFriendFragment:Fragment() {
+class AddFriendFragment : Fragment() {
   private val viewModel = AddFriendViewModel()
-  private lateinit var viewAdapter : RecyclerView.Adapter<*>
-  private lateinit var viewManager : RecyclerView.LayoutManager
-  private lateinit var users : Users
+  private lateinit var viewAdapter: RecyclerView.Adapter<*>
+  private lateinit var viewManager: RecyclerView.LayoutManager
+  private lateinit var users: Users
   var idToken = ""
   override fun onCreateView(
     inflater: LayoutInflater,
     container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View? {
-    val binding:FragmentAddFriendBinding = DataBindingUtil.inflate(inflater,R.layout.fragment_add_friend,container,false)
+    val binding: FragmentAddFriendBinding =
+      DataBindingUtil.inflate(inflater, R.layout.fragment_add_friend, container, false)
     binding.setLifecycleOwner(this)
     binding.viewModel = viewModel
-    users = Users(listOf(UserProperty("","友達検索してください","","","")))
+    users = Users(listOf(UserProperty("", "友達検索してください", "", "", "")))
     viewAdapter = AddFriendAdapter(users)
     viewManager = LinearLayoutManager(requireContext())
     binding.usersRecycleView.apply {
@@ -45,21 +46,18 @@ class AddFriendFragment:Fragment() {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     val mUser = FirebaseAuth.getInstance().currentUser
-    mUser?.getIdToken(true)?.addOnCompleteListener(requireActivity()){
+    mUser?.getIdToken(true)?.addOnCompleteListener(requireActivity()) {
       idToken = it.result?.token!!
     }
     search.setOnClickListener {
-      val users = viewModel.getUserProperties(userName.text.toString(),idToken)
-      Log.i(TAG, "onViewCreated: ${users.toString()}")
-      users?.let {
-        if(users.users.isEmpty()){
-          Toast.makeText(requireContext(),"ユーザーが見つかりません",Toast.LENGTH_SHORT).show()
-        }
-        usersRecycleView.swapAdapter(AddFriendAdapter(it),false)
+      users = viewModel.getUserProperties(userName.text.toString(), idToken)!!
+      if (users.users.isEmpty()) {
+        Toast.makeText(requireContext(), "ユーザーが見つかりません", Toast.LENGTH_SHORT).show()
       }
+      usersRecycleView.swapAdapter(AddFriendAdapter(users), false)
     }
-
   }
+
   companion object {
     internal const val TAG = "AddFriendFragment"
   }

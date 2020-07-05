@@ -15,7 +15,6 @@ private const val BASE_URL = "https://api.presto-pay-stg.calmato.work/v1/"
 
 enum class ApiFilter(val value: String){SEARCH_USER("users")}
 
-
 /**
  * Build the Moshi object that Retrofit will be using, making sure to add the Kotlin adapter for
  * full Kotlin compatibility.
@@ -47,11 +46,8 @@ interface ApiService{
   @GET("users")
   fun getProperties(@Header("Authorization")token:String, @Query("username") username: String):
   // The Coroutine Call Adapter allows us to return a Deferred, a Job with a result
-//    Call<List<UserProperty>>
     Call<Users>
 }
-
-
 
 /**
  * A public Api object that exposes the lazy-initialized Retrofit service

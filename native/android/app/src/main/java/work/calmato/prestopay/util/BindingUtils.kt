@@ -1,17 +1,20 @@
 package work.calmato.prestopay.util
 
+import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
+import com.squareup.picasso.Picasso
 import work.calmato.prestopay.network.UserProperty
-import work.calmato.prestopay.util.decodeImageFromBase64
 
-//@BindingAdapter("thumbnail")
-//fun ImageView.setThumbnail(item:UserProperty?){
-//  item?.let{
-//    setImageBitmap(decodeImageFromBase64(item.thumbnail!!))
-//  }
-//}
+@BindingAdapter("thumbnail")
+fun ImageView.setThumbnail(item:UserProperty?){
+  item?.thumbnailUrl?.let{
+    if(item.thumbnailUrl.isNotEmpty()) {
+      Picasso.with(context).load(item.thumbnailUrl).into(this)
+    }
+  }
+}
 
 @BindingAdapter("username")
 fun TextView.setUserName(item:UserProperty?){

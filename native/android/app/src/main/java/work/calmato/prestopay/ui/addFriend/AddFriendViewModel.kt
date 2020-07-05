@@ -9,14 +9,7 @@ import work.calmato.prestopay.network.Api
 import work.calmato.prestopay.network.UserProperty
 import work.calmato.prestopay.network.Users
 
-enum class ApiStatus { LOADING, ERROR, DONE }
 class AddFriendViewModel:ViewModel(){
-  // The internal MutableLiveData that stores the status of the most recent request
-  private val _status = MutableLiveData<ApiStatus>()
-  // The external immutable LiveData for the request status
-  val status: LiveData<ApiStatus>
-    get() = _status
-
   // Internally, we use a MutableLiveData, because we will be updating the List of MarsProperty
   // with new values
   private val _userProperties = MutableLiveData<UserProperty>()
@@ -36,23 +29,16 @@ class AddFriendViewModel:ViewModel(){
    */
   fun getUserProperties(userName:String,idToken:String): Users? {
     var users : Users? = null
-//    coroutineScope.launch{
       val getProperties = Api.retrofitService.getProperties("Bearer $idToken",userName)
       val thread = Thread(Runnable {
-//        try {
-//          _status.value = ApiStatus.LOADING
+        try {
         users = getProperties.execute().body()
-//          _status.value = ApiStatus.DONE
-//          _userProperties.value = listResult.body()
         Log.i(TAG, "getUserProperties: ${users!!}")
-//        } catch (e: Exception) {
-//          _status.value = ApiStatus.ERROR
-//          _userProperties.value = null
-//          Log.i(TAG, "getUserProperties: Fail")
-//        }
+        } catch (e: Exception) {
+          Log.i(TAG, "getUserProperties: Fail")
+        }
       })
       thread.start()
-//    }
     thread.join()
     return users
   }

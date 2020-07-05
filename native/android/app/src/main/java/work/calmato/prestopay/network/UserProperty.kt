@@ -10,7 +10,7 @@ data class UserProperty (
   val name:String,
   val username:String,
   val email:String,
-  val thumbnail:String?
+  val thumbnailUrl:String?
 ):Parcelable{}
 
 @Parcelize
