@@ -1,29 +1,44 @@
 package work.calmato.prestopay.ui.addFriend
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.fragment_add_friend.*
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentAddFriendBinding
+import work.calmato.prestopay.network.UserProperty
+import work.calmato.prestopay.network.Users
 
 class AddFriendFragment:Fragment() {
   private val viewModel = AddFriendViewModel()
+  private lateinit var viewAdapter : RecyclerView.Adapter<*>
+  private lateinit var viewManager : RecyclerView.LayoutManager
+  private lateinit var users : Users
   var idToken = ""
   override fun onCreateView(
     inflater: LayoutInflater,
     container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View? {
-    val binding = FragmentAddFriendBinding.inflate(inflater)
+    val binding:FragmentAddFriendBinding = DataBindingUtil.inflate(inflater,R.layout.fragment_add_friend,container,false)
     binding.setLifecycleOwner(this)
     binding.viewModel = viewModel
-    return inflater.inflate(R.layout.fragment_add_friend, container, false)
+    users = Users(listOf(UserProperty("","友達検索してください","","","")))
+    viewAdapter = AddFriendAdapter(users)
+    viewManager = LinearLayoutManager(requireContext())
+    binding.usersRecycleView.apply {
+      setHasFixedSize(true)
+      layoutManager = viewManager
+      adapter = viewAdapter
+    }
+    return binding.root
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -33,7 +48,14 @@ class AddFriendFragment:Fragment() {
       idToken = it.result?.token!!
     }
     search.setOnClickListener {
-      viewModel.getUserProperties(userName.text.toString(),idToken)
+//      viewModel.getUserProperties(userName.text.toString(),idToken)
+      users = Users(listOf(UserProperty("1","namewow!","name","email","thumbnail"),UserProperty("1","nam!","name","email","thumbnail")))
+      usersRecycleView.swapAdapter(AddFriendAdapter(users),false)
+      Log.i(TAG, "onViewCreated: presssed")
     }
+
+  }
+  companion object {
+    internal const val TAG = "AddFriendFragment"
   }
 }
