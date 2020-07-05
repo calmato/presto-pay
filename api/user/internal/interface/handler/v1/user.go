@@ -60,7 +60,7 @@ func (uh *apiV1UserHandler) IndexByUsername(ctx *gin.Context) {
 	res := &response.IndexUsers{}
 	res.Users = make([]*response.ShowUser, len(us))
 
-	for _, u := range us {
+	for i, u := range us {
 		ur := &response.ShowUser{
 			ID:           u.ID,
 			Name:         u.Name,
@@ -69,7 +69,7 @@ func (uh *apiV1UserHandler) IndexByUsername(ctx *gin.Context) {
 			ThumbnailURL: u.ThumbnailURL,
 		}
 
-		res.Users = append(res.Users, ur)
+		res.Users[i] = ur
 	}
 
 	ctx.JSON(http.StatusOK, res)
