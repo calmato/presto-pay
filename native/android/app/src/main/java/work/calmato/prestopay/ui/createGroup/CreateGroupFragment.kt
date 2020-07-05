@@ -13,8 +13,8 @@ import android.view.*
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
 import com.google.firebase.auth.FirebaseAuth
+import androidx.fragment.app.Fragment
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_create_group.*
 import okhttp3.Response
