@@ -21,7 +21,7 @@ class AddFriendFragment : Fragment() {
   private val viewModel = AddFriendViewModel()
   private lateinit var viewAdapter: RecyclerView.Adapter<*>
   private lateinit var viewManager: RecyclerView.LayoutManager
-  private lateinit var users: Users
+  private var usersList: Users? = null
   var idToken = ""
   override fun onCreateView(
     inflater: LayoutInflater,
@@ -32,8 +32,7 @@ class AddFriendFragment : Fragment() {
       DataBindingUtil.inflate(inflater, R.layout.fragment_add_friend, container, false)
     binding.setLifecycleOwner(this)
     binding.viewModel = viewModel
-    users = Users(listOf(UserProperty("", "友達検索してください", "", "", "")))
-    viewAdapter = AddFriendAdapter(users)
+    viewAdapter = AddFriendAdapter(usersList)
     viewManager = LinearLayoutManager(requireContext())
     binding.usersRecycleView.apply {
       setHasFixedSize(true)
@@ -50,11 +49,11 @@ class AddFriendFragment : Fragment() {
       idToken = it.result?.token!!
     }
     search.setOnClickListener {
-      users = viewModel.getUserProperties(userName.text.toString(), idToken)!!
-      if (users.users.isEmpty()) {
+      usersList = viewModel.getUserProperties(userName.text.toString(), idToken)!!
+      if (usersList!!.users.isEmpty()) {
         Toast.makeText(requireContext(), "ユーザーが見つかりません", Toast.LENGTH_SHORT).show()
       }
-      usersRecycleView.swapAdapter(AddFriendAdapter(users), false)
+      usersRecycleView.swapAdapter(AddFriendAdapter(usersList), false)
     }
   }
 

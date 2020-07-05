@@ -9,7 +9,7 @@ import work.calmato.prestopay.databinding.ListItemNameThumbnailBinding
 import work.calmato.prestopay.network.UserProperty
 import work.calmato.prestopay.network.Users
 
-class AddFriendAdapter(private val mUsersProperties: Users) : RecyclerView.Adapter<AddFriendAdapter.ViewHolder>(){
+class AddFriendAdapter(private val mUsersProperties: Users?) : RecyclerView.Adapter<AddFriendAdapter.ViewHolder>(){
   class ViewHolder private constructor(val binding:ListItemNameThumbnailBinding):RecyclerView.ViewHolder(binding.root){
     fun bind(item:UserProperty){
       binding.userProperty = item
@@ -29,11 +29,19 @@ class AddFriendAdapter(private val mUsersProperties: Users) : RecyclerView.Adapt
   }
 
   override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-    val item = mUsersProperties.users[position]
-    if (item != null) {
-      holder.bind(item)
+    mUsersProperties?.let {
+      val item = it.users[position]
+      if (item != null) {
+        holder.bind(item)
+      }
     }
   }
 
-  override fun getItemCount()=mUsersProperties.users.size
+  override fun getItemCount(): Int {
+    var returnInt = 0
+    mUsersProperties?.let {
+      returnInt = it.users.size
+    }
+    return returnInt
+  }
 }

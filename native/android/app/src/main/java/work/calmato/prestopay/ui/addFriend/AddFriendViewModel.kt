@@ -19,8 +19,6 @@ class AddFriendViewModel:ViewModel(){
 
   // Create a Coroutine scope using a job to be able to cancel when needed
   private var viewModelJob = Job()
-  // the Coroutine runs using the Main (UI) dispatcher
-  private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
   /**
    * Gets filtered Mars real estate property information from the API Retrofit service and
