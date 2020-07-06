@@ -43,7 +43,7 @@ func (ga *groupApplication) Index(ctx context.Context) ([]*group.Group, error) {
 		return nil, domain.Unauthorized.New(err)
 	}
 
-	gs, err := ga.groupService.IndexJoinGroups(ctx, u)
+	gs, err := ga.groupService.Index(ctx, u)
 	if err != nil {
 		return nil, err
 	}

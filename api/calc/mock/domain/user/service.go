@@ -48,3 +48,18 @@ func (mr *MockUserServiceMockRecorder) Authentication(ctx interface{}) *gomock.C
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Authentication", reflect.TypeOf((*MockUserService)(nil).Authentication), ctx)
 }
+
+// ContainsGroupID mocks base method
+func (m *MockUserService) ContainsGroupID(ctx context.Context, u *user.User, groupID string) (bool, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ContainsGroupID", ctx, u, groupID)
+	ret0, _ := ret[0].(bool)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ContainsGroupID indicates an expected call of ContainsGroupID
+func (mr *MockUserServiceMockRecorder) ContainsGroupID(ctx, u, groupID interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ContainsGroupID", reflect.TypeOf((*MockUserService)(nil).ContainsGroupID), ctx, u, groupID)
+}

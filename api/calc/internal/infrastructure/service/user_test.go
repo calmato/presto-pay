@@ -100,15 +100,11 @@ func TestUserService_ContainsGroupID(t *testing.T) {
 		defer ctrl.Finish()
 
 		// Defined mocks
-		udvm := mock_user.NewMockUserDomainValidation(ctrl)
-
-		urm := mock_user.NewMockUserRepository(ctrl)
-
-		uum := mock_user.NewMockUserUploader(ctrl)
+		acm := mock_api.NewMockAPIClient(ctrl)
 
 		// Start test
 		t.Run(result, func(t *testing.T) {
-			target := NewUserService(udvm, urm, uum)
+			target := NewUserService(acm)
 
 			got, err := target.ContainsGroupID(ctx, testCase.User, testCase.GroupID)
 			if err != nil {

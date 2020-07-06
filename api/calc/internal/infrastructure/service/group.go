@@ -32,7 +32,7 @@ func NewGroupService(
 	}
 }
 
-func (gs *groupService) IndexJoinGroups(ctx context.Context, u *user.User) ([]*group.Group, error) {
+func (gs *groupService) Index(ctx context.Context, u *user.User) ([]*group.Group, error) {
 	groups := make([]*group.Group, len(u.GroupIDs))
 
 	for i, groupID := range u.GroupIDs {

@@ -12,7 +12,7 @@ import (
 	"github.com/golang/mock/gomock"
 )
 
-func TestGroupService_IndexJoinGroups(t *testing.T) {
+func TestGroupService_Index(t *testing.T) {
 	testCases := map[string]struct {
 		User     *user.User
 		Expected []*group.Group
@@ -32,7 +32,7 @@ func TestGroupService_IndexJoinGroups(t *testing.T) {
 					Name:         "テストグループ",
 					ThumbnailURL: "",
 					UserIDs:      []string{},
-					Users:        []*user.User{},
+					Users:        map[string]*user.User{},
 				},
 			},
 		},
@@ -61,7 +61,7 @@ func TestGroupService_IndexJoinGroups(t *testing.T) {
 		t.Run(result, func(t *testing.T) {
 			target := NewGroupService(gdvm, grm, gum, acm)
 
-			got, err := target.IndexJoinGroups(ctx, testCase.User)
+			got, err := target.Index(ctx, testCase.User)
 			if err != nil {
 				t.Fatalf("error: %v", err)
 				return
@@ -87,7 +87,7 @@ func TestGroupService_Show(t *testing.T) {
 				Name:         "テストグループ",
 				ThumbnailURL: "",
 				UserIDs:      []string{},
-				Users:        []*user.User{},
+				Users:        map[string]*user.User{},
 			},
 		},
 	}
@@ -113,7 +113,7 @@ func TestGroupService_Show(t *testing.T) {
 		t.Run(result, func(t *testing.T) {
 			target := NewGroupService(gdvm, grm, gum, acm)
 
-			got, err := target.IndexJoinGroups(ctx, testCase.GroupID)
+			got, err := target.Show(ctx, testCase.GroupID)
 			if err != nil {
 				t.Fatalf("error: %v", err)
 				return
@@ -137,6 +137,7 @@ func TestGroupService_Create(t *testing.T) {
 				Name:         "テストグループ",
 				ThumbnailURL: "",
 				UserIDs:      []string{"user-id"},
+				Users:        map[string]*user.User{},
 			},
 		},
 	}

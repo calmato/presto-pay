@@ -44,7 +44,7 @@ func TestGroupApplication_Index(t *testing.T) {
 		usm.EXPECT().Authentication(ctx).Return(u, nil)
 
 		gsm := mock_group.NewMockGroupService(ctrl)
-		gsm.EXPECT().IndexJoinGroups(ctx, u).Return(testCase.Expected, nil)
+		gsm.EXPECT().Index(ctx, u).Return(testCase.Expected, nil)
 
 		// Start test
 		t.Run(result, func(t *testing.T) {
@@ -71,12 +71,12 @@ func TestGroupApplication_Show(t *testing.T) {
 	}{
 		"ok": {
 			GroupID: "group-id",
-			Expected: *group.Group{
+			Expected: &group.Group{
 				ID:           "group-id",
 				Name:         "テストグループ",
 				ThumbnailURL: "",
 				UserIDs:      []string{},
-				Users:        []*user.User{},
+				Users:        map[string]*user.User{},
 			},
 		},
 	}
@@ -108,7 +108,7 @@ func TestGroupApplication_Show(t *testing.T) {
 		t.Run(result, func(t *testing.T) {
 			target := NewGroupApplication(grvm, usm, gsm)
 
-			got, err := target.Show(ctx)
+			got, err := target.Show(ctx, testCase.GroupID)
 			if err != nil {
 				t.Fatalf("error: %v", err)
 				return
