@@ -99,6 +99,7 @@ func TestGroupApplication_Show(t *testing.T) {
 
 		usm := mock_user.NewMockUserService(ctrl)
 		usm.EXPECT().Authentication(ctx).Return(u, nil)
+		usm.EXPECT().ContainsGroupID(ctx, u, testCase.GroupID).Return(true, nil)
 
 		gsm := mock_group.NewMockGroupService(ctrl)
 		gsm.EXPECT().Show(ctx, testCase.GroupID).Return(testCase.Expected, nil)

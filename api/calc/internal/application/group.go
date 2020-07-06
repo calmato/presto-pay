@@ -57,7 +57,15 @@ func (ga *groupApplication) Show(ctx context.Context, groupID string) (*group.Gr
 		return nil, domain.Unauthorized.New(err)
 	}
 
-	// TODO: ContainGroupID
+	contain, err := ga.userService.ContainsGroupID(ctx, u, groupID)
+	if err != nil {
+		return nil, err
+	}
+
+	if !contain {
+		err := xerrors.New("Failed to Service")
+		return nil, domain.Forbidden.New(err)
+	}
 
 	g, err := ga.groupService.Show(ctx, groupID)
 	if err != nil {
