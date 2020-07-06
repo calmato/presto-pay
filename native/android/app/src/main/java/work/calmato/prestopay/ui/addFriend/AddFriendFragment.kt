@@ -1,7 +1,6 @@
 package work.calmato.prestopay.ui.addFriend
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,7 +13,6 @@ import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.fragment_add_friend.*
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentAddFriendBinding
-import work.calmato.prestopay.network.UserProperty
 import work.calmato.prestopay.network.Users
 
 class AddFriendFragment : Fragment() {
@@ -49,15 +47,13 @@ class AddFriendFragment : Fragment() {
       idToken = it.result?.token!!
     }
     search.setOnClickListener {
-      usersList = viewModel.getUserProperties(userName.text.toString(), idToken)!!
-      if (usersList!!.users.isEmpty()) {
+      usersList = viewModel.getUserProperties(userName.text.toString(), idToken)
+      usersList?.let {
+        usersRecycleView.swapAdapter(AddFriendAdapter(usersList), false)
+      } ?: run{
         Toast.makeText(requireContext(), "ユーザーが見つかりません", Toast.LENGTH_SHORT).show()
+        usersRecycleView.adapter = null
       }
-      usersRecycleView.swapAdapter(AddFriendAdapter(usersList), false)
     }
-  }
-
-  companion object {
-    internal const val TAG = "AddFriendFragment"
   }
 }

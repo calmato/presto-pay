@@ -2,8 +2,6 @@ package work.calmato.prestopay.ui.addFriend
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.ListAdapter
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import work.calmato.prestopay.databinding.ListItemNameThumbnailBinding
 import work.calmato.prestopay.network.UserProperty
@@ -38,7 +36,7 @@ class AddFriendAdapter(private val mUsersProperties: Users?) : RecyclerView.Adap
   }
 
   override fun getItemCount(): Int {
-    var returnInt = 0
+    var returnInt: Int = 0
     mUsersProperties?.let {
       returnInt = it.users.size
     }

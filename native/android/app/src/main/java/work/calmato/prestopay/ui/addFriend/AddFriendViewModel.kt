@@ -2,21 +2,12 @@ package work.calmato.prestopay.ui.addFriend
 
 import android.util.Log
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.*
 import work.calmato.prestopay.network.Api
-import work.calmato.prestopay.network.UserProperty
 import work.calmato.prestopay.network.Users
 
 class AddFriendViewModel:ViewModel(){
-  // Internally, we use a MutableLiveData, because we will be updating the List of MarsProperty
-  // with new values
-  private val _userProperties = MutableLiveData<UserProperty>()
-  // The external LiveData interface to the property is immutable, so only this class can modify
-  val userProperties:LiveData<UserProperty>
-    get() = _userProperties
-
   // Create a Coroutine scope using a job to be able to cancel when needed
   private var viewModelJob = Job()
 
