@@ -64,6 +64,63 @@ func TestGroupApplication_Index(t *testing.T) {
 	}
 }
 
+func TestGroupApplication_Show(t *testing.T) {
+	testCases := map[string]struct {
+		GroupID  string
+		Expected *group.Group
+	}{
+		"ok": {
+			GroupID: "group-id",
+			Expected: *group.Group{
+				ID:           "group-id",
+				Name:         "テストグループ",
+				ThumbnailURL: "",
+				UserIDs:      []string{},
+				Users:        []*user.User{},
+			},
+		},
+	}
+
+	for result, testCase := range testCases {
+		ctx, cancel := context.WithCancel(context.Background())
+		defer cancel()
+
+		ctrl := gomock.NewController(t)
+		defer ctrl.Finish()
+
+		// Defined variables
+		u := &user.User{
+			ID:       "user-id",
+			GroupIDs: []string{testCase.GroupID},
+		}
+
+		// Defined mocks
+		grvm := mock_validation.NewMockGroupRequestValidation(ctrl)
+
+		usm := mock_user.NewMockUserService(ctrl)
+		usm.EXPECT().Authentication(ctx).Return(u, nil)
+
+		gsm := mock_group.NewMockGroupService(ctrl)
+		gsm.EXPECT().Show(ctx, testCase.GroupID).Return(testCase.Expected, nil)
+
+		// Start test
+		t.Run(result, func(t *testing.T) {
+			target := NewGroupApplication(grvm, usm, gsm)
+
+			got, err := target.Show(ctx)
+			if err != nil {
+				t.Fatalf("error: %v", err)
+				return
+			}
+
+			if !reflect.DeepEqual(got, testCase.Expected) {
+				t.Fatalf("want %#v, but %#v", testCase.Expected, got)
+				return
+			}
+		})
+	}
+}
+
 func TestGroupApplication_Create(t *testing.T) {
 	testCases := map[string]struct {
 		Request *request.CreateGroup
