@@ -80,7 +80,7 @@ paths:
 
   /auth/friends:
     get:
-      summary: 友達一覧
+      summary: 友達一覧取得
       security:
         - BearerAuth: []
       responses:
@@ -161,7 +161,7 @@ paths:
 
   /users/{userId}:
     get:
-      summary: ユーザー情報取得
+      summary: ユーザー詳細取得
       security:
         - BearerAuth: []
       parameters:
@@ -214,7 +214,7 @@ paths:
 
   /groups:
     get:
-      summary: グループ一覧
+      summary: グループ一覧取得
       security:
         - BearerAuth: []
       responses:
@@ -240,6 +240,31 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '409':
           $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/Unkown'
+
+  /groups/{groupId}:
+    get:
+      summary: グループ詳細取得
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: groupId
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: グループUUID
+      responses:
+        '200':
+          $ref: '#/components/responses/ShowGroup'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '500':
           $ref: '#/components/responses/Unkown'
 
@@ -776,28 +801,12 @@ components:
                     thumbnailUrl:
                       type: string
                       description: サムネイルURL
-                    users:
+                    userIds:
                       type: array
-                      description: ユーザー一覧
+                      description: ユーザーID一覧
                       items:
-                        properties:
-                          id:
-                            type: string
-                            format: uuid
-                            description: ユーザーID
-                          name:
-                            type: string
-                            description: 表示名
-                          username:
-                            type: string
-                            description: ユーザー名
-                          email:
-                            type: string
-                            format: email
-                            description: メールアドレス
-                          thumbnailUrl:
-                            type: string
-                            description: サムネイルURL
+                        type: string
+                        format: uuid
                     createdAt:
                       type: string
                       format: date-time
@@ -806,6 +815,56 @@ components:
                       type: string
                       format: date-time
                       description: 更新日時
+
+
+    ShowGroup:
+      description: グループ詳細取得APIのレスポンス
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              id:
+                type: string
+                format: uuid
+                description: グループID
+              name:
+                type: string
+                description: グループ名
+              thumbnailUrl:
+                type: string
+                description: サムネイルURL
+              users:
+                type: array
+                description: ユーザー一覧
+                items:
+                  properties:
+                    id:
+                      type: string
+                      format: uuid
+                      description: ユーザーID
+                    name:
+                      type: string
+                      description: 表示名
+                    username:
+                      type: string
+                      description: ユーザー名
+                    email:
+                      type: string
+                      format: email
+                      description: メールアドレス
+                    thumbnailUrl:
+                      type: string
+                      description: サムネイルURL
+              createdAt:
+                type: string
+                format: date-time
+                description: 作成日時
+              updatedAt:
+                type: string
+                format: date-time
+                description: 更新日時
+
 
     CreateGroup:
       description: グループ作成APIのレスポンス

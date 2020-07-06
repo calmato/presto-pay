@@ -16,6 +16,7 @@ import (
 // GroupApplication - GroupApplicationインターフェース
 type GroupApplication interface {
 	Index(ctx context.Context) ([]*group.Group, error)
+	Show(ctx context.Context, groupID string) (*group.Group, error)
 	Create(ctx context.Context, req *request.CreateGroup) (*group.Group, error)
 }
 
@@ -42,12 +43,36 @@ func (ga *groupApplication) Index(ctx context.Context) ([]*group.Group, error) {
 		return nil, domain.Unauthorized.New(err)
 	}
 
-	gs, err := ga.groupService.IndexJoinGroups(ctx, u)
+	gs, err := ga.groupService.Index(ctx, u)
 	if err != nil {
 		return nil, err
 	}
 
 	return gs, nil
+}
+
+func (ga *groupApplication) Show(ctx context.Context, groupID string) (*group.Group, error) {
+	u, err := ga.userService.Authentication(ctx)
+	if err != nil {
+		return nil, domain.Unauthorized.New(err)
+	}
+
+	contain, err := ga.userService.ContainsGroupID(ctx, u, groupID)
+	if err != nil {
+		return nil, err
+	}
+
+	if !contain {
+		err := xerrors.New("Failed to Service")
+		return nil, domain.Forbidden.New(err)
+	}
+
+	g, err := ga.groupService.Show(ctx, groupID)
+	if err != nil {
+		return nil, err
+	}
+
+	return g, nil
 }
 
 func (ga *groupApplication) Create(ctx context.Context, req *request.CreateGroup) (*group.Group, error) {

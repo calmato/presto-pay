@@ -10,11 +10,13 @@ import (
 	"github.com/calmato/presto-pay/api/calc/internal/interface/handler"
 	"github.com/calmato/presto-pay/api/calc/middleware"
 	"github.com/gin-gonic/gin"
+	"golang.org/x/xerrors"
 )
 
 // APIV1GroupHandler - Groupハンドラのインターフェース
 type APIV1GroupHandler interface {
 	Index(ctx *gin.Context)
+	Show(ctx *gin.Context)
 	Create(ctx *gin.Context)
 }
 
@@ -38,33 +40,62 @@ func (gh *apiV1GroupHandler) Index(ctx *gin.Context) {
 	}
 
 	res := &response.IndexGroups{
-		Groups: make([]*response.ShowGroup, len(gs)),
+		Groups: make([]*response.IndexGroup, len(gs)),
 	}
 
 	for i, g := range gs {
-		urs := make([]*response.UserToShowGroup, len(g.Users))
-		for j, u := range g.Users {
-			ur := &response.UserToShowGroup{
-				ID:           u.ID,
-				Name:         u.Name,
-				Username:     u.Username,
-				Email:        u.Email,
-				ThumbnailURL: u.ThumbnailURL,
-			}
-
-			urs[j] = ur
-		}
-
-		gr := &response.ShowGroup{
+		gr := &response.IndexGroup{
 			ID:           g.ID,
 			Name:         g.Name,
 			ThumbnailURL: g.ThumbnailURL,
-			Users:        urs,
+			UserIDs:      g.UserIDs,
 			CreatedAt:    g.CreatedAt,
 			UpdatedAt:    g.UpdatedAt,
 		}
 
 		res.Groups[i] = gr
+	}
+
+	ctx.JSON(http.StatusOK, res)
+}
+
+func (gh *apiV1GroupHandler) Show(ctx *gin.Context) {
+	groupID := ctx.Params.ByName("groupID")
+
+	c := middleware.GinContextToContext(ctx)
+	g, err := gh.groupApplication.Show(c, groupID)
+	if err != nil {
+		handler.ErrorHandling(ctx, err)
+		return
+	}
+
+	usr := make([]*response.UserToShowGroup, len(g.UserIDs))
+	for i, userID := range g.UserIDs {
+		u := g.Users[userID]
+		if u == nil {
+			err := xerrors.New("User is not found.")
+			handler.ErrorHandling(ctx, domain.Unknown.New(err))
+			return
+		}
+
+		ur := &response.UserToShowGroup{
+			ID:           u.ID,
+			Name:         u.Name,
+			Username:     u.Username,
+			Email:        u.Email,
+			ThumbnailURL: u.ThumbnailURL,
+		}
+
+		usr[i] = ur
+	}
+
+	res := &response.ShowGroup{
+		ID:           g.ID,
+		Name:         g.Name,
+		ThumbnailURL: g.ThumbnailURL,
+		Users:        usr,
+		CreatedAt:    g.CreatedAt,
+		UpdatedAt:    g.UpdatedAt,
 	}
 
 	ctx.JSON(http.StatusOK, res)

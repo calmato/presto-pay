@@ -32,8 +32,7 @@ func NewGroupService(
 	}
 }
 
-func (gs *groupService) IndexJoinGroups(ctx context.Context, u *user.User) ([]*group.Group, error) {
-	users := map[string]*user.User{}
+func (gs *groupService) Index(ctx context.Context, u *user.User) ([]*group.Group, error) {
 	groups := make([]*group.Group, len(u.GroupIDs))
 
 	for i, groupID := range u.GroupIDs {
@@ -42,23 +41,32 @@ func (gs *groupService) IndexJoinGroups(ctx context.Context, u *user.User) ([]*g
 			return nil, domain.ErrorInDatastore.New(err)
 		}
 
-		for _, userID := range g.UserIDs {
-			if users[userID] == nil {
-				u, err := gs.apiClient.ShowUser(ctx, userID)
-				if err != nil {
-					return nil, domain.ErrorInDatastore.New(err)
-				}
-
-				users[userID] = u
-			}
-
-			g.Users = append(g.Users, users[userID])
-		}
-
 		groups[i] = g
 	}
 
 	return groups, nil
+}
+
+func (gs *groupService) Show(ctx context.Context, groupID string) (*group.Group, error) {
+	g, err := gs.groupRepository.Show(ctx, groupID)
+	if err != nil {
+		return nil, domain.ErrorInDatastore.New(err)
+	}
+
+	us := map[string]*user.User{}
+
+	for _, userID := range g.UserIDs {
+		u, err := gs.apiClient.ShowUser(ctx, userID)
+		if err != nil {
+			return nil, domain.ErrorInDatastore.New(err)
+		}
+
+		us[userID] = u
+	}
+
+	g.Users = us
+
+	return g, nil
 }
 
 func (gs *groupService) Create(ctx context.Context, g *group.Group) (*group.Group, error) {

@@ -35,19 +35,34 @@ func (m *MockGroupService) EXPECT() *MockGroupServiceMockRecorder {
 	return m.recorder
 }
 
-// IndexJoinGroups mocks base method
-func (m *MockGroupService) IndexJoinGroups(ctx context.Context, u *user.User) ([]*group.Group, error) {
+// Index mocks base method
+func (m *MockGroupService) Index(ctx context.Context, u *user.User) ([]*group.Group, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "IndexJoinGroups", ctx, u)
+	ret := m.ctrl.Call(m, "Index", ctx, u)
 	ret0, _ := ret[0].([]*group.Group)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// IndexJoinGroups indicates an expected call of IndexJoinGroups
-func (mr *MockGroupServiceMockRecorder) IndexJoinGroups(ctx, u interface{}) *gomock.Call {
+// Index indicates an expected call of Index
+func (mr *MockGroupServiceMockRecorder) Index(ctx, u interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "IndexJoinGroups", reflect.TypeOf((*MockGroupService)(nil).IndexJoinGroups), ctx, u)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Index", reflect.TypeOf((*MockGroupService)(nil).Index), ctx, u)
+}
+
+// Show mocks base method
+func (m *MockGroupService) Show(ctx context.Context, groupID string) (*group.Group, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Show", ctx, groupID)
+	ret0, _ := ret[0].(*group.Group)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// Show indicates an expected call of Show
+func (mr *MockGroupServiceMockRecorder) Show(ctx, groupID interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Show", reflect.TypeOf((*MockGroupService)(nil).Show), ctx, groupID)
 }
 
 // Create mocks base method
