@@ -64,6 +64,8 @@ func (gs *groupService) Show(ctx context.Context, groupID string) (*group.Group,
 		us[userID] = u
 	}
 
+	g.Users = us
+
 	return g, nil
 }
 
