@@ -44,12 +44,12 @@ func (gs *groupService) IndexJoinGroups(ctx context.Context, u *user.User) ([]*g
 
 		for _, userID := range g.UserIDs {
 			if users[userID] == nil {
-				u, err := gs.apiClient.ShowUser(ctx, userID)
+				user, err := gs.apiClient.ShowUser(ctx, userID)
 				if err != nil {
 					return nil, domain.ErrorInDatastore.New(err)
 				}
 
-				users[userID] = u
+				users[userID] = user
 			}
 
 			g.Users = append(g.Users, users[userID])
@@ -59,6 +59,26 @@ func (gs *groupService) IndexJoinGroups(ctx context.Context, u *user.User) ([]*g
 	}
 
 	return groups, nil
+}
+
+func (gs *groupService) Show(ctx context.Context, groupID string) (*group.Group, error) {
+	g, err := gs.groupRepository.Show(ctx, groupID)
+	if err != nil {
+		return nil, domain.ErrorInDatastore.New(err)
+	}
+
+	us := map[string]*user.User{}
+
+	for _, userID := range g.UserIDs {
+		u, err := gs.apiClient.ShowUser(ctx, userID)
+		if err != nil {
+			return nil, domain.ErrorInDatastore.New(err)
+		}
+
+		us[userID] = u
+	}
+
+	return g, nil
 }
 
 func (gs *groupService) Create(ctx context.Context, g *group.Group) (*group.Group, error) {

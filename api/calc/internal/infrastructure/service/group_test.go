@@ -75,6 +75,58 @@ func TestGroupService_IndexJoinGroups(t *testing.T) {
 	}
 }
 
+func TestGroupService_Show(t *testing.T) {
+	testCases := map[string]struct {
+		GroupID  string
+		Expected *group.Group
+	}{
+		"ok": {
+			GroupID: "group-id",
+			Expected: &group.Group{
+				ID:           "group-id",
+				Name:         "テストグループ",
+				ThumbnailURL: "",
+				UserIDs:      []string{},
+				Users:        []*user.User{},
+			},
+		},
+	}
+
+	for result, testCase := range testCases {
+		ctx, cancel := context.WithCancel(context.Background())
+		defer cancel()
+
+		ctrl := gomock.NewController(t)
+		defer ctrl.Finish()
+
+		// Defined mocks
+		gdvm := mock_group.NewMockGroupDomainValidation(ctrl)
+
+		grm := mock_group.NewMockGroupRepository(ctrl)
+		grm.EXPECT().Show(ctx, testCase.GroupID).Return(testCase.Expected, nil)
+
+		gum := mock_group.NewMockGroupUploader(ctrl)
+
+		acm := mock_api.NewMockAPIClient(ctrl)
+
+		// Start test
+		t.Run(result, func(t *testing.T) {
+			target := NewGroupService(gdvm, grm, gum, acm)
+
+			got, err := target.IndexJoinGroups(ctx, testCase.GroupID)
+			if err != nil {
+				t.Fatalf("error: %v", err)
+				return
+			}
+
+			if !reflect.DeepEqual(got, testCase.Expected) {
+				t.Fatalf("want %#v, but %#v", testCase.Expected, got)
+				return
+			}
+		})
+	}
+}
+
 func TestGroupService_Create(t *testing.T) {
 	testCases := map[string]struct {
 		Group *group.Group
