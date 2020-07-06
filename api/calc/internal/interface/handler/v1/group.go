@@ -48,7 +48,7 @@ func (gh *apiV1GroupHandler) Index(ctx *gin.Context) {
 			ID:           g.ID,
 			Name:         g.Name,
 			ThumbnailURL: g.ThumbnailURL,
-			Users:        g.UserIDs,
+			UserIDs:      g.UserIDs,
 			CreatedAt:    g.CreatedAt,
 			UpdatedAt:    g.UpdatedAt,
 		}
