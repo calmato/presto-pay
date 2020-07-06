@@ -38,28 +38,15 @@ func (gh *apiV1GroupHandler) Index(ctx *gin.Context) {
 	}
 
 	res := &response.IndexGroups{
-		Groups: make([]*response.ShowGroup, len(gs)),
+		Groups: make([]*response.IndexGroup, len(gs)),
 	}
 
 	for i, g := range gs {
-		urs := make([]*response.UserToShowGroup, len(g.Users))
-		for j, u := range g.Users {
-			ur := &response.UserToShowGroup{
-				ID:           u.ID,
-				Name:         u.Name,
-				Username:     u.Username,
-				Email:        u.Email,
-				ThumbnailURL: u.ThumbnailURL,
-			}
-
-			urs[j] = ur
-		}
-
-		gr := &response.ShowGroup{
+		gr := &response.IndexGroup{
 			ID:           g.ID,
 			Name:         g.Name,
 			ThumbnailURL: g.ThumbnailURL,
-			Users:        urs,
+			Users:        g.UserIDs,
 			CreatedAt:    g.CreatedAt,
 			UpdatedAt:    g.UpdatedAt,
 		}
