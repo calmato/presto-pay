@@ -28,7 +28,7 @@ type IndexGroup struct {
 	ID           string    `json:"id"`
 	Name         string    `json:"name"`
 	ThumbnailURL string    `json:"thumbnail_url"`
-	Users        []string  `json:"users"`
+	UserIDs      []string  `json:"userIds"`
 	CreatedAt    time.Time `json:"created_at"`
 	UpdatedAt    time.Time `json:"updated_at"`
 }
