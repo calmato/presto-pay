@@ -2,44 +2,63 @@ package work.calmato.prestopay.ui.addFriend
 
 import android.util.Log
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.*
 import work.calmato.prestopay.network.Api
+import work.calmato.prestopay.network.UserId
+import work.calmato.prestopay.network.UserProperty
 import work.calmato.prestopay.network.Users
 
-class AddFriendViewModel:ViewModel(){
-  // Create a Coroutine scope using a job to be able to cancel when needed
-  private var viewModelJob = Job()
+class AddFriendViewModel : ViewModel() {
+  private val _itemClicked = MutableLiveData<UserProperty>()
+  val itemClicked: LiveData<UserProperty>
+    get() = _itemClicked
 
-  /**
-   * Gets filtered Mars real estate property information from the API Retrofit service and
-   * updates the [userProperties] [List] and [ApiStatus] [LiveData]. The Retrofit service
-   * returns a coroutine Deferred, which we await to get the result of the transaction.
-   */
-  fun getUserProperties(userName:String,idToken:String): Users? {
-    var users : Users? = null
-      val getProperties = Api.retrofitService.getProperties("Bearer $idToken",userName)
-      val thread = Thread(Runnable {
-        try {
+  fun getUserProperties(userName: String, idToken: String): Users? {
+    var users: Users? = null
+    val getProperties = Api.retrofitService.getProperties("Bearer $idToken", userName)
+    val thread = Thread(Runnable {
+      try {
         users = getProperties.execute().body()
         Log.i(TAG, "getUserProperties: ${users!!}")
-        } catch (e: Exception) {
-          Log.i(TAG, "getUserProperties: Fail")
-        }
-      })
-      thread.start()
+      } catch (e: Exception) {
+        Log.i(TAG, "getUserProperties: Fail")
+      }
+    })
+    thread.start()
     thread.join()
     return users
   }
-  /**
-   * When the [ViewModel] is finished, we cancel our coroutine [viewModelJob], which tells the
-   * Retrofit service to stop.
-   */
-  override fun onCleared() {
-    super.onCleared()
-    viewModelJob.cancel()
+
+  fun addFriendApi(userProperty: UserProperty, idToken: String):Boolean{
+    val userId = UserId(userProperty.id)
+    val sendFriendRequest = Api.retrofitService.addFriend("Bearer $idToken", userId)
+    var returnBool = false
+    val thread = Thread(Runnable {
+      try {
+        val user = sendFriendRequest.execute().body()
+        returnBool = true
+        Log.i(TAG, "getUserProperties:kore ${user!!}")
+      } catch (e: Exception) {
+        Log.i(TAG, "getUserProperties: Fail")
+      }
+    })
+    thread.start()
+    thread.join()
+    return returnBool
   }
+
+  fun displayDialog(userProperty: UserProperty) {
+    _itemClicked.value = userProperty
+  }
+
+  fun displayDialogCompleted() {
+    _itemClicked.value = null
+  }
+
   companion object {
     internal const val TAG = "AddFriendViewModel"
   }
+
 }

@@ -7,39 +7,48 @@ import work.calmato.prestopay.databinding.ListItemNameThumbnailBinding
 import work.calmato.prestopay.network.UserProperty
 import work.calmato.prestopay.network.Users
 
-class AddFriendAdapter(private val mUsersProperties: Users?) : RecyclerView.Adapter<AddFriendAdapter.ViewHolder>(){
-  class ViewHolder private constructor(val binding:ListItemNameThumbnailBinding):RecyclerView.ViewHolder(binding.root){
-    fun bind(item:UserProperty){
+class AddFriendAdapter(private val mUserProperties: Users?, val onClickListener: OnClickListener) :
+  RecyclerView.Adapter<AddFriendAdapter.AddFriendViewHolder>() {
+  class AddFriendViewHolder(private val binding: ListItemNameThumbnailBinding) :
+    RecyclerView.ViewHolder(binding.root) {
+    fun bind(item: UserProperty) {
       binding.userProperty = item
       binding.executePendingBindings()
     }
-    companion object{
-      fun from(parent:ViewGroup):ViewHolder{
+
+    companion object {
+      fun from(parent: ViewGroup): AddFriendViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
-        val binding = ListItemNameThumbnailBinding.inflate(layoutInflater,parent,false)
-        return ViewHolder(binding)
+        val binding = ListItemNameThumbnailBinding.inflate(layoutInflater, parent, false)
+        return AddFriendViewHolder(binding)
       }
     }
   }
 
-  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-    return ViewHolder.from(parent)
+  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AddFriendViewHolder {
+    return AddFriendViewHolder.from(parent)
   }
 
-  override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-    mUsersProperties?.let {
-      val item = it.users[position]
-      if (item != null) {
-        holder.bind(item)
+  override fun onBindViewHolder(holder: AddFriendViewHolder, position: Int) {
+    mUserProperties?.let {
+      val userProperty = it.users[position]!!
+      holder.itemView.setOnClickListener {
+        onClickListener.onClick(userProperty)
       }
+      holder.bind(userProperty)
     }
   }
 
   override fun getItemCount(): Int {
     var returnInt: Int = 0
-    mUsersProperties?.let {
+    mUserProperties?.let {
       returnInt = it.users.size
     }
     return returnInt
   }
+
+  class OnClickListener(val clickListener: (userProperty: UserProperty) -> Unit) {
+    fun onClick(userProperty: UserProperty) = clickListener(userProperty)
+  }
 }
+

@@ -4,16 +4,14 @@ import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterF
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import kotlinx.coroutines.Deferred
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
-import retrofit2.http.GET
-import retrofit2.http.Header
-import retrofit2.http.Query
+import retrofit2.http.*
 
 private const val BASE_URL = "https://api.presto-pay-stg.calmato.work/v1/"
-
-enum class ApiFilter(val value: String){SEARCH_USER("users")}
 
 /**
  * Build the Moshi object that Retrofit will be using, making sure to add the Kotlin adapter for
@@ -23,6 +21,10 @@ private val moshi = Moshi.Builder()
   .add(KotlinJsonAdapterFactory())
   .build()
 
+private val client = OkHttpClient.Builder()
+    .addInterceptor(HttpLoggingInterceptor()
+    .setLevel(HttpLoggingInterceptor.Level.BODY))
+    .build()
 /**
  * Use the Retrofit builder to build a retrofit object using a Moshi converter with our Moshi
  * object.
@@ -31,6 +33,7 @@ private val retrofit = Retrofit.Builder()
   .addConverterFactory(MoshiConverterFactory.create(moshi))
   .addCallAdapterFactory(CoroutineCallAdapterFactory())
   .baseUrl(BASE_URL)
+  .client(client)
   .build()
 
 /**
@@ -47,6 +50,11 @@ interface ApiService{
   fun getProperties(@Header("Authorization")token:String, @Query("username") username: String):
   // The Coroutine Call Adapter allows us to return a Deferred, a Job with a result
     Call<Users>
+
+  @POST("auth/friends")
+  fun addFriend(@Header("Authorization")token:String, @Body userId: UserId):
+    Call<addFriendResponse>
+
 }
 
 /**
