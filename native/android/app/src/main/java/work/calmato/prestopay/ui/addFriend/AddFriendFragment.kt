@@ -1,28 +1,31 @@
 package work.calmato.prestopay.ui.addFriend
 
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.auth.FirebaseAuth
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_add_friend.*
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentAddFriendBinding
-import work.calmato.prestopay.network.UserProperty
-import work.calmato.prestopay.network.Users
+import work.calmato.prestopay.util.AdapterUser
+import work.calmato.prestopay.util.ViewModelFriendGroup
 
 class AddFriendFragment : Fragment() {
-  private val viewModel = AddFriendViewModel()
-  private lateinit var viewAdapter: RecyclerView.Adapter<*>
+  private val viewModel = ViewModelFriendGroup()
+  private lateinit var clickListener: AdapterUser.OnClickListener
   private lateinit var viewManager: RecyclerView.LayoutManager
-  private lateinit var users: Users
-  var idToken = ""
+
   override fun onCreateView(
     inflater: LayoutInflater,
     container: ViewGroup?,
@@ -30,35 +33,60 @@ class AddFriendFragment : Fragment() {
   ): View? {
     val binding: FragmentAddFriendBinding =
       DataBindingUtil.inflate(inflater, R.layout.fragment_add_friend, container, false)
-    binding.setLifecycleOwner(this)
+    binding.lifecycleOwner = this
     binding.viewModel = viewModel
-    users = Users(listOf(UserProperty("", "友達検索してください", "", "", "")))
-    viewAdapter = AddFriendAdapter(users)
+
+    clickListener = AdapterUser.OnClickListener { viewModel.displayDialog(it) }
+    binding.usersRecycleView.adapter = AdapterUser(null, clickListener)
+
     viewManager = LinearLayoutManager(requireContext())
     binding.usersRecycleView.apply {
       setHasFixedSize(true)
       layoutManager = viewManager
-      adapter = viewAdapter
     }
     return binding.root
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    val mUser = FirebaseAuth.getInstance().currentUser
-    mUser?.getIdToken(true)?.addOnCompleteListener(requireActivity()) {
-      idToken = it.result?.token!!
-    }
     search.setOnClickListener {
-      users = viewModel.getUserProperties(userName.text.toString(), idToken)!!
-      if (users.users.isEmpty()) {
-        Toast.makeText(requireContext(), "ユーザーが見つかりません", Toast.LENGTH_SHORT).show()
+      val usersList = viewModel.getUserProperties(userName.text.toString())
+      usersList?.let {
+        usersRecycleView.swapAdapter(
+          AdapterUser(usersList, clickListener), false
+        )
+        if (it.users.isEmpty()) {
+          Toast.makeText(requireContext(), "ユーザーが見つかりません", Toast.LENGTH_SHORT).show()
+        }
       }
-      usersRecycleView.swapAdapter(AddFriendAdapter(users), false)
     }
-  }
-
-  companion object {
-    internal const val TAG = "AddFriendFragment"
+    viewModel.itemClicked.observe(viewLifecycleOwner, Observer {
+      if (null != it) {
+        val builder: AlertDialog.Builder? = requireActivity().let {
+          AlertDialog.Builder(it)
+        }
+        builder?.setTitle("友だち追加しますか？")
+          ?.setPositiveButton("追加する",
+            DialogInterface.OnClickListener { dialog, id ->
+              val isSuccess = viewModel.addFriendApi(it)
+              if (isSuccess) {
+                Toast.makeText(requireContext(), "友だち追加しました", Toast.LENGTH_SHORT).show()
+              } else {
+                Toast.makeText(requireContext(), "友だち追加失敗しました", Toast.LENGTH_SHORT).show()
+              }
+            })
+          ?.setNegativeButton("キャンセル", null)
+          ?.setView(R.layout.dialog_add_friend)
+        val dialog: AlertDialog? = builder?.create()
+        dialog?.show()
+        val name = dialog?.findViewById<TextView>(R.id.username_dialog)
+        val thumbnail = dialog?.findViewById<ImageView>(R.id.thumbnail_dialog)
+        name!!.text = it.name
+        if (it.thumbnailUrl != null && it.thumbnailUrl.isNotEmpty()) {
+          Picasso.with(context).load(it.thumbnailUrl).into(thumbnail)
+        }
+        viewModel.displayDialogCompleted()
+      }
+    })
   }
 }
