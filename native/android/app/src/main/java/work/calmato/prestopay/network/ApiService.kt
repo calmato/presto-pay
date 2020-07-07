@@ -36,25 +36,19 @@ private val retrofit = Retrofit.Builder()
   .client(client)
   .build()
 
-/**
- * A public interface that exposes the [getProperties] method
- */
 interface ApiService{
-  /**
-   * Returns a Coroutine [Deferred] [List] of [MarsProperty] which can be fetched with await() if
-   * in a Coroutine scope.
-   * The @GET annotation indicates that the "realestate" endpoint will be requested with the GET
-   * HTTP method
-   */
+
   @GET("users")
   fun getProperties(@Header("Authorization")token:String, @Query("username") username: String):
-  // The Coroutine Call Adapter allows us to return a Deferred, a Job with a result
     Call<Users>
 
   @POST("auth/friends")
   fun addFriend(@Header("Authorization")token:String, @Body userId: UserId):
     Call<addFriendResponse>
 
+  @GET("auth/friends")
+  fun getFriends(@Header("Authorization")token:String):
+    Call<Users>
 }
 
 /**

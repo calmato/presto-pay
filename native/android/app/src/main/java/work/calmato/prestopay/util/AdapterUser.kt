@@ -1,4 +1,4 @@
-package work.calmato.prestopay.ui.addFriend
+package work.calmato.prestopay.util
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -7,8 +7,8 @@ import work.calmato.prestopay.databinding.ListItemNameThumbnailBinding
 import work.calmato.prestopay.network.UserProperty
 import work.calmato.prestopay.network.Users
 
-class AddFriendAdapter(private val mUserProperties: Users?, val onClickListener: OnClickListener) :
-  RecyclerView.Adapter<AddFriendAdapter.AddFriendViewHolder>() {
+class AdapterUser(private val mUserProperties: Users?, val onClickListener: OnClickListener) :
+  RecyclerView.Adapter<AdapterUser.AddFriendViewHolder>() {
   class AddFriendViewHolder(private val binding: ListItemNameThumbnailBinding) :
     RecyclerView.ViewHolder(binding.root) {
     fun bind(item: UserProperty) {
@@ -20,13 +20,17 @@ class AddFriendAdapter(private val mUserProperties: Users?, val onClickListener:
       fun from(parent: ViewGroup): AddFriendViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val binding = ListItemNameThumbnailBinding.inflate(layoutInflater, parent, false)
-        return AddFriendViewHolder(binding)
+        return AddFriendViewHolder(
+          binding
+        )
       }
     }
   }
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AddFriendViewHolder {
-    return AddFriendViewHolder.from(parent)
+    return AddFriendViewHolder.from(
+      parent
+    )
   }
 
   override fun onBindViewHolder(holder: AddFriendViewHolder, position: Int) {

@@ -14,19 +14,18 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.auth.FirebaseAuth
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_add_friend.*
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentAddFriendBinding
-import work.calmato.prestopay.network.Users
+import work.calmato.prestopay.util.AdapterUser
+import work.calmato.prestopay.util.ViewModelFriendGroup
 
 class AddFriendFragment : Fragment() {
-  private val viewModel = AddFriendViewModel()
-  private lateinit var clickListener: AddFriendAdapter.OnClickListener
+  private val viewModel = ViewModelFriendGroup()
+  private lateinit var clickListener: AdapterUser.OnClickListener
   private lateinit var viewManager: RecyclerView.LayoutManager
-  private var usersList: Users? = null
-  var idToken = ""
+
   override fun onCreateView(
     inflater: LayoutInflater,
     container: ViewGroup?,
@@ -34,11 +33,11 @@ class AddFriendFragment : Fragment() {
   ): View? {
     val binding: FragmentAddFriendBinding =
       DataBindingUtil.inflate(inflater, R.layout.fragment_add_friend, container, false)
-    binding.setLifecycleOwner(this)
+    binding.lifecycleOwner = this
     binding.viewModel = viewModel
 
-    clickListener = AddFriendAdapter.OnClickListener { viewModel.displayDialog(it) }
-    binding.usersRecycleView.adapter = AddFriendAdapter(usersList, clickListener)
+    clickListener = AdapterUser.OnClickListener { viewModel.displayDialog(it) }
+    binding.usersRecycleView.adapter = AdapterUser(null, clickListener)
 
     viewManager = LinearLayoutManager(requireContext())
     binding.usersRecycleView.apply {
@@ -50,17 +49,15 @@ class AddFriendFragment : Fragment() {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    val mUser = FirebaseAuth.getInstance().currentUser
-    mUser?.getIdToken(true)?.addOnCompleteListener(requireActivity()) {
-      idToken = it.result?.token!!
-    }
     search.setOnClickListener {
-      usersList = viewModel.getUserProperties(userName.text.toString(), idToken)
+      val usersList = viewModel.getUserProperties(userName.text.toString())
       usersList?.let {
-        usersRecycleView.swapAdapter(AddFriendAdapter(usersList, clickListener), false)
-      } ?: run {
-        Toast.makeText(requireContext(), "ユーザーが見つかりません", Toast.LENGTH_SHORT).show()
-        usersRecycleView.adapter = null
+        usersRecycleView.swapAdapter(
+          AdapterUser(usersList, clickListener), false
+        )
+        if (it.users.isEmpty()) {
+          Toast.makeText(requireContext(), "ユーザーが見つかりません", Toast.LENGTH_SHORT).show()
+        }
       }
     }
     viewModel.itemClicked.observe(viewLifecycleOwner, Observer {
@@ -68,21 +65,18 @@ class AddFriendFragment : Fragment() {
         val builder: AlertDialog.Builder? = requireActivity().let {
           AlertDialog.Builder(it)
         }
-        builder?.setPositiveButton("追加する",
-          DialogInterface.OnClickListener { dialog, id ->
-            val isSuccess = viewModel.addFriendApi(it,idToken)
-            if(isSuccess){
-              Toast.makeText(requireContext(),"友だち追加しました",Toast.LENGTH_SHORT).show()
-            }else{
-              Toast.makeText(requireContext(),"友だち追加失敗",Toast.LENGTH_SHORT).show()
-            }
-          })
-          ?.setNegativeButton("キャンセル",
+        builder?.setTitle("友だち追加しますか？")
+          ?.setPositiveButton("追加する",
             DialogInterface.OnClickListener { dialog, id ->
-              // User cancelled the dialog
+              val isSuccess = viewModel.addFriendApi(it)
+              if (isSuccess) {
+                Toast.makeText(requireContext(), "友だち追加しました", Toast.LENGTH_SHORT).show()
+              } else {
+                Toast.makeText(requireContext(), "友だち追加失敗しました", Toast.LENGTH_SHORT).show()
+              }
             })
+          ?.setNegativeButton("キャンセル", null)
           ?.setView(R.layout.dialog_add_friend)
-
         val dialog: AlertDialog? = builder?.create()
         dialog?.show()
         val name = dialog?.findViewById<TextView>(R.id.username_dialog)

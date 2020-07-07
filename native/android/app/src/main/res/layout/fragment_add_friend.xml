@@ -6,7 +6,7 @@
   <data>
     <variable
       name="viewModel"
-      type="work.calmato.prestopay.ui.addFriend.AddFriendViewModel"/>
+      type="work.calmato.prestopay.util.ViewModelFriendGroup"/>
   </data>
   <androidx.constraintlayout.widget.ConstraintLayout android:layout_width="match_parent"
       android:layout_height="match_parent">
