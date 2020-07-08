@@ -34,33 +34,40 @@ class UpdatePassLoginFragment : Fragment() {
   }
 
   private fun changePass() {
-    val newPass = newPassEdit.text.toString()
-    if (newPass.equals(passConfirmEdit.text.toString())) {
-      val auth = FirebaseAuth.getInstance()
-      val user = auth.currentUser
-      val cred =
-        EmailAuthProvider.getCredential(user!!.email.toString(), currentPassEdit.text.toString())
-      user.reauthenticate(cred).addOnCompleteListener {
-        if (it.isSuccessful) {
-          user.updatePassword(newPass).addOnCompleteListener {
-            if (it.isSuccessful) {
-              Toast.makeText(requireContext(), "パスワードを変更しました", Toast.LENGTH_SHORT).show()
-              this.findNavController().navigate(
-                UpdatePassLoginFragmentDirections.actionUpdatePassLoginFragmentToAccountHome()
+    if(newPassEdit.text.isNotEmpty()&&passConfirmEdit.text.isNotEmpty()&&currentPassEdit.text.isNotEmpty()) {
+      val newPass = newPassEdit.text.toString()
+      if (newPass.equals(passConfirmEdit.text.toString())) {
+        val auth = FirebaseAuth.getInstance()
+        val user = auth.currentUser
+        val cred =
+          EmailAuthProvider.getCredential(user!!.email.toString(), currentPassEdit.text.toString())
+        user.reauthenticate(cred).addOnCompleteListener {
+          if (it.isSuccessful) {
+            user.updatePassword(newPass).addOnCompleteListener {
+              if (it.isSuccessful) {
+                Toast.makeText(requireContext(), "パスワードを変更しました", Toast.LENGTH_SHORT).show()
+                this.findNavController().navigate(
+                  UpdatePassLoginFragmentDirections.actionUpdatePassLoginFragmentToAccountHome()
 
-              )
-            } else {
-              Toast.makeText(requireContext(), it.exception!!.message.toString(), Toast.LENGTH_LONG)
-                .show()
+                )
+              } else {
+                Toast.makeText(
+                  requireContext(),
+                  it.exception!!.message.toString(),
+                  Toast.LENGTH_LONG
+                )
+                  .show()
+              }
             }
+          } else {
+            Toast.makeText(requireContext(), "現在のパスワードが正しくありません", Toast.LENGTH_LONG).show()
           }
-        } else {
-          Toast.makeText(requireContext(), "現在のパスワードが正しくありません", Toast.LENGTH_LONG).show()
         }
+      } else {
+        Toast.makeText(requireContext(), "パスワードが一致しません", Toast.LENGTH_LONG).show()
       }
-    } else {
-      Toast.makeText(requireContext(), "パスワードが一致しません", Toast.LENGTH_LONG).show()
+    } else{
+      Toast.makeText(requireContext(), "空白の欄があります", Toast.LENGTH_LONG).show()
     }
-
   }
 }

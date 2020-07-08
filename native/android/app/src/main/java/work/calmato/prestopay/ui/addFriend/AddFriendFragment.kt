@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -35,9 +36,8 @@ class AddFriendFragment : Fragment() {
       DataBindingUtil.inflate(inflater, R.layout.fragment_add_friend, container, false)
     binding.lifecycleOwner = this
     binding.viewModel = viewModel
-
-    clickListener = AdapterUser.OnClickListener { viewModel.displayDialog(it) }
-    binding.usersRecycleView.adapter = AdapterUser(null, clickListener)
+    clickListener = AdapterUser.OnClickListener { viewModel.itemIsClicked(it) }
+    binding.usersRecycleView.adapter = AdapterUser(null, clickListener,CheckBox.GONE)
 
     viewManager = LinearLayoutManager(requireContext())
     binding.usersRecycleView.apply {
@@ -53,7 +53,7 @@ class AddFriendFragment : Fragment() {
       val usersList = viewModel.getUserProperties(userName.text.toString())
       usersList?.let {
         usersRecycleView.swapAdapter(
-          AdapterUser(usersList, clickListener), false
+          AdapterUser(usersList, clickListener,CheckBox.GONE), false
         )
         if (it.users.isEmpty()) {
           Toast.makeText(requireContext(), "ユーザーが見つかりません", Toast.LENGTH_SHORT).show()
@@ -85,7 +85,7 @@ class AddFriendFragment : Fragment() {
         if (it.thumbnailUrl != null && it.thumbnailUrl.isNotEmpty()) {
           Picasso.with(context).load(it.thumbnailUrl).into(thumbnail)
         }
-        viewModel.displayDialogCompleted()
+        viewModel.itemIsClickedCompleted()
       }
     })
   }

@@ -1,62 +1,52 @@
-package work.calmato.prestopay.ui.groupFriend
+package work.calmato.prestopay.ui.friendList
 
-import android.app.AlertDialog
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.CheckBox
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.fragment_group_friend.*
+import kotlinx.android.synthetic.main.fragment_friend_list.*
 import work.calmato.prestopay.R
-import work.calmato.prestopay.databinding.FragmentGroupFriendBinding
+import work.calmato.prestopay.databinding.FragmentFriendListBinding
 import work.calmato.prestopay.network.Users
 import work.calmato.prestopay.util.AdapterUser
 import work.calmato.prestopay.util.ViewModelFriendGroup
 
-class GroupFriendFragment : Fragment() {
+class FriendListFragment: Fragment() {
   private val viewModel = ViewModelFriendGroup()
-  private var usersList: Users? = null
+  private var usersList:Users? = null
+  private lateinit var adapter : AdapterUser
   private lateinit var clickListener: AdapterUser.OnClickListener
   private lateinit var viewManager: RecyclerView.LayoutManager
-  private lateinit var adapter:AdapterUser
 
   override fun onCreateView(
     inflater: LayoutInflater,
     container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View? {
-    val binding: FragmentGroupFriendBinding =
-      DataBindingUtil.inflate(inflater, R.layout.fragment_group_friend, container, false)
+    val binding: FragmentFriendListBinding =
+      DataBindingUtil.inflate(inflater, R.layout.fragment_friend_list, container, false)
     binding.lifecycleOwner = this
     binding.viewModel = viewModel
     clickListener = AdapterUser.OnClickListener { viewModel.itemIsClicked(it) }
-    adapter = AdapterUser(usersList, clickListener,CheckBox.GONE)
+    adapter = AdapterUser(usersList, clickListener, CheckBox.VISIBLE)
+    binding.friendsRecycleView.adapter = adapter
     viewManager = LinearLayoutManager(requireContext())
     binding.friendsRecycleView.apply {
       setHasFixedSize(true)
+      layoutManager = viewManager
     }
-    binding.friendsRecycleView.adapter = adapter
-    binding.friendsRecycleView.layoutManager = viewManager
     return binding.root
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    addFriend.setOnClickListener {
-      this.findNavController().navigate(
-        GroupFriendFragmentDirections.actionGroupFriendFragmentToAddFriendFragment()
-      )
-    }
     viewModel.idToken.observe(viewLifecycleOwner, Observer {
       if (null != it) {
         usersList = viewModel.getFriends()
@@ -65,33 +55,33 @@ class GroupFriendFragment : Fragment() {
             AdapterUser(
               usersList,
               clickListener,
-              CheckBox.GONE
+              CheckBox.VISIBLE
             ), false
           )
         }
       }
     })
-
     viewModel.itemClicked.observe(viewLifecycleOwner, Observer {
       if (null != it) {
-        val builder: AlertDialog.Builder? = requireActivity().let {
-          AlertDialog.Builder(it)
-        }
-        builder?.setView(R.layout.dialog_add_friend)
-        val dialog: AlertDialog? = builder?.create()
-        dialog?.show()
-        val name = dialog?.findViewById<TextView>(R.id.username_dialog)
-        val thumbnail = dialog?.findViewById<ImageView>(R.id.thumbnail_dialog)
-        name!!.text = it.name
-        if (it.thumbnailUrl != null && it.thumbnailUrl.isNotEmpty()) {
-          Picasso.with(context).load(it.thumbnailUrl).into(thumbnail)
-        }
+        it.checked = !it.checked
+
         viewModel.itemIsClickedCompleted()
       }
     })
+    setHasOptionsMenu(true)
   }
-
+  override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+    inflater.inflate(R.menu.header_done, menu)
+  }
+  override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    when (item.itemId) {
+      R.id.done -> this.findNavController().navigate(
+        FriendListFragmentDirections.actionFriendListFragmentToCreateGroupFragment()
+      )
+    }
+    return super.onOptionsItemSelected(item)
+  }
   companion object {
-    internal const val TAG = "GroupFriendFragment"
+    internal const val TAG = "FriendListFragment"
   }
 }

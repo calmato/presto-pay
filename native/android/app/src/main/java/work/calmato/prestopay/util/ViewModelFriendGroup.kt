@@ -75,11 +75,11 @@ class ViewModelFriendGroup : ViewModel() {
     return users
   }
 
-  fun displayDialog(userProperty: UserProperty) {
+  fun itemIsClicked(userProperty: UserProperty) {
     _itemClicked.value = userProperty
   }
 
-  fun displayDialogCompleted() {
+  fun itemIsClickedCompleted() {
     _itemClicked.value = null
   }
 
