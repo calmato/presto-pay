@@ -38,7 +38,7 @@ class AddFriendFragment : Fragment() {
     binding.viewModel = viewModel
     viewModel.getIdToken()
     clickListener = RecycleAdapterUser.OnClickListener { viewModel.itemIsClicked(it) }
-    binding.usersRecycleView.adapter = RecycleAdapterUser(null, clickListener,CheckBox.GONE)
+    binding.usersRecycleView.adapter = RecycleAdapterUser(null, clickListener, CheckBox.GONE)
 
     viewManager = LinearLayoutManager(requireContext())
     binding.usersRecycleView.apply {
@@ -54,7 +54,7 @@ class AddFriendFragment : Fragment() {
       val usersList = viewModel.getUserProperties(userName.text.toString())
       usersList?.let {
         usersRecycleView.swapAdapter(
-          RecycleAdapterUser(usersList, clickListener,CheckBox.GONE), false
+          RecycleAdapterUser(usersList, clickListener, CheckBox.GONE), false
         )
         if (it.users.isEmpty()) {
           Toast.makeText(requireContext(), "ユーザーが見つかりません", Toast.LENGTH_SHORT).show()

@@ -109,7 +109,7 @@
     android:id="@+id/addFriendFragment"
     android:name="work.calmato.prestopay.ui.addFriend.AddFriendFragment"
     android:label="AddFriendFragment"
-    tools:layout="@layout/fragment_add_friend"/>
+    tools:layout="@layout/fragment_add_friend" />
   <fragment
     android:id="@+id/friendListFragment"
     android:name="work.calmato.prestopay.ui.friendList.FriendListFragment"
@@ -117,8 +117,8 @@
     tools:layout="@layout/fragment_friend_list">
     <argument
       android:name="friendsList"
-      app:nullable="true"
-      app:argType="work.calmato.prestopay.network.Users"/>
+      app:argType="work.calmato.prestopay.network.Users"
+      app:nullable="true" />
     <action
       android:id="@+id/action_friendListFragment_to_createGroupFragment"
       app:destination="@id/createGroupFragment" />
@@ -133,8 +133,8 @@
     tools:layout="@layout/fragment_create_group">
     <argument
       android:name="friendsList"
-      app:nullable="true"
-      app:argType="work.calmato.prestopay.network.Users"/>
+      app:argType="work.calmato.prestopay.network.Users"
+      app:nullable="true" />
     <action
       android:id="@+id/action_createGroupFragment_to_friendListFragment"
       app:destination="@id/friendListFragment" />

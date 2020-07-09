@@ -7,7 +7,6 @@ import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.AsyncTask
 import android.os.Bundle
-import android.preference.PreferenceManager
 import android.util.Log
 import android.view.*
 import android.widget.CheckBox
@@ -24,10 +23,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_create_group.*
 import okhttp3.Response
-import org.json.JSONObject
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentCreateGroupBinding
-import work.calmato.prestopay.network.UserProperty
 import work.calmato.prestopay.network.Users
 import work.calmato.prestopay.util.Constant.Companion.IMAGE_PICK_CODE
 import work.calmato.prestopay.util.Constant.Companion.MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE
@@ -35,7 +32,6 @@ import work.calmato.prestopay.util.RecycleAdapterUser
 import work.calmato.prestopay.util.RestClient
 import work.calmato.prestopay.util.ViewModelFriendGroup
 import work.calmato.prestopay.util.encodeImage2Base64
-import java.util.stream.Collectors
 
 class CreateGroupFragment : Fragment() {
   val serverUrl: String = "https://api.presto-pay-stg.calmato.work/v1/groups"
@@ -145,7 +141,7 @@ class CreateGroupFragment : Fragment() {
     }
     requireActivity().onBackPressedDispatcher.addCallback(
       viewLifecycleOwner,
-      object: OnBackPressedCallback(true){
+      object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
           reChooseMember()
         }

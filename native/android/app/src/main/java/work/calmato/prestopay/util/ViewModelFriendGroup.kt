@@ -77,7 +77,7 @@ class ViewModelFriendGroup : ViewModel() {
     _itemClicked.value = null
   }
 
-  fun getIdToken(){
+  fun getIdToken() {
     FirebaseAuth.getInstance().currentUser?.getIdToken(true)?.addOnCompleteListener {
       _idToken.value = it.result?.token
     }

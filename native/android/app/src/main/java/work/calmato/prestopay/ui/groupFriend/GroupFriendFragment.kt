@@ -27,7 +27,7 @@ class GroupFriendFragment : Fragment() {
   private var usersList: Users? = null
   private lateinit var clickListener: RecycleAdapterUser.OnClickListener
   private lateinit var viewManager: RecyclerView.LayoutManager
-  private lateinit var recycleAdapter:RecycleAdapterUser
+  private lateinit var recycleAdapter: RecycleAdapterUser
 
   override fun onCreateView(
     inflater: LayoutInflater,
@@ -40,7 +40,7 @@ class GroupFriendFragment : Fragment() {
     binding.viewModel = viewModel
     viewModel.getIdToken()
     clickListener = RecycleAdapterUser.OnClickListener { viewModel.itemIsClicked(it) }
-    recycleAdapter = RecycleAdapterUser(usersList, clickListener,CheckBox.GONE)
+    recycleAdapter = RecycleAdapterUser(usersList, clickListener, CheckBox.GONE)
     viewManager = LinearLayoutManager(requireContext())
     binding.friendsRecycleView.apply {
       setHasFixedSize(true)

@@ -17,10 +17,10 @@ import work.calmato.prestopay.network.Users
 import work.calmato.prestopay.util.RecycleAdapterUser
 import work.calmato.prestopay.util.ViewModelFriendGroup
 
-class FriendListFragment: Fragment() {
+class FriendListFragment : Fragment() {
   private val viewModel = ViewModelFriendGroup()
-  private var usersList:Users? = null
-  private lateinit var recycleAdapter : RecycleAdapterUser
+  private var usersList: Users? = null
+  private lateinit var recycleAdapter: RecycleAdapterUser
   private lateinit var clickListener: RecycleAdapterUser.OnClickListener
   private lateinit var viewManager: RecyclerView.LayoutManager
 
@@ -35,7 +35,7 @@ class FriendListFragment: Fragment() {
     binding.viewModel = viewModel
     clickListener = RecycleAdapterUser.OnClickListener { viewModel.itemIsClicked(it) }
     usersList = FriendListFragmentArgs.fromBundle(requireArguments()).friendsList
-    if(usersList==null){
+    if (usersList == null) {
       viewModel.getIdToken()
     }
     recycleAdapter = RecycleAdapterUser(usersList, clickListener, CheckBox.VISIBLE)
@@ -52,7 +52,7 @@ class FriendListFragment: Fragment() {
     super.onViewCreated(view, savedInstanceState)
     viewModel.idToken.observe(viewLifecycleOwner, Observer { it ->
       if (null != it) {
-       viewModel.getFriends()?.let{obtainedUsersList ->
+        viewModel.getFriends()?.let { obtainedUsersList ->
           usersList = obtainedUsersList
           friendsRecycleView.swapAdapter(
             RecycleAdapterUser(
@@ -73,16 +73,18 @@ class FriendListFragment: Fragment() {
     setHasOptionsMenu(true)
     requireActivity().onBackPressedDispatcher.addCallback(
       viewLifecycleOwner,
-      object :OnBackPressedCallback(true){
+      object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
           goBackToHome()
         }
       }
     )
   }
+
   override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
     inflater.inflate(R.menu.header_done, menu)
   }
+
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
     when (item.itemId) {
       R.id.done -> this.findNavController().navigate(
@@ -91,11 +93,13 @@ class FriendListFragment: Fragment() {
     }
     return super.onOptionsItemSelected(item)
   }
-  private fun goBackToHome(){
+
+  private fun goBackToHome() {
     this.findNavController().navigate(
       FriendListFragmentDirections.actionFriendListFragmentToHomeFragment()
     )
   }
+
   companion object {
     internal const val TAG = "FriendListFragment"
   }
