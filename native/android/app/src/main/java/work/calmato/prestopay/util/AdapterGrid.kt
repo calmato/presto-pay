@@ -1,43 +1,29 @@
 package work.calmato.prestopay.util
 
-import android.content.res.Resources
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.CheckBox
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
-import work.calmato.prestopay.databinding.ListItemNameThumbnailBinding
+import work.calmato.prestopay.databinding.ListItemGridBinding
 import work.calmato.prestopay.network.UserProperty
 import work.calmato.prestopay.network.Users
 
-class RecycleAdapterUser(private val mUserProperties: Users?, val onClickListener: OnClickListener?, val isCheckBoxVisible:Int) :
-  RecyclerView.Adapter<RecycleAdapterUser.AddFriendViewHolder>() {
-  class AddFriendViewHolder(private val binding: ListItemNameThumbnailBinding) :
+class AdapterGrid(private val mUserProperties: Users?, val onClickListener: OnClickListener) :
+  RecyclerView.Adapter<AdapterGrid.AddFriendViewHolder>() {
+  class AddFriendViewHolder(private val binding: ListItemGridBinding) :
     RecyclerView.ViewHolder(binding.root) {
-    fun bind(item: UserProperty, isCheckBoxVisible:Int) {
+    fun bind(item: UserProperty) {
       binding.userProperty = item
-      binding.addFriendCheckBox.visibility = isCheckBoxVisible
-      binding.addFriendCheckBox.setOnClickListener {
-        item.checked = binding.addFriendCheckBox.isChecked
-      }
-      if(isCheckBoxVisible == CheckBox.GONE){
-        val newLayout = binding.thumbnail.layoutParams as ConstraintLayout.LayoutParams
-        newLayout.marginStart = dpToPx(8)
-      }
       binding.executePendingBindings()
     }
 
     companion object {
       fun from(parent: ViewGroup): AddFriendViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
-        val binding = ListItemNameThumbnailBinding.inflate(layoutInflater, parent, false)
+        val binding = ListItemGridBinding.inflate(layoutInflater, parent, false)
         return AddFriendViewHolder(
           binding
         )
       }
-    }
-    fun dpToPx(dp: Int): Int {
-      return (dp * Resources.getSystem().displayMetrics.density).toInt()
     }
   }
 
@@ -52,9 +38,9 @@ class RecycleAdapterUser(private val mUserProperties: Users?, val onClickListene
     mUserProperties?.let {
       val userProperty = it.users[position]!!
       holder.itemView.setOnClickListener {
-        onClickListener?.onClick(userProperty)
+        onClickListener.onClick(userProperty)
       }
-      holder.bind(userProperty,isCheckBoxVisible)
+      holder.bind(userProperty)
     }
   }
 

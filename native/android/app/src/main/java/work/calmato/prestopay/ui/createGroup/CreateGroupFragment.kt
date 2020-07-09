@@ -9,7 +9,6 @@ import android.os.AsyncTask
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import android.widget.CheckBox
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.core.app.ActivityCompat
@@ -26,9 +25,9 @@ import okhttp3.Response
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentCreateGroupBinding
 import work.calmato.prestopay.network.Users
+import work.calmato.prestopay.util.AdapterGrid
 import work.calmato.prestopay.util.Constant.Companion.IMAGE_PICK_CODE
 import work.calmato.prestopay.util.Constant.Companion.MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE
-import work.calmato.prestopay.util.RecycleAdapterUser
 import work.calmato.prestopay.util.RestClient
 import work.calmato.prestopay.util.ViewModelFriendGroup
 import work.calmato.prestopay.util.encodeImage2Base64
@@ -41,8 +40,8 @@ class CreateGroupFragment : Fragment() {
   private var usersList : Users? = null
   private var usersListToBeSent : Users? = null
   private val viewModel = ViewModelFriendGroup()
-  private lateinit var recycleAdapter : RecycleAdapterUser
-  private lateinit var clickListener: RecycleAdapterUser.OnClickListener
+  private lateinit var recycleAdapter : AdapterGrid
+  private lateinit var clickListener: AdapterGrid.OnClickListener
   private lateinit var viewManager: RecyclerView.LayoutManager
 
 
@@ -54,15 +53,15 @@ class CreateGroupFragment : Fragment() {
       DataBindingUtil.inflate(inflater,R.layout.fragment_create_group,container,false)
     binding.lifecycleOwner = this
     binding.viewModel = viewModel
-    clickListener = RecycleAdapterUser.OnClickListener{viewModel.itemIsClicked(it)}
+    clickListener = AdapterGrid.OnClickListener{viewModel.itemIsClicked(it)}
     usersList = CreateGroupFragmentArgs.fromBundle(requireArguments()).friendsList
     usersListToBeSent = Users(usersList!!.users.filter { userProperty -> userProperty!!.checked })
-    recycleAdapter = RecycleAdapterUser(usersListToBeSent,clickListener,CheckBox.GONE)
+    recycleAdapter = AdapterGrid(usersListToBeSent,clickListener)
     binding.GridViewFriends.adapter = recycleAdapter
     viewManager = LinearLayoutManager(requireContext())
     binding.GridViewFriends.apply {
       setHasFixedSize(true)
-      layoutManager = viewManager
+//      layoutManager = viewManager
     }
     return binding.root
   }

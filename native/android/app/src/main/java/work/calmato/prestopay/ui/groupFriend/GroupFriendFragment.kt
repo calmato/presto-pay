@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.DataBindingUtil
@@ -19,15 +18,16 @@ import kotlinx.android.synthetic.main.fragment_group_friend.*
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentGroupFriendBinding
 import work.calmato.prestopay.network.Users
-import work.calmato.prestopay.util.RecycleAdapterUser
+import work.calmato.prestopay.util.AdapterRecycleCheck
+import work.calmato.prestopay.util.AdapterRecyclePlane
 import work.calmato.prestopay.util.ViewModelFriendGroup
 
 class GroupFriendFragment : Fragment() {
   private val viewModel = ViewModelFriendGroup()
   private var usersList: Users? = null
-  private lateinit var clickListener: RecycleAdapterUser.OnClickListener
+  private lateinit var clickListener: AdapterRecycleCheck.OnClickListener
   private lateinit var viewManager: RecyclerView.LayoutManager
-  private lateinit var recycleAdapter: RecycleAdapterUser
+  private lateinit var recycleAdapter: AdapterRecycleCheck
 
   override fun onCreateView(
     inflater: LayoutInflater,
@@ -39,8 +39,8 @@ class GroupFriendFragment : Fragment() {
     binding.lifecycleOwner = this
     binding.viewModel = viewModel
     viewModel.getIdToken()
-    clickListener = RecycleAdapterUser.OnClickListener { viewModel.itemIsClicked(it) }
-    recycleAdapter = RecycleAdapterUser(usersList, clickListener, CheckBox.GONE)
+    clickListener = AdapterRecycleCheck.OnClickListener { viewModel.itemIsClicked(it) }
+    recycleAdapter = AdapterRecycleCheck(usersList, clickListener)
     viewManager = LinearLayoutManager(requireContext())
     binding.friendsRecycleView.apply {
       setHasFixedSize(true)
@@ -62,10 +62,9 @@ class GroupFriendFragment : Fragment() {
         usersList = viewModel.getFriends()
         usersList?.let {
           friendsRecycleView.swapAdapter(
-            RecycleAdapterUser(
+            AdapterRecyclePlane(
               usersList,
-              clickListener,
-              CheckBox.GONE
+              clickListener
             ), false
           )
         }
