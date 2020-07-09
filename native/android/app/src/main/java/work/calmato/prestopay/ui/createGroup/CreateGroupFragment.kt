@@ -61,7 +61,6 @@ class CreateGroupFragment : Fragment() {
     viewManager = LinearLayoutManager(requireContext())
     binding.GridViewFriends.apply {
       setHasFixedSize(true)
-//      layoutManager = viewManager
     }
     return binding.root
   }
@@ -80,7 +79,7 @@ class CreateGroupFragment : Fragment() {
     }
     val groupName = groupName.text.toString()
     if (groupName.length in 1..31){
-      if(usersListToBeSent!!.users.size in 1..100){
+      if(usersListToBeSent!!.users.size in 0..100){
         val gson = Gson()
         val map: MutableMap<String, Any> = mutableMapOf()
         map["name"] = groupName
@@ -91,12 +90,15 @@ class CreateGroupFragment : Fragment() {
         val response = MyAsyncTask().execute().get()
         if (response.isSuccessful) {
           Toast.makeText(requireContext(), "新しいグループを作成しました", Toast.LENGTH_SHORT).show()
+          this.findNavController().navigate(
+            CreateGroupFragmentDirections.actionCreateGroupFragmentToHomeFragment()
+          )
         } else {
           Log.i(TAG, "responseBody: " + response.body()!!.string())
           Toast.makeText(requireActivity(), "グループ作成に失敗しました", Toast.LENGTH_LONG).show()
         }
       }else{
-        Toast.makeText(requireContext(),"2~100人のグループメンバーを選択してください",Toast.LENGTH_LONG).show()
+        Toast.makeText(requireContext(),"グループメンバーは100人までです",Toast.LENGTH_LONG).show()
       }
     }else{
       Toast.makeText(requireContext(),"1〜31文字のグループ名を入力してください",Toast.LENGTH_LONG).show()

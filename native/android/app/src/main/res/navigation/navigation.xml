@@ -138,5 +138,8 @@
     <action
       android:id="@+id/action_createGroupFragment_to_friendListFragment"
       app:destination="@id/friendListFragment" />
+    <action
+      android:id="@+id/action_createGroupFragment_to_home_fragment"
+      app:destination="@id/home_fragment" />
   </fragment>
 </navigation>
