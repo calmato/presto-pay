@@ -10,8 +10,8 @@ import work.calmato.prestopay.databinding.ListItemNameThumbnailBinding
 import work.calmato.prestopay.network.UserProperty
 import work.calmato.prestopay.network.Users
 
-class AdapterUser(private val mUserProperties: Users?, val onClickListener: OnClickListener?,val isCheckBoxVisible:Int) :
-  RecyclerView.Adapter<AdapterUser.AddFriendViewHolder>() {
+class RecycleAdapterUser(private val mUserProperties: Users?, val onClickListener: OnClickListener?, val isCheckBoxVisible:Int) :
+  RecyclerView.Adapter<RecycleAdapterUser.AddFriendViewHolder>() {
   class AddFriendViewHolder(private val binding: ListItemNameThumbnailBinding) :
     RecyclerView.ViewHolder(binding.root) {
     fun bind(item: UserProperty, isCheckBoxVisible:Int) {
@@ -36,7 +36,7 @@ class AdapterUser(private val mUserProperties: Users?, val onClickListener: OnCl
         )
       }
     }
-    private fun dpToPx(dp: Int): Int {
+    fun dpToPx(dp: Int): Int {
       return (dp * Resources.getSystem().displayMetrics.density).toInt()
     }
   }
@@ -55,7 +55,6 @@ class AdapterUser(private val mUserProperties: Users?, val onClickListener: OnCl
         onClickListener?.onClick(userProperty)
       }
       holder.bind(userProperty,isCheckBoxVisible)
-
     }
   }
 

@@ -79,11 +79,6 @@
       app:destination="@id/account_edit_fragment" />
   </fragment>
   <fragment
-    android:id="@+id/createGroupFragment"
-    android:name="work.calmato.prestopay.ui.createGroup.CreateGroupFragment"
-    android:label="fragment_create_group"
-    tools:layout="@layout/fragment_create_group" />
-  <fragment
     android:id="@+id/resetPassFragment"
     android:name="work.calmato.prestopay.ui.resetPass.ResetPassFragment"
     android:label="ResetPassFragment"
@@ -120,8 +115,28 @@
     android:name="work.calmato.prestopay.ui.friendList.FriendListFragment"
     android:label="FriendListFragment"
     tools:layout="@layout/fragment_friend_list">
+    <argument
+      android:name="friendsList"
+      app:nullable="true"
+      app:argType="work.calmato.prestopay.network.Users"/>
     <action
       android:id="@+id/action_friendListFragment_to_createGroupFragment"
       app:destination="@id/createGroupFragment" />
+    <action
+      android:id="@+id/action_friendListFragment_to_home_fragment"
+      app:destination="@id/home_fragment" />
+  </fragment>
+  <fragment
+    android:id="@+id/createGroupFragment"
+    android:name="work.calmato.prestopay.ui.createGroup.CreateGroupFragment"
+    android:label="fragment_create_group"
+    tools:layout="@layout/fragment_create_group">
+    <argument
+      android:name="friendsList"
+      app:nullable="true"
+      app:argType="work.calmato.prestopay.network.Users"/>
+    <action
+      android:id="@+id/action_createGroupFragment_to_friendListFragment"
+      app:destination="@id/friendListFragment" />
   </fragment>
 </navigation>

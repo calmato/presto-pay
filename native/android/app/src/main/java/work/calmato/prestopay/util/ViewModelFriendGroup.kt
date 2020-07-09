@@ -20,12 +20,6 @@ class ViewModelFriendGroup : ViewModel() {
   val idToken: LiveData<String>
     get() = _idToken
 
-  init {
-    FirebaseAuth.getInstance().currentUser?.getIdToken(true)?.addOnCompleteListener {
-      _idToken.value = it.result?.token
-    }
-  }
-
   fun getUserProperties(userName: String): Users? {
     var users: Users? = null
     val getProperties = Api.retrofitService.getProperties("Bearer ${idToken.value}", userName)
@@ -81,6 +75,12 @@ class ViewModelFriendGroup : ViewModel() {
 
   fun itemIsClickedCompleted() {
     _itemClicked.value = null
+  }
+
+  fun getIdToken(){
+    FirebaseAuth.getInstance().currentUser?.getIdToken(true)?.addOnCompleteListener {
+      _idToken.value = it.result?.token
+    }
   }
 
   companion object {

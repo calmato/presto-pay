@@ -2,7 +2,6 @@ package work.calmato.prestopay.ui.groupFriend
 
 import android.app.AlertDialog
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,15 +19,15 @@ import kotlinx.android.synthetic.main.fragment_group_friend.*
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentGroupFriendBinding
 import work.calmato.prestopay.network.Users
-import work.calmato.prestopay.util.AdapterUser
+import work.calmato.prestopay.util.RecycleAdapterUser
 import work.calmato.prestopay.util.ViewModelFriendGroup
 
 class GroupFriendFragment : Fragment() {
   private val viewModel = ViewModelFriendGroup()
   private var usersList: Users? = null
-  private lateinit var clickListener: AdapterUser.OnClickListener
+  private lateinit var clickListener: RecycleAdapterUser.OnClickListener
   private lateinit var viewManager: RecyclerView.LayoutManager
-  private lateinit var adapter:AdapterUser
+  private lateinit var recycleAdapter:RecycleAdapterUser
 
   override fun onCreateView(
     inflater: LayoutInflater,
@@ -39,13 +38,14 @@ class GroupFriendFragment : Fragment() {
       DataBindingUtil.inflate(inflater, R.layout.fragment_group_friend, container, false)
     binding.lifecycleOwner = this
     binding.viewModel = viewModel
-    clickListener = AdapterUser.OnClickListener { viewModel.itemIsClicked(it) }
-    adapter = AdapterUser(usersList, clickListener,CheckBox.GONE)
+    viewModel.getIdToken()
+    clickListener = RecycleAdapterUser.OnClickListener { viewModel.itemIsClicked(it) }
+    recycleAdapter = RecycleAdapterUser(usersList, clickListener,CheckBox.GONE)
     viewManager = LinearLayoutManager(requireContext())
     binding.friendsRecycleView.apply {
       setHasFixedSize(true)
     }
-    binding.friendsRecycleView.adapter = adapter
+    binding.friendsRecycleView.adapter = recycleAdapter
     binding.friendsRecycleView.layoutManager = viewManager
     return binding.root
   }
@@ -62,7 +62,7 @@ class GroupFriendFragment : Fragment() {
         usersList = viewModel.getFriends()
         usersList?.let {
           friendsRecycleView.swapAdapter(
-            AdapterUser(
+            RecycleAdapterUser(
               usersList,
               clickListener,
               CheckBox.GONE

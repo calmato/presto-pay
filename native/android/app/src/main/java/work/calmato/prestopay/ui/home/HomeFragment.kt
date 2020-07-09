@@ -28,7 +28,7 @@ class HomeFragment : Fragment() {
     super.onViewCreated(view, savedInstanceState)
     floatingActionButton.setOnClickListener {
       this.findNavController().navigate(
-        HomeFragmentDirections.ActionHomeFragmentToFriendListFragment()
+        HomeFragmentDirections.ActionHomeFragmentToFriendListFragment(null)
       )
     }
     bottom_navigation.setOnNavigationItemSelectedListener { item ->
