@@ -18,12 +18,12 @@ import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_add_friend.*
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentAddFriendBinding
-import work.calmato.prestopay.util.AdapterRecycleCheck
+import work.calmato.prestopay.util.AdapterRecyclePlane
 import work.calmato.prestopay.util.ViewModelFriendGroup
 
 class AddFriendFragment : Fragment() {
   private val viewModel = ViewModelFriendGroup()
-  private lateinit var clickListener: AdapterRecycleCheck.OnClickListener
+  private lateinit var clickListener: AdapterRecyclePlane.OnClickListener
   private lateinit var viewManager: RecyclerView.LayoutManager
 
   override fun onCreateView(
@@ -36,8 +36,8 @@ class AddFriendFragment : Fragment() {
     binding.lifecycleOwner = this
     binding.viewModel = viewModel
     viewModel.getIdToken()
-    clickListener = AdapterRecycleCheck.OnClickListener { viewModel.itemIsClicked(it) }
-    binding.usersRecycleView.adapter = AdapterRecycleCheck(null, clickListener)
+    clickListener = AdapterRecyclePlane.OnClickListener { viewModel.itemIsClicked(it) }
+    binding.usersRecycleView.adapter = AdapterRecyclePlane(null, clickListener)
 
     viewManager = LinearLayoutManager(requireContext())
     binding.usersRecycleView.apply {
@@ -53,7 +53,7 @@ class AddFriendFragment : Fragment() {
       val usersList = viewModel.getUserProperties(userName.text.toString())
       usersList?.let {
         usersRecycleView.swapAdapter(
-          AdapterRecycleCheck(usersList, clickListener), false
+          AdapterRecyclePlane(usersList, clickListener), false
         )
         if (it.users.isEmpty()) {
           Toast.makeText(requireContext(), "ユーザーが見つかりません", Toast.LENGTH_SHORT).show()

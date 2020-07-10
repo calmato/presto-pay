@@ -7,7 +7,7 @@ import work.calmato.prestopay.databinding.ListItemPlaneBinding
 import work.calmato.prestopay.network.UserProperty
 import work.calmato.prestopay.network.Users
 
-class AdapterRecyclePlane(private val mUserProperties: Users?, val onClickListener: AdapterRecycleCheck.OnClickListener) :
+class AdapterRecyclePlane(private val mUserProperties: Users?, val onClickListener: OnClickListener) :
   RecyclerView.Adapter<AdapterRecyclePlane.AddFriendViewHolder>() {
   class AddFriendViewHolder(private val binding: ListItemPlaneBinding) :
     RecyclerView.ViewHolder(binding.root) {

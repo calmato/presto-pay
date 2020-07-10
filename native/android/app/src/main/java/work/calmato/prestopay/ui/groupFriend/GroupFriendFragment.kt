@@ -18,16 +18,15 @@ import kotlinx.android.synthetic.main.fragment_group_friend.*
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentGroupFriendBinding
 import work.calmato.prestopay.network.Users
-import work.calmato.prestopay.util.AdapterRecycleCheck
 import work.calmato.prestopay.util.AdapterRecyclePlane
 import work.calmato.prestopay.util.ViewModelFriendGroup
 
 class GroupFriendFragment : Fragment() {
   private val viewModel = ViewModelFriendGroup()
   private var usersList: Users? = null
-  private lateinit var clickListener: AdapterRecycleCheck.OnClickListener
+  private lateinit var clickListener: AdapterRecyclePlane.OnClickListener
   private lateinit var viewManager: RecyclerView.LayoutManager
-  private lateinit var recycleAdapter: AdapterRecycleCheck
+  private lateinit var recycleAdapter: AdapterRecyclePlane
 
   override fun onCreateView(
     inflater: LayoutInflater,
@@ -39,8 +38,8 @@ class GroupFriendFragment : Fragment() {
     binding.lifecycleOwner = this
     binding.viewModel = viewModel
     viewModel.getIdToken()
-    clickListener = AdapterRecycleCheck.OnClickListener { viewModel.itemIsClicked(it) }
-    recycleAdapter = AdapterRecycleCheck(usersList, clickListener)
+    clickListener = AdapterRecyclePlane.OnClickListener { viewModel.itemIsClicked(it) }
+    recycleAdapter = AdapterRecyclePlane(usersList, clickListener)
     viewManager = LinearLayoutManager(requireContext())
     binding.friendsRecycleView.apply {
       setHasFixedSize(true)
