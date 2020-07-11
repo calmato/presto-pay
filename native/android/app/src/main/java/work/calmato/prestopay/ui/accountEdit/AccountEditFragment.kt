@@ -67,14 +67,18 @@ class AccountEditFragment : Fragment() {
       jsonText = gson.toJson(map)
       Log.d("Edit Account Patch Json", jsonText)
 
-      val response = MyAsyncTask().execute().get()
-      if (response.isSuccessful) {
-        this.findNavController().navigate(
-          AccountEditFragmentDirections.actionEditAccountFragmentToAccountHome()
-        )
+      if (name != "" && userName != "" && email != "") {
+        val response = MyAsyncTask().execute().get()
+        if (response.isSuccessful) {
+          this.findNavController().navigate(
+            AccountEditFragmentDirections.actionEditAccountFragmentToAccountHome()
+          )
+        } else {
+          Log.i("responseActivity", "responseBody: " + response.body()!!.string())
+          Toast.makeText(requireActivity(), "変更に失敗しました", Toast.LENGTH_LONG).show()
+        }
       } else {
-        Log.i("responseActivity", "responseBody: " + response.body()!!.string())
-        Toast.makeText(requireActivity(), "変更に失敗しました", Toast.LENGTH_LONG).show()
+        Toast.makeText(requireContext(), "入力を行ってください", Toast.LENGTH_SHORT).show()
       }
     }
 

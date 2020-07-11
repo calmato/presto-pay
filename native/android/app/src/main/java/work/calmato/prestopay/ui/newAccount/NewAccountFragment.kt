@@ -50,7 +50,7 @@ class NewAccountFragment : Fragment() {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
 
-    passEditText.addTextChangedListener(object: TextWatcher {
+    passEditText.addTextChangedListener(object : TextWatcher {
       override fun afterTextChanged(s: Editable?) {
         var textLength = s?.length
         var textColor = Color.GRAY
@@ -71,7 +71,7 @@ class NewAccountFragment : Fragment() {
 
     })
 
-    passConfirmEditText.addTextChangedListener(object: TextWatcher {
+    passConfirmEditText.addTextChangedListener(object : TextWatcher {
       override fun afterTextChanged(s: Editable?) {
         var textColor = Color.GRAY
 
