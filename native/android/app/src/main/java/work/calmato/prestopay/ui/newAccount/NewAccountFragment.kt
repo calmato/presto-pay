@@ -101,38 +101,42 @@ class NewAccountFragment : Fragment() {
       val password = passEditText.text.toString()
       val passwordConfirmation = passConfirmEditText.text.toString()
 
-      if (password == passwordConfirmation) {
-        val map: MutableMap<String, Any> = mutableMapOf()
-        map.put("name", name)
-        map.put("username", userName)
-        map.put("email", email)
-        map.put("thumbnail", thumbnails)
-        map.put("password", password)
-        map.put("passwordConfirmation", passwordConfirmation)
+      if (name != "" && userName != "" && email != "" && password != "" && passwordConfirmation != "") {
+        if (password == passwordConfirmation || password.length >= 8) {
+          val map: MutableMap<String, Any> = mutableMapOf()
+          map.put("name", name)
+          map.put("username", userName)
+          map.put("email", email)
+          map.put("thumbnail", thumbnails)
+          map.put("password", password)
+          map.put("passwordConfirmation", passwordConfirmation)
 
-        val gson = Gson()
-        jsonText = gson.toJson(map)
-        Log.d("New Account Post Json", jsonText)
+          val gson = Gson()
+          jsonText = gson.toJson(map)
+          Log.d("New Account Post Json", jsonText)
 
-        val response = MyAsyncTask().execute().get()
-        if (response.isSuccessful) {
-          this.findNavController().navigate(
-            NewAccountFragmentDirections.actionNewAccountFragmentToLoginFragment()
-          )
-        } else {
-          var errorMessage = ""
-          val jsonArray = JSONObject(response.body()!!.string()).getJSONArray("errors")
-          for (i in 0 until jsonArray.length()) {
-            val jsonObject = jsonArray.getJSONObject(i)
-            errorMessage += jsonObject.getString("field") + " " + jsonObject.getString("message")
-            if (i != jsonArray.length() - 1) {
-              errorMessage += "\n"
+          val response = MyAsyncTask().execute().get()
+          if (response.isSuccessful) {
+            this.findNavController().navigate(
+              NewAccountFragmentDirections.actionNewAccountFragmentToLoginFragment()
+            )
+          } else {
+            var errorMessage = ""
+            val jsonArray = JSONObject(response.body()!!.string()).getJSONArray("errors")
+            for (i in 0 until jsonArray.length()) {
+              val jsonObject = jsonArray.getJSONObject(i)
+              errorMessage += jsonObject.getString("field") + " " + jsonObject.getString("message")
+              if (i != jsonArray.length() - 1) {
+                errorMessage += "\n"
+              }
             }
+            Toast.makeText(requireActivity(), errorMessage, Toast.LENGTH_LONG).show()
           }
-          Toast.makeText(requireActivity(), errorMessage, Toast.LENGTH_LONG).show()
+        } else {
+          Toast.makeText(requireContext(), "入力を確認してください", Toast.LENGTH_SHORT).show()
         }
       } else {
-        Toast.makeText(requireContext(), "パスワードが一致しません", Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), "入力を行ってください", Toast.LENGTH_SHORT).show()
       }
     }
 
