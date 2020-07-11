@@ -59,4 +59,6 @@
   <string name="email_address">Email address</string>
   <string name="description_reset_pass">にパスワードを変更するリンクを送信します。\n現在のパスワードを入力してください。</string>
   <string name="save_button"><u>保存</u></string>
+    <string name="passwordInformation">半角のアルファベットと数字両方を含む8~15文字</string>
+  <string name="passwordConfirmInformation">同じパスワードを入力</string>
 </resources>
