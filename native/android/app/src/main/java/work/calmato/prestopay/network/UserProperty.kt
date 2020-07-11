@@ -10,7 +10,8 @@ data class UserProperty(
   val name: String,
   val username: String,
   val email: String,
-  val thumbnailUrl: String?
+  val thumbnailUrl: String?,
+  var checked: Boolean = false
 ) : Parcelable {}
 
 @Parcelize

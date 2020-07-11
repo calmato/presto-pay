@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:tools="http://schemas.android.com/tools"
-  android:layout_width="match_parent"
-  android:layout_height="match_parent"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
-  tools:context=".ui.createGroup.CreateGroupFragment">
+  xmlns:tools="http://schemas.android.com/tools">
+  <data>
+    <variable
+      name="viewModel"
+      type="work.calmato.prestopay.util.ViewModelFriendGroup" />
+  </data>
 
   <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
@@ -43,16 +45,21 @@
       app:layout_constraintStart_toEndOf="@+id/thumbnailEdit"
       app:layout_constraintTop_toTopOf="@+id/thumbnailEdit" />
 
-    <ImageView
-      android:id="@+id/imageView2"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginTop="32dp"
-      android:src="@drawable/ic_baseline_add_circle_outline_60"
-      app:layout_constraintEnd_toEndOf="@+id/thumbnailEdit"
-      app:layout_constraintStart_toStartOf="@+id/thumbnailEdit"
-      app:layout_constraintTop_toBottomOf="@+id/thumbnailEdit" />
+    <androidx.recyclerview.widget.RecyclerView
+      android:id="@+id/GridViewFriends"
+      android:layout_width="0dp"
+      android:layout_height="0dp"
+      android:layout_marginStart="8dp"
+      android:layout_marginTop="8dp"
+      android:layout_marginEnd="8dp"
+      android:layout_marginBottom="8dp"
+      app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/thumbnailEdit"
+      app:spanCount="3"/>
 
   </androidx.constraintlayout.widget.ConstraintLayout>
 
-</FrameLayout>
+</layout>

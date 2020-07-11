@@ -18,12 +18,12 @@ import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_add_friend.*
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentAddFriendBinding
-import work.calmato.prestopay.util.AdapterUser
+import work.calmato.prestopay.util.AdapterRecyclePlane
 import work.calmato.prestopay.util.ViewModelFriendGroup
 
 class AddFriendFragment : Fragment() {
   private val viewModel = ViewModelFriendGroup()
-  private lateinit var clickListener: AdapterUser.OnClickListener
+  private lateinit var clickListener: AdapterRecyclePlane.OnClickListener
   private lateinit var viewManager: RecyclerView.LayoutManager
 
   override fun onCreateView(
@@ -35,9 +35,9 @@ class AddFriendFragment : Fragment() {
       DataBindingUtil.inflate(inflater, R.layout.fragment_add_friend, container, false)
     binding.lifecycleOwner = this
     binding.viewModel = viewModel
-
-    clickListener = AdapterUser.OnClickListener { viewModel.displayDialog(it) }
-    binding.usersRecycleView.adapter = AdapterUser(null, clickListener)
+    viewModel.getIdToken()
+    clickListener = AdapterRecyclePlane.OnClickListener { viewModel.itemIsClicked(it) }
+    binding.usersRecycleView.adapter = AdapterRecyclePlane(null, clickListener)
 
     viewManager = LinearLayoutManager(requireContext())
     binding.usersRecycleView.apply {
@@ -53,7 +53,7 @@ class AddFriendFragment : Fragment() {
       val usersList = viewModel.getUserProperties(userName.text.toString())
       usersList?.let {
         usersRecycleView.swapAdapter(
-          AdapterUser(usersList, clickListener), false
+          AdapterRecyclePlane(usersList, clickListener), false
         )
         if (it.users.isEmpty()) {
           Toast.makeText(requireContext(), "ユーザーが見つかりません", Toast.LENGTH_SHORT).show()
@@ -85,7 +85,7 @@ class AddFriendFragment : Fragment() {
         if (it.thumbnailUrl != null && it.thumbnailUrl.isNotEmpty()) {
           Picasso.with(context).load(it.thumbnailUrl).into(thumbnail)
         }
-        viewModel.displayDialogCompleted()
+        viewModel.itemIsClickedCompleted()
       }
     })
   }

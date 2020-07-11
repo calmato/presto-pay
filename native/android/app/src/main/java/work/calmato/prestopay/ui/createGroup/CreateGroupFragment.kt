@@ -7,22 +7,29 @@ import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.AsyncTask
 import android.os.Bundle
-import android.preference.PreferenceManager
 import android.util.Log
 import android.view.*
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.databinding.DataBindingUtil
 import com.google.firebase.auth.FirebaseAuth
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_create_group.*
 import okhttp3.Response
-import org.json.JSONObject
 import work.calmato.prestopay.R
+import work.calmato.prestopay.databinding.FragmentCreateGroupBinding
+import work.calmato.prestopay.network.Users
+import work.calmato.prestopay.util.AdapterGrid
 import work.calmato.prestopay.util.Constant.Companion.IMAGE_PICK_CODE
 import work.calmato.prestopay.util.Constant.Companion.MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE
 import work.calmato.prestopay.util.RestClient
+import work.calmato.prestopay.util.ViewModelFriendGroup
 import work.calmato.prestopay.util.encodeImage2Base64
 
 class CreateGroupFragment : Fragment() {
@@ -30,13 +37,32 @@ class CreateGroupFragment : Fragment() {
   var jsonText: String = ""
   var setThumbnail = false
   var idToken = ""
+  private var usersList : Users? = null
+  private var usersListToBeSent : Users? = null
+  private val viewModel = ViewModelFriendGroup()
+  private lateinit var recycleAdapter : AdapterGrid
+  private lateinit var clickListener: AdapterGrid.OnClickListener
+  private lateinit var viewManager: RecyclerView.LayoutManager
 
 
   override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View? {
-    return inflater.inflate(R.layout.fragment_create_group, container, false)
+    val binding:FragmentCreateGroupBinding =
+      DataBindingUtil.inflate(inflater,R.layout.fragment_create_group,container,false)
+    binding.lifecycleOwner = this
+    binding.viewModel = viewModel
+    clickListener = AdapterGrid.OnClickListener{viewModel.itemIsClicked(it)}
+    usersList = CreateGroupFragmentArgs.fromBundle(requireArguments()).friendsList
+    usersListToBeSent = Users(usersList!!.users.filter { userProperty -> userProperty!!.checked })
+    recycleAdapter = AdapterGrid(usersListToBeSent,clickListener)
+    binding.GridViewFriends.adapter = recycleAdapter
+    viewManager = LinearLayoutManager(requireContext())
+    binding.GridViewFriends.apply {
+      setHasFixedSize(true)
+    }
+    return binding.root
   }
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -52,27 +78,27 @@ class CreateGroupFragment : Fragment() {
       thumbnailStr = encodeImage2Base64(thumbnailEdit)
     }
     val groupName = groupName.text.toString()
-    val userList = listOf("1924e4ce-cbfd-4420-a902-ba83653f7d4e","bb942b57-3ff3-4d0a-b1c7-a3ec20e86899")
     if (groupName.length in 1..31){
-      if(userList.size in 1..100){
+      if(usersListToBeSent!!.users.size in 0..100){
         val gson = Gson()
         val map: MutableMap<String, Any> = mutableMapOf()
         map["name"] = groupName
         map["thumbnail"] = thumbnailStr
-        map["userIds"] = userList
-        //TODO ユーザー検索をできるように
-        //TODO ユーザーIDがユニークか確認バリデーション
+        map["userIds"] = usersListToBeSent!!.users.map{it!!.id}
         jsonText = gson.toJson(map)
         Log.i(TAG, "sendGroupInfo: $jsonText")
         val response = MyAsyncTask().execute().get()
         if (response.isSuccessful) {
           Toast.makeText(requireContext(), "新しいグループを作成しました", Toast.LENGTH_SHORT).show()
+          this.findNavController().navigate(
+            CreateGroupFragmentDirections.actionCreateGroupFragmentToHomeFragment()
+          )
         } else {
           Log.i(TAG, "responseBody: " + response.body()!!.string())
           Toast.makeText(requireActivity(), "グループ作成に失敗しました", Toast.LENGTH_LONG).show()
         }
       }else{
-        Toast.makeText(requireContext(),"2~100人のグループメンバーを選択してください",Toast.LENGTH_LONG).show()
+        Toast.makeText(requireContext(),"グループメンバーは100人までです",Toast.LENGTH_LONG).show()
       }
     }else{
       Toast.makeText(requireContext(),"1〜31文字のグループ名を入力してください",Toast.LENGTH_LONG).show()
@@ -114,6 +140,15 @@ class CreateGroupFragment : Fragment() {
     mUser?.getIdToken(true)?.addOnCompleteListener(requireActivity()){
       idToken = it.result?.token!!
     }
+    requireActivity().onBackPressedDispatcher.addCallback(
+      viewLifecycleOwner,
+      object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+          reChooseMember()
+        }
+
+      }
+    )
   }
 
   override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -166,6 +201,12 @@ class CreateGroupFragment : Fragment() {
     override fun doInBackground(vararg params: Void?): Response {
       return RestClient().postAuthExecute(jsonText, serverUrl, idToken)
     }
+  }
+
+  private fun reChooseMember(){
+    this.findNavController().navigate(
+      CreateGroupFragmentDirections.actionCreateGroupFragmentToFriendListFragment(usersList)
+    )
   }
 
   companion object {

@@ -1,6 +1,7 @@
 package work.calmato.prestopay.util
 
 import android.util.Log
+import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
@@ -20,5 +21,12 @@ fun ImageView.setThumbnail(item:UserProperty?){
 fun TextView.setUserName(item:UserProperty?){
   item?.let {
     text = item.name
+  }
+}
+
+@BindingAdapter("checkbox")
+fun CheckBox.isChecked(item:UserProperty?){
+  item?.let{
+    isChecked = item.checked
   }
 }

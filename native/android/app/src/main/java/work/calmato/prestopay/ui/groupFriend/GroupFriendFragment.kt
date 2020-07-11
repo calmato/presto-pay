@@ -17,13 +17,16 @@ import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_group_friend.*
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentGroupFriendBinding
-import work.calmato.prestopay.util.AdapterUser
+import work.calmato.prestopay.network.Users
+import work.calmato.prestopay.util.AdapterRecyclePlane
 import work.calmato.prestopay.util.ViewModelFriendGroup
 
 class GroupFriendFragment : Fragment() {
   private val viewModel = ViewModelFriendGroup()
-  private lateinit var clickListener: AdapterUser.OnClickListener
+  private var usersList: Users? = null
+  private lateinit var clickListener: AdapterRecyclePlane.OnClickListener
   private lateinit var viewManager: RecyclerView.LayoutManager
+  private lateinit var recycleAdapter: AdapterRecyclePlane
 
   override fun onCreateView(
     inflater: LayoutInflater,
@@ -34,14 +37,15 @@ class GroupFriendFragment : Fragment() {
       DataBindingUtil.inflate(inflater, R.layout.fragment_group_friend, container, false)
     binding.lifecycleOwner = this
     binding.viewModel = viewModel
-    clickListener = AdapterUser.OnClickListener { viewModel.displayDialog(it) }
-    binding.friendsRecycleView.adapter =
-      AdapterUser(null, clickListener)
+    viewModel.getIdToken()
+    clickListener = AdapterRecyclePlane.OnClickListener { viewModel.itemIsClicked(it) }
+    recycleAdapter = AdapterRecyclePlane(usersList, clickListener)
     viewManager = LinearLayoutManager(requireContext())
     binding.friendsRecycleView.apply {
       setHasFixedSize(true)
-      layoutManager = viewManager
     }
+    binding.friendsRecycleView.adapter = recycleAdapter
+    binding.friendsRecycleView.layoutManager = viewManager
     return binding.root
   }
 
@@ -54,10 +58,10 @@ class GroupFriendFragment : Fragment() {
     }
     viewModel.idToken.observe(viewLifecycleOwner, Observer {
       if (null != it) {
-        val usersList = viewModel.getFriends()
+        usersList = viewModel.getFriends()
         usersList?.let {
           friendsRecycleView.swapAdapter(
-            AdapterUser(
+            AdapterRecyclePlane(
               usersList,
               clickListener
             ), false
@@ -80,7 +84,7 @@ class GroupFriendFragment : Fragment() {
         if (it.thumbnailUrl != null && it.thumbnailUrl.isNotEmpty()) {
           Picasso.with(context).load(it.thumbnailUrl).into(thumbnail)
         }
-        viewModel.displayDialogCompleted()
+        viewModel.itemIsClickedCompleted()
       }
     })
   }
