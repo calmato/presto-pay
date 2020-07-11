@@ -7,6 +7,8 @@ import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.AsyncTask
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -32,6 +34,7 @@ class NewAccountFragment : Fragment() {
   val serverUrl: String = "https://api.presto-pay-stg.calmato.work/v1/auth"
   var jsonText: String = ""
   var setThumbnail = false
+
   override fun onCreateView(
     inflater: LayoutInflater,
     container: ViewGroup?,
@@ -46,6 +49,45 @@ class NewAccountFragment : Fragment() {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
+
+    passEditText.addTextChangedListener(object: TextWatcher {
+      override fun afterTextChanged(s: Editable?) {
+        var textLength = s?.length
+        var textColor = Color.GRAY
+
+        if (textLength != null) {
+          if (textLength < 8) {
+            textColor = Color.RED
+          }
+        }
+        passwordInformation.setTextColor(textColor)
+      }
+
+      override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+      }
+
+      override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+      }
+
+    })
+
+    passConfirmEditText.addTextChangedListener(object: TextWatcher {
+      override fun afterTextChanged(s: Editable?) {
+        var textColor = Color.GRAY
+
+        if (!passConfirmEditText.text.toString().equals(passEditText.text.toString())) {
+          textColor = Color.RED
+        }
+        passwordConfirmInformation.setTextColor(textColor)
+      }
+
+      override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+      }
+
+      override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+      }
+
+    })
 
     // buttonを押した時の処理を記述
     createAccountButton.setOnClickListener {
