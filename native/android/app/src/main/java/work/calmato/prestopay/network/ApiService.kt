@@ -3,7 +3,6 @@ package work.calmato.prestopay.network
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
-import kotlinx.coroutines.Deferred
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
@@ -44,11 +43,15 @@ interface ApiService{
 
   @POST("auth/friends")
   fun addFriend(@Header("Authorization")token:String, @Body userId: UserId):
-    Call<addFriendResponse>
+    Call<AddFriendResponse>
 
   @GET("auth/friends")
   fun getFriends(@Header("Authorization")token:String):
     Call<Users>
+
+  @POST("groups")
+  fun createGroup(@Header("Authorization")token:String, @Body userId: CreateGroupProperty):
+    Call<CreateGroupProperty>
 }
 
 /**
