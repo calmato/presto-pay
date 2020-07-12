@@ -7,6 +7,8 @@ import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.AsyncTask
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -32,6 +34,7 @@ class NewAccountFragment : Fragment() {
   val serverUrl: String = "https://api.presto-pay-stg.calmato.work/v1/auth"
   var jsonText: String = ""
   var setThumbnail = false
+
   override fun onCreateView(
     inflater: LayoutInflater,
     container: ViewGroup?,
@@ -47,6 +50,45 @@ class NewAccountFragment : Fragment() {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
 
+    passEditText.addTextChangedListener(object : TextWatcher {
+      override fun afterTextChanged(s: Editable?) {
+        var textLength = s?.length
+        var textColor = Color.GRAY
+
+        if (textLength != null) {
+          if (textLength < 8) {
+            textColor = Color.RED
+          }
+        }
+        passwordInformation.setTextColor(textColor)
+      }
+
+      override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+      }
+
+      override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+      }
+
+    })
+
+    passConfirmEditText.addTextChangedListener(object : TextWatcher {
+      override fun afterTextChanged(s: Editable?) {
+        var textColor = Color.GRAY
+
+        if (!passConfirmEditText.text.toString().equals(passEditText.text.toString())) {
+          textColor = Color.RED
+        }
+        passwordConfirmInformation.setTextColor(textColor)
+      }
+
+      override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+      }
+
+      override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+      }
+
+    })
+
     // buttonを押した時の処理を記述
     createAccountButton.setOnClickListener {
       var thumbnails = ""
@@ -59,38 +101,42 @@ class NewAccountFragment : Fragment() {
       val password = passEditText.text.toString()
       val passwordConfirmation = passConfirmEditText.text.toString()
 
-      if (password == passwordConfirmation) {
-        val map: MutableMap<String, Any> = mutableMapOf()
-        map.put("name", name)
-        map.put("username", userName)
-        map.put("email", email)
-        map.put("thumbnail", thumbnails)
-        map.put("password", password)
-        map.put("passwordConfirmation", passwordConfirmation)
+      if (name != "" && userName != "" && email != "" && password != "" && passwordConfirmation != "") {
+        if (password == passwordConfirmation || password.length >= 8) {
+          val map: MutableMap<String, Any> = mutableMapOf()
+          map.put("name", name)
+          map.put("username", userName)
+          map.put("email", email)
+          map.put("thumbnail", thumbnails)
+          map.put("password", password)
+          map.put("passwordConfirmation", passwordConfirmation)
 
-        val gson = Gson()
-        jsonText = gson.toJson(map)
-        Log.d("New Account Post Json", jsonText)
+          val gson = Gson()
+          jsonText = gson.toJson(map)
+          Log.d("New Account Post Json", jsonText)
 
-        val response = MyAsyncTask().execute().get()
-        if (response.isSuccessful) {
-          this.findNavController().navigate(
-            NewAccountFragmentDirections.actionNewAccountFragmentToLoginFragment()
-          )
-        } else {
-          var errorMessage = ""
-          val jsonArray = JSONObject(response.body()!!.string()).getJSONArray("errors")
-          for (i in 0 until jsonArray.length()) {
-            val jsonObject = jsonArray.getJSONObject(i)
-            errorMessage += jsonObject.getString("field") + " " + jsonObject.getString("message")
-            if (i != jsonArray.length() - 1) {
-              errorMessage += "\n"
+          val response = MyAsyncTask().execute().get()
+          if (response.isSuccessful) {
+            this.findNavController().navigate(
+              NewAccountFragmentDirections.actionNewAccountFragmentToLoginFragment()
+            )
+          } else {
+            var errorMessage = ""
+            val jsonArray = JSONObject(response.body()!!.string()).getJSONArray("errors")
+            for (i in 0 until jsonArray.length()) {
+              val jsonObject = jsonArray.getJSONObject(i)
+              errorMessage += jsonObject.getString("field") + " " + jsonObject.getString("message")
+              if (i != jsonArray.length() - 1) {
+                errorMessage += "\n"
+              }
             }
+            Toast.makeText(requireActivity(), errorMessage, Toast.LENGTH_LONG).show()
           }
-          Toast.makeText(requireActivity(), errorMessage, Toast.LENGTH_LONG).show()
+        } else {
+          Toast.makeText(requireContext(), "入力を確認してください", Toast.LENGTH_SHORT).show()
         }
       } else {
-        Toast.makeText(requireContext(), "パスワードが一致しません", Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), "入力を行ってください", Toast.LENGTH_SHORT).show()
       }
     }
 
