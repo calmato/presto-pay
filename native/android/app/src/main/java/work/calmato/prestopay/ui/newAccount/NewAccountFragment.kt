@@ -25,10 +25,13 @@ import okhttp3.Response
 import org.json.JSONObject
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentNewAccountBinding
+import work.calmato.prestopay.network.Api
+import work.calmato.prestopay.network.NewAccountProperty
 import work.calmato.prestopay.util.Constant.Companion.IMAGE_PICK_CODE
 import work.calmato.prestopay.util.Constant.Companion.MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE
 import work.calmato.prestopay.util.RestClient
 import work.calmato.prestopay.util.encodeImage2Base64
+import java.lang.Exception
 
 class NewAccountFragment : Fragment() {
   val serverUrl: String = "https://api.presto-pay-stg.calmato.work/v1/auth"
@@ -103,34 +106,48 @@ class NewAccountFragment : Fragment() {
 
       if (name != "" && userName != "" && email != "" && password != "" && passwordConfirmation != "") {
         if (password == passwordConfirmation || password.length >= 8) {
-          val map: MutableMap<String, Any> = mutableMapOf()
-          map.put("name", name)
-          map.put("username", userName)
-          map.put("email", email)
-          map.put("thumbnail", thumbnails)
-          map.put("password", password)
-          map.put("passwordConfirmation", passwordConfirmation)
+//          val map: MutableMap<String, Any> = mutableMapOf()
+//          map.put("name", name)
+//          map.put("username", userName)
+//          map.put("email", email)
+//          map.put("thumbnail", thumbnails)
+//          map.put("password", password)
+//          map.put("passwordConfirmation", passwordConfirmation)
+//
+//          val gson = Gson()
+//          jsonText = gson.toJson(map)
+//          Log.d("New Account Post Json", jsonText)
 
-          val gson = Gson()
-          jsonText = gson.toJson(map)
-          Log.d("New Account Post Json", jsonText)
-
-          val response = MyAsyncTask().execute().get()
-          if (response.isSuccessful) {
+//          val response = MyAsyncTask().execute().get()
+          val accountProperty = NewAccountProperty(name,userName,email,thumbnails,password,passwordConfirmation)
+          var resultBool = false
+          val newAccountRequest = Api.retrofitService.createAccount(accountProperty)
+          val thread = Thread(Runnable {
+//            try {
+                val result = newAccountRequest.execute()
+              resultBool = result.isSuccessful
+//            }catch (e:Exception){
+//              Log.i(TAG, "onViewCreated: ")
+//            }
+          })
+          thread.start()
+          thread.join()
+          if (resultBool) {
+            Toast.makeText(requireContext(),"アカウントを作成しました\nログインしてください",Toast.LENGTH_LONG).show()
             this.findNavController().navigate(
               NewAccountFragmentDirections.actionNewAccountFragmentToLoginFragment()
             )
           } else {
-            var errorMessage = ""
-            val jsonArray = JSONObject(response.body()!!.string()).getJSONArray("errors")
-            for (i in 0 until jsonArray.length()) {
-              val jsonObject = jsonArray.getJSONObject(i)
-              errorMessage += jsonObject.getString("field") + " " + jsonObject.getString("message")
-              if (i != jsonArray.length() - 1) {
-                errorMessage += "\n"
-              }
-            }
-            Toast.makeText(requireActivity(), errorMessage, Toast.LENGTH_LONG).show()
+//            var errorMessage = ""
+//            val jsonArray = JSONObject(response.body()!!.string()).getJSONArray("errors")
+//            for (i in 0 until jsonArray.length()) {
+//              val jsonObject = jsonArray.getJSONObject(i)
+//              errorMessage += jsonObject.getString("field") + " " + jsonObject.getString("message")
+//              if (i != jsonArray.length() - 1) {
+//                errorMessage += "\n"
+//              }
+//            }
+//            Toast.makeText(requireActivity(), errorMessage, Toast.LENGTH_LONG).show()
           }
         } else {
           Toast.makeText(requireContext(), "入力を確認してください", Toast.LENGTH_SHORT).show()
@@ -224,5 +241,8 @@ class NewAccountFragment : Fragment() {
       thumbnailEdit.setBackgroundColor(Color.TRANSPARENT)
       editPhotoText.setText("写真を変更")
     }
+  }
+  companion object {
+    internal const val TAG = "NewAccountFragment"
   }
 }

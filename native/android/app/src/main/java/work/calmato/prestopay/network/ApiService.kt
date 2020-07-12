@@ -62,6 +62,12 @@ interface ApiService {
     @Body accountProperty: EditAccountProperty
   ):
     Call<EditAccountResult>
+
+  @POST("auth")
+  fun createAccount(
+    @Body accountProperty: NewAccountProperty
+  ):
+    Call<NewAccountResponse>
 }
 
 /**
