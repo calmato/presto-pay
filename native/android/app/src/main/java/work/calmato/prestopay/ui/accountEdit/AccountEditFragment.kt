@@ -31,8 +31,6 @@ import work.calmato.prestopay.util.encodeImage2Base64
 import java.lang.Exception
 
 class AccountEditFragment : Fragment() {
-  val serverUrl: String = "https://api.presto-pay-stg.calmato.work/v1/auth"
-  var jsonText: String = ""
   var setThumbnail = false
   var idToken = ""
 
@@ -59,39 +57,26 @@ class AccountEditFragment : Fragment() {
       val name: String = nameEditText.text.toString()
       val userName: String = userNameEditText.text.toString()
       val email: String = mailEditText.text.toString()
-
-//      val map: MutableMap<String, Any> = mutableMapOf()
-//      map.put("name", name)
-//      map.put("username", userName)
-//      map.put("email", email)
-//      map.put("thumbnail", thumbnails)
-//
-//      val gson = Gson()
-//      jsonText = gson.toJson(map)
-//      Log.d("Edit Account Patch Json", jsonText)
-
       if (name != "" && userName != "" && email != "") {
-//        val response = MyAsyncTask().execute().get()
-        val accountProperty = EditAccountProperty(name,userName,email,thumbnails)
+        val accountProperty = EditAccountProperty(name, userName, email, thumbnails)
         var resultBool = false
         val editRequest = Api.retrofitService.editAccount("Bearer $idToken", accountProperty)
         val thread = Thread(Runnable {
           try {
             val result = editRequest.execute()
             resultBool = result.isSuccessful
-          } catch (e:Exception){
+          } catch (e: Exception) {
             Log.i(TAG, "onViewCreated: ")
           }
         })
         thread.start()
         thread.join()
         if (resultBool) {
-          Toast.makeText(requireContext(),"変更しました",Toast.LENGTH_LONG).show()
+          Toast.makeText(requireContext(), "変更しました", Toast.LENGTH_LONG).show()
           this.findNavController().navigate(
             AccountEditFragmentDirections.actionEditAccountFragmentToAccountHome()
           )
         } else {
-//          Log.i("responseActivity", "responseBody: " + response.body()!!.string())
           Toast.makeText(requireActivity(), "変更に失敗しました", Toast.LENGTH_LONG).show()
         }
       } else {
@@ -136,13 +121,6 @@ class AccountEditFragment : Fragment() {
     }
   }
 
-  inner class MyAsyncTask : AsyncTask<Void, Void, Response>() {
-    override fun doInBackground(vararg params: Void?): Response {
-      val responseCode = RestClient().patchExecute(jsonText, serverUrl, idToken)
-      return responseCode
-    }
-  }
-
   override fun onRequestPermissionsResult(
     requestCode: Int,
     permissions: Array<String>,
@@ -183,6 +161,7 @@ class AccountEditFragment : Fragment() {
       changeProfilePicture.setText("写真を変更")
     }
   }
+
   companion object {
     internal const val TAG = "AccountEditFragment"
   }

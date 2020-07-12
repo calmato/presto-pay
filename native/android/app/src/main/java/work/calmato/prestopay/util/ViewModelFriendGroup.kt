@@ -51,14 +51,15 @@ class ViewModelFriendGroup : ViewModel() {
     return returnBool
   }
 
-  fun createGroupApi(groupProperty:CreateGroupProperty):Boolean{
-    val createGroupRequest = Api.retrofitService.createGroup("Bearer ${idToken.value}", groupProperty)
+  fun createGroupApi(groupProperty: CreateGroupProperty): Boolean {
+    val createGroupRequest =
+      Api.retrofitService.createGroup("Bearer ${idToken.value}", groupProperty)
     var returnBool = false
     val thread = Thread(Runnable {
       try {
         val result = createGroupRequest.execute()
         returnBool = result.isSuccessful
-      } catch (e:Exception){
+      } catch (e: Exception) {
         Log.i(TAG, "CreateGroupProperties: Fail. ログのOkhttpをチェック")
       }
     })

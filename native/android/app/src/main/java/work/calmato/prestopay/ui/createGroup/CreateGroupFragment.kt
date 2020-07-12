@@ -36,10 +36,10 @@ import work.calmato.prestopay.util.encodeImage2Base64
 class CreateGroupFragment : Fragment() {
   var setThumbnail = false
   var idToken = ""
-  private var usersList : Users? = null
-  private var usersListToBeSent : Users? = null
+  private var usersList: Users? = null
+  private var usersListToBeSent: Users? = null
   private val viewModel = ViewModelFriendGroup()
-  private lateinit var recycleAdapter : AdapterGrid
+  private lateinit var recycleAdapter: AdapterGrid
   private lateinit var clickListener: AdapterGrid.OnClickListener
   private lateinit var viewManager: RecyclerView.LayoutManager
 
@@ -48,15 +48,15 @@ class CreateGroupFragment : Fragment() {
     inflater: LayoutInflater, container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View? {
-    val binding:FragmentCreateGroupBinding =
-      DataBindingUtil.inflate(inflater,R.layout.fragment_create_group,container,false)
+    val binding: FragmentCreateGroupBinding =
+      DataBindingUtil.inflate(inflater, R.layout.fragment_create_group, container, false)
     binding.lifecycleOwner = this
     binding.viewModel = viewModel
     viewModel.getIdToken()
-    clickListener = AdapterGrid.OnClickListener{viewModel.itemIsClicked(it)}
+    clickListener = AdapterGrid.OnClickListener { viewModel.itemIsClicked(it) }
     usersList = CreateGroupFragmentArgs.fromBundle(requireArguments()).friendsList
-    usersListToBeSent = Users(usersList!!.users.filter { userProperty -> userProperty!!.checked})
-    recycleAdapter = AdapterGrid(usersListToBeSent,clickListener)
+    usersListToBeSent = Users(usersList!!.users.filter { userProperty -> userProperty!!.checked })
+    recycleAdapter = AdapterGrid(usersListToBeSent, clickListener)
     binding.GridViewFriends.adapter = recycleAdapter
     viewManager = LinearLayoutManager(requireContext())
     binding.GridViewFriends.apply {
@@ -74,13 +74,14 @@ class CreateGroupFragment : Fragment() {
 
   private fun sendGroupInfo() {
     var thumbnailStr = encodeImage2Base64(thumbnailEdit)
-    if(setThumbnail) {
+    if (setThumbnail) {
       thumbnailStr = encodeImage2Base64(thumbnailEdit)
     }
     val groupName = groupName.text.toString()
-    if (groupName.length in 1..31){
-      if(usersListToBeSent!!.users.size in 0..100){
-        val groupProperty = CreateGroupProperty(groupName,thumbnailStr,usersListToBeSent!!.users.map { it!!.id })
+    if (groupName.length in 1..31) {
+      if (usersListToBeSent!!.users.size in 0..100) {
+        val groupProperty =
+          CreateGroupProperty(groupName, thumbnailStr, usersListToBeSent!!.users.map { it!!.id })
         val result = viewModel.createGroupApi(groupProperty)
         if (result) {
           Toast.makeText(requireContext(), "新しいグループを作成しました", Toast.LENGTH_SHORT).show()
@@ -90,11 +91,11 @@ class CreateGroupFragment : Fragment() {
         } else {
           Toast.makeText(requireActivity(), "グループ作成に失敗しました", Toast.LENGTH_LONG).show()
         }
-      }else{
-        Toast.makeText(requireContext(),"グループメンバーは100人までです",Toast.LENGTH_LONG).show()
+      } else {
+        Toast.makeText(requireContext(), "グループメンバーは100人までです", Toast.LENGTH_LONG).show()
       }
-    }else{
-      Toast.makeText(requireContext(),"1〜31文字のグループ名を入力してください",Toast.LENGTH_LONG).show()
+    } else {
+      Toast.makeText(requireContext(), "1〜31文字のグループ名を入力してください", Toast.LENGTH_LONG).show()
     }
   }
 
@@ -130,7 +131,7 @@ class CreateGroupFragment : Fragment() {
     }
     setHasOptionsMenu(true)
     val mUser = FirebaseAuth.getInstance().currentUser
-    mUser?.getIdToken(true)?.addOnCompleteListener(requireActivity()){
+    mUser?.getIdToken(true)?.addOnCompleteListener(requireActivity()) {
       idToken = it.result?.token!!
     }
     requireActivity().onBackPressedDispatcher.addCallback(
@@ -190,7 +191,7 @@ class CreateGroupFragment : Fragment() {
     }
   }
 
-  private fun reChooseMember(){
+  private fun reChooseMember() {
     this.findNavController().navigate(
       CreateGroupFragmentDirections.actionCreateGroupFragmentToFriendListFragment(usersList)
     )

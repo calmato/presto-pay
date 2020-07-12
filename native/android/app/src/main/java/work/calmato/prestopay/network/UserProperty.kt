@@ -34,20 +34,20 @@ data class UserId(
 
 @Parcelize
 data class CreateGroupProperty(
-  val name : String,
-  val thumbnail:String,
-  val userIds:List<String>
-) : Parcelable{}
+  val name: String,
+  val thumbnail: String,
+  val userIds: List<String>
+) : Parcelable {}
 
 @Parcelize
 data class CreateGroupPropertyResult(
-  val id:String,
-  val name : String,
-  val thumbnail_url:String,
-  val user_ids:List<String>,
-  val created_at:String,
-  val updated_at:String
-) : Parcelable{}
+  val id: String,
+  val name: String,
+  val thumbnail_url: String,
+  val user_ids: List<String>,
+  val created_at: String,
+  val updated_at: String
+) : Parcelable {}
 
 @Parcelize
 data class EditAccountProperty(
@@ -55,17 +55,17 @@ data class EditAccountProperty(
   val username: String,
   val email: String,
   val thumbnail: String
-) : Parcelable{}
+) : Parcelable {}
 
 @Parcelize
 data class EditAccountResult(
   val id: String,
   val name: String,
   val username: String,
-  val email:String,
+  val email: String,
   val thumbnailUrl: String,
-  val groupIds:List<String>,
-  val friendIds:List<String>,
-  val createdAt:String,
+  val groupIds: List<String>,
+  val friendIds: List<String>,
+  val createdAt: String,
   val updatedAt: String
-) : Parcelable{}
+) : Parcelable {}
