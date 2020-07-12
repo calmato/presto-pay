@@ -69,3 +69,26 @@ data class EditAccountResult(
   val createdAt: String,
   val updatedAt: String
 ) : Parcelable {}
+
+@Parcelize
+data class NewAccountProperty(
+  val name: String,
+  val username: String,
+  val email: String,
+  val thumbnail: String,
+  val password: String,
+  val passwordConfirmation: String
+) : Parcelable
+
+@Parcelize
+data class NewAccountResponse(
+  val id: String,
+  val name: String,
+  val username: String,
+  val email: String,
+  val thumbnailUrl: String,
+  val groupIds: List<String>,
+  val friendIds: List<String>,
+  val createdAt: String,
+  val updatedAt: String
+) : Parcelable
