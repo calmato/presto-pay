@@ -6,10 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.*
-import work.calmato.prestopay.network.Api
-import work.calmato.prestopay.network.UserId
-import work.calmato.prestopay.network.UserProperty
-import work.calmato.prestopay.network.Users
+import work.calmato.prestopay.network.*
 
 class ViewModelFriendGroup : ViewModel() {
   private val _itemClicked = MutableLiveData<UserProperty>()
@@ -42,11 +39,26 @@ class ViewModelFriendGroup : ViewModel() {
     var returnBool = false
     val thread = Thread(Runnable {
       try {
-        val user = sendFriendRequest.execute().body()
-        returnBool = true
-        Log.i(TAG, "getUserProperties:kore ${user!!}")
+        val result = sendFriendRequest.execute()
+        returnBool = result.isSuccessful
       } catch (e: Exception) {
         Log.i(TAG, "getUserProperties: Fail")
+      }
+    })
+    thread.start()
+    thread.join()
+    return returnBool
+  }
+
+  fun createGroupApi(groupProperty:CreateGroupProperty):Boolean{
+    val createGroupRequest = Api.retrofitService.createGroup("Bearer ${idToken.value}", groupProperty)
+    var returnBool = false
+    val thread = Thread(Runnable {
+      try {
+          val result = createGroupRequest.execute()
+        returnBool = result.isSuccessful
+      } catch (e:Exception){
+        Log.i(TAG, "CreateGroupProperties: Fail")
       }
     })
     thread.start()
