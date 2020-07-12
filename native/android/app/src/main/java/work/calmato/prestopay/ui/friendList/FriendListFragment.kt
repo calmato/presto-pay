@@ -55,8 +55,9 @@ class FriendListFragment : Fragment() {
         viewModel.getFriends(requireActivity())
       }})
     viewModel.usersList.observe(viewLifecycleOwner, Observer {
+      usersList = it
       friendsRecycleView.swapAdapter(
-      AdapterRecycleCheck(it,clickListener),false
+      AdapterRecycleCheck(usersList,clickListener),false
       )
     })
     viewModel.itemClicked.observe(viewLifecycleOwner, Observer {
