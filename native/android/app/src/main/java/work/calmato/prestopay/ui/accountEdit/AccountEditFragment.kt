@@ -18,10 +18,15 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.fragment_account_edit.*
+import org.json.JSONObject
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentAccountEditBindingImpl
 import work.calmato.prestopay.network.Api
 import work.calmato.prestopay.network.EditAccountProperty
+import work.calmato.prestopay.network.EditAccountResult
 import work.calmato.prestopay.util.Constant
 import work.calmato.prestopay.util.encodeImage2Base64
 import java.lang.Exception
@@ -55,26 +60,30 @@ class AccountEditFragment : Fragment() {
       val email: String = mailEditText.text.toString()
       if (name != "" && userName != "" && email != "") {
         val accountProperty = EditAccountProperty(name, userName, email, thumbnails)
-        var resultBool = false
-        val editRequest = Api.retrofitService.editAccount("Bearer $idToken", accountProperty)
-        val thread = Thread(Runnable {
-          try {
-            val result = editRequest.execute()
-            resultBool = result.isSuccessful
-          } catch (e: Exception) {
-            Log.i(TAG, "onViewCreated: ")
+        Api.retrofitService.editAccount("Bearer $idToken", accountProperty).enqueue(object:Callback<EditAccountResult>{
+          override fun onFailure(call: Call<EditAccountResult>, t: Throwable) {
+            Toast.makeText(activity, t.message, Toast.LENGTH_LONG).show()
+          }
+          override fun onResponse(
+            call: Call<EditAccountResult>,
+            response: Response<EditAccountResult>
+          ) {
+            if(response.isSuccessful){
+              Toast.makeText(requireContext(), "変更しました", Toast.LENGTH_LONG).show()
+              navigateToAccountHome()
+            } else{
+              val jObjError = JSONObject(response.errorBody()?.string()).getJSONArray("errors")
+              for (i in 0 until jObjError.length()) {
+                val errorMessage =
+                  jObjError.getJSONObject(i).getString("field") + " " + jObjError.getJSONObject(
+                    i
+                  )
+                    .getString("message")
+                Toast.makeText(activity, errorMessage, Toast.LENGTH_LONG).show()
+              }
+            }
           }
         })
-        thread.start()
-        thread.join()
-        if (resultBool) {
-          Toast.makeText(requireContext(), "変更しました", Toast.LENGTH_LONG).show()
-          this.findNavController().navigate(
-            AccountEditFragmentDirections.actionEditAccountFragmentToAccountHome()
-          )
-        } else {
-          Toast.makeText(requireActivity(), "変更に失敗しました", Toast.LENGTH_LONG).show()
-        }
       } else {
         Toast.makeText(requireContext(), "入力を行ってください", Toast.LENGTH_SHORT).show()
       }
@@ -154,10 +163,15 @@ class AccountEditFragment : Fragment() {
     if (resultCode == Activity.RESULT_OK && requestCode == Constant.IMAGE_PICK_CODE) {
       thumbnailEdit.setImageURI(data?.data)
       thumbnailEdit.setBackgroundColor(Color.TRANSPARENT)
-      changeProfilePicture.setText("写真を変更")
+      changeProfilePicture.text = "写真を変更"
     }
   }
 
+  private fun navigateToAccountHome(){
+    this.findNavController().navigate(
+      AccountEditFragmentDirections.actionEditAccountFragmentToAccountHome()
+    )
+  }
   companion object {
     internal const val TAG = "AccountEditFragment"
   }
