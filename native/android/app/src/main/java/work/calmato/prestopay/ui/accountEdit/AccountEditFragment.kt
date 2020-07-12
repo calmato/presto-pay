@@ -23,9 +23,12 @@ import kotlinx.android.synthetic.main.fragment_account_edit.*
 import okhttp3.Response
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentAccountEditBindingImpl
+import work.calmato.prestopay.network.Api
+import work.calmato.prestopay.network.EditAccountProperty
 import work.calmato.prestopay.util.Constant
 import work.calmato.prestopay.util.RestClient
 import work.calmato.prestopay.util.encodeImage2Base64
+import java.lang.Exception
 
 class AccountEditFragment : Fragment() {
   val serverUrl: String = "https://api.presto-pay-stg.calmato.work/v1/auth"
@@ -57,24 +60,38 @@ class AccountEditFragment : Fragment() {
       val userName: String = userNameEditText.text.toString()
       val email: String = mailEditText.text.toString()
 
-      val map: MutableMap<String, Any> = mutableMapOf()
-      map.put("name", name)
-      map.put("username", userName)
-      map.put("email", email)
-      map.put("thumbnail", thumbnails)
-
-      val gson = Gson()
-      jsonText = gson.toJson(map)
-      Log.d("Edit Account Patch Json", jsonText)
+//      val map: MutableMap<String, Any> = mutableMapOf()
+//      map.put("name", name)
+//      map.put("username", userName)
+//      map.put("email", email)
+//      map.put("thumbnail", thumbnails)
+//
+//      val gson = Gson()
+//      jsonText = gson.toJson(map)
+//      Log.d("Edit Account Patch Json", jsonText)
 
       if (name != "" && userName != "" && email != "") {
-        val response = MyAsyncTask().execute().get()
-        if (response.isSuccessful) {
+//        val response = MyAsyncTask().execute().get()
+        val accountProperty = EditAccountProperty(name,userName,email,thumbnails)
+        var resultBool = false
+        val editRequest = Api.retrofitService.editAccount("Bearer $idToken", accountProperty)
+        val thread = Thread(Runnable {
+          try {
+            val result = editRequest.execute()
+            resultBool = result.isSuccessful
+          } catch (e:Exception){
+            Log.i(TAG, "onViewCreated: ")
+          }
+        })
+        thread.start()
+        thread.join()
+        if (resultBool) {
+          Toast.makeText(requireContext(),"変更しました",Toast.LENGTH_LONG).show()
           this.findNavController().navigate(
             AccountEditFragmentDirections.actionEditAccountFragmentToAccountHome()
           )
         } else {
-          Log.i("responseActivity", "responseBody: " + response.body()!!.string())
+//          Log.i("responseActivity", "responseBody: " + response.body()!!.string())
           Toast.makeText(requireActivity(), "変更に失敗しました", Toast.LENGTH_LONG).show()
         }
       } else {
@@ -165,6 +182,9 @@ class AccountEditFragment : Fragment() {
       thumbnailEdit.setBackgroundColor(Color.TRANSPARENT)
       changeProfilePicture.setText("写真を変更")
     }
+  }
+  companion object {
+    internal const val TAG = "AccountEditFragment"
   }
 }
 

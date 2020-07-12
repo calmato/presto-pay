@@ -63,9 +63,9 @@ data class EditAccountResult(
   val name: String,
   val username: String,
   val email:String,
-  val thumbnail_url: String,
-  val group_ids:List<String>,
-  val friend_ids:List<String>,
-  val created_at:String,
-  val updated_at: String
+  val thumbnailUrl: String,
+  val groupIds:List<String>,
+  val friendIds:List<String>,
+  val createdAt:String,
+  val updatedAt: String
 ) : Parcelable{}
