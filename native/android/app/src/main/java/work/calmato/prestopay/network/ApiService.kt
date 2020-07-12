@@ -22,9 +22,12 @@ private val moshi = Moshi.Builder()
   .build()
 
 private val client = OkHttpClient.Builder()
-    .addInterceptor(HttpLoggingInterceptor()
-    .setLevel(HttpLoggingInterceptor.Level.BODY))
-    .build()
+  .addInterceptor(
+    HttpLoggingInterceptor()
+      .setLevel(HttpLoggingInterceptor.Level.BODY)
+  )
+  .build()
+
 /**
  * Use the Retrofit builder to build a retrofit object using a Moshi converter with our Moshi
  * object.
@@ -36,24 +39,41 @@ private val retrofit = Retrofit.Builder()
   .client(client)
   .build()
 
-interface ApiService{
+interface ApiService {
 
   @GET("users")
-  fun getProperties(@Header("Authorization")token:String, @Query("username") username: String):
-    Call<Users>
+  fun getPropertiesAsync(@Header("Authorization") token: String, @Query("username") username: String):
+    Deferred<Users>
 
   @POST("auth/friends")
-  fun addFriend(@Header("Authorization")token:String, @Body userId: UserId):
-    Call<addFriendResponse>
+  fun addFriend(@Header("Authorization") token: String, @Body userId: UserId):
+    Call<AddFriendResponse>
 
   @GET("auth/friends")
-  fun getFriends(@Header("Authorization")token:String):
-    Call<Users>
+  fun getFriendsAsync(@Header("Authorization") token: String):
+    Deferred<Users>
+
+  @POST("groups")
+  fun createGroup(@Header("Authorization") token: String, @Body userId: CreateGroupProperty):
+    Call<CreateGroupPropertyResult>
+
+  @PATCH("auth")
+  fun editAccount(
+    @Header("Authorization") token: String,
+    @Body accountProperty: EditAccountProperty
+  ):
+    Call<EditAccountResult>
+
+  @POST("auth")
+  fun createAccount(
+    @Body accountProperty: NewAccountProperty
+  ):
+    Call<NewAccountResponse>
 }
 
 /**
  * A public Api object that exposes the lazy-initialized Retrofit service
  */
-object Api{
-  val retrofitService : ApiService by lazy { retrofit.create(ApiService::class.java)}
+object Api {
+  val retrofitService: ApiService by lazy { retrofit.create(ApiService::class.java) }
 }

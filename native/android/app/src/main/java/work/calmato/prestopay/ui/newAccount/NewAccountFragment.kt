@@ -5,7 +5,6 @@ import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
-import android.os.AsyncTask
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -19,20 +18,23 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_new_account.*
-import okhttp3.Response
 import org.json.JSONObject
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentNewAccountBinding
+import work.calmato.prestopay.network.Api
+import work.calmato.prestopay.network.NewAccountProperty
+import work.calmato.prestopay.network.NewAccountResponse
 import work.calmato.prestopay.util.Constant.Companion.IMAGE_PICK_CODE
 import work.calmato.prestopay.util.Constant.Companion.MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE
-import work.calmato.prestopay.util.RestClient
 import work.calmato.prestopay.util.encodeImage2Base64
+import java.lang.Exception
+
 
 class NewAccountFragment : Fragment() {
-  val serverUrl: String = "https://api.presto-pay-stg.calmato.work/v1/auth"
-  var jsonText: String = ""
   var setThumbnail = false
 
   override fun onCreateView(
@@ -103,35 +105,38 @@ class NewAccountFragment : Fragment() {
 
       if (name != "" && userName != "" && email != "" && password != "" && passwordConfirmation != "") {
         if (password == passwordConfirmation || password.length >= 8) {
-          val map: MutableMap<String, Any> = mutableMapOf()
-          map.put("name", name)
-          map.put("username", userName)
-          map.put("email", email)
-          map.put("thumbnail", thumbnails)
-          map.put("password", password)
-          map.put("passwordConfirmation", passwordConfirmation)
-
-          val gson = Gson()
-          jsonText = gson.toJson(map)
-          Log.d("New Account Post Json", jsonText)
-
-          val response = MyAsyncTask().execute().get()
-          if (response.isSuccessful) {
-            this.findNavController().navigate(
-              NewAccountFragmentDirections.actionNewAccountFragmentToLoginFragment()
-            )
-          } else {
-            var errorMessage = ""
-            val jsonArray = JSONObject(response.body()!!.string()).getJSONArray("errors")
-            for (i in 0 until jsonArray.length()) {
-              val jsonObject = jsonArray.getJSONObject(i)
-              errorMessage += jsonObject.getString("field") + " " + jsonObject.getString("message")
-              if (i != jsonArray.length() - 1) {
-                errorMessage += "\n"
+          val accountProperty =
+            NewAccountProperty(name, userName, email, thumbnails, password, passwordConfirmation)
+          Api.retrofitService.createAccount(accountProperty)
+            .enqueue(object : Callback<NewAccountResponse> {
+              override fun onFailure(call: Call<NewAccountResponse>, t: Throwable) {
+                Toast.makeText(activity, t.message, Toast.LENGTH_LONG).show()
               }
-            }
-            Toast.makeText(requireActivity(), errorMessage, Toast.LENGTH_LONG).show()
-          }
+              override fun onResponse(
+                call: Call<NewAccountResponse>,
+                response: Response<NewAccountResponse>
+              ) {
+                if (response.isSuccessful) {
+                  Toast.makeText(requireContext(), "アカウントを作成しました\nログインしてください", Toast.LENGTH_LONG)
+                    .show()
+                  navigateToLogin()
+                } else {
+                  try {
+                    val jObjError = JSONObject(response.errorBody()?.string()).getJSONArray("errors")
+                    for (i in 0 until jObjError.length()) {
+                      val errorMessage =
+                        jObjError.getJSONObject(i).getString("field") + " " + jObjError.getJSONObject(
+                          i
+                        )
+                          .getString("message")
+                      Toast.makeText(activity, errorMessage, Toast.LENGTH_LONG).show()
+                    }
+                  }catch (e:Exception){
+                    Toast.makeText(activity, "アカウント作成失敗しました", Toast.LENGTH_LONG).show()
+                  }
+                }
+              }
+            })
         } else {
           Toast.makeText(requireContext(), "入力を確認してください", Toast.LENGTH_SHORT).show()
         }
@@ -178,13 +183,6 @@ class NewAccountFragment : Fragment() {
     }
   }
 
-  inner class MyAsyncTask : AsyncTask<Void, Void, Response>() {
-    override fun doInBackground(vararg params: Void?): Response {
-      val responseCode = RestClient().postExecute(jsonText, serverUrl)
-      return responseCode
-    }
-  }
-
   override fun onRequestPermissionsResult(
     requestCode: Int,
     permissions: Array<String>,
@@ -222,7 +220,17 @@ class NewAccountFragment : Fragment() {
     if (resultCode == Activity.RESULT_OK && requestCode == IMAGE_PICK_CODE) {
       thumbnailEdit.setImageURI(data?.data)
       thumbnailEdit.setBackgroundColor(Color.TRANSPARENT)
-      editPhotoText.setText("写真を変更")
+      editPhotoText.text = "写真を変更"
     }
+  }
+
+  private fun navigateToLogin() {
+    this.findNavController().navigate(
+      NewAccountFragmentDirections.actionNewAccountFragmentToLoginFragment()
+    )
+  }
+
+  companion object {
+    internal const val TAG = "NewAccountFragment"
   }
 }

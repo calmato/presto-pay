@@ -58,16 +58,11 @@ class GroupFriendFragment : Fragment() {
     }
     viewModel.idToken.observe(viewLifecycleOwner, Observer {
       if (null != it) {
-        usersList = viewModel.getFriends()
-        usersList?.let {
-          friendsRecycleView.swapAdapter(
-            AdapterRecyclePlane(
-              usersList,
-              clickListener
-            ), false
-          )
-        }
+        viewModel.getFriends(requireActivity())
       }
+    })
+    viewModel.usersList.observe(viewLifecycleOwner, Observer {
+      friendsRecycleView.swapAdapter(AdapterRecyclePlane(it, clickListener), false)
     })
 
     viewModel.itemClicked.observe(viewLifecycleOwner, Observer {

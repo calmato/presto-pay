@@ -3,6 +3,7 @@ package work.calmato.prestopay.ui.addFriend
 import android.app.AlertDialog
 import android.content.DialogInterface
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -50,16 +51,18 @@ class AddFriendFragment : Fragment() {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     search.setOnClickListener {
-      val usersList = viewModel.getUserProperties(userName.text.toString())
-      usersList?.let {
+      viewModel.getUserProperties(userName.text.toString(),requireActivity())
+    }
+    viewModel.usersList.observe(viewLifecycleOwner, Observer {
+      it?.let {
         usersRecycleView.swapAdapter(
-          AdapterRecyclePlane(usersList, clickListener), false
+          AdapterRecyclePlane(it, clickListener), false
         )
         if (it.users.isEmpty()) {
           Toast.makeText(requireContext(), "ユーザーが見つかりません", Toast.LENGTH_SHORT).show()
         }
       }
-    }
+    })
     viewModel.itemClicked.observe(viewLifecycleOwner, Observer {
       if (null != it) {
         val builder: AlertDialog.Builder? = requireActivity().let {
@@ -67,13 +70,8 @@ class AddFriendFragment : Fragment() {
         }
         builder?.setTitle("友だち追加しますか？")
           ?.setPositiveButton("追加する",
-            DialogInterface.OnClickListener { dialog, id ->
-              val isSuccess = viewModel.addFriendApi(it)
-              if (isSuccess) {
-                Toast.makeText(requireContext(), "友だち追加しました", Toast.LENGTH_SHORT).show()
-              } else {
-                Toast.makeText(requireContext(), "友だち追加失敗しました", Toast.LENGTH_SHORT).show()
-              }
+            DialogInterface.OnClickListener { _, _ ->
+              viewModel.addFriendApi(it,requireActivity())
             })
           ?.setNegativeButton("キャンセル", null)
           ?.setView(R.layout.dialog_add_friend)
@@ -88,5 +86,8 @@ class AddFriendFragment : Fragment() {
         viewModel.itemIsClickedCompleted()
       }
     })
+  }
+  companion object {
+    internal const val TAG = "AddFriendFragment"
   }
 }
