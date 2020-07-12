@@ -52,6 +52,10 @@ interface ApiService{
   @POST("groups")
   fun createGroup(@Header("Authorization")token:String, @Body userId: CreateGroupProperty):
     Call<CreateGroupPropertyResult>
+
+  @PATCH("auth")
+  fun editAccount(@Header("Authorization")token:String, @Body accountProperty: EditAccountProperty):
+    Call<EditAccountResult>
 }
 
 /**
