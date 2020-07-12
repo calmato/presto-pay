@@ -48,3 +48,11 @@ data class CreateGroupPropertyResult(
   val created_at:String,
   val updated_at:String
 ) : Parcelable{}
+
+@Parcelize
+data class EditAccountProperty(
+  val name: String,
+  val username: String,
+  val email: String,
+  val thumbnail: String
+) : Parcelable{}
