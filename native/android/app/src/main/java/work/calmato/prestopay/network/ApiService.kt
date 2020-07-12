@@ -3,6 +3,7 @@ package work.calmato.prestopay.network
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import kotlinx.coroutines.Deferred
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
@@ -41,8 +42,8 @@ private val retrofit = Retrofit.Builder()
 interface ApiService {
 
   @GET("users")
-  fun getProperties(@Header("Authorization") token: String, @Query("username") username: String):
-    Call<Users>
+  fun getPropertiesAsync(@Header("Authorization") token: String, @Query("username") username: String):
+    Deferred<Users>
 
   @POST("auth/friends")
   fun addFriend(@Header("Authorization") token: String, @Body userId: UserId):

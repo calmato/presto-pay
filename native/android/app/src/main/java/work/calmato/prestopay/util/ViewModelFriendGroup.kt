@@ -27,23 +27,31 @@ class ViewModelFriendGroup : ViewModel() {
   val navigateToHome:LiveData<Boolean>
     get() = _navigateToHome
 
-  fun getUserProperties(userName: String): Users? {
-    var users: Users? = null
-    val getProperties = Api.retrofitService.getProperties("Bearer ${idToken.value}", userName)
-    val thread = Thread(Runnable {
+  private val _usersList = MutableLiveData<Users>()
+  val usersList:LiveData<Users>
+    get() = _usersList
+
+  // Create a Coroutine scope using a job to be able to cancel when needed
+  private var viewModelJob = Job()
+
+  // the Coroutine runs using the Main (UI) dispatcher
+  private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
+
+  fun getUserProperties(userName: String,activity: Activity){
+    coroutineScope.launch {
       try {
-        users = getProperties.execute().body()
-        Log.i(TAG, "getUserProperties: ${users!!}")
-      } catch (e: Exception) {
-        Log.i(TAG, "getUserProperties: Fail")
+      _usersList.value   = Api.retrofitService.getPropertiesAsync("Bearer ${idToken.value}", userName).await()
+      } catch (e:Exception){
+        Toast.makeText(activity, e.message, Toast.LENGTH_LONG).show()
       }
-    })
-    thread.start()
-    thread.join()
-    return users
+    }
+  }
+  override fun onCleared() {
+    super.onCleared()
+    viewModelJob.cancel()
   }
 
-  fun addFriendApi(userProperty: UserProperty,activity:Activity): Boolean {
+  fun addFriendApi(userProperty: UserProperty,activity:Activity){
     val userId = UserId(userProperty.id)
     Api.retrofitService.addFriend("Bearer ${idToken.value}", userId).enqueue(object:Callback<AddFriendResponse>{
       override fun onFailure(call: Call<AddFriendResponse>, t: Throwable) {
@@ -72,22 +80,6 @@ class ViewModelFriendGroup : ViewModel() {
         }
       }
     })
-
-
-    val sendFriendRequest = Api.retrofitService.addFriend("Bearer ${idToken.value}", userId)
-    var returnBool = false
-    val thread = Thread(Runnable {
-      try {
-        val result = sendFriendRequest.execute()
-        returnBool = result.isSuccessful
-        Log.i(TAG, "addFriendApi: ${result.isSuccessful}")
-      } catch (e: Exception) {
-        Log.i(TAG, "getUserProperties: Fail")
-      }
-    })
-    thread.start()
-    thread.join()
-    return returnBool
   }
 
   fun createGroupApi(groupProperty: CreateGroupProperty,activity: Activity) {
