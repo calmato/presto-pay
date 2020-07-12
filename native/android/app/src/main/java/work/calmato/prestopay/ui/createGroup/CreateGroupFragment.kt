@@ -34,8 +34,6 @@ import work.calmato.prestopay.util.ViewModelFriendGroup
 import work.calmato.prestopay.util.encodeImage2Base64
 
 class CreateGroupFragment : Fragment() {
-  val serverUrl: String = "https://api.presto-pay-stg.calmato.work/v1/groups"
-  var jsonText: String = ""
   var setThumbnail = false
   var idToken = ""
   private var usersList : Users? = null
@@ -57,7 +55,7 @@ class CreateGroupFragment : Fragment() {
     viewModel.getIdToken()
     clickListener = AdapterGrid.OnClickListener{viewModel.itemIsClicked(it)}
     usersList = CreateGroupFragmentArgs.fromBundle(requireArguments()).friendsList
-    usersListToBeSent = Users(usersList!!.users.filter { userProperty -> userProperty!!.checked })
+    usersListToBeSent = Users(usersList!!.users.filter { userProperty -> userProperty!!.checked})
     recycleAdapter = AdapterGrid(usersListToBeSent,clickListener)
     binding.GridViewFriends.adapter = recycleAdapter
     viewManager = LinearLayoutManager(requireContext())
@@ -189,12 +187,6 @@ class CreateGroupFragment : Fragment() {
     if (resultCode == Activity.RESULT_OK && requestCode == IMAGE_PICK_CODE) {
       thumbnailEdit.setImageURI(data?.data)
       thumbnailEdit.setBackgroundColor(Color.TRANSPARENT)
-    }
-  }
-
-  inner class MyAsyncTask : AsyncTask<Void, Void, Response>() {
-    override fun doInBackground(vararg params: Void?): Response {
-      return RestClient().postAuthExecute(jsonText, serverUrl, idToken)
     }
   }
 
