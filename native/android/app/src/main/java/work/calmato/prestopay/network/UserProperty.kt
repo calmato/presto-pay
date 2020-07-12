@@ -20,7 +20,7 @@ data class Users(
 ) : Parcelable {}
 
 @Parcelize
-data class addFriendResponse(
+data class AddFriendResponse(
   val id: String,
   val name: String,
   val username: String,
@@ -31,3 +31,10 @@ data class addFriendResponse(
 data class UserId(
   val userId: String
 )
+
+@Parcelize
+data class CreateGroupProperty(
+  val name : String,
+  val thumbnail:String,
+  val userIds:List<String>
+) : Parcelable{}
