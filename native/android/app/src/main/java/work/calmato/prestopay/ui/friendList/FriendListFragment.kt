@@ -9,6 +9,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.android.synthetic.main.fragment_add_friend.*
 import kotlinx.android.synthetic.main.fragment_friend_list.*
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentFriendListBinding
@@ -51,16 +52,12 @@ class FriendListFragment : Fragment() {
     super.onViewCreated(view, savedInstanceState)
     viewModel.idToken.observe(viewLifecycleOwner, Observer { it ->
       if (null != it) {
-        viewModel.getFriends()?.let { obtainedUsersList ->
-          usersList = obtainedUsersList
-          friendsRecycleView.swapAdapter(
-            AdapterRecycleCheck(
-              usersList,
-              clickListener
-            ), false
-          )
-        }
-      }
+        viewModel.getFriends(requireActivity())
+      }})
+    viewModel.usersList.observe(viewLifecycleOwner, Observer {
+      friendsRecycleView.swapAdapter(
+      AdapterRecycleCheck(it,clickListener),false
+      )
     })
     viewModel.itemClicked.observe(viewLifecycleOwner, Observer {
       if (null != it) {

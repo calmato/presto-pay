@@ -113,19 +113,14 @@ class ViewModelFriendGroup : ViewModel() {
     })
   }
 
-  fun getFriends(): Users? {
-    var users: Users? = null
-    val getFriends = Api.retrofitService.getFriends("Bearer ${idToken.value}")
-    val thread = Thread(Runnable {
+  fun getFriends(activity: Activity){
+    coroutineScope.launch {
       try {
-        users = getFriends.execute().body()
-      } catch (e: java.lang.Exception) {
-        Log.i(TAG, "getUserProperties: Fail")
+          _usersList.value = Api.retrofitService.getFriendsAsync("Bearer ${idToken.value}").await()
+      }catch (e:java.lang.Exception){
+        Toast.makeText(activity, e.message, Toast.LENGTH_LONG).show()
       }
-    })
-    thread.start()
-    thread.join()
-    return users
+    }
   }
 
   fun itemIsClicked(userProperty: UserProperty) {
