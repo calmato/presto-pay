@@ -72,14 +72,18 @@ class AccountEditFragment : Fragment() {
               Toast.makeText(requireContext(), "変更しました", Toast.LENGTH_LONG).show()
               navigateToAccountHome()
             } else{
-              val jObjError = JSONObject(response.errorBody()?.string()).getJSONArray("errors")
-              for (i in 0 until jObjError.length()) {
-                val errorMessage =
-                  jObjError.getJSONObject(i).getString("field") + " " + jObjError.getJSONObject(
-                    i
-                  )
-                    .getString("message")
-                Toast.makeText(activity, errorMessage, Toast.LENGTH_LONG).show()
+              try{
+                val jObjError = JSONObject(response.errorBody()?.string()).getJSONArray("errors")
+                for (i in 0 until jObjError.length()) {
+                  val errorMessage =
+                    jObjError.getJSONObject(i).getString("field") + " " + jObjError.getJSONObject(
+                      i
+                    )
+                      .getString("message")
+                  Toast.makeText(activity, errorMessage, Toast.LENGTH_LONG).show()
+                }
+              }catch (e:Exception){
+                Toast.makeText(activity, "アカウント情報の修正に失敗しました", Toast.LENGTH_LONG).show()
               }
             }
           }

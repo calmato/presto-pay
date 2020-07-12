@@ -31,6 +31,7 @@ import work.calmato.prestopay.network.NewAccountResponse
 import work.calmato.prestopay.util.Constant.Companion.IMAGE_PICK_CODE
 import work.calmato.prestopay.util.Constant.Companion.MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE
 import work.calmato.prestopay.util.encodeImage2Base64
+import java.lang.Exception
 
 
 class NewAccountFragment : Fragment() {
@@ -120,14 +121,18 @@ class NewAccountFragment : Fragment() {
                     .show()
                   navigateToLogin()
                 } else {
-                  val jObjError = JSONObject(response.errorBody()?.string()).getJSONArray("errors")
-                  for (i in 0 until jObjError.length()) {
-                    val errorMessage =
-                      jObjError.getJSONObject(i).getString("field") + " " + jObjError.getJSONObject(
-                        i
-                      )
-                        .getString("message")
-                    Toast.makeText(activity, errorMessage, Toast.LENGTH_LONG).show()
+                  try {
+                    val jObjError = JSONObject(response.errorBody()?.string()).getJSONArray("errors")
+                    for (i in 0 until jObjError.length()) {
+                      val errorMessage =
+                        jObjError.getJSONObject(i).getString("field") + " " + jObjError.getJSONObject(
+                          i
+                        )
+                          .getString("message")
+                      Toast.makeText(activity, errorMessage, Toast.LENGTH_LONG).show()
+                    }
+                  }catch (e:Exception){
+                    Toast.makeText(activity, "アカウント作成失敗しました", Toast.LENGTH_LONG).show()
                   }
                 }
               }

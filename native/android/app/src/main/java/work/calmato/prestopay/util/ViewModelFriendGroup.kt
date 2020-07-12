@@ -8,6 +8,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.*
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -51,7 +52,19 @@ class ViewModelFriendGroup : ViewModel() {
         if(response.isSuccessful){
           Toast.makeText(activity, "友だち追加しました", Toast.LENGTH_SHORT).show()
         }else{
-          Toast.makeText(activity, "友だち追加失敗しました", Toast.LENGTH_SHORT).show()
+          try {
+            val jObjError = JSONObject(response.errorBody()?.string()).getJSONArray("errors")
+            for (i in 0 until jObjError.length()) {
+              val errorMessage =
+                jObjError.getJSONObject(i).getString("field") + " " + jObjError.getJSONObject(
+                  i
+                )
+                  .getString("message")
+              Toast.makeText(activity, errorMessage, Toast.LENGTH_LONG).show()
+            }
+          }catch (e:java.lang.Exception){
+            Toast.makeText(activity, "友だち追加失敗しました", Toast.LENGTH_SHORT).show()
+          }
         }
       }
     })
