@@ -14,6 +14,7 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import com.google.firebase.auth.FirebaseAuth
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -77,15 +78,7 @@ class CreateGroupFragment : Fragment() {
       if (usersListToBeSent!!.users.size in 0..100) {
         val groupProperty =
           CreateGroupProperty(groupName, thumbnailStr, usersListToBeSent!!.users.map { it!!.id })
-        val result = viewModel.createGroupApi(groupProperty)
-        if (result) {
-          Toast.makeText(requireContext(), "新しいグループを作成しました", Toast.LENGTH_SHORT).show()
-          this.findNavController().navigate(
-            CreateGroupFragmentDirections.actionCreateGroupFragmentToHomeFragment()
-          )
-        } else {
-          Toast.makeText(requireActivity(), "グループ作成に失敗しました", Toast.LENGTH_LONG).show()
-        }
+        viewModel.createGroupApi(groupProperty,requireActivity())
       } else {
         Toast.makeText(requireContext(), "グループメンバーは100人までです", Toast.LENGTH_LONG).show()
       }
@@ -124,6 +117,14 @@ class CreateGroupFragment : Fragment() {
         pickImageFromGallery()
       }
     }
+    viewModel.navigateToHome.observe(viewLifecycleOwner, Observer{
+      if(it){
+        this.findNavController().navigate(
+          CreateGroupFragmentDirections.actionCreateGroupFragmentToHomeFragment()
+        )
+        viewModel.navigationCompleted()
+      }
+    })
     setHasOptionsMenu(true)
     val mUser = FirebaseAuth.getInstance().currentUser
     mUser?.getIdToken(true)?.addOnCompleteListener(requireActivity()) {

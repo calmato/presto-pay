@@ -23,6 +23,10 @@ class ViewModelFriendGroup : ViewModel() {
   val idToken: LiveData<String>
     get() = _idToken
 
+  private val _navigateToHome = MutableLiveData<Boolean>()
+  val navigateToHome:LiveData<Boolean>
+    get() = _navigateToHome
+
   fun getUserProperties(userName: String): Users? {
     var users: Users? = null
     val getProperties = Api.retrofitService.getProperties("Bearer ${idToken.value}", userName)
@@ -86,21 +90,35 @@ class ViewModelFriendGroup : ViewModel() {
     return returnBool
   }
 
-  fun createGroupApi(groupProperty: CreateGroupProperty): Boolean {
-    val createGroupRequest =
-      Api.retrofitService.createGroup("Bearer ${idToken.value}", groupProperty)
-    var returnBool = false
-    val thread = Thread(Runnable {
-      try {
-        val result = createGroupRequest.execute()
-        returnBool = result.isSuccessful
-      } catch (e: Exception) {
-        Log.i(TAG, "CreateGroupProperties: Fail. ログのOkhttpをチェック")
+  fun createGroupApi(groupProperty: CreateGroupProperty,activity: Activity) {
+    Api.retrofitService.createGroup("Bearer ${idToken.value}", groupProperty).enqueue(object:Callback<CreateGroupPropertyResult>{
+      override fun onFailure(call: Call<CreateGroupPropertyResult>, t: Throwable) {
+        Toast.makeText(activity, t.message, Toast.LENGTH_LONG).show()
+      }
+      override fun onResponse(
+        call: Call<CreateGroupPropertyResult>,
+        response: Response<CreateGroupPropertyResult>
+      ) {
+        if(response.isSuccessful){
+          Toast.makeText(activity, "新しいグループを作成しました", Toast.LENGTH_SHORT).show()
+          _navigateToHome.value = true
+        }else{
+          try {
+            val jObjError = JSONObject(response.errorBody()?.string()).getJSONArray("errors")
+            for (i in 0 until jObjError.length()) {
+              val errorMessage =
+                jObjError.getJSONObject(i).getString("field") + " " + jObjError.getJSONObject(
+                  i
+                )
+                  .getString("message")
+              Toast.makeText(activity, errorMessage, Toast.LENGTH_LONG).show()
+            }
+          }catch (e: java.lang.Exception){
+            Toast.makeText(activity, "グループ作成に失敗しました", Toast.LENGTH_LONG).show()
+          }
+        }
       }
     })
-    thread.start()
-    thread.join()
-    return returnBool
   }
 
   fun getFriends(): Users? {
@@ -130,6 +148,10 @@ class ViewModelFriendGroup : ViewModel() {
     FirebaseAuth.getInstance().currentUser?.getIdToken(true)?.addOnCompleteListener {
       _idToken.value = it.result?.token
     }
+  }
+
+  fun navigationCompleted(){
+    _navigateToHome.value = false
   }
 
   companion object {
