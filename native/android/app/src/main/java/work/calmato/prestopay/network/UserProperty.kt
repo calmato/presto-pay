@@ -38,3 +38,13 @@ data class CreateGroupProperty(
   val thumbnail:String,
   val userIds:List<String>
 ) : Parcelable{}
+
+@Parcelize
+data class CreateGroupPropertyResult(
+  val id:String,
+  val name : String,
+  val thumbnail_url:String,
+  val user_ids:List<String>,
+  val created_at:String,
+  val updated_at:String
+) : Parcelable{}

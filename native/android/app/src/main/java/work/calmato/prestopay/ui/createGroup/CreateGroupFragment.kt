@@ -24,6 +24,7 @@ import kotlinx.android.synthetic.main.fragment_create_group.*
 import okhttp3.Response
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentCreateGroupBinding
+import work.calmato.prestopay.network.CreateGroupProperty
 import work.calmato.prestopay.network.Users
 import work.calmato.prestopay.util.AdapterGrid
 import work.calmato.prestopay.util.Constant.Companion.IMAGE_PICK_CODE
@@ -53,6 +54,7 @@ class CreateGroupFragment : Fragment() {
       DataBindingUtil.inflate(inflater,R.layout.fragment_create_group,container,false)
     binding.lifecycleOwner = this
     binding.viewModel = viewModel
+    viewModel.getIdToken()
     clickListener = AdapterGrid.OnClickListener{viewModel.itemIsClicked(it)}
     usersList = CreateGroupFragmentArgs.fromBundle(requireArguments()).friendsList
     usersListToBeSent = Users(usersList!!.users.filter { userProperty -> userProperty!!.checked })
@@ -80,21 +82,14 @@ class CreateGroupFragment : Fragment() {
     val groupName = groupName.text.toString()
     if (groupName.length in 1..31){
       if(usersListToBeSent!!.users.size in 0..100){
-        val gson = Gson()
-        val map: MutableMap<String, Any> = mutableMapOf()
-        map["name"] = groupName
-        map["thumbnail"] = thumbnailStr
-        map["userIds"] = usersListToBeSent!!.users.map{it!!.id}
-        jsonText = gson.toJson(map)
-        Log.i(TAG, "sendGroupInfo: $jsonText")
-        val response = MyAsyncTask().execute().get()
-        if (response.isSuccessful) {
+        val groupProperty = CreateGroupProperty(groupName,thumbnailStr,usersListToBeSent!!.users.map { it!!.id })
+        val result = viewModel.createGroupApi(groupProperty)
+        if (result) {
           Toast.makeText(requireContext(), "新しいグループを作成しました", Toast.LENGTH_SHORT).show()
           this.findNavController().navigate(
             CreateGroupFragmentDirections.actionCreateGroupFragmentToHomeFragment()
           )
         } else {
-          Log.i(TAG, "responseBody: " + response.body()!!.string())
           Toast.makeText(requireActivity(), "グループ作成に失敗しました", Toast.LENGTH_LONG).show()
         }
       }else{

@@ -51,7 +51,7 @@ interface ApiService{
 
   @POST("groups")
   fun createGroup(@Header("Authorization")token:String, @Body userId: CreateGroupProperty):
-    Call<CreateGroupProperty>
+    Call<CreateGroupPropertyResult>
 }
 
 /**

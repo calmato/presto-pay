@@ -41,6 +41,7 @@ class ViewModelFriendGroup : ViewModel() {
       try {
         val result = sendFriendRequest.execute()
         returnBool = result.isSuccessful
+        Log.i(TAG, "addFriendApi: ${result.isSuccessful}")
       } catch (e: Exception) {
         Log.i(TAG, "getUserProperties: Fail")
       }
@@ -55,10 +56,10 @@ class ViewModelFriendGroup : ViewModel() {
     var returnBool = false
     val thread = Thread(Runnable {
       try {
-          val result = createGroupRequest.execute()
+        val result = createGroupRequest.execute()
         returnBool = result.isSuccessful
       } catch (e:Exception){
-        Log.i(TAG, "CreateGroupProperties: Fail")
+        Log.i(TAG, "CreateGroupProperties: Fail. ログのOkhttpをチェック")
       }
     })
     thread.start()
