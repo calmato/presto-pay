@@ -5,7 +5,6 @@ import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
-import android.os.AsyncTask
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -18,15 +17,12 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
-import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_account_edit.*
-import okhttp3.Response
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentAccountEditBindingImpl
 import work.calmato.prestopay.network.Api
 import work.calmato.prestopay.network.EditAccountProperty
 import work.calmato.prestopay.util.Constant
-import work.calmato.prestopay.util.RestClient
 import work.calmato.prestopay.util.encodeImage2Base64
 import java.lang.Exception
 

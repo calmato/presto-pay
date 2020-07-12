@@ -5,9 +5,7 @@ import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
-import android.os.AsyncTask
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
@@ -19,9 +17,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_create_group.*
-import okhttp3.Response
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentCreateGroupBinding
 import work.calmato.prestopay.network.CreateGroupProperty
@@ -29,7 +25,6 @@ import work.calmato.prestopay.network.Users
 import work.calmato.prestopay.util.AdapterGrid
 import work.calmato.prestopay.util.Constant.Companion.IMAGE_PICK_CODE
 import work.calmato.prestopay.util.Constant.Companion.MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE
-import work.calmato.prestopay.util.RestClient
 import work.calmato.prestopay.util.ViewModelFriendGroup
 import work.calmato.prestopay.util.encodeImage2Base64
 

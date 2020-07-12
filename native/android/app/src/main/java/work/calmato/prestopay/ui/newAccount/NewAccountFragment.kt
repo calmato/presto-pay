@@ -5,7 +5,6 @@ import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
-import android.os.AsyncTask
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -19,23 +18,17 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_new_account.*
-import okhttp3.Response
-import org.json.JSONObject
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentNewAccountBinding
 import work.calmato.prestopay.network.Api
 import work.calmato.prestopay.network.NewAccountProperty
 import work.calmato.prestopay.util.Constant.Companion.IMAGE_PICK_CODE
 import work.calmato.prestopay.util.Constant.Companion.MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE
-import work.calmato.prestopay.util.RestClient
 import work.calmato.prestopay.util.encodeImage2Base64
 import java.lang.Exception
 
 class NewAccountFragment : Fragment() {
-  val serverUrl: String = "https://api.presto-pay-stg.calmato.work/v1/auth"
-  var jsonText: String = ""
   var setThumbnail = false
 
   override fun onCreateView(
@@ -106,29 +99,16 @@ class NewAccountFragment : Fragment() {
 
       if (name != "" && userName != "" && email != "" && password != "" && passwordConfirmation != "") {
         if (password == passwordConfirmation || password.length >= 8) {
-//          val map: MutableMap<String, Any> = mutableMapOf()
-//          map.put("name", name)
-//          map.put("username", userName)
-//          map.put("email", email)
-//          map.put("thumbnail", thumbnails)
-//          map.put("password", password)
-//          map.put("passwordConfirmation", passwordConfirmation)
-//
-//          val gson = Gson()
-//          jsonText = gson.toJson(map)
-//          Log.d("New Account Post Json", jsonText)
-
-//          val response = MyAsyncTask().execute().get()
           val accountProperty = NewAccountProperty(name,userName,email,thumbnails,password,passwordConfirmation)
           var resultBool = false
           val newAccountRequest = Api.retrofitService.createAccount(accountProperty)
           val thread = Thread(Runnable {
-//            try {
+            try {
                 val result = newAccountRequest.execute()
               resultBool = result.isSuccessful
-//            }catch (e:Exception){
-//              Log.i(TAG, "onViewCreated: ")
-//            }
+            }catch (e:Exception){
+              Log.i(TAG, "onViewCreated: ")
+            }
           })
           thread.start()
           thread.join()
@@ -138,16 +118,7 @@ class NewAccountFragment : Fragment() {
               NewAccountFragmentDirections.actionNewAccountFragmentToLoginFragment()
             )
           } else {
-//            var errorMessage = ""
-//            val jsonArray = JSONObject(response.body()!!.string()).getJSONArray("errors")
-//            for (i in 0 until jsonArray.length()) {
-//              val jsonObject = jsonArray.getJSONObject(i)
-//              errorMessage += jsonObject.getString("field") + " " + jsonObject.getString("message")
-//              if (i != jsonArray.length() - 1) {
-//                errorMessage += "\n"
-//              }
-//            }
-//            Toast.makeText(requireActivity(), errorMessage, Toast.LENGTH_LONG).show()
+            Log.i(TAG, "onViewCreated: アカウント作成失敗")
           }
         } else {
           Toast.makeText(requireContext(), "入力を確認してください", Toast.LENGTH_SHORT).show()
@@ -192,13 +163,6 @@ class NewAccountFragment : Fragment() {
       this.findNavController().navigate(
         NewAccountFragmentDirections.actionNewAccountFragmentToLoginFragment()
       )
-    }
-  }
-
-  inner class MyAsyncTask : AsyncTask<Void, Void, Response>() {
-    override fun doInBackground(vararg params: Void?): Response {
-      val responseCode = RestClient().postExecute(jsonText, serverUrl)
-      return responseCode
     }
   }
 
