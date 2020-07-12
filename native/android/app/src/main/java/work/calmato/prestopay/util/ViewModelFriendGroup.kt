@@ -1,11 +1,16 @@
 package work.calmato.prestopay.util
 
+import android.app.Activity
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import work.calmato.prestopay.network.*
 
 class ViewModelFriendGroup : ViewModel() {
@@ -33,8 +38,25 @@ class ViewModelFriendGroup : ViewModel() {
     return users
   }
 
-  fun addFriendApi(userProperty: UserProperty): Boolean {
+  fun addFriendApi(userProperty: UserProperty,activity:Activity): Boolean {
     val userId = UserId(userProperty.id)
+    Api.retrofitService.addFriend("Bearer ${idToken.value}", userId).enqueue(object:Callback<AddFriendResponse>{
+      override fun onFailure(call: Call<AddFriendResponse>, t: Throwable) {
+        Toast.makeText(activity, t.message, Toast.LENGTH_LONG).show()
+      }
+      override fun onResponse(
+        call: Call<AddFriendResponse>,
+        response: Response<AddFriendResponse>
+      ) {
+        if(response.isSuccessful){
+          Toast.makeText(activity, "友だち追加しました", Toast.LENGTH_SHORT).show()
+        }else{
+          Toast.makeText(activity, "友だち追加失敗しました", Toast.LENGTH_SHORT).show()
+        }
+      }
+    })
+
+
     val sendFriendRequest = Api.retrofitService.addFriend("Bearer ${idToken.value}", userId)
     var returnBool = false
     val thread = Thread(Runnable {

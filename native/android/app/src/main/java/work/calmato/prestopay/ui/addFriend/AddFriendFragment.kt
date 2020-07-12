@@ -67,13 +67,8 @@ class AddFriendFragment : Fragment() {
         }
         builder?.setTitle("友だち追加しますか？")
           ?.setPositiveButton("追加する",
-            DialogInterface.OnClickListener { dialog, id ->
-              val isSuccess = viewModel.addFriendApi(it)
-              if (isSuccess) {
-                Toast.makeText(requireContext(), "友だち追加しました", Toast.LENGTH_SHORT).show()
-              } else {
-                Toast.makeText(requireContext(), "友だち追加失敗しました", Toast.LENGTH_SHORT).show()
-              }
+            DialogInterface.OnClickListener { _, _ ->
+              viewModel.addFriendApi(it,requireActivity())
             })
           ?.setNegativeButton("キャンセル", null)
           ?.setView(R.layout.dialog_add_friend)
