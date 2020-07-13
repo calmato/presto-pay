@@ -1,7 +1,9 @@
 package work.calmato.prestopay.ui.groupFriend
 
 import android.app.AlertDialog
+import android.content.DialogInterface
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -71,6 +73,20 @@ class GroupFriendFragment : Fragment() {
           AlertDialog.Builder(it)
         }
         builder?.setView(R.layout.dialog_add_friend)
+          ?.setPositiveButton("友達リストから削除する"
+          ,DialogInterface.OnClickListener{_,_->
+              val builder2:AlertDialog.Builder? = requireActivity().let {
+                AlertDialog.Builder(it)
+              }
+              builder2?.setMessage("本当に削除しますか？")
+                ?.setPositiveButton("削除する"
+                ,DialogInterface.OnClickListener{_,_->
+                    viewModel.deleteFriend(it.id,requireActivity())
+                  })
+                ?.setNegativeButton("キャンセル",null)
+              val dialog2:AlertDialog? = builder2?.create()
+              dialog2?.show()
+            })
         val dialog: AlertDialog? = builder?.create()
         dialog?.show()
         val name = dialog?.findViewById<TextView>(R.id.username_dialog)

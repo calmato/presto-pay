@@ -40,7 +40,7 @@ data class CreateGroupProperty(
 ) : Parcelable {}
 
 @Parcelize
-data class CreateGroupPropertyResult(
+data class CreateGroupPropertyResponse(
   val id: String,
   val name: String,
   val thumbnail_url: String,
@@ -58,7 +58,7 @@ data class EditAccountProperty(
 ) : Parcelable {}
 
 @Parcelize
-data class EditAccountResult(
+data class EditAccountResponse(
   val id: String,
   val name: String,
   val username: String,
@@ -81,7 +81,7 @@ data class NewAccountProperty(
 ) : Parcelable
 
 @Parcelize
-data class NewAccountResponse(
+data class AccountResponse(
   val id: String,
   val name: String,
   val username: String,
@@ -92,3 +92,5 @@ data class NewAccountResponse(
   val createdAt: String,
   val updatedAt: String
 ) : Parcelable
+
+

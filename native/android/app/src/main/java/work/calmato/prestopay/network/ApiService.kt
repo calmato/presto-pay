@@ -42,7 +42,10 @@ private val retrofit = Retrofit.Builder()
 interface ApiService {
 
   @GET("users")
-  fun getPropertiesAsync(@Header("Authorization") token: String, @Query("username") username: String):
+  fun getPropertiesAsync(
+    @Header("Authorization") token: String,
+    @Query("username") username: String
+  ):
     Deferred<Users>
 
   @POST("auth/friends")
@@ -55,20 +58,24 @@ interface ApiService {
 
   @POST("groups")
   fun createGroup(@Header("Authorization") token: String, @Body userId: CreateGroupProperty):
-    Call<CreateGroupPropertyResult>
+    Call<CreateGroupPropertyResponse>
 
   @PATCH("auth")
   fun editAccount(
     @Header("Authorization") token: String,
     @Body accountProperty: EditAccountProperty
   ):
-    Call<EditAccountResult>
+    Call<EditAccountResponse>
 
   @POST("auth")
   fun createAccount(
     @Body accountProperty: NewAccountProperty
   ):
-    Call<NewAccountResponse>
+    Call<AccountResponse>
+
+  @DELETE("auth/friends/{userId}")
+  fun deleteFriend(@Header("Authorization") token: String, @Path("userId") userId:String):
+    Call<AccountResponse>
 }
 
 /**

@@ -83,13 +83,13 @@ class ViewModelFriendGroup : ViewModel() {
   }
 
   fun createGroupApi(groupProperty: CreateGroupProperty,activity: Activity) {
-    Api.retrofitService.createGroup("Bearer ${idToken.value}", groupProperty).enqueue(object:Callback<CreateGroupPropertyResult>{
-      override fun onFailure(call: Call<CreateGroupPropertyResult>, t: Throwable) {
+    Api.retrofitService.createGroup("Bearer ${idToken.value}", groupProperty).enqueue(object:Callback<CreateGroupPropertyResponse>{
+      override fun onFailure(call: Call<CreateGroupPropertyResponse>, t: Throwable) {
         Toast.makeText(activity, t.message, Toast.LENGTH_LONG).show()
       }
       override fun onResponse(
-        call: Call<CreateGroupPropertyResult>,
-        response: Response<CreateGroupPropertyResult>
+        call: Call<CreateGroupPropertyResponse>,
+        response: Response<CreateGroupPropertyResponse>
       ) {
         if(response.isSuccessful){
           Toast.makeText(activity, "新しいグループを作成しました", Toast.LENGTH_SHORT).show()
@@ -117,10 +117,40 @@ class ViewModelFriendGroup : ViewModel() {
     coroutineScope.launch {
       try {
           _usersList.value = Api.retrofitService.getFriendsAsync("Bearer ${idToken.value}").await()
+        Log.i(TAG, "getFriends: getUser")
       }catch (e:java.lang.Exception){
         Toast.makeText(activity, e.message, Toast.LENGTH_LONG).show()
       }
     }
+  }
+
+  fun deleteFriend(userId:String, activity: Activity){
+    Api.retrofitService.deleteFriend("Bearer ${idToken.value}", userId).enqueue(object:Callback<AccountResponse>{
+      override fun onFailure(call: Call<AccountResponse>, t: Throwable) {
+        Toast.makeText(activity, t.message, Toast.LENGTH_LONG).show()
+      }
+
+      override fun onResponse(call: Call<AccountResponse>, response: Response<AccountResponse>) {
+        if(response.isSuccessful){
+          Toast.makeText(activity,"友達リストから削除しました",Toast.LENGTH_LONG).show()
+          getFriends(activity)
+        }else{
+          try {
+            val jObjError = JSONObject(response.errorBody()?.string()).getJSONArray("errors")
+            for (i in 0 until jObjError.length()) {
+              val errorMessage =
+                jObjError.getJSONObject(i).getString("field") + " " + jObjError.getJSONObject(
+                  i
+                )
+                  .getString("message")
+              Toast.makeText(activity, errorMessage, Toast.LENGTH_LONG).show()
+            }
+          }catch (e: java.lang.Exception){
+            Toast.makeText(activity, "友達削除に失敗しました", Toast.LENGTH_LONG).show()
+          }
+        }
+      }
+    })
   }
 
   fun itemIsClicked(userProperty: UserProperty) {

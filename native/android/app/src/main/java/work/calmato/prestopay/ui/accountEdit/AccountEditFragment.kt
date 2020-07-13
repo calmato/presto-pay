@@ -6,7 +6,6 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,7 +25,7 @@ import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentAccountEditBindingImpl
 import work.calmato.prestopay.network.Api
 import work.calmato.prestopay.network.EditAccountProperty
-import work.calmato.prestopay.network.EditAccountResult
+import work.calmato.prestopay.network.EditAccountResponse
 import work.calmato.prestopay.util.Constant
 import work.calmato.prestopay.util.encodeImage2Base64
 import java.lang.Exception
@@ -60,13 +59,13 @@ class AccountEditFragment : Fragment() {
       val email: String = mailEditText.text.toString()
       if (name != "" && userName != "" && email != "") {
         val accountProperty = EditAccountProperty(name, userName, email, thumbnails)
-        Api.retrofitService.editAccount("Bearer $idToken", accountProperty).enqueue(object:Callback<EditAccountResult>{
-          override fun onFailure(call: Call<EditAccountResult>, t: Throwable) {
+        Api.retrofitService.editAccount("Bearer $idToken", accountProperty).enqueue(object:Callback<EditAccountResponse>{
+          override fun onFailure(call: Call<EditAccountResponse>, t: Throwable) {
             Toast.makeText(activity, t.message, Toast.LENGTH_LONG).show()
           }
           override fun onResponse(
-            call: Call<EditAccountResult>,
-            response: Response<EditAccountResult>
+            call: Call<EditAccountResponse>,
+            response: Response<EditAccountResponse>
           ) {
             if(response.isSuccessful){
               Toast.makeText(requireContext(), "変更しました", Toast.LENGTH_LONG).show()

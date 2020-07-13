@@ -8,7 +8,6 @@ import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,7 +26,7 @@ import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentNewAccountBinding
 import work.calmato.prestopay.network.Api
 import work.calmato.prestopay.network.NewAccountProperty
-import work.calmato.prestopay.network.NewAccountResponse
+import work.calmato.prestopay.network.AccountResponse
 import work.calmato.prestopay.util.Constant.Companion.IMAGE_PICK_CODE
 import work.calmato.prestopay.util.Constant.Companion.MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE
 import work.calmato.prestopay.util.encodeImage2Base64
@@ -108,13 +107,13 @@ class NewAccountFragment : Fragment() {
           val accountProperty =
             NewAccountProperty(name, userName, email, thumbnails, password, passwordConfirmation)
           Api.retrofitService.createAccount(accountProperty)
-            .enqueue(object : Callback<NewAccountResponse> {
-              override fun onFailure(call: Call<NewAccountResponse>, t: Throwable) {
+            .enqueue(object : Callback<AccountResponse> {
+              override fun onFailure(call: Call<AccountResponse>, t: Throwable) {
                 Toast.makeText(activity, t.message, Toast.LENGTH_LONG).show()
               }
               override fun onResponse(
-                call: Call<NewAccountResponse>,
-                response: Response<NewAccountResponse>
+                call: Call<AccountResponse>,
+                response: Response<AccountResponse>
               ) {
                 if (response.isSuccessful) {
                   Toast.makeText(requireContext(), "アカウントを作成しました\nログインしてください", Toast.LENGTH_LONG)
