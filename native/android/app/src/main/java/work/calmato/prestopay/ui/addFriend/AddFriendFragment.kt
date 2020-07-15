@@ -13,6 +13,8 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
@@ -23,7 +25,13 @@ import work.calmato.prestopay.util.AdapterRecyclePlane
 import work.calmato.prestopay.util.ViewModelFriendGroup
 
 class AddFriendFragment : Fragment() {
-  private val viewModel = ViewModelFriendGroup()
+  private val viewModel : ViewModelFriendGroup by lazy {
+    val activity = requireNotNull(this.activity){
+      "You can only access the viewModel after onActivityCreated()"
+    }
+    ViewModelProviders.of(this,ViewModelFriendGroup.Factory(activity.application))
+      .get(ViewModelFriendGroup::class.java)
+  }
   private lateinit var clickListener: AdapterRecyclePlane.OnClickListener
   private lateinit var viewManager: RecyclerView.LayoutManager
 
