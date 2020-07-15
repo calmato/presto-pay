@@ -1,20 +1,21 @@
 package work.calmato.prestopay.util
 
 import android.app.Activity
+import android.app.Application
 import android.util.Log
 import android.widget.Toast
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.*
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import work.calmato.prestopay.database.getFriendsDatabase
 import work.calmato.prestopay.network.*
+import work.calmato.prestopay.repository.FriendsRepository
 
-class ViewModelFriendGroup : ViewModel() {
+class ViewModelFriendGroup(application: Application) : AndroidViewModel(application) {
   private val _itemClicked = MutableLiveData<UserProperty>()
   val itemClicked: LiveData<UserProperty>
     get() = _itemClicked
@@ -32,10 +33,20 @@ class ViewModelFriendGroup : ViewModel() {
     get() = _usersList
 
   // Create a Coroutine scope using a job to be able to cancel when needed
-  private var viewModelJob = Job()
+  private var viewModelJob = SupervisorJob()
 
   // the Coroutine runs using the Main (UI) dispatcher
   private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
+
+  private val database = getFriendsDatabase(application)
+  private val friendsRepository = FriendsRepository(database)
+  init {
+      viewModelScope.launch {
+        friendsRepository.refreshFriends()
+      }
+  }
+
+  val friendsList = friendsRepository.friends
 
   fun getUserProperties(userName: String,activity: Activity){
     coroutineScope.launch {
@@ -169,6 +180,19 @@ class ViewModelFriendGroup : ViewModel() {
 
   fun navigationCompleted(){
     _navigateToHome.value = false
+  }
+
+  /**
+   * Factory for constructing DevByteViewModel with parameter
+   */
+  class Factory(val app: Application) : ViewModelProvider.Factory {
+    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+      if (modelClass.isAssignableFrom(ViewModelFriendGroup::class.java)) {
+        @Suppress("UNCHECKED_CAST")
+        return ViewModelFriendGroup(app) as T
+      }
+      throw IllegalArgumentException("Unable to construct viewmodel")
+    }
   }
 
   companion object {

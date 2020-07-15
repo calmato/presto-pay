@@ -19,7 +19,7 @@ class FriendsRepository(private val database: FriendsDatabase) {
   suspend fun refreshFriends(){
     withContext(Dispatchers.IO){
       val id = getIdToken()
-      val friendList = Api.retrofitService.getFriendsAsync(id).await()
+      val friendList = Api.retrofitService.getFriends(id).await()
       database.friendDao.insertAll(*friendList.asDatabaseModel())
     }
   }
