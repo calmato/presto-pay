@@ -1,7 +1,9 @@
 package work.calmato.prestopay.repository
 
+import android.preference.PreferenceManager
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
+import com.google.android.gms.tasks.Tasks
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -16,14 +18,10 @@ class FriendsRepository(private val database: FriendsDatabase) {
         Transformations.map(database.friendDao.getFriends()){
           it.asDomainModel()
         }
-  suspend fun refreshFriends(){
+  suspend fun refreshFriends(id:String){
     withContext(Dispatchers.IO){
-      val id = getIdToken()
       val friendList = Api.retrofitService.getFriends(id).await()
       database.friendDao.insertAll(*friendList.asDatabaseModel())
     }
-  }
-  private fun getIdToken():String {
-    return FirebaseAuth.getInstance().currentUser?.getIdToken(true)?.addOnCompleteListener {}?.result?.token!!
   }
 }

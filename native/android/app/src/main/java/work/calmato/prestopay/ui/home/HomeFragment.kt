@@ -1,12 +1,14 @@
 package work.calmato.prestopay.ui.home
 
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.fragment_home.*
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentHomeBinding
@@ -48,6 +50,13 @@ class HomeFragment : Fragment() {
         else -> false
       }
     }
+    val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+    val editor = sharedPreferences.edit()
+    FirebaseAuth.getInstance().currentUser?.getIdToken(true)?.addOnCompleteListener {
+      editor.putString("token", it.result?.token)
+      editor.apply()
+    }
+
   }
 
 }

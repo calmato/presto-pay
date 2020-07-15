@@ -13,10 +13,10 @@ data class NetworkFriend(
   var checked: Boolean = false
 )
 @JsonClass(generateAdapter = true)
-data class NetworkFriendContainer(val friends:List<NetworkFriend>)
+data class NetworkFriendContainer(val users:List<NetworkFriend>)
 
 fun NetworkFriendContainer.asDomainModel(): List<UserProperty>{
-  return friends.map{
+  return users.map{
     UserProperty(
       id = it.id,
       name = it.name,
@@ -29,7 +29,7 @@ fun NetworkFriendContainer.asDomainModel(): List<UserProperty>{
 }
 
 fun NetworkFriendContainer.asDatabaseModel():Array<DatabaseFriend>{
-  return friends.map {
+  return users.map {
     DatabaseFriend(
       id = it.id,
       name = it.name,
