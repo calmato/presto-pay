@@ -2,6 +2,7 @@ package work.calmato.prestopay.util
 
 import android.app.Activity
 import android.app.Application
+import android.preference.PreferenceManager
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.*
@@ -41,8 +42,10 @@ class ViewModelFriendGroup(application: Application) : AndroidViewModel(applicat
   private val database = getFriendsDatabase(application)
   private val friendsRepository = FriendsRepository(database)
   init {
+    val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplication())
+    val id = sharedPreferences.getString("token", null)
       viewModelScope.launch {
-        friendsRepository.refreshFriends()
+        friendsRepository.refreshFriends(id!!)
       }
   }
 

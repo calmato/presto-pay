@@ -10,12 +10,10 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.fragment_add_friend.*
-import kotlinx.android.synthetic.main.fragment_friend_list.*
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentFriendListBinding
-import work.calmato.prestopay.network.Users
-import work.calmato.prestopay.util.AdapterRecycleCheck
+import work.calmato.prestopay.network.UserProperty
+import work.calmato.prestopay.util.AdapterCheck
 import work.calmato.prestopay.util.ViewModelFriendGroup
 
 class FriendListFragment : Fragment() {
@@ -26,11 +24,19 @@ class FriendListFragment : Fragment() {
     ViewModelProviders.of(this,ViewModelFriendGroup.Factory(activity.application))
       .get(ViewModelFriendGroup::class.java)
   }
-  private var usersList: Users? = null
-  private lateinit var recycleAdapter: AdapterRecycleCheck
-  private lateinit var clickListener: AdapterRecycleCheck.OnClickListener
-  private lateinit var viewManager: RecyclerView.LayoutManager
 
+  private var recycleAdapter: AdapterCheck? = null
+
+  override fun onActivityCreated(savedInstanceState: Bundle?) {
+    super.onActivityCreated(savedInstanceState)
+    viewModel.friendsList.observe(viewLifecycleOwner, Observer<List<UserProperty>> {
+      it?.apply {
+          recycleAdapter?.friendList = it
+      }
+    })
+  }
+
+  private lateinit var clickListener: AdapterCheck.OnClickListener
   override fun onCreateView(
     inflater: LayoutInflater,
     container: ViewGroup?,
@@ -40,33 +46,17 @@ class FriendListFragment : Fragment() {
       DataBindingUtil.inflate(inflater, R.layout.fragment_friend_list, container, false)
     binding.lifecycleOwner = this
     binding.viewModel = viewModel
-    clickListener = AdapterRecycleCheck.OnClickListener { viewModel.itemIsClicked(it) }
-    usersList = FriendListFragmentArgs.fromBundle(requireArguments()).friendsList
-    if (usersList == null) {
-      viewModel.getIdToken()
-    }
-    recycleAdapter = AdapterRecycleCheck(usersList, clickListener)
-    binding.friendsRecycleView.adapter = recycleAdapter
-    viewManager = LinearLayoutManager(requireContext())
-    binding.friendsRecycleView.apply {
-      setHasFixedSize(true)
-      layoutManager = viewManager
+    clickListener = AdapterCheck.OnClickListener { viewModel.itemIsClicked(it) }
+    recycleAdapter = AdapterCheck(clickListener)
+    binding.root.findViewById<RecyclerView>(R.id.friendsRecycleView).apply {
+      layoutManager = LinearLayoutManager(context)
+      adapter = recycleAdapter
     }
     return binding.root
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    viewModel.idToken.observe(viewLifecycleOwner, Observer { it ->
-      if (null != it) {
-        viewModel.getFriends(requireActivity())
-      }})
-    viewModel.usersList.observe(viewLifecycleOwner, Observer {
-      usersList = it
-      friendsRecycleView.swapAdapter(
-      AdapterRecycleCheck(usersList,clickListener),false
-      )
-    })
     viewModel.itemClicked.observe(viewLifecycleOwner, Observer {
       if (null != it) {
         it.checked = !it.checked
@@ -88,14 +78,14 @@ class FriendListFragment : Fragment() {
     inflater.inflate(R.menu.header_done, menu)
   }
 
-  override fun onOptionsItemSelected(item: MenuItem): Boolean {
-    when (item.itemId) {
-      R.id.done -> this.findNavController().navigate(
-        FriendListFragmentDirections.actionFriendListFragmentToCreateGroupFragment(usersList!!)
-      )
-    }
-    return super.onOptionsItemSelected(item)
-  }
+//  override fun onOptionsItemSelected(item: MenuItem): Boolean {
+//    when (item.itemId) {
+//      R.id.done -> this.findNavController().navigate(
+//        FriendListFragmentDirections.actionFriendListFragmentToCreateGroupFragment(usersList!!)
+//      )
+//    }
+//    return super.onOptionsItemSelected(item)
+//  }
 
   private fun goBackToHome() {
     this.findNavController().navigate(
