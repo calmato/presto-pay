@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 import work.calmato.prestopay.network.UserProperty
 
 @Entity
-data class DatabaseUser constructor(
+data class DatabaseFriend constructor(
   @PrimaryKey
   val id: String,
   val name: String,
@@ -15,7 +15,7 @@ data class DatabaseUser constructor(
   var checked: Boolean = false
 )
 
-fun List<DatabaseUser>.asDomainModel(): List<UserProperty> {
+fun List<DatabaseFriend>.asDomainModel(): List<UserProperty> {
   return map {
     UserProperty(
       id = it.id,
