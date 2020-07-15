@@ -54,7 +54,7 @@ interface ApiService {
 
   @GET("auth/friends")
   fun getFriendsAsync(@Header("Authorization") token: String):
-    Deferred<Users>
+    Deferred<NetworkFriendContainer>
 
   @POST("groups")
   fun createGroup(@Header("Authorization") token: String, @Body userId: CreateGroupProperty):
