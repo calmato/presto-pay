@@ -54,11 +54,12 @@ class HomeFragment : Fragment() {
     }
     val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
     val editor = sharedPreferences.edit()
-    FirebaseAuth.getInstance().currentUser?.getIdToken(true)?.addOnCompleteListener {
-      editor.putString("token", it.result?.token)
-      editor.apply()
+    synchronized(sharedPreferences){
+      FirebaseAuth.getInstance().currentUser?.getIdToken(true)?.addOnCompleteListener {
+        editor.putString("token", it.result?.token)
+        editor.apply()
+      }
     }
-
   }
 
 }
