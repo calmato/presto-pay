@@ -29,8 +29,8 @@ class ViewModelFriendGroup(application: Application) : AndroidViewModel(applicat
   val navigateToHome:LiveData<Boolean>
     get() = _navigateToHome
 
-  private val _usersList = MutableLiveData<Users>()
-  val usersList:LiveData<Users>
+  private val _usersList = MutableLiveData<List<UserProperty>>()
+  val usersList:LiveData<List<UserProperty>>
     get() = _usersList
 
   // Create a Coroutine scope using a job to be able to cancel when needed
@@ -41,9 +41,10 @@ class ViewModelFriendGroup(application: Application) : AndroidViewModel(applicat
 
   private val database = getFriendsDatabase(application)
   private val friendsRepository = FriendsRepository(database)
+  private val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplication())
+  private val id = sharedPreferences.getString("token", null)
+
   init {
-    val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplication())
-    val id = sharedPreferences.getString("token", null)
       viewModelScope.launch {
         friendsRepository.refreshFriends(id!!)
       }
@@ -54,7 +55,7 @@ class ViewModelFriendGroup(application: Application) : AndroidViewModel(applicat
   fun getUserProperties(userName: String,activity: Activity){
     coroutineScope.launch {
       try {
-      _usersList.value   = Api.retrofitService.getPropertiesAsync("Bearer ${idToken.value}", userName).await()
+      _usersList.value   = Api.retrofitService.getPropertiesAsync("Bearer $id", userName).await().asDomainModel()
       } catch (e:Exception){
         Toast.makeText(activity, e.message, Toast.LENGTH_LONG).show()
       }
@@ -130,7 +131,9 @@ class ViewModelFriendGroup(application: Application) : AndroidViewModel(applicat
   fun getFriends(activity: Activity){
     coroutineScope.launch {
       try {
-          _usersList.value = Api.retrofitService.getFriendsAsync("Bearer ${idToken.value}").await()
+        viewModelScope.launch {
+          friendsRepository.refreshFriends(id!!)
+        }
         Log.i(TAG, "getFriends: getUser")
       }catch (e:java.lang.Exception){
         Toast.makeText(activity, e.message, Toast.LENGTH_LONG).show()

@@ -12,6 +12,8 @@ import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.fragment_home.*
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentHomeBinding
+import work.calmato.prestopay.network.UserProperty
+import work.calmato.prestopay.network.Users
 
 
 class HomeFragment : Fragment() {
@@ -30,7 +32,7 @@ class HomeFragment : Fragment() {
     super.onViewCreated(view, savedInstanceState)
     floatingActionButton.setOnClickListener {
       this.findNavController().navigate(
-        HomeFragmentDirections.ActionHomeFragmentToFriendListFragment(null)
+        HomeFragmentDirections.ActionHomeFragmentToFriendListFragment(Users(emptyList<UserProperty>()))
       )
     }
     bottom_navigation.setOnNavigationItemSelectedListener { item ->

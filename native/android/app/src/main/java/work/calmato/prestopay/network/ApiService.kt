@@ -46,7 +46,7 @@ interface ApiService {
     @Header("Authorization") token: String,
     @Query("username") username: String
   ):
-    Deferred<Users>
+    Deferred<NetworkFriendContainer>
 
   @POST("auth/friends")
   fun addFriend(@Header("Authorization") token: String, @Body userId: UserId):

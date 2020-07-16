@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.analytics.FirebaseAnalytics
@@ -39,7 +40,7 @@ class AddFriendFragment : Fragment() {
 
   override fun onActivityCreated(savedInstanceState: Bundle?) {
     super.onActivityCreated(savedInstanceState)
-    viewModel.friendsList.observe(viewLifecycleOwner, Observer<List<UserProperty>> {
+    viewModel.usersList.observe(viewLifecycleOwner, Observer<List<UserProperty>> {
       it?.apply {
         recycleAdapter?.friendList = it
       }
@@ -57,10 +58,9 @@ class AddFriendFragment : Fragment() {
       DataBindingUtil.inflate(inflater, R.layout.fragment_add_friend, container, false)
     binding.lifecycleOwner = this
     binding.viewModel = viewModel
-    viewModel.getIdToken()
     clickListener = AdapterRecyclePlane.OnClickListener { viewModel.itemIsClicked(it) }
     recycleAdapter = AdapterRecyclePlane(clickListener)
-    binding.root.findViewById<RecyclerView>(R.id.friendsRecycleView).apply {
+    binding.root.findViewById<RecyclerView>(R.id.usersRecycleView).apply {
       layoutManager = LinearLayoutManager(context)
       adapter = recycleAdapter
     }
@@ -70,17 +70,17 @@ class AddFriendFragment : Fragment() {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     search.setOnClickListener {
-      viewModel.getUserProperties(userName.text.toString(),requireActivity())
+      val name = userName.text.toString()
+      if (name.isEmpty()){
+        Toast.makeText(requireContext(),"友達のユーザー名を入力してください",Toast.LENGTH_SHORT).show()
+      }else {
+        viewModel.getUserProperties(name, requireActivity())
+      }
     }
     viewModel.usersList.observe(viewLifecycleOwner, Observer {
-      it?.let {
-        usersRecycleView.swapAdapter(
-          AdapterRecyclePlane(clickListener), false
-        )
-        if (it.users.isEmpty()) {
+        if (it.isEmpty()) {
           Toast.makeText(requireContext(), "ユーザーが見つかりません", Toast.LENGTH_SHORT).show()
         }
-      }
     })
     viewModel.itemClicked.observe(viewLifecycleOwner, Observer {
       if (null != it) {

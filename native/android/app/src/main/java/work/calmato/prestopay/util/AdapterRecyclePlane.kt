@@ -5,12 +5,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import work.calmato.prestopay.databinding.ListItemPlaneBinding
 import work.calmato.prestopay.network.UserProperty
-import work.calmato.prestopay.network.Users
 
 class AdapterRecyclePlane(val onClickListener: OnClickListener) :
   RecyclerView.Adapter<AdapterRecyclePlane.AddFriendViewHolder>() {
-  var friendList:List<UserProperty> = emptyList()
-    set(value){
+  var friendList: List<UserProperty> = emptyList()
+    set(value) {
       field = value
       notifyDataSetChanged()
     }
@@ -48,12 +47,5 @@ class AdapterRecyclePlane(val onClickListener: OnClickListener) :
       }
     }
   }
-
-
-
-
-
-
-
 }
 

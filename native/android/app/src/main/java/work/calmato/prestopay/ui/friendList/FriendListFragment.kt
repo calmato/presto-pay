@@ -10,9 +10,12 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.twitter.sdk.android.core.models.User
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentFriendListBinding
 import work.calmato.prestopay.network.UserProperty
+import work.calmato.prestopay.network.Users
+import work.calmato.prestopay.ui.createGroup.CreateGroupFragmentArgs
 import work.calmato.prestopay.util.AdapterCheck
 import work.calmato.prestopay.util.ViewModelFriendGroup
 
@@ -26,14 +29,21 @@ class FriendListFragment : Fragment() {
   }
 
   private var recycleAdapter: AdapterCheck? = null
+  private lateinit var friendListArg :List<UserProperty>
 
   override fun onActivityCreated(savedInstanceState: Bundle?) {
     super.onActivityCreated(savedInstanceState)
-    viewModel.friendsList.observe(viewLifecycleOwner, Observer<List<UserProperty>> {
-      it?.apply {
+    friendListArg = FriendListFragmentArgs.fromBundle(requireArguments()).friendsList!!.users
+    if(friendListArg.isEmpty()){
+      viewModel.friendsList.observe(viewLifecycleOwner, Observer<List<UserProperty>> {
+        it?.apply {
+          friendListArg = it
           recycleAdapter?.friendList = it
-      }
-    })
+        }
+      })
+    }else{
+      recycleAdapter?.friendList = friendListArg
+    }
   }
 
   private lateinit var clickListener: AdapterCheck.OnClickListener
@@ -78,14 +88,14 @@ class FriendListFragment : Fragment() {
     inflater.inflate(R.menu.header_done, menu)
   }
 
-//  override fun onOptionsItemSelected(item: MenuItem): Boolean {
-//    when (item.itemId) {
-//      R.id.done -> this.findNavController().navigate(
-//        FriendListFragmentDirections.actionFriendListFragmentToCreateGroupFragment(usersList!!)
-//      )
-//    }
-//    return super.onOptionsItemSelected(item)
-//  }
+  override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    when (item.itemId) {
+      R.id.done -> this.findNavController().navigate(
+        FriendListFragmentDirections.actionFriendListFragmentToCreateGroupFragment(Users(friendListArg))
+      )
+    }
+    return super.onOptionsItemSelected(item)
+  }
 
   private fun goBackToHome() {
     this.findNavController().navigate(
