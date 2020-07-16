@@ -53,16 +53,6 @@ class HomeFragment : Fragment() {
         else -> false
       }
     }
-    val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
-    val editor = sharedPreferences.edit()
-    synchronized(sharedPreferences) {
-      FirebaseAuth.getInstance().currentUser?.getIdToken(true)?.addOnCompleteListener {
-        if (it.isSuccessful) {
-          editor.putString("token", it.result?.token)
-          editor.apply()
-        }
-      }
-    }
     requireActivity().onBackPressedDispatcher.addCallback(
       viewLifecycleOwner,
       object : OnBackPressedCallback(false) {

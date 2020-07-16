@@ -1,6 +1,7 @@
 package work.calmato.prestopay.ui.login
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.util.Log
@@ -26,15 +27,24 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.twitter.sdk.android.core.TwitterAuthConfig
 import kotlinx.android.synthetic.main.fragment_login.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentLoginBinding
+import work.calmato.prestopay.network.Api
+import work.calmato.prestopay.network.UserProperty
+import work.calmato.prestopay.network.asDomainModel
 import java.util.*
+import kotlin.coroutines.suspendCoroutine
 
 
 class LoginFragment : Fragment() {
   private lateinit var auth: FirebaseAuth
   private lateinit var googleSignInClient: GoogleSignInClient
   private lateinit var callbackManager: CallbackManager
+  private lateinit var sharedPreferences : SharedPreferences
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -65,7 +75,7 @@ class LoginFragment : Fragment() {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-
+    sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
     loginNewText.setOnClickListener {
       this.findNavController().navigate(
         LoginFragmentDirections.actionLoginFragmentToNewAccountFragment()
@@ -152,7 +162,6 @@ class LoginFragment : Fragment() {
     }
 
     //Auth check
-    val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
     val value = sharedPreferences.getString("token", null)
     Log.d(DEFAULT_TAG, "token default: " + value)
 
@@ -206,7 +215,6 @@ class LoginFragment : Fragment() {
             val user = auth.currentUser
             user?.getIdToken(true)?.addOnCompleteListener(requireActivity()) { task ->
               val idToken = task.getResult()?.token
-              val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
               val editor = sharedPreferences.edit()
               editor.putString("token", idToken)
               editor.apply()
@@ -294,6 +302,7 @@ class LoginFragment : Fragment() {
           // Sign in success, update UI with the signed-in user's information
           Log.d(FACEBOOK_TAG, "signInWithFacebook:success")
           val user = auth.currentUser
+
           updateUI(user)
         } else {
           // If sign in fails, display a message to the user.
@@ -311,9 +320,34 @@ class LoginFragment : Fragment() {
     if (user != null) {
       //home pageの遷移
       user.getIdToken(true)
+      setSharedPreference()
       this.findNavController().navigate(
         LoginFragmentDirections.actionLoginFragmentToHomeFragment()
       )
+    }
+  }
+  private fun setSharedPreference(){
+    FirebaseAuth.getInstance().currentUser?.getIdToken(true)?.addOnCompleteListener {
+      if (it.isSuccessful) {
+        val editor = sharedPreferences.edit()
+        synchronized(sharedPreferences) {
+          FirebaseAuth.getInstance().currentUser?.getIdToken(true)?.addOnCompleteListener {
+            if (it.isSuccessful) {
+              editor.putString("token", it.result?.token)
+              editor.apply()
+            }
+          }
+        }
+        val id = sharedPreferences.getString("token", null)
+        GlobalScope.launch(Dispatchers.IO){
+          val userProperty  = Api.retrofitService.getLoginUserInformation("Bearer $id").await().asDomainModel()
+          editor.putString("name", userProperty.name)
+          editor.putString("username",userProperty.username)
+          editor.putString("email",userProperty.email)
+          editor.putString("thumbnailUrl",userProperty.thumbnailUrl)
+          editor.apply()
+        }
+      }
     }
   }
 
