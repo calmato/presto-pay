@@ -34,7 +34,6 @@ class MailCheckFragment : Fragment() {
         override fun handleOnBackPressed() {
           navigateToLogin()
         }
-
       }
     )
   }

@@ -5,6 +5,7 @@ import android.preference.PreferenceManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -54,12 +55,19 @@ class HomeFragment : Fragment() {
     }
     val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
     val editor = sharedPreferences.edit()
-    synchronized(sharedPreferences){
+    synchronized(sharedPreferences) {
       FirebaseAuth.getInstance().currentUser?.getIdToken(true)?.addOnCompleteListener {
-        editor.putString("token", it.result?.token)
-        editor.apply()
+        if (it.isSuccessful) {
+          editor.putString("token", it.result?.token)
+          editor.apply()
+        }
       }
     }
+    requireActivity().onBackPressedDispatcher.addCallback(
+      viewLifecycleOwner,
+      object : OnBackPressedCallback(false) {
+        override fun handleOnBackPressed() {
+        }
+      })
   }
-
 }
