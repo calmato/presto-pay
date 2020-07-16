@@ -1,10 +1,7 @@
 package work.calmato.prestopay.repository
 
-import android.preference.PreferenceManager
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
-import com.google.android.gms.tasks.Tasks
-import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import work.calmato.prestopay.database.FriendsDatabase

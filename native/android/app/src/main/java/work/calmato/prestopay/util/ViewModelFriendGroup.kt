@@ -21,10 +21,6 @@ class ViewModelFriendGroup(application: Application) : AndroidViewModel(applicat
   val itemClicked: LiveData<UserProperty>
     get() = _itemClicked
 
-  private val _idToken = MutableLiveData<String>()
-  val idToken: LiveData<String>
-    get() = _idToken
-
   private val _navigateToHome = MutableLiveData<Boolean>()
   val navigateToHome:LiveData<Boolean>
     get() = _navigateToHome
@@ -68,7 +64,7 @@ class ViewModelFriendGroup(application: Application) : AndroidViewModel(applicat
 
   fun addFriendApi(userProperty: UserProperty,activity:Activity){
     val userId = UserId(userProperty.id)
-    Api.retrofitService.addFriend("Bearer ${idToken.value}", userId).enqueue(object:Callback<AddFriendResponse>{
+    Api.retrofitService.addFriend("Bearer ${id}", userId).enqueue(object:Callback<AddFriendResponse>{
       override fun onFailure(call: Call<AddFriendResponse>, t: Throwable) {
         Toast.makeText(activity, t.message, Toast.LENGTH_LONG).show()
       }
@@ -98,7 +94,7 @@ class ViewModelFriendGroup(application: Application) : AndroidViewModel(applicat
   }
 
   fun createGroupApi(groupProperty: CreateGroupProperty,activity: Activity) {
-    Api.retrofitService.createGroup("Bearer ${idToken.value}", groupProperty).enqueue(object:Callback<CreateGroupPropertyResponse>{
+    Api.retrofitService.createGroup("Bearer ${id}", groupProperty).enqueue(object:Callback<CreateGroupPropertyResponse>{
       override fun onFailure(call: Call<CreateGroupPropertyResponse>, t: Throwable) {
         Toast.makeText(activity, t.message, Toast.LENGTH_LONG).show()
       }
@@ -142,7 +138,7 @@ class ViewModelFriendGroup(application: Application) : AndroidViewModel(applicat
   }
 
   fun deleteFriend(userId:String, activity: Activity){
-    Api.retrofitService.deleteFriend("Bearer ${idToken.value}", userId).enqueue(object:Callback<AccountResponse>{
+    Api.retrofitService.deleteFriend("Bearer ${id}", userId).enqueue(object:Callback<AccountResponse>{
       override fun onFailure(call: Call<AccountResponse>, t: Throwable) {
         Toast.makeText(activity, t.message, Toast.LENGTH_LONG).show()
       }
@@ -176,12 +172,6 @@ class ViewModelFriendGroup(application: Application) : AndroidViewModel(applicat
 
   fun itemIsClickedCompleted() {
     _itemClicked.value = null
-  }
-
-  fun getIdToken() {
-    FirebaseAuth.getInstance().currentUser?.getIdToken(true)?.addOnCompleteListener {
-      _idToken.value = it.result?.token
-    }
   }
 
   fun navigationCompleted(){

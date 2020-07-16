@@ -53,7 +53,6 @@ class GroupFriendFragment : Fragment() {
       DataBindingUtil.inflate(inflater, R.layout.fragment_group_friend, container, false)
     binding.lifecycleOwner = this
     binding.viewModel = viewModel
-    viewModel.getIdToken()
     clickListener = AdapterRecyclePlane.OnClickListener { viewModel.itemIsClicked(it) }
     recycleAdapter = AdapterRecyclePlane(clickListener)
     binding.friendsRecycleView.apply {

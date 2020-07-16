@@ -56,7 +56,6 @@ class CreateGroupFragment : PermissionBase() {
       DataBindingUtil.inflate(inflater, R.layout.fragment_create_group, container, false)
     binding.lifecycleOwner = this
     binding.viewModel = viewModel
-    viewModel.getIdToken()
     clickListener = AdapterGrid.OnClickListener { viewModel.itemIsClicked(it) }
     usersList = CreateGroupFragmentArgs.fromBundle(requireArguments()).friendsList
     usersListToBeSent = Users(usersList!!.users.filter { userProperty -> userProperty!!.checked })
