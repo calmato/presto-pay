@@ -2,7 +2,9 @@ package work.calmato.prestopay.ui.groupFriend
 
 import android.app.AlertDialog
 import android.content.DialogInterface
+import android.content.SharedPreferences
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -24,6 +26,7 @@ import work.calmato.prestopay.network.UserProperty
 import work.calmato.prestopay.network.Users
 import work.calmato.prestopay.util.AdapterRecyclePlane
 import work.calmato.prestopay.util.ViewModelFriendGroup
+import work.calmato.prestopay.util.setThumbnail
 
 class GroupFriendFragment : Fragment() {
   private val viewModel : ViewModelFriendGroup by lazy {
@@ -101,6 +104,12 @@ class GroupFriendFragment : Fragment() {
         viewModel.itemIsClickedCompleted()
       }
     })
+    val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
+    userNameText.text = sharedPreferences.getString("name","")
+    val thumbnailUrl = sharedPreferences.getString("thumbnailUrl","")
+    if(thumbnailUrl.isNotEmpty()) {
+      Picasso.with(context).load(thumbnailUrl).into(thumbnail)
+    }
   }
 
   companion object {

@@ -77,6 +77,9 @@
     <action
       android:id="@+id/action_account_home_to_account_edit_fragment"
       app:destination="@id/account_edit_fragment" />
+    <action
+      android:id="@+id/action_account_home_to_home_fragment"
+      app:destination="@id/home_fragment" />
   </fragment>
   <fragment
     android:id="@+id/resetPassFragment"
