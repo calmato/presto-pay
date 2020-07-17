@@ -55,7 +55,7 @@ class HomeFragment : Fragment() {
     }
     requireActivity().onBackPressedDispatcher.addCallback(
       viewLifecycleOwner,
-      object : OnBackPressedCallback(false) {
+      object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
         }
       })
