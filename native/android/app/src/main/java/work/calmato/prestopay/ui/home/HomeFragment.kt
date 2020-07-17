@@ -1,15 +1,20 @@
 package work.calmato.prestopay.ui.home
 
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.fragment_home.*
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentHomeBinding
+import work.calmato.prestopay.network.UserProperty
+import work.calmato.prestopay.network.Users
 
 
 class HomeFragment : Fragment() {
@@ -28,7 +33,7 @@ class HomeFragment : Fragment() {
     super.onViewCreated(view, savedInstanceState)
     floatingActionButton.setOnClickListener {
       this.findNavController().navigate(
-        HomeFragmentDirections.ActionHomeFragmentToFriendListFragment(null)
+        HomeFragmentDirections.ActionHomeFragmentToFriendListFragment(Users(emptyList<UserProperty>()))
       )
     }
     bottom_navigation.setOnNavigationItemSelectedListener { item ->
@@ -48,6 +53,11 @@ class HomeFragment : Fragment() {
         else -> false
       }
     }
+    requireActivity().onBackPressedDispatcher.addCallback(
+      viewLifecycleOwner,
+      object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+        }
+      })
   }
-
 }

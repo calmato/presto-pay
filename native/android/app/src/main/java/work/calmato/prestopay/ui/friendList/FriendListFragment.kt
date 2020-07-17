@@ -6,24 +6,47 @@ import androidx.activity.OnBackPressedCallback
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.fragment_add_friend.*
-import kotlinx.android.synthetic.main.fragment_friend_list.*
+import com.twitter.sdk.android.core.models.User
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentFriendListBinding
+import work.calmato.prestopay.network.UserProperty
 import work.calmato.prestopay.network.Users
-import work.calmato.prestopay.util.AdapterRecycleCheck
+import work.calmato.prestopay.ui.createGroup.CreateGroupFragmentArgs
+import work.calmato.prestopay.util.AdapterCheck
 import work.calmato.prestopay.util.ViewModelFriendGroup
 
 class FriendListFragment : Fragment() {
-  private val viewModel = ViewModelFriendGroup()
-  private var usersList: Users? = null
-  private lateinit var recycleAdapter: AdapterRecycleCheck
-  private lateinit var clickListener: AdapterRecycleCheck.OnClickListener
-  private lateinit var viewManager: RecyclerView.LayoutManager
+  private val viewModel  : ViewModelFriendGroup by lazy {
+    val activity = requireNotNull(this.activity){
+      "You can only access the viewModel after onActivityCreated()"
+    }
+    ViewModelProviders.of(this,ViewModelFriendGroup.Factory(activity.application))
+      .get(ViewModelFriendGroup::class.java)
+  }
 
+  private var recycleAdapter: AdapterCheck? = null
+  private lateinit var friendListArg :List<UserProperty>
+
+  override fun onActivityCreated(savedInstanceState: Bundle?) {
+    super.onActivityCreated(savedInstanceState)
+    friendListArg = FriendListFragmentArgs.fromBundle(requireArguments()).friendsList!!.users
+    if(friendListArg.isEmpty()){
+      viewModel.friendsList.observe(viewLifecycleOwner, Observer<List<UserProperty>> {
+        it?.apply {
+          friendListArg = it
+          recycleAdapter?.friendList = it
+        }
+      })
+    }else{
+      recycleAdapter?.friendList = friendListArg
+    }
+  }
+
+  private lateinit var clickListener: AdapterCheck.OnClickListener
   override fun onCreateView(
     inflater: LayoutInflater,
     container: ViewGroup?,
@@ -33,33 +56,17 @@ class FriendListFragment : Fragment() {
       DataBindingUtil.inflate(inflater, R.layout.fragment_friend_list, container, false)
     binding.lifecycleOwner = this
     binding.viewModel = viewModel
-    clickListener = AdapterRecycleCheck.OnClickListener { viewModel.itemIsClicked(it) }
-    usersList = FriendListFragmentArgs.fromBundle(requireArguments()).friendsList
-    if (usersList == null) {
-      viewModel.getIdToken()
-    }
-    recycleAdapter = AdapterRecycleCheck(usersList, clickListener)
-    binding.friendsRecycleView.adapter = recycleAdapter
-    viewManager = LinearLayoutManager(requireContext())
-    binding.friendsRecycleView.apply {
-      setHasFixedSize(true)
-      layoutManager = viewManager
+    clickListener = AdapterCheck.OnClickListener { viewModel.itemIsClicked(it) }
+    recycleAdapter = AdapterCheck(clickListener)
+    binding.root.findViewById<RecyclerView>(R.id.friendsRecycleView).apply {
+      layoutManager = LinearLayoutManager(context)
+      adapter = recycleAdapter
     }
     return binding.root
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    viewModel.idToken.observe(viewLifecycleOwner, Observer { it ->
-      if (null != it) {
-        viewModel.getFriends(requireActivity())
-      }})
-    viewModel.usersList.observe(viewLifecycleOwner, Observer {
-      usersList = it
-      friendsRecycleView.swapAdapter(
-      AdapterRecycleCheck(usersList,clickListener),false
-      )
-    })
     viewModel.itemClicked.observe(viewLifecycleOwner, Observer {
       if (null != it) {
         it.checked = !it.checked
@@ -84,7 +91,7 @@ class FriendListFragment : Fragment() {
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
     when (item.itemId) {
       R.id.done -> this.findNavController().navigate(
-        FriendListFragmentDirections.actionFriendListFragmentToCreateGroupFragment(usersList!!)
+        FriendListFragmentDirections.actionFriendListFragmentToCreateGroupFragment(Users(friendListArg))
       )
     }
     return super.onOptionsItemSelected(item)

@@ -2,13 +2,17 @@ package work.calmato.prestopay.ui.accountHome
 
 import android.app.AlertDialog
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
+import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.fragment_account_edit.*
 import kotlinx.android.synthetic.main.fragment_account_home.*
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentAccountHomeBindingImpl
@@ -42,6 +46,26 @@ class AccountHomeFragment : Fragment() {
         AccountHomeFragmentDirections.actionAccountHomeToAccountEditFragment()
       )
     }
+    requireActivity().onBackPressedDispatcher.addCallback(
+      viewLifecycleOwner,
+      object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+          findNavController().navigate(
+            AccountHomeFragmentDirections.actionAccountHomeToHomeFragment()
+          )
+        }
+      })
+    val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
+    setUserNameText.text = sharedPreferences.getString("name","")
+    val thumbnailUrl = sharedPreferences.getString("thumbnailUrl","")
+    if(thumbnailUrl.isNotEmpty()) {
+      Picasso.with(context).load(thumbnailUrl).into(UserAccountThumnail)
+    }
+    displayNotificationButton.setOnClickListener {
+      this.findNavController().navigate(
+        AccountHomeFragmentDirections.actionAccountHomeToNotificationSetFragment()
+      )
+    }
   }
 
   private fun showAlertDialog() {
@@ -58,9 +82,6 @@ class AccountHomeFragment : Fragment() {
   }
 
   private fun logout() {
-//    val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
-//    val editor = sharedPreferences.edit()
-//    editor.putString("token", null)
     FirebaseAuth.getInstance().signOut()
     this.findNavController().navigate(
       AccountHomeFragmentDirections.actionAccountHomeToLoginFragment()

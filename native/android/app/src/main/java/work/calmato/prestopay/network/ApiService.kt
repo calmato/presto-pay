@@ -46,11 +46,15 @@ interface ApiService {
     @Header("Authorization") token: String,
     @Query("username") username: String
   ):
-    Deferred<Users>
+    Deferred<NetworkFriendContainer>
 
   @POST("auth/friends")
   fun addFriend(@Header("Authorization") token: String, @Body userId: UserId):
     Call<AddFriendResponse>
+
+  @GET("auth/friends")
+  fun getFriends(@Header("Authorization") token: String):
+    Deferred<NetworkFriendContainer>
 
   @GET("auth/friends")
   fun getFriendsAsync(@Header("Authorization") token: String):
@@ -76,6 +80,11 @@ interface ApiService {
   @DELETE("auth/friends/{userId}")
   fun deleteFriend(@Header("Authorization") token: String, @Path("userId") userId:String):
     Call<AccountResponse>
+
+  @GET("auth")
+  fun getLoginUserInformation(
+    @Header("Authorization") token: String
+  ) : Deferred<NetworkFriend>
 }
 
 /**

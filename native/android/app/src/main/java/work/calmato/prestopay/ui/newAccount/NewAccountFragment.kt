@@ -29,11 +29,12 @@ import work.calmato.prestopay.network.NewAccountProperty
 import work.calmato.prestopay.network.AccountResponse
 import work.calmato.prestopay.util.Constant.Companion.IMAGE_PICK_CODE
 import work.calmato.prestopay.util.Constant.Companion.MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE
+import work.calmato.prestopay.util.PermissionBase
 import work.calmato.prestopay.util.encodeImage2Base64
 import java.lang.Exception
 
 
-class NewAccountFragment : Fragment() {
+class NewAccountFragment : PermissionBase() {
   var setThumbnail = false
 
   override fun onCreateView(
@@ -145,73 +146,13 @@ class NewAccountFragment : Fragment() {
     }
 
     editPhotoText.setOnClickListener {
-      //check runtime permission
-      if (ContextCompat.checkSelfPermission(
-          requireActivity(),
-          Manifest.permission.READ_EXTERNAL_STORAGE
-        )
-        != PackageManager.PERMISSION_GRANTED
-      ) {
-        // Permission is not granted
-        if (ActivityCompat.shouldShowRequestPermissionRationale(
-            requireActivity(),
-            Manifest.permission.READ_EXTERNAL_STORAGE
-          )
-        ) {
-          // Show an explanation to the user *asynchronously* -- don't block
-          // this thread waiting for the user's response! After the user
-          // sees the explanation, try again to request the permission.
-          Toast.makeText(requireActivity(), "設定からギャラリーへのアクセスを許可してください", Toast.LENGTH_LONG).show()
-        } else {
-          // No explanation needed, we can request the permission.
-          ActivityCompat.requestPermissions(
-            requireActivity(),
-            arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
-            MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE
-          )
-        }
-      } else {
-        //permission already granted
-        pickImageFromGallery()
-      }
+      requestPermission()
     }
     hasAccountText.setOnClickListener {
       this.findNavController().navigate(
         NewAccountFragmentDirections.actionNewAccountFragmentToLoginFragment()
       )
     }
-  }
-
-  override fun onRequestPermissionsResult(
-    requestCode: Int,
-    permissions: Array<String>,
-    grantResults: IntArray
-  ) {
-    when (requestCode) {
-      MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE -> {
-        // If request is cancelled, the result arrays are empty.
-        if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-          pickImageFromGallery()
-        } else {
-          Toast.makeText(requireActivity(), "permission denied", Toast.LENGTH_LONG).show()
-        }
-        return
-      }
-      else -> {
-        // Ignore all other requests.
-      }
-    }
-  }
-
-  private fun pickImageFromGallery() {
-    //Intent to pick image
-    val intent = Intent(Intent.ACTION_PICK)
-    intent.type = "image/*"
-    startActivityForResult(
-      intent,
-      IMAGE_PICK_CODE
-    )
-    setThumbnail = true
   }
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
