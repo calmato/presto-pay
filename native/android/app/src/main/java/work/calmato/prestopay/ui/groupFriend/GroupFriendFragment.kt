@@ -12,6 +12,7 @@ import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -19,16 +20,29 @@ import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_group_friend.*
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentGroupFriendBinding
+import work.calmato.prestopay.network.UserProperty
 import work.calmato.prestopay.network.Users
 import work.calmato.prestopay.util.AdapterRecyclePlane
 import work.calmato.prestopay.util.ViewModelFriendGroup
 
 class GroupFriendFragment : Fragment() {
-  private val viewModel = ViewModelFriendGroup()
-  private var usersList: Users? = null
+  private val viewModel : ViewModelFriendGroup by lazy {
+    val activity = requireNotNull(this.activity){
+      "You can only access the viewModel after onActivityCreated()"
+    }
+    ViewModelProviders.of(this,ViewModelFriendGroup.Factory(activity.application))
+      .get(ViewModelFriendGroup::class.java)
+  }
+  private var recycleAdapter: AdapterRecyclePlane?=null
+  override fun onActivityCreated(savedInstanceState: Bundle?) {
+    super.onActivityCreated(savedInstanceState)
+    viewModel.friendsList.observe(viewLifecycleOwner, Observer<List<UserProperty>> {
+      it?.apply {
+        recycleAdapter?.friendList = it
+      }
+    })
+  }
   private lateinit var clickListener: AdapterRecyclePlane.OnClickListener
-  private lateinit var viewManager: RecyclerView.LayoutManager
-  private lateinit var recycleAdapter: AdapterRecyclePlane
 
   override fun onCreateView(
     inflater: LayoutInflater,
@@ -39,15 +53,12 @@ class GroupFriendFragment : Fragment() {
       DataBindingUtil.inflate(inflater, R.layout.fragment_group_friend, container, false)
     binding.lifecycleOwner = this
     binding.viewModel = viewModel
-    viewModel.getIdToken()
     clickListener = AdapterRecyclePlane.OnClickListener { viewModel.itemIsClicked(it) }
-    recycleAdapter = AdapterRecyclePlane(usersList, clickListener)
-    viewManager = LinearLayoutManager(requireContext())
+    recycleAdapter = AdapterRecyclePlane(clickListener)
     binding.friendsRecycleView.apply {
-      setHasFixedSize(true)
+      layoutManager = LinearLayoutManager(context)
+      adapter = recycleAdapter
     }
-    binding.friendsRecycleView.adapter = recycleAdapter
-    binding.friendsRecycleView.layoutManager = viewManager
     return binding.root
   }
 
@@ -58,14 +69,6 @@ class GroupFriendFragment : Fragment() {
         GroupFriendFragmentDirections.actionGroupFriendFragmentToAddFriendFragment()
       )
     }
-    viewModel.idToken.observe(viewLifecycleOwner, Observer {
-      if (null != it) {
-        viewModel.getFriends(requireActivity())
-      }
-    })
-    viewModel.usersList.observe(viewLifecycleOwner, Observer {
-      friendsRecycleView.swapAdapter(AdapterRecyclePlane(it, clickListener), false)
-    })
 
     viewModel.itemClicked.observe(viewLifecycleOwner, Observer {
       if (null != it) {

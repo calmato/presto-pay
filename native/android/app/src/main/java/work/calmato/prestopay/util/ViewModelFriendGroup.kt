@@ -1,46 +1,57 @@
 package work.calmato.prestopay.util
 
 import android.app.Activity
+import android.app.Application
+import android.preference.PreferenceManager
 import android.util.Log
 import android.widget.Toast
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.*
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import work.calmato.prestopay.database.getFriendsDatabase
 import work.calmato.prestopay.network.*
+import work.calmato.prestopay.repository.FriendsRepository
 
-class ViewModelFriendGroup : ViewModel() {
+class ViewModelFriendGroup(application: Application) : AndroidViewModel(application) {
   private val _itemClicked = MutableLiveData<UserProperty>()
   val itemClicked: LiveData<UserProperty>
     get() = _itemClicked
-
-  private val _idToken = MutableLiveData<String>()
-  val idToken: LiveData<String>
-    get() = _idToken
 
   private val _navigateToHome = MutableLiveData<Boolean>()
   val navigateToHome:LiveData<Boolean>
     get() = _navigateToHome
 
-  private val _usersList = MutableLiveData<Users>()
-  val usersList:LiveData<Users>
+  private val _usersList = MutableLiveData<List<UserProperty>>()
+  val usersList:LiveData<List<UserProperty>>
     get() = _usersList
 
   // Create a Coroutine scope using a job to be able to cancel when needed
-  private var viewModelJob = Job()
+  private var viewModelJob = SupervisorJob()
 
   // the Coroutine runs using the Main (UI) dispatcher
   private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
+  private val database = getFriendsDatabase(application)
+  private val friendsRepository = FriendsRepository(database)
+  private val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplication())
+  private val id = sharedPreferences.getString("token", null)
+
+  init {
+      viewModelScope.launch {
+        friendsRepository.refreshFriends(id!!)
+      }
+  }
+
+  val friendsList = friendsRepository.friends
+
   fun getUserProperties(userName: String,activity: Activity){
     coroutineScope.launch {
       try {
-      _usersList.value   = Api.retrofitService.getPropertiesAsync("Bearer ${idToken.value}", userName).await()
+      _usersList.value   = Api.retrofitService.getPropertiesAsync("Bearer $id", userName).await().asDomainModel()
       } catch (e:Exception){
         Toast.makeText(activity, e.message, Toast.LENGTH_LONG).show()
       }
@@ -53,7 +64,7 @@ class ViewModelFriendGroup : ViewModel() {
 
   fun addFriendApi(userProperty: UserProperty,activity:Activity){
     val userId = UserId(userProperty.id)
-    Api.retrofitService.addFriend("Bearer ${idToken.value}", userId).enqueue(object:Callback<AddFriendResponse>{
+    Api.retrofitService.addFriend("Bearer ${id}", userId).enqueue(object:Callback<AddFriendResponse>{
       override fun onFailure(call: Call<AddFriendResponse>, t: Throwable) {
         Toast.makeText(activity, t.message, Toast.LENGTH_LONG).show()
       }
@@ -83,7 +94,7 @@ class ViewModelFriendGroup : ViewModel() {
   }
 
   fun createGroupApi(groupProperty: CreateGroupProperty,activity: Activity) {
-    Api.retrofitService.createGroup("Bearer ${idToken.value}", groupProperty).enqueue(object:Callback<CreateGroupPropertyResponse>{
+    Api.retrofitService.createGroup("Bearer ${id}", groupProperty).enqueue(object:Callback<CreateGroupPropertyResponse>{
       override fun onFailure(call: Call<CreateGroupPropertyResponse>, t: Throwable) {
         Toast.makeText(activity, t.message, Toast.LENGTH_LONG).show()
       }
@@ -116,7 +127,9 @@ class ViewModelFriendGroup : ViewModel() {
   fun getFriends(activity: Activity){
     coroutineScope.launch {
       try {
-          _usersList.value = Api.retrofitService.getFriendsAsync("Bearer ${idToken.value}").await()
+        viewModelScope.launch {
+          friendsRepository.refreshFriends(id!!)
+        }
         Log.i(TAG, "getFriends: getUser")
       }catch (e:java.lang.Exception){
         Toast.makeText(activity, e.message, Toast.LENGTH_LONG).show()
@@ -125,7 +138,7 @@ class ViewModelFriendGroup : ViewModel() {
   }
 
   fun deleteFriend(userId:String, activity: Activity){
-    Api.retrofitService.deleteFriend("Bearer ${idToken.value}", userId).enqueue(object:Callback<AccountResponse>{
+    Api.retrofitService.deleteFriend("Bearer ${id}", userId).enqueue(object:Callback<AccountResponse>{
       override fun onFailure(call: Call<AccountResponse>, t: Throwable) {
         Toast.makeText(activity, t.message, Toast.LENGTH_LONG).show()
       }
@@ -161,14 +174,21 @@ class ViewModelFriendGroup : ViewModel() {
     _itemClicked.value = null
   }
 
-  fun getIdToken() {
-    FirebaseAuth.getInstance().currentUser?.getIdToken(true)?.addOnCompleteListener {
-      _idToken.value = it.result?.token
-    }
-  }
-
   fun navigationCompleted(){
     _navigateToHome.value = false
+  }
+
+  /**
+   * Factory for constructing DevByteViewModel with parameter
+   */
+  class Factory(val app: Application) : ViewModelProvider.Factory {
+    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+      if (modelClass.isAssignableFrom(ViewModelFriendGroup::class.java)) {
+        @Suppress("UNCHECKED_CAST")
+        return ViewModelFriendGroup(app) as T
+      }
+      throw IllegalArgumentException("Unable to construct viewmodel")
+    }
   }
 
   companion object {

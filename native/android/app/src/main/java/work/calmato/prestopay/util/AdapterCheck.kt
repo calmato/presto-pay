@@ -3,11 +3,12 @@ package work.calmato.prestopay.util
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import work.calmato.prestopay.databinding.ListItemPlaneBinding
+import kotlinx.android.synthetic.main.list_item_checkbox.view.*
+import work.calmato.prestopay.databinding.ListItemCheckboxBinding
 import work.calmato.prestopay.network.UserProperty
 
-class AdapterRecyclePlane(val onClickListener: OnClickListener) :
-  RecyclerView.Adapter<AdapterRecyclePlane.AddFriendViewHolder>() {
+class AdapterCheck(val onClickListener: OnClickListener?) :
+  RecyclerView.Adapter<AdapterCheck.AddFriendViewHolder>() {
   var friendList: List<UserProperty> = emptyList()
     set(value) {
       field = value
@@ -17,11 +18,14 @@ class AdapterRecyclePlane(val onClickListener: OnClickListener) :
   override fun getItemCount() = friendList.size
 
   override fun onBindViewHolder(holder: AddFriendViewHolder, position: Int) {
-    holder.binding.also {
+    holder.binding.also { it ->
       it.userProperty = friendList[position]
+      it.addFriendCheckBox.setOnClickListener {
+        friendList[position].checked = it.addFriendCheckBox.isChecked
+      }
     }
     holder.itemView.setOnClickListener {
-      onClickListener.onClick(friendList[position])
+      onClickListener?.onClick(friendList[position])
     }
   }
 
@@ -35,12 +39,12 @@ class AdapterRecyclePlane(val onClickListener: OnClickListener) :
     fun onClick(userProperty: UserProperty) = clickListener(userProperty)
   }
 
-  class AddFriendViewHolder(val binding: ListItemPlaneBinding) :
+  class AddFriendViewHolder(val binding: ListItemCheckboxBinding) :
     RecyclerView.ViewHolder(binding.root) {
     companion object {
       fun from(parent: ViewGroup): AddFriendViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
-        val binding = ListItemPlaneBinding.inflate(layoutInflater, parent, false)
+        val binding = ListItemCheckboxBinding.inflate(layoutInflater, parent, false)
         return AddFriendViewHolder(
           binding
         )
@@ -48,4 +52,3 @@ class AdapterRecyclePlane(val onClickListener: OnClickListener) :
     }
   }
 }
-

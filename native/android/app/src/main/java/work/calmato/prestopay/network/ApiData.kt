@@ -16,7 +16,7 @@ data class UserProperty(
 
 @Parcelize
 data class Users(
-  val users: List<UserProperty?>
+  val users: List<UserProperty>
 ) : Parcelable {}
 
 @Parcelize

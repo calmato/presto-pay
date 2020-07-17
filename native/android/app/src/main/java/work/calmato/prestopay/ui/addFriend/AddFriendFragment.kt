@@ -7,25 +7,47 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Adapter
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_add_friend.*
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentAddFriendBinding
+import work.calmato.prestopay.network.UserProperty
 import work.calmato.prestopay.util.AdapterRecyclePlane
 import work.calmato.prestopay.util.ViewModelFriendGroup
 
 class AddFriendFragment : Fragment() {
-  private val viewModel = ViewModelFriendGroup()
+  private val viewModel : ViewModelFriendGroup by lazy {
+    val activity = requireNotNull(this.activity){
+      "You can only access the viewModel after onActivityCreated()"
+    }
+    ViewModelProviders.of(this,ViewModelFriendGroup.Factory(activity.application))
+      .get(ViewModelFriendGroup::class.java)
+  }
+  private var recycleAdapter:AdapterRecyclePlane? = null
+
+  override fun onActivityCreated(savedInstanceState: Bundle?) {
+    super.onActivityCreated(savedInstanceState)
+    viewModel.usersList.observe(viewLifecycleOwner, Observer<List<UserProperty>> {
+      it?.apply {
+        recycleAdapter?.friendList = it
+      }
+    })
+  }
+
   private lateinit var clickListener: AdapterRecyclePlane.OnClickListener
-  private lateinit var viewManager: RecyclerView.LayoutManager
 
   override fun onCreateView(
     inflater: LayoutInflater,
@@ -36,14 +58,11 @@ class AddFriendFragment : Fragment() {
       DataBindingUtil.inflate(inflater, R.layout.fragment_add_friend, container, false)
     binding.lifecycleOwner = this
     binding.viewModel = viewModel
-    viewModel.getIdToken()
     clickListener = AdapterRecyclePlane.OnClickListener { viewModel.itemIsClicked(it) }
-    binding.usersRecycleView.adapter = AdapterRecyclePlane(null, clickListener)
-
-    viewManager = LinearLayoutManager(requireContext())
-    binding.usersRecycleView.apply {
-      setHasFixedSize(true)
-      layoutManager = viewManager
+    recycleAdapter = AdapterRecyclePlane(clickListener)
+    binding.root.findViewById<RecyclerView>(R.id.usersRecycleView).apply {
+      layoutManager = LinearLayoutManager(context)
+      adapter = recycleAdapter
     }
     return binding.root
   }
@@ -51,17 +70,17 @@ class AddFriendFragment : Fragment() {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     search.setOnClickListener {
-      viewModel.getUserProperties(userName.text.toString(),requireActivity())
+      val name = userName.text.toString()
+      if (name.isEmpty()){
+        Toast.makeText(requireContext(),"友達のユーザー名を入力してください",Toast.LENGTH_SHORT).show()
+      }else {
+        viewModel.getUserProperties(name, requireActivity())
+      }
     }
     viewModel.usersList.observe(viewLifecycleOwner, Observer {
-      it?.let {
-        usersRecycleView.swapAdapter(
-          AdapterRecyclePlane(it, clickListener), false
-        )
-        if (it.users.isEmpty()) {
+        if (it.isEmpty()) {
           Toast.makeText(requireContext(), "ユーザーが見つかりません", Toast.LENGTH_SHORT).show()
         }
-      }
     })
     viewModel.itemClicked.observe(viewLifecycleOwner, Observer {
       if (null != it) {

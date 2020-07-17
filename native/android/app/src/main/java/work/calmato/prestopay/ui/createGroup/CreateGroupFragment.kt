@@ -15,6 +15,7 @@ import androidx.databinding.DataBindingUtil
 import com.google.firebase.auth.FirebaseAuth
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -35,7 +36,13 @@ class CreateGroupFragment : PermissionBase() {
   var idToken = ""
   private var usersList: Users? = null
   private var usersListToBeSent: Users? = null
-  private val viewModel = ViewModelFriendGroup()
+  private val viewModel : ViewModelFriendGroup by lazy {
+    val activity = requireNotNull(this.activity){
+      "You can only access the viewModel after onActivityCreated()"
+    }
+    ViewModelProviders.of(this,ViewModelFriendGroup.Factory(activity.application))
+      .get(ViewModelFriendGroup::class.java)
+  }
   private lateinit var recycleAdapter: AdapterGrid
   private lateinit var clickListener: AdapterGrid.OnClickListener
   private lateinit var viewManager: RecyclerView.LayoutManager
@@ -49,7 +56,6 @@ class CreateGroupFragment : PermissionBase() {
       DataBindingUtil.inflate(inflater, R.layout.fragment_create_group, container, false)
     binding.lifecycleOwner = this
     binding.viewModel = viewModel
-    viewModel.getIdToken()
     clickListener = AdapterGrid.OnClickListener { viewModel.itemIsClicked(it) }
     usersList = CreateGroupFragmentArgs.fromBundle(requireArguments()).friendsList
     usersListToBeSent = Users(usersList!!.users.filter { userProperty -> userProperty!!.checked })
