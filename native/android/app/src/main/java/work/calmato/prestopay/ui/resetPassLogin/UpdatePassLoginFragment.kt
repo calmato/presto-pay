@@ -1,6 +1,9 @@
 package work.calmato.prestopay.ui.resetPassLogin
 
+import android.graphics.Color
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.fragment_update_pass_login.*
+import kotlinx.android.synthetic.main.fragment_update_pass_login.passwordInformation
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentUpdatePassLoginBinding
 
@@ -31,12 +35,47 @@ class UpdatePassLoginFragment : Fragment() {
     changePassButton.setOnClickListener {
       changePass()
     }
+
+    passEditText.addTextChangedListener(object : TextWatcher {
+      override fun afterTextChanged(s: Editable?) {
+        val textLength = s?.length
+        var textColor = Color.GRAY
+
+        if (textLength != null) {
+          if (textLength < 8) {
+            textColor = Color.RED
+          }
+        }
+        passwordInformation.setTextColor(textColor)
+      }
+      override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+      }
+      override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+      }
+    })
+    passConfirmEditText.addTextChangedListener(object : TextWatcher {
+      override fun afterTextChanged(s: Editable?) {
+        var textColor = Color.GRAY
+
+        if (!passConfirmEditText.text.toString().equals(passEditText.text.toString())) {
+          textColor = Color.RED
+        }
+        passwordConfirmInformation.setTextColor(textColor)
+      }
+
+      override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+      }
+
+      override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+      }
+
+    })
   }
 
   private fun changePass() {
-    if(newPassEdit.text.isNotEmpty()&&passConfirmEdit.text.isNotEmpty()&&currentPassEdit.text.isNotEmpty()) {
-      val newPass = newPassEdit.text.toString()
-      if (newPass.equals(passConfirmEdit.text.toString())) {
+    if(passEditText.text.isNotEmpty()&&passConfirmEditText.text.isNotEmpty()&&currentPassEdit.text.isNotEmpty()) {
+      val newPass = passEditText.text.toString()
+      if (newPass.equals(passConfirmEditText.text.toString())) {
         val auth = FirebaseAuth.getInstance()
         val user = auth.currentUser
         val cred =

@@ -33,7 +33,6 @@ import work.calmato.prestopay.util.encodeImage2Base64
 
 class CreateGroupFragment : PermissionBase() {
   var setThumbnail = false
-  var idToken = ""
   private var usersList: Users? = null
   private var usersListToBeSent: Users? = null
   private val viewModel : ViewModelFriendGroup by lazy {
@@ -58,7 +57,7 @@ class CreateGroupFragment : PermissionBase() {
     binding.viewModel = viewModel
     clickListener = AdapterGrid.OnClickListener { viewModel.itemIsClicked(it) }
     usersList = CreateGroupFragmentArgs.fromBundle(requireArguments()).friendsList
-    usersListToBeSent = Users(usersList!!.users.filter { userProperty -> userProperty!!.checked })
+    usersListToBeSent = Users(usersList!!.users.filter { userProperty -> userProperty.checked })
     recycleAdapter = AdapterGrid(usersListToBeSent, clickListener)
     binding.GridViewFriends.adapter = recycleAdapter
     viewManager = LinearLayoutManager(requireContext())
@@ -108,10 +107,7 @@ class CreateGroupFragment : PermissionBase() {
       }
     })
     setHasOptionsMenu(true)
-    val mUser = FirebaseAuth.getInstance().currentUser
-    mUser?.getIdToken(true)?.addOnCompleteListener(requireActivity()) {
-      idToken = it.result?.token!!
-    }
+
     requireActivity().onBackPressedDispatcher.addCallback(
       viewLifecycleOwner,
       object : OnBackPressedCallback(true) {

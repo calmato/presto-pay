@@ -42,7 +42,11 @@ class ViewModelFriendGroup(application: Application) : AndroidViewModel(applicat
 
   init {
       viewModelScope.launch {
-        friendsRepository.refreshFriends(id!!)
+        try {
+          friendsRepository.refreshFriends(id!!)
+        } catch (e:java.lang.Exception){
+          Log.i(TAG, "Trying to refresh id")
+        }
       }
   }
 

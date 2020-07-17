@@ -80,6 +80,11 @@ interface ApiService {
   @DELETE("auth/friends/{userId}")
   fun deleteFriend(@Header("Authorization") token: String, @Path("userId") userId:String):
     Call<AccountResponse>
+
+  @GET("auth")
+  fun getLoginUserInformation(
+    @Header("Authorization") token: String
+  ) : Deferred<NetworkFriend>
 }
 
 /**
