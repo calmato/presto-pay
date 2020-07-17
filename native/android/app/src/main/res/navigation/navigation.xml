@@ -80,6 +80,9 @@
     <action
       android:id="@+id/action_account_home_to_home_fragment"
       app:destination="@id/home_fragment" />
+    <action
+      android:id="@+id/action_account_home_to_notificationSetFragment"
+      app:destination="@id/notificationSetFragment" />
   </fragment>
   <fragment
     android:id="@+id/resetPassFragment"
@@ -144,5 +147,11 @@
     <action
       android:id="@+id/action_createGroupFragment_to_home_fragment"
       app:destination="@id/home_fragment" />
+  </fragment>
+  <fragment
+    android:id="@+id/notificationSetFragment"
+    android:name="work.calmato.prestopay.ui.notificationSet.NotificationSetFragment"
+    android:label="fragment_notification_set"
+    tools:layout="@layout/fragment_notification_set">
   </fragment>
 </navigation>

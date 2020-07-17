@@ -61,6 +61,11 @@ class AccountHomeFragment : Fragment() {
     if(thumbnailUrl.isNotEmpty()) {
       Picasso.with(context).load(thumbnailUrl).into(UserAccountThumnail)
     }
+    displayNotificationButton.setOnClickListener {
+      this.findNavController().navigate(
+        AccountHomeFragmentDirections.actionAccountHomeToNotificationSetFragment()
+      )
+    }
   }
 
   private fun showAlertDialog() {
