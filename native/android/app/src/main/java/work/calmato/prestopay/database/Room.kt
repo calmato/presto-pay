@@ -24,9 +24,9 @@ interface GroupDao {
 
 @Database(
   entities =
-    [DatabaseFriend::class,
+  [DatabaseFriend::class,
     DatabaseGroup::class],
-  version = 1,
+  version = 2,
   exportSchema = false
 )
 @TypeConverters(ListTypeConverter::class)
@@ -34,6 +34,7 @@ abstract class AppDatabase : RoomDatabase() {
   abstract val friendDao: FriendDao
   abstract val groupDao: GroupDao
 }
+
 private lateinit var INSTANCE: AppDatabase
 
 fun getAppDatabase(context: Context): AppDatabase {
@@ -43,7 +44,8 @@ fun getAppDatabase(context: Context): AppDatabase {
         context.applicationContext,
         AppDatabase::class.java,
         "prestoPay"
-      ).build()
+      ).fallbackToDestructiveMigration()
+        .build()
     }
   }
   return INSTANCE
