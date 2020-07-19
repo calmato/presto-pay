@@ -1,11 +1,11 @@
 package work.calmato.prestopay.util
 
-import android.util.Log
 import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.squareup.picasso.Picasso
+import work.calmato.prestopay.network.GroupPropertyResponse
 import work.calmato.prestopay.network.UserProperty
 
 @BindingAdapter("thumbnail")
@@ -30,3 +30,21 @@ fun CheckBox.isChecked(item:UserProperty?){
     isChecked = item.checked
   }
 }
+
+@BindingAdapter("thumbnailGroup")
+fun ImageView.setThumbnail(item:GroupPropertyResponse){
+  item?.thumbnail_url?.let{
+    if(item.thumbnail_url.isNotEmpty()) {
+      Picasso.with(context).load(item.thumbnail_url).into(this)
+    }
+  }
+}
+
+@BindingAdapter("groupName")
+fun TextView.setUserName(item:GroupPropertyResponse?){
+  item?.let {
+    text = item.name
+  }
+}
+
+
