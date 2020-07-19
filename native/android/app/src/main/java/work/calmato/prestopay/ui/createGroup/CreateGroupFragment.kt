@@ -122,7 +122,6 @@ class CreateGroupFragment : PermissionBase() {
   override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
     super.onCreateOptionsMenu(menu, inflater)
     inflater.inflate(R.menu.header_done, menu)
-
   }
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

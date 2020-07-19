@@ -3,7 +3,7 @@
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   android:id="@+id/navigation"
-  app:startDestination="@id/login_fragment">
+  app:startDestination="@id/addExpenseFragment">
 
   <fragment
     android:id="@+id/login_fragment"
@@ -154,4 +154,9 @@
     android:label="fragment_notification_set"
     tools:layout="@layout/fragment_notification_set">
   </fragment>
+  <fragment
+    android:id="@+id/addExpenseFragment"
+    android:name="work.calmato.prestopay.ui.addExpense.AddExpenseFragment"
+    android:label="fragment_add_expense"
+    tools:layout="@layout/fragment_add_expense" />
 </navigation>
