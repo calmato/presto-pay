@@ -6,13 +6,15 @@ import android.preference.PreferenceManager
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.*
-import com.google.firebase.auth.FirebaseAuth
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import work.calmato.prestopay.database.getFriendsDatabase
+import work.calmato.prestopay.database.getAppDatabase
 import work.calmato.prestopay.network.*
 import work.calmato.prestopay.repository.FriendsRepository
 
@@ -35,7 +37,7 @@ class ViewModelFriendGroup(application: Application) : AndroidViewModel(applicat
   // the Coroutine runs using the Main (UI) dispatcher
   private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
-  private val database = getFriendsDatabase(application)
+  private val database = getAppDatabase(application)
   private val friendsRepository = FriendsRepository(database)
   private val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplication())
   private val id = sharedPreferences.getString("token", null)
@@ -98,13 +100,13 @@ class ViewModelFriendGroup(application: Application) : AndroidViewModel(applicat
   }
 
   fun createGroupApi(groupProperty: CreateGroupProperty,activity: Activity) {
-    Api.retrofitService.createGroup("Bearer ${id}", groupProperty).enqueue(object:Callback<CreateGroupPropertyResponse>{
-      override fun onFailure(call: Call<CreateGroupPropertyResponse>, t: Throwable) {
+    Api.retrofitService.createGroup("Bearer ${id}", groupProperty).enqueue(object:Callback<GroupPropertyResponse>{
+      override fun onFailure(call: Call<GroupPropertyResponse>, t: Throwable) {
         Toast.makeText(activity, t.message, Toast.LENGTH_LONG).show()
       }
       override fun onResponse(
-        call: Call<CreateGroupPropertyResponse>,
-        response: Response<CreateGroupPropertyResponse>
+        call: Call<GroupPropertyResponse>,
+        response: Response<GroupPropertyResponse>
       ) {
         if(response.isSuccessful){
           Toast.makeText(activity, "新しいグループを作成しました", Toast.LENGTH_SHORT).show()

@@ -48,10 +48,6 @@ interface ApiService {
   ):
     Deferred<NetworkFriendContainer>
 
-  @POST("auth/friends")
-  fun addFriend(@Header("Authorization") token: String, @Body userId: UserId):
-    Call<AddFriendResponse>
-
   @GET("auth/friends")
   fun getFriends(@Header("Authorization") token: String):
     Deferred<NetworkFriendContainer>
@@ -60,9 +56,14 @@ interface ApiService {
   fun getFriendsAsync(@Header("Authorization") token: String):
     Deferred<Users>
 
-  @POST("groups")
-  fun createGroup(@Header("Authorization") token: String, @Body userId: CreateGroupProperty):
-    Call<CreateGroupPropertyResponse>
+  @GET("auth")
+  fun getLoginUserInformation(
+    @Header("Authorization") token: String
+  ): Deferred<NetworkFriend>
+
+  @GET("groups")
+  fun getGroups(@Header("Authorization") token: String):
+    Deferred<NetworkGroupContainer>
 
   @PATCH("auth")
   fun editAccount(
@@ -71,6 +72,15 @@ interface ApiService {
   ):
     Call<EditAccountResponse>
 
+  @POST("auth/friends")
+  fun addFriend(@Header("Authorization") token: String, @Body userId: UserId):
+    Call<AddFriendResponse>
+
+  @POST("groups")
+  fun createGroup(@Header("Authorization") token: String, @Body userId: CreateGroupProperty):
+    Call<GroupPropertyResponse>
+
+
   @POST("auth")
   fun createAccount(
     @Body accountProperty: NewAccountProperty
@@ -78,13 +88,9 @@ interface ApiService {
     Call<AccountResponse>
 
   @DELETE("auth/friends/{userId}")
-  fun deleteFriend(@Header("Authorization") token: String, @Path("userId") userId:String):
+  fun deleteFriend(@Header("Authorization") token: String, @Path("userId") userId: String):
     Call<AccountResponse>
 
-  @GET("auth")
-  fun getLoginUserInformation(
-    @Header("Authorization") token: String
-  ) : Deferred<NetworkFriend>
 }
 
 /**
