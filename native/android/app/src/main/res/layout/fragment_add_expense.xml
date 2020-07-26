@@ -13,7 +13,7 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginStart="16dp"
-      android:layout_marginTop="16dp"
+      android:layout_marginTop="24dp"
       android:text="Group Name"
       android:textSize="36sp"
       android:textStyle="bold"
@@ -197,18 +197,33 @@
       app:layout_constraintStart_toStartOf="@+id/textView10"
       app:layout_constraintTop_toTopOf="@+id/commentEditText" />
 
-    <TextView
+    <EditText
       android:id="@+id/commentEditText"
       android:layout_width="0dp"
       android:layout_height="0dp"
       android:layout_marginTop="8dp"
       android:layout_marginBottom="16dp"
+      android:background="@android:color/transparent"
+      android:gravity="top"
+      android:maxLength="100"
       android:textSize="18sp"
       android:visibility="invisible"
       app:layout_constraintBottom_toTopOf="@+id/camera"
       app:layout_constraintEnd_toEndOf="@+id/spinner3"
       app:layout_constraintStart_toStartOf="@+id/spinner3"
       app:layout_constraintTop_toBottomOf="@+id/advancedSetting" />
+
+    <ImageView
+      android:id="@+id/thumbnail"
+      android:layout_width="100dp"
+      android:layout_height="100dp"
+      android:layout_marginTop="16dp"
+      android:visibility="invisible"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toEndOf="@+id/groupName"
+      app:layout_constraintTop_toTopOf="parent"
+      app:srcCompat="@drawable/ic_launcher_foreground" />
+
   </androidx.constraintlayout.widget.ConstraintLayout>
 
 

@@ -3,7 +3,7 @@
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   android:id="@+id/navigation"
-  app:startDestination="@id/addExpenseFragment">
+  app:startDestination="@id/login_fragment">
 
   <fragment
     android:id="@+id/login_fragment"
@@ -115,7 +115,8 @@
     android:id="@+id/addFriendFragment"
     android:name="work.calmato.prestopay.ui.addFriend.AddFriendFragment"
     android:label="AddFriendFragment"
-    tools:layout="@layout/fragment_add_friend" />
+    tools:layout="@layout/fragment_add_friend" >
+  </fragment>
   <fragment
     android:id="@+id/friendListFragment"
     android:name="work.calmato.prestopay.ui.friendList.FriendListFragment"

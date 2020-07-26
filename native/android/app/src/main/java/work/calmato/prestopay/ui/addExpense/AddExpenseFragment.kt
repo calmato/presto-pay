@@ -44,7 +44,8 @@ class AddExpenseFragment : PermissionBase() {
       calendarDate.visibility = TextView.VISIBLE
     }
     if (resultCode == Activity.RESULT_OK && requestCode == Constant.IMAGE_PICK_CODE) {
-      camera.setImageURI(data?.data)
+      thumbnail.setImageURI(data?.data)
+      thumbnail.visibility = ImageView.VISIBLE
     }
   }
 
@@ -62,11 +63,13 @@ class AddExpenseFragment : PermissionBase() {
         AlertDialog.Builder(it)
       }
       val input = EditText(requireContext())
+      input.setBackgroundResource(android.R.color.transparent)
       input.setText(commentEditText.text)
+
       builder?.setTitle("コメント追加")
         ?.setPositiveButton("追加",
         DialogInterface.OnClickListener{_,_ ->
-          commentEditText.text = input.text.toString()
+          commentEditText.setText(input.text.toString())
           commentEditText.visibility = EditText.VISIBLE
           commentText.visibility = TextView.VISIBLE
         })
@@ -74,7 +77,10 @@ class AddExpenseFragment : PermissionBase() {
         ?.setView(input)
       val dialog:AlertDialog? = builder?.create()
       dialog?.show()
-
+    }
+    advancedSetting.setOnClickListener {
+      val advancedDialog = AdvancedExpenseFragment()
+      advancedDialog.show(parentFragmentManager,"advancedExpense")
     }
     setHasOptionsMenu(true)
   }
