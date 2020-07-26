@@ -109,19 +109,6 @@ class ViewModelFriendGroup(application: Application) : AndroidViewModel(applicat
     })
   }
 
-  fun getFriends(activity: Activity){
-    coroutineScope.launch {
-      try {
-        viewModelScope.launch {
-          friendsRepository.refreshFriends(id!!)
-        }
-        Log.i(TAG, "getFriends: getUser")
-      }catch (e:java.lang.Exception){
-        Toast.makeText(activity, e.message, Toast.LENGTH_LONG).show()
-      }
-    }
-  }
-
   fun deleteFriend(userId:String, activity: Activity){
     Api.retrofitService.deleteFriend("Bearer ${id}", userId).enqueue(object:Callback<AccountResponse>{
       override fun onFailure(call: Call<AccountResponse>, t: Throwable) {
