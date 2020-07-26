@@ -61,4 +61,5 @@
   <string name="save_button"><u>保存</u></string>
   <string name="passwordInformation">半角のアルファベットと数字両方を含む8~15文字</string>
   <string name="passwordConfirmInformation">同じパスワードを入力</string>
+    <string name="now_loading">Now Loading ...</string>
 </resources>

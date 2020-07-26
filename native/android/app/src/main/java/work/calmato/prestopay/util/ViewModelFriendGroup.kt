@@ -29,6 +29,10 @@ class ViewModelFriendGroup(application: Application) : AndroidViewModel(applicat
   val usersList: LiveData<List<UserProperty>>
     get() = _usersList
 
+  private val _nowLoading = MutableLiveData<Boolean>()
+  val nowLoading : LiveData<Boolean>
+    get() = _nowLoading
+
   // Create a Coroutine scope using a job to be able to cancel when needed
   private var viewModelJob = SupervisorJob()
 
@@ -53,12 +57,15 @@ class ViewModelFriendGroup(application: Application) : AndroidViewModel(applicat
   val friendsList = friendsRepository.friends
 
   fun getUserProperties(userName: String, activity: Activity) {
+    _nowLoading.value = true
     coroutineScope.launch {
       try {
         _usersList.value =
           Api.retrofitService.getPropertiesAsync("Bearer $id", userName).await().asDomainModel()
+        _nowLoading.value = false
       } catch (e: Exception) {
         Toast.makeText(activity, e.message, Toast.LENGTH_LONG).show()
+        _nowLoading.value = false
       }
     }
   }
@@ -69,22 +76,27 @@ class ViewModelFriendGroup(application: Application) : AndroidViewModel(applicat
   }
 
   fun addFriendApi(userProperty: UserProperty, activity: Activity) {
+    _nowLoading.value = true
     val userId = userProperty.id
     viewModelScope.launch {
       try {
         friendsRepository.addFriend(id, UserId(userId), userProperty)
         Toast.makeText(activity, "友だち追加しました", Toast.LENGTH_SHORT).show()
+        _nowLoading.value = false
       } catch (e: java.lang.Exception) {
         Toast.makeText(activity, e.message, Toast.LENGTH_LONG).show()
+        _nowLoading.value = false
       }
     }
   }
 
   fun createGroupApi(groupProperty: CreateGroupProperty, activity: Activity) {
+    _nowLoading.value = true
     Api.retrofitService.createGroup("Bearer ${id}", groupProperty)
       .enqueue(object : Callback<CreateGroupPropertyResponse> {
         override fun onFailure(call: Call<CreateGroupPropertyResponse>, t: Throwable) {
           Toast.makeText(activity, t.message, Toast.LENGTH_LONG).show()
+          _nowLoading.value = false
         }
 
         override fun onResponse(
@@ -97,15 +109,18 @@ class ViewModelFriendGroup(application: Application) : AndroidViewModel(applicat
           } else {
             Toast.makeText(activity, "グループ作成に失敗しました", Toast.LENGTH_LONG).show()
           }
+          _nowLoading.value = false
         }
       })
   }
 
   fun deleteFriend(userId: String, activity: Activity) {
+    _nowLoading.value = true
     Api.retrofitService.deleteFriend("Bearer ${id}", userId)
       .enqueue(object : Callback<AccountResponse> {
         override fun onFailure(call: Call<AccountResponse>, t: Throwable) {
           Toast.makeText(activity, t.message, Toast.LENGTH_LONG).show()
+          _nowLoading.value = false
         }
 
         override fun onResponse(call: Call<AccountResponse>, response: Response<AccountResponse>) {
@@ -124,6 +139,7 @@ class ViewModelFriendGroup(application: Application) : AndroidViewModel(applicat
           } else {
             Toast.makeText(activity, "友達削除に失敗しました", Toast.LENGTH_LONG).show()
           }
+          _nowLoading.value = false
         }
       })
   }

@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.widget.Adapter
 import android.widget.ImageView
 import android.widget.TextView
@@ -22,6 +23,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_add_friend.*
+import kotlinx.android.synthetic.main.fragment_add_friend.nowLoading
+import kotlinx.android.synthetic.main.fragment_create_group.*
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentAddFriendBinding
 import work.calmato.prestopay.network.UserProperty
@@ -81,6 +84,16 @@ class AddFriendFragment : Fragment() {
         if (it.isEmpty()) {
           Toast.makeText(requireContext(), "ユーザーが見つかりません", Toast.LENGTH_SHORT).show()
         }
+    })
+    val animBlink = AnimationUtils.loadAnimation(requireContext(),R.anim.blink)
+    viewModel.nowLoading.observe(viewLifecycleOwner, Observer {
+      if(it){
+        nowLoading.visibility = View.VISIBLE
+        nowLoading.startAnimation(animBlink)
+      }else{
+        nowLoading.clearAnimation()
+        nowLoading.visibility = View.INVISIBLE
+      }
     })
     viewModel.itemClicked.observe(viewLifecycleOwner, Observer {
       if (null != it) {

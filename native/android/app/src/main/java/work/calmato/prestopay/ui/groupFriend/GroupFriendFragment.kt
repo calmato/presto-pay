@@ -2,13 +2,12 @@ package work.calmato.prestopay.ui.groupFriend
 
 import android.app.AlertDialog
 import android.content.DialogInterface
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.preference.PreferenceManager
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.DataBindingUtil
@@ -17,16 +16,13 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_group_friend.*
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentGroupFriendBinding
 import work.calmato.prestopay.network.UserProperty
-import work.calmato.prestopay.network.Users
 import work.calmato.prestopay.util.AdapterRecyclePlane
 import work.calmato.prestopay.util.ViewModelFriendGroup
-import work.calmato.prestopay.util.setThumbnail
 
 class GroupFriendFragment : Fragment() {
   private val viewModel : ViewModelFriendGroup by lazy {
@@ -72,6 +68,16 @@ class GroupFriendFragment : Fragment() {
         GroupFriendFragmentDirections.actionGroupFriendFragmentToAddFriendFragment()
       )
     }
+    val animBlink = AnimationUtils.loadAnimation(requireContext(),R.anim.blink)
+    viewModel.nowLoading.observe(viewLifecycleOwner, Observer {
+      if(it){
+        nowLoading.visibility = View.VISIBLE
+        nowLoading.startAnimation(animBlink)
+      }else{
+        nowLoading.clearAnimation()
+        nowLoading.visibility = View.INVISIBLE
+      }
+    })
 
     viewModel.itemClicked.observe(viewLifecycleOwner, Observer {
       if (null != it) {
