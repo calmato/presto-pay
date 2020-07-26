@@ -19,6 +19,17 @@ fun NetworkFriend.asDomainModel(): UserProperty{
   return UserProperty(id, name, username, email, thumbnailUrl, checked)
 }
 
+fun NetworkFriend.asDatabaseModel():DatabaseFriend{
+  return DatabaseFriend(
+    id = this.id,
+    name = this.name,
+    username = this.username,
+    email = this.email,
+    thumbnailUrl = this.thumbnailUrl,
+    checked = this.checked
+  )
+}
+
 fun NetworkFriendContainer.asDomainModel(): List<UserProperty>{
   return users.map{
     UserProperty(
@@ -44,3 +55,4 @@ fun NetworkFriendContainer.asDatabaseModel():Array<DatabaseFriend>{
     )
   }.toTypedArray()
 }
+

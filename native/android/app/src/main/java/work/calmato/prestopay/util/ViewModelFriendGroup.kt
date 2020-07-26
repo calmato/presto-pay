@@ -67,34 +67,15 @@ class ViewModelFriendGroup(application: Application) : AndroidViewModel(applicat
   }
 
   fun addFriendApi(userProperty: UserProperty,activity:Activity){
-    val userId = UserId(userProperty.id)
-    Api.retrofitService.addFriend("Bearer ${id}", userId).enqueue(object:Callback<AddFriendResponse>{
-      override fun onFailure(call: Call<AddFriendResponse>, t: Throwable) {
-        Toast.makeText(activity, t.message, Toast.LENGTH_LONG).show()
+    val userId = userProperty.id
+    viewModelScope.launch {
+      try {
+        friendsRepository.addFriend(id,UserId(userId),userProperty)
+        Toast.makeText(activity, "友だち追加しました", Toast.LENGTH_SHORT).show()
+      } catch (e:java.lang.Exception){
+        Toast.makeText(activity, e.message, Toast.LENGTH_LONG).show()
       }
-      override fun onResponse(
-        call: Call<AddFriendResponse>,
-        response: Response<AddFriendResponse>
-      ) {
-        if(response.isSuccessful){
-          Toast.makeText(activity, "友だち追加しました", Toast.LENGTH_SHORT).show()
-        }else{
-          try {
-            val jObjError = JSONObject(response.errorBody()?.string()).getJSONArray("errors")
-            for (i in 0 until jObjError.length()) {
-              val errorMessage =
-                jObjError.getJSONObject(i).getString("field") + " " + jObjError.getJSONObject(
-                  i
-                )
-                  .getString("message")
-              Toast.makeText(activity, errorMessage, Toast.LENGTH_LONG).show()
-            }
-          }catch (e:java.lang.Exception){
-            Toast.makeText(activity, "友だち追加失敗しました", Toast.LENGTH_SHORT).show()
-          }
-        }
-      }
-    })
+    }
   }
 
   fun createGroupApi(groupProperty: CreateGroupProperty,activity: Activity) {

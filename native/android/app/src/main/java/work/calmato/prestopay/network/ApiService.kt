@@ -50,7 +50,7 @@ interface ApiService {
 
   @POST("auth/friends")
   fun addFriend(@Header("Authorization") token: String, @Body userId: UserId):
-    Call<AddFriendResponse>
+    Deferred<NetworkFriend>
 
   @GET("auth/friends")
   fun getFriends(@Header("Authorization") token: String):

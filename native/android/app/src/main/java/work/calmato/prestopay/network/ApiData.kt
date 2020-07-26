@@ -19,15 +19,6 @@ data class Users(
   val users: List<UserProperty>
 ) : Parcelable {}
 
-@Parcelize
-data class AddFriendResponse(
-  val id: String,
-  val name: String,
-  val username: String,
-  val email: String,
-  val thumbnailUrl: String?
-) : Parcelable {}
-
 data class UserId(
   val userId: String
 )
