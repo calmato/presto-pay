@@ -10,7 +10,7 @@ type Payment struct {
 	Name      string    `firestore:"name"`       // 支払い名
 	Currency  string    `firestore:"currency"`   // 通貨
 	Total     uint      `firestore:"total"`      // 合計金額
-	Payers    []Payer   `firestore:"payers"`     // 支払い者情報一覧
+	Payers    []*Payer  `firestore:"payers"`     // 支払い者情報一覧
 	Tags      []string  `firestore:"tags"`       // タグ
 	Comment   string    `firestore:"comment"`    // コメント
 	ImageURLs []string  `firestore:"image_urls"` // 添付イメージURL一覧
