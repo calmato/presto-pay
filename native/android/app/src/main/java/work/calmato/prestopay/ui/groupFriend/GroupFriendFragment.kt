@@ -74,35 +74,35 @@ class GroupFriendFragment : Fragment() {
     }
 
     viewModel.itemClicked.observe(viewLifecycleOwner, Observer {
-//      if (null != it) {
-//        val builder: AlertDialog.Builder? = requireActivity().let {
-//          AlertDialog.Builder(it)
-//        }
-//        builder?.setView(R.layout.dialog_add_friend)
-//          ?.setPositiveButton("友達リストから削除する"
-//          ,DialogInterface.OnClickListener{_,_->
-//              val builder2:AlertDialog.Builder? = requireActivity().let {
-//                AlertDialog.Builder(it)
-//              }
-//              builder2?.setMessage("本当に削除しますか？")
-//                ?.setPositiveButton("削除する"
-//                ,DialogInterface.OnClickListener{_,_->
-//                    viewModel.deleteFriend(it.id,requireActivity())
-//                  })
-//                ?.setNegativeButton("キャンセル",null)
-//              val dialog2:AlertDialog? = builder2?.create()
-//              dialog2?.show()
-//            })
-//        val dialog: AlertDialog? = builder?.create()
-//        dialog?.show()
-//        val name = dialog?.findViewById<TextView>(R.id.username_dialog)
-//        val thumbnail = dialog?.findViewById<ImageView>(R.id.thumbnail_dialog)
-//        name!!.text = it.name
-//        if (it.thumbnailUrl != null && it.thumbnailUrl.isNotEmpty()) {
-//          Picasso.with(context).load(it.thumbnailUrl).into(thumbnail)
-//        }
-//        viewModel.itemIsClickedCompleted()
-//      }
+      if (null != it) {
+        val builder: AlertDialog.Builder? = requireActivity().let {
+          AlertDialog.Builder(it)
+        }
+        builder?.setView(R.layout.dialog_add_friend)
+          ?.setPositiveButton("友達リストから削除する"
+          ,DialogInterface.OnClickListener{_,_->
+              val builder2:AlertDialog.Builder? = requireActivity().let {
+                AlertDialog.Builder(it)
+              }
+              builder2?.setMessage("本当に削除しますか？")
+                ?.setPositiveButton("削除する"
+                ,DialogInterface.OnClickListener{_,_->
+                    viewModel.deleteFriend(it.id,requireActivity())
+                  })
+                ?.setNegativeButton("キャンセル",null)
+              val dialog2:AlertDialog? = builder2?.create()
+              dialog2?.show()
+            })
+        val dialog: AlertDialog? = builder?.create()
+        dialog?.show()
+        val name = dialog?.findViewById<TextView>(R.id.username_dialog)
+        val thumbnail = dialog?.findViewById<ImageView>(R.id.thumbnail_dialog)
+        name!!.text = it.name
+        if (it.thumbnailUrl != null && it.thumbnailUrl.isNotEmpty()) {
+          Picasso.with(context).load(it.thumbnailUrl).into(thumbnail)
+        }
+        viewModel.itemIsClickedCompleted()
+      }
     })
     val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
     userNameText.text = sharedPreferences.getString("name","")

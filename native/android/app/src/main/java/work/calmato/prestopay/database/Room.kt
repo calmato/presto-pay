@@ -10,6 +10,8 @@ interface FriendDao{
     fun getFriends() : LiveData<List<DatabaseFriend>>
   @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(vararg friends:DatabaseFriend)
+  @Query("delete from databasefriend where id = :userId")
+    fun deleteFriend(userId:String)
 }
 
 @Database(entities = [DatabaseFriend::class],version = 1)

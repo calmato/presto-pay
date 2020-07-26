@@ -149,8 +149,18 @@ class ViewModelFriendGroup(application: Application) : AndroidViewModel(applicat
 
       override fun onResponse(call: Call<AccountResponse>, response: Response<AccountResponse>) {
         if(response.isSuccessful){
-          Toast.makeText(activity,"友達リストから削除しました",Toast.LENGTH_LONG).show()
-          getFriends(activity)
+          coroutineScope.launch {
+            try {
+              viewModelScope.launch {
+                friendsRepository.deleteFriend(userId)
+                Toast.makeText(activity,"友達リストから削除しました",Toast.LENGTH_LONG).show()
+
+              }
+              Log.i(TAG, "getFriends: getUser")
+            }catch (e:java.lang.Exception){
+              Toast.makeText(activity, e.message, Toast.LENGTH_LONG).show()
+            }
+          }
         }else{
           try {
             val jObjError = JSONObject(response.errorBody()?.string()).getJSONArray("errors")

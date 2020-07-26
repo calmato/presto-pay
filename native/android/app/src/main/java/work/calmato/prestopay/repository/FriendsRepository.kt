@@ -1,5 +1,6 @@
 package work.calmato.prestopay.repository
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import kotlinx.coroutines.Dispatchers
@@ -19,6 +20,11 @@ class FriendsRepository(private val database: FriendsDatabase) {
     withContext(Dispatchers.IO){
       val friendList = Api.retrofitService.getFriends(id).await()
       database.friendDao.insertAll(*friendList.asDatabaseModel())
+    }
+  }
+  suspend fun deleteFriend(id:String){
+    withContext(Dispatchers.IO) {
+      database.friendDao.deleteFriend(id)
     }
   }
 }
