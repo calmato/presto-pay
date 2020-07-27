@@ -33,6 +33,11 @@ func Router(reg *registry.Registry) *gin.Engine {
 		apiV1.GET("/groups", reg.V1Group.Index)
 		apiV1.GET("/groups/:groupID", reg.V1Group.Show)
 		apiV1.POST("/groups", reg.V1Group.Create)
+
+		groups := apiV1.Group("/groups/:groupID")
+		{
+			groups.POST("/payment", reg.V1Payment.Create)
+		}
 	}
 
 	return r

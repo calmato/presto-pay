@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/calmato/presto-pay/api/calc/internal/domain/payment"
-	"github.com/calmato/presto-pay/api/user/lib/firebase/firestore"
+	"github.com/calmato/presto-pay/api/calc/lib/firebase/firestore"
 )
 
 type paymentRepository struct {
