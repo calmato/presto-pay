@@ -10,18 +10,21 @@ import (
 
 // Registry - DIコンテナ
 type Registry struct {
-	Health  handler.APIHealthHandler
-	V1Group v1.APIV1GroupHandler
+	Health    handler.APIHealthHandler
+	V1Group   v1.APIV1GroupHandler
+	V1Payment v1.APIV1PaymentHandler
 }
 
 // NewRegistry - internalディレクトリ配下のファイルを読み込み
 func NewRegistry(fs *firestore.Firestore, cs *storage.Storage, ac api.APIClient) *Registry {
 	health := healthInjection()
 	v1Group := v1GroupInjection(fs, cs, ac)
+	v1Payment := v1PaymentInjection(fs, cs, ac)
 
 	return &Registry{
-		Health:  health,
-		V1Group: v1Group,
+		Health:    health,
+		V1Group:   v1Group,
+		V1Payment: v1Payment,
 	}
 }
 
