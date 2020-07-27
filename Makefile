@@ -38,6 +38,14 @@ swagger-edit:
 	open http://localhost:8001
 
 ##################################################
+# Container Commands - API
+##################################################
+.PHONY: api-start
+
+api-start:
+	docker-compose -f docker-compose.api.yaml up
+
+##################################################
 # Container Commands - Terraform
 ##################################################
 .PHONY: terraform-stg-setup
