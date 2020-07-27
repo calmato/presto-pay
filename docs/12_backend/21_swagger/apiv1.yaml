@@ -268,6 +268,33 @@ paths:
         '500':
           $ref: '#/components/responses/Unkown'
 
+  /groups/{groupId}/payment:
+    post:
+      summary: 支払い情報追加
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: groupId
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: グループUUID
+      requestBody:
+        $ref: '#/components/requestBodies/CreatePayment'
+      responses:
+        '200':
+          $ref: '#/components/responses/CreatePayment'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/Unkown'
+
 components:
   securitySchemes:
     BearerAuth:
@@ -442,6 +469,56 @@ components:
                   format: uuid
             required:
               - name
+
+    CreatePayment:
+      description: 支払い情報追加
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+                description: 支払い名
+              currency:
+                type: string
+                description: 通貨
+              total:
+                type: integer
+                description: 合計金額
+              payers:
+                type: array
+                description: 支払い者一覧
+                items:
+                  properties:
+                    id:
+                      type: string
+                      description: ユーザーID
+                    amount:
+                      type: integer
+                      description: 支払い金額
+              tags:
+                type: array
+                description: タグ一覧
+                items:
+                  type: string
+              comment:
+                type: string
+                description: コメント
+              images:
+                type: array
+                description: 添付画像一覧
+                items:
+                  type: string
+              paidAt:
+                type: string
+                format: date-time
+                description: 支払い日時
+            required:
+              - name
+              - total
+              - paidAt
 
   responses:
     BadRequest:
@@ -897,3 +974,59 @@ components:
                 type: string
                 format: date-time
                 description: 更新日時
+
+    CreatePayment:
+      description: 支払い情報追加APIのレスポンス
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              id:
+                type: string
+                format: uuid
+                description: 支払いID
+              name:
+                type: string
+                description: 支払い名
+              currency:
+                type: string
+                description: 通貨
+              total:
+                type: integer
+                description: 合計金額
+              payers:
+                type: array
+                description: 支払い者一覧
+                items:
+                  properties:
+                    id:
+                      type: string
+                      description: ユーザーID
+                    amount:
+                      type: integer
+                      description: 支払い金額
+              tags:
+                type: array
+                description: タグ一覧
+                items:
+                  type: string
+              comment:
+                type: string
+                description: コメント
+              imageUrls:
+                type: array
+                description: 添付画像一覧
+                items:
+                  type: string
+              paidAt:
+                type: string
+                format: date-time
+                description: 支払い日時
+              createdAt:
+                type: string
+                format: date-time
+                description: 作成日時
+              updatedAt:
+                type: string
+

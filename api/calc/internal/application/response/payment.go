@@ -17,8 +17,8 @@ type CreatePayment struct {
 	Payers    []*PayerInCreatePayment `json:"payers"`
 	Tags      []string                `json:"tags"`
 	Comment   string                  `json:"comment"`
-	ImageURLs []string                `json:"image_urls"`
-	PaidAt    time.Time               `json:"paid_at"`
-	CreatedAt time.Time               `json:"created_at"`
-	UpdatedAt time.Time               `json:"updated_at"`
+	ImageURLs []string                `json:"imageUrls"`
+	PaidAt    time.Time               `json:"paidAt"`
+	CreatedAt time.Time               `json:"createdAt"`
+	UpdatedAt time.Time               `json:"updatedAt"`
 }
