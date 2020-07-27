@@ -17,6 +17,7 @@ import retrofit2.Response
 import work.calmato.prestopay.database.getAppDatabase
 import work.calmato.prestopay.network.*
 import work.calmato.prestopay.repository.FriendsRepository
+import work.calmato.prestopay.repository.GroupsRepository
 
 class ViewModelFriendGroup(application: Application) : AndroidViewModel(application) {
   private val _itemClicked = MutableLiveData<UserProperty>()
@@ -39,20 +40,32 @@ class ViewModelFriendGroup(application: Application) : AndroidViewModel(applicat
 
   private val database = getAppDatabase(application)
   private val friendsRepository = FriendsRepository(database)
+  private val groupsRepository = GroupsRepository(database)
   private val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplication())
   private val id = sharedPreferences.getString("token", null)
 
-  init {
-      viewModelScope.launch {
-        try {
-          friendsRepository.refreshFriends(id!!)
-        } catch (e:java.lang.Exception){
-          Log.i(TAG, "Trying to refresh id")
-        }
+  fun userListView() {
+    viewModelScope.launch {
+      try {
+        friendsRepository.refreshFriends(id!!)
+      } catch (e:java.lang.Exception){
+        Log.i(TAG, "Trying to refresh id")
       }
+    }
+  }
+
+  fun groupListView() {
+    viewModelScope.launch {
+      //try {
+        groupsRepository.refreshGroups(id!!)
+//      } catch (e:java.lang.Exception){
+//        Log.i(TAG, "Trying to refresh id")
+//      }val
+    }
   }
 
   val friendsList = friendsRepository.friends
+  val groupsList = groupsRepository.groups
 
   fun getUserProperties(userName: String,activity: Activity){
     coroutineScope.launch {

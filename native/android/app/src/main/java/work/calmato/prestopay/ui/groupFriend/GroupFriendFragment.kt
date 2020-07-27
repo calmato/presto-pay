@@ -15,19 +15,23 @@ import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_group_friend.*
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentGroupFriendBinding
+import work.calmato.prestopay.network.GroupPropertyResponse
 import work.calmato.prestopay.network.UserProperty
 import work.calmato.prestopay.util.AdapterFriendPlane
+import work.calmato.prestopay.util.AdapterGroupPlane
 import work.calmato.prestopay.util.ViewModelFriendGroup
 
 class GroupFriendFragment : Fragment() {
-  private val viewModel : ViewModelFriendGroup by lazy {
-    val activity = requireNotNull(this.activity){
+  private val viewModel: ViewModelFriendGroup by lazy {
+    val activity = requireNotNull(this.activity) {
       "You can only access the viewModel after onActivityCreated()"
     }
-    ViewModelProviders.of(this,ViewModelFriendGroup.Factory(activity.application))
+    ViewModelProviders.of(this, ViewModelFriendGroup.Factory(activity.application))
       .get(ViewModelFriendGroup::class.java)
   }
-  private var recycleAdapter: AdapterFriendPlane?=null
+  private var recycleAdapter: AdapterFriendPlane? = null
+  private var recycleGroupAdapter: AdapterGroupPlane? = null
+
   override fun onActivityCreated(savedInstanceState: Bundle?) {
     super.onActivityCreated(savedInstanceState)
     viewModel.friendsList.observe(viewLifecycleOwner, Observer<List<UserProperty>> {
@@ -35,7 +39,14 @@ class GroupFriendFragment : Fragment() {
         recycleAdapter?.friendList = it
       }
     })
+
+    viewModel.groupsList.observe(viewLifecycleOwner, Observer<List<GroupPropertyResponse>> {
+      it?.apply {
+        recycleGroupAdapter?.groupList = it
+      }
+    })
   }
+
   private lateinit var clickListener: AdapterFriendPlane.OnClickListener
 
   override fun onCreateView(
@@ -45,6 +56,10 @@ class GroupFriendFragment : Fragment() {
   ): View? {
     val binding: FragmentGroupFriendBinding =
       DataBindingUtil.inflate(inflater, R.layout.fragment_group_friend, container, false)
+
+    viewModel.userListView()
+    viewModel.groupListView()
+
     binding.lifecycleOwner = this
     binding.viewModel = viewModel
     clickListener = AdapterFriendPlane.OnClickListener { viewModel.itemIsClicked(it) }
@@ -53,6 +68,12 @@ class GroupFriendFragment : Fragment() {
       layoutManager = LinearLayoutManager(context)
       adapter = recycleAdapter
     }
+
+    binding.groupRecycle.apply {
+      layoutManager = LinearLayoutManager(context)
+      adapter = recycleGroupAdapter
+    }
+
     return binding.root
   }
 
@@ -96,9 +117,9 @@ class GroupFriendFragment : Fragment() {
 //      }
     })
     val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
-    userNameText.text = sharedPreferences.getString("name","")
-    val thumbnailUrl = sharedPreferences.getString("thumbnailUrl","")
-    if(thumbnailUrl.isNotEmpty()) {
+    userNameText.text = sharedPreferences.getString("name", "")
+    val thumbnailUrl = sharedPreferences.getString("thumbnailUrl", "")
+    if (thumbnailUrl.isNotEmpty()) {
       Picasso.with(context).load(thumbnailUrl).into(thumbnail)
     }
   }

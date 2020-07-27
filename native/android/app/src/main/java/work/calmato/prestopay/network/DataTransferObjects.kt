@@ -21,11 +21,13 @@ data class NetworkGroup(
   val thumbnailUrl: String,
   val userIds: ArrayList<String>,
   val createdAt: String,
-  val updateAt: String
+  val updatedAt: String
 )
 
+@JsonClass(generateAdapter = true)
 data class NetworkFriendContainer(val users: List<NetworkFriend>)
 
+@JsonClass(generateAdapter = true)
 data class NetworkGroupContainer(val groups: List<NetworkGroup>)
 
 fun NetworkFriend.asDomainModel(): UserProperty {
@@ -33,7 +35,7 @@ fun NetworkFriend.asDomainModel(): UserProperty {
 }
 
 fun NetworkGroup.asDomainModel(): GroupPropertyResponse {
-  return GroupPropertyResponse(id, name, thumbnailUrl, userIds, createdAt, updateAt)
+  return GroupPropertyResponse(id, name, thumbnailUrl, userIds, createdAt, updatedAt)
 }
 
 fun NetworkFriendContainer.asDomainModel(): List<UserProperty> {
@@ -57,7 +59,7 @@ fun NetworkGroupContainer.asDomainModel(): List<GroupPropertyResponse> {
       thumbnail_url = it.thumbnailUrl,
       user_ids = it.userIds,
       created_at = it.createdAt,
-      updated_at = it.updateAt
+      updated_at = it.updatedAt
     )
   }
 }
@@ -83,7 +85,7 @@ fun NetworkGroupContainer.asDatabaseModel(): Array<DatabaseGroup> {
       thumbnailUrl = it.thumbnailUrl,
       userIds = it.userIds,
       createdAt = it.createdAt,
-      updateAt = it.updateAt
+      updateAt = it.updatedAt
     )
   }.toTypedArray()
 }
