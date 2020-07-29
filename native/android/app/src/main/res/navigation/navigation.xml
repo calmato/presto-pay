@@ -115,7 +115,8 @@
     android:id="@+id/addFriendFragment"
     android:name="work.calmato.prestopay.ui.addFriend.AddFriendFragment"
     android:label="AddFriendFragment"
-    tools:layout="@layout/fragment_add_friend" />
+    tools:layout="@layout/fragment_add_friend" >
+  </fragment>
   <fragment
     android:id="@+id/friendListFragment"
     android:name="work.calmato.prestopay.ui.friendList.FriendListFragment"
@@ -154,4 +155,9 @@
     android:label="fragment_notification_set"
     tools:layout="@layout/fragment_notification_set">
   </fragment>
+  <fragment
+    android:id="@+id/addExpenseFragment"
+    android:name="work.calmato.prestopay.ui.addExpense.AddExpenseFragment"
+    android:label="fragment_add_expense"
+    tools:layout="@layout/fragment_add_expense" />
 </navigation>

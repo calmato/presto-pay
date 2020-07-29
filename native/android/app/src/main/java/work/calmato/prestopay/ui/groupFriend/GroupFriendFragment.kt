@@ -1,10 +1,15 @@
 package work.calmato.prestopay.ui.groupFriend
 
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -19,6 +24,7 @@ import work.calmato.prestopay.network.GroupPropertyResponse
 import work.calmato.prestopay.network.UserProperty
 import work.calmato.prestopay.util.AdapterFriendPlane
 import work.calmato.prestopay.util.AdapterGroupPlane
+import work.calmato.prestopay.util.AdapterRecyclePlane
 import work.calmato.prestopay.util.ViewModelFriendGroup
 
 class GroupFriendFragment : Fragment() {
@@ -86,37 +92,47 @@ class GroupFriendFragment : Fragment() {
         GroupFriendFragmentDirections.actionGroupFriendFragmentToAddFriendFragment()
       )
     }
+    val animBlink = AnimationUtils.loadAnimation(requireContext(),R.anim.blink)
+    viewModel.nowLoading.observe(viewLifecycleOwner, Observer {
+      if(it){
+        nowLoading.visibility = View.VISIBLE
+        nowLoading.startAnimation(animBlink)
+      }else{
+        nowLoading.clearAnimation()
+        nowLoading.visibility = View.INVISIBLE
+      }
+    })
 
     viewModel.itemClicked.observe(viewLifecycleOwner, Observer {
-//      if (null != it) {
-//        val builder: AlertDialog.Builder? = requireActivity().let {
-//          AlertDialog.Builder(it)
-//        }
-//        builder?.setView(R.layout.dialog_add_friend)
-//          ?.setPositiveButton("友達リストから削除する"
-//          ,DialogInterface.OnClickListener{_,_->
-//              val builder2:AlertDialog.Builder? = requireActivity().let {
-//                AlertDialog.Builder(it)
-//              }
-//              builder2?.setMessage("本当に削除しますか？")
-//                ?.setPositiveButton("削除する"
-//                ,DialogInterface.OnClickListener{_,_->
-//                    viewModel.deleteFriend(it.id,requireActivity())
-//                  })
-//                ?.setNegativeButton("キャンセル",null)
-//              val dialog2:AlertDialog? = builder2?.create()
-//              dialog2?.show()
-//            })
-//        val dialog: AlertDialog? = builder?.create()
-//        dialog?.show()
-//        val name = dialog?.findViewById<TextView>(R.id.username_dialog)
-//        val thumbnail = dialog?.findViewById<ImageView>(R.id.thumbnail_dialog)
-//        name!!.text = it.name
-//        if (it.thumbnailUrl != null && it.thumbnailUrl.isNotEmpty()) {
-//          Picasso.with(context).load(it.thumbnailUrl).into(thumbnail)
-//        }
-//        viewModel.itemIsClickedCompleted()
-//      }
+      if (null != it) {
+        val builder: AlertDialog.Builder? = requireActivity().let {
+          AlertDialog.Builder(it)
+        }
+        builder?.setView(R.layout.dialog_add_friend)
+          ?.setPositiveButton("友達リストから削除する"
+          ,DialogInterface.OnClickListener{_,_->
+              val builder2:AlertDialog.Builder? = requireActivity().let {
+                AlertDialog.Builder(it)
+              }
+              builder2?.setMessage("本当に削除しますか？")
+                ?.setPositiveButton("削除する"
+                ,DialogInterface.OnClickListener{_,_->
+                    viewModel.deleteFriend(it.id,requireActivity())
+                  })
+                ?.setNegativeButton("キャンセル",null)
+              val dialog2:AlertDialog? = builder2?.create()
+              dialog2?.show()
+            })
+        val dialog: AlertDialog? = builder?.create()
+        dialog?.show()
+        val name = dialog?.findViewById<TextView>(R.id.username_dialog)
+        val thumbnail = dialog?.findViewById<ImageView>(R.id.thumbnail_dialog)
+        name!!.text = it.name
+        if (it.thumbnailUrl != null && it.thumbnailUrl.isNotEmpty()) {
+          Picasso.with(context).load(it.thumbnailUrl).into(thumbnail)
+        }
+        viewModel.itemIsClickedCompleted()
+      }
     })
     val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
     userNameText.text = sharedPreferences.getString("name", "")

@@ -10,7 +10,12 @@ interface FriendDao {
   fun getFriends(): LiveData<List<DatabaseFriend>>
 
   @Insert(onConflict = OnConflictStrategy.REPLACE)
-  fun insertAll(vararg friends: DatabaseFriend)
+    fun insertAll(vararg friends:DatabaseFriend)
+  @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertFriend(friend: DatabaseFriend)
+  @Query("delete from databasefriend where id = :userId")
+    fun deleteFriend(userId:String)
+
 }
 
 @Dao

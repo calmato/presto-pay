@@ -36,7 +36,7 @@ class AdapterGrid(private val mUserProperties: Users?, val onClickListener: OnCl
 
   override fun onBindViewHolder(holder: AddFriendViewHolder, position: Int) {
     mUserProperties?.let {
-      val userProperty = it.users[position]!!
+      val userProperty = it.users[position]
       holder.itemView.setOnClickListener {
         onClickListener.onClick(userProperty)
       }

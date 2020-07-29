@@ -48,6 +48,10 @@ interface ApiService {
   ):
     Deferred<NetworkFriendContainer>
 
+  @POST("auth/friends")
+  fun addFriend(@Header("Authorization") token: String, @Body userId: UserId):
+    Deferred<NetworkFriend>
+
   @GET("auth/friends")
   fun getFriends(@Header("Authorization") token: String):
     Deferred<NetworkFriendContainer>

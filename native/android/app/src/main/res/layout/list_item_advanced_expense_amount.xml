@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools">
+  <data>
+    <variable
+      name="userProperty"
+      type="work.calmato.prestopay.network.UserProperty" />
+  </data>
+
+  <androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="0dp">
+
+    <ImageView
+      android:id="@+id/thumbnail"
+      android:layout_width="75dp"
+      android:layout_height="75dp"
+      android:layout_marginStart="8dp"
+      android:layout_marginTop="8dp"
+      android:layout_marginBottom="8dp"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      app:layout_constraintVertical_bias="0.0"
+      app:srcCompat="@drawable/circle_theme_color"
+      app:thumbnail="@{userProperty}" />
+
+    <TextView
+      android:id="@+id/userName"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="8dp"
+      android:layout_marginEnd="8dp"
+      android:textSize="24sp"
+      app:layout_constraintBottom_toBottomOf="@+id/thumbnail"
+      app:layout_constraintEnd_toStartOf="@+id/textView8"
+      app:layout_constraintStart_toEndOf="@+id/thumbnail"
+      app:layout_constraintTop_toTopOf="@+id/thumbnail"
+      app:layout_constraintVertical_bias="0.5"
+      app:username="@{userProperty}"
+      tools:text="userName" />
+
+    <EditText
+      android:id="@+id/editTextNumberDecimal"
+      android:layout_width="100dp"
+      android:layout_height="wrap_content"
+      android:layout_marginEnd="8dp"
+      android:ems="10"
+      android:inputType="numberDecimal"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+      android:id="@+id/textView8"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="￥"
+      android:textSize="24sp"
+      app:layout_constraintEnd_toStartOf="@+id/editTextNumberDecimal"
+      tools:layout_editor_absoluteY="30dp" />
+
+  </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

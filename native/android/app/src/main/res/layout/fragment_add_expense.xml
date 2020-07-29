@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools">
+
+  <androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <TextView
+      android:id="@+id/groupName"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="16dp"
+      android:layout_marginTop="24dp"
+      android:text="Group Name"
+      android:textSize="36sp"
+      android:textStyle="bold"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+      android:id="@+id/expenseTag"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="8dp"
+      android:layout_marginTop="48dp"
+      android:rotation="225"
+      android:src="@drawable/ic_baseline_label_24"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/groupName" />
+
+    <EditText
+      android:id="@+id/expenseName"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="8dp"
+      android:layout_marginEnd="8dp"
+      android:ems="10"
+      android:hint="支払い名"
+      android:inputType="textPersonName"
+      app:layout_constraintBottom_toBottomOf="@+id/expenseTag"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toEndOf="@+id/expenseTag"
+      app:layout_constraintTop_toTopOf="@+id/expenseTag" />
+
+    <TextView
+      android:id="@+id/currency"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="16dp"
+      android:text="￥"
+      android:textSize="48sp"
+      app:layout_constraintEnd_toEndOf="@+id/expenseTag"
+      app:layout_constraintStart_toStartOf="@+id/expenseTag"
+      app:layout_constraintTop_toBottomOf="@+id/expenseTag" />
+
+    <EditText
+      android:id="@+id/amountEdit"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:ems="10"
+      android:hint="金額"
+      android:inputType="numberDecimal"
+      app:layout_constraintBottom_toBottomOf="@+id/currency"
+      app:layout_constraintEnd_toEndOf="@+id/expenseName"
+      app:layout_constraintStart_toStartOf="@+id/expenseName"
+      app:layout_constraintTop_toTopOf="@+id/currency" />
+
+    <TextView
+      android:id="@+id/textView9"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="32dp"
+      android:text="支払い者"
+      android:textSize="18sp"
+      app:layout_constraintStart_toStartOf="@+id/currency"
+      app:layout_constraintTop_toBottomOf="@+id/currency" />
+
+    <Spinner
+      android:id="@+id/spinner"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="8dp"
+      android:layout_marginEnd="8dp"
+      app:layout_constraintBottom_toBottomOf="@+id/textView9"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toEndOf="@+id/textView9"
+      app:layout_constraintTop_toTopOf="@+id/textView9" />
+
+    <TextView
+      android:id="@+id/textView10"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="32dp"
+      android:text="対象者"
+      android:textSize="18sp"
+      app:layout_constraintStart_toStartOf="@+id/textView9"
+      app:layout_constraintTop_toBottomOf="@+id/textView9" />
+
+    <Spinner
+      android:id="@+id/spinner3"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      app:layout_constraintBottom_toBottomOf="@+id/textView10"
+      app:layout_constraintEnd_toEndOf="@+id/spinner"
+      app:layout_constraintStart_toStartOf="@+id/spinner"
+      app:layout_constraintTop_toTopOf="@+id/textView10" />
+
+    <TextView
+      android:id="@+id/advancedSetting"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="16dp"
+      android:text="高度な支払い設定"
+      app:layout_constraintEnd_toEndOf="@+id/spinner3"
+      app:layout_constraintTop_toBottomOf="@+id/spinner3" />
+
+    <ImageView
+      android:id="@+id/camera"
+      android:layout_width="95dp"
+      android:layout_height="95dp"
+      android:src="@android:drawable/ic_menu_camera"
+      app:layout_constraintBottom_toBottomOf="@+id/constraintDate"
+      app:layout_constraintEnd_toStartOf="@+id/comment"
+      app:layout_constraintHorizontal_bias="0.5"
+      app:layout_constraintStart_toEndOf="@+id/constraintDate"
+      app:layout_constraintTop_toTopOf="@+id/constraintDate" />
+
+    <ImageView
+      android:id="@+id/comment"
+      android:layout_width="80dp"
+      android:layout_height="80dp"
+      android:src="@drawable/ic_baseline_comment_24"
+      app:layout_constraintBottom_toBottomOf="@+id/camera"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.5"
+      app:layout_constraintStart_toEndOf="@+id/camera"
+      app:layout_constraintTop_toTopOf="@+id/camera" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+      android:id="@+id/constraintDate"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginBottom="32dp"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toStartOf="@+id/camera"
+      app:layout_constraintHorizontal_bias="0.5"
+      app:layout_constraintStart_toStartOf="parent">
+
+      <TextView
+        android:id="@+id/calendarYear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:text="year"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/calendarDate"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+      <TextView
+        android:id="@+id/calendarDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="date"
+        android:textSize="24sp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/calendar"
+        app:layout_constraintVertical_bias="0.6" />
+
+      <ImageView
+        android:id="@+id/calendar"
+        android:layout_width="85dp"
+        android:layout_height="85dp"
+        android:src="@drawable/ic_baseline_calendar_today_24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+      android:id="@+id/commentText"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="コメント"
+      android:textSize="18sp"
+      android:visibility="invisible"
+      app:layout_constraintStart_toStartOf="@+id/textView10"
+      app:layout_constraintTop_toTopOf="@+id/commentEditText" />
+
+    <EditText
+      android:id="@+id/commentEditText"
+      android:layout_width="0dp"
+      android:layout_height="0dp"
+      android:layout_marginTop="8dp"
+      android:layout_marginBottom="16dp"
+      android:background="@android:color/transparent"
+      android:gravity="top"
+      android:maxLength="100"
+      android:textSize="18sp"
+      android:visibility="invisible"
+      app:layout_constraintBottom_toTopOf="@+id/camera"
+      app:layout_constraintEnd_toEndOf="@+id/spinner3"
+      app:layout_constraintStart_toStartOf="@+id/spinner3"
+      app:layout_constraintTop_toBottomOf="@+id/advancedSetting" />
+
+    <ImageView
+      android:id="@+id/thumbnail"
+      android:layout_width="100dp"
+      android:layout_height="100dp"
+      android:layout_marginTop="16dp"
+      android:visibility="invisible"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toEndOf="@+id/groupName"
+      app:layout_constraintTop_toTopOf="parent"
+      app:srcCompat="@drawable/ic_launcher_foreground" />
+
+  </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+</layout>
