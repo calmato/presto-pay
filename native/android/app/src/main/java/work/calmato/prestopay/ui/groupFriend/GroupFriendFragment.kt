@@ -48,6 +48,7 @@ class GroupFriendFragment : Fragment() {
   }
 
   private lateinit var clickListener: AdapterFriendPlane.OnClickListener
+  private lateinit var clickListenerGroup:AdapterGroupPlane.OnClickListener
 
   override fun onCreateView(
     inflater: LayoutInflater,
@@ -57,18 +58,19 @@ class GroupFriendFragment : Fragment() {
     val binding: FragmentGroupFriendBinding =
       DataBindingUtil.inflate(inflater, R.layout.fragment_group_friend, container, false)
 
-    viewModel.userListView()
-    viewModel.groupListView()
-
     binding.lifecycleOwner = this
     binding.viewModel = viewModel
     clickListener = AdapterFriendPlane.OnClickListener { viewModel.itemIsClicked(it) }
+    clickListenerGroup = AdapterGroupPlane.OnClickListener{viewModel.itemIsClickedGroup(it)}
     recycleAdapter = AdapterFriendPlane(clickListener)
+    recycleGroupAdapter = AdapterGroupPlane(clickListenerGroup)
     binding.friendsRecycleView.apply {
       layoutManager = LinearLayoutManager(context)
       adapter = recycleAdapter
     }
 
+    viewModel.userListView()
+    viewModel.groupListView()
     binding.groupRecycle.apply {
       layoutManager = LinearLayoutManager(context)
       adapter = recycleGroupAdapter

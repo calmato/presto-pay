@@ -47,7 +47,7 @@ fun List<DatabaseGroup>.asGroupModel(): List<GroupPropertyResponse> {
       id = it.id,
       name = it.name,
       thumbnail_url = it.thumbnailUrl,
-      user_ids = it.userIds as ArrayList<String>,
+      user_ids = it.userIds as List<String>,
       created_at = it.createdAt,
       updated_at = it.updateAt
     )

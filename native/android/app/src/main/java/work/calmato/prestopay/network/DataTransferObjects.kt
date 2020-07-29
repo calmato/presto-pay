@@ -1,5 +1,6 @@
 package work.calmato.prestopay.network
 
+import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import work.calmato.prestopay.database.DatabaseFriend
 import work.calmato.prestopay.database.DatabaseGroup
@@ -18,10 +19,10 @@ data class NetworkFriend(
 data class NetworkGroup(
   val id: String,
   val name: String,
-  val thumbnailUrl: String,
-  val userIds: ArrayList<String>,
-  val createdAt: String,
-  val updatedAt: String
+  val thumbnail_url: String,
+  @Json(name = "userIds")val userIds: List<String>,
+  val created_at: String,
+  val updated_at: String
 )
 
 @JsonClass(generateAdapter = true)
@@ -35,7 +36,7 @@ fun NetworkFriend.asDomainModel(): UserProperty {
 }
 
 fun NetworkGroup.asDomainModel(): GroupPropertyResponse {
-  return GroupPropertyResponse(id, name, thumbnailUrl, userIds, createdAt, updatedAt)
+  return GroupPropertyResponse(id, name, thumbnail_url, userIds, created_at, updated_at)
 }
 
 fun NetworkFriendContainer.asDomainModel(): List<UserProperty> {
@@ -56,10 +57,10 @@ fun NetworkGroupContainer.asDomainModel(): List<GroupPropertyResponse> {
     GroupPropertyResponse(
       id = it.id,
       name = it.name,
-      thumbnail_url = it.thumbnailUrl,
+      thumbnail_url = it.thumbnail_url,
       user_ids = it.userIds,
-      created_at = it.createdAt,
-      updated_at = it.updatedAt
+      created_at = it.created_at,
+      updated_at = it.updated_at
     )
   }
 }
@@ -82,10 +83,10 @@ fun NetworkGroupContainer.asDatabaseModel(): Array<DatabaseGroup> {
     DatabaseGroup(
       id = it.id,
       name = it.name,
-      thumbnailUrl = it.thumbnailUrl,
+      thumbnailUrl = it.thumbnail_url,
       userIds = it.userIds,
-      createdAt = it.createdAt,
-      updateAt = it.updatedAt
+      createdAt = it.created_at,
+      updateAt = it.updated_at
     )
   }.toTypedArray()
 }
