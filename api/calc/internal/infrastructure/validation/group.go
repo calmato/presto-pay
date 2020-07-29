@@ -63,11 +63,16 @@ func uniqueCheckUserIDs(userIDs []string) error {
 	return nil
 }
 
-func userIDExists(ctx context.Context, ac api.APIClient, userID string) bool {
-	exists, err := ac.UserExists(ctx, userID)
-	if err != nil {
-		return false
+func uniqueCheckTags(tags []string) error {
+	m := make(map[string]struct{})
+
+	for _, v := range tags {
+		if _, ok := m[v]; ok {
+			return xerrors.New("There are duplicate values.")
+		}
+
+		m[v] = struct{}{}
 	}
 
-	return exists
+	return nil
 }
