@@ -22,6 +22,7 @@ import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentGroupFriendBinding
 import work.calmato.prestopay.network.GroupPropertyResponse
 import work.calmato.prestopay.network.UserProperty
+import work.calmato.prestopay.network.Users
 import work.calmato.prestopay.util.AdapterFriendPlane
 import work.calmato.prestopay.util.AdapterGroupPlane
 import work.calmato.prestopay.util.ViewModelFriendGroup
@@ -89,6 +90,12 @@ class GroupFriendFragment : Fragment() {
     addFriend.setOnClickListener {
       this.findNavController().navigate(
         GroupFriendFragmentDirections.actionGroupFriendFragmentToAddFriendFragment()
+      )
+    }
+    addGroup.setOnClickListener {
+      this.findNavController().navigate(
+        GroupFriendFragmentDirections.actionGroupFriendFragmentToFriendListFragment(
+          Users(emptyList<UserProperty>()))
       )
     }
     val animBlink = AnimationUtils.loadAnimation(requireContext(),R.anim.blink)
