@@ -76,10 +76,6 @@ interface ApiService {
   ):
     Call<EditAccountResponse>
 
-  @POST("auth/friends")
-  fun addFriend(@Header("Authorization") token: String, @Body userId: UserId):
-    Call<AddFriendResponse>
-
   @POST("groups")
   fun createGroup(@Header("Authorization") token: String, @Body userId: CreateGroupProperty):
     Call<GroupPropertyResponse>

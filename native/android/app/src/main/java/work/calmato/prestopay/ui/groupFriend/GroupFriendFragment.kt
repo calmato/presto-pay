@@ -24,7 +24,6 @@ import work.calmato.prestopay.network.GroupPropertyResponse
 import work.calmato.prestopay.network.UserProperty
 import work.calmato.prestopay.util.AdapterFriendPlane
 import work.calmato.prestopay.util.AdapterGroupPlane
-import work.calmato.prestopay.util.AdapterRecyclePlane
 import work.calmato.prestopay.util.ViewModelFriendGroup
 
 class GroupFriendFragment : Fragment() {

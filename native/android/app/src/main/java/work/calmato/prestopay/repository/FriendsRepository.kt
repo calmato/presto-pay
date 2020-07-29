@@ -7,7 +7,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import work.calmato.prestopay.database.AppDatabase
 import work.calmato.prestopay.database.DatabaseFriend
-import work.calmato.prestopay.database.FriendsDatabase
 import work.calmato.prestopay.database.asDomainModel
 import work.calmato.prestopay.network.*
 
