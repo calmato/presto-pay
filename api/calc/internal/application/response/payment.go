@@ -13,7 +13,7 @@ type CreatePayment struct {
 	ID        string                  `json:"id"`
 	Name      string                  `json:"name"`
 	Currency  string                  `json:"currency"`
-	Total     uint                    `json:"total"`
+	Total     int                     `json:"total"`
 	Payers    []*PayerInCreatePayment `json:"payers"`
 	Tags      []string                `json:"tags"`
 	Comment   string                  `json:"comment"`
