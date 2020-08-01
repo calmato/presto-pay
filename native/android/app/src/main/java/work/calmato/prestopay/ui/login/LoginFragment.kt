@@ -29,15 +29,12 @@ import com.twitter.sdk.android.core.TwitterAuthConfig
 import kotlinx.android.synthetic.main.fragment_login.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentLoginBinding
 import work.calmato.prestopay.network.Api
-import work.calmato.prestopay.network.UserProperty
 import work.calmato.prestopay.network.asDomainModel
 import java.util.*
-import kotlin.coroutines.suspendCoroutine
 
 
 class LoginFragment : Fragment() {
@@ -152,7 +149,7 @@ class LoginFragment : Fragment() {
     //email password sign in
     loginButton.setOnClickListener {
       defaultSignIn(
-        loginEmailFileld.text.toString(),
+        loginEmailField.text.toString(),
         loginPasswordField.text.toString()
       )
     }

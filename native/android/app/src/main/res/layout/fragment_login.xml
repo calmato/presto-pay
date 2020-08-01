@@ -86,7 +86,7 @@
         tools:ignore="MissingConstraints" />
 
       <EditText
-        android:id="@+id/loginEmailFileld"
+        android:id="@+id/loginEmailField"
         android:layout_width="270dp"
         android:layout_height="47dp"
         android:layout_marginTop="52dp"
@@ -106,10 +106,10 @@
         android:ems="10"
         android:hint="Password"
         android:inputType="textPassword"
-        app:layout_constraintEnd_toEndOf="@+id/loginEmailFileld"
+        app:layout_constraintEnd_toEndOf="@+id/loginEmailField"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/loginEmailFileld"
-        app:layout_constraintTop_toBottomOf="@+id/loginEmailFileld"
+        app:layout_constraintStart_toStartOf="@+id/loginEmailField"
+        app:layout_constraintTop_toBottomOf="@+id/loginEmailField"
         tools:ignore="MissingConstraints" />
 
       <ImageView
@@ -118,7 +118,7 @@
         android:layout_height="28dp"
         android:layout_marginTop="68dp"
         android:src="@drawable/ic_mail"
-        app:layout_constraintEnd_toStartOf="@+id/loginEmailFileld"
+        app:layout_constraintEnd_toStartOf="@+id/loginEmailField"
         app:layout_constraintHorizontal_bias="0.795"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
