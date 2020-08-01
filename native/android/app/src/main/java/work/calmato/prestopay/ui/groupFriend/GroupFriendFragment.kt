@@ -1,42 +1,37 @@
 package work.calmato.prestopay.ui.groupFriend
 
-import android.app.AlertDialog
-import android.content.DialogInterface
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.preference.PreferenceManager
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_group_friend.*
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentGroupFriendBinding
+import work.calmato.prestopay.network.GroupPropertyResponse
 import work.calmato.prestopay.network.UserProperty
-import work.calmato.prestopay.network.Users
-import work.calmato.prestopay.util.AdapterRecyclePlane
+import work.calmato.prestopay.util.AdapterFriendPlane
+import work.calmato.prestopay.util.AdapterGroupPlane
 import work.calmato.prestopay.util.ViewModelFriendGroup
-import work.calmato.prestopay.util.setThumbnail
 
 class GroupFriendFragment : Fragment() {
-  private val viewModel : ViewModelFriendGroup by lazy {
-    val activity = requireNotNull(this.activity){
+  private val viewModel: ViewModelFriendGroup by lazy {
+    val activity = requireNotNull(this.activity) {
       "You can only access the viewModel after onActivityCreated()"
     }
-    ViewModelProviders.of(this,ViewModelFriendGroup.Factory(activity.application))
+    ViewModelProviders.of(this, ViewModelFriendGroup.Factory(activity.application))
       .get(ViewModelFriendGroup::class.java)
   }
-  private var recycleAdapter: AdapterRecyclePlane?=null
+  private var recycleAdapter: AdapterFriendPlane? = null
+  private var recycleGroupAdapter: AdapterGroupPlane? = null
+
   override fun onActivityCreated(savedInstanceState: Bundle?) {
     super.onActivityCreated(savedInstanceState)
     viewModel.friendsList.observe(viewLifecycleOwner, Observer<List<UserProperty>> {
@@ -44,8 +39,16 @@ class GroupFriendFragment : Fragment() {
         recycleAdapter?.friendList = it
       }
     })
+
+    viewModel.groupsList.observe(viewLifecycleOwner, Observer<List<GroupPropertyResponse>> {
+      it?.apply {
+        recycleGroupAdapter?.groupList = it
+      }
+    })
   }
-  private lateinit var clickListener: AdapterRecyclePlane.OnClickListener
+
+  private lateinit var clickListener: AdapterFriendPlane.OnClickListener
+  private lateinit var clickListenerGroup:AdapterGroupPlane.OnClickListener
 
   override fun onCreateView(
     inflater: LayoutInflater,
@@ -54,14 +57,25 @@ class GroupFriendFragment : Fragment() {
   ): View? {
     val binding: FragmentGroupFriendBinding =
       DataBindingUtil.inflate(inflater, R.layout.fragment_group_friend, container, false)
+
     binding.lifecycleOwner = this
     binding.viewModel = viewModel
-    clickListener = AdapterRecyclePlane.OnClickListener { viewModel.itemIsClicked(it) }
-    recycleAdapter = AdapterRecyclePlane(clickListener)
+    clickListener = AdapterFriendPlane.OnClickListener { viewModel.itemIsClicked(it) }
+    clickListenerGroup = AdapterGroupPlane.OnClickListener{viewModel.itemIsClickedGroup(it)}
+    recycleAdapter = AdapterFriendPlane(clickListener)
+    recycleGroupAdapter = AdapterGroupPlane(clickListenerGroup)
     binding.friendsRecycleView.apply {
       layoutManager = LinearLayoutManager(context)
       adapter = recycleAdapter
     }
+
+    viewModel.userListView()
+    viewModel.groupListView()
+    binding.groupRecycle.apply {
+      layoutManager = LinearLayoutManager(context)
+      adapter = recycleGroupAdapter
+    }
+
     return binding.root
   }
 
@@ -105,9 +119,9 @@ class GroupFriendFragment : Fragment() {
 //      }
     })
     val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
-    userNameText.text = sharedPreferences.getString("name","")
-    val thumbnailUrl = sharedPreferences.getString("thumbnailUrl","")
-    if(thumbnailUrl.isNotEmpty()) {
+    userNameText.text = sharedPreferences.getString("name", "")
+    val thumbnailUrl = sharedPreferences.getString("thumbnailUrl", "")
+    if (thumbnailUrl.isNotEmpty()) {
       Picasso.with(context).load(thumbnailUrl).into(thumbnail)
     }
   }

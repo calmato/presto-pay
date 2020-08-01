@@ -6,8 +6,8 @@ import androidx.recyclerview.widget.RecyclerView
 import work.calmato.prestopay.databinding.ListItemPlaneBinding
 import work.calmato.prestopay.network.UserProperty
 
-class AdapterRecyclePlane(val onClickListener: OnClickListener) :
-  RecyclerView.Adapter<AdapterRecyclePlane.AddFriendViewHolder>() {
+class AdapterFriendPlane(val onClickListener: OnClickListener) :
+  RecyclerView.Adapter<AdapterFriendPlane.AddFriendViewHolder>() {
   var friendList: List<UserProperty> = emptyList()
     set(value) {
       field = value

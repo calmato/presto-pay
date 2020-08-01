@@ -3,29 +3,24 @@ package work.calmato.prestopay.ui.addFriend
 import android.app.AlertDialog
 import android.content.DialogInterface
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Adapter
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
-import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.analytics.FirebaseAnalytics
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_add_friend.*
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentAddFriendBinding
 import work.calmato.prestopay.network.UserProperty
-import work.calmato.prestopay.util.AdapterRecyclePlane
+import work.calmato.prestopay.util.AdapterFriendPlane
 import work.calmato.prestopay.util.ViewModelFriendGroup
 
 class AddFriendFragment : Fragment() {
@@ -36,7 +31,7 @@ class AddFriendFragment : Fragment() {
     ViewModelProviders.of(this,ViewModelFriendGroup.Factory(activity.application))
       .get(ViewModelFriendGroup::class.java)
   }
-  private var recycleAdapter:AdapterRecyclePlane? = null
+  private var recycleAdapter:AdapterFriendPlane? = null
 
   override fun onActivityCreated(savedInstanceState: Bundle?) {
     super.onActivityCreated(savedInstanceState)
@@ -47,7 +42,7 @@ class AddFriendFragment : Fragment() {
     })
   }
 
-  private lateinit var clickListener: AdapterRecyclePlane.OnClickListener
+  private lateinit var clickListener: AdapterFriendPlane.OnClickListener
 
   override fun onCreateView(
     inflater: LayoutInflater,
@@ -58,8 +53,8 @@ class AddFriendFragment : Fragment() {
       DataBindingUtil.inflate(inflater, R.layout.fragment_add_friend, container, false)
     binding.lifecycleOwner = this
     binding.viewModel = viewModel
-    clickListener = AdapterRecyclePlane.OnClickListener { viewModel.itemIsClicked(it) }
-    recycleAdapter = AdapterRecyclePlane(clickListener)
+    clickListener = AdapterFriendPlane.OnClickListener { viewModel.itemIsClicked(it) }
+    recycleAdapter = AdapterFriendPlane(clickListener)
     binding.root.findViewById<RecyclerView>(R.id.usersRecycleView).apply {
       layoutManager = LinearLayoutManager(context)
       adapter = recycleAdapter

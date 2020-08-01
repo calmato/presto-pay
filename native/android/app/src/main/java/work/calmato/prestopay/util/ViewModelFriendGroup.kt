@@ -6,15 +6,18 @@ import android.preference.PreferenceManager
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.*
-import com.google.firebase.auth.FirebaseAuth
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import work.calmato.prestopay.database.getFriendsDatabase
+import work.calmato.prestopay.database.getAppDatabase
 import work.calmato.prestopay.network.*
 import work.calmato.prestopay.repository.FriendsRepository
+import work.calmato.prestopay.repository.GroupsRepository
 
 class ViewModelFriendGroup(application: Application) : AndroidViewModel(application) {
   private val _itemClicked = MutableLiveData<UserProperty>()
@@ -29,28 +32,44 @@ class ViewModelFriendGroup(application: Application) : AndroidViewModel(applicat
   val usersList:LiveData<List<UserProperty>>
     get() = _usersList
 
+  private val _itemClickedGroup = MutableLiveData<GroupPropertyResponse>()
+  val itemClickedGroup: LiveData<GroupPropertyResponse>
+    get() = _itemClickedGroup
+
   // Create a Coroutine scope using a job to be able to cancel when needed
   private var viewModelJob = SupervisorJob()
 
   // the Coroutine runs using the Main (UI) dispatcher
   private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
-  private val database = getFriendsDatabase(application)
+  private val database = getAppDatabase(application)
   private val friendsRepository = FriendsRepository(database)
+  private val groupsRepository = GroupsRepository(database)
   private val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplication())
   private val id = sharedPreferences.getString("token", null)
 
-  init {
-      viewModelScope.launch {
-        try {
-          friendsRepository.refreshFriends(id!!)
-        } catch (e:java.lang.Exception){
-          Log.i(TAG, "Trying to refresh id")
-        }
+  fun userListView() {
+    viewModelScope.launch {
+      try {
+        friendsRepository.refreshFriends(id!!)
+      } catch (e:java.lang.Exception){
+        Log.i(TAG, "Trying to refresh id")
       }
+    }
+  }
+
+  fun groupListView() {
+    viewModelScope.launch {
+      //try {
+        groupsRepository.refreshGroups(id!!)
+//      } catch (e:java.lang.Exception){
+//        Log.i(TAG, "Trying to refresh id")
+//      }val
+    }
   }
 
   val friendsList = friendsRepository.friends
+  val groupsList = groupsRepository.groups
 
   fun getUserProperties(userName: String,activity: Activity){
     coroutineScope.launch {
@@ -98,13 +117,13 @@ class ViewModelFriendGroup(application: Application) : AndroidViewModel(applicat
   }
 
   fun createGroupApi(groupProperty: CreateGroupProperty,activity: Activity) {
-    Api.retrofitService.createGroup("Bearer ${id}", groupProperty).enqueue(object:Callback<CreateGroupPropertyResponse>{
-      override fun onFailure(call: Call<CreateGroupPropertyResponse>, t: Throwable) {
+    Api.retrofitService.createGroup("Bearer ${id}", groupProperty).enqueue(object:Callback<GroupPropertyResponse>{
+      override fun onFailure(call: Call<GroupPropertyResponse>, t: Throwable) {
         Toast.makeText(activity, t.message, Toast.LENGTH_LONG).show()
       }
       override fun onResponse(
-        call: Call<CreateGroupPropertyResponse>,
-        response: Response<CreateGroupPropertyResponse>
+        call: Call<GroupPropertyResponse>,
+        response: Response<GroupPropertyResponse>
       ) {
         if(response.isSuccessful){
           Toast.makeText(activity, "新しいグループを作成しました", Toast.LENGTH_SHORT).show()
@@ -172,6 +191,10 @@ class ViewModelFriendGroup(application: Application) : AndroidViewModel(applicat
 
   fun itemIsClicked(userProperty: UserProperty) {
     _itemClicked.value = userProperty
+  }
+
+  fun itemIsClickedGroup(group:GroupPropertyResponse) {
+    _itemClickedGroup.value = group
   }
 
   fun itemIsClickedCompleted() {
