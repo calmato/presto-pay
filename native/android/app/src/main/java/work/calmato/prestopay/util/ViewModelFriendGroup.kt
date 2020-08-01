@@ -32,6 +32,10 @@ class ViewModelFriendGroup(application: Application) : AndroidViewModel(applicat
   val usersList:LiveData<List<UserProperty>>
     get() = _usersList
 
+  private val _itemClickedGroup = MutableLiveData<GroupPropertyResponse>()
+  val itemClickedGroup: LiveData<GroupPropertyResponse>
+    get() = _itemClickedGroup
+
   // Create a Coroutine scope using a job to be able to cancel when needed
   private var viewModelJob = SupervisorJob()
 
@@ -187,6 +191,10 @@ class ViewModelFriendGroup(application: Application) : AndroidViewModel(applicat
 
   fun itemIsClicked(userProperty: UserProperty) {
     _itemClicked.value = userProperty
+  }
+
+  fun itemIsClickedGroup(group:GroupPropertyResponse) {
+    _itemClickedGroup.value = group
   }
 
   fun itemIsClickedCompleted() {

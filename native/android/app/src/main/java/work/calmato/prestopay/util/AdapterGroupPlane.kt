@@ -18,7 +18,7 @@ class AdapterGroupPlane(val onClickListener: OnClickListener) :
 
   override fun onBindViewHolder(holder: AddGroupViewHolder, position: Int) {
     holder.binding.also {
-     // it.userProperty = groupList[position]
+      it.groupPropertyResponse = groupList[position]
     }
     holder.itemView.setOnClickListener {
       onClickListener.onClick(groupList[position])
