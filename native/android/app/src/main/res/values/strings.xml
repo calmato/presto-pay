@@ -22,7 +22,7 @@
   <string name="send_mail">メール送信</string>
   <string name="descriptionResetPassword">パスワードを再設定するURLを送信します。\nメールアドレスを記入してください。</string>
   <string name="login_title">Presto Pay</string>
-  <string name="google_signin"/>
+  <string name="google_signin" />
   <string name="login_button">ログイン</string>
   <string name="google_signin_text">Log in with Google</string>
   <string name="twitter_signin_text">Twitterでサインイン</string>
@@ -59,6 +59,20 @@
   <string name="email_address">Email address</string>
   <string name="description_reset_pass">にパスワードを変更するリンクを送信します。\n現在のパスワードを入力してください。</string>
   <string name="save_button"><u>保存</u></string>
-    <string name="passwordInformation">半角のアルファベットと数字両方を含む8~15文字</string>
+  <string name="passwordInformation">半角のアルファベットと数字両方を含む8~15文字</string>
   <string name="passwordConfirmInformation">同じパスワードを入力</string>
+  <string name="now_loading">Now Loading …</string>
+  <string-array name="currency_array">
+    <item>￥</item>
+    <item>＄</item>
+    <item>€</item>
+  </string-array>
+  <integer-array name="tag_array">
+    <item>@drawable/ic_baseline_shopping_cart_24</item>
+    <item>@drawable/ic_baseline_train_24</item>
+  </integer-array>
+  <string-array name="tag_name">
+    <item>買い物</item>
+    <item>交通費</item>
+  </string-array>
 </resources>

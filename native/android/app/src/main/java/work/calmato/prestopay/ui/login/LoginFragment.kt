@@ -337,12 +337,17 @@ class LoginFragment : Fragment() {
         }
         val id = sharedPreferences.getString("token", null)
         GlobalScope.launch(Dispatchers.IO){
-          val userProperty  = Api.retrofitService.getLoginUserInformation("Bearer $id").await().asDomainModel()
-          editor.putString("name", userProperty.name)
-          editor.putString("username",userProperty.username)
-          editor.putString("email",userProperty.email)
-          editor.putString("thumbnailUrl",userProperty.thumbnailUrl)
-          editor.apply()
+          try {
+            val userProperty  = Api.retrofitService.getLoginUserInformation("Bearer $id").await().asDomainModel()
+            editor.putString("name", userProperty.name)
+            editor.putString("username",userProperty.username)
+            editor.putString("email",userProperty.email)
+            editor.putString("thumbnailUrl",userProperty.thumbnailUrl)
+            editor.apply()
+          }catch (e:Exception){
+            Log.i("LoginFragment", "setSharedPreference: ${e.message}")
+          }
+
         }
       }
     }

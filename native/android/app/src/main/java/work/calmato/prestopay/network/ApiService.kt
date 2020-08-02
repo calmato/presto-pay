@@ -48,6 +48,10 @@ interface ApiService {
   ):
     Deferred<NetworkFriendContainer>
 
+  @POST("auth/friends")
+  fun addFriend(@Header("Authorization") token: String, @Body userId: UserId):
+    Deferred<NetworkFriend>
+
   @GET("auth/friends")
   fun getFriends(@Header("Authorization") token: String):
     Deferred<NetworkFriendContainer>
@@ -72,14 +76,9 @@ interface ApiService {
   ):
     Call<EditAccountResponse>
 
-  @POST("auth/friends")
-  fun addFriend(@Header("Authorization") token: String, @Body userId: UserId):
-    Call<AddFriendResponse>
-
   @POST("groups")
   fun createGroup(@Header("Authorization") token: String, @Body userId: CreateGroupProperty):
     Call<GroupPropertyResponse>
-
 
   @POST("auth")
   fun createAccount(
@@ -90,6 +89,12 @@ interface ApiService {
   @DELETE("auth/friends/{userId}")
   fun deleteFriend(@Header("Authorization") token: String, @Path("userId") userId: String):
     Call<AccountResponse>
+
+  @POST("groups/{groupId}/payment")
+  fun addExpense(@Header("Authorization") token: String
+                 , @Body createExpenseProperty: CreateExpenseProperty
+                  ,@Path ("groupId")groupId:String):
+    Call<CreateExpenseResponse>
 
 }
 

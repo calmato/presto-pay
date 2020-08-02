@@ -18,15 +18,6 @@ data class Users(
   val users: List<UserProperty>
 ) : Parcelable {}
 
-@Parcelize
-data class AddFriendResponse(
-  val id: String,
-  val name: String,
-  val username: String,
-  val email: String,
-  val thumbnailUrl: String?
-) : Parcelable {}
-
 data class UserId(
   val userId: String
 )
@@ -37,6 +28,39 @@ data class CreateGroupProperty(
   val thumbnail: String,
   val userIds: List<String>
 ) : Parcelable {}
+
+@Parcelize
+data class CreateExpenseProperty(
+  val name: String,
+  val currency:String,
+  val total:Int,
+  val payers:List<UserExpense>,
+  val tags:List<String>,
+  val comment:String,
+  val images: List<String>,
+  val paidAt:String
+) : Parcelable {}
+
+@Parcelize
+data class CreateExpenseResponse(
+  val id:String,
+  val name: String,
+  val currency:String,
+  val total:Int,
+  val payers:List<UserExpense>,
+  val tags:List<String>,
+  val comment:String,
+  val imageUrls: List<String>,
+  val paidAt:String,
+  val createdAt:String,
+  val updatedAt:String
+) : Parcelable {}
+
+@Parcelize
+data class UserExpense(
+  val id:String,
+  val amount:Int
+): Parcelable {}
 
 @Parcelize
 data class GroupPropertyResponse(

@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.Bundle
 import android.view.*
+import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.core.app.ActivityCompat
@@ -83,7 +84,7 @@ class CreateGroupFragment : PermissionBase() {
     if (groupName.length in 1..31) {
       if (usersListToBeSent!!.users.size in 0..100) {
         val groupProperty =
-          CreateGroupProperty(groupName, thumbnailStr, usersListToBeSent!!.users.map { it!!.id })
+          CreateGroupProperty(groupName, thumbnailStr, usersListToBeSent!!.users.map { it.id })
         viewModel.createGroupApi(groupProperty,requireActivity())
       } else {
         Toast.makeText(requireContext(), "グループメンバーは100人までです", Toast.LENGTH_LONG).show()
@@ -114,15 +115,23 @@ class CreateGroupFragment : PermissionBase() {
         override fun handleOnBackPressed() {
           reChooseMember()
         }
-
       }
     )
+    val animBlink = AnimationUtils.loadAnimation(requireContext(),R.anim.blink)
+    viewModel.nowLoading.observe(viewLifecycleOwner, Observer {
+      if(it){
+        nowLoading.visibility = View.VISIBLE
+        nowLoading.startAnimation(animBlink)
+      }else{
+        nowLoading.clearAnimation()
+        nowLoading.visibility = View.INVISIBLE
+      }
+    })
   }
 
   override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
     super.onCreateOptionsMenu(menu, inflater)
     inflater.inflate(R.menu.header_done, menu)
-
   }
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
