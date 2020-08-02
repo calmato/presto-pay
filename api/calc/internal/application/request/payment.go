@@ -12,7 +12,7 @@ type PayerInCreatePayment struct {
 type CreatePayment struct {
 	Name     string                  `json:"name" validate:"required,max=64"`
 	Currency string                  `json:"currency"`
-	Total    uint                    `json:"total" validate:"required,gte=0,lt=65536"`
+	Total    int                     `json:"total" validate:"required,gte=0,lt=65536"`
 	Payers   []*PayerInCreatePayment `json:"payers" validate:"min=2"`
 	Tags     []string                `json:"tags" validate:"min=0,dive,max=32"`
 	Comment  string                  `json:"comment" validate:"max=256"`

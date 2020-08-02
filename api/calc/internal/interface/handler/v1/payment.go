@@ -45,7 +45,7 @@ func (ph *apiV1PaymentHandler) Create(ctx *gin.Context) {
 	}
 
 	payers := make([]*response.PayerInCreatePayment, len(p.Payers))
-	for i, payer := range payers {
+	for i, payer := range p.Payers {
 		payers[i] = &response.PayerInCreatePayment{
 			ID:     payer.ID,
 			Amount: payer.Amount,
