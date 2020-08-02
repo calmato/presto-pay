@@ -1,5 +1,6 @@
 package work.calmato.prestopay.util
 
+import android.media.Image
 import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
@@ -48,3 +49,23 @@ fun TextView.setUserName(item:GroupPropertyResponse?){
 }
 
 
+@BindingAdapter("tagName")
+fun TextView.setTagName(item:Tag?){
+  item?.let {
+    text = item.name
+  }
+}
+
+@BindingAdapter("tagImage")
+fun ImageView.setTagImage(item:Tag?){
+  item?.let {
+    setImageResource(item.imageId)
+  }
+}
+
+@BindingAdapter("tagCheckbox")
+fun CheckBox.setTagCheckBox(item:Tag?){
+  item?.let {
+    isChecked = item.isSelected
+  }
+}

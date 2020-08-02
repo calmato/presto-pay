@@ -80,7 +80,6 @@ interface ApiService {
   fun createGroup(@Header("Authorization") token: String, @Body userId: CreateGroupProperty):
     Call<GroupPropertyResponse>
 
-
   @POST("auth")
   fun createAccount(
     @Body accountProperty: NewAccountProperty
@@ -90,6 +89,12 @@ interface ApiService {
   @DELETE("auth/friends/{userId}")
   fun deleteFriend(@Header("Authorization") token: String, @Path("userId") userId: String):
     Call<AccountResponse>
+
+  @POST("groups/{groupId}/payment")
+  fun addExpense(@Header("Authorization") token: String
+                 , @Body createExpenseProperty: CreateExpenseProperty
+                  ,@Path ("groupId")groupId:String):
+    Call<CreateExpenseProperty>
 
 }
 

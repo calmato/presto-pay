@@ -20,63 +20,43 @@
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-      android:id="@+id/expenseTag"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginStart="8dp"
-      android:layout_marginTop="48dp"
-      android:rotation="225"
-      android:src="@drawable/ic_baseline_label_24"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/groupName" />
-
     <EditText
       android:id="@+id/expenseName"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
-      android:layout_marginStart="8dp"
+      android:layout_marginStart="16dp"
+      android:layout_marginTop="16dp"
       android:layout_marginEnd="8dp"
       android:ems="10"
       android:hint="支払い名"
       android:inputType="textPersonName"
-      app:layout_constraintBottom_toBottomOf="@+id/expenseTag"
       app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toEndOf="@+id/expenseTag"
-      app:layout_constraintTop_toTopOf="@+id/expenseTag" />
-
-    <TextView
-      android:id="@+id/currency"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginTop="16dp"
-      android:text="￥"
-      android:textSize="48sp"
-      app:layout_constraintEnd_toEndOf="@+id/expenseTag"
-      app:layout_constraintStart_toStartOf="@+id/expenseTag"
-      app:layout_constraintTop_toBottomOf="@+id/expenseTag" />
+      app:layout_constraintStart_toEndOf="@+id/tagImage"
+      app:layout_constraintTop_toBottomOf="@+id/thumbnail" />
 
     <EditText
       android:id="@+id/amountEdit"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
+      android:layout_marginTop="24dp"
       android:ems="10"
       android:hint="金額"
       android:inputType="numberDecimal"
-      app:layout_constraintBottom_toBottomOf="@+id/currency"
       app:layout_constraintEnd_toEndOf="@+id/expenseName"
+      app:layout_constraintHorizontal_bias="1.0"
       app:layout_constraintStart_toStartOf="@+id/expenseName"
-      app:layout_constraintTop_toTopOf="@+id/currency" />
+      app:layout_constraintTop_toBottomOf="@+id/expenseName" />
 
     <TextView
       android:id="@+id/textView9"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_marginTop="32dp"
+      android:layout_marginStart="16dp"
+      android:layout_marginTop="100dp"
       android:text="支払い者"
       android:textSize="18sp"
-      app:layout_constraintStart_toStartOf="@+id/currency"
-      app:layout_constraintTop_toBottomOf="@+id/currency" />
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/amountEdit" />
 
     <Spinner
       android:id="@+id/spinner"
@@ -224,8 +204,28 @@
       app:layout_constraintTop_toTopOf="parent"
       app:srcCompat="@drawable/ic_launcher_foreground" />
 
-  </androidx.constraintlayout.widget.ConstraintLayout>
+    <ImageView
+      android:id="@+id/tagImage"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="16dp"
+      app:layout_constraintBottom_toBottomOf="@+id/expenseName"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="@+id/expenseName"
+      app:srcCompat="@drawable/ic_baseline_label_24" />
 
+    <Spinner
+      android:id="@+id/currencySpinner"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="16dp"
+      android:backgroundTint="@android:color/transparent"
+      android:spinnerMode="dialog"
+      app:layout_constraintBottom_toBottomOf="@+id/amountEdit"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="@+id/amountEdit" />
+
+  </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 </layout>

@@ -61,5 +61,18 @@
   <string name="save_button"><u>保存</u></string>
   <string name="passwordInformation">半角のアルファベットと数字両方を含む8~15文字</string>
   <string name="passwordConfirmInformation">同じパスワードを入力</string>
-    <string name="now_loading">Now Loading ...</string>
+  <string name="now_loading">Now Loading …</string>
+  <string-array name="currency_array">
+    <item>￥</item>
+    <item>＄</item>
+    <item>€</item>
+  </string-array>
+  <integer-array name="tag_array">
+    <item>@drawable/ic_baseline_shopping_cart_24</item>
+    <item>@drawable/ic_baseline_train_24</item>
+  </integer-array>
+  <string-array name="tag_name">
+    <item>買い物</item>
+    <item>交通費</item>
+  </string-array>
 </resources>
