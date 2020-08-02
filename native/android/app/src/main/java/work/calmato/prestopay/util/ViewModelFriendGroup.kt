@@ -133,31 +133,6 @@ class ViewModelFriendGroup(application: Application) : AndroidViewModel(applicat
       })
   }
 
-  fun addExpenseApi(expenseProperty: CreateExpenseProperty, activity: Activity){
-    _nowLoading.value = true
-    //TODO groupId
-    Api.retrofitService.addExpense("Bearer ${id}",expenseProperty,"")
-      .enqueue(object :Callback<CreateExpenseProperty>{
-        override fun onFailure(call: Call<CreateExpenseProperty>, t: Throwable) {
-          Toast.makeText(activity, t.message, Toast.LENGTH_LONG).show()
-          _nowLoading.value = false
-        }
-
-        override fun onResponse(
-          call: Call<CreateExpenseProperty>,
-          response: Response<CreateExpenseProperty>
-        ) {
-          if (response.isSuccessful) {
-            Toast.makeText(activity, "新しい支払いを追加しました", Toast.LENGTH_SHORT).show()
-            _navigateToHome.value = true
-          } else {
-            Toast.makeText(activity, "支払い追加に失敗しました", Toast.LENGTH_LONG).show()
-          }
-          _nowLoading.value = false
-        }
-      })
-  }
-
   fun deleteFriend(userId: String, activity: Activity) {
     _nowLoading.value = true
     Api.retrofitService.deleteFriend("Bearer ${id}", userId)

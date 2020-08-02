@@ -94,7 +94,7 @@ interface ApiService {
   fun addExpense(@Header("Authorization") token: String
                  , @Body createExpenseProperty: CreateExpenseProperty
                   ,@Path ("groupId")groupId:String):
-    Call<CreateExpenseProperty>
+    Call<CreateExpenseResponse>
 
 }
 
