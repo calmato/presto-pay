@@ -33,7 +33,7 @@ data class CreateGroupProperty(
 data class CreateExpenseProperty(
   val name: String,
   val currency:String,
-  val total:Int,
+  val total:Float,
   val payers:List<UserExpense>,
   val tags:List<String>,
   val comment:String,
@@ -59,7 +59,7 @@ data class CreateExpenseResponse(
 @Parcelize
 data class UserExpense(
   val id:String,
-  val amount:Int
+  val amount:Float
 ): Parcelable {}
 
 @Parcelize

@@ -107,9 +107,9 @@ class AddExpenseFragment : PermissionBase() {
   private fun sendRequest(){
     val groupId = "618ff440-e663-4fcb-a519-aaf81d017535"
     val name = expenseName.text.toString()
+    val totalString = amountEdit.text.toString()
     val currency = currencySpinner.selectedItem.toString()
-    val total = (amountEdit.text.toString()).toInt()
-    val payers = listOf<UserExpense>(UserExpense("30TqoiY59wb9aZwdzqwrE4fwim42",250),UserExpense("58cf47e8-cf77-4c92-88bc-48deee452208",-250))
+    val payers = listOf<UserExpense>(UserExpense("30TqoiY59wb9aZwdzqwrE4fwim42",250f),UserExpense("58cf47e8-cf77-4c92-88bc-48deee452208",-250f))
     val tags = mutableListOf<String>()
     for (i in tagList.filter { it.isSelected }){
       tags.add(i.name)
@@ -118,12 +118,29 @@ class AddExpenseFragment : PermissionBase() {
     val paidAt = "${calendarYear.text}-${monthDate[0]}-${monthDate[1]}T00:00:00.000Z"
     val images = encodeImage2Base64(camera)
     val comment = commentEditText.text.toString()
-    val expenseProperty = CreateExpenseProperty(
-      name,currency,total,payers,tags,comment, listOf(images),paidAt
-    )
-    Log.i(TAG, "sendRequest: $expenseProperty")
-
-    addExpenseApi(expenseProperty,groupId)
+    when {
+        name.isEmpty() -> {
+          Toast.makeText(requireContext(),"支払い名を入力してください",Toast.LENGTH_LONG).show()
+        }
+      totalString.isEmpty() -> {
+          Toast.makeText(requireContext(),"合計金額を入力してください",Toast.LENGTH_LONG).show()
+        }
+        else -> {
+          val total = totalString.toFloat()
+          var sumPayment = 0f
+          for(i in payers.filter{it.amount > 0}){
+            sumPayment += i.amount
+          }
+          if(total == sumPayment) {
+            val expenseProperty = CreateExpenseProperty(
+              name, currency, total, payers, tags, comment, listOf(images), paidAt
+            )
+            addExpenseApi(expenseProperty, groupId)
+          }else{
+            Toast.makeText(requireContext(),"ユーザーの支払い金額の総計が合計金額と一致しません",Toast.LENGTH_LONG).show()
+          }
+        }
+    }
   }
   private fun addExpenseApi(expenseProperty:CreateExpenseProperty,groupId:String){
     Api.retrofitService.addExpense("Bearer ${id}",expenseProperty,groupId)
