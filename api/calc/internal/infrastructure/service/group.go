@@ -96,6 +96,38 @@ func (gs *groupService) Create(ctx context.Context, g *group.Group) (*group.Grou
 	return g, nil
 }
 
+func (gs *groupService) AddUsers(
+	ctx context.Context, groupID string, userIDs []string,
+) (*group.Group, error) {
+	g, err := gs.groupRepository.Show(ctx, groupID)
+	if err != nil {
+		return nil, domain.ErrorInDatastore.New(err)
+	}
+
+	for _, userID := range userIDs {
+		if !containsUserID(g, userID) {
+			err := xerrors.New("Failed to Servicee")
+			return nil, domain.AlreadyExistsInDatastore.New(err)
+		}
+
+		g.UserIDs = append(g.UserIDs, userID)
+	}
+
+	if ves := gs.groupDomainValidation.Group(ctx, g); len(ves) > 0 {
+		err := xerrors.New("Failed to DomainValidation")
+		return nil, domain.Unknown.New(err, ves...)
+	}
+
+	current := time.Now()
+	g.UpdatedAt = current
+
+	if err := gs.groupRepository.Update(ctx, g); err != nil {
+		return nil, domain.ErrorInDatastore.New(err)
+	}
+
+	return g, nil
+}
+
 func (gs *groupService) UploadThumbnail(ctx context.Context, data []byte) (string, error) {
 	thumbnailURL, err := gs.groupUploader.UploadThumbnail(ctx, data)
 	if err != nil {
@@ -119,4 +151,18 @@ func (gs *groupService) ContainsUserID(ctx context.Context, g *group.Group, user
 	}
 
 	return false, nil
+}
+
+func containsUserID(g *group.Group, userID string) bool {
+	if g == nil {
+		return false
+	}
+
+	for _, v := range g.UserIDs {
+		if v == userID {
+			return true
+		}
+	}
+
+	return false
 }

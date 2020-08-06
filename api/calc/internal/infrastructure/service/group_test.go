@@ -179,6 +179,60 @@ func TestGroupService_Create(t *testing.T) {
 	}
 }
 
+func TestGroupService_AddUsers(t *testing.T) {
+	testCases := map[string]struct {
+		Group   *group.Group
+		UserIDs []string
+	}{
+		"ok": {
+			Group: &group.Group{
+				ID:           "group-id",
+				Name:         "テストグループ",
+				ThumbnailURL: "",
+				UserIDs:      []string{"user-id"},
+				Users:        map[string]*user.User{},
+			},
+			UserIDs: []string{"test-user01", "test-user02"},
+		},
+	}
+
+	for result, testCase := range testCases {
+		ctx, cancel := context.WithCancel(context.Background())
+		defer cancel()
+
+		ctrl := gomock.NewController(t)
+		defer ctrl.Finish()
+
+		// Defined variables
+		u := &user.User{
+			ID: testCase.Group.UserIDs[0],
+		}
+
+		// Defined mocks
+		gdvm := mock_group.NewMockGroupDomainValidation(ctrl)
+		gdvm.EXPECT().Group(ctx, testCase.Group).Return(nil)
+
+		grm := mock_group.NewMockGroupRepository(ctrl)
+		grm.EXPECT().Create(ctx, testCase.Group).Return(nil)
+
+		gum := mock_group.NewMockGroupUploader(ctrl)
+
+		acm := mock_api.NewMockAPIClient(ctrl)
+		acm.EXPECT().AddGroup(ctx, u.ID, gomock.Any()).Return(nil)
+
+		// Start test
+		t.Run(result, func(t *testing.T) {
+			target := NewGroupService(gdvm, grm, gum, acm)
+
+			_, err := target.Create(ctx, testCase.Group)
+			if err != nil {
+				t.Fatalf("error: %v", err)
+				return
+			}
+		})
+	}
+}
+
 func TestGroupService_UploadThumbnail(t *testing.T) {
 	testCases := map[string]struct {
 		Data     []byte
