@@ -10,7 +10,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
-import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -18,6 +17,7 @@ import work.calmato.prestopay.database.getAppDatabase
 import work.calmato.prestopay.network.*
 import work.calmato.prestopay.repository.FriendsRepository
 import work.calmato.prestopay.repository.GroupsRepository
+import work.calmato.prestopay.R
 
 class ViewModelFriendGroup(application: Application) : AndroidViewModel(application) {
   private val _itemClicked = MutableLiveData<UserProperty>()
@@ -100,7 +100,7 @@ class ViewModelFriendGroup(application: Application) : AndroidViewModel(applicat
     viewModelScope.launch {
       try {
         friendsRepository.addFriend(id, UserId(userId), userProperty)
-        Toast.makeText(activity, "友だち追加しました", Toast.LENGTH_SHORT).show()
+        Toast.makeText(activity, getApplication<Application>().resources.getString(R.string.add_friend_succeeded), Toast.LENGTH_SHORT).show()
         _nowLoading.value = false
       } catch (e: java.lang.Exception) {
         Toast.makeText(activity, e.message, Toast.LENGTH_LONG).show()
@@ -123,10 +123,10 @@ class ViewModelFriendGroup(application: Application) : AndroidViewModel(applicat
           response: Response<GroupPropertyResponse>
         ) {
           if (response.isSuccessful) {
-            Toast.makeText(activity, "新しいグループを作成しました", Toast.LENGTH_SHORT).show()
+            Toast.makeText(activity, getApplication<Application>().resources.getString(R.string.create_group_succeeded), Toast.LENGTH_SHORT).show()
             _navigateToHome.value = true
           } else {
-            Toast.makeText(activity, "グループ作成に失敗しました", Toast.LENGTH_LONG).show()
+            Toast.makeText(activity, getApplication<Application>().resources.getString(R.string.create_group_failed), Toast.LENGTH_LONG).show()
           }
           _nowLoading.value = false
         }
@@ -148,15 +148,15 @@ class ViewModelFriendGroup(application: Application) : AndroidViewModel(applicat
               try {
                 viewModelScope.launch {
                   friendsRepository.deleteFriend(userId)
-                  Toast.makeText(activity, "友達リストから削除しました", Toast.LENGTH_LONG).show()
+                  Toast.makeText(activity, getApplication<Application>().resources.getString(R.string.delete_friend_succeeded), Toast.LENGTH_LONG).show()
                 }
               } catch (e: java.lang.Exception) {
-                Toast.makeText(activity, "友達削除に失敗しました", Toast.LENGTH_LONG).show()
+                Toast.makeText(activity, getApplication<Application>().resources.getString(R.string.delete_friend_failed), Toast.LENGTH_LONG).show()
                 Log.i(TAG, "onResponse: ${e.message}")
               }
             }
           } else {
-            Toast.makeText(activity, "友達削除に失敗しました", Toast.LENGTH_LONG).show()
+            Toast.makeText(activity, getApplication<Application>().resources.getString(R.string.delete_friend_failed), Toast.LENGTH_LONG).show()
           }
           _nowLoading.value = false
         }

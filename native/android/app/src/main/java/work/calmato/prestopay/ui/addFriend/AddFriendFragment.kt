@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
-import android.widget.Adapter
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -20,7 +19,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_add_friend.*
 import kotlinx.android.synthetic.main.fragment_add_friend.nowLoading
-import kotlinx.android.synthetic.main.fragment_create_group.*
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentAddFriendBinding
 import work.calmato.prestopay.network.UserProperty
@@ -71,14 +69,14 @@ class AddFriendFragment : Fragment() {
     search.setOnClickListener {
       val name = userName.text.toString()
       if (name.isEmpty()){
-        Toast.makeText(requireContext(),"友達のユーザー名を入力してください",Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(),resources.getString(R.string.fill_friend_username),Toast.LENGTH_SHORT).show()
       }else {
         viewModel.getUserProperties(name, requireActivity())
       }
     }
     viewModel.usersList.observe(viewLifecycleOwner, Observer {
         if (it.isEmpty()) {
-          Toast.makeText(requireContext(), "ユーザーが見つかりません", Toast.LENGTH_SHORT).show()
+          Toast.makeText(requireContext(), resources.getString(R.string.user_not_found), Toast.LENGTH_SHORT).show()
         }
     })
     val animBlink = AnimationUtils.loadAnimation(requireContext(),R.anim.blink)
@@ -96,12 +94,12 @@ class AddFriendFragment : Fragment() {
         val builder: AlertDialog.Builder? = requireActivity().let {
           AlertDialog.Builder(it)
         }
-        builder?.setTitle("友だち追加しますか？")
-          ?.setPositiveButton("追加する",
+        builder?.setTitle(resources.getString(R.string.add_friend_question))
+          ?.setPositiveButton(resources.getString(R.string.add),
             DialogInterface.OnClickListener { _, _ ->
               viewModel.addFriendApi(it,requireActivity())
             })
-          ?.setNegativeButton("キャンセル", null)
+          ?.setNegativeButton(resources.getString(R.string.cancel), null)
           ?.setView(R.layout.dialog_add_friend)
         val dialog: AlertDialog? = builder?.create()
         dialog?.show()

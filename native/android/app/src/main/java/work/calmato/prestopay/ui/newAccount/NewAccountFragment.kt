@@ -117,7 +117,7 @@ class NewAccountFragment : PermissionBase() {
                 response: Response<AccountResponse>
               ) {
                 if (response.isSuccessful) {
-                  Toast.makeText(requireContext(), "アカウントを作成しました\nログインしてください", Toast.LENGTH_LONG)
+                  Toast.makeText(requireContext(), resources.getString(R.string.failed_to_change_account_information)+"\n"+resources.getString(R.string.please_login), Toast.LENGTH_LONG)
                     .show()
                   navigateToLogin()
                 } else {
@@ -132,16 +132,16 @@ class NewAccountFragment : PermissionBase() {
                       Toast.makeText(activity, errorMessage, Toast.LENGTH_LONG).show()
                     }
                   }catch (e:Exception){
-                    Toast.makeText(activity, "アカウント作成失敗しました", Toast.LENGTH_LONG).show()
+                    Toast.makeText(activity, resources.getString(R.string.failed_create_account), Toast.LENGTH_LONG).show()
                   }
                 }
               }
             })
         } else {
-          Toast.makeText(requireContext(), "入力を確認してください", Toast.LENGTH_SHORT).show()
+          Toast.makeText(requireContext(), resources.getString(R.string.please_fill), Toast.LENGTH_SHORT).show()
         }
       } else {
-        Toast.makeText(requireContext(), "入力を行ってください", Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), resources.getString(R.string.please_fill), Toast.LENGTH_SHORT).show()
       }
     }
 
@@ -160,7 +160,7 @@ class NewAccountFragment : PermissionBase() {
     if (resultCode == Activity.RESULT_OK && requestCode == IMAGE_PICK_CODE) {
       thumbnailEdit.setImageURI(data?.data)
       thumbnailEdit.setBackgroundColor(Color.TRANSPARENT)
-      editPhotoText.text = "写真を変更"
+      editPhotoText.text = resources.getString(R.string.change_image)
     }
   }
 

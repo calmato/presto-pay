@@ -5,7 +5,7 @@
   <string name="fb_login_protocol_scheme">fb583814478990192</string>
   <string name="app_name">PrestoPay</string>
   <string name="create_new_account">アカウントを作成</string>
-  <string name="already_has_an_account" translatable="false">既にアカウントをお持ちの方</string>
+  <string name="already_has_an_account">既にアカウントをお持ちの方</string>
   <string name="upload_photo">写真を追加</string>
   <string name="camera_icon">カメラのアイコン</string>
   <string name="name">名前</string>

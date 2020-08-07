@@ -109,7 +109,7 @@ class AddExpenseFragment : PermissionBase() {
     val name = expenseName.text.toString()
     val totalString = amountEdit.text.toString()
     val currency = currencySpinner.selectedItem.toString()
-    val payers = listOf<UserExpense>(UserExpense("30TqoiY59wb9aZwdzqwrE4fwim42",250f),UserExpense("58cf47e8-cf77-4c92-88bc-48deee452208",-250f))
+    val payers = listOf<UserExpense>(UserExpense("30TqoiY59wb9aZwdzqwrE4fwim42",250.1f),UserExpense("58cf47e8-cf77-4c92-88bc-48deee452208",-250.1f))
     val tags = mutableListOf<String>()
     for (i in tagList.filter { it.isSelected }){
       tags.add(i.name)
@@ -120,10 +120,10 @@ class AddExpenseFragment : PermissionBase() {
     val comment = commentEditText.text.toString()
     when {
         name.isEmpty() -> {
-          Toast.makeText(requireContext(),"支払い名を入力してください",Toast.LENGTH_LONG).show()
+          Toast.makeText(requireContext(),resources.getString(R.string.fill_expense_name),Toast.LENGTH_LONG).show()
         }
       totalString.isEmpty() -> {
-          Toast.makeText(requireContext(),"合計金額を入力してください",Toast.LENGTH_LONG).show()
+          Toast.makeText(requireContext(),resources.getString(R.string.fill_total_amount),Toast.LENGTH_LONG).show()
         }
         else -> {
           val total = totalString.toFloat()
@@ -137,7 +137,7 @@ class AddExpenseFragment : PermissionBase() {
             )
             addExpenseApi(expenseProperty, groupId)
           }else{
-            Toast.makeText(requireContext(),"ユーザーの支払い金額の総計が合計金額と一致しません",Toast.LENGTH_LONG).show()
+            Toast.makeText(requireContext(),resources.getString(R.string.total_amount_error),Toast.LENGTH_LONG).show()
           }
         }
     }
@@ -154,9 +154,9 @@ class AddExpenseFragment : PermissionBase() {
           response: Response<CreateExpenseResponse>
         ) {
           if (response.isSuccessful) {
-            Toast.makeText(activity, "新しい支払い情報を作成しました", Toast.LENGTH_SHORT).show()
+            Toast.makeText(activity, resources.getString(R.string.registered_new_expense), Toast.LENGTH_SHORT).show()
           } else {
-            Toast.makeText(activity, "支払い情報作成に失敗しました", Toast.LENGTH_LONG).show()
+            Toast.makeText(activity,resources.getString(R.string.failed_register_new_expense), Toast.LENGTH_LONG).show()
           }
         }
       })
@@ -175,14 +175,14 @@ class AddExpenseFragment : PermissionBase() {
     input.setBackgroundResource(android.R.color.transparent)
     input.setText(commentEditText.text)
 
-    builder?.setTitle("コメント追加")
-      ?.setPositiveButton("追加",
+    builder?.setTitle(resources.getString(R.string.add_comment))
+      ?.setPositiveButton(resources.getString(R.string.add),
         DialogInterface.OnClickListener{_,_ ->
           commentEditText.setText(input.text.toString())
           commentEditText.visibility = EditText.VISIBLE
           commentText.visibility = TextView.VISIBLE
         })
-      ?.setNegativeButton("キャンセル", null)
+      ?.setNegativeButton(resources.getString(R.string.cancel), null)
       ?.setView(input)
     val dialog:AlertDialog? = builder?.create()
     dialog?.show()

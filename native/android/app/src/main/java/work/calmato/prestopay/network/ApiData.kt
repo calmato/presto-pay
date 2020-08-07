@@ -46,7 +46,7 @@ data class CreateExpenseResponse(
   val id:String,
   val name: String,
   val currency:String,
-  val total:Int,
+  val total:Float,
   val payers:List<UserExpense>,
   val tags:List<String>,
   val comment:String,
