@@ -1,6 +1,10 @@
 package work.calmato.prestopay.network
 
+import android.os.BaseBundle
 import android.os.Parcelable
+import com.google.gson.JsonArray
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
@@ -115,5 +119,12 @@ data class AccountResponse(
   val createdAt: String,
   val updatedAt: String
 ) : Parcelable
+
+data class CurrencyApi(
+  val base: String,
+  val date: String,
+  val rates: Map<String,Float>
+)
+
 
 
