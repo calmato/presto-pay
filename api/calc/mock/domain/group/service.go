@@ -80,6 +80,21 @@ func (mr *MockGroupServiceMockRecorder) Create(ctx, g interface{}) *gomock.Call 
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockGroupService)(nil).Create), ctx, g)
 }
 
+// AddUsers mocks base method
+func (m *MockGroupService) AddUsers(ctx context.Context, groupID string, userIDs []string) (*group.Group, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "AddUsers", ctx, groupID, userIDs)
+	ret0, _ := ret[0].(*group.Group)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// AddUsers indicates an expected call of AddUsers
+func (mr *MockGroupServiceMockRecorder) AddUsers(ctx, groupID, userIDs interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AddUsers", reflect.TypeOf((*MockGroupService)(nil).AddUsers), ctx, groupID, userIDs)
+}
+
 // UploadThumbnail mocks base method
 func (m *MockGroupService) UploadThumbnail(ctx context.Context, data []byte) (string, error) {
 	m.ctrl.T.Helper()

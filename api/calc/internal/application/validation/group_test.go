@@ -36,3 +36,30 @@ func TestGroupRequestValidation_CreateGroup(t *testing.T) {
 		})
 	}
 }
+
+func TestGroupRequestValidation_AddUsersInGroup(t *testing.T) {
+	testCases := map[string]struct {
+		Request  *request.AddUsersInGroup
+		Expected []*domain.ValidationError
+	}{
+		"ok": {
+			Request: &request.AddUsersInGroup{
+				UserIDs: []string{},
+			},
+			Expected: make([]*domain.ValidationError, 0),
+		},
+	}
+
+	for result, testCase := range testCases {
+		// Start test
+		t.Run(result, func(t *testing.T) {
+			target := NewGroupRequestValidation()
+
+			got := target.AddUsersInGroup(testCase.Request)
+			if !reflect.DeepEqual(got, testCase.Expected) {
+				t.Fatalf("want %#v, but %#v", testCase.Expected, got)
+				return
+			}
+		})
+	}
+}

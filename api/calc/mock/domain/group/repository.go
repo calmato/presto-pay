@@ -62,3 +62,17 @@ func (mr *MockGroupRepositoryMockRecorder) Create(ctx, g interface{}) *gomock.Ca
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockGroupRepository)(nil).Create), ctx, g)
 }
+
+// Update mocks base method
+func (m *MockGroupRepository) Update(ctx context.Context, g *group.Group) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Update", ctx, g)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// Update indicates an expected call of Update
+func (mr *MockGroupRepositoryMockRecorder) Update(ctx, g interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Update", reflect.TypeOf((*MockGroupRepository)(nil).Update), ctx, g)
+}
