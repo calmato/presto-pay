@@ -43,7 +43,7 @@ class ResetPassFragment : Fragment() {
           }
         }
       } else {
-        Toast.makeText(requireContext(), "メールアドレスを入力してください", Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), resources.getString(R.string.fill_email), Toast.LENGTH_SHORT).show()
       }
     }
   }

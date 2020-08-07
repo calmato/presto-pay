@@ -92,10 +92,11 @@
         android:layout_marginTop="52dp"
         android:layout_marginEnd="52dp"
         android:ems="10"
-        android:hint="Email"
+        android:hint="@string/email"
         android:inputType="textEmailAddress"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:autofillHints="" />
 
       <EditText
         android:id="@+id/loginPasswordField"
@@ -104,7 +105,7 @@
         android:layout_marginTop="16dp"
         android:autofillHints=""
         android:ems="10"
-        android:hint="Password"
+        android:hint="@string/password"
         android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="@+id/loginEmailField"
         app:layout_constraintHorizontal_bias="0.0"

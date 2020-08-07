@@ -70,12 +70,12 @@ class AccountHomeFragment : Fragment() {
 
   private fun showAlertDialog() {
     val builder = AlertDialog.Builder(requireContext())
-    builder.setTitle("ログアウト")
-    builder.setMessage("本当にログアウトしていいですか？")
-    builder.setPositiveButton("YES") { dialog, which ->
+    builder.setTitle(resources.getString(R.string.logout))
+    builder.setMessage(resources.getString(R.string.logout_confirmation))
+    builder.setPositiveButton(resources.getString(R.string.yes)) { dialog, which ->
       logout()
     }
-    builder.setNegativeButton("NO") { dialog, which ->
+    builder.setNegativeButton(resources.getString(R.string.no)) { dialog, which ->
     }
     val dialog: AlertDialog = builder.create()
     dialog.show()

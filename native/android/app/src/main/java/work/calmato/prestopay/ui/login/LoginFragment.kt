@@ -104,7 +104,7 @@ class LoginFragment : Fragment() {
               handleFacebookAccessToken(result.accessToken)
             } else {
               Toast.makeText(
-                requireContext(), "認証に失敗しました.もう一度お願いします",
+                requireContext(), resources.getString(R.string.authorization_failed),
                 Toast.LENGTH_SHORT
               ).show()
             }
@@ -221,15 +221,14 @@ class LoginFragment : Fragment() {
             // If sign in fails, display a message to the user.
             Log.w(DEFAULT_TAG, "signInWithEmail:failure", task.exception)
             Toast.makeText(
-              requireContext(), "認証が失敗しました",
+              requireContext(), resources.getString(R.string.authorization_failed),
               Toast.LENGTH_SHORT
             ).show()
-            Toast.makeText(requireContext(), "もう一度お願いします", Toast.LENGTH_SHORT).show()
             updateUI(null)
           }
         })
     } else {
-      Toast.makeText(requireContext(), "emailとpasswordを入力してください", Toast.LENGTH_SHORT).show()
+      Toast.makeText(requireContext(), resources.getString(R.string.fill_email_password), Toast.LENGTH_SHORT).show()
     }
     // [END create_user_with_email]
   }
@@ -249,7 +248,7 @@ class LoginFragment : Fragment() {
           // If sign in fails, display a message to the user.
           Log.w(GOOGLE_TAG, "signInWithCredential:failure", task.exception)
           Toast.makeText(
-            requireContext(), "認証が失敗しました",
+            requireContext(), resources.getString(R.string.authorization_failed),
             Toast.LENGTH_SHORT
           ).show()
           updateUI(null)
@@ -305,7 +304,7 @@ class LoginFragment : Fragment() {
           // If sign in fails, display a message to the user.
           Log.w(FACEBOOK_TAG, "signInWithCredential:failure", task.exception)
           Toast.makeText(
-            requireContext(), "認証が失敗しました",
+            requireContext(), resources.getString(R.string.authorization_failed),
             Toast.LENGTH_SHORT
           ).show()
           updateUI(null)

@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import work.calmato.prestopay.R
 
 open class PermissionBase :Fragment() {
   override fun onRequestPermissionsResult(
@@ -24,7 +25,7 @@ open class PermissionBase :Fragment() {
         if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
           pickImageFromGallery()
         } else {
-          Toast.makeText(requireActivity(), "アクセスが拒否されました", Toast.LENGTH_LONG).show()
+          Toast.makeText(requireActivity(), resources.getString(R.string.access_denied), Toast.LENGTH_LONG).show()
         }
         return
       }
@@ -59,7 +60,7 @@ open class PermissionBase :Fragment() {
         // Show an explanation to the user *asynchronously* -- don't block
         // this thread waiting for the user's response! After the user
         // sees the explanation, try again to request the permission.
-        Toast.makeText(requireActivity(), "設定からギャラリーへのアクセスを許可してください", Toast.LENGTH_LONG).show()
+        Toast.makeText(requireActivity(), resources.getString(R.string.change_gallery_setting), Toast.LENGTH_LONG).show()
       } else {
         // No explanation needed, we can request the permission.
         requestPermissions(

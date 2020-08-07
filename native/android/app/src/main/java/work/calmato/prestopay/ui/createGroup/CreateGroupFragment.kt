@@ -10,11 +10,7 @@ import android.view.*
 import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
-import com.google.firebase.auth.FirebaseAuth
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
@@ -27,7 +23,6 @@ import work.calmato.prestopay.network.CreateGroupProperty
 import work.calmato.prestopay.network.Users
 import work.calmato.prestopay.util.AdapterGrid
 import work.calmato.prestopay.util.Constant.Companion.IMAGE_PICK_CODE
-import work.calmato.prestopay.util.Constant.Companion.MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE
 import work.calmato.prestopay.util.PermissionBase
 import work.calmato.prestopay.util.ViewModelFriendGroup
 import work.calmato.prestopay.util.encodeImage2Base64
@@ -87,10 +82,10 @@ class CreateGroupFragment : PermissionBase() {
           CreateGroupProperty(groupName, thumbnailStr, usersListToBeSent!!.users.map { it.id })
         viewModel.createGroupApi(groupProperty,requireActivity())
       } else {
-        Toast.makeText(requireContext(), "グループメンバーは100人までです", Toast.LENGTH_LONG).show()
+        Toast.makeText(requireContext(), resources.getString(R.string.group_member_restriction), Toast.LENGTH_LONG).show()
       }
     } else {
-      Toast.makeText(requireContext(), "1〜31文字のグループ名を入力してください", Toast.LENGTH_LONG).show()
+      Toast.makeText(requireContext(), resources.getString(R.string.group_name_restriction), Toast.LENGTH_LONG).show()
     }
   }
 

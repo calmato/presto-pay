@@ -107,9 +107,9 @@ class AddExpenseFragment : PermissionBase() {
   private fun sendRequest(){
     val groupId = "618ff440-e663-4fcb-a519-aaf81d017535"
     val name = expenseName.text.toString()
+    val totalString = amountEdit.text.toString()
     val currency = currencySpinner.selectedItem.toString()
-    val total = (amountEdit.text.toString()).toInt()
-    val payers = listOf<UserExpense>(UserExpense("30TqoiY59wb9aZwdzqwrE4fwim42",250),UserExpense("58cf47e8-cf77-4c92-88bc-48deee452208",-250))
+    val payers = listOf<UserExpense>(UserExpense("30TqoiY59wb9aZwdzqwrE4fwim42",250.1f),UserExpense("58cf47e8-cf77-4c92-88bc-48deee452208",-250.1f))
     val tags = mutableListOf<String>()
     for (i in tagList.filter { it.isSelected }){
       tags.add(i.name)
@@ -118,12 +118,29 @@ class AddExpenseFragment : PermissionBase() {
     val paidAt = "${calendarYear.text}-${monthDate[0]}-${monthDate[1]}T00:00:00.000Z"
     val images = encodeImage2Base64(camera)
     val comment = commentEditText.text.toString()
-    val expenseProperty = CreateExpenseProperty(
-      name,currency,total,payers,tags,comment, listOf(images),paidAt
-    )
-    Log.i(TAG, "sendRequest: $expenseProperty")
-
-    addExpenseApi(expenseProperty,groupId)
+    when {
+        name.isEmpty() -> {
+          Toast.makeText(requireContext(),resources.getString(R.string.fill_expense_name),Toast.LENGTH_LONG).show()
+        }
+      totalString.isEmpty() -> {
+          Toast.makeText(requireContext(),resources.getString(R.string.fill_total_amount),Toast.LENGTH_LONG).show()
+        }
+        else -> {
+          val total = totalString.toFloat()
+          var sumPayment = 0f
+          for(i in payers.filter{it.amount > 0}){
+            sumPayment += i.amount
+          }
+          if(total == sumPayment) {
+            val expenseProperty = CreateExpenseProperty(
+              name, currency, total, payers, tags, comment, listOf(images), paidAt
+            )
+            addExpenseApi(expenseProperty, groupId)
+          }else{
+            Toast.makeText(requireContext(),resources.getString(R.string.total_amount_error),Toast.LENGTH_LONG).show()
+          }
+        }
+    }
   }
   private fun addExpenseApi(expenseProperty:CreateExpenseProperty,groupId:String){
     Api.retrofitService.addExpense("Bearer ${id}",expenseProperty,groupId)
@@ -137,9 +154,9 @@ class AddExpenseFragment : PermissionBase() {
           response: Response<CreateExpenseResponse>
         ) {
           if (response.isSuccessful) {
-            Toast.makeText(activity, "新しい支払い情報を作成しました", Toast.LENGTH_SHORT).show()
+            Toast.makeText(activity, resources.getString(R.string.registered_new_expense), Toast.LENGTH_SHORT).show()
           } else {
-            Toast.makeText(activity, "支払い情報作成に失敗しました", Toast.LENGTH_LONG).show()
+            Toast.makeText(activity,resources.getString(R.string.failed_register_new_expense), Toast.LENGTH_LONG).show()
           }
         }
       })
@@ -158,14 +175,14 @@ class AddExpenseFragment : PermissionBase() {
     input.setBackgroundResource(android.R.color.transparent)
     input.setText(commentEditText.text)
 
-    builder?.setTitle("コメント追加")
-      ?.setPositiveButton("追加",
+    builder?.setTitle(resources.getString(R.string.add_comment))
+      ?.setPositiveButton(resources.getString(R.string.add),
         DialogInterface.OnClickListener{_,_ ->
           commentEditText.setText(input.text.toString())
           commentEditText.visibility = EditText.VISIBLE
           commentText.visibility = TextView.VISIBLE
         })
-      ?.setNegativeButton("キャンセル", null)
+      ?.setNegativeButton(resources.getString(R.string.cancel), null)
       ?.setView(input)
     val dialog:AlertDialog? = builder?.create()
     dialog?.show()

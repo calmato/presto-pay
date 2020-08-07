@@ -71,7 +71,7 @@ class AccountEditFragment : PermissionBase() {
             response: Response<EditAccountResponse>
           ) {
             if(response.isSuccessful){
-              Toast.makeText(requireContext(), "変更しました", Toast.LENGTH_LONG).show()
+              Toast.makeText(requireContext(), resources.getString(R.string.changed), Toast.LENGTH_LONG).show()
               val editor =  sharedPreferences.edit()
               editor.putString("thumbnailUrl", response.body()?.thumbnailUrl)
               editor.putString("name", response.body()?.name)
@@ -91,13 +91,13 @@ class AccountEditFragment : PermissionBase() {
                   Toast.makeText(activity, errorMessage, Toast.LENGTH_LONG).show()
                 }
               }catch (e:Exception){
-                Toast.makeText(activity, "アカウント情報の修正に失敗しました", Toast.LENGTH_LONG).show()
+                Toast.makeText(activity, resources.getString(R.string.failed_to_change_account_information), Toast.LENGTH_LONG).show()
               }
             }
           }
         })
       } else {
-        Toast.makeText(requireContext(), "入力を行ってください", Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), resources.getString(R.string.fill_all_required_forms), Toast.LENGTH_SHORT).show()
       }
     }
 
@@ -118,7 +118,7 @@ class AccountEditFragment : PermissionBase() {
     if (resultCode == Activity.RESULT_OK && requestCode == Constant.IMAGE_PICK_CODE) {
       thumbnailEdit.setImageURI(data?.data)
       thumbnailEdit.setBackgroundColor(Color.TRANSPARENT)
-      changeProfilePicture.text = "写真を変更"
+      changeProfilePicture.text = resources.getText(R.string.change_image)
     }
   }
 

@@ -1,5 +1,6 @@
 package work.calmato.prestopay.network
 
+import com.google.gson.JsonObject
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -12,6 +13,7 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.*
 
 private const val BASE_URL = "https://api.presto-pay-stg.calmato.work/v1/"
+private const val BASE_URL_CURRENCY = "https://api.exchangeratesapi.io/"
 
 /**
  * Build the Moshi object that Retrofit will be using, making sure to add the Kotlin adapter for
@@ -36,6 +38,13 @@ private val retrofit = Retrofit.Builder()
   .addConverterFactory(MoshiConverterFactory.create(moshi))
   .addCallAdapterFactory(CoroutineCallAdapterFactory())
   .baseUrl(BASE_URL)
+  .client(client)
+  .build()
+
+private val retrofit_currency = Retrofit.Builder()
+  .addConverterFactory(MoshiConverterFactory.create(moshi))
+  .addCallAdapterFactory(CoroutineCallAdapterFactory())
+  .baseUrl(BASE_URL_CURRENCY)
   .client(client)
   .build()
 
@@ -98,9 +107,18 @@ interface ApiService {
 
 }
 
+interface ApiServiceCurrency{
+  @GET("latest")
+  fun getLatestCurrency():Call<CurrencyApi>
+}
+
 /**
  * A public Api object that exposes the lazy-initialized Retrofit service
  */
 object Api {
   val retrofitService: ApiService by lazy { retrofit.create(ApiService::class.java) }
+}
+
+object ApiCurrency{
+  val retrofitServiceCurrency: ApiServiceCurrency by lazy { retrofit_currency.create(ApiServiceCurrency::class.java) }
 }
