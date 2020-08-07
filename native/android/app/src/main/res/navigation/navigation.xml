@@ -3,7 +3,7 @@
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   android:id="@+id/navigation"
-  app:startDestination="@id/home_fragment">
+  app:startDestination="@id/login_fragment">
 
   <fragment
     android:id="@+id/login_fragment"
@@ -54,10 +54,12 @@
     tools:layout="@layout/fragment_home">
     <action
       android:id="@+id/action_home_fragment_to_account_home"
-      app:destination="@id/account_home" />
+      app:destination="@id/account_home"
+      app:enterAnim="@anim/slide_in_right"/>
     <action
       android:id="@+id/action_home_fragment_to_groupFriendFragment"
-      app:destination="@id/groupFriendFragment" />
+      app:destination="@id/groupFriendFragment"
+      app:enterAnim="@anim/slide_in_left"/>
     <action
       android:id="@+id/action_home_fragment_to_friendListFragment"
       app:destination="@id/friendListFragment" />

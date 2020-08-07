@@ -23,14 +23,14 @@
       android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:layout_weight="1"
-      android:text="金額" />
+      android:text="@string/amount" />
 
     <RadioButton
       android:id="@+id/byRatio"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:layout_weight="1"
-      android:text="割合" />
+      android:text="@string/ratio" />
   </RadioGroup>
 
   <TextView
@@ -51,7 +51,7 @@
     android:layout_marginStart="8dp"
     android:layout_marginEnd="8dp"
     android:ems="10"
-    android:hint="金額"
+    android:hint="@string/amount"
     android:inputType="numberDecimal"
     app:layout_constraintBottom_toBottomOf="@+id/textView7"
     app:layout_constraintEnd_toEndOf="parent"
@@ -76,7 +76,7 @@
     android:layout_marginEnd="8dp"
     android:layout_marginBottom="8dp"
     android:backgroundTint="@color/ourTheme"
-    android:text="完了"
+    android:text="@string/done"
     android:textColor="@color/tw__solid_white"
     android:textStyle="bold"
     app:layout_constraintBottom_toBottomOf="parent"

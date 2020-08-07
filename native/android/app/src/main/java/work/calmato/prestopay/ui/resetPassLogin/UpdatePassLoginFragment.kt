@@ -84,7 +84,7 @@ class UpdatePassLoginFragment : Fragment() {
           if (it.isSuccessful) {
             user.updatePassword(newPass).addOnCompleteListener {
               if (it.isSuccessful) {
-                Toast.makeText(requireContext(), "パスワードを変更しました", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), resources.getString(R.string.password_changed), Toast.LENGTH_SHORT).show()
                 this.findNavController().navigate(
                   UpdatePassLoginFragmentDirections.actionUpdatePassLoginFragmentToAccountHome()
 
@@ -99,14 +99,14 @@ class UpdatePassLoginFragment : Fragment() {
               }
             }
           } else {
-            Toast.makeText(requireContext(), "現在のパスワードが正しくありません", Toast.LENGTH_LONG).show()
+            Toast.makeText(requireContext(), resources.getString(R.string.current_password_wrong), Toast.LENGTH_LONG).show()
           }
         }
       } else {
-        Toast.makeText(requireContext(), "パスワードが一致しません", Toast.LENGTH_LONG).show()
+        Toast.makeText(requireContext(), resources.getString(R.string.password_doesnt_match), Toast.LENGTH_LONG).show()
       }
     } else{
-      Toast.makeText(requireContext(), "空白の欄があります", Toast.LENGTH_LONG).show()
+      Toast.makeText(requireContext(), resources.getString(R.string.empty_form_exist), Toast.LENGTH_LONG).show()
     }
   }
 }

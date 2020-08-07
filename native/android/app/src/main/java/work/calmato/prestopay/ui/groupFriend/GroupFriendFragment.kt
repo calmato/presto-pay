@@ -16,6 +16,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_group_friend.*
 import work.calmato.prestopay.R
@@ -78,7 +79,7 @@ class GroupFriendFragment : Fragment() {
 
     viewModel.userListView()
     viewModel.groupListView()
-    binding.groupRecycle.apply {
+    binding.groupRecycleView.apply {
       layoutManager = LinearLayoutManager(context)
       adapter = recycleGroupAdapter
     }
@@ -117,18 +118,18 @@ class GroupFriendFragment : Fragment() {
           AlertDialog.Builder(it)
         }
         builder?.setView(R.layout.dialog_add_friend)
-          ?.setPositiveButton("友達リストから削除する"
-            , DialogInterface.OnClickListener { _, _ ->
-              val builder2: AlertDialog.Builder? = requireActivity().let {
+          ?.setPositiveButton(resources.getString(R.string.delete_friend)
+          ,DialogInterface.OnClickListener{_,_->
+              val builder2:AlertDialog.Builder? = requireActivity().let {
                 AlertDialog.Builder(it)
               }
-              builder2?.setMessage("本当に削除しますか？")
-                ?.setPositiveButton("削除する"
-                  , DialogInterface.OnClickListener { _, _ ->
-                    viewModel.deleteFriend(it.id, requireActivity())
+              builder2?.setMessage(resources.getString(R.string.delete_question))
+                ?.setPositiveButton(resources.getString(R.string.delete)
+                ,DialogInterface.OnClickListener{_,_->
+                    viewModel.deleteFriend(it.id,requireActivity())
                   })
-                ?.setNegativeButton("キャンセル", null)
-              val dialog2: AlertDialog? = builder2?.create()
+                ?.setNegativeButton(resources.getString(R.string.cancel),null)
+              val dialog2:AlertDialog? = builder2?.create()
               dialog2?.show()
             })
         val dialog: AlertDialog? = builder?.create()
@@ -147,6 +148,20 @@ class GroupFriendFragment : Fragment() {
     val thumbnailUrl = sharedPreferences.getString("thumbnailUrl", "")
     if (thumbnailUrl.isNotEmpty()) {
       Picasso.with(context).load(thumbnailUrl).into(thumbnail)
+    }
+    groupSwitcher.setOnClickListener {
+      if(groupRecycleView.visibility==RecyclerView.VISIBLE && friendsRecycleView.visibility==RecyclerView.VISIBLE){
+        groupRecycleView.visibility = RecyclerView.GONE
+      }else{
+        groupRecycleView.visibility = RecyclerView.VISIBLE
+      }
+    }
+    friendSwitcher.setOnClickListener {
+      if(friendsRecycleView.visibility==RecyclerView.VISIBLE && groupRecycleView.visibility==RecyclerView.VISIBLE){
+        friendsRecycleView.visibility = RecyclerView.GONE
+      }else{
+        friendsRecycleView.visibility = RecyclerView.VISIBLE
+      }
     }
   }
 

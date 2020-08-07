@@ -14,7 +14,7 @@
       android:layout_height="wrap_content"
       android:layout_marginStart="16dp"
       android:layout_marginTop="24dp"
-      android:text="Group Name"
+      android:text="@string/group_name"
       android:textSize="36sp"
       android:textStyle="bold"
       app:layout_constraintStart_toStartOf="parent"
@@ -28,19 +28,21 @@
       android:layout_marginTop="16dp"
       android:layout_marginEnd="8dp"
       android:ems="10"
-      android:hint="支払い名"
+      android:hint="@string/expense_name"
       android:inputType="textPersonName"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toEndOf="@+id/tagImage"
-      app:layout_constraintTop_toBottomOf="@+id/thumbnail" />
+      app:layout_constraintTop_toBottomOf="@+id/thumbnail"
+      android:autofillHints="" />
 
     <EditText
       android:id="@+id/amountEdit"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:layout_marginTop="24dp"
+      android:autofillHints=""
       android:ems="10"
-      android:hint="金額"
+      android:hint="@string/amount"
       android:inputType="numberDecimal"
       app:layout_constraintEnd_toEndOf="@+id/expenseName"
       app:layout_constraintHorizontal_bias="1.0"
@@ -53,7 +55,7 @@
       android:layout_height="wrap_content"
       android:layout_marginStart="16dp"
       android:layout_marginTop="100dp"
-      android:text="支払い者"
+      android:text="@string/who_paied"
       android:textSize="18sp"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/amountEdit" />
@@ -74,7 +76,7 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginTop="32dp"
-      android:text="対象者"
+      android:text="@string/for_whom"
       android:textSize="18sp"
       app:layout_constraintStart_toStartOf="@+id/textView9"
       app:layout_constraintTop_toBottomOf="@+id/textView9" />
@@ -93,7 +95,7 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginTop="16dp"
-      android:text="高度な支払い設定"
+      android:text="@string/advanced_setting"
       app:layout_constraintEnd_toEndOf="@+id/spinner3"
       app:layout_constraintTop_toBottomOf="@+id/spinner3" />
 
@@ -122,12 +124,12 @@
     <androidx.constraintlayout.widget.ConstraintLayout
       android:id="@+id/constraintDate"
       android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginBottom="32dp"
-      app:layout_constraintBottom_toBottomOf="parent"
+      android:layout_height="0dp"
+      android:layout_marginTop="120dp"
       app:layout_constraintEnd_toStartOf="@+id/camera"
       app:layout_constraintHorizontal_bias="0.5"
-      app:layout_constraintStart_toStartOf="parent">
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/textView10">
 
       <TextView
         android:id="@+id/calendarYear"
@@ -171,7 +173,7 @@
       android:id="@+id/commentText"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:text="コメント"
+      android:text="@string/comment"
       android:textSize="18sp"
       android:visibility="invisible"
       app:layout_constraintStart_toStartOf="@+id/textView10"

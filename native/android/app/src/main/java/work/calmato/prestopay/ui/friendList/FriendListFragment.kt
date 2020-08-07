@@ -1,8 +1,11 @@
 package work.calmato.prestopay.ui.friendList
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.*
 import androidx.activity.OnBackPressedCallback
+import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -11,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.twitter.sdk.android.core.models.User
+import kotlinx.android.synthetic.main.fragment_friend_list.*
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentFriendListBinding
 import work.calmato.prestopay.network.UserProperty
@@ -82,6 +86,19 @@ class FriendListFragment : Fragment() {
         }
       }
     )
+    searchEdit.addTextChangedListener (object:TextWatcher{
+      override fun afterTextChanged(s: Editable?) {}
+
+      override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+      override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+        if (s.isNullOrEmpty()) {
+          recycleAdapter?.friendList = friendListArg
+        } else {
+          recycleAdapter?.friendList = friendListArg.filter { it.name.toLowerCase().contains(s) }
+        }
+      }
+    })
   }
 
   override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

@@ -55,7 +55,7 @@
         android:id="@+id/textView2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="グループを追加する"
+        android:text="@string/create_group"
         android:textAlignment="center"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="@+id/imageView5"
@@ -97,7 +97,7 @@
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="友達を追加する"
+        android:text="@string/add_friend"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="@+id/imageView3"
         app:layout_constraintEnd_toStartOf="@+id/imageView7"
@@ -116,12 +116,13 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-      android:id="@+id/constraintLayout5"
+      android:id="@+id/groupSwitcher"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_marginTop="8dp"
       android:background="#99C1C1C1"
       app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.5"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/addFriend">
 
@@ -140,29 +141,33 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:text="グループ"
+        android:text="@string/group"
         app:layout_constraintBottom_toBottomOf="@+id/imageView12"
         app:layout_constraintStart_toEndOf="@+id/imageView12"
         app:layout_constraintTop_toTopOf="@+id/imageView12" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-      android:id="@+id/groupRecycle"
+      android:id="@+id/groupRecycleView"
       android:layout_width="match_parent"
-      android:layout_height="200dp"
+      android:layout_height="0dp"
+      android:visibility="visible"
+      app:layout_constraintBottom_toTopOf="@+id/friendSwitcher"
       app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.5"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/constraintLayout5" />
+      app:layout_constraintTop_toBottomOf="@+id/groupSwitcher" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-      android:id="@+id/constraintLayout6"
+      android:id="@+id/friendSwitcher"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:background="#99C1C1C1"
+      app:layout_constraintBottom_toTopOf="@+id/friendsRecycleView"
       app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintHorizontal_bias="0.0"
+      app:layout_constraintHorizontal_bias="0.5"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/groupRecycle">
+      app:layout_constraintTop_toBottomOf="@+id/groupRecycleView">
 
       <ImageView
         android:id="@+id/imageView13"
@@ -179,7 +184,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:text="友達"
+        android:text="@string/friend"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imageView13"
         app:layout_constraintTop_toTopOf="parent" />
@@ -189,10 +194,12 @@
       android:id="@+id/friendsRecycleView"
       android:layout_width="0dp"
       android:layout_height="0dp"
+      android:visibility="visible"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.5"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/constraintLayout6" />
+      app:layout_constraintTop_toBottomOf="@+id/friendSwitcher" />
 
     <TextView
       android:id="@+id/nowLoading"

@@ -1,6 +1,10 @@
 package work.calmato.prestopay.network
 
+import android.os.BaseBundle
 import android.os.Parcelable
+import com.google.gson.JsonArray
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
@@ -33,7 +37,7 @@ data class CreateGroupProperty(
 data class CreateExpenseProperty(
   val name: String,
   val currency:String,
-  val total:Int,
+  val total:Float,
   val payers:List<UserExpense>,
   val tags:List<String>,
   val comment:String,
@@ -46,7 +50,7 @@ data class CreateExpenseResponse(
   val id:String,
   val name: String,
   val currency:String,
-  val total:Int,
+  val total:Float,
   val payers:List<UserExpense>,
   val tags:List<String>,
   val comment:String,
@@ -59,7 +63,7 @@ data class CreateExpenseResponse(
 @Parcelize
 data class UserExpense(
   val id:String,
-  val amount:Int
+  val amount:Float
 ): Parcelable {}
 
 @Parcelize
@@ -115,5 +119,12 @@ data class AccountResponse(
   val createdAt: String,
   val updatedAt: String
 ) : Parcelable
+
+data class CurrencyApi(
+  val base: String,
+  val date: String,
+  val rates: Map<String,Float>
+)
+
 
 
