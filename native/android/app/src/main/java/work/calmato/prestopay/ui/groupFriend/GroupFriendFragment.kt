@@ -55,7 +55,7 @@ class GroupFriendFragment : Fragment() {
   }
 
   private lateinit var clickListener: AdapterFriendPlane.OnClickListener
-  private lateinit var clickListenerGroup:AdapterGroupPlane.OnClickListener
+  private lateinit var clickListenerGroup: AdapterGroupPlane.OnClickListener
 
   override fun onCreateView(
     inflater: LayoutInflater,
@@ -67,8 +67,9 @@ class GroupFriendFragment : Fragment() {
 
     binding.lifecycleOwner = this
     binding.viewModel = viewModel
+
     clickListener = AdapterFriendPlane.OnClickListener { viewModel.itemIsClicked(it) }
-    clickListenerGroup = AdapterGroupPlane.OnClickListener{viewModel.itemIsClickedGroup(it)}
+    clickListenerGroup = AdapterGroupPlane.OnClickListener { viewModel.itemIsClickedGroup(it) }
     recycleAdapter = AdapterFriendPlane(clickListener)
     recycleGroupAdapter = AdapterGroupPlane(clickListenerGroup)
     binding.friendsRecycleView.apply {
@@ -96,15 +97,16 @@ class GroupFriendFragment : Fragment() {
     addGroup.setOnClickListener {
       this.findNavController().navigate(
         GroupFriendFragmentDirections.actionGroupFriendFragmentToFriendListFragment(
-          Users(emptyList<UserProperty>()))
+          Users(emptyList<UserProperty>())
+        )
       )
     }
-    val animBlink = AnimationUtils.loadAnimation(requireContext(),R.anim.blink)
+    val animBlink = AnimationUtils.loadAnimation(requireContext(), R.anim.blink)
     viewModel.nowLoading.observe(viewLifecycleOwner, Observer {
-      if(it){
+      if (it) {
         nowLoading.visibility = View.VISIBLE
         nowLoading.startAnimation(animBlink)
-      }else{
+      } else {
         nowLoading.clearAnimation()
         nowLoading.visibility = View.INVISIBLE
       }

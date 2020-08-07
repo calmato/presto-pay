@@ -38,7 +38,7 @@ class ViewModelFriendGroup(application: Application) : AndroidViewModel(applicat
     get() = _itemClickedGroup
 
   private val _nowLoading = MutableLiveData<Boolean>()
-  val nowLoading : LiveData<Boolean>
+  val nowLoading: LiveData<Boolean>
     get() = _nowLoading
 
   // Create a Coroutine scope using a job to be able to cancel when needed
@@ -57,7 +57,7 @@ class ViewModelFriendGroup(application: Application) : AndroidViewModel(applicat
     viewModelScope.launch {
       try {
         friendsRepository.refreshFriends(id!!)
-      } catch (e:java.lang.Exception){
+      } catch (e: java.lang.Exception) {
         Log.i(TAG, "Trying to refresh id")
       }
     }
@@ -67,7 +67,7 @@ class ViewModelFriendGroup(application: Application) : AndroidViewModel(applicat
     viewModelScope.launch {
       try {
         groupsRepository.refreshGroups(id!!)
-      } catch (e:java.lang.Exception){
+      } catch (e: java.lang.Exception) {
         Log.i(TAG, "Trying to refresh id")
       }
     }
@@ -191,7 +191,7 @@ class ViewModelFriendGroup(application: Application) : AndroidViewModel(applicat
     _itemClicked.value = userProperty
   }
 
-  fun itemIsClickedGroup(group:GroupPropertyResponse) {
+  fun itemIsClickedGroup(group: GroupPropertyResponse) {
     _itemClickedGroup.value = group
   }
 

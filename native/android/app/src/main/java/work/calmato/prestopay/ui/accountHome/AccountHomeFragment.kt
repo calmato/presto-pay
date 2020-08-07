@@ -12,12 +12,14 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.fragment_account_edit.*
 import kotlinx.android.synthetic.main.fragment_account_home.*
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentAccountHomeBindingImpl
+import work.calmato.prestopay.util.AdapterGroupPlane
 
 class AccountHomeFragment : Fragment() {
+  private var recycleGroupAdapter: AdapterGroupPlane? = null
+
   override fun onCreateView(
     inflater: LayoutInflater,
     container: ViewGroup?,
