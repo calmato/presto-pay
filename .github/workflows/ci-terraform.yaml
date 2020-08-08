@@ -4,6 +4,7 @@ on:
     paths:
       - 'infra/terraform/env/stg/**'
       - 'infra/terraform/modules/**'
+      - '.github/workflows/ci-terraform.yaml'
 
 env:
   tf_version: 'latest'
