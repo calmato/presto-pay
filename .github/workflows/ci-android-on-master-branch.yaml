@@ -93,7 +93,7 @@ jobs:
               click:floatingActionButton=,\
               text:expenseName=expenseTest,\
               text:amountEdit=amountTest,\
-              click:action_person,\
-              click:logoutButton,\
+              click:action_person=,\
+              click:logoutButton=,\
               ignore:camera=,\
               ignore:thumbnailEdit=,
