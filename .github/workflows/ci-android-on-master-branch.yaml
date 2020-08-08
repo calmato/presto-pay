@@ -83,4 +83,17 @@ jobs:
               text:loginEmailField=${APP_EMAIL},\
               text:loginPasswordField=${APP_PASSWORD},\
               click:loginButton=,\
-              ignore:thumbnailEdit=
+              click:action_people=,\
+              click:addGroup=,\
+              text:searchEdit=keio,\
+              click:done=,\
+              text:groupName=GroupTest,\
+              click:addFriend=,\
+              text:userName=keio,\
+              click:floatingActionButton=,\
+              text:expenseName=expenseTest,\
+              text:amountEdit=amountTest,\
+              click:action_person,\
+              click:logoutButton,\
+              ignore:camera=,\
+              ignore:thumbnailEdit=,
