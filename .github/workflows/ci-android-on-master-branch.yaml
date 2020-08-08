@@ -79,7 +79,4 @@ jobs:
             --device model=H8416,version=28 \
             --timeout 20m \
             --no-auto-google-login \
-            --robo-directives \
-              text:loginEmailField=${APP_EMAIL},\
-              text:loginPasswordField=${APP_PASSWORD},\
-              ignore:thumbnailEdit=
+            --robo-directives text:loginEmailField=${APP_EMAIL},text:loginPasswordField=${APP_PASSWORD},ignore:thumbnailEdit=,text:searchEdit=keio,text:groupName=GroupTest,text:userName=keio
