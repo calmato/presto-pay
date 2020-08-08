@@ -82,7 +82,6 @@ jobs:
             --robo-directives \
               text:loginEmailField=${APP_EMAIL},\
               text:loginPasswordField=${APP_PASSWORD},\
-              click:loginButton=,\
               text:searchEdit=keio,\
               text:groupName=GroupTest,\
               text:userName=keio,\
