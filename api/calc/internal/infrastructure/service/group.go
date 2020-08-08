@@ -105,7 +105,7 @@ func (gs *groupService) AddUsers(
 	}
 
 	for _, userID := range userIDs {
-		if !containsUserID(g, userID) {
+		if containsUserID(g, userID) {
 			err := xerrors.New("Failed to Servicee")
 			return nil, domain.AlreadyExistsInDatastore.New(err)
 		}

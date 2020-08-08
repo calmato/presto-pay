@@ -9,5 +9,5 @@ type CreateGroup struct {
 
 // AddUsersInGroup - グループへユーザー追加APIのリクエスト
 type AddUsersInGroup struct {
-	UserIDs []string `json:"userIds" validate:"dive,unique"`
+	UserIDs []string `json:"userIds" validate:"unique"`
 }
