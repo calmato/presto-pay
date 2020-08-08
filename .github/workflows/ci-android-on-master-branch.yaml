@@ -68,7 +68,7 @@ jobs:
           gcloud config set run/platform managed
           gcloud config set run/region ${GCP_REGION}
 
-      - name: Run Instrumentation Tests in Firebase Test Lab
+      - name: Run Robo Tests in Firebase Test Lab
         env:
           APP_EMAIL: ${{ secrets.STG_PRESTO_PAY_EMAIL }}
           APP_PASSWORD: ${{ secrets.STG_PRESTO_PAY_PASSWORD }}
@@ -76,7 +76,7 @@ jobs:
           gcloud firebase test android run \
             --type robo \
             --app app-debug/app-debug.apk \
-            --device model=SonyXZ3,version=28 \
+            --device model=H8416,version=28 \
             --timeout 20m \
             --robo-directives text:loginEmailField=${APP_EMAIL} \
             --robo-directives text:loginPasswordField=${APP_PASSWORD} \
