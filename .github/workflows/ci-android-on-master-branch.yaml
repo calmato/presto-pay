@@ -79,6 +79,8 @@ jobs:
             --device model=H8416,version=28 \
             --timeout 20m \
             --no-auto-google-login \
-            --robo-directives text:loginEmailField=${APP_EMAIL},text:loginPasswordField=${APP_PASSWORD} \
-            --robo-directives click:loginButton= \
-            --robo-directives ignore:thumbnailEdit=
+            --robo-directives \
+              text:loginEmailField=${APP_EMAIL},\
+              text:loginPasswordField=${APP_PASSWORD},\
+              click:loginButton=,\
+              ignore:thumbnailEdit=
