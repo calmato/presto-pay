@@ -3,6 +3,7 @@ on:
   push:
     paths:
       - 'web/admin/**'
+      - '.github/workflows/ci-admin.yaml'
 
 jobs:
   build_and_test:

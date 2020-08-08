@@ -3,6 +3,7 @@ on:
   push:
     paths:
       - 'api/calc/**'
+      - '.github/workflows/ci-calc-api.yaml'
 
 jobs:
   build_and_test:

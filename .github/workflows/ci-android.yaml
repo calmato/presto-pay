@@ -3,6 +3,7 @@ on:
   push:
     paths:
       - 'native/android/**'
+      - '.github/workflows/ci-android.yaml'
 
 env:
   ANDROID_SECRET: ${{ secrets.STG_ANDROID_SECRET }}

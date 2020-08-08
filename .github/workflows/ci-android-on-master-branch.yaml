@@ -3,6 +3,7 @@ on:
   push:
     paths:
       - 'native/android/**'
+      - '.github/workflows/ci-android-on-master-branch.yaml'
     branches:
       - master
 
@@ -68,9 +69,15 @@ jobs:
           gcloud config set run/region ${GCP_REGION}
 
       - name: Run Instrumentation Tests in Firebase Test Lab
+        env:
+          APP_EMAIL: ${{ secrets.STG_PRESTO_PAY_EMAIL }}
+          APP_PASSWORD: ${{ secrets.STG_PRESTO_PAY_PASSWORD }}
         run: |
           gcloud firebase test android run \
             --type robo \
             --app app-debug/app-debug.apk \
-            --device model=Pixel2,version=29,locale=ja_JP \
-            --timeout 300s
+            --device model=SonyXZ3,version=28 \
+            --timeout 20m \
+            --robo-directives text:loginEmailField=${APP_EMAIL} \
+            --robo-directives text:loginPasswordField=${APP_PASSWORD} \
+            --robo-directives ignore:thumbnailEdit=
