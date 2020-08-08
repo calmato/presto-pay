@@ -72,28 +72,28 @@ jobs:
         env:
           APP_EMAIL: ${{ secrets.STG_PRESTO_PAY_EMAIL }}
           APP_PASSWORD: ${{ secrets.STG_PRESTO_PAY_PASSWORD }}
-        run: |
-          gcloud firebase test android run \
-            --type robo \
-            --app app-debug/app-debug.apk \
-            --device model=H8416,version=28 \
-            --timeout 20m \
-            --no-auto-google-login \
-            --robo-directives \
-              text:loginEmailField=${APP_EMAIL},\
-              text:loginPasswordField=${APP_PASSWORD},\
-              click:loginButton=,\
-              click:action_people=,\
-              click:addGroup=,\
-              text:searchEdit=keio,\
-              click:done=,\
-              text:groupName=GroupTest,\
-              click:addFriend=,\
-              text:userName=keio,\
-              click:floatingActionButton=,\
-              text:expenseName=expenseTest,\
-              text:amountEdit=amountTest,\
-              click:action_person=,\
-              click:logoutButton=,\
-              ignore:camera=,\
-              ignore:thumbnailEdit=,
+        run: |
+          gcloud firebase test android run \
+            --type robo \
+            --app app-debug/app-debug.apk \
+            --device model=H8416,version=28 \
+            --timeout 20m \
+            --no-auto-google-login \
+            --robo-directives \
+              text:loginEmailField=${APP_EMAIL},\
+              text:loginPasswordField=${APP_PASSWORD},\
+              click:loginButton=,\
+              click:action_people=,\
+              click:addGroup=,\
+              text:searchEdit=keio,\
+              click:done=,\
+              text:groupName=GroupTest,\
+              click:addFriend=,\
+              text:userName=keio,\
+              click:floatingActionButton=,\
+              text:expenseName=expenseTest,\
+              text:amountEdit=amountTest,\
+              click:action_person,\
+              click:logoutButton,\
+              ignore:camera=,\
+              ignore:thumbnailEdit=
