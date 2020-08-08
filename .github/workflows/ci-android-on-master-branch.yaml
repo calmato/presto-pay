@@ -72,7 +72,7 @@ jobs:
         env:
           APP_EMAIL: ${{ secrets.STG_PRESTO_PAY_EMAIL }}
           APP_PASSWORD: ${{ secrets.STG_PRESTO_PAY_PASSWORD }}
-run: |
+        run: |
           gcloud firebase test android run \
             --type robo \
             --app app-debug/app-debug.apk \
