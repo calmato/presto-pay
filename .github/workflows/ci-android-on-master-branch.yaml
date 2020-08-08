@@ -82,5 +82,4 @@ jobs:
             --robo-directives \
               text:loginEmailField=${APP_EMAIL},\
               text:loginPasswordField=${APP_PASSWORD},\
-              text:userName=keio,\
               ignore:thumbnailEdit=
