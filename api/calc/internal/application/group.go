@@ -114,7 +114,9 @@ func (ga *groupApplication) Create(ctx context.Context, req *request.CreateGroup
 	return g, nil
 }
 
-func (ga *groupApplication) AddUsers(ctx context.Context, req *request.AddUsersInGroup, groupID string) (*group.Group, error) {
+func (ga *groupApplication) AddUsers(
+	ctx context.Context, req *request.AddUsersInGroup, groupID string,
+) (*group.Group, error) {
 	u, err := ga.userService.Authentication(ctx)
 	if err != nil {
 		return nil, domain.Unauthorized.New(err)
