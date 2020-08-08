@@ -78,6 +78,7 @@ jobs:
             --app app-debug/app-debug.apk \
             --device model=H8416,version=28 \
             --timeout 20m \
-            --robo-directives text:loginEmailField=${APP_EMAIL} \
-            --robo-directives text:loginPasswordField=${APP_PASSWORD} \
+            --no-auto-google-login \
+            --robo-directives text:loginEmailField=${APP_EMAIL},text:loginPasswordField=${APP_PASSWORD} \
+            --robo-directives click:loginButton= \
             --robo-directives ignore:thumbnailEdit=
