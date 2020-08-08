@@ -14,7 +14,7 @@ module "this" {
   gke_cluster_name        = "presto-pay-cluster"
   gke_cluster_description = "presto-pay application cluster for staging"
 
-  gke_cluster_min_master_version = "1.15.11-gke.13"
+  gke_cluster_min_master_version = "1.16.13-gke.1"
 
   #################################################
   # GKE Node
@@ -24,7 +24,7 @@ module "this" {
       name         = "presto-pay-node"
       count        = 1
       preemptible  = false
-      machine_type = "g1-small"
+      machine_type = "e2-micro"
       disk_type    = "pd-standard"
       disk_size_gb = 10
     },
@@ -32,7 +32,7 @@ module "this" {
       name         = "presto-pay-spot-node"
       count        = 1
       preemptible  = true
-      machine_type = "g1-small"
+      machine_type = "e2-small"
       disk_type    = "pd-standard"
       disk_size_gb = 10
     },
