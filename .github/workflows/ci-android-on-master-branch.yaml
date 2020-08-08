@@ -84,7 +84,6 @@ jobs:
               text:loginPasswordField=${APP_PASSWORD},\
               click:loginButton=,\
               text:searchEdit=keio,\
-              click:done=,\
               text:groupName=GroupTest,\
               text:userName=keio,\
               ignore:thumbnailEdit=
