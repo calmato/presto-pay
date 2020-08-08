@@ -44,3 +44,13 @@ func (gr *groupRepository) Create(ctx context.Context, g *group.Group) error {
 
 	return nil
 }
+
+func (gr *groupRepository) Update(ctx context.Context, g *group.Group) error {
+	groupCollection := getGroupCollection()
+
+	if err := gr.firestore.Set(ctx, groupCollection, g.ID, g); err != nil {
+		return err
+	}
+
+	return nil
+}

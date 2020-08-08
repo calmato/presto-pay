@@ -178,3 +178,58 @@ func TestGroupApplication_Create(t *testing.T) {
 		})
 	}
 }
+
+func TestGroupApplication_AddUsers(t *testing.T) {
+	testCases := map[string]struct {
+		Request *request.AddUsersInGroup
+		GroupID string
+	}{
+		"ok": {
+			Request: &request.AddUsersInGroup{
+				UserIDs: []string{},
+			},
+			GroupID: "group-id",
+		},
+	}
+
+	for result, testCase := range testCases {
+		ctx, cancel := context.WithCancel(context.Background())
+		defer cancel()
+
+		ctrl := gomock.NewController(t)
+		defer ctrl.Finish()
+
+		// Defined variables
+		ves := make([]*domain.ValidationError, 0)
+
+		u := &user.User{
+			ID: "user-id",
+		}
+
+		g := &group.Group{
+			ID: "group-id",
+		}
+
+		// Defined mocks
+		grvm := mock_validation.NewMockGroupRequestValidation(ctrl)
+		grvm.EXPECT().AddUsersInGroup(testCase.Request).Return(ves)
+
+		usm := mock_user.NewMockUserService(ctrl)
+		usm.EXPECT().Authentication(ctx).Return(u, nil)
+		usm.EXPECT().ContainsGroupID(ctx, u, testCase.GroupID).Return(true, nil)
+
+		gsm := mock_group.NewMockGroupService(ctrl)
+		gsm.EXPECT().AddUsers(ctx, testCase.GroupID, testCase.Request.UserIDs).Return(g, nil)
+
+		// Start test
+		t.Run(result, func(t *testing.T) {
+			target := NewGroupApplication(grvm, usm, gsm)
+
+			_, err := target.AddUsers(ctx, testCase.Request, testCase.GroupID)
+			if err != nil {
+				t.Fatalf("error: %v", err)
+				return
+			}
+		})
+	}
+}

@@ -47,3 +47,17 @@ func (mr *MockGroupRequestValidationMockRecorder) CreateGroup(req interface{}) *
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateGroup", reflect.TypeOf((*MockGroupRequestValidation)(nil).CreateGroup), req)
 }
+
+// AddUsersInGroup mocks base method
+func (m *MockGroupRequestValidation) AddUsersInGroup(req *request.AddUsersInGroup) []*domain.ValidationError {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "AddUsersInGroup", req)
+	ret0, _ := ret[0].([]*domain.ValidationError)
+	return ret0
+}
+
+// AddUsersInGroup indicates an expected call of AddUsersInGroup
+func (mr *MockGroupRequestValidationMockRecorder) AddUsersInGroup(req interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AddUsersInGroup", reflect.TypeOf((*MockGroupRequestValidation)(nil).AddUsersInGroup), req)
+}

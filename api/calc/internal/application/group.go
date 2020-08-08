@@ -18,6 +18,7 @@ type GroupApplication interface {
 	Index(ctx context.Context) ([]*group.Group, error)
 	Show(ctx context.Context, groupID string) (*group.Group, error)
 	Create(ctx context.Context, req *request.CreateGroup) (*group.Group, error)
+	AddUsers(ctx context.Context, req *request.AddUsersInGroup, groupID string) (*group.Group, error)
 }
 
 type groupApplication struct {
@@ -107,6 +108,37 @@ func (ga *groupApplication) Create(ctx context.Context, req *request.CreateGroup
 	}
 
 	if _, err = ga.groupService.Create(ctx, g); err != nil {
+		return nil, err
+	}
+
+	return g, nil
+}
+
+func (ga *groupApplication) AddUsers(
+	ctx context.Context, req *request.AddUsersInGroup, groupID string,
+) (*group.Group, error) {
+	u, err := ga.userService.Authentication(ctx)
+	if err != nil {
+		return nil, domain.Unauthorized.New(err)
+	}
+
+	contain, err := ga.userService.ContainsGroupID(ctx, u, groupID)
+	if err != nil {
+		return nil, err
+	}
+
+	if !contain {
+		err := xerrors.New("Failed to Service")
+		return nil, domain.Forbidden.New(err)
+	}
+
+	if ves := ga.groupRequestValidation.AddUsersInGroup(req); len(ves) > 0 {
+		err := xerrors.New("Failed to RequestValidation")
+		return nil, domain.InvalidRequestValidation.New(err, ves...)
+	}
+
+	g, err := ga.groupService.AddUsers(ctx, groupID, req.UserIDs)
+	if err != nil {
 		return nil, err
 	}
 

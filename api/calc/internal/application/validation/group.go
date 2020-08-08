@@ -8,6 +8,7 @@ import (
 // GroupRequestValidation - グループ関連のバリデーション
 type GroupRequestValidation interface {
 	CreateGroup(req *request.CreateGroup) []*domain.ValidationError
+	AddUsersInGroup(req *request.AddUsersInGroup) []*domain.ValidationError
 }
 
 type groupRequestValidation struct {
@@ -24,5 +25,9 @@ func NewGroupRequestValidation() GroupRequestValidation {
 }
 
 func (grv *groupRequestValidation) CreateGroup(req *request.CreateGroup) []*domain.ValidationError {
+	return grv.validator.Run(req)
+}
+
+func (grv *groupRequestValidation) AddUsersInGroup(req *request.AddUsersInGroup) []*domain.ValidationError {
 	return grv.validator.Run(req)
 }

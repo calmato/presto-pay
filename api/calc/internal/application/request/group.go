@@ -6,3 +6,8 @@ type CreateGroup struct {
 	Thumbnail string   `json:"thumbnail"`
 	UserIDs   []string `json:"userIds" validarte:"unique"`
 }
+
+// AddUsersInGroup - グループへユーザー追加APIのリクエスト
+type AddUsersInGroup struct {
+	UserIDs []string `json:"userIds" validate:"unique"`
+}
