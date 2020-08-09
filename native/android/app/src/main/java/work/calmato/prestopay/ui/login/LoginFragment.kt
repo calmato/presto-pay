@@ -148,6 +148,7 @@ class LoginFragment : Fragment() {
 
     //email password sign in
     loginButton.setOnClickListener {
+      loginButton.isEnabled=false
       defaultSignIn(
         loginEmailField.text.toString(),
         loginPasswordField.text.toString()
@@ -218,6 +219,7 @@ class LoginFragment : Fragment() {
             }
             updateUI(user)
           } else {
+            loginButton.isEnabled=true
             // If sign in fails, display a message to the user.
             Log.w(DEFAULT_TAG, "signInWithEmail:failure", task.exception)
             Toast.makeText(
@@ -228,6 +230,7 @@ class LoginFragment : Fragment() {
           }
         })
     } else {
+      loginButton.isEnabled=true
       Toast.makeText(requireContext(), resources.getString(R.string.fill_email_password), Toast.LENGTH_SHORT).show()
     }
     // [END create_user_with_email]
