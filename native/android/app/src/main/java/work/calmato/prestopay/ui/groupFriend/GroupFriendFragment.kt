@@ -119,17 +119,17 @@ class GroupFriendFragment : Fragment() {
         }
         builder?.setView(R.layout.dialog_add_friend)
           ?.setPositiveButton(resources.getString(R.string.delete_friend)
-          ,DialogInterface.OnClickListener{_,_->
-              val builder2:AlertDialog.Builder? = requireActivity().let {
+            , DialogInterface.OnClickListener { _, _ ->
+              val builder2: AlertDialog.Builder? = requireActivity().let {
                 AlertDialog.Builder(it)
               }
               builder2?.setMessage(resources.getString(R.string.delete_question))
                 ?.setPositiveButton(resources.getString(R.string.delete)
-                ,DialogInterface.OnClickListener{_,_->
-                    viewModel.deleteFriend(it.id,requireActivity())
+                  , DialogInterface.OnClickListener { _, _ ->
+                    viewModel.deleteFriend(it.id, requireActivity())
                   })
-                ?.setNegativeButton(resources.getString(R.string.cancel),null)
-              val dialog2:AlertDialog? = builder2?.create()
+                ?.setNegativeButton(resources.getString(R.string.cancel), null)
+              val dialog2: AlertDialog? = builder2?.create()
               dialog2?.show()
             })
         val dialog: AlertDialog? = builder?.create()
@@ -150,16 +150,16 @@ class GroupFriendFragment : Fragment() {
       Picasso.with(context).load(thumbnailUrl).into(thumbnail)
     }
     groupSwitcher.setOnClickListener {
-      if(groupRecycleView.visibility==RecyclerView.VISIBLE && friendsRecycleView.visibility==RecyclerView.VISIBLE){
+      if (groupRecycleView.visibility == RecyclerView.VISIBLE && friendsRecycleView.visibility == RecyclerView.VISIBLE) {
         groupRecycleView.visibility = RecyclerView.GONE
-      }else{
+      } else {
         groupRecycleView.visibility = RecyclerView.VISIBLE
       }
     }
     friendSwitcher.setOnClickListener {
-      if(friendsRecycleView.visibility==RecyclerView.VISIBLE && groupRecycleView.visibility==RecyclerView.VISIBLE){
+      if (friendsRecycleView.visibility == RecyclerView.VISIBLE && groupRecycleView.visibility == RecyclerView.VISIBLE) {
         friendsRecycleView.visibility = RecyclerView.GONE
-      }else{
+      } else {
         friendsRecycleView.visibility = RecyclerView.VISIBLE
       }
     }
