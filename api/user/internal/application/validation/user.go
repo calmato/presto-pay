@@ -9,6 +9,7 @@ import (
 type UserRequestValidation interface {
 	IndexByUsername(req *request.IndexByUsername) []*domain.ValidationError
 	CreateUser(req *request.CreateUser) []*domain.ValidationError
+	RegisterInstanceID(req *request.RegisterInstanceID) []*domain.ValidationError
 	UpdateProfile(req *request.UpdateProfile) []*domain.ValidationError
 	UpdatePassword(req *request.UpdateUserPassword) []*domain.ValidationError
 	AddFriend(req *request.AddFriend) []*domain.ValidationError
@@ -34,6 +35,10 @@ func (urv *userRequestValidation) IndexByUsername(req *request.IndexByUsername) 
 }
 
 func (urv *userRequestValidation) CreateUser(req *request.CreateUser) []*domain.ValidationError {
+	return urv.validator.Run(req)
+}
+
+func (urv *userRequestValidation) RegisterInstanceID(req *request.RegisterInstanceID) []*domain.ValidationError {
 	return urv.validator.Run(req)
 }
 
