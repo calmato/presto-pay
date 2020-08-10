@@ -20,6 +20,7 @@ type APIV1UserHandler interface {
 	ShowInternal(ctx *gin.Context)
 	ShowProfile(ctx *gin.Context)
 	Create(ctx *gin.Context)
+	RegisterInstanceID(ctx *gin.Context)
 	UpdateProfile(ctx *gin.Context)
 	UpdatePassword(ctx *gin.Context)
 	UniqueCheckEmail(ctx *gin.Context)
@@ -140,6 +141,7 @@ func (uh *apiV1UserHandler) ShowInternal(ctx *gin.Context) {
 		ThumbnailURL: u.ThumbnailURL,
 		GroupIDs:     u.GroupIDs,
 		FriendIDs:    u.FriendIDs,
+		InstanceID:   u.InstanceID,
 		CreatedAt:    u.CreatedAt,
 		UpdatedAt:    u.UpdatedAt,
 	}
@@ -179,6 +181,35 @@ func (uh *apiV1UserHandler) Create(ctx *gin.Context) {
 
 	c := middleware.GinContextToContext(ctx)
 	u, err := uh.userApplication.Create(c, req)
+	if err != nil {
+		handler.ErrorHandling(ctx, err)
+		return
+	}
+
+	res := &response.CreateUser{
+		ID:           u.ID,
+		Name:         u.Name,
+		Username:     u.Username,
+		Email:        u.Email,
+		ThumbnailURL: u.ThumbnailURL,
+		GroupIDs:     u.GroupIDs,
+		FriendIDs:    u.FriendIDs,
+		CreatedAt:    u.CreatedAt,
+		UpdatedAt:    u.UpdatedAt,
+	}
+
+	ctx.JSON(http.StatusOK, res)
+}
+
+func (uh *apiV1UserHandler) RegisterInstanceID(ctx *gin.Context) {
+	req := &request.RegisterInstanceID{}
+	if err := ctx.BindJSON(req); err != nil {
+		handler.ErrorHandling(ctx, domain.UnableParseJSON.New(err))
+		return
+	}
+
+	c := middleware.GinContextToContext(ctx)
+	u, err := uh.userApplication.RegisterInstanceID(c, req)
 	if err != nil {
 		handler.ErrorHandling(ctx, err)
 		return

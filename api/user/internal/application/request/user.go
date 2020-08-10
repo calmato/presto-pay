@@ -16,6 +16,11 @@ type CreateUser struct {
 	PasswordConfirmation string `json:"passwordConfirmation" validate:"required,eqfield=Password"`
 }
 
+// RegisterInstanceID - 端末のデバイスID登録APIのリクエスト
+type RegisterInstanceID struct {
+	InstanceID string `json:"instanceId" validate:"required"`
+}
+
 // UpdateProfile - ログインユーザー編集APIのリクエスト
 type UpdateProfile struct {
 	Name      string `json:"name" validate:"required,max=32"`

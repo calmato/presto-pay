@@ -20,6 +20,7 @@ type UserApplication interface {
 	Show(ctx context.Context, userID string) (*user.User, error)
 	ShowProfile(ctx context.Context) (*user.User, error)
 	Create(ctx context.Context, req *request.CreateUser) (*user.User, error)
+	RegisterInstanceID(ctx context.Context, req *request.RegisterInstanceID) (*user.User, error)
 	UpdateProfile(ctx context.Context, req *request.UpdateProfile) (*user.User, error)
 	UpdatePassword(ctx context.Context, req *request.UpdateUserPassword) (*user.User, error)
 	UniqueCheckEmail(ctx context.Context, req *request.UniqueCheckUserEmail) (bool, error)
@@ -117,6 +118,32 @@ func (ua *userApplication) Create(ctx context.Context, req *request.CreateUser) 
 	}
 
 	if _, err := ua.userService.Create(ctx, u); err != nil {
+		return nil, err
+	}
+
+	return u, nil
+}
+
+func (ua *userApplication) RegisterInstanceID(
+	ctx context.Context, req *request.RegisterInstanceID,
+) (*user.User, error) {
+	u, err := ua.userService.Authentication(ctx)
+	if err != nil {
+		return nil, domain.Unauthorized.New(err)
+	}
+
+	if ves := ua.userRequestValidation.RegisterInstanceID(req); len(ves) > 0 {
+		err := xerrors.New("Failed to RequestValidation")
+		return nil, domain.InvalidRequestValidation.New(err, ves...)
+	}
+
+	if u.InstanceID == req.InstanceID {
+		return u, nil
+	}
+
+	u.InstanceID = req.InstanceID
+
+	if _, err := ua.userService.Update(ctx, u); err != nil {
 		return nil, err
 	}
 

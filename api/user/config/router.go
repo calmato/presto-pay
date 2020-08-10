@@ -37,6 +37,7 @@ func Router(reg *registry.Registry) *gin.Engine {
 		apiV1.DELETE("/auth/friends/:userID", reg.V1User.RemoveFriend)
 		apiV1.PATCH("/auth", reg.V1User.UpdateProfile)
 		apiV1.PATCH("/auth/password", reg.V1User.UpdatePassword)
+		apiV1.POST("/auth/device", reg.V1User.RegisterInstanceID)
 
 		apiV1.GET("/users", reg.V1User.IndexByUsername)
 		apiV1.GET("/users/:userID", reg.V1User.Show)

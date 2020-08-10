@@ -25,6 +25,7 @@ type ShowUserInternal struct {
 	ThumbnailURL string    `json:"thumbnailUrl"`
 	GroupIDs     []string  `json:"groupIds"`
 	FriendIDs    []string  `json:"friendIds"`
+	InstanceID   string    `json:"instanceId"`
 	CreatedAt    time.Time `json:"createdAt"`
 	UpdatedAt    time.Time `json:"updatedAt"`
 }
@@ -44,6 +45,19 @@ type ShowProfile struct {
 
 // CreateUser - ユーザー登録APIのレスポンス
 type CreateUser struct {
+	ID           string    `json:"id"`
+	Name         string    `json:"name"`
+	Username     string    `json:"username"`
+	Email        string    `json:"email"`
+	ThumbnailURL string    `json:"thumbnailUrl"`
+	GroupIDs     []string  `json:"groupIds"`
+	FriendIDs    []string  `json:"friendIds"`
+	CreatedAt    time.Time `json:"createdAt"`
+	UpdatedAt    time.Time `json:"updatedAt"`
+}
+
+// RegisterInstanccID - 端末のデバイスID登録APIのレスポンス
+type RegisterInstanccID struct {
 	ID           string    `json:"id"`
 	Name         string    `json:"name"`
 	Username     string    `json:"username"`

@@ -62,6 +62,20 @@ func (mr *MockUserRequestValidationMockRecorder) CreateUser(req interface{}) *go
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateUser", reflect.TypeOf((*MockUserRequestValidation)(nil).CreateUser), req)
 }
 
+// RegisterInstanceID mocks base method
+func (m *MockUserRequestValidation) RegisterInstanceID(req *request.RegisterInstanceID) []*domain.ValidationError {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "RegisterInstanceID", req)
+	ret0, _ := ret[0].([]*domain.ValidationError)
+	return ret0
+}
+
+// RegisterInstanceID indicates an expected call of RegisterInstanceID
+func (mr *MockUserRequestValidationMockRecorder) RegisterInstanceID(req interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RegisterInstanceID", reflect.TypeOf((*MockUserRequestValidation)(nil).RegisterInstanceID), req)
+}
+
 // UpdateProfile mocks base method
 func (m *MockUserRequestValidation) UpdateProfile(req *request.UpdateProfile) []*domain.ValidationError {
 	m.ctrl.T.Helper()
