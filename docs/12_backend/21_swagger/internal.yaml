@@ -294,6 +294,9 @@ components:
                 items:
                   type: string
                   format: uuid
+              instanceId:
+                type: string
+                description: インスタンスID
               createdAt:
                 type: string
                 format: date-time
