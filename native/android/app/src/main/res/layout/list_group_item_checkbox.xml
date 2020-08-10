@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools">
+  <data>
+    <variable
+      name="groupPropertyResponse"
+      type="work.calmato.prestopay.network.GroupPropertyResponse" />
+  </data>
+
+  <androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="0dp">
+
+
+    <CheckBox
+      android:id="@+id/addGroupCheckBox"
+      android:layout_width="0dp"
+      android:layout_height="0dp"
+      android:gravity="center_vertical"
+      app:checkboxGroup="@{groupPropertyResponse}"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+      android:id="@+id/thumbnail"
+      android:layout_width="75dp"
+      android:layout_height="75dp"
+      android:layout_marginStart="32dp"
+      android:layout_marginTop="8dp"
+      android:layout_marginBottom="8dp"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      app:layout_constraintVertical_bias="0.0"
+      app:srcCompat="@drawable/circle_theme_color"  app:thumbnailGroup="@{groupPropertyResponse}" />
+
+    <TextView
+      android:id="@+id/userName"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="8dp"
+      android:layout_marginEnd="8dp"
+      android:textSize="24sp"
+      app:groupName="@{groupPropertyResponse}"
+      app:layout_constraintBottom_toBottomOf="@+id/thumbnail"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toEndOf="@+id/thumbnail"
+      app:layout_constraintTop_toTopOf="@+id/thumbnail"
+      app:layout_constraintVertical_bias="0.5"
+      tools:text="groupName" />
+
+
+  </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
