@@ -129,6 +129,7 @@
   <string name="create_group_failed">グループ作成に失敗しました</string>
   <string name="delete_friend_succeeded">友達リストから削除しました</string>
   <string name="delete_friend_failed">友達削除に失敗しました</string>
+  <string name="group_choice_list">グループを選択</string>
   <string-array name="currency_array">
     <item>￥</item>
     <item>＄</item>
