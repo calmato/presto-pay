@@ -1,5 +1,6 @@
 package work.calmato.prestopay.ui.login
 
+import android.app.activity
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -11,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.facebook.*
 import com.facebook.login.LoginManager
@@ -34,10 +36,21 @@ import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentLoginBinding
 import work.calmato.prestopay.network.Api
 import work.calmato.prestopay.network.asDomainModel
+import work.calmato.prestopay.network.registerDeviceIdProperty
+import work.calmato.prestopay.util.ViewModelUser
 import java.util.*
 
 
 class LoginFragment : Fragment() {
+  private val viewModel : ViewModelUser by lazy {
+    val activity = requireNotNull(this.activity){
+      "You can only access the viewModel after onActivityCreated()"
+    }
+
+    ViewModelProviders.of(this.ViewModelUser.Factory(activity.application))
+      .get(ViewModelUser::class.java)
+  }
+
   private lateinit var auth: FirebaseAuth
   private lateinit var googleSignInClient: GoogleSignInClient
   private lateinit var callbackManager: CallbackManager
@@ -317,14 +330,37 @@ class LoginFragment : Fragment() {
 
   private fun updateUI(user: FirebaseUser?) {
     if (user != null) {
-      //home pageの遷移
+      // 認証用トークンの保存
       user.getIdToken(true)
       setSharedPreference()
+
+      // FCM用デバイスIDを送信
+      sendFirebaseCloudMessageToken()
+
+      // home pageの遷移
       this.findNavController().navigate(
         LoginFragmentDirections.actionLoginFragmentToHomeFragment()
       )
     }
   }
+
+  // sendFirebaseCloudMessageToken register instance_id to api
+  private fun sendFirebaseCloudMessageToken() {
+    FirebaseInstanceId.getInstance().instanceId.addOnCompleteListener(OnCompleteListener { task ->
+      if (!task.isSuccessful) {
+        Log.i("LoginFragment", "getInstanceId failed: ${task.exception}")
+        return
+      }
+
+      // Get new Instance ID token and request property
+      val instanceId = task.result?.token
+      val registerDeviceIdProperty = registerDeviceIdProperty(instanceId)
+
+      // send instance_id to api
+      viewModel.registerDeviceId(registerDeviceIdProperty, requireActivity())
+    }
+  }
+
   private fun setSharedPreference(){
     FirebaseAuth.getInstance().currentUser?.getIdToken(true)?.addOnCompleteListener {
       if (it.isSuccessful) {

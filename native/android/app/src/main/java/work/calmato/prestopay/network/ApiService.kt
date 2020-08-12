@@ -74,6 +74,12 @@ interface ApiService {
     @Header("Authorization") token: String
   ): Deferred<NetworkFriend>
 
+  @POST("auth/device")
+  fun registerDeviceId(
+    @Header("Authorization") token: String,
+    @Body instanceId: RegisterDeviceIdProperty
+  ): Deferred<AccountResponse>
+
   @GET("groups")
   fun getGroups(@Header("Authorization") token: String):
     Deferred<NetworkGroupContainer>

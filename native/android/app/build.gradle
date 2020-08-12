@@ -67,6 +67,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics-ktx:17.4.4'
     implementation 'com.google.firebase:firebase-crashlytics:17.1.1'
     implementation 'com.google.firebase:firebase-perf:19.0.8'
+    implementation 'com.google.firebase:firebase-messaging:20.2.3'
 
     //Twitter SDK
     implementation 'com.twitter.sdk.android:twitter-core:3.1.1'
