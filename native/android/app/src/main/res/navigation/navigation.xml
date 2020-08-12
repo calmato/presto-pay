@@ -3,7 +3,7 @@
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   android:id="@+id/navigation"
-  app:startDestination="@id/login_fragment">
+  app:startDestination="@id/groupListFragment">
 
   <fragment
     android:id="@+id/login_fragment"
@@ -140,6 +140,15 @@
     <action
       android:id="@+id/action_friendListFragment_to_home_fragment"
       app:destination="@id/home_fragment" />
+  </fragment>
+  <fragment
+    android:id="@+id/groupListFragment"
+    android:name="work.calmato.prestopay.ui.groupList.groupListFragment"
+    android:label="GroupListFragment"
+    tools:layout="@layout/fragment_group_list">
+    <action
+      android:id="@+id/action_groupListFragment_to_addExpenseFragment"
+      app:destination="@id/addExpenseFragment" />
   </fragment>
   <fragment
     android:id="@+id/createGroupFragment"
