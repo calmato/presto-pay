@@ -1,6 +1,5 @@
 package work.calmato.prestopay.ui.login
 
-import android.app.activity
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -27,6 +26,7 @@ import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.iid.FirebaseInstanceId
 import com.twitter.sdk.android.core.TwitterAuthConfig
 import kotlinx.android.synthetic.main.fragment_login.*
 import kotlinx.coroutines.Dispatchers
@@ -36,7 +36,7 @@ import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentLoginBinding
 import work.calmato.prestopay.network.Api
 import work.calmato.prestopay.network.asDomainModel
-import work.calmato.prestopay.network.registerDeviceIdProperty
+import work.calmato.prestopay.network.RegisterDeviceIdProperty
 import work.calmato.prestopay.util.ViewModelUser
 import java.util.*
 
@@ -349,16 +349,16 @@ class LoginFragment : Fragment() {
     FirebaseInstanceId.getInstance().instanceId.addOnCompleteListener(OnCompleteListener { task ->
       if (!task.isSuccessful) {
         Log.i("LoginFragment", "getInstanceId failed: ${task.exception}")
-        return
+        return@OnCompleteListener
       }
 
       // Get new Instance ID token and request property
-      val instanceId = task.result?.token
-      val registerDeviceIdProperty = registerDeviceIdProperty(instanceId)
+      val instanceId = task.result?.token as String
+      val registerDeviceIdProperty = RegisterDeviceIdProperty(instanceId)
 
       // send instance_id to api
       viewModel.registerDeviceId(registerDeviceIdProperty, requireActivity())
-    }
+    })
   }
 
   private fun setSharedPreference(){
