@@ -78,7 +78,7 @@ interface ApiService {
   fun registerDeviceId(
     @Header("Authorization") token: String,
     @Body instanceId: RegisterDeviceIdProperty
-  ): Deferred<AccountResponse>
+  ): Call<AccountResponse>
 
   @GET("groups")
   fun getGroups(@Header("Authorization") token: String):
