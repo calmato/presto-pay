@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.content.DialogInterface
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.util.Log
@@ -12,7 +13,9 @@ import android.widget.*
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.yalantis.ucrop.UCrop
 import kotlinx.android.synthetic.main.fragment_add_expense.*
+import kotlinx.android.synthetic.main.fragment_create_group.*
 import retrofit2.Call
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentAddExpenseBindingImpl
@@ -51,7 +54,11 @@ class AddExpenseFragment : PermissionBase() {
       calendarDate.visibility = TextView.VISIBLE
     }
     if (resultCode == Activity.RESULT_OK && requestCode == Constant.IMAGE_PICK_CODE) {
-      thumbnail.setImageURI(data?.data)
+      cropImage(data?.data!!)
+    }
+    if (resultCode == Activity.RESULT_OK && requestCode == UCrop.REQUEST_CROP) {
+      val resultUri = UCrop.getOutput(data!!)
+      thumbnail.setImageURI(resultUri)
       thumbnail.visibility = ImageView.VISIBLE
     }
   }

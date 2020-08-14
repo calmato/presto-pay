@@ -142,7 +142,8 @@ class CreateGroupFragment : PermissionBase() {
     super.onActivityResult(requestCode, resultCode, data)
     if (resultCode == Activity.RESULT_OK && requestCode == IMAGE_PICK_CODE) {
       cropImage(data?.data!!)
-    } else if (resultCode == Activity.RESULT_OK && requestCode == UCrop.REQUEST_CROP) {
+    }
+    if (resultCode == Activity.RESULT_OK && requestCode == UCrop.REQUEST_CROP) {
       val resultUri = UCrop.getOutput(data!!)
       thumbnailEdit.setImageURI(resultUri)
       thumbnailEdit.setBackgroundColor(Color.TRANSPARENT)
@@ -158,14 +159,4 @@ class CreateGroupFragment : PermissionBase() {
   companion object {
     internal const val TAG = "CreateGroupFragment"
   }
-
-  private fun cropImage(uri: Uri) {
-    val destination = Uri.fromFile(
-      File(requireActivity().cacheDir, "IMG_" + System.currentTimeMillis())
-    )
-    UCrop.of(uri, destination)
-      .withAspectRatio(1f, 1f)
-      .start(requireActivity(), this)
-  }
-
 }
