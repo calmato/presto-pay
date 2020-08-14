@@ -26,8 +26,8 @@ spec:
               cpu: 50m
               memory: 100Mi
             limits:
-              cpu: 100m
-              memory: 200Mi
+              cpu: 200m
+              memory: 400Mi
           ports:
             - name: prometheus
               containerPort: 9090

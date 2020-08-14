@@ -25,8 +25,8 @@ spec:
               cpu: 50m
               memory: 100Mi
             limits:
-              cpu: 100m
-              memory: 150Mi
+              cpu: 200m
+              memory: 300Mi
           ports:
             - name: grafana
               containerPort: 3000
