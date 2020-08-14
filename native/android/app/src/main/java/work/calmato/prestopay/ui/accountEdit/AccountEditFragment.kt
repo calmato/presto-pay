@@ -1,10 +1,8 @@
 package work.calmato.prestopay.ui.accountEdit
 
-import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.content.SharedPreferences
-import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.Bundle
 import android.preference.PreferenceManager
@@ -12,19 +10,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.facebook.share.Share
-import com.google.firebase.auth.FirebaseAuth
 import com.squareup.picasso.Picasso
 import com.yalantis.ucrop.UCrop
 import kotlinx.android.synthetic.main.fragment_account_edit.*
 import kotlinx.android.synthetic.main.fragment_account_edit.thumbnailEdit
-import kotlinx.android.synthetic.main.fragment_create_group.*
-import kotlinx.android.synthetic.main.fragment_group_friend.*
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
@@ -34,9 +25,7 @@ import work.calmato.prestopay.databinding.FragmentAccountEditBindingImpl
 import work.calmato.prestopay.network.Api
 import work.calmato.prestopay.network.EditAccountProperty
 import work.calmato.prestopay.network.EditAccountResponse
-import work.calmato.prestopay.util.Constant
-import work.calmato.prestopay.util.PermissionBase
-import work.calmato.prestopay.util.encodeImage2Base64
+import work.calmato.prestopay.util.*
 import java.lang.Exception
 
 class AccountEditFragment : PermissionBase() {
@@ -64,9 +53,11 @@ class AccountEditFragment : PermissionBase() {
       val email: String = mailEditText.text.toString()
       val id = sharedPreferences.getString("token","")
       if (name != "" && userName != "" && email != "") {
+        startHttpConnection(savaButton,nowLoading,requireContext())
         val accountProperty = EditAccountProperty(name, userName, email, thumbnails)
         Api.retrofitService.editAccount("Bearer $id", accountProperty).enqueue(object:Callback<EditAccountResponse>{
           override fun onFailure(call: Call<EditAccountResponse>, t: Throwable) {
+            finishHttpConnection(savaButton,nowLoading)
             Toast.makeText(activity, t.message, Toast.LENGTH_LONG).show()
           }
           override fun onResponse(
@@ -96,6 +87,7 @@ class AccountEditFragment : PermissionBase() {
               }catch (e:Exception){
                 Toast.makeText(activity, resources.getString(R.string.failed_to_change_account_information), Toast.LENGTH_LONG).show()
               }
+              finishHttpConnection(savaButton,nowLoading)
             }
           }
         })

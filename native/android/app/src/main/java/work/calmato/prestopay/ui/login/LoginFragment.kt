@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -26,7 +27,9 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.twitter.sdk.android.core.TwitterAuthConfig
+import kotlinx.android.synthetic.main.fragment_add_expense.*
 import kotlinx.android.synthetic.main.fragment_login.*
+import kotlinx.android.synthetic.main.fragment_login.nowLoading
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -34,6 +37,8 @@ import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentLoginBinding
 import work.calmato.prestopay.network.Api
 import work.calmato.prestopay.network.asDomainModel
+import work.calmato.prestopay.util.finishHttpConnection
+import work.calmato.prestopay.util.startHttpConnection
 import java.util.*
 
 
@@ -148,7 +153,6 @@ class LoginFragment : Fragment() {
 
     //email password sign in
     loginButton.setOnClickListener {
-      loginButton.isEnabled=false
       defaultSignIn(
         loginEmailField.text.toString(),
         loginPasswordField.text.toString()
@@ -205,6 +209,7 @@ class LoginFragment : Fragment() {
     Log.d(DEFAULT_TAG, "signInAccount:$email")
     // [START create_user_with_email]
     if (email != "" && password != "") {
+      startHttpConnection(loginButton,nowLoading,requireContext())
           auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener(OnCompleteListener { task ->
           if (task.isSuccessful) {
@@ -219,7 +224,7 @@ class LoginFragment : Fragment() {
             }
             updateUI(user)
           } else {
-            loginButton.isEnabled=true
+            finishHttpConnection(loginButton,nowLoading)
             // If sign in fails, display a message to the user.
             Log.w(DEFAULT_TAG, "signInWithEmail:failure", task.exception)
             Toast.makeText(
@@ -230,7 +235,6 @@ class LoginFragment : Fragment() {
           }
         })
     } else {
-      loginButton.isEnabled=true
       Toast.makeText(requireContext(), resources.getString(R.string.fill_email_password), Toast.LENGTH_SHORT).show()
     }
     // [END create_user_with_email]

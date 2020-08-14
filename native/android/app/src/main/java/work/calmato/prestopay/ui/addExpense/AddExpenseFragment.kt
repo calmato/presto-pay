@@ -4,17 +4,17 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.content.DialogInterface
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
 import android.preference.PreferenceManager
-import android.util.Log
 import android.view.*
+import android.view.animation.AnimationUtils
 import android.widget.*
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.yalantis.ucrop.UCrop
 import kotlinx.android.synthetic.main.fragment_add_expense.*
+import kotlinx.android.synthetic.main.fragment_add_expense.nowLoading
 import kotlinx.android.synthetic.main.fragment_create_group.*
 import retrofit2.Call
 import work.calmato.prestopay.R
@@ -45,6 +45,7 @@ class AddExpenseFragment : PermissionBase() {
   private lateinit var tagNames: Array<String>
   private lateinit var tagList:MutableList<Tag>
   private lateinit var id : String
+  private lateinit var doneButton:MenuItem
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     if(requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK){
@@ -150,10 +151,12 @@ class AddExpenseFragment : PermissionBase() {
     }
   }
   private fun addExpenseApi(expenseProperty:CreateExpenseProperty,groupId:String){
+    startHttpConnectionMenu(doneButton,nowLoading,requireContext())
     Api.retrofitService.addExpense("Bearer ${id}",expenseProperty,groupId)
       .enqueue(object : Callback<CreateExpenseResponse>{
         override fun onFailure(call: Call<CreateExpenseResponse>, t: Throwable) {
           Toast.makeText(activity, t.message, Toast.LENGTH_LONG).show()
+          finishHttpConnectionMenu(doneButton,nowLoading)
         }
 
         override fun onResponse(
@@ -165,6 +168,7 @@ class AddExpenseFragment : PermissionBase() {
           } else {
             Toast.makeText(activity,resources.getString(R.string.failed_register_new_expense), Toast.LENGTH_LONG).show()
           }
+          finishHttpConnectionMenu(doneButton,nowLoading)
         }
       })
   }
@@ -208,6 +212,10 @@ class AddExpenseFragment : PermissionBase() {
     builder?.setView(recycleView)
     val dialog:AlertDialog? = builder?.create()
     dialog?.show()
+  }
+  override fun onPrepareOptionsMenu(menu: Menu) {
+    super.onPrepareOptionsMenu(menu)
+    doneButton = menu.getItem(0)
   }
 
   companion object{

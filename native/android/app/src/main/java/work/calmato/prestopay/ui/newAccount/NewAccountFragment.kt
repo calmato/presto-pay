@@ -11,6 +11,7 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -18,8 +19,9 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.yalantis.ucrop.UCrop
-import kotlinx.android.synthetic.main.fragment_create_group.*
+import kotlinx.android.synthetic.main.fragment_login.*
 import kotlinx.android.synthetic.main.fragment_new_account.*
+import kotlinx.android.synthetic.main.fragment_new_account.nowLoading
 import kotlinx.android.synthetic.main.fragment_new_account.thumbnailEdit
 import org.json.JSONObject
 import retrofit2.Call
@@ -34,6 +36,8 @@ import work.calmato.prestopay.util.Constant.Companion.IMAGE_PICK_CODE
 import work.calmato.prestopay.util.Constant.Companion.MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE
 import work.calmato.prestopay.util.PermissionBase
 import work.calmato.prestopay.util.encodeImage2Base64
+import work.calmato.prestopay.util.finishHttpConnection
+import work.calmato.prestopay.util.startHttpConnection
 import java.lang.Exception
 
 
@@ -108,11 +112,13 @@ class NewAccountFragment : PermissionBase() {
 
       if (name != "" && userName != "" && email != "" && password != "" && passwordConfirmation != "") {
         if (password == passwordConfirmation || password.length >= 8) {
+          startHttpConnection(createAccountButton,nowLoading,requireContext())
           val accountProperty =
             NewAccountProperty(name, userName, email, thumbnails, password, passwordConfirmation)
           Api.retrofitService.createAccount(accountProperty)
             .enqueue(object : Callback<AccountResponse> {
               override fun onFailure(call: Call<AccountResponse>, t: Throwable) {
+                finishHttpConnection(createAccountButton,nowLoading)
                 Toast.makeText(activity, t.message, Toast.LENGTH_LONG).show()
               }
               override fun onResponse(
@@ -120,7 +126,7 @@ class NewAccountFragment : PermissionBase() {
                 response: Response<AccountResponse>
               ) {
                 if (response.isSuccessful) {
-                  Toast.makeText(requireContext(), resources.getString(R.string.failed_to_change_account_information)+"\n"+resources.getString(R.string.please_login), Toast.LENGTH_LONG)
+                  Toast.makeText(requireContext(), resources.getString(R.string.successed_to_create_account)+"\n"+resources.getString(R.string.please_login), Toast.LENGTH_LONG)
                     .show()
                   navigateToLogin()
                 } else {
@@ -137,6 +143,7 @@ class NewAccountFragment : PermissionBase() {
                   }catch (e:Exception){
                     Toast.makeText(activity, resources.getString(R.string.failed_create_account), Toast.LENGTH_LONG).show()
                   }
+                  finishHttpConnection(createAccountButton,nowLoading)
                 }
               }
             })
@@ -147,6 +154,7 @@ class NewAccountFragment : PermissionBase() {
         Toast.makeText(requireContext(), resources.getString(R.string.please_fill), Toast.LENGTH_SHORT).show()
       }
     }
+
 
     editPhotoText.setOnClickListener {
       requestPermission()
