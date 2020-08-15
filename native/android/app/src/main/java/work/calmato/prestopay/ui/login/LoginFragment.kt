@@ -47,7 +47,7 @@ class LoginFragment : Fragment() {
       "You can only access the viewModel after onActivityCreated()"
     }
 
-    ViewModelProviders.of(this.ViewModelUser.Factory(activity.application))
+    ViewModelProviders.of(this, ViewModelUser.Factory(activity.application))
       .get(ViewModelUser::class.java)
   }
 

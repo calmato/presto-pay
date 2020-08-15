@@ -6,6 +6,9 @@ import android.preference.PreferenceManager
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -32,6 +35,9 @@ class ViewModelUser(application: Application) : AndroidViewModel(application) {
       })
   }
 
+  /*
+   * Factory for constructing DevByteViewModel with parameter
+   */
   class Factory(val app: Application) : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
       if (modelClass.isAssignableFrom(ViewModelUser::class.java)) {
