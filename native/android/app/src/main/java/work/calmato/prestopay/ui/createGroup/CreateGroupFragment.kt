@@ -1,10 +1,9 @@
 package work.calmato.prestopay.ui.createGroup
 
-import android.Manifest
 import android.app.Activity
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
 import android.view.*
 import android.view.animation.AnimationUtils
@@ -16,31 +15,30 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.yalantis.ucrop.UCrop
 import kotlinx.android.synthetic.main.fragment_create_group.*
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentCreateGroupBinding
 import work.calmato.prestopay.network.CreateGroupProperty
 import work.calmato.prestopay.network.Users
-import work.calmato.prestopay.util.AdapterGrid
+import work.calmato.prestopay.util.*
 import work.calmato.prestopay.util.Constant.Companion.IMAGE_PICK_CODE
-import work.calmato.prestopay.util.PermissionBase
-import work.calmato.prestopay.util.ViewModelFriendGroup
-import work.calmato.prestopay.util.encodeImage2Base64
+import java.io.File
 
 class CreateGroupFragment : PermissionBase() {
-  var setThumbnail = false
   private var usersList: Users? = null
   private var usersListToBeSent: Users? = null
-  private val viewModel : ViewModelFriendGroup by lazy {
-    val activity = requireNotNull(this.activity){
+  private val viewModel: ViewModelFriendGroup by lazy {
+    val activity = requireNotNull(this.activity) {
       "You can only access the viewModel after onActivityCreated()"
     }
-    ViewModelProviders.of(this,ViewModelFriendGroup.Factory(activity.application))
+    ViewModelProviders.of(this, ViewModelFriendGroup.Factory(activity.application))
       .get(ViewModelFriendGroup::class.java)
   }
   private lateinit var recycleAdapter: AdapterGrid
   private lateinit var clickListener: AdapterGrid.OnClickListener
   private lateinit var viewManager: RecyclerView.LayoutManager
+  private lateinit var doneButton:MenuItem
 
 
   override fun onCreateView(
@@ -63,6 +61,11 @@ class CreateGroupFragment : PermissionBase() {
     return binding.root
   }
 
+  override fun onPrepareOptionsMenu(menu: Menu) {
+    super.onPrepareOptionsMenu(menu)
+    doneButton = menu.getItem(0)
+  }
+
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
     when (item.itemId) {
       R.id.done -> sendGroupInfo()
@@ -71,21 +74,26 @@ class CreateGroupFragment : PermissionBase() {
   }
 
   private fun sendGroupInfo() {
-    var thumbnailStr = encodeImage2Base64(thumbnailEdit)
-    if (setThumbnail) {
-      thumbnailStr = encodeImage2Base64(thumbnailEdit)
-    }
+    val thumbnailStr = encodeImage2Base64(thumbnailEdit)
     val groupName = groupName.text.toString()
     if (groupName.length in 1..31) {
       if (usersListToBeSent!!.users.size in 0..100) {
         val groupProperty =
           CreateGroupProperty(groupName, thumbnailStr, usersListToBeSent!!.users.map { it.id })
-        viewModel.createGroupApi(groupProperty,requireActivity())
+        viewModel.createGroupApi(groupProperty, requireActivity())
       } else {
-        Toast.makeText(requireContext(), resources.getString(R.string.group_member_restriction), Toast.LENGTH_LONG).show()
+        Toast.makeText(
+          requireContext(),
+          resources.getString(R.string.group_member_restriction),
+          Toast.LENGTH_LONG
+        ).show()
       }
     } else {
-      Toast.makeText(requireContext(), resources.getString(R.string.group_name_restriction), Toast.LENGTH_LONG).show()
+      Toast.makeText(
+        requireContext(),
+        resources.getString(R.string.group_name_restriction),
+        Toast.LENGTH_LONG
+      ).show()
     }
   }
 
@@ -94,8 +102,8 @@ class CreateGroupFragment : PermissionBase() {
     thumbnailEdit.setOnClickListener {
       requestPermission()
     }
-    viewModel.navigateToHome.observe(viewLifecycleOwner, Observer{
-      if(it){
+    viewModel.navigateToHome.observe(viewLifecycleOwner, Observer {
+      if (it) {
         this.findNavController().navigate(
           CreateGroupFragmentDirections.actionCreateGroupFragmentToHomeFragment()
         )
@@ -112,14 +120,11 @@ class CreateGroupFragment : PermissionBase() {
         }
       }
     )
-    val animBlink = AnimationUtils.loadAnimation(requireContext(),R.anim.blink)
     viewModel.nowLoading.observe(viewLifecycleOwner, Observer {
-      if(it){
-        nowLoading.visibility = View.VISIBLE
-        nowLoading.startAnimation(animBlink)
-      }else{
-        nowLoading.clearAnimation()
-        nowLoading.visibility = View.INVISIBLE
+      if (it) {
+        startHttpConnectionMenu(doneButton,nowLoading,requireContext())
+      } else {
+        finishHttpConnectionMenu(doneButton,nowLoading)
       }
     })
   }
@@ -132,7 +137,11 @@ class CreateGroupFragment : PermissionBase() {
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     super.onActivityResult(requestCode, resultCode, data)
     if (resultCode == Activity.RESULT_OK && requestCode == IMAGE_PICK_CODE) {
-      thumbnailEdit.setImageURI(data?.data)
+      cropImage(data?.data!!)
+    }
+    if (resultCode == Activity.RESULT_OK && requestCode == UCrop.REQUEST_CROP) {
+      val resultUri = UCrop.getOutput(data!!)
+      thumbnailEdit.setImageURI(resultUri)
       thumbnailEdit.setBackgroundColor(Color.TRANSPARENT)
     }
   }

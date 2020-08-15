@@ -28,6 +28,10 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.iid.FirebaseInstanceId
 import com.twitter.sdk.android.core.TwitterAuthConfig
+import com.google.android.gms.tasks.OnFailureListener
+import com.google.android.gms.tasks.OnSuccessListener
+import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.*
 import kotlinx.android.synthetic.main.fragment_login.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -37,6 +41,8 @@ import work.calmato.prestopay.databinding.FragmentLoginBinding
 import work.calmato.prestopay.network.Api
 import work.calmato.prestopay.network.asDomainModel
 import work.calmato.prestopay.network.RegisterDeviceIdProperty
+import work.calmato.prestopay.util.finishHttpConnection
+import work.calmato.prestopay.util.startHttpConnection
 import work.calmato.prestopay.util.ViewModelUser
 import java.util.*
 
@@ -54,21 +60,10 @@ class LoginFragment : Fragment() {
   private lateinit var auth: FirebaseAuth
   private lateinit var googleSignInClient: GoogleSignInClient
   private lateinit var callbackManager: CallbackManager
-  private lateinit var sharedPreferences : SharedPreferences
+  private lateinit var sharedPreferences: SharedPreferences
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    //Twitter sign in
-    val mTwitterAuthConfig = TwitterAuthConfig(
-      getString(R.string.twitter_consumer_key),
-      getString(R.string.twitter_consumer_secret)
-    )
-/*    val twitterConfig = TwitterConfig.Builder(requireContext())
-      .logger(DefaultLogger(Log.DEBUG))
-      .twitterAuthConfig(mTwitterAuthConfig)
-      .debug(true)
-      .build()
-    Twitter.initialize(twitterConfig)*/
     FacebookSdk.sdkInitialize(activity)
   }
 
@@ -135,33 +130,8 @@ class LoginFragment : Fragment() {
         })
     })
 
-    //Twitter Oauth
-/*
-    twitterLogInButton.callback = object : Callback<TwitterSession>() {
-      override fun success(result: Result<TwitterSession>?) {
-        Log.d(TWITTER_TAG, "success")
-        if (result != null) {
-          firebaseAuthWithTwitter(result.data)
-        } else {
-          Toast.makeText(
-            requireContext(), "処理できませんでした.もう一度お願いします",
-            Toast.LENGTH_SHORT
-          ).show()
-        }
-      }
-
-      override fun failure(exception: TwitterException?) {
-        Toast.makeText(
-          requireContext(), "ログインが失敗しました.インターネットが接続されているか,Twitterのアプリがダウンロードされているか確認してください",
-          Toast.LENGTH_LONG
-        ).show()
-      }
-    }
-*/
-
     //email password sign in
     loginButton.setOnClickListener {
-      loginButton.isEnabled=false
       defaultSignIn(
         loginEmailField.text.toString(),
         loginPasswordField.text.toString()
@@ -181,15 +151,15 @@ class LoginFragment : Fragment() {
         LoginFragmentDirections.actionLoginFragmentToResetPassFragment()
       )
     }
+    twitterSingnIn.setOnClickListener {
+      firebaseAuthWithTwitter()
+    }
   }
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     super.onActivityResult(requestCode, resultCode, data)
 
-    if (requestCode == RC_TWITTER) {
-      // Pass the activity result to the Twitter login button.
-      twitterLogInButton.onActivityResult(requestCode, resultCode, data);
-    } else if (requestCode == RC_SIGN_IN) {
+    if (requestCode == RC_SIGN_IN) {
       val task = GoogleSignIn.getSignedInAccountFromIntent(data)
       try {
         // Google Sign In was successful, authenticate with Firebase
@@ -209,6 +179,7 @@ class LoginFragment : Fragment() {
 
   override fun onStart() {
     super.onStart()
+
     // Check if user is signed in (non-null) and update UI accordingly.
     val currentUser = auth.currentUser
     updateUI(currentUser)
@@ -218,8 +189,9 @@ class LoginFragment : Fragment() {
     Log.d(DEFAULT_TAG, "signInAccount:$email")
     // [START create_user_with_email]
     if (email != "" && password != "") {
-          auth.signInWithEmailAndPassword(email, password)
-            .addOnCompleteListener(OnCompleteListener { task ->
+      startHttpConnection(loginButton, nowLoading, requireContext())
+      auth.signInWithEmailAndPassword(email, password)
+        .addOnCompleteListener(OnCompleteListener { task ->
           if (task.isSuccessful) {
             // Sign in success, update UI with the signed-in user's information
             Log.d(DEFAULT_TAG, "signInWithEmail:success")
@@ -232,7 +204,7 @@ class LoginFragment : Fragment() {
             }
             updateUI(user)
           } else {
-            loginButton.isEnabled=true
+            finishHttpConnection(loginButton, nowLoading)
             // If sign in fails, display a message to the user.
             Log.w(DEFAULT_TAG, "signInWithEmail:failure", task.exception)
             Toast.makeText(
@@ -243,8 +215,11 @@ class LoginFragment : Fragment() {
           }
         })
     } else {
-      loginButton.isEnabled=true
-      Toast.makeText(requireContext(), resources.getString(R.string.fill_email_password), Toast.LENGTH_SHORT).show()
+      Toast.makeText(
+        requireContext(),
+        resources.getString(R.string.fill_email_password),
+        Toast.LENGTH_SHORT
+      ).show()
     }
     // [END create_user_with_email]
   }
@@ -277,32 +252,35 @@ class LoginFragment : Fragment() {
     startActivityForResult(signInIntent, RC_SIGN_IN)
   }
 
-/*
-  private fun firebaseAuthWithTwitter(session: TwitterSession) {
-    val credential = TwitterAuthProvider.getCredential(
-      session.authToken.token,
-      session.authToken.secret
-    )
-
-    auth.signInWithCredential(credential)
-      .addOnCompleteListener({ task ->
-        if (task.isSuccessful) {
-          // Sign in success, update UI with the signed-in user's information
-          Log.d(TWITTER_TAG, "signInWithTwitter:success")
-          val user = auth.currentUser
-          updateUI(user)
-        } else {
-          // If sign in fails, display a message to the user.
-          Log.w(TWITTER_TAG, "signInWithCredential:failure", task.exception)
-          Toast.makeText(
-            requireContext(), "認証が失敗しました",
-            Toast.LENGTH_SHORT
-          ).show()
-          updateUI(null)
+  private fun firebaseAuthWithTwitter() {
+    val provider: OAuthProvider.Builder = OAuthProvider.newBuilder("twitter.com")
+    val pendingResultTask: Task<AuthResult>? = auth.pendingAuthResult
+    if (pendingResultTask != null) {
+      // There's something already here! Finish the sign-in for your user.
+      pendingResultTask.addOnSuccessListener(object : OnSuccessListener<AuthResult?> {
+        override fun onSuccess(p0: AuthResult?) {
+          updateUI(auth.currentUser)
         }
       })
+      pendingResultTask.addOnFailureListener(object : OnFailureListener {
+        override fun onFailure(p0: java.lang.Exception) {
+          Log.i("LoginFragment", "onFailure: ${p0.message}")
+        }
+      })
+    } else {
+      auth.startActivityForSignInWithProvider(/* activity= */ requireActivity(), provider.build())
+        .addOnSuccessListener(object : OnSuccessListener<AuthResult> {
+          override fun onSuccess(p0: AuthResult?) {
+            updateUI(auth.currentUser)
+          }
+        })
+        .addOnFailureListener(object : OnFailureListener {
+          override fun onFailure(p0: java.lang.Exception) {
+            Log.i("LoginFragment", "onFailure: ${p0.message}")
+          }
+        })
+    }
   }
-*/
 
   private fun handleFacebookAccessToken(token: AccessToken) {
     Log.d(FACEBOOK_TAG, "handleFacebookAccessToken:$token")
@@ -361,7 +339,7 @@ class LoginFragment : Fragment() {
     })
   }
 
-  private fun setSharedPreference(){
+  private fun setSharedPreference() {
     FirebaseAuth.getInstance().currentUser?.getIdToken(true)?.addOnCompleteListener {
       if (it.isSuccessful) {
         val editor = sharedPreferences.edit()
@@ -374,15 +352,16 @@ class LoginFragment : Fragment() {
           }
         }
         val id = sharedPreferences.getString("token", null)
-        GlobalScope.launch(Dispatchers.IO){
+        GlobalScope.launch(Dispatchers.IO) {
           try {
-            val userProperty  = Api.retrofitService.getLoginUserInformation("Bearer $id").await().asDomainModel()
+            val userProperty =
+              Api.retrofitService.getLoginUserInformation("Bearer $id").await().asDomainModel()
             editor.putString("name", userProperty.name)
-            editor.putString("username",userProperty.username)
-            editor.putString("email",userProperty.email)
-            editor.putString("thumbnailUrl",userProperty.thumbnailUrl)
+            editor.putString("username", userProperty.username)
+            editor.putString("email", userProperty.email)
+            editor.putString("thumbnailUrl", userProperty.thumbnailUrl)
             editor.apply()
-          }catch (e:Exception){
+          } catch (e: Exception) {
             Log.i("LoginFragment", "setSharedPreference: ${e.message}")
           }
 
@@ -394,9 +373,7 @@ class LoginFragment : Fragment() {
   companion object {
     private const val DEFAULT_TAG = "EmailPassword"
     private const val GOOGLE_TAG = "GoogleActivity"
-    private const val TWITTER_TAG = "TwitterActivity"
     private const val FACEBOOK_TAG = "FacebookActivity"
     private const val RC_SIGN_IN = 9001
-    private const val RC_TWITTER = 9002
   }
 }

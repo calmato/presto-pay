@@ -21,15 +21,16 @@ import work.calmato.prestopay.network.UserProperty
 import work.calmato.prestopay.network.Users
 import work.calmato.prestopay.ui.createGroup.CreateGroupFragmentArgs
 import work.calmato.prestopay.util.AdapterCheck
+import work.calmato.prestopay.util.ViewModelFriend
 import work.calmato.prestopay.util.ViewModelFriendGroup
 
 class FriendListFragment : Fragment() {
-  private val viewModel  : ViewModelFriendGroup by lazy {
+  private val viewModel  : ViewModelFriend by lazy {
     val activity = requireNotNull(this.activity){
       "You can only access the viewModel after onActivityCreated()"
     }
-    ViewModelProviders.of(this,ViewModelFriendGroup.Factory(activity.application))
-      .get(ViewModelFriendGroup::class.java)
+    ViewModelProviders.of(this,ViewModelFriend.Factory(activity.application))
+      .get(ViewModelFriend::class.java)
   }
 
   private var recycleAdapter: AdapterCheck? = null

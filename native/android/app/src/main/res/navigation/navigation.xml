@@ -142,6 +142,15 @@
       app:destination="@id/home_fragment" />
   </fragment>
   <fragment
+    android:id="@+id/groupListFragment"
+    android:name="work.calmato.prestopay.ui.groupList.groupListFragment"
+    android:label="GroupListFragment"
+    tools:layout="@layout/fragment_group_list">
+    <action
+      android:id="@+id/action_groupListFragment_to_addExpenseFragment"
+      app:destination="@id/addExpenseFragment" />
+  </fragment>
+  <fragment
     android:id="@+id/createGroupFragment"
     android:name="work.calmato.prestopay.ui.createGroup.CreateGroupFragment"
     android:label="fragment_create_group"
