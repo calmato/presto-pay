@@ -17,7 +17,10 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.yalantis.ucrop.UCrop
+import kotlinx.android.synthetic.main.fragment_create_group.*
 import kotlinx.android.synthetic.main.fragment_new_account.*
+import kotlinx.android.synthetic.main.fragment_new_account.thumbnailEdit
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
@@ -158,7 +161,11 @@ class NewAccountFragment : PermissionBase() {
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     super.onActivityResult(requestCode, resultCode, data)
     if (resultCode == Activity.RESULT_OK && requestCode == IMAGE_PICK_CODE) {
-      thumbnailEdit.setImageURI(data?.data)
+      cropImage(data?.data!!)
+    }
+    if (resultCode == Activity.RESULT_OK && requestCode == UCrop.REQUEST_CROP) {
+      val resultUri = UCrop.getOutput(data!!)
+      thumbnailEdit.setImageURI(resultUri)
       thumbnailEdit.setBackgroundColor(Color.TRANSPARENT)
       editPhotoText.text = resources.getString(R.string.change_image)
     }

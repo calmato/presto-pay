@@ -20,7 +20,10 @@ import androidx.navigation.fragment.findNavController
 import com.facebook.share.Share
 import com.google.firebase.auth.FirebaseAuth
 import com.squareup.picasso.Picasso
+import com.yalantis.ucrop.UCrop
 import kotlinx.android.synthetic.main.fragment_account_edit.*
+import kotlinx.android.synthetic.main.fragment_account_edit.thumbnailEdit
+import kotlinx.android.synthetic.main.fragment_create_group.*
 import kotlinx.android.synthetic.main.fragment_group_friend.*
 import org.json.JSONObject
 import retrofit2.Call
@@ -116,7 +119,11 @@ class AccountEditFragment : PermissionBase() {
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     super.onActivityResult(requestCode, resultCode, data)
     if (resultCode == Activity.RESULT_OK && requestCode == Constant.IMAGE_PICK_CODE) {
-      thumbnailEdit.setImageURI(data?.data)
+      cropImage(data?.data!!)
+    }
+    if (resultCode == Activity.RESULT_OK && requestCode == UCrop.REQUEST_CROP) {
+      val resultUri = UCrop.getOutput(data!!)
+      thumbnailEdit.setImageURI(resultUri)
       thumbnailEdit.setBackgroundColor(Color.TRANSPARENT)
       changeProfilePicture.text = resources.getText(R.string.change_image)
     }
