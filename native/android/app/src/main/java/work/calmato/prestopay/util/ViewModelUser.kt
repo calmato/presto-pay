@@ -6,9 +6,6 @@ import android.preference.PreferenceManager
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -28,14 +25,14 @@ class ViewModelUser(application: Application) : AndroidViewModel(application) {
         }
 
         override fun onResponse(call: Call<AccountResponse>, response: Response<AccountResponse>) {
-          if (!response.isSuccessful) {
+          if (response.isSuccessful) {
             Log.i(ViewModelUser.TAG, "There is some error on onResponse")
           }
         }
       })
   }
 
-  /*
+  /**
    * Factory for constructing DevByteViewModel with parameter
    */
   class Factory(val app: Application) : ViewModelProvider.Factory {
