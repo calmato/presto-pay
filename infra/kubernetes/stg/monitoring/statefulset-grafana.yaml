@@ -1,11 +1,12 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 
 metadata:
   name: grafana
   namespace: monitoring
 
 spec:
+  serviceName: grafana
   replicas: 1
   selector:
     matchLabels:
@@ -20,6 +21,7 @@ spec:
       containers:
         - name: grafana
           image: grafana/grafana:7.0.2
+          # imagePullPolicy: Always
           resources:
             requests:
               cpu: 50m
@@ -49,3 +51,31 @@ spec:
                 secretKeyRef:
                   name: grafana-secret
                   key: grafana-password
+          command: ["sudo", "chmod", "777", "/var/lib/grafana"]
+          volumeMounts:
+            - name: grafana-config
+              mountPath: /etc/grafana/provisioning/datasources/
+            - name: grafana-storage
+              mountPath: /var/lib/grafana
+      # initContainers:
+      #   - name: init-chmod-data
+      #     image: grafana/grafana:7.0.2
+      #     imagePullPolicy: "IfNotPresent"
+      #     command: ["chmod", "777", "/var/lib/grafana"]
+      #     volumeMounts:
+      #       - name: grafana-storage
+      #         mountPath: /var/lib/grafana
+      volumes:
+        - name: grafana-config
+          configMap:
+            name: grafana
+
+  volumeClaimTemplates:
+    - metadata:
+        name: grafana-storage
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 1Gi

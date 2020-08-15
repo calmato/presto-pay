@@ -1,11 +1,12 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 
 metadata:
   name: loki
   namespace: monitoring
 
 spec:
+  serviceName: loki
   replicas: 1
   selector:
     matchLabels:
@@ -30,3 +31,16 @@ spec:
           ports:
             - name: loki
               containerPort: 3100
+          volumeMounts:
+            - name: loki-storage
+              mountPath: /data
+
+  volumeClaimTemplates:
+    - metadata:
+        name: loki-storage
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 2Gi
