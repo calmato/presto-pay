@@ -3,6 +3,7 @@ package work.calmato.prestopay.util
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -10,7 +11,9 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import com.yalantis.ucrop.UCrop
 import work.calmato.prestopay.R
+import java.io.File
 
 open class PermissionBase :Fragment() {
   override fun onRequestPermissionsResult(
@@ -72,5 +75,13 @@ open class PermissionBase :Fragment() {
       //permission already granted
       pickImageFromGallery()
     }
+  }
+  fun cropImage(uri: Uri) {
+    val destination = Uri.fromFile(
+      File(requireActivity().cacheDir, "IMG_" + System.currentTimeMillis())
+    )
+    UCrop.of(uri, destination)
+      .withAspectRatio(1f, 1f)
+      .start(requireActivity(), this)
   }
 }

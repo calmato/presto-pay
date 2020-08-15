@@ -13,6 +13,8 @@ import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.fragment_reset_pass.*
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentResetPassBinding
+import work.calmato.prestopay.util.finishHttpConnection
+import work.calmato.prestopay.util.startHttpConnection
 
 class ResetPassFragment : Fragment() {
   override fun onCreateView(
@@ -32,6 +34,7 @@ class ResetPassFragment : Fragment() {
       if (!emailEditText.text.isEmpty()) {
         val auth = FirebaseAuth.getInstance()
         val emailAddress = emailEditText.text.toString()
+        startHttpConnection(sendMailButton,nowLoading,requireContext())
         auth.sendPasswordResetEmail(emailAddress).addOnCompleteListener { task ->
           if (task.isSuccessful) {
             sendEmail()
@@ -39,6 +42,7 @@ class ResetPassFragment : Fragment() {
               ResetPassFragmentDirections.actionResetPassFragmentToMailCheckFragment()
             )
           } else {
+            finishHttpConnection(sendMailButton,nowLoading)
             Log.d("Reset password", "Email is not sent")
           }
         }

@@ -17,6 +17,8 @@ import kotlinx.android.synthetic.main.fragment_update_pass_login.*
 import kotlinx.android.synthetic.main.fragment_update_pass_login.passwordInformation
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentUpdatePassLoginBinding
+import work.calmato.prestopay.util.finishHttpConnection
+import work.calmato.prestopay.util.startHttpConnection
 
 class UpdatePassLoginFragment : Fragment() {
   override fun onCreateView(
@@ -80,6 +82,7 @@ class UpdatePassLoginFragment : Fragment() {
         val user = auth.currentUser
         val cred =
           EmailAuthProvider.getCredential(user!!.email.toString(), currentPassEdit.text.toString())
+        startHttpConnection(changePassButton,nowLoading,requireContext())
         user.reauthenticate(cred).addOnCompleteListener {
           if (it.isSuccessful) {
             user.updatePassword(newPass).addOnCompleteListener {
@@ -87,7 +90,6 @@ class UpdatePassLoginFragment : Fragment() {
                 Toast.makeText(requireContext(), resources.getString(R.string.password_changed), Toast.LENGTH_SHORT).show()
                 this.findNavController().navigate(
                   UpdatePassLoginFragmentDirections.actionUpdatePassLoginFragmentToAccountHome()
-
                 )
               } else {
                 Toast.makeText(
@@ -96,10 +98,12 @@ class UpdatePassLoginFragment : Fragment() {
                   Toast.LENGTH_LONG
                 )
                   .show()
+                finishHttpConnection(changePassButton,nowLoading)
               }
             }
           } else {
             Toast.makeText(requireContext(), resources.getString(R.string.current_password_wrong), Toast.LENGTH_LONG).show()
+            finishHttpConnection(changePassButton,nowLoading)
           }
         }
       } else {
