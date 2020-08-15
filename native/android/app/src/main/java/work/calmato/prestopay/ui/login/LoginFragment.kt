@@ -8,7 +8,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -22,14 +21,15 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.OnCompleteListener
-import com.google.firebase.auth.FacebookAuthProvider
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.auth.GoogleAuthProvider
+import com.google.android.gms.tasks.OnFailureListener
+import com.google.android.gms.tasks.OnSuccessListener
+import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.*
+import com.twitter.sdk.android.core.DefaultLogger
+import com.twitter.sdk.android.core.Twitter
 import com.twitter.sdk.android.core.TwitterAuthConfig
-import kotlinx.android.synthetic.main.fragment_add_expense.*
+import com.twitter.sdk.android.core.TwitterConfig
 import kotlinx.android.synthetic.main.fragment_login.*
-import kotlinx.android.synthetic.main.fragment_login.nowLoading
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -50,17 +50,17 @@ class LoginFragment : Fragment() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    //Twitter sign in
-    val mTwitterAuthConfig = TwitterAuthConfig(
-      getString(R.string.twitter_consumer_key),
-      getString(R.string.twitter_consumer_secret)
-    )
-/*    val twitterConfig = TwitterConfig.Builder(requireContext())
-      .logger(DefaultLogger(Log.DEBUG))
-      .twitterAuthConfig(mTwitterAuthConfig)
-      .debug(true)
-      .build()
-    Twitter.initialize(twitterConfig)*/
+//    //Twitter sign in
+//    val mTwitterAuthConfig = TwitterAuthConfig(
+//      getString(R.string.twitter_consumer_key),
+//      getString(R.string.twitter_consumer_secret)
+//    )
+//    val twitterConfig = TwitterConfig.Builder(requireContext())
+//      .logger(DefaultLogger(Log.DEBUG))
+//      .twitterAuthConfig(mTwitterAuthConfig)
+//      .debug(true)
+//      .build()
+//    Twitter.initialize(twitterConfig)
     FacebookSdk.sdkInitialize(activity)
   }
 
@@ -172,15 +172,19 @@ class LoginFragment : Fragment() {
         LoginFragmentDirections.actionLoginFragmentToResetPassFragment()
       )
     }
+    twitterSingnIn.setOnClickListener {
+      firebaseAuthWithTwitter()
+    }
   }
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     super.onActivityResult(requestCode, resultCode, data)
 
-    if (requestCode == RC_TWITTER) {
-      // Pass the activity result to the Twitter login button.
-      twitterLogInButton.onActivityResult(requestCode, resultCode, data);
-    } else if (requestCode == RC_SIGN_IN) {
+//    if (requestCode == RC_TWITTER) {
+//      // Pass the activity result to the Twitter login button.
+//      twitterLogInButton.onActivityResult(requestCode, resultCode, data);
+//    } else
+      if (requestCode == RC_SIGN_IN) {
       val task = GoogleSignIn.getSignedInAccountFromIntent(data)
       try {
         // Google Sign In was successful, authenticate with Firebase
@@ -294,6 +298,35 @@ class LoginFragment : Fragment() {
       })
   }
 */
+  private fun firebaseAuthWithTwitter(){
+  val provider: OAuthProvider.Builder = OAuthProvider.newBuilder("twitter.com")
+  val pendingResultTask: Task<AuthResult>? = auth.pendingAuthResult
+  if (pendingResultTask != null) {
+    // There's something already here! Finish the sign-in for your user.
+    pendingResultTask.addOnSuccessListener(object : OnSuccessListener<AuthResult?> {
+      override fun onSuccess(p0: AuthResult?) {
+        updateUI(auth.currentUser)
+      }
+      })
+    pendingResultTask.addOnFailureListener(object : OnFailureListener {
+      override fun onFailure(p0: java.lang.Exception) {
+        Log.i("LoginFragment", "onFailure: ${p0.message}")
+      }
+    })
+  } else {
+    auth.startActivityForSignInWithProvider(/* activity= */ requireActivity(), provider.build())
+      .addOnSuccessListener (object :OnSuccessListener<AuthResult>{
+        override fun onSuccess(p0: AuthResult?) {
+          updateUI(auth.currentUser)
+        }
+      })
+      .addOnFailureListener (object :OnFailureListener{
+        override fun onFailure(p0: java.lang.Exception) {
+          Log.i("LoginFragment", "onFailure: ${p0.message}")
+        }
+      })
+  }
+}
 
   private fun handleFacebookAccessToken(token: AccessToken) {
     Log.d(FACEBOOK_TAG, "handleFacebookAccessToken:$token")

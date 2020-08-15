@@ -131,6 +131,7 @@
   <string name="delete_friend_failed">友達削除に失敗しました</string>
   <string name="group_choice_list">グループを選択</string>
   <string name="successed_to_create_account">アカウントの作成に成功しました</string>
+  <string name="log_in_with_twitter">Log in with Twitter</string>
   <string-array name="currency_array">
     <item>￥</item>
     <item>＄</item>

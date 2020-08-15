@@ -158,9 +158,7 @@
         android:text="@string/facebook_signin_text"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="@+id/facebookSingin"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.595"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/textView13"
         app:layout_constraintTop_toTopOf="@+id/facebookSingin"
         app:layout_constraintVertical_bias="0.368" />
 
@@ -214,11 +212,11 @@
       <com.twitter.sdk.android.core.identity.TwitterLoginButton
         android:id="@+id/twitterLogInButton"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="43dp"
         android:layout_marginTop="16dp"
-        android:visibility="visible"
+        android:clickable="true"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="@+id/googleSingnin"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="@+id/googleSingnin"
         app:layout_constraintTop_toBottomOf="@+id/googleSingnin" />
 
@@ -232,6 +230,36 @@
         app:layout_constraintStart_toStartOf="@+id/googleSingnin"
         app:layout_constraintTop_toTopOf="@+id/googleSingnin"
         app:srcCompat="@drawable/ic_google" />
+
+      <Button
+        android:id="@+id/twitterSingnIn"
+        android:layout_width="0dp"
+        android:layout_height="43dp"
+        android:background="@drawable/border"
+        app:layout_constraintBottom_toBottomOf="@+id/twitterLogInButton"
+        app:layout_constraintEnd_toEndOf="@+id/twitterLogInButton"
+        app:layout_constraintStart_toStartOf="@+id/twitterLogInButton"
+        app:layout_constraintTop_toTopOf="@+id/twitterLogInButton" />
+
+      <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        app:layout_constraintBottom_toBottomOf="@+id/twitterLogInButton"
+        app:layout_constraintEnd_toEndOf="@+id/loginGoogleIcon"
+        app:layout_constraintStart_toStartOf="@+id/loginGoogleIcon"
+        app:layout_constraintTop_toTopOf="@+id/twitterLogInButton"
+        app:srcCompat="@drawable/ic_twitter" />
+
+      <TextView
+        android:id="@+id/textView13"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/log_in_with_twitter"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/twitterLogInButton"
+        app:layout_constraintStart_toStartOf="@+id/googleSigninText"
+        app:layout_constraintTop_toTopOf="@+id/twitterLogInButton" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
     <TextView
