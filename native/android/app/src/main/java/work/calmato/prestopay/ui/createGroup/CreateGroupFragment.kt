@@ -21,15 +21,11 @@ import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentCreateGroupBinding
 import work.calmato.prestopay.network.CreateGroupProperty
 import work.calmato.prestopay.network.Users
-import work.calmato.prestopay.util.AdapterGrid
+import work.calmato.prestopay.util.*
 import work.calmato.prestopay.util.Constant.Companion.IMAGE_PICK_CODE
-import work.calmato.prestopay.util.PermissionBase
-import work.calmato.prestopay.util.ViewModelFriendGroup
-import work.calmato.prestopay.util.encodeImage2Base64
 import java.io.File
 
 class CreateGroupFragment : PermissionBase() {
-  var setThumbnail = false
   private var usersList: Users? = null
   private var usersListToBeSent: Users? = null
   private val viewModel: ViewModelFriendGroup by lazy {
@@ -42,6 +38,7 @@ class CreateGroupFragment : PermissionBase() {
   private lateinit var recycleAdapter: AdapterGrid
   private lateinit var clickListener: AdapterGrid.OnClickListener
   private lateinit var viewManager: RecyclerView.LayoutManager
+  private lateinit var doneButton:MenuItem
 
 
   override fun onCreateView(
@@ -64,6 +61,11 @@ class CreateGroupFragment : PermissionBase() {
     return binding.root
   }
 
+  override fun onPrepareOptionsMenu(menu: Menu) {
+    super.onPrepareOptionsMenu(menu)
+    doneButton = menu.getItem(0)
+  }
+
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
     when (item.itemId) {
       R.id.done -> sendGroupInfo()
@@ -72,10 +74,7 @@ class CreateGroupFragment : PermissionBase() {
   }
 
   private fun sendGroupInfo() {
-    var thumbnailStr = encodeImage2Base64(thumbnailEdit)
-    if (setThumbnail) {
-      thumbnailStr = encodeImage2Base64(thumbnailEdit)
-    }
+    val thumbnailStr = encodeImage2Base64(thumbnailEdit)
     val groupName = groupName.text.toString()
     if (groupName.length in 1..31) {
       if (usersListToBeSent!!.users.size in 0..100) {
@@ -121,14 +120,11 @@ class CreateGroupFragment : PermissionBase() {
         }
       }
     )
-    val animBlink = AnimationUtils.loadAnimation(requireContext(), R.anim.blink)
     viewModel.nowLoading.observe(viewLifecycleOwner, Observer {
       if (it) {
-        nowLoading.visibility = View.VISIBLE
-        nowLoading.startAnimation(animBlink)
+        startHttpConnectionMenu(doneButton,nowLoading,requireContext())
       } else {
-        nowLoading.clearAnimation()
-        nowLoading.visibility = View.INVISIBLE
+        finishHttpConnectionMenu(doneButton,nowLoading)
       }
     })
   }

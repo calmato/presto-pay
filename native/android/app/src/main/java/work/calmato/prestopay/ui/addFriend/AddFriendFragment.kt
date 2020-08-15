@@ -24,6 +24,8 @@ import work.calmato.prestopay.databinding.FragmentAddFriendBinding
 import work.calmato.prestopay.network.UserProperty
 import work.calmato.prestopay.util.AdapterFriendPlane
 import work.calmato.prestopay.util.ViewModelFriendGroup
+import work.calmato.prestopay.util.finishHttpConnection
+import work.calmato.prestopay.util.startHttpConnection
 
 class AddFriendFragment : Fragment() {
   private val viewModel : ViewModelFriendGroup by lazy {
@@ -79,14 +81,11 @@ class AddFriendFragment : Fragment() {
           Toast.makeText(requireContext(), resources.getString(R.string.user_not_found), Toast.LENGTH_SHORT).show()
         }
     })
-    val animBlink = AnimationUtils.loadAnimation(requireContext(),R.anim.blink)
     viewModel.nowLoading.observe(viewLifecycleOwner, Observer {
       if(it){
-        nowLoading.visibility = View.VISIBLE
-        nowLoading.startAnimation(animBlink)
+        startHttpConnection(search,nowLoading,requireContext())
       }else{
-        nowLoading.clearAnimation()
-        nowLoading.visibility = View.INVISIBLE
+        finishHttpConnection(search,nowLoading)
       }
     })
     viewModel.itemClicked.observe(viewLifecycleOwner, Observer {
