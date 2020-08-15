@@ -46,6 +46,7 @@
       android:ems="10"
       android:hint="@string/new_password"
       android:inputType="textPassword"
+      android:maxLength="15"
       app:layout_constraintEnd_toEndOf="@+id/currentPassEdit"
       app:layout_constraintStart_toStartOf="@+id/currentPassEdit"
       app:layout_constraintTop_toBottomOf="@+id/currentPassEdit" />
