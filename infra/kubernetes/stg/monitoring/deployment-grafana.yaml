@@ -1,12 +1,11 @@
 apiVersion: apps/v1
-kind: StatefulSet
+kind: Deployment
 
 metadata:
   name: grafana
   namespace: monitoring
 
 spec:
-  serviceName: grafana
   replicas: 1
   selector:
     matchLabels:
@@ -21,7 +20,6 @@ spec:
       containers:
         - name: grafana
           image: grafana/grafana:7.0.2
-          # imagePullPolicy: Always
           resources:
             requests:
               cpu: 50m
@@ -34,7 +32,7 @@ spec:
               containerPort: 3000
           readinessProbe:
             httpGet:
-              path: /login
+              path: /api/health
               port: 3000
           env:
             - name: GF_AUTH_BASIC_ENABLED
@@ -51,31 +49,25 @@ spec:
                 secretKeyRef:
                   name: grafana-secret
                   key: grafana-password
-          command: ["sudo", "chmod", "777", "/var/lib/grafana"]
           volumeMounts:
             - name: grafana-config
-              mountPath: /etc/grafana/provisioning/datasources/
-            - name: grafana-storage
-              mountPath: /var/lib/grafana
-      # initContainers:
-      #   - name: init-chmod-data
-      #     image: grafana/grafana:7.0.2
-      #     imagePullPolicy: "IfNotPresent"
-      #     command: ["chmod", "777", "/var/lib/grafana"]
-      #     volumeMounts:
-      #       - name: grafana-storage
-      #         mountPath: /var/lib/grafana
+              mountPath: /etc/grafana
+            - name: grafana-datasources
+              mountPath: /etc/grafana/provisioning/datasources
+            - name: grafana-dashboards
+              mountPath: /var/lib/grafana/dashboards
+            - name: grafana-dashboardproviders
+              mountPath: /etc/grafana/provisioning/dashboards/
       volumes:
         - name: grafana-config
           configMap:
-            name: grafana
-
-  volumeClaimTemplates:
-    - metadata:
-        name: grafana-storage
-      spec:
-        accessModes:
-          - ReadWriteOnce
-        resources:
-          requests:
-            storage: 1Gi
+            name: grafana-ini
+        - name: grafana-datasources
+          configMap:
+            name: grafana-datasources
+        - name: grafana-dashboards
+          configMap:
+            name: grafana-dashboards
+        - name: grafana-dashboardproviders
+          configMap:
+            name: grafana-dashboardproviders
