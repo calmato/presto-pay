@@ -25,7 +25,7 @@ class ViewModelUser(application: Application) : AndroidViewModel(application) {
         }
 
         override fun onResponse(call: Call<AccountResponse>, response: Response<AccountResponse>) {
-          if (response.isSuccessful) {
+          if (!response.isSuccessful) {
             Log.i(ViewModelUser.TAG, "There is some error on onResponse")
           }
         }
