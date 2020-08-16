@@ -58,6 +58,8 @@ spec:
               mountPath: /var/lib/grafana/dashboards
             - name: grafana-dashboardproviders
               mountPath: /etc/grafana/provisioning/dashboards/
+            - name: grafana-storage
+              mountPath: /var/lib/grafana
       volumes:
         - name: grafana-config
           configMap:
@@ -71,3 +73,6 @@ spec:
         - name: grafana-dashboardproviders
           configMap:
             name: grafana-dashboardproviders
+        - name: grafana-storage
+          persistentVolumeClaim:
+            claimName: grafana

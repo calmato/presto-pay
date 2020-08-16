@@ -34,13 +34,7 @@ spec:
           volumeMounts:
             - name: loki-storage
               mountPath: /data
-
-  volumeClaimTemplates:
-    - metadata:
-        name: loki-storage
-      spec:
-        accessModes:
-          - ReadWriteOnce
-        resources:
-          requests:
-            storage: 2Gi
+      volumes:
+        - name: loki-storage
+          persistentVolumeClaim:
+            claimName: loki

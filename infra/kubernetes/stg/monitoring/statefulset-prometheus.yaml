@@ -32,6 +32,8 @@ spec:
           ports:
             - name: prometheus
               containerPort: 9090
+          args:
+            - --config.file=/etc/prometheus/prometheus.yaml
           volumeMounts:
             - name: prometheus-config
               mountPath: /etc/prometheus
@@ -41,13 +43,6 @@ spec:
         - name: prometheus-config
           configMap:
             name: prometheus
-
-  volumeClaimTemplates:
-    - metadata:
-        name: prometheus-storage
-      spec:
-        accessModes:
-          - ReadWriteOnce
-        resources:
-          requests:
-            storage: 1Gi
+        - name: prometheus-storage
+          persistentVolumeClaim:
+            claimName: prometheus
