@@ -32,7 +32,7 @@ class AdapterGroupPlane(val onClickListener: OnClickListener) :
   }
 
   class OnClickListener(val clickListener: (groupPropertyResponse: GroupPropertyResponse) -> Unit) {
-    fun onClick(groupPropertyResponse: GroupPropertyResponse) = clickListener
+    fun onClick(groupPropertyResponse: GroupPropertyResponse) = clickListener(groupPropertyResponse)
   }
 
   class AddGroupViewHolder(val binding: ListGroupItemPlaneBinding) :

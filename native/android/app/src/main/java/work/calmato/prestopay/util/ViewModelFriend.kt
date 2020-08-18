@@ -30,6 +30,7 @@ class ViewModelFriend(application:Application): AndroidViewModel(application) {
   private val _usersList = MutableLiveData<List<UserProperty>>()
   val usersList: LiveData<List<UserProperty>>
     get() = _usersList
+
   private val _nowLoading = MutableLiveData<Boolean>()
   val nowLoading: LiveData<Boolean>
     get() = _nowLoading

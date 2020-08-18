@@ -7,29 +7,26 @@ import android.content.Intent
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.view.*
-import android.view.animation.AnimationUtils
 import android.widget.*
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.yalantis.ucrop.UCrop
 import kotlinx.android.synthetic.main.fragment_add_expense.*
-import kotlinx.android.synthetic.main.fragment_add_expense.nowLoading
-import kotlinx.android.synthetic.main.fragment_create_group.*
 import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentAddExpenseBindingImpl
 import work.calmato.prestopay.network.Api
 import work.calmato.prestopay.network.CreateExpenseProperty
+import work.calmato.prestopay.network.CreateExpenseResponse
 import work.calmato.prestopay.network.UserExpense
 import work.calmato.prestopay.util.*
 import java.text.SimpleDateFormat
 import java.util.*
-import retrofit2.Callback
-import retrofit2.Response
-import work.calmato.prestopay.network.CreateExpenseResponse
 
-class AddExpenseFragment : PermissionBase() {
+class AddExpenseFragment() : PermissionBase() {
   val REQUEST_CODE = 11
   override fun onCreateView(
     inflater: LayoutInflater,
