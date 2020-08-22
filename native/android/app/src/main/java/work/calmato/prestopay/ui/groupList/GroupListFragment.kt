@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentGroupListBinding
 import work.calmato.prestopay.network.GroupPropertyResponse
+import work.calmato.prestopay.network.Groups
 import work.calmato.prestopay.util.AdapterGroupPlane
 import work.calmato.prestopay.util.ViewModelGroup
 
@@ -58,7 +59,8 @@ class GroupListFragment : Fragment() {
     binding.lifecycleOwner = this
     binding.viewModelGroupList = viewModelGroup
 
-    clickListenerHomeGroup = AdapterGroupPlane.OnClickListener { viewModelGroup.itemIsClickedGroup(it) }
+    clickListenerHomeGroup =
+      AdapterGroupPlane.OnClickListener { viewModelGroup.itemIsClickedGroup(it) }
     recycleGroupListAdapter = AdapterGroupPlane(clickListenerHomeGroup)
     viewModelGroup.groupListView()
     binding.groupChoiceRecycle.apply {
@@ -76,7 +78,11 @@ class GroupListFragment : Fragment() {
         it.selected = true
         Log.d(TAG, it.toString())
         this.findNavController().navigate(
-          GroupListFragmentDirections.actionGroupListFragmentToAddExpenseFragment()
+          GroupListFragmentDirections.actionGroupListFragmentToAddExpenseFragment(
+            Groups(
+              groupListArg
+            )
+          )
         )
       }
     })
