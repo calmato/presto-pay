@@ -3,7 +3,7 @@
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   android:id="@+id/navigation"
-  app:startDestination="@id/login_fragment">
+  app:startDestination="@id/home_fragment">
 
   <fragment
     android:id="@+id/login_fragment"
@@ -64,15 +64,14 @@
       android:id="@+id/action_home_fragment_to_friendListFragment"
       app:destination="@id/friendListFragment" />
     <action
-      android:id="@+id/action_home_fragment_to_addExpenseFragment"
-      app:destination="@id/addExpenseFragment" />
+      android:id="@+id/action_home_fragment_to_groupListFragment"
+      app:destination="@id/groupListFragment" />
   </fragment>
   <fragment
     android:id="@+id/account_home"
     android:name="work.calmato.prestopay.ui.accountHome.AccountHomeFragment"
     android:label="fragment_account_home"
     tools:layout="@layout/fragment_account_home">
-
     <action
       android:id="@+id/action_account_home_to_login_fragment"
       app:destination="@id/login_fragment" />
@@ -143,12 +142,19 @@
   </fragment>
   <fragment
     android:id="@+id/groupListFragment"
-    android:name="work.calmato.prestopay.ui.groupList.groupListFragment"
+    android:name="work.calmato.prestopay.ui.groupList.GroupListFragment"
     android:label="GroupListFragment"
     tools:layout="@layout/fragment_group_list">
+    <argument
+      android:name="groupsList"
+      app:argType="work.calmato.prestopay.network.Groups"
+      app:nullable="true" />
     <action
       android:id="@+id/action_groupListFragment_to_addExpenseFragment"
       app:destination="@id/addExpenseFragment" />
+    <action
+      android:id="@+id/action_groupListFragment_to_home_fragment"
+      app:destination="@id/home_fragment" />
   </fragment>
   <fragment
     android:id="@+id/createGroupFragment"
@@ -176,5 +182,16 @@
     android:id="@+id/addExpenseFragment"
     android:name="work.calmato.prestopay.ui.addExpense.AddExpenseFragment"
     android:label="fragment_add_expense"
-    tools:layout="@layout/fragment_add_expense" />
+    tools:layout="@layout/fragment_add_expense" >
+    <action
+      android:id="@+id/action_addExpenseFragment_to_groupListFragment"
+      app:destination="@id/groupListFragment" />
+    <argument
+      android:name="groupsList"
+      app:argType="work.calmato.prestopay.network.Groups"
+      app:nullable="false" />
+    <action
+      android:id="@+id/action_addExpenseFragment_to_home_fragment"
+      app:destination="@id/home_fragment" />
+  </fragment>
 </navigation>

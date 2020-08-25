@@ -15,6 +15,7 @@ import kotlinx.android.synthetic.main.fragment_home.*
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentHomeBinding
 import work.calmato.prestopay.network.GroupPropertyResponse
+import work.calmato.prestopay.network.Groups
 import work.calmato.prestopay.util.AdapterGroupPlane
 import work.calmato.prestopay.util.ViewModelGroup
 
@@ -29,7 +30,6 @@ class HomeFragment : Fragment() {
   }
 
   private var recycleGroupAdapter: AdapterGroupPlane? = null
-
   override fun onActivityCreated(savedInstanceState: Bundle?) {
     super.onActivityCreated(savedInstanceState)
     viewModelGroup.groupsList.observe(viewLifecycleOwner, Observer<List<GroupPropertyResponse>> {
@@ -69,7 +69,9 @@ class HomeFragment : Fragment() {
     super.onViewCreated(view, savedInstanceState)
     floatingActionButton.setOnClickListener {
       this.findNavController().navigate(
-        HomeFragmentDirections.actionHomeFragmentToAddExpenseFragment()
+        HomeFragmentDirections.actionHomeFragmentToGroupListFragment(
+          Groups(emptyList<GroupPropertyResponse>())
+        )
       )
     }
     bottom_navigation.setOnNavigationItemSelectedListener { item ->

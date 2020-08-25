@@ -34,6 +34,7 @@ interface GroupDao {
   version = 2,
   exportSchema = false
 )
+
 @TypeConverters(ListTypeConverter::class)
 abstract class AppDatabase : RoomDatabase() {
   abstract val friendDao: FriendDao

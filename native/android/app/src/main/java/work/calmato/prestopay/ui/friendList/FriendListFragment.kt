@@ -5,7 +5,6 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.*
 import androidx.activity.OnBackPressedCallback
-import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -13,16 +12,13 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.twitter.sdk.android.core.models.User
 import kotlinx.android.synthetic.main.fragment_friend_list.*
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentFriendListBinding
 import work.calmato.prestopay.network.UserProperty
 import work.calmato.prestopay.network.Users
-import work.calmato.prestopay.ui.createGroup.CreateGroupFragmentArgs
 import work.calmato.prestopay.util.AdapterCheck
 import work.calmato.prestopay.util.ViewModelFriend
-import work.calmato.prestopay.util.ViewModelFriendGroup
 
 class FriendListFragment : Fragment() {
   private val viewModel  : ViewModelFriend by lazy {
@@ -34,7 +30,7 @@ class FriendListFragment : Fragment() {
   }
 
   private var recycleAdapter: AdapterCheck? = null
-  private lateinit var friendListArg :List<UserProperty>
+  private lateinit var friendListArg: List<UserProperty>
 
   override fun onActivityCreated(savedInstanceState: Bundle?) {
     super.onActivityCreated(savedInstanceState)

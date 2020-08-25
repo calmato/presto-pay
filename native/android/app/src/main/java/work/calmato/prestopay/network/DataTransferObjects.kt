@@ -22,7 +22,8 @@ data class NetworkGroup(
   val thumbnail_url: String,
   @Json(name = "userIds")val userIds: List<String>,
   val created_at: String,
-  val updated_at: String
+  val updated_at: String,
+  var selected: Boolean = false
 )
 
 @JsonClass(generateAdapter = true)
@@ -36,7 +37,7 @@ fun NetworkFriend.asDomainModel(): UserProperty {
 }
 
 fun NetworkGroup.asDomainModel(): GroupPropertyResponse {
-  return GroupPropertyResponse(id, name, thumbnail_url, userIds, created_at, updated_at)
+  return GroupPropertyResponse(id, name, thumbnail_url, userIds, created_at, updated_at, selected)
 }
 
 fun NetworkFriendContainer.asDomainModel(): List<UserProperty> {
@@ -60,7 +61,8 @@ fun NetworkGroupContainer.asDomainModel(): List<GroupPropertyResponse> {
       thumbnail_url = it.thumbnail_url,
       user_ids = it.userIds,
       created_at = it.created_at,
-      updated_at = it.updated_at
+      updated_at = it.updated_at,
+      selected = it.selected
     )
   }
 }

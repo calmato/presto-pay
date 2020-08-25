@@ -3,10 +3,8 @@ package work.calmato.prestopay.ui.createGroup
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
-import android.net.Uri
 import android.os.Bundle
 import android.view.*
-import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.databinding.DataBindingUtil
@@ -23,7 +21,6 @@ import work.calmato.prestopay.network.CreateGroupProperty
 import work.calmato.prestopay.network.Users
 import work.calmato.prestopay.util.*
 import work.calmato.prestopay.util.Constant.Companion.IMAGE_PICK_CODE
-import java.io.File
 
 class CreateGroupFragment : PermissionBase() {
   private var usersList: Users? = null
@@ -38,7 +35,7 @@ class CreateGroupFragment : PermissionBase() {
   private lateinit var recycleAdapter: AdapterGrid
   private lateinit var clickListener: AdapterGrid.OnClickListener
   private lateinit var viewManager: RecyclerView.LayoutManager
-  private lateinit var doneButton:MenuItem
+  private lateinit var doneButton: MenuItem
 
 
   override fun onCreateView(
@@ -122,9 +119,9 @@ class CreateGroupFragment : PermissionBase() {
     )
     viewModel.nowLoading.observe(viewLifecycleOwner, Observer {
       if (it) {
-        startHttpConnectionMenu(doneButton,nowLoading,requireContext())
+        startHttpConnectionMenu(doneButton, nowLoading, requireContext())
       } else {
-        finishHttpConnectionMenu(doneButton,nowLoading)
+        finishHttpConnectionMenu(doneButton, nowLoading)
       }
     })
   }

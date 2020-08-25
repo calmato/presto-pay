@@ -1,10 +1,6 @@
 package work.calmato.prestopay.network
 
-import android.os.BaseBundle
 import android.os.Parcelable
-import com.google.gson.JsonArray
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
@@ -25,6 +21,11 @@ data class Users(
 data class UserId(
   val userId: String
 )
+
+@Parcelize
+data class Groups(
+  val groups: List<GroupPropertyResponse>
+) : Parcelable {}
 
 @Parcelize
 data class RegisterDeviceIdProperty(
@@ -78,7 +79,8 @@ data class GroupPropertyResponse(
   val thumbnail_url: String,
   val user_ids: List<String>,
   val created_at: String,
-  val updated_at: String
+  val updated_at: String,
+  var selected: Boolean = false
 ) : Parcelable {}
 
 @Parcelize
