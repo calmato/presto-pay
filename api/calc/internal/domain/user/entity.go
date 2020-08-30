@@ -13,6 +13,7 @@ type User struct {
 	GroupIDs      []string  `json:"groupIds"`            // グループID一覧
 	FriendIDs     []string  `firestore:"friend_ids"`     // 友達のユーザーID一覧
 	Password      string    `json:"-"`                   // パスワード
+	InstanceID    string    `firestore:"instance_id"`    // 端末のデバイスID
 	CreatedAt     time.Time `json:"createdAt"`           // 作成日時
 	UpdatedAt     time.Time `json:"updatedAt"`           // 更新日時
 }
