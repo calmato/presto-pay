@@ -68,7 +68,7 @@ func (ps *paymentService) Create(ctx context.Context, p *payment.Payment, groupI
 		Body:  "新しい支払い情報が追加されました.",
 	}
 
-	res, err := ps.messaging.SendMulticast(ctx, deviceTokens, message)
+	_, err := ps.messaging.SendMulticast(ctx, deviceTokens, message)
 	if err != nil {
 		err = xerrors.Errorf("Failed to Firebase Cloud Messaging: %w", err)
 		return nil, domain.Unknown.New(err)
