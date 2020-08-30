@@ -7,7 +7,7 @@ import (
 	"io"
 
 	"cloud.google.com/go/storage"
-	firebase "firebase.google.com/go"
+	firebase "firebase.google.com/go/v4"
 	"github.com/google/uuid"
 )
 
