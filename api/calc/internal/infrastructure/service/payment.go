@@ -56,19 +56,20 @@ func (ps *paymentService) Create(ctx context.Context, p *payment.Payment, groupI
 	deviceTokens := []string{}
 	for _, payer := range p.Payers {
 		u, _ := ps.apiClient.ShowUser(ctx, payer.ID)
-		if u == nil {
+		if u == nil || u.InstanceID == "" {
 			continue
 		}
 
 		deviceTokens = append(deviceTokens, u.InstanceID)
 	}
 
-	message := map[string]string{
-		"title":   p.Name,
-		"content": "新しい支払い情報が追加されました.",
+	message := &messaging.Data{
+		Title: p.Name,
+		Body:  "新しい支払い情報が追加されました.",
 	}
 
-	if err := ps.messaging.SendMulticast(ctx, deviceTokens, message); err != nil {
+	res, err := ps.messaging.SendMulticast(ctx, deviceTokens, message)
+	if err != nil {
 		err = xerrors.Errorf("Failed to Firebase Cloud Messaging: %w", err)
 		return nil, domain.Unknown.New(err)
 	}
