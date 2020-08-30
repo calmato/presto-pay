@@ -12,7 +12,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.*
 
-private const val BASE_URL = "http://localhost:8080/"
+private const val BASE_URL = "https://api.presto-pay-stg.calmato.work/v1/"
 private const val BASE_URL_CURRENCY = "https://api.exchangeratesapi.io/"
 
 /**
