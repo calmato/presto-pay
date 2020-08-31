@@ -1,6 +1,5 @@
 package work.calmato.prestopay.network
 
-import com.google.gson.JsonObject
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -78,6 +77,11 @@ interface ApiService {
   fun getGroups(@Header("Authorization") token: String):
     Deferred<NetworkGroupContainer>
 
+  @GET("groups/{groupId}")
+  fun getGroupDetail(
+    @Header("Authorization") token: String, @Path("groupId") groupId: String
+  ): Call<GetGroupDetail>
+
   @PATCH("auth")
   fun editAccount(
     @Header("Authorization") token: String,
@@ -100,16 +104,18 @@ interface ApiService {
     Call<AccountResponse>
 
   @POST("groups/{groupId}/payment")
-  fun addExpense(@Header("Authorization") token: String
-                 , @Body createExpenseProperty: CreateExpenseProperty
-                  ,@Path ("groupId")groupId:String):
+  fun addExpense(
+    @Header("Authorization") token: String
+    , @Body createExpenseProperty: CreateExpenseProperty
+    , @Path("groupId") groupId: String
+  ):
     Call<CreateExpenseResponse>
 
 }
 
-interface ApiServiceCurrency{
+interface ApiServiceCurrency {
   @GET("latest")
-  fun getLatestCurrency():Call<CurrencyApi>
+  fun getLatestCurrency(): Call<CurrencyApi>
 }
 
 /**
@@ -119,6 +125,10 @@ object Api {
   val retrofitService: ApiService by lazy { retrofit.create(ApiService::class.java) }
 }
 
-object ApiCurrency{
-  val retrofitServiceCurrency: ApiServiceCurrency by lazy { retrofit_currency.create(ApiServiceCurrency::class.java) }
+object ApiCurrency {
+  val retrofitServiceCurrency: ApiServiceCurrency by lazy {
+    retrofit_currency.create(
+      ApiServiceCurrency::class.java
+    )
+  }
 }

@@ -6,10 +6,12 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.preference.PreferenceManager
+import android.util.Log
 import android.view.*
 import android.widget.*
 import androidx.activity.OnBackPressedCallback
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -26,6 +28,14 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class AddExpenseFragment() : PermissionBase() {
+  private val viewModelGroup: ViewModelGroup by lazy {
+    val activity = requireNotNull(this.activity) {
+      "You can only access the viewModel after onActivityCreated()"
+    }
+    ViewModelProviders.of(this, ViewModelGroup.Factory(activity.application))
+      .get(ViewModelGroup::class.java)
+  }
+
   private var groupsList: Groups? = null
   private var checkedGroup: Groups? = null
   private var getGroupInfo: GroupPropertyResponse? = null
@@ -79,6 +89,8 @@ class AddExpenseFragment() : PermissionBase() {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     groupName.text = getGroupInfo!!.name
+    val GroupDetail = viewModelGroup.getGroupDetail(getGroupInfo!!.id, requireActivity())
+    Log.d(TAG, GroupDetail.toString())
     imageIds = resources.getIdList(R.array.tag_array)
     tagNames = resources.getStringArray(R.array.tag_name)
     tagList = mutableListOf<Tag>()
@@ -285,4 +297,5 @@ class AddExpenseFragment() : PermissionBase() {
   companion object {
     val TAG = "AddExpenseFragment"
   }
+
 }

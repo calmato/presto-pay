@@ -79,6 +79,16 @@ data class GroupPropertyResponse(
 ) : Parcelable {}
 
 @Parcelize
+data class GetGroupDetail(
+  val id: String,
+  val name: String,
+  val thumbnailUrl: String,
+  val users: List<String>,
+  val createdAt: String,
+  val updatedAt: String
+) : Parcelable {}
+
+@Parcelize
 data class EditAccountProperty(
   val name: String,
   val username: String,
