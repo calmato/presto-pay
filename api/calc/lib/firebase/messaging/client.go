@@ -49,10 +49,11 @@ func (m *Messaging) SendMulticast(
 	}
 
 	_, err := m.Client.SendMulticast(ctx, message)
+
+	// TODO: remove
 	fields := log.Fields{
 		"message": message,
 	}
-
 	log.WithFields(fields).Debug("test")
 
 	return nil, err

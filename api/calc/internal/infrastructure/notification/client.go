@@ -1,29 +1,30 @@
-package api
+package notification
 
 import (
 	"context"
 
-	fcm "github.com/calmato/presto-pay/api/calc/lib/firebase/message"
+	fcm "github.com/calmato/presto-pay/api/calc/lib/firebase/messaging"
 )
 
 // NotificationClient - プッシュ通知用インターフェース
 type NotificationClient interface {
-	Send(ctx context.Context, deviceTokens []string, title string, body string)
+	Send(ctx context.Context, deviceTokens []string, title string, body string) error
 }
 
 // Client - プッシュ通知用の構造体
 type Client struct {
-	message *fcm.Message
+	message *fcm.Messaging
 }
 
 // NewNotificationClient - NotificationClientの初期化
-func NewNotificationClient(cm *fcm.Message) NotificationClient {
+func NewNotificationClient(cm *fcm.Messaging) NotificationClient {
 	return &Client{
 		message: cm,
 	}
 }
 
-func (c *client) Send(
+// Send - プッシュ通知の送信
+func (c *Client) Send(
 	ctx context.Context, deviceTokens []string, title string, body string,
 ) error {
 	message := &fcm.Data{
@@ -31,7 +32,7 @@ func (c *client) Send(
 		Body:  body,
 	}
 
-	if _, err := c.SendMulticast(ctx, deviceTokens, message); err != nil {
+	if _, err := c.message.SendMulticast(ctx, deviceTokens, message); err != nil {
 		return err
 	}
 
