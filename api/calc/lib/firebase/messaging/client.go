@@ -5,6 +5,7 @@ import (
 
 	firebase "firebase.google.com/go/v4"
 	"firebase.google.com/go/v4/messaging"
+	log "github.com/sirupsen/logrus"
 )
 
 // Messaging - Firestore Cloud Messaging (FCM)の構造体
@@ -47,5 +48,13 @@ func (m *Messaging) SendMulticast(
 		Tokens:       registrationTokens,
 	}
 
-	return m.Client.SendMulticast(ctx, message)
+	_, err := m.Client.SendMulticast(ctx, message)
+
+	// TODO: remove
+	fields := log.Fields{
+		"message": message,
+	}
+	log.WithFields(fields).Debug("test")
+
+	return nil, err
 }

@@ -7,7 +7,7 @@ import (
 	"github.com/calmato/presto-pay/api/calc/internal/domain"
 	"github.com/calmato/presto-pay/api/calc/internal/domain/payment"
 	"github.com/calmato/presto-pay/api/calc/internal/infrastructure/api"
-	"github.com/calmato/presto-pay/api/calc/lib/firebase/messaging"
+	"github.com/calmato/presto-pay/api/calc/internal/infrastructure/notification"
 	"github.com/google/uuid"
 	"golang.org/x/xerrors"
 )
@@ -17,20 +17,20 @@ type paymentService struct {
 	paymentRepository       payment.PaymentRepository
 	paymentUploader         payment.PaymentUploader
 	apiClient               api.APIClient
-	messaging               *messaging.Messaging
+	notificationClient      notification.NotificationClient
 }
 
 // NewPaymentService - PaymentServiceの生成
 func NewPaymentService(
 	pdv payment.PaymentDomainValidation, pr payment.PaymentRepository, pu payment.PaymentUploader,
-	ac api.APIClient, m *messaging.Messaging,
+	ac api.APIClient, nc notification.NotificationClient,
 ) payment.PaymentService {
 	return &paymentService{
 		paymentDomainValidation: pdv,
 		paymentRepository:       pr,
 		paymentUploader:         pu,
 		apiClient:               ac,
-		messaging:               m,
+		notificationClient:      nc,
 	}
 }
 
@@ -63,13 +63,9 @@ func (ps *paymentService) Create(ctx context.Context, p *payment.Payment, groupI
 		deviceTokens = append(deviceTokens, u.InstanceID)
 	}
 
-	message := &messaging.Data{
-		Title: p.Name,
-		Body:  "新しい支払い情報が追加されました.",
-	}
+	message := "新しい支払い情報が追加されました."
 
-	_, err := ps.messaging.SendMulticast(ctx, deviceTokens, message)
-	if err != nil {
+	if err := ps.notificationClient.Send(ctx, deviceTokens, p.Name, message); err != nil {
 		err = xerrors.Errorf("Failed to Firebase Cloud Messaging: %w", err)
 		return nil, domain.Unknown.New(err)
 	}

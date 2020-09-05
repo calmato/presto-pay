@@ -4,6 +4,7 @@ import (
 	"github.com/calmato/presto-pay/api/calc/internal/application"
 	rv "github.com/calmato/presto-pay/api/calc/internal/application/validation"
 	"github.com/calmato/presto-pay/api/calc/internal/infrastructure/api"
+	"github.com/calmato/presto-pay/api/calc/internal/infrastructure/notification"
 	"github.com/calmato/presto-pay/api/calc/internal/infrastructure/repository"
 	"github.com/calmato/presto-pay/api/calc/internal/infrastructure/service"
 	"github.com/calmato/presto-pay/api/calc/internal/infrastructure/storage"
@@ -17,13 +18,15 @@ import (
 func v1PaymentInjection(
 	fs *firestore.Firestore, cs *gcs.Storage, cm *messaging.Messaging, ac api.APIClient,
 ) v1.APIV1PaymentHandler {
+	nc := notification.NewNotificationClient(cm)
+
 	us := service.NewUserService(ac)
 
 	pr := repository.NewPaymentRepository(fs)
 	pdv := dv.NewPaymentDomainValidation(ac)
 	pu := storage.NewPaymentUploader(cs)
 	prv := rv.NewPaymentRequestValidation()
-	ps := service.NewPaymentService(pdv, pr, pu, ac, cm)
+	ps := service.NewPaymentService(pdv, pr, pu, ac, nc)
 	pa := application.NewPaymentApplication(prv, us, ps)
 	ph := v1.NewAPIV1PaymentHandler(pa)
 
