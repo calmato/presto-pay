@@ -27,7 +27,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.iid.FirebaseInstanceId
-import com.twitter.sdk.android.core.TwitterAuthConfig
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.gms.tasks.Task
@@ -44,7 +43,6 @@ import work.calmato.prestopay.network.RegisterDeviceIdProperty
 import work.calmato.prestopay.util.finishHttpConnection
 import work.calmato.prestopay.util.startHttpConnection
 import work.calmato.prestopay.util.ViewModelUser
-import java.util.*
 
 
 class LoginFragment : Fragment() {
@@ -61,11 +59,6 @@ class LoginFragment : Fragment() {
   private lateinit var googleSignInClient: GoogleSignInClient
   private lateinit var callbackManager: CallbackManager
   private lateinit var sharedPreferences: SharedPreferences
-
-  override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-    FacebookSdk.sdkInitialize(activity)
-  }
 
   override fun onCreateView(
     inflater: LayoutInflater,
@@ -99,10 +92,10 @@ class LoginFragment : Fragment() {
 
 
     //Facebook Oauth
-    facebookSingin?.setOnClickListener(View.OnClickListener {
+    facebookSingin?.setOnClickListener {
       callbackManager = CallbackManager.Factory.create()
       LoginManager.getInstance()
-        .logInWithReadPermissions(this, Arrays.asList("public_profile", "email"))
+        .logInWithReadPermissions(this, listOf("public_profile", "email"))
 
       LoginManager.getInstance().registerCallback(callbackManager,
         object : FacebookCallback<LoginResult> {
@@ -128,7 +121,7 @@ class LoginFragment : Fragment() {
             updateUI(null,false)
           }
         })
-    })
+    }
 
     //email password sign in
     loginButton.setOnClickListener {
@@ -144,7 +137,7 @@ class LoginFragment : Fragment() {
 
     //Auth check
     val value = sharedPreferences.getString("token", null)
-    Log.d(DEFAULT_TAG, "token default: " + value)
+    Log.d(DEFAULT_TAG, "token default: $value")
 
     loginForgetText.setOnClickListener {
       this.findNavController().navigate(
@@ -191,29 +184,29 @@ class LoginFragment : Fragment() {
     if (email != "" && password != "") {
       startHttpConnection(loginButton, nowLoading, requireContext())
       auth.signInWithEmailAndPassword(email, password)
-        .addOnCompleteListener(OnCompleteListener { task ->
+        .addOnCompleteListener { task ->
           if (task.isSuccessful) {
-            // Sign in success, update UI with the signed-in user's information
-            Log.d(DEFAULT_TAG, "signInWithEmail:success")
-            val user = auth.currentUser
-            user?.getIdToken(true)?.addOnCompleteListener(requireActivity()) { task ->
-              val idToken = task.getResult()?.token
-              val editor = sharedPreferences.edit()
-              editor.putString("token", idToken)
-              editor.apply()
-            }
-            updateUI(user,true)
+                // Sign in success, update UI with the signed-in user's information
+                Log.d(DEFAULT_TAG, "signInWithEmail:success")
+                val user = auth.currentUser
+                user?.getIdToken(true)?.addOnCompleteListener(requireActivity()) { task ->
+                  val idToken = task.result?.token
+                  val editor = sharedPreferences.edit()
+                  editor.putString("token", idToken)
+                  editor.apply()
+                }
+                updateUI(user,true)
           } else {
-            finishHttpConnection(loginButton, nowLoading)
-            // If sign in fails, display a message to the user.
-            Log.w(DEFAULT_TAG, "signInWithEmail:failure", task.exception)
-            Toast.makeText(
-              requireContext(), resources.getString(R.string.authorization_failed),
-              Toast.LENGTH_SHORT
-            ).show()
-            updateUI(null,false)
+                finishHttpConnection(loginButton, nowLoading)
+                // If sign in fails, display a message to the user.
+                Log.w(DEFAULT_TAG, "signInWithEmail:failure", task.exception)
+                Toast.makeText(
+                  requireContext(), resources.getString(R.string.authorization_failed),
+                  Toast.LENGTH_SHORT
+                ).show()
+                updateUI(null,false)
           }
-        })
+        }
     } else {
       Toast.makeText(
         requireContext(),
@@ -229,22 +222,22 @@ class LoginFragment : Fragment() {
 
     val credential = GoogleAuthProvider.getCredential(acct.idToken, null)
     auth.signInWithCredential(credential)
-      .addOnCompleteListener({ task ->
-        if (task.isSuccessful) {
-          // Sign in success, update UI with the signed-in user's information
-          Log.d(GOOGLE_TAG, "signInWithGoogle:success")
-          val user = auth.currentUser
-          updateUI(user,true)
-        } else {
-          // If sign in fails, display a message to the user.
-          Log.w(GOOGLE_TAG, "signInWithCredential:failure", task.exception)
-          Toast.makeText(
-            requireContext(), resources.getString(R.string.authorization_failed),
-            Toast.LENGTH_SHORT
-          ).show()
-          updateUI(null,false)
-        }
-      })
+      .addOnCompleteListener { task ->
+          if (task.isSuccessful) {
+            // Sign in success, update UI with the signed-in user's information
+            Log.d(GOOGLE_TAG, "signInWithGoogle:success")
+            val user = auth.currentUser
+            updateUI(user,true)
+          } else {
+            // If sign in fails, display a message to the user.
+            Log.w(GOOGLE_TAG, "signInWithCredential:failure", task.exception)
+            Toast.makeText(
+              requireContext(), resources.getString(R.string.authorization_failed),
+              Toast.LENGTH_SHORT
+            ).show()
+            updateUI(null,false)
+          }
+      }
   }
 
   private fun googleSignIn() {
@@ -287,22 +280,22 @@ class LoginFragment : Fragment() {
 
     val credential = FacebookAuthProvider.getCredential(token.token)
     auth.signInWithCredential(credential)
-      .addOnCompleteListener({ task ->
-        if (task.isSuccessful) {
-          // Sign in success, update UI with the signed-in user's information
-          Log.d(FACEBOOK_TAG, "signInWithFacebook:success")
-          val user = auth.currentUser
-          updateUI(user,true)
-        } else {
-          // If sign in fails, display a message to the user.
-          Log.w(FACEBOOK_TAG, "signInWithCredential:failure", task.exception)
-          Toast.makeText(
-            requireContext(), resources.getString(R.string.authorization_failed),
-            Toast.LENGTH_SHORT
-          ).show()
-          updateUI(null,false)
-        }
-      })
+      .addOnCompleteListener { task ->
+          if (task.isSuccessful) {
+            // Sign in success, update UI with the signed-in user's information
+            Log.d(FACEBOOK_TAG, "signInWithFacebook:success")
+            val user = auth.currentUser
+            updateUI(user,true)
+          } else {
+            // If sign in fails, display a message to the user.
+            Log.w(FACEBOOK_TAG, "signInWithCredential:failure", task.exception)
+            Toast.makeText(
+              requireContext(), resources.getString(R.string.authorization_failed),
+              Toast.LENGTH_SHORT
+            ).show()
+            updateUI(null,false)
+          }
+      }
   }
 
   private fun updateUI(user: FirebaseUser?, isFirstLogin:Boolean) {
@@ -343,7 +336,7 @@ class LoginFragment : Fragment() {
   }
 
   private fun setSharedPreference() {
-    FirebaseAuth.getInstance().currentUser?.getIdToken(true)?.addOnCompleteListener {
+    FirebaseAuth.getInstance().currentUser?.getIdToken(true)?.addOnCompleteListener { it ->
       if (it.isSuccessful) {
         val editor = sharedPreferences.edit()
         synchronized(sharedPreferences) {
