@@ -12,7 +12,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [10.x, 12.x]
+        node-version: [12.x, 14.x]
 
     steps:
       - name: Check out code
@@ -50,7 +50,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [10.x, 12.x]
+        node-version: [12.x, 14.x]
 
     steps:
       - uses: actions/checkout@v2
@@ -108,7 +108,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [10.x, 12.x]
+        node-version: [12.x, 14.x]
 
     steps:
       - uses: actions/checkout@v2
@@ -151,17 +151,5 @@ jobs:
         run: |
           xcodebuild \
             -workspace PrestoPay.xcworkspace \
-            -scheme PrestoPay archive \
-            -archivePath PrestoPay.xcarchive \
-            -allowProvisioningUpdates
-          xcodebuild \
-            -exportArchive \
-            -archivePath ./PrestoPay.xcarchive \
-            -exportPath . -exportOptionsPlist PrestoPay/Info.plist
-          mv PrestoPay.ipa ../PrestoPay.ipa
-
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v1
-        with:
-          name: PrestoPay.ipa
-          path: ./native/react/ios/build/
+            -scheme PrestoPay \
+            -sdk iphonesimulator
