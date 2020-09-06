@@ -2,6 +2,11 @@
   "expo": {
     "name": "PrestoPay",
     "slug": "react",
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -17,7 +22,12 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "work.calmato.presto-pay"
+    },
+    "android": {
+      "package": "work.calmato.presto_pay",
+      "permissions": []
     },
     "web": {
       "favicon": "./assets/favicon.png"
