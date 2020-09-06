@@ -120,12 +120,12 @@ class LoginFragment : Fragment() {
 
           override fun onCancel() {
             Log.d(FACEBOOK_TAG, "facebook:onCancel")
-            updateUI(null)
+            updateUI(null,false)
           }
 
           override fun onError(error: FacebookException?) {
             Log.d(FACEBOOK_TAG, "facebook:onError", error)
-            updateUI(null)
+            updateUI(null,false)
           }
         })
     })
@@ -169,7 +169,7 @@ class LoginFragment : Fragment() {
         // Google Sign In failed, update UI appropriately
         Log.w(GOOGLE_TAG, "Google sign in failed", e)
         // [START_EXCLUDE]
-        updateUI(null)
+        updateUI(null,false)
         // [END_EXCLUDE]
       }
     } else {
@@ -182,7 +182,7 @@ class LoginFragment : Fragment() {
 
     // Check if user is signed in (non-null) and update UI accordingly.
     val currentUser = auth.currentUser
-    updateUI(currentUser)
+    updateUI(currentUser,false)
   }
 
   private fun defaultSignIn(email: String, password: String) {
@@ -202,7 +202,7 @@ class LoginFragment : Fragment() {
               editor.putString("token", idToken)
               editor.apply()
             }
-            updateUI(user)
+            updateUI(user,true)
           } else {
             finishHttpConnection(loginButton, nowLoading)
             // If sign in fails, display a message to the user.
@@ -211,7 +211,7 @@ class LoginFragment : Fragment() {
               requireContext(), resources.getString(R.string.authorization_failed),
               Toast.LENGTH_SHORT
             ).show()
-            updateUI(null)
+            updateUI(null,false)
           }
         })
     } else {
@@ -234,7 +234,7 @@ class LoginFragment : Fragment() {
           // Sign in success, update UI with the signed-in user's information
           Log.d(GOOGLE_TAG, "signInWithGoogle:success")
           val user = auth.currentUser
-          updateUI(user)
+          updateUI(user,true)
         } else {
           // If sign in fails, display a message to the user.
           Log.w(GOOGLE_TAG, "signInWithCredential:failure", task.exception)
@@ -242,7 +242,7 @@ class LoginFragment : Fragment() {
             requireContext(), resources.getString(R.string.authorization_failed),
             Toast.LENGTH_SHORT
           ).show()
-          updateUI(null)
+          updateUI(null,false)
         }
       })
   }
@@ -259,7 +259,7 @@ class LoginFragment : Fragment() {
       // There's something already here! Finish the sign-in for your user.
       pendingResultTask.addOnSuccessListener(object : OnSuccessListener<AuthResult?> {
         override fun onSuccess(p0: AuthResult?) {
-          updateUI(auth.currentUser)
+          updateUI(auth.currentUser,true)
         }
       })
       pendingResultTask.addOnFailureListener(object : OnFailureListener {
@@ -271,7 +271,7 @@ class LoginFragment : Fragment() {
       auth.startActivityForSignInWithProvider(/* activity= */ requireActivity(), provider.build())
         .addOnSuccessListener(object : OnSuccessListener<AuthResult> {
           override fun onSuccess(p0: AuthResult?) {
-            updateUI(auth.currentUser)
+            updateUI(auth.currentUser,true)
           }
         })
         .addOnFailureListener(object : OnFailureListener {
@@ -292,8 +292,7 @@ class LoginFragment : Fragment() {
           // Sign in success, update UI with the signed-in user's information
           Log.d(FACEBOOK_TAG, "signInWithFacebook:success")
           val user = auth.currentUser
-
-          updateUI(user)
+          updateUI(user,true)
         } else {
           // If sign in fails, display a message to the user.
           Log.w(FACEBOOK_TAG, "signInWithCredential:failure", task.exception)
@@ -301,24 +300,26 @@ class LoginFragment : Fragment() {
             requireContext(), resources.getString(R.string.authorization_failed),
             Toast.LENGTH_SHORT
           ).show()
-          updateUI(null)
+          updateUI(null,false)
         }
       })
   }
 
-  private fun updateUI(user: FirebaseUser?) {
+  private fun updateUI(user: FirebaseUser?, isFirstLogin:Boolean) {
     if (user != null) {
       // 認証用トークンの保存
       user.getIdToken(true)
       setSharedPreference()
 
-      // FCM用デバイスIDを送信
-      sendFirebaseCloudMessageToken()
-
       // home pageの遷移
       this.findNavController().navigate(
         LoginFragmentDirections.actionLoginFragmentToHomeFragment()
       )
+
+      if(isFirstLogin) {
+        // FCM用デバイスIDを送信
+        sendFirebaseCloudMessageToken()
+      }
     }
   }
 
@@ -328,6 +329,8 @@ class LoginFragment : Fragment() {
       if (!task.isSuccessful) {
         Log.i("LoginFragment", "getInstanceId failed: ${task.exception}")
         return@OnCompleteListener
+      } else{
+        Log.i("LoginFragment", "sendFirebaseCloudMessageToken: success")
       }
 
       // Get new Instance ID token and request property
