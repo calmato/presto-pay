@@ -89,8 +89,8 @@ class AddExpenseFragment() : PermissionBase() {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     groupName.text = getGroupInfo!!.name
-    val GroupDetail = viewModelGroup.getGroupDetail(getGroupInfo!!.id, requireActivity())
-    Log.d(TAG, GroupDetail.toString())
+    val groupDetail = viewModelGroup.getGroupDetail(getGroupInfo!!.id, requireActivity())
+    Log.d(TAG, groupDetail.toString())
     imageIds = resources.getIdList(R.array.tag_array)
     tagNames = resources.getStringArray(R.array.tag_name)
     tagList = mutableListOf<Tag>()

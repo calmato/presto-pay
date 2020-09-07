@@ -4,7 +4,6 @@ import android.app.Activity
 import android.app.Application
 import android.preference.PreferenceManager
 import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -61,14 +60,13 @@ class ViewModelGroup(application: Application) : AndroidViewModel(application) {
     Api.retrofitService.getGroupDetail("Bearer ${id}", groupId)
       .enqueue(object: Callback<GetGroupDetail> {
         override fun onFailure(call: Call<GetGroupDetail>, t: Throwable) {
-          Toast.makeText(activity, t.message, Toast.LENGTH_LONG).show()
+          Log.d(TAG, t.message)
         }
 
         override fun onResponse(call: Call<GetGroupDetail>, response: Response<GetGroupDetail>) {
-          Log.d(TAG, response.body()!!.name)
-          if (response.isSuccessful) {
-            groupDetail = response.body()!!
-          }
+          Log.d(TAG, response.body().toString())
+          groupDetail = response.body()!!
+          Log.d("groupDetail", groupDetail.toString())
         }
       })
     return groupDetail
@@ -89,7 +87,7 @@ class ViewModelGroup(application: Application) : AndroidViewModel(application) {
   }
 
   companion object {
-    internal const val TAG = "AddGroupViewModel"
+    internal const val TAG = "ViewModelGroup"
   }
 
 }
