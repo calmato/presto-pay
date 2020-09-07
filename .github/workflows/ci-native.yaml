@@ -5,6 +5,8 @@ on:
       - 'native/react/**'
       - '.github/workflows/ci-native.yaml'
 
+# TODO: env for expo cli
+
 jobs:
   build_and_test:
     name: Setup and Test
@@ -39,17 +41,19 @@ jobs:
         working-directory: ./native/react
         run: yarn
 
-      - name: Install Expo-CLI
-        working-directory: ./native/react
-        run: yarn global add expo-cli
-
       - name: Lint
         working-directory: ./native/react
         run: yarn lint
 
-      - name: Test
-        working-directory: ./native/react
-        run: yarn test
+      # - name: Test
+      #   working-directory: ./native/react
+      #   run: yarn test
+
+      - uses: expo/expo-github-action@v5
+        with:
+          expo-version: 3.x
+          expo-username: ${{ secrets.EXPO_CLI_USERNAME }}
+          expo-password: ${{ secrets.EXPO_CLI_PASSWORD }}
 
       - name: Build iOS
         working-directory: ./native/react
