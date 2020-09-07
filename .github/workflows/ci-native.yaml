@@ -52,8 +52,8 @@ jobs:
       - uses: expo/expo-github-action@v5
         with:
           expo-version: 3.x
-          expo-username: ${{ secrets.EXPO_CLI_USERNAME }}
-          expo-password: ${{ secrets.EXPO_CLI_PASSWORD }}
+          expo-username: ${{ secrets.STG_EXPO_CLI_USERNAME }}
+          expo-password: ${{ secrets.STG_EXPO_CLI_PASSWORD }}
 
       - name: Build iOS
         working-directory: ./native/react
