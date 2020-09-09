@@ -13,10 +13,11 @@ import work.calmato.prestopay.network.*
 
 class ViewModelUser(application: Application) : AndroidViewModel(application) {
   private val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplication())
-  private val id = sharedPreferences.getString("token", null)
-  private val token = "Bearer $id"
+
 
   fun registerDeviceId(registerDeviceIdProperty: RegisterDeviceIdProperty, activity: Activity) {
+    val id = sharedPreferences.getString("token", null)
+    val token = "Bearer $id"
     Api.retrofitService
       .registerDeviceId(token, registerDeviceIdProperty)
       .enqueue(object : Callback<AccountResponse> {
