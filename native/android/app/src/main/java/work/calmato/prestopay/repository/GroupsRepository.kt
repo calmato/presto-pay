@@ -22,4 +22,9 @@ class GroupsRepository(private val database: AppDatabase) {
       database.groupDao.insertAll(*groupList.asDatabaseModel())
     }
   }
+  suspend fun deleteGroupAll(){
+    withContext(Dispatchers.IO){
+      database.groupDao.deleteGroupAll()
+    }
+  }
 }

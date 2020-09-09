@@ -1,6 +1,7 @@
 package work.calmato.prestopay.ui.accountHome
 
 import android.app.AlertDialog
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.view.LayoutInflater
@@ -13,12 +14,19 @@ import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_account_home.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import work.calmato.prestopay.R
+import work.calmato.prestopay.database.getAppDatabase
 import work.calmato.prestopay.databinding.FragmentAccountHomeBindingImpl
+import work.calmato.prestopay.repository.FriendsRepository
+import work.calmato.prestopay.repository.GroupsRepository
 import work.calmato.prestopay.util.AdapterGroupPlane
 
 class AccountHomeFragment : Fragment() {
   private var recycleGroupAdapter: AdapterGroupPlane? = null
+  private lateinit var sharedPreferences: SharedPreferences
 
   override fun onCreateView(
     inflater: LayoutInflater,
@@ -57,7 +65,7 @@ class AccountHomeFragment : Fragment() {
           )
         }
       })
-    val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
+    sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
     setUserNameText.text = sharedPreferences.getString("name","")
     val thumbnailUrl = sharedPreferences.getString("thumbnailUrl","")
     if(thumbnailUrl.isNotEmpty()) {
@@ -84,7 +92,18 @@ class AccountHomeFragment : Fragment() {
   }
 
   private fun logout() {
+    // Firebase からサインアウト
     FirebaseAuth.getInstance().signOut()
+
+    // DatabaseとShared Preferenceを削除
+    CoroutineScope(Dispatchers.IO).launch {
+      GroupsRepository(getAppDatabase(requireContext())).deleteGroupAll()
+      FriendsRepository(getAppDatabase(requireContext())).deleteFriendAll()
+    }
+    val editor = sharedPreferences.edit()
+    editor.clear()
+    editor.apply()
+
     this.findNavController().navigate(
       AccountHomeFragmentDirections.actionAccountHomeToLoginFragment()
     )
