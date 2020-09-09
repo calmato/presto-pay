@@ -18,7 +18,13 @@ class GroupsRepository(private val database: AppDatabase) {
   suspend fun refreshGroups(id:String) {
     withContext(Dispatchers.IO) {
       val groupList = Api.retrofitService.getGroups(id).await()
+      database.groupDao.deleteGroupAll()
       database.groupDao.insertAll(*groupList.asDatabaseModel())
+    }
+  }
+  suspend fun deleteGroupAll(){
+    withContext(Dispatchers.IO){
+      database.groupDao.deleteGroupAll()
     }
   }
 }

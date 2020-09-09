@@ -308,10 +308,15 @@ class LoginFragment : Fragment() {
       this.findNavController().navigate(
         LoginFragmentDirections.actionLoginFragmentToHomeFragment()
       )
-
+      //最初のログインのみ実行される。　
+      // トークンの情報が変更たときにFCM用デバイスIDを送信することで、ユーザーが権限を持っていることを確実にした。401帰ってきてたので。
       if(isFirstLogin) {
-        // FCM用デバイスIDを送信
-        sendFirebaseCloudMessageToken()
+        sharedPreferences.registerOnSharedPreferenceChangeListener { _, key ->
+          when (key){
+            // FCM用デバイスIDを送信
+            "token" -> sendFirebaseCloudMessageToken()
+          }
+        }
       }
     }
   }
@@ -342,25 +347,26 @@ class LoginFragment : Fragment() {
         synchronized(sharedPreferences) {
           FirebaseAuth.getInstance().currentUser?.getIdToken(true)?.addOnCompleteListener {
             if (it.isSuccessful) {
-              editor.putString("token", it.result?.token)
+              Log.i("Ok", "setSharedPreferenceToken: ${it.result.token}")
+              editor.putString("token", it.result.token)
               editor.apply()
+              val id = sharedPreferences.getString("token", null)
+              GlobalScope.launch(Dispatchers.IO) {
+                  try {
+                    Log.i("Ok", "setSharedPreferenceId: ${id}")
+                    val userProperty =
+                      Api.retrofitService.getLoginUserInformation("Bearer $id").await().asDomainModel()
+                    editor.putString("name", userProperty.name)
+                    editor.putString("username", userProperty.username)
+                    editor.putString("email", userProperty.email)
+                    editor.putString("thumbnailUrl", userProperty.thumbnailUrl)
+                    editor.apply()
+                  } catch (e: Exception) {
+                    Log.i("LoginFragment", "setSharedPreference: ${e.message}")
+                  }
+              }
             }
           }
-        }
-        val id = sharedPreferences.getString("token", null)
-        GlobalScope.launch(Dispatchers.IO) {
-          try {
-            val userProperty =
-              Api.retrofitService.getLoginUserInformation("Bearer $id").await().asDomainModel()
-            editor.putString("name", userProperty.name)
-            editor.putString("username", userProperty.username)
-            editor.putString("email", userProperty.email)
-            editor.putString("thumbnailUrl", userProperty.thumbnailUrl)
-            editor.apply()
-          } catch (e: Exception) {
-            Log.i("LoginFragment", "setSharedPreference: ${e.message}")
-          }
-
         }
       }
     }

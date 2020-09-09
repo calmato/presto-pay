@@ -21,6 +21,7 @@ class FriendsRepository(private val database: AppDatabase) {
   suspend fun refreshFriends(id: String) {
     withContext(Dispatchers.IO) {
       val friendList = Api.retrofitService.getFriends(id).await()
+      database.friendDao.deleteFriendAll()
       database.friendDao.insertAll(*friendList.asDatabaseModel())
     }
   }
@@ -44,5 +45,8 @@ class FriendsRepository(private val database: AppDatabase) {
         )
       )
     }
+  }
+  suspend fun deleteFriendAll(){
+    database.friendDao.deleteFriendAll()
   }
 }
