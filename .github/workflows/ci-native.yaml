@@ -5,14 +5,16 @@ on:
       - 'native/react/**'
       - '.github/workflows/ci-native.yaml'
 
+# TODO: env for expo cli
+
 jobs:
-  setup_and_test:
+  build_and_test:
     name: Setup and Test
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
-        node-version: [12.x, 14.x]
+        node-version: [14.x]
 
     steps:
       - name: Check out code
@@ -39,117 +41,24 @@ jobs:
         working-directory: ./native/react
         run: yarn
 
-      - name: Test
+      - name: Lint
         working-directory: ./native/react
-        run: yarn test
+        run: yarn lint
 
-  build_android:
-    name: Build Android
-    needs: setup_and_test
-    runs-on: ubuntu-latest
+      # - name: Test
+      #   working-directory: ./native/react
+      #   run: yarn test
 
-    strategy:
-      matrix:
-        node-version: [12.x, 14.x]
-
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
+      - uses: expo/expo-github-action@v5
         with:
-          node-version: ${{ matrix.node-version }}
+          expo-version: 3.x
+          expo-username: ${{ secrets.STG_EXPO_CLI_USERNAME }}
+          expo-password: ${{ secrets.STG_EXPO_CLI_PASSWORD }}
 
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn cache dir)"
-
-      - uses: actions/cache@v1
-        id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
-        with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn
-
-      - name: Install
+      - name: Build iOS
         working-directory: ./native/react
-        run: yarn
+        run: expo build:ios -t simulator
 
-      - name: Use JDK 1.8
-        uses: actions/setup-java@v1
-        with:
-          java-version: 1.8
-
-      - name: Build Debug APK
-        working-directory: ./native/react/android
-        run: ./gradlew assembleDebug --stacktrace
-
-      - name: Build Release APK
-        working-directory: ./native/react/android
-        run: ./gradlew assembleRelease
-
-      - name: Upload Artifact (Debug)
-        uses: actions/upload-artifact@v1
-        with:
-          name: app-debug.apk
-          path: ./native/react/android/app/build/outputs/apk/debug/
-
-      - name: Upload Artifact (Release)
-        uses: actions/upload-artifact@v1
-        with:
-          name: app-release.apk
-          path: ./native/react/android/app/build/outputs/apk/release/
-
-  build_ios:
-    name: Build iOS
-    needs: setup_and_test
-    runs-on: macos-latest
-
-    strategy:
-      matrix:
-        node-version: [12.x, 14.x]
-
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
-        with:
-          node-version: ${{ matrix.node-version }}
-
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn cache dir)"
-
-      - uses: actions/cache@v1
-        id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
-        with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn
-
-      - name: Install
+      - name: Build Android
         working-directory: ./native/react
-        run: yarn
-
-      - name: Get CocoaPods cache files
-        uses: actions/cache@preview
-        with:
-          path: ./native/react/ios/Pods
-          key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-pods-
-
-      - name: Pod Install
-        working-directory: ./native/react/ios
-        run: pod install
-
-      - name: Build App
-        working-directory: ./native/react/ios
-        run: |
-          xcodebuild \
-            -workspace PrestoPay.xcworkspace \
-            -scheme PrestoPay \
-            -sdk iphonesimulator
+        run: expo build:android -t app-bundle
