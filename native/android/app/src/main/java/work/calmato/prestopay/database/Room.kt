@@ -8,14 +8,14 @@ import androidx.room.*
 interface FriendDao {
   @Query("select * from databasefriend")
   fun getFriends(): LiveData<List<DatabaseFriend>>
-
   @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(vararg friends:DatabaseFriend)
   @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertFriend(friend: DatabaseFriend)
   @Query("delete from databasefriend where id = :userId")
     fun deleteFriend(userId:String)
-
+  @Query("delete from databasefriend")
+    fun deleteFriendAll()
 }
 
 @Dao
@@ -25,6 +25,9 @@ interface GroupDao {
 
   @Insert(onConflict = OnConflictStrategy.REPLACE)
   fun insertAll(vararg groups: DatabaseGroup)
+
+  @Query("delete from databasegroup")
+  fun deleteGroupAll()
 }
 
 @Database(
