@@ -1,7 +1,8 @@
-import React from 'react';
-import {createStackNavigator} from '@react-navigation/stack';
-import {GROUPS} from '~/constants/path';
-import {Groups} from '~/components/pages';
+import { createStackNavigator } from "@react-navigation/stack";
+import React from "react";
+
+import { Groups } from "~/components/pages";
+import { GROUPS } from "~/constants/path";
 
 const Stack = createStackNavigator();
 

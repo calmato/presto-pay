@@ -1,1 +1,1 @@
-export {default as HeaderLeft} from './HeaderLeft';
+export { default as HeaderLeft } from "./HeaderLeft";

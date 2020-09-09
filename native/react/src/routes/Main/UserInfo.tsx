@@ -1,7 +1,8 @@
-import React from 'react';
-import {createStackNavigator} from '@react-navigation/stack';
-import {USER_INFO} from '~/constants/path';
-import {UserInfo} from '~/components/pages';
+import { createStackNavigator } from "@react-navigation/stack";
+import React from "react";
+
+import { UserInfo } from "~/components/pages";
+import { USER_INFO } from "~/constants/path";
 
 const Stack = createStackNavigator();
 

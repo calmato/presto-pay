@@ -5,24 +5,31 @@ module.exports = {
     es2021: true,
   },
   extends: [
-    'plugin:react/recommended',
-    'airbnb',
+    "universe",
+    "plugin:@typescript-eslint/recommended",
+    "prettier",
+    "prettier/@typescript-eslint",
+    "prettier/react",
   ],
-  parser: '@typescript-eslint/parser',
+  parser: "@typescript-eslint/parser",
+  plugins: ["@typescript-eslint", "babel", "react"],
   parserOptions: {
+    sourceType: "module",
+    ecmaVersion: 2020,
     ecmaFeatures: {
       jsx: true,
-      tsx: true,
     },
-    ecmaVersion: 2020,
-    sourceType: 'module',
   },
-  plugins: [
-    'react',
-    '@typescript-eslint',
-    'prettier',
-  ],
+  settings: {
+    "import/resolver": {
+      node: {
+        extensions: [".js", "jsx", ".ts", ".tsx"],
+      },
+    },
+  },
   rules: {
-    'react/jsx-filename-extension': ['error', { extensions: ['.js', '.jsx', '.ts', '.tsx'] }],
+    "@typescript-eslint/no-empty-function": "off",
+    "@typescript-eslint/no-unused-vars": "off",
+    "@typescript-eslint/explicit-module-boundary-types": "off",
   },
 };
