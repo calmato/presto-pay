@@ -7,22 +7,38 @@ import Groups from "./Groups";
 import Home from "./Home";
 import UserInfo from "./UserInfo";
 
-import { Initial, Loading, SignIn } from "~/components/pages";
-import { GROUPS, HOME, INITIAL, LOADING, SIGN_IN, USER_INFO } from "~/constants/path";
+import { Initial, Loading, SignIn, SignUp } from "~/components/pages";
+import { GROUPS, HOME, INITIAL, LOADING, SIGN_IN, SIGN_UP, USER_INFO } from "~/constants/path";
 import * as UiContext from "~/contexts/ui";
 
 const Stack = createStackNavigator();
+const SignInStack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 const GroupsDrawer = createDrawerNavigator();
 const HomeDrawer = createDrawerNavigator();
-const UserInfoDrawer = createDrawerNavigator();
 
+// 画面遷移時のアニメーション
 const forFade = ({ current }: StackCardInterpolationProps) => ({
   cardStyle: {
     opacity: current.progress,
   },
 });
 
+// 現在の画面名を取得
+const getActiveRouteName = (state: any): string => {
+  if (!state || !state.routes) {
+    return "";
+  }
+
+  const route = state.routes[state.index];
+  if (route.state) {
+    return getActiveRouteName(route.state);
+  }
+
+  return route.name;
+};
+
+// ドロワー
 function GroupsWithDrawer(): JSX.Element {
   return (
     <GroupsDrawer.Navigator initialRouteName={GROUPS}>
@@ -50,9 +66,19 @@ function UserInfoWithDrawer(): JSX.Element {
   );
 }
 
+// フッタータブ
 function TabRoutes(): JSX.Element {
   return (
-    <Tab.Navigator initialRouteName={HOME}>
+    <Tab.Navigator
+      initialRouteName={HOME}
+      screenOptions={(props: any) => {
+        const routeName = getActiveRouteName(props.route.state);
+
+        return {
+          tabBarVisible: routeName !== USER_INFO,
+        };
+      }}
+    >
       <Tab.Screen name={GROUPS} component={GroupsWithDrawer} />
       <Tab.Screen name={HOME} component={HomeWithDrawer} />
       <Tab.Screen name={USER_INFO} component={UserInfoWithDrawer} />
@@ -60,10 +86,20 @@ function TabRoutes(): JSX.Element {
   );
 }
 
+// ナビゲーター
+function SignInNavigator(): JSX.Element {
+  return (
+    <SignInStack.Navigator initialRouteName={SIGN_IN}>
+      <SignInStack.Screen name={SIGN_IN} component={SignIn} />
+      <SignInStack.Screen name={SIGN_UP} component={SignUp} />
+    </SignInStack.Navigator>
+  );
+}
+
 function switchingAuthStatus(status: UiContext.Status): JSX.Element {
   switch (status) {
     case UiContext.Status.UN_AUTHORIZED:
-      return <Stack.Screen name={SIGN_IN} component={SignIn} />;
+      return <Stack.Screen name={SIGN_IN} component={SignInNavigator} />;
     case UiContext.Status.AUTHORIZED:
       return <Stack.Screen name={HOME} component={TabRoutes} />;
     case UiContext.Status.FIRST_OPEN:
