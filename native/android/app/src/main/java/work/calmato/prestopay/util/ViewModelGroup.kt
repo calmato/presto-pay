@@ -1,6 +1,5 @@
 package work.calmato.prestopay.util
 
-import android.app.Activity
 import android.app.Application
 import android.preference.PreferenceManager
 import android.util.Log
@@ -9,12 +8,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import work.calmato.prestopay.database.getAppDatabase
-import work.calmato.prestopay.network.Api
-import work.calmato.prestopay.network.GetGroupDetail
 import work.calmato.prestopay.network.GroupPropertyResponse
 import work.calmato.prestopay.repository.GroupsRepository
 
@@ -53,23 +47,6 @@ class ViewModelGroup(application: Application) : AndroidViewModel(application) {
   override fun onCleared() {
     super.onCleared()
     viewModelGroupJob.cancel()
-  }
-
-  fun getGroupDetail(groupId: String, activity: Activity) : GetGroupDetail? {
-    var groupDetail: GetGroupDetail? = null
-    Api.retrofitService.getGroupDetail("Bearer ${id}", groupId)
-      .enqueue(object: Callback<GetGroupDetail> {
-        override fun onFailure(call: Call<GetGroupDetail>, t: Throwable) {
-          Log.d(TAG, t.message)
-        }
-
-        override fun onResponse(call: Call<GetGroupDetail>, response: Response<GetGroupDetail>) {
-          Log.d(TAG, response.body().toString())
-          groupDetail = response.body()!!
-          Log.d("groupDetail", groupDetail.toString())
-        }
-      })
-    return groupDetail
   }
 
   fun itemIsClickedGroup(group: GroupPropertyResponse) {

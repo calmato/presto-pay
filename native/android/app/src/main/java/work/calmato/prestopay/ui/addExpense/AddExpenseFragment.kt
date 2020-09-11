@@ -26,6 +26,7 @@ import work.calmato.prestopay.network.*
 import work.calmato.prestopay.util.*
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.concurrent.thread
 
 class AddExpenseFragment() : PermissionBase() {
   private val viewModelGroup: ViewModelGroup by lazy {
@@ -39,6 +40,7 @@ class AddExpenseFragment() : PermissionBase() {
   private var groupsList: Groups? = null
   private var checkedGroup: Groups? = null
   private var getGroupInfo: GroupPropertyResponse? = null
+  private lateinit var groupId: String
 
   val REQUEST_CODE = 11
 
@@ -88,9 +90,29 @@ class AddExpenseFragment() : PermissionBase() {
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-    groupName.text = getGroupInfo!!.name
-    val groupDetail = viewModelGroup.getGroupDetail(getGroupInfo!!.id, requireActivity())
-    Log.d(TAG, groupDetail.toString())
+    thread {
+      try {
+        Api.retrofitService.getGroupDetail("Bearer ${id}", getGroupInfo!!.id)
+          .enqueue(object : Callback<GetGroupDetail> {
+            override fun onFailure(call: Call<GetGroupDetail>, t: Throwable) {
+              Log.d(ViewModelGroup.TAG, t.message)
+            }
+
+            override fun onResponse(
+              call: Call<GetGroupDetail>,
+              response: Response<GetGroupDetail>
+            ) {
+              Log.d(ViewModelGroup.TAG, response.body().toString())
+              val groupDetail = response.body()!!
+              groupName.text = groupDetail.name
+              Log.d("groupDetail", groupDetail.toString())
+            }
+          })
+      } catch (e: Exception) {
+        Log.d(TAG, "debug $e")
+      }
+    }
+
     imageIds = resources.getIdList(R.array.tag_array)
     tagNames = resources.getStringArray(R.array.tag_name)
     tagList = mutableListOf<Tag>()
