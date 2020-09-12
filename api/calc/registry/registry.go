@@ -5,6 +5,7 @@ import (
 	"github.com/calmato/presto-pay/api/calc/internal/interface/handler"
 	v1 "github.com/calmato/presto-pay/api/calc/internal/interface/handler/v1"
 	"github.com/calmato/presto-pay/api/calc/lib/firebase/firestore"
+	"github.com/calmato/presto-pay/api/calc/lib/firebase/messaging"
 	"github.com/calmato/presto-pay/api/calc/lib/firebase/storage"
 )
 
@@ -16,10 +17,10 @@ type Registry struct {
 }
 
 // NewRegistry - internalディレクトリ配下のファイルを読み込み
-func NewRegistry(fs *firestore.Firestore, cs *storage.Storage, ac api.APIClient) *Registry {
+func NewRegistry(fs *firestore.Firestore, cs *storage.Storage, cm *messaging.Messaging, ac api.APIClient) *Registry {
 	health := healthInjection()
 	v1Group := v1GroupInjection(fs, cs, ac)
-	v1Payment := v1PaymentInjection(fs, cs, ac)
+	v1Payment := v1PaymentInjection(fs, cs, cm, ac)
 
 	return &Registry{
 		Health:    health,

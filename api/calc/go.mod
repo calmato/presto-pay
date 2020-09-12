@@ -5,7 +5,7 @@ go 1.14
 require (
 	cloud.google.com/go/firestore v1.2.0
 	cloud.google.com/go/storage v1.6.0
-	firebase.google.com/go v3.12.1+incompatible
+	firebase.google.com/go/v4 v4.0.0
 	github.com/bmizerany/assert v0.0.0-20160611221934-b7ed37b82869 // indirect
 	github.com/fluent/fluent-logger-golang v1.5.0
 	github.com/gin-gonic/gin v1.6.3

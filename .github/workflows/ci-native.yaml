@@ -1,0 +1,64 @@
+name: Native app Build and Test
+on:
+  push:
+    paths:
+      - 'native/react/**'
+      - '.github/workflows/ci-native.yaml'
+
+# TODO: env for expo cli
+
+jobs:
+  build_and_test:
+    name: Setup and Test
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [14.x]
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+
+      - uses: actions/cache@v1
+        id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn
+
+      - name: Install
+        working-directory: ./native/react
+        run: yarn
+
+      - name: Lint
+        working-directory: ./native/react
+        run: yarn lint
+
+      # - name: Test
+      #   working-directory: ./native/react
+      #   run: yarn test
+
+      - uses: expo/expo-github-action@v5
+        with:
+          expo-version: 3.x
+          expo-username: ${{ secrets.STG_EXPO_CLI_USERNAME }}
+          expo-password: ${{ secrets.STG_EXPO_CLI_PASSWORD }}
+
+      - name: Build iOS
+        working-directory: ./native/react
+        run: expo build:ios -t simulator
+
+      - name: Build Android
+        working-directory: ./native/react
+        run: expo build:android -t app-bundle

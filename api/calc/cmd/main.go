@@ -8,6 +8,7 @@ import (
 	"github.com/calmato/presto-pay/api/calc/internal/infrastructure/api"
 	"github.com/calmato/presto-pay/api/calc/lib/firebase"
 	"github.com/calmato/presto-pay/api/calc/lib/firebase/firestore"
+	"github.com/calmato/presto-pay/api/calc/lib/firebase/messaging"
 	"github.com/calmato/presto-pay/api/calc/lib/firebase/storage"
 	"github.com/calmato/presto-pay/api/calc/middleware"
 	"github.com/calmato/presto-pay/api/calc/registry"
@@ -52,6 +53,12 @@ func main() {
 		panic(err)
 	}
 
+	// Firebase Cloud Messaging
+	fcm, err := messaging.NewClient(ctx, fb.App)
+	if err != nil {
+		panic(err)
+	}
+
 	// API Client
 	ac := api.NewAPIClient(e.UserAPIURL)
 
@@ -63,7 +70,7 @@ func main() {
 		}
 	}()
 
-	reg := registry.NewRegistry(fs, cs, ac)
+	reg := registry.NewRegistry(fs, cs, fcm, ac)
 
 	// サーバ起動
 	r := config.Router(reg)

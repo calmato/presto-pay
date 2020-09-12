@@ -62,3 +62,4 @@ build_package 'application' 'validation'
 
 # --- Infrastructure ---
 build_package 'infrastructure' 'api'
+build_package 'infrastructure' 'notification'

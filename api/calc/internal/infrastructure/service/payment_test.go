@@ -7,7 +7,10 @@ import (
 	"time"
 
 	"github.com/calmato/presto-pay/api/calc/internal/domain/payment"
+	"github.com/calmato/presto-pay/api/calc/internal/domain/user"
 	mock_payment "github.com/calmato/presto-pay/api/calc/mock/domain/payment"
+	mock_api "github.com/calmato/presto-pay/api/calc/mock/infrastructure/api"
+	mock_notification "github.com/calmato/presto-pay/api/calc/mock/infrastructure/notification"
 	"github.com/golang/mock/gomock"
 )
 
@@ -20,15 +23,10 @@ func TestPaymentService_Create(t *testing.T) {
 	}{
 		"ok": {
 			Payment: &payment.Payment{
-				Name:     "支払いテスト",
-				Currency: "dollar",
-				Total:    15000,
-				Payers: []*payment.Payer{
-					{
-						ID:     "user-id",
-						Amount: 0,
-					},
-				},
+				Name:      "支払いテスト",
+				Currency:  "dollar",
+				Total:     15000,
+				Payers:    []*payment.Payer{},
 				Tags:      []string{},
 				Comment:   "",
 				ImageURLs: []string{},
@@ -54,9 +52,24 @@ func TestPaymentService_Create(t *testing.T) {
 
 		pum := mock_payment.NewMockPaymentUploader(ctrl)
 
+		acm := mock_api.NewMockAPIClient(ctrl)
+		for _, payer := range testCase.Payment.Payers {
+			u := &user.User{
+				ID: payer.ID,
+			}
+
+			acm.EXPECT().ShowUser(ctrl, payer.ID).Return(u, nil)
+		}
+
+		ncm := mock_notification.NewMockNotificationClient(ctrl)
+		ncm.
+			EXPECT().
+			Send(ctx, []string{}, testCase.Payment.Name, "新しい支払い情報が追加されました.").
+			Return(nil)
+
 		// Start test
 		t.Run(result, func(t *testing.T) {
-			target := NewPaymentService(pdvm, prm, pum)
+			target := NewPaymentService(pdvm, prm, pum, acm, ncm)
 
 			_, err := target.Create(ctx, testCase.Payment, testCase.GroupID)
 			if err != nil {
@@ -93,9 +106,13 @@ func TestPaymentService_UploadImage(t *testing.T) {
 		pum := mock_payment.NewMockPaymentUploader(ctrl)
 		pum.EXPECT().UploadImage(ctx, testCase.Data).Return(testCase.Expected, nil)
 
+		acm := mock_api.NewMockAPIClient(ctrl)
+
+		ncm := mock_notification.NewMockNotificationClient(ctrl)
+
 		// Start test
 		t.Run(result, func(t *testing.T) {
-			target := NewPaymentService(pdvm, prm, pum)
+			target := NewPaymentService(pdvm, prm, pum, acm, ncm)
 
 			got, err := target.UploadImage(ctx, testCase.Data)
 			if err != nil {

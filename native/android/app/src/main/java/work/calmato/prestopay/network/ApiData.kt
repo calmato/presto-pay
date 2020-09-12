@@ -28,6 +28,11 @@ data class Groups(
 ) : Parcelable {}
 
 @Parcelize
+data class RegisterDeviceIdProperty(
+  val instanceId: String
+) : Parcelable {}
+
+@Parcelize
 data class CreateGroupProperty(
   val name: String,
   val thumbnail: String,
