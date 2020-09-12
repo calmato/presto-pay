@@ -308,6 +308,7 @@ class LoginFragment : Fragment() {
       this.findNavController().navigate(
         LoginFragmentDirections.actionLoginFragmentToHomeFragment()
       )
+      // TODO グループ、友達のGETここでする
       //最初のログインのみ実行される。　
       // トークンの情報が変更たときにFCM用デバイスIDを送信することで、ユーザーが権限を持っていることを確実にした。401帰ってきてたので。
       if(isFirstLogin) {

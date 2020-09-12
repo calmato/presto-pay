@@ -64,7 +64,7 @@ class ViewModelGroup(application: Application) : AndroidViewModel(application) {
   }
 
   companion object {
-    internal const val TAG = "AddGroupViewModel"
+    internal const val TAG = "ViewModelGroup"
   }
 
 }

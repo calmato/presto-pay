@@ -6,10 +6,12 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.preference.PreferenceManager
+import android.util.Log
 import android.view.*
 import android.widget.*
 import androidx.activity.OnBackPressedCallback
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -24,11 +26,22 @@ import work.calmato.prestopay.network.*
 import work.calmato.prestopay.util.*
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.concurrent.thread
 
 class AddExpenseFragment() : PermissionBase() {
+  private val viewModelFriend: ViewModelFriend by lazy {
+    val activity = requireNotNull(this.activity) {
+      "You can only access the viewModel after onActivityCreated()"
+    }
+    ViewModelProviders.of(this, ViewModelFriend.Factory(activity.application))
+      .get(ViewModelFriend::class.java)
+  }
+
   private var groupsList: Groups? = null
   private var checkedGroup: Groups? = null
   private var getGroupInfo: GroupPropertyResponse? = null
+  private var recycleAdapter: AdapterCheck? = null
+  private lateinit var clickListener: AdapterCheck.OnClickListener
 
   val REQUEST_CODE = 11
 
@@ -37,12 +50,11 @@ class AddExpenseFragment() : PermissionBase() {
     container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View? {
-    val view: View = inflater.inflate(R.layout.fragment_add_expense, container, false)
-
-    val binding: FragmentAddExpenseBindingImpl = DataBindingUtil.inflate(
+     val binding: FragmentAddExpenseBindingImpl = DataBindingUtil.inflate(
       inflater, R.layout.fragment_add_expense, container, false
     )
-
+    clickListener = AdapterCheck.OnClickListener { viewModelFriend.itemIsClicked(it) }
+    recycleAdapter = AdapterCheck(clickListener)
     groupsList = AddExpenseFragmentArgs.fromBundle(requireArguments()).groupsList
     checkedGroup =
       Groups(groupsList!!.groups.filter { groupPropertyResponse -> groupPropertyResponse.selected })
@@ -77,8 +89,53 @@ class AddExpenseFragment() : PermissionBase() {
     }
   }
 
+  private fun addExpensePayer(groupDetail: GetGroupDetail) {
+    val targetUsers = (groupDetail.users.map { it.name})
+    val adapter = ArrayAdapter<String>(requireContext(),android.R.layout.simple_list_item_checked,
+      targetUsers)
+    adapter.setDropDownViewResource(android.R.layout.simple_list_item_checked)
+    payerSpinner.adapter = adapter
+  }
+
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-    groupName.text = getGroupInfo!!.name
+    thread {
+      try {
+        Api.retrofitService.getGroupDetail("Bearer ${id}", getGroupInfo!!.id)
+          .enqueue(object : Callback<GetGroupDetail> {
+            override fun onFailure(call: Call<GetGroupDetail>, t: Throwable) {
+              Log.d(ViewModelGroup.TAG, t.message)
+            }
+
+            override fun onResponse(
+              call: Call<GetGroupDetail>,
+              response: Response<GetGroupDetail>
+            ) {
+              Log.d(ViewModelGroup.TAG, response.body().toString())
+              val groupDetail = response.body()!!
+              groupName.text = groupDetail.name
+              addExpensePayer(groupDetail)
+              targetText.setOnClickListener {
+                val builder: AlertDialog.Builder? = requireActivity().let {
+                  AlertDialog.Builder(it)
+                }
+                val targetRecycleAdapter = AdapterCheck(null)
+                targetRecycleAdapter.friendList = groupDetail.users
+                val recyclerView = RecyclerView(requireContext())
+                recyclerView.apply {
+                  layoutManager = LinearLayoutManager(requireContext())
+                  adapter = targetRecycleAdapter
+                }
+                builder?.setView(recyclerView)
+                val dialog:AlertDialog? = builder?.create()
+                dialog?.show()
+              }
+            }
+          })
+      } catch (e: Exception) {
+        Log.d(TAG, "debug $e")
+      }
+    }
+
     imageIds = resources.getIdList(R.array.tag_array)
     tagNames = resources.getStringArray(R.array.tag_name)
     tagList = mutableListOf<Tag>()
@@ -285,4 +342,5 @@ class AddExpenseFragment() : PermissionBase() {
   companion object {
     val TAG = "AddExpenseFragment"
   }
+
 }
