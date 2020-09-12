@@ -50,15 +50,11 @@ class AddExpenseFragment() : PermissionBase() {
     container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View? {
-    val view: View = inflater.inflate(R.layout.fragment_add_expense, container, false)
-    val binding: FragmentAddExpenseBindingImpl = DataBindingUtil.inflate(
+     val binding: FragmentAddExpenseBindingImpl = DataBindingUtil.inflate(
       inflater, R.layout.fragment_add_expense, container, false
     )
     clickListener = AdapterCheck.OnClickListener { viewModelFriend.itemIsClicked(it) }
     recycleAdapter = AdapterCheck(clickListener)
-    binding.root.findViewById<RecyclerView>(R.id.friendsRecycleView).apply {
-      layoutManager = LinearLayoutManager(requireContext())
-    }
     groupsList = AddExpenseFragmentArgs.fromBundle(requireArguments()).groupsList
     checkedGroup =
       Groups(groupsList!!.groups.filter { groupPropertyResponse -> groupPropertyResponse.selected })
@@ -95,7 +91,12 @@ class AddExpenseFragment() : PermissionBase() {
 
   private fun addExpenseTarget(groupDetail: GetGroupDetail) {
     Log.d("groupDetail", groupDetail.users.toString())
-    recycleAdapter?.friendList = groupDetail.users
+    val targetUsers = (groupDetail.users.map { it.name})
+    val adapter = ArrayAdapter<String>(requireContext(),android.R.layout.simple_list_item_checked,
+      targetUsers)
+    adapter.setDropDownViewResource(android.R.layout.simple_list_item_checked)
+    this.targetSpinner.adapter = adapter
+    Log.i(TAG, "addExpenseTarget: ${targetSpinner.adapter.count}")
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
