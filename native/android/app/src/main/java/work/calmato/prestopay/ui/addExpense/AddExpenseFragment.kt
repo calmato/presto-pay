@@ -89,14 +89,12 @@ class AddExpenseFragment() : PermissionBase() {
     }
   }
 
-  private fun addExpenseTarget(groupDetail: GetGroupDetail) {
-    Log.d("groupDetail", groupDetail.users.toString())
+  private fun addExpensePayer(groupDetail: GetGroupDetail) {
     val targetUsers = (groupDetail.users.map { it.name})
     val adapter = ArrayAdapter<String>(requireContext(),android.R.layout.simple_list_item_checked,
       targetUsers)
     adapter.setDropDownViewResource(android.R.layout.simple_list_item_checked)
-    this.targetSpinner.adapter = adapter
-    Log.i(TAG, "addExpenseTarget: ${targetSpinner.adapter.count}")
+    payerSpinner.adapter = adapter
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -115,7 +113,7 @@ class AddExpenseFragment() : PermissionBase() {
               Log.d(ViewModelGroup.TAG, response.body().toString())
               val groupDetail = response.body()!!
               groupName.text = groupDetail.name
-              addExpenseTarget(groupDetail)
+              addExpensePayer(groupDetail)
             }
           })
       } catch (e: Exception) {
