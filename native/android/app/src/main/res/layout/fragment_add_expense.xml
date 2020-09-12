@@ -61,7 +61,7 @@
       app:layout_constraintTop_toBottomOf="@+id/amountEdit" />
 
     <Spinner
-      android:id="@+id/spinner"
+      android:id="@+id/payerSpinner"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:layout_marginStart="8dp"
@@ -82,12 +82,12 @@
       app:layout_constraintTop_toBottomOf="@+id/textView9" />
 
     <Spinner
-      android:id="@+id/spinner3"
+      android:id="@+id/targetSpinner"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
       app:layout_constraintBottom_toBottomOf="@+id/textView10"
-      app:layout_constraintEnd_toEndOf="@+id/spinner"
-      app:layout_constraintStart_toStartOf="@+id/spinner"
+      app:layout_constraintEnd_toEndOf="@+id/payerSpinner"
+      app:layout_constraintStart_toStartOf="@+id/payerSpinner"
       app:layout_constraintTop_toTopOf="@+id/textView10" />
 
     <TextView
@@ -96,8 +96,8 @@
       android:layout_height="wrap_content"
       android:layout_marginTop="16dp"
       android:text="@string/advanced_setting"
-      app:layout_constraintEnd_toEndOf="@+id/spinner3"
-      app:layout_constraintTop_toBottomOf="@+id/spinner3" />
+      app:layout_constraintEnd_toEndOf="@+id/targetSpinner"
+      app:layout_constraintTop_toBottomOf="@+id/targetSpinner" />
 
     <ImageView
       android:id="@+id/camera"
@@ -191,8 +191,8 @@
       android:textSize="18sp"
       android:visibility="invisible"
       app:layout_constraintBottom_toTopOf="@+id/camera"
-      app:layout_constraintEnd_toEndOf="@+id/spinner3"
-      app:layout_constraintStart_toStartOf="@+id/spinner3"
+      app:layout_constraintEnd_toEndOf="@+id/targetSpinner"
+      app:layout_constraintStart_toStartOf="@+id/targetSpinner"
       app:layout_constraintTop_toBottomOf="@+id/advancedSetting" />
 
     <ImageView

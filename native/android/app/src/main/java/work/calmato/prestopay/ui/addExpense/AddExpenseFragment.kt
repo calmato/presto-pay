@@ -29,18 +29,19 @@ import java.util.*
 import kotlin.concurrent.thread
 
 class AddExpenseFragment() : PermissionBase() {
-  private val viewModelGroup: ViewModelGroup by lazy {
+  private val viewModelFriend: ViewModelFriend by lazy {
     val activity = requireNotNull(this.activity) {
       "You can only access the viewModel after onActivityCreated()"
     }
-    ViewModelProviders.of(this, ViewModelGroup.Factory(activity.application))
-      .get(ViewModelGroup::class.java)
+    ViewModelProviders.of(this, ViewModelFriend.Factory(activity.application))
+      .get(ViewModelFriend::class.java)
   }
 
   private var groupsList: Groups? = null
   private var checkedGroup: Groups? = null
   private var getGroupInfo: GroupPropertyResponse? = null
-  private lateinit var groupId: String
+  private var recycleAdapter: AdapterCheck? = null
+  private lateinit var clickListener: AdapterCheck.OnClickListener
 
   val REQUEST_CODE = 11
 
@@ -50,11 +51,14 @@ class AddExpenseFragment() : PermissionBase() {
     savedInstanceState: Bundle?
   ): View? {
     val view: View = inflater.inflate(R.layout.fragment_add_expense, container, false)
-
     val binding: FragmentAddExpenseBindingImpl = DataBindingUtil.inflate(
       inflater, R.layout.fragment_add_expense, container, false
     )
-
+    clickListener = AdapterCheck.OnClickListener { viewModelFriend.itemIsClicked(it) }
+    recycleAdapter = AdapterCheck(clickListener)
+    binding.root.findViewById<RecyclerView>(R.id.friendsRecycleView).apply {
+      layoutManager = LinearLayoutManager(requireContext())
+    }
     groupsList = AddExpenseFragmentArgs.fromBundle(requireArguments()).groupsList
     checkedGroup =
       Groups(groupsList!!.groups.filter { groupPropertyResponse -> groupPropertyResponse.selected })
@@ -89,6 +93,12 @@ class AddExpenseFragment() : PermissionBase() {
     }
   }
 
+  private fun addExpenseTarget(groupDetail: GetGroupDetail) {
+    Log.d("groupDetail", groupDetail.users.toString())
+    recycleAdapter?.friendList = groupDetail.users
+    targetSpinner.adapter(recycleAdapter)
+  }
+
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     thread {
       try {
@@ -105,11 +115,7 @@ class AddExpenseFragment() : PermissionBase() {
               Log.d(ViewModelGroup.TAG, response.body().toString())
               val groupDetail = response.body()!!
               groupName.text = groupDetail.name
-              for (i in groupDetail.users) {
-                Log.d(TAG, gr)
-              }
-              groupDetail.users[0].username
-              Log.d("groupDetail", groupDetail.toString())
+              addExpenseTarget(groupDetail)
             }
           })
       } catch (e: Exception) {
