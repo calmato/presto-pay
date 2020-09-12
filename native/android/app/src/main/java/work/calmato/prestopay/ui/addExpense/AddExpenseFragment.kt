@@ -114,6 +114,21 @@ class AddExpenseFragment() : PermissionBase() {
               val groupDetail = response.body()!!
               groupName.text = groupDetail.name
               addExpensePayer(groupDetail)
+              targetText.setOnClickListener {
+                val builder: AlertDialog.Builder? = requireActivity().let {
+                  AlertDialog.Builder(it)
+                }
+                val targetRecycleAdapter = AdapterCheck(null)
+                targetRecycleAdapter.friendList = groupDetail.users
+                val recyclerView = RecyclerView(requireContext())
+                recyclerView.apply {
+                  layoutManager = LinearLayoutManager(requireContext())
+                  adapter = targetRecycleAdapter
+                }
+                builder?.setView(recyclerView)
+                val dialog:AlertDialog? = builder?.create()
+                dialog?.show()
+              }
             }
           })
       } catch (e: Exception) {
