@@ -296,6 +296,7 @@ class LoginFragment : Fragment() {
       this.findNavController().navigate(
         LoginFragmentDirections.actionLoginFragmentToHomeFragment()
       )
+      // TODO グループ、友達のGETここでする
     }
   }
 
