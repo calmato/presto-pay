@@ -89,7 +89,7 @@ function TabRoutes(): JSX.Element {
 // ナビゲーター
 function SignInNavigator(): JSX.Element {
   return (
-    <SignInStack.Navigator initialRouteName={SIGN_IN}>
+    <SignInStack.Navigator initialRouteName={SIGN_IN} headerMode="none">
       <SignInStack.Screen name={SIGN_IN} component={SignIn} />
       <SignInStack.Screen name={SIGN_UP} component={SignUp} />
     </SignInStack.Navigator>
