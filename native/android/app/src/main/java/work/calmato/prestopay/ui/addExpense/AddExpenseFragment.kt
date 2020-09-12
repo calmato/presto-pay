@@ -96,7 +96,6 @@ class AddExpenseFragment() : PermissionBase() {
   private fun addExpenseTarget(groupDetail: GetGroupDetail) {
     Log.d("groupDetail", groupDetail.users.toString())
     recycleAdapter?.friendList = groupDetail.users
-    targetSpinner.adapter(recycleAdapter)
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
