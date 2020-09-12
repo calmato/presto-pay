@@ -105,6 +105,10 @@ class AddExpenseFragment() : PermissionBase() {
               Log.d(ViewModelGroup.TAG, response.body().toString())
               val groupDetail = response.body()!!
               groupName.text = groupDetail.name
+              for (i in groupDetail.users) {
+                Log.d(TAG, gr)
+              }
+              groupDetail.users[0].username
               Log.d("groupDetail", groupDetail.toString())
             }
           })
