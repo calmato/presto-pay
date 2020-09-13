@@ -84,7 +84,7 @@ class GroupFriendFragment : Fragment() {
     super.onViewCreated(view, savedInstanceState)
     viewModel.refreshingFriend.observe(viewLifecycleOwner, Observer<Boolean> {
       it?.apply {
-        swipeContainerFriend.isRefreshing = it
+        swipeContainer.isRefreshing = it
       }
     })
     viewModel.refreshingGroup.observe(viewLifecycleOwner, Observer<Boolean> {
@@ -92,7 +92,7 @@ class GroupFriendFragment : Fragment() {
         swipeContainerGroup.isRefreshing = it
       }
     })
-    swipeContainerFriend.setOnRefreshListener {
+    swipeContainer.setOnRefreshListener {
       viewModel.userListView()
     }
     swipeContainerGroup.setOnRefreshListener {
@@ -160,17 +160,17 @@ class GroupFriendFragment : Fragment() {
       Picasso.with(context).load(thumbnailUrl).into(thumbnail)
     }
     groupSwitcher.setOnClickListener {
-      if(swipeContainerGroup.visibility==RecyclerView.VISIBLE && swipeContainerFriend.visibility==RecyclerView.VISIBLE){
+      if(swipeContainerGroup.visibility==RecyclerView.VISIBLE && swipeContainer.visibility==RecyclerView.VISIBLE){
         swipeContainerGroup.visibility = RecyclerView.GONE
       }else{
         swipeContainerGroup.visibility = RecyclerView.VISIBLE
       }
     }
     friendSwitcher.setOnClickListener {
-      if(swipeContainerFriend.visibility==RecyclerView.VISIBLE && swipeContainerGroup.visibility==RecyclerView.VISIBLE){
-        swipeContainerFriend.visibility = RecyclerView.GONE
+      if(swipeContainer.visibility==RecyclerView.VISIBLE && swipeContainerGroup.visibility==RecyclerView.VISIBLE){
+        swipeContainer.visibility = RecyclerView.GONE
       }else{
-        swipeContainerFriend.visibility = RecyclerView.VISIBLE
+        swipeContainer.visibility = RecyclerView.VISIBLE
       }
     }
   }
