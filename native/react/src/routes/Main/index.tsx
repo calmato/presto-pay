@@ -3,16 +3,16 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 import { createStackNavigator, StackCardInterpolationProps } from "@react-navigation/stack";
 import React from "react";
 
-import Groups from "./Groups";
+import GroupList from "./GroupList";
 import Home from "./Home";
+import SignIn from "./SignIn";
 import UserInfo from "./UserInfo";
 
-import { Initial, Loading, SignIn, SignUp } from "~/components/pages";
-import { GROUPS, HOME, INITIAL, LOADING, SIGN_IN, SIGN_UP, USER_INFO } from "~/constants/path";
+import { Initial, Loading } from "~/components/pages";
+import { GROUP_LIST, HOME, INITIAL, LOADING, SIGN_IN, USER_INFO } from "~/constants/path";
 import * as UiContext from "~/contexts/ui";
 
 const Stack = createStackNavigator();
-const SignInStack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 const GroupsDrawer = createDrawerNavigator();
 const HomeDrawer = createDrawerNavigator();
@@ -38,11 +38,11 @@ const getActiveRouteName = (state: any): string => {
   return route.name;
 };
 
-// ドロワー
+// TODO: Refactor - ドロワー
 function GroupsWithDrawer(): JSX.Element {
   return (
-    <GroupsDrawer.Navigator initialRouteName={GROUPS}>
-      <GroupsDrawer.Screen name={GROUPS} component={Groups} />
+    <GroupsDrawer.Navigator initialRouteName={GROUP_LIST}>
+      <GroupsDrawer.Screen name={GROUP_LIST} component={GroupList} />
       <GroupsDrawer.Screen name={HOME} component={Home} />
     </GroupsDrawer.Navigator>
   );
@@ -66,7 +66,7 @@ function UserInfoWithDrawer(): JSX.Element {
   );
 }
 
-// フッタータブ
+// TODO: Refactor - フッタータブ
 function TabRoutes(): JSX.Element {
   return (
     <Tab.Navigator
@@ -79,27 +79,19 @@ function TabRoutes(): JSX.Element {
         };
       }}
     >
-      <Tab.Screen name={GROUPS} component={GroupsWithDrawer} />
+      <Tab.Screen name={GROUP_LIST} component={GroupsWithDrawer} />
       <Tab.Screen name={HOME} component={HomeWithDrawer} />
       <Tab.Screen name={USER_INFO} component={UserInfoWithDrawer} />
     </Tab.Navigator>
   );
 }
 
-// ナビゲーター
-function SignInNavigator(): JSX.Element {
-  return (
-    <SignInStack.Navigator initialRouteName={SIGN_IN} mode="modal" headerMode="none">
-      <SignInStack.Screen name={SIGN_IN} component={SignIn} />
-      <SignInStack.Screen name={SIGN_UP} component={SignUp} />
-    </SignInStack.Navigator>
-  );
-}
-
-function switchingAuthStatus(status: UiContext.Status): JSX.Element {
+// TODO: 認証機能実装後リファクタ
+// アプリ起動時、認証情報によってページ遷移
+function SwitchingAuthStatus(status: UiContext.Status): JSX.Element {
   switch (status) {
     case UiContext.Status.UN_AUTHORIZED:
-      return <Stack.Screen name={SIGN_IN} component={SignInNavigator} />;
+      return <Stack.Screen name={SIGN_IN} component={SignIn} />;
     case UiContext.Status.AUTHORIZED:
       return <Stack.Screen name={HOME} component={TabRoutes} />;
     case UiContext.Status.FIRST_OPEN:
@@ -114,7 +106,7 @@ export default function MainRoutes() {
   return (
     <Stack.Navigator initialRouteName={LOADING} headerMode="none" screenOptions={{ cardStyleInterpolator: forFade }}>
       {uiContext.applicationState !== UiContext.Status.LOADING ? (
-        switchingAuthStatus(uiContext.applicationState)
+        SwitchingAuthStatus(uiContext.applicationState)
       ) : (
         <Stack.Screen name={LOADING} component={Loading} />
       )}
