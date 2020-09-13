@@ -2,14 +2,16 @@
 
 割り勘アプリ
 
-![Android Github Action](https://github.com/calmato/presto-pay/workflows/Android%20Build%20and%20Test/badge.svg)  
-![Admin(Nuxt.js) Build on Test](https://github.com/calmato/presto-pay/workflows/Admin(Nuxt.js)%20Build%20and%20Test/badge.svg)  
+![Native App(React Native) Build and Test](https://github.com/calmato/presto-pay/workflows/Native%20app%20Build%20and%20Test/badge.svg)  
+![Android Build and Test](https://github.com/calmato/presto-pay/workflows/Android%20Build%20and%20Test/badge.svg)  
+![Admin(Nuxt.js) Build Test Test](https://github.com/calmato/presto-pay/workflows/Admin(Nuxt.js)%20Build%20and%20Test/badge.svg)  
 ![User API(Golang) Build and Test](https://github.com/calmato/presto-pay/workflows/User%20API(Golang)%20Build%20and%20Test/badge.svg)
 ![User API(Golang) Reviewdog](https://github.com/calmato/presto-pay/workflows/User%20API(Golang)%20Reviewdog/badge.svg)  
 ![Calc API(Golang) Build and Test](https://github.com/calmato/presto-pay/workflows/Calc%20API(Golang)%20Build%20and%20Test/badge.svg)
 ![Calc API(Golang) Reviewdog](https://github.com/calmato/presto-pay/workflows/Calc%20API(Golang)%20Reviewdog/badge.svg)  
 ![Terraform(stg) Test](https://github.com/calmato/presto-pay/workflows/Terraform(stg)%20Test/badge.svg)  
 
+![Android Test with Firebase](https://github.com/calmato/presto-pay/workflows/Android%20Test%20with%20Firebase/badge.svg)  
 ![User API(Golang) Deploy to Staging](https://github.com/calmato/presto-pay/workflows/User%20API(Golang)%20Deploy%20to%20Staging/badge.svg)
 ![Calc API(Golang) Deploy to Staging](https://github.com/calmato/presto-pay/workflows/Calc%20API(Golang)%20Deploy%20to%20Staging/badge.svg)
 
