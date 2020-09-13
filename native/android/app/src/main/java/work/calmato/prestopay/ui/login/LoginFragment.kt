@@ -36,22 +36,19 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import work.calmato.prestopay.R
+import work.calmato.prestopay.database.getAppDatabase
 import work.calmato.prestopay.databinding.FragmentLoginBinding
 import work.calmato.prestopay.network.Api
 import work.calmato.prestopay.network.asDomainModel
 import work.calmato.prestopay.network.RegisterDeviceIdProperty
+import work.calmato.prestopay.repository.FriendsRepository
+import work.calmato.prestopay.repository.GroupsRepository
 import work.calmato.prestopay.util.*
 
 
 class LoginFragment : Fragment() {
   private val viewModel: ViewModelUser by lazy {
     ViewModelProvider(this).get(ViewModelUser::class.java)
-  }
-  private val viewModelGroup: ViewModelGroup by lazy {
-    ViewModelProvider(this).get(ViewModelGroup::class.java)
-  }
-  private val viewModelFriend: ViewModelFriend by lazy {
-    ViewModelProvider(this).get(ViewModelFriend::class.java)
   }
 
   private lateinit var auth: FirebaseAuth
@@ -307,20 +304,19 @@ class LoginFragment : Fragment() {
       this.findNavController().navigate(
         LoginFragmentDirections.actionLoginFragmentToHomeFragment()
       )
-      // TODO グループ、友達のGETここでする
       //最初のログインのみ実行される。　
       // トークンの情報が変更たときにFCM用デバイスIDを送信することで、ユーザーが権限を持っていることを確実にした。401帰ってきてたので。
-      if (isFirstLogin) {
-        sharedPreferences.registerOnSharedPreferenceChangeListener { _, key ->
-          when (key) {
-            // FCM用デバイスIDを送信
-            "token" -> {
+
+      sharedPreferences.registerOnSharedPreferenceChangeListener { _, key ->
+        when (key) {
+          // FCM用デバイスIDを送信
+          "token" -> {
+            if (isFirstLogin) {
               sendFirebaseCloudMessageToken()
-              viewModelGroup.groupListView()
-              viewModelFriend.userListView()
             }
           }
         }
+
       }
     }
   }
@@ -358,6 +354,8 @@ class LoginFragment : Fragment() {
               GlobalScope.launch(Dispatchers.IO) {
                 try {
                   Log.i("Ok", "setSharedPreferenceId: ${id}")
+                  GroupsRepository(getAppDatabase(requireContext())).refreshGroups(id!!)
+                  FriendsRepository(getAppDatabase(requireContext())).refreshFriends(id!!)
                   val userProperty =
                     Api.retrofitService.getLoginUserInformation("Bearer $id").await()
                       .asDomainModel()

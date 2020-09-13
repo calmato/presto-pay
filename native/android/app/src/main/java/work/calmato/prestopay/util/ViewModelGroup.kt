@@ -68,16 +68,6 @@ class ViewModelGroup(application: Application) : AndroidViewModel(application) {
     _refreshing.value = false
   }
 
-  class Factory(val app: Application) : ViewModelProvider.Factory {
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-      if (modelClass.isAssignableFrom(ViewModelGroup::class.java)) {
-        @Suppress("UNCHECKED_CAST")
-        return ViewModelGroup(app) as T
-      }
-      throw IllegalArgumentException("Unable to construct viewmodel")
-    }
-  }
-
   companion object {
     internal const val TAG = "ViewModelGroup"
   }
