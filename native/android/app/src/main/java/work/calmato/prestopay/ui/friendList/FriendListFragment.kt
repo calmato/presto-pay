@@ -14,6 +14,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_friend_list.*
+import kotlinx.android.synthetic.main.fragment_friend_list.swipeContainer
+import kotlinx.android.synthetic.main.fragment_group_friend.*
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentFriendListBinding
 import work.calmato.prestopay.network.UserProperty
@@ -66,6 +68,15 @@ class FriendListFragment : Fragment() {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
+    viewModel.refreshingFriend.observe(viewLifecycleOwner, Observer<Boolean> {
+      it?.apply {
+        swipeContainer.isRefreshing = it
+      }
+    })
+    swipeContainer.setOnRefreshListener {
+      searchEdit.setText("")
+      viewModel.userListView()
+    }
     viewModel.itemClicked.observe(viewLifecycleOwner, Observer {
       if (null != it) {
         it.checked = !it.checked

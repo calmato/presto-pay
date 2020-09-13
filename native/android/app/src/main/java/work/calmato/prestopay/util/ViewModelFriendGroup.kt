@@ -224,10 +224,10 @@ class ViewModelFriendGroup(application: Application) : AndroidViewModel(applicat
     _refreshingGroup.value = false
   }
 
-  fun startRefreshingFriend(){
+  private fun startRefreshingFriend(){
     _refreshingFriend.value = true
   }
-  fun endRefreshingFriend(){
+  private fun endRefreshingFriend(){
     _refreshingFriend.value = false
   }
 
