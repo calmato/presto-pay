@@ -1,6 +1,7 @@
 package work.calmato.prestopay.ui.home
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,14 +31,6 @@ class HomeFragment : Fragment() {
   }
 
   private var recycleGroupAdapter: AdapterGroupPlane? = null
-  override fun onActivityCreated(savedInstanceState: Bundle?) {
-    super.onActivityCreated(savedInstanceState)
-    viewModelGroup.groupsList.observe(viewLifecycleOwner, Observer<List<GroupPropertyResponse>> {
-      it?.apply {
-        recycleGroupAdapter?.groupList = it
-      }
-    })
-  }
 
   private lateinit var clickListenerHomeGroup: AdapterGroupPlane.OnClickListener
 
@@ -56,7 +49,6 @@ class HomeFragment : Fragment() {
       viewModelGroup.itemIsClickedGroup(it)
     }
     recycleGroupAdapter = AdapterGroupPlane(clickListenerHomeGroup)
-    viewModelGroup.groupListView()
     binding.groupHomeRecycle.apply {
       layoutManager = LinearLayoutManager(context)
       adapter = recycleGroupAdapter
@@ -67,6 +59,21 @@ class HomeFragment : Fragment() {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
+    viewModelGroup.groupsList.observe(viewLifecycleOwner, Observer<List<GroupPropertyResponse>> {
+      it?.apply {
+        recycleGroupAdapter?.groupList = it
+        viewModelGroup.endRefreshing()
+      }
+    })
+    viewModelGroup.refreshing.observe(viewLifecycleOwner, Observer<Boolean> {
+      it?.apply {
+        Log.i("ViewModelGroup: ", "onViewCreated: dataset changed")
+        swipeContainer.isRefreshing = it
+      }
+    })
+    swipeContainer.setOnRefreshListener {
+      viewModelGroup.groupListView()
+    }
     floatingActionButton.setOnClickListener {
       this.findNavController().navigate(
         HomeFragmentDirections.actionHomeFragmentToGroupListFragment(
@@ -97,5 +104,6 @@ class HomeFragment : Fragment() {
         override fun handleOnBackPressed() {
         }
       })
+
   }
 }
