@@ -19,6 +19,11 @@ type Query struct {
 	Value    interface{}
 }
 
+const (
+	sortByAsc  = "asc"
+	sortByDesc = "desc"
+)
+
 // NewClient - Firestoreに接続
 func NewClient(ctx context.Context, app *firebase.App) (*Firestore, error) {
 	client, err := app.Firestore(ctx)
@@ -51,9 +56,21 @@ func (f *Firestore) GetAll(ctx context.Context, collection string) *firestore.Do
 
 // GetAllFirst - 初めから指定の件数分ドキュメントを取得
 func (f *Firestore) GetAllFirst(
-	ctx context.Context, collection string, length int,
+	ctx context.Context, collection string, orderBy string, sort string, length int,
 ) ([]*firestore.DocumentSnapshot, error) {
-	dsnap := f.Client.Collection(collection).OrderBy("id", firestore.Asc).Limit(length).Documents(ctx)
+	if orderBy == "" {
+		orderBy = "id"
+	}
+
+	orderBySort := firestore.Asc
+	switch sort {
+	case sortByAsc:
+		orderBySort = firestore.Asc
+	case sortByDesc:
+		orderBySort = firestore.Desc
+	}
+
+	dsnap := f.Client.Collection(collection).OrderBy(orderBy, orderBySort).Limit(length).Documents(ctx)
 
 	docs, err := dsnap.GetAll()
 	if err != nil {
@@ -65,7 +82,7 @@ func (f *Firestore) GetAllFirst(
 
 // GetAllFromStartAt - 指定した箇所から指定の件数分ドキュメントを取得
 func (f *Firestore) GetAllFromStartAt(
-	ctx context.Context, collection string, orderBy string, document string, length int,
+	ctx context.Context, collection string, orderBy string, sort string, document string, length int,
 ) ([]*firestore.DocumentSnapshot, error) {
 	col := f.Client.Collection(collection)
 
@@ -74,7 +91,19 @@ func (f *Firestore) GetAllFromStartAt(
 		return nil, err
 	}
 
-	dsnap := col.OrderBy(orderBy, firestore.Asc).StartAfter(doc.Data()[orderBy]).Limit(length).Documents(ctx)
+	if orderBy == "" {
+		orderBy = "id"
+	}
+
+	orderBySort := firestore.Asc
+	switch sort {
+	case sortByAsc:
+		orderBySort = firestore.Asc
+	case sortByDesc:
+		orderBySort = firestore.Desc
+	}
+
+	dsnap := col.OrderBy(orderBy, orderBySort).StartAfter(doc.Data()[orderBy]).Limit(length).Documents(ctx)
 
 	docs, err := dsnap.GetAll()
 	if err != nil {
@@ -102,9 +131,21 @@ func (f *Firestore) GetByQueries(ctx context.Context, collection string, queries
 
 // Search - 前方一致検索
 func (f *Firestore) Search(
-	ctx context.Context, collection string, orderBy string, query string, length int,
+	ctx context.Context, collection string, orderBy string, sort string, query string, length int,
 ) ([]*firestore.DocumentSnapshot, error) {
-	dsnap := f.Client.Collection(collection).OrderBy(orderBy, firestore.Asc).
+	if orderBy == "" {
+		orderBy = "id"
+	}
+
+	orderBySort := firestore.Asc
+	switch sort {
+	case sortByAsc:
+		orderBySort = firestore.Asc
+	case sortByDesc:
+		orderBySort = firestore.Desc
+	}
+
+	dsnap := f.Client.Collection(collection).OrderBy(orderBy, orderBySort).
 		StartAt(query).EndAt(query + "\uf8ff").
 		Limit(length).Documents(ctx)
 
@@ -118,7 +159,7 @@ func (f *Firestore) Search(
 
 // SearchFromStartAt - ()指定した箇所から)前方一致検索
 func (f *Firestore) SearchFromStartAt(
-	ctx context.Context, collection string, orderBy string, query string, document string, length int,
+	ctx context.Context, collection string, orderBy string, sort string, query string, document string, length int,
 ) ([]*firestore.DocumentSnapshot, error) {
 	col := f.Client.Collection(collection)
 
@@ -127,7 +168,19 @@ func (f *Firestore) SearchFromStartAt(
 		return nil, err
 	}
 
-	dsnap := f.Client.Collection(collection).OrderBy(orderBy, firestore.Asc).
+	if orderBy == "" {
+		orderBy = "id"
+	}
+
+	orderBySort := firestore.Asc
+	switch sort {
+	case sortByAsc:
+		orderBySort = firestore.Asc
+	case sortByDesc:
+		orderBySort = firestore.Desc
+	}
+
+	dsnap := f.Client.Collection(collection).OrderBy(orderBy, orderBySort).
 		StartAt(query).EndAt(query + "\uf8ff").
 		StartAfter(doc.Data()[orderBy]).
 		Limit(length).Documents(ctx)

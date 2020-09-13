@@ -3,7 +3,7 @@ import { ViewStyle } from "react-native";
 import { Input } from "react-native-elements";
 
 interface Props {
-  label: string;
+  label?: string;
   placeholder?: string;
   onChangeText?: (str: string) => void;
   style?: ViewStyle;

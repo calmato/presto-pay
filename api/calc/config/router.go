@@ -37,6 +37,7 @@ func Router(reg *registry.Registry) *gin.Engine {
 		groups := apiV1.Group("/groups/:groupID")
 		{
 			groups.POST("/users", reg.V1Group.AddUsers)
+			groups.GET("/payment", reg.V1Payment.Index)
 			groups.POST("/payment", reg.V1Payment.Create)
 		}
 	}

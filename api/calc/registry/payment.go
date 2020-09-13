@@ -22,11 +22,13 @@ func v1PaymentInjection(
 
 	us := service.NewUserService(ac)
 
+	gr := repository.NewGroupRepository(fs)
+
 	pr := repository.NewPaymentRepository(fs)
 	pdv := dv.NewPaymentDomainValidation(ac)
 	pu := storage.NewPaymentUploader(cs)
 	prv := rv.NewPaymentRequestValidation()
-	ps := service.NewPaymentService(pdv, pr, pu, ac, nc)
+	ps := service.NewPaymentService(pdv, pr, pu, gr, ac, nc)
 	pa := application.NewPaymentApplication(prv, us, ps)
 	ph := v1.NewAPIV1PaymentHandler(pa)
 

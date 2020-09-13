@@ -22,11 +22,12 @@ const styles = StyleSheet.create({
   },
   button: {
     padding: 10,
-    color: COLOR.PRIMARY,
   },
   link: {
     padding: 10,
     textAlign: "center",
+    textDecorationLine: "underline",
+    color: COLOR.PRIMARY,
   },
 });
 
@@ -34,19 +35,43 @@ export default function SignIn() {
   const { navigate } = useNavigation();
   const { setApplicationState } = React.useContext(Context);
 
-  // TODO: デザイン, コードリファクタ
+  // TODO: コンポーネント分割, アイコン追加
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Presto Pay</Text>
       <Card>
-        <TextField label="E-Mail" />
-        <TextField label="Password" secureTextEntry={true} />
-        <Button onPress={() => setApplicationState(Status.AUTHORIZED)} title="ログイン" style={styles.button} />
+        <TextField placeholder="Email" />
+        <TextField placeholder="Password" secureTextEntry={true} />
+        <Button
+          onPress={() => setApplicationState(Status.AUTHORIZED)}
+          title="ログイン"
+          titleColor={COLOR.MAIN}
+          style={styles.button}
+          backgroundColor={COLOR.PRIMARY}
+        />
         <Text style={styles.link}>パスワードを忘れた方</Text>
         <Card.Divider />
-        <Button onPress={() => console.log("click", "google")} title="Googleでサインイン" style={styles.button} />
-        <Button onPress={() => console.log("click", "twitter")} title="Twitterでサインイン" style={styles.button} />
-        <Button onPress={() => console.log("click", "facebook")} title="Facebookでサインイン" style={styles.button} />
+        <Button
+          onPress={() => console.log("click", "google")}
+          title="Googleでサインイン"
+          titleColor={COLOR.DARK}
+          style={styles.button}
+          type="outline"
+        />
+        <Button
+          onPress={() => console.log("click", "twitter")}
+          title="Twitterでサインイン"
+          titleColor={COLOR.DARK}
+          style={styles.button}
+          type="outline"
+        />
+        <Button
+          onPress={() => console.log("click", "facebook")}
+          title="Facebookでサインイン"
+          titleColor={COLOR.DARK}
+          style={styles.button}
+          type="outline"
+        />
         <TouchableOpacity onPress={() => navigate(SIGN_UP)}>
           <Text style={styles.link}>アカウントをお持ちでない方</Text>
         </TouchableOpacity>

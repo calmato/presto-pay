@@ -8,11 +8,14 @@ import (
 
 	"github.com/calmato/presto-pay/api/calc/internal/domain/payment"
 	"github.com/calmato/presto-pay/api/calc/internal/domain/user"
+	mock_group "github.com/calmato/presto-pay/api/calc/mock/domain/group"
 	mock_payment "github.com/calmato/presto-pay/api/calc/mock/domain/payment"
 	mock_api "github.com/calmato/presto-pay/api/calc/mock/infrastructure/api"
 	mock_notification "github.com/calmato/presto-pay/api/calc/mock/infrastructure/notification"
 	"github.com/golang/mock/gomock"
 )
+
+// TODO: create test for index
 
 func TestPaymentService_Create(t *testing.T) {
 	current := time.Now()
@@ -52,6 +55,8 @@ func TestPaymentService_Create(t *testing.T) {
 
 		pum := mock_payment.NewMockPaymentUploader(ctrl)
 
+		grm := mock_group.NewMockGroupRepository(ctrl)
+
 		acm := mock_api.NewMockAPIClient(ctrl)
 		for _, payer := range testCase.Payment.Payers {
 			u := &user.User{
@@ -69,7 +74,7 @@ func TestPaymentService_Create(t *testing.T) {
 
 		// Start test
 		t.Run(result, func(t *testing.T) {
-			target := NewPaymentService(pdvm, prm, pum, acm, ncm)
+			target := NewPaymentService(pdvm, prm, pum, grm, acm, ncm)
 
 			_, err := target.Create(ctx, testCase.Payment, testCase.GroupID)
 			if err != nil {
@@ -108,11 +113,13 @@ func TestPaymentService_UploadImage(t *testing.T) {
 
 		acm := mock_api.NewMockAPIClient(ctrl)
 
+		grm := mock_group.NewMockGroupRepository(ctrl)
+
 		ncm := mock_notification.NewMockNotificationClient(ctrl)
 
 		// Start test
 		t.Run(result, func(t *testing.T) {
-			target := NewPaymentService(pdvm, prm, pum, acm, ncm)
+			target := NewPaymentService(pdvm, prm, pum, grm, acm, ncm)
 
 			got, err := target.UploadImage(ctx, testCase.Data)
 			if err != nil {
