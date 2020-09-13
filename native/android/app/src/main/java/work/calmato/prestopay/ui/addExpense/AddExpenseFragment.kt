@@ -184,7 +184,7 @@ class AddExpenseFragment : PermissionBase() {
       AlertDialog.Builder(it)
     }
     val targetRecycleAdapter = AdapterCheck(null)
-    targetRecycleAdapter.friendList = groupDetail!!.users
+    targetRecycleAdapter.friendList = groupDetail!!.users.filter { userProperty -> userProperty.name != payerSpinner.selectedItem }
     val recyclerView = RecyclerView(requireContext())
     recyclerView.apply {
       layoutManager = LinearLayoutManager(requireContext())
