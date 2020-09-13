@@ -64,7 +64,6 @@ class HomeFragment : Fragment() {
     })
     viewModelGroup.refreshing.observe(viewLifecycleOwner, Observer<Boolean> {
       it?.apply {
-        Log.i("ViewModelGroup: ", "onViewCreated: dataset changed")
         swipeContainer.isRefreshing = it
       }
     })

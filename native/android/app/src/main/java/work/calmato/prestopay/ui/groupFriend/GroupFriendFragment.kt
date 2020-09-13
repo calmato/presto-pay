@@ -72,9 +72,6 @@ class GroupFriendFragment : Fragment() {
       layoutManager = LinearLayoutManager(context)
       adapter = recycleAdapter
     }
-
-    viewModel.userListView()
-    viewModel.groupListView()
     binding.groupRecycleView.apply {
       layoutManager = LinearLayoutManager(context)
       adapter = recycleGroupAdapter
@@ -85,6 +82,23 @@ class GroupFriendFragment : Fragment() {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
+    viewModel.refreshingFriend.observe(viewLifecycleOwner, Observer<Boolean> {
+      it?.apply {
+        swipeContainerFriend.isRefreshing = it
+      }
+    })
+    viewModel.refreshingGroup.observe(viewLifecycleOwner, Observer<Boolean> {
+      it?.apply {
+        swipeContainerGroup.isRefreshing = it
+      }
+    })
+    swipeContainerFriend.setOnRefreshListener {
+      viewModel.userListView()
+    }
+    swipeContainerGroup.setOnRefreshListener {
+      viewModel.groupListView()
+    }
+
     addFriend.setOnClickListener {
       this.findNavController().navigate(
         GroupFriendFragmentDirections.actionGroupFriendFragmentToAddFriendFragment()
@@ -146,17 +160,17 @@ class GroupFriendFragment : Fragment() {
       Picasso.with(context).load(thumbnailUrl).into(thumbnail)
     }
     groupSwitcher.setOnClickListener {
-      if(groupRecycleView.visibility==RecyclerView.VISIBLE && friendsRecycleView.visibility==RecyclerView.VISIBLE){
-        groupRecycleView.visibility = RecyclerView.GONE
+      if(swipeContainerGroup.visibility==RecyclerView.VISIBLE && swipeContainerFriend.visibility==RecyclerView.VISIBLE){
+        swipeContainerGroup.visibility = RecyclerView.GONE
       }else{
-        groupRecycleView.visibility = RecyclerView.VISIBLE
+        swipeContainerGroup.visibility = RecyclerView.VISIBLE
       }
     }
     friendSwitcher.setOnClickListener {
-      if(friendsRecycleView.visibility==RecyclerView.VISIBLE && groupRecycleView.visibility==RecyclerView.VISIBLE){
-        friendsRecycleView.visibility = RecyclerView.GONE
+      if(swipeContainerFriend.visibility==RecyclerView.VISIBLE && swipeContainerGroup.visibility==RecyclerView.VISIBLE){
+        swipeContainerFriend.visibility = RecyclerView.GONE
       }else{
-        friendsRecycleView.visibility = RecyclerView.VISIBLE
+        swipeContainerFriend.visibility = RecyclerView.VISIBLE
       }
     }
   }
