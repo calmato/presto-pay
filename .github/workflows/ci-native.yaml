@@ -49,16 +49,16 @@ jobs:
       #   working-directory: ./native/react
       #   run: yarn test
 
-      - uses: expo/expo-github-action@v5
-        with:
-          expo-version: 3.x
-          expo-username: ${{ secrets.STG_EXPO_CLI_USERNAME }}
-          expo-password: ${{ secrets.STG_EXPO_CLI_PASSWORD }}
+      # - uses: expo/expo-github-action@v5
+      #   with:
+      #     expo-version: 3.x
+      #     expo-username: ${{ secrets.STG_EXPO_CLI_USERNAME }}
+      #     expo-password: ${{ secrets.STG_EXPO_CLI_PASSWORD }}
 
-      - name: Build iOS
-        working-directory: ./native/react
-        run: expo build:ios -t simulator
+      # - name: Build iOS
+      #   working-directory: ./native/react
+      #   run: expo build:ios -t simulator
 
-      - name: Build Android
-        working-directory: ./native/react
-        run: expo build:android -t app-bundle
+      # - name: Build Android
+      #   working-directory: ./native/react
+      #   run: expo build:android -t app-bundle

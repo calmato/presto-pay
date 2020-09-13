@@ -89,7 +89,7 @@ function TabRoutes(): JSX.Element {
 // ナビゲーター
 function SignInNavigator(): JSX.Element {
   return (
-    <SignInStack.Navigator initialRouteName={SIGN_IN} headerMode="none">
+    <SignInStack.Navigator initialRouteName={SIGN_IN} mode="modal" headerMode="none">
       <SignInStack.Screen name={SIGN_IN} component={SignIn} />
       <SignInStack.Screen name={SIGN_UP} component={SignUp} />
     </SignInStack.Navigator>
@@ -108,7 +108,7 @@ function switchingAuthStatus(status: UiContext.Status): JSX.Element {
   }
 }
 
-export default function AuthWithRoutes() {
+export default function MainRoutes() {
   const uiContext = React.useContext(UiContext.Context);
 
   return (
