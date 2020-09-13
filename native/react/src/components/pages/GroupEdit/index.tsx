@@ -9,10 +9,10 @@ const styles = StyleSheet.create({
   },
 });
 
-export default function Groups() {
+export default function GroupEdit() {
   return (
     <View style={styles.container}>
-      <Text>Groups</Text>
+      <Text>GroupEdit</Text>
     </View>
   );
 }

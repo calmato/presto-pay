@@ -11,15 +11,10 @@ const styles = StyleSheet.create({
   },
 });
 
-export default function UserInfo() {
-  const { setApplicationState } = React.useContext(Context);
-
+export default function UserPasswordEdit() {
   return (
     <View style={styles.container}>
-      <Text>UserInfo</Text>
-      <TouchableOpacity onPress={() => setApplicationState(Status.UN_AUTHORIZED)}>
-        <Text>SignOut</Text>
-      </TouchableOpacity>
+      <Text>UserPasswordEdit</Text>
     </View>
   );
 }
