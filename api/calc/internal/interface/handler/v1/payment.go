@@ -48,21 +48,23 @@ func (ph *apiV1PaymentHandler) Index(ctx *gin.Context) {
 				ID:     payer.ID,
 				Name:   payer.Name,
 				Amount: payer.Amount,
+				IsPaid: payer.IsPaid,
 			}
 		}
 
 		payments[i] = &response.PaymentInIndexPayments{
-			ID:        p.ID,
-			Name:      p.Name,
-			Currency:  p.Currency,
-			Total:     p.Total,
-			Payers:    payers,
-			Tags:      p.Tags,
-			Comment:   p.Comment,
-			ImageURLs: p.ImageURLs,
-			PaidAt:    p.PaidAt,
-			CreatedAt: p.CreatedAt,
-			UpdatedAt: p.UpdatedAt,
+			ID:          p.ID,
+			Name:        p.Name,
+			Currency:    p.Currency,
+			Total:       p.Total,
+			Payers:      payers,
+			Tags:        p.Tags,
+			Comment:     p.Comment,
+			ImageURLs:   p.ImageURLs,
+			PaidAt:      p.PaidAt,
+			IsCompleted: p.IsCompleted,
+			CreatedAt:   p.CreatedAt,
+			UpdatedAt:   p.UpdatedAt,
 		}
 	}
 
@@ -94,21 +96,23 @@ func (ph *apiV1PaymentHandler) Create(ctx *gin.Context) {
 		payers[i] = &response.PayerInCreatePayment{
 			ID:     payer.ID,
 			Amount: payer.Amount,
+			IsPaid: payer.IsPaid,
 		}
 	}
 
 	res := &response.CreatePayment{
-		ID:        p.ID,
-		Name:      p.Name,
-		Currency:  p.Currency,
-		Total:     p.Total,
-		Payers:    payers,
-		Tags:      p.Tags,
-		Comment:   p.Comment,
-		ImageURLs: p.ImageURLs,
-		PaidAt:    p.PaidAt,
-		CreatedAt: p.CreatedAt,
-		UpdatedAt: p.UpdatedAt,
+		ID:          p.ID,
+		Name:        p.Name,
+		Currency:    p.Currency,
+		Total:       p.Total,
+		Payers:      payers,
+		Tags:        p.Tags,
+		Comment:     p.Comment,
+		ImageURLs:   p.ImageURLs,
+		PaidAt:      p.PaidAt,
+		IsCompleted: p.IsCompleted,
+		CreatedAt:   p.CreatedAt,
+		UpdatedAt:   p.UpdatedAt,
 	}
 
 	ctx.JSON(http.StatusOK, res)
