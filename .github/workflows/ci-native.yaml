@@ -49,7 +49,7 @@ jobs:
       #   working-directory: ./native/react
       #   run: yarn test
 
-      - uses: expo/expo-github-action@v5
+      # - uses: expo/expo-github-action@v5
       #   with:
       #     expo-version: 3.x
       #     expo-username: ${{ secrets.STG_EXPO_CLI_USERNAME }}
