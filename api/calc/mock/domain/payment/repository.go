@@ -49,6 +49,21 @@ func (mr *MockPaymentRepositoryMockRecorder) Index(ctx, groupID interface{}) *go
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Index", reflect.TypeOf((*MockPaymentRepository)(nil).Index), ctx, groupID)
 }
 
+// IndexFromStartAt mocks base method
+func (m *MockPaymentRepository) IndexFromStartAt(ctx context.Context, groupID, startAt string) ([]*payment.Payment, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "IndexFromStartAt", ctx, groupID, startAt)
+	ret0, _ := ret[0].([]*payment.Payment)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// IndexFromStartAt indicates an expected call of IndexFromStartAt
+func (mr *MockPaymentRepositoryMockRecorder) IndexFromStartAt(ctx, groupID, startAt interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "IndexFromStartAt", reflect.TypeOf((*MockPaymentRepository)(nil).IndexFromStartAt), ctx, groupID, startAt)
+}
+
 // Create mocks base method
 func (m *MockPaymentRepository) Create(ctx context.Context, p *payment.Payment, groupID string) error {
 	m.ctrl.T.Helper()

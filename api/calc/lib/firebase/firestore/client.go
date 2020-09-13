@@ -19,6 +19,11 @@ type Query struct {
 	Value    interface{}
 }
 
+const (
+	sortByAsc  = "asc"
+	sortByDesc = "desc"
+)
+
 // NewClient - Firestoreに接続
 func NewClient(ctx context.Context, app *firebase.App) (*Firestore, error) {
 	client, err := app.Firestore(ctx)
@@ -58,7 +63,10 @@ func (f *Firestore) GetAllFirst(
 	}
 
 	orderBySort := firestore.Asc
-	if sort == "desc" {
+	switch sort {
+	case sortByAsc:
+		orderBySort = firestore.Asc
+	case sortByDesc:
 		orderBySort = firestore.Desc
 	}
 
@@ -88,7 +96,10 @@ func (f *Firestore) GetAllFromStartAt(
 	}
 
 	orderBySort := firestore.Asc
-	if sort == "desc" {
+	switch sort {
+	case sortByAsc:
+		orderBySort = firestore.Asc
+	case sortByDesc:
 		orderBySort = firestore.Desc
 	}
 
@@ -127,7 +138,10 @@ func (f *Firestore) Search(
 	}
 
 	orderBySort := firestore.Asc
-	if sort == "desc" {
+	switch sort {
+	case sortByAsc:
+		orderBySort = firestore.Asc
+	case sortByDesc:
 		orderBySort = firestore.Desc
 	}
 
@@ -159,7 +173,10 @@ func (f *Firestore) SearchFromStartAt(
 	}
 
 	orderBySort := firestore.Asc
-	if sort == "desc" {
+	switch sort {
+	case sortByAsc:
+		orderBySort = firestore.Asc
+	case sortByDesc:
 		orderBySort = firestore.Desc
 	}
 
