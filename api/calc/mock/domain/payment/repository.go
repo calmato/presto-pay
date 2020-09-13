@@ -34,6 +34,21 @@ func (m *MockPaymentRepository) EXPECT() *MockPaymentRepositoryMockRecorder {
 	return m.recorder
 }
 
+// Index mocks base method
+func (m *MockPaymentRepository) Index(ctx context.Context, groupID string) ([]*payment.Payment, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Index", ctx, groupID)
+	ret0, _ := ret[0].([]*payment.Payment)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// Index indicates an expected call of Index
+func (mr *MockPaymentRepositoryMockRecorder) Index(ctx, groupID interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Index", reflect.TypeOf((*MockPaymentRepository)(nil).Index), ctx, groupID)
+}
+
 // Create mocks base method
 func (m *MockPaymentRepository) Create(ctx context.Context, p *payment.Payment, groupID string) error {
 	m.ctrl.T.Helper()
