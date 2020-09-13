@@ -1204,7 +1204,7 @@ components:
               updatedAt:
                 type: string
 
-    IndexPayment:
+    IndexPayments:
       description: 支払い情報一覧取得APIのレスポンス
       content:
         application/json:
@@ -1216,53 +1216,53 @@ components:
                 description: 支払い一覧
                 items:
                   properties:
-                  id:
-                    type: string
-                    format: uuid
-                    description: 支払いID
-                  name:
-                    type: string
-                    description: 支払い名
-                  currency:
-                    type: string
-                    description: 通貨
-                  total:
-                    type: integer
-                    description: 合計金額
-                  payers:
-                    type: array
-                    description: 支払い者一覧
-                    items:
-                      properties:
-                        id:
-                          type: string
-                          description: ユーザーID
-                        name:
-                          type: string
-                          description: ユーザー名
-                        amount:
-                          type: integer
-                          description: 支払い金額
-                  tags:
-                    type: array
-                    description: タグ一覧
-                    items:
+                    id:
                       type: string
-                  comment:
-                    type: string
-                    description: コメント
-                  imageUrls:
-                    type: array
-                    description: 添付画像一覧
-                    items:
+                      format: uuid
+                      description: 支払いID
+                    name:
                       type: string
-                  paidAt:
-                    type: string
-                    format: date-time
-                    description: 支払い日時
-                  createdAt:
-                    type: string
-                    format: date-time
-                    description: 作成日時
-                  updatedAt:
-                    type: string
+                      description: 支払い名
+                    currency:
+                      type: string
+                      description: 通貨
+                    total:
+                      type: integer
+                      description: 合計金額
+                    payers:
+                      type: array
+                      description: 支払い者一覧
+                      items:
+                        properties:
+                          id:
+                            type: string
+                            description: ユーザーID
+                          name:
+                            type: string
+                            description: ユーザー名
+                          amount:
+                            type: integer
+                            description: 支払い金額
+                    tags:
+                      type: array
+                      description: タグ一覧
+                      items:
+                        type: string
+                    comment:
+                      type: string
+                      description: コメント
+                    imageUrls:
+                      type: array
+                      description: 添付画像一覧
+                      items:
+                        type: string
+                    paidAt:
+                      type: string
+                      format: date-time
+                      description: 支払い日時
+                    createdAt:
+                      type: string
+                      format: date-time
+                      description: 作成日時
+                    updatedAt:
+                      type: string

@@ -87,8 +87,19 @@ func (ps *paymentService) Create(ctx context.Context, p *payment.Payment, groupI
 	current := time.Now()
 
 	p.ID = uuid.New().String()
+	p.IsCompleted = false
 	p.CreatedAt = current
 	p.UpdatedAt = current
+
+	// フラグの追加
+	for i, payer := range p.Payers {
+		if payer == nil {
+			err := xerrors.New("Failed to Service: Payer is nil")
+			return nil, domain.Unknown.New(err)
+		}
+
+		p.Payers[i].IsPaid = payer.Amount >= 0
+	}
 
 	if err := ps.paymentRepository.Create(ctx, p, groupID); err != nil {
 		err = xerrors.Errorf("Failed to Repository: %w", err)
