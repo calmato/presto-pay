@@ -27,8 +27,9 @@ import work.calmato.prestopay.util.*
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.concurrent.thread
+import kotlin.math.absoluteValue
 
-class AddExpenseFragment() : PermissionBase() {
+class AddExpenseFragment : PermissionBase() {
   private val viewModelFriend: ViewModelFriend by lazy {
     val activity = requireNotNull(this.activity) {
       "You can only access the viewModel after onActivityCreated()"
@@ -42,8 +43,10 @@ class AddExpenseFragment() : PermissionBase() {
   private var getGroupInfo: GroupPropertyResponse? = null
   private var recycleAdapter: AdapterCheck? = null
   private lateinit var clickListener: AdapterCheck.OnClickListener
+  private var groupMembers:MutableList<UserProperty> = mutableListOf()
+  private var groupDetail:GetGroupDetail? = null
 
-  val REQUEST_CODE = 11
+  private val CODE = 11
 
   override fun onCreateView(
     inflater: LayoutInflater,
@@ -73,7 +76,7 @@ class AddExpenseFragment() : PermissionBase() {
   private lateinit var doneButton: MenuItem
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-    if (requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+    if (requestCode == CODE && resultCode == Activity.RESULT_OK) {
       inflateDate(data?.getStringExtra("selectedDate"))
       calendar.visibility = ImageView.INVISIBLE
       calendarYear.visibility = TextView.VISIBLE
@@ -90,9 +93,9 @@ class AddExpenseFragment() : PermissionBase() {
   }
 
   private fun addExpensePayer(groupDetail: GetGroupDetail) {
-    val targetUsers = (groupDetail.users.map { it.name})
+    groupMembers.addAll(groupDetail.users)
     val adapter = ArrayAdapter<String>(requireContext(),android.R.layout.simple_list_item_checked,
-      targetUsers)
+      groupMembers.map { it.name})
     adapter.setDropDownViewResource(android.R.layout.simple_list_item_checked)
     payerSpinner.adapter = adapter
   }
@@ -100,7 +103,7 @@ class AddExpenseFragment() : PermissionBase() {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     thread {
       try {
-        Api.retrofitService.getGroupDetail("Bearer ${id}", getGroupInfo!!.id)
+        Api.retrofitService.getGroupDetail("Bearer $id", getGroupInfo!!.id)
           .enqueue(object : Callback<GetGroupDetail> {
             override fun onFailure(call: Call<GetGroupDetail>, t: Throwable) {
               Log.d(ViewModelGroup.TAG, t.message)
@@ -111,23 +114,11 @@ class AddExpenseFragment() : PermissionBase() {
               response: Response<GetGroupDetail>
             ) {
               Log.d(ViewModelGroup.TAG, response.body().toString())
-              val groupDetail = response.body()!!
-              groupName.text = groupDetail.name
-              addExpensePayer(groupDetail)
+              groupDetail = response.body()!!
+              groupName.text = groupDetail!!.name
+              addExpensePayer(groupDetail!!)
               targetText.setOnClickListener {
-                val builder: AlertDialog.Builder? = requireActivity().let {
-                  AlertDialog.Builder(it)
-                }
-                val targetRecycleAdapter = AdapterCheck(null)
-                targetRecycleAdapter.friendList = groupDetail.users
-                val recyclerView = RecyclerView(requireContext())
-                recyclerView.apply {
-                  layoutManager = LinearLayoutManager(requireContext())
-                  adapter = targetRecycleAdapter
-                }
-                builder?.setView(recyclerView)
-                val dialog:AlertDialog? = builder?.create()
-                dialog?.show()
+                showTargetDialog()
               }
             }
           })
@@ -138,7 +129,7 @@ class AddExpenseFragment() : PermissionBase() {
 
     imageIds = resources.getIdList(R.array.tag_array)
     tagNames = resources.getStringArray(R.array.tag_name)
-    tagList = mutableListOf<Tag>()
+    tagList = mutableListOf()
     for (i in tagNames.indices) {
       tagList.add(Tag(tagNames[i], imageIds[i], false))
     }
@@ -150,7 +141,7 @@ class AddExpenseFragment() : PermissionBase() {
 
     constraintDate.setOnClickListener {
       val datePickerFragment = DatePickerFragment()
-      datePickerFragment.setTargetFragment(this, REQUEST_CODE)
+      datePickerFragment.setTargetFragment(this, CODE)
       datePickerFragment.show(parentFragmentManager, "datePicker")
     }
     camera.setOnClickListener {
@@ -187,6 +178,23 @@ class AddExpenseFragment() : PermissionBase() {
     )
   }
 
+  fun showTargetDialog(){
+    groupMembers.filter { userProperty -> userProperty.name == payerSpinner.selectedItem }[0].checked = true
+    val builder: AlertDialog.Builder? = requireActivity().let {
+      AlertDialog.Builder(it)
+    }
+    val targetRecycleAdapter = AdapterCheck(null)
+    targetRecycleAdapter.friendList = groupDetail!!.users
+    val recyclerView = RecyclerView(requireContext())
+    recyclerView.apply {
+      layoutManager = LinearLayoutManager(requireContext())
+      adapter = targetRecycleAdapter
+    }
+    builder?.setView(recyclerView)
+    val dialog:AlertDialog? = builder?.create()
+    dialog?.show()
+  }
+
   override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
     super.onCreateOptionsMenu(menu, inflater)
     inflater.inflate(R.menu.header_done, menu)
@@ -200,14 +208,24 @@ class AddExpenseFragment() : PermissionBase() {
   }
 
   private fun sendRequest() {
-    val groupId = "618ff440-e663-4fcb-a519-aaf81d017535"
+    val groupId = groupDetail!!.id
     val name = expenseName.text.toString()
     val totalString = amountEdit.text.toString()
     val currency = currencySpinner.selectedItem.toString()
-    val payers = listOf<UserExpense>(
-      UserExpense("30TqoiY59wb9aZwdzqwrE4fwim42", 250.1f),
-      UserExpense("58cf47e8-cf77-4c92-88bc-48deee452208", -250.1f)
+    val payer = payerSpinner.selectedItem
+    val payers = mutableListOf<UserExpense>(
+      UserExpense(groupMembers.filter { userProperty -> userProperty.name == payer }[0].id, totalString.toFloat())
     )
+    val targetUsers = groupMembers.filter { it.checked && it.name != payer }
+    val isPayerIncluded = groupMembers.filter { userProperty -> userProperty.name == payer }[0].checked
+    val targetProperty = targetUsers.map { userProperty ->
+      val isPayerIncludedInt = if (isPayerIncluded) 1 else 0
+      UserExpense(userProperty.id,totalString.toFloat()/(targetUsers.size + isPayerIncludedInt) * -1f)
+    }
+    payers.addAll(targetProperty)
+    if(isPayerIncluded){
+      payers[0].amount = payers[0].amount - totalString.toFloat()/(targetUsers.size + 1)
+    }
     val tags = mutableListOf<String>()
     for (i in tagList.filter { it.isSelected }) {
       tags.add(i.name)
@@ -234,10 +252,12 @@ class AddExpenseFragment() : PermissionBase() {
       else -> {
         val total = totalString.toFloat()
         var sumPayment = 0f
-        for (i in payers.filter { it.amount > 0 }) {
+        for (i in payers) {
           sumPayment += i.amount
         }
-        if (total == sumPayment) {
+        Log.i(TAG, "sendRequest: ${sumPayment}")
+        Log.i(TAG, "sendRequest: $payers")
+        if (sumPayment.absoluteValue < 0.01f) {
           val expenseProperty = CreateExpenseProperty(
             name, currency, total, payers, tags, comment, listOf(images), paidAt
           )
@@ -255,7 +275,7 @@ class AddExpenseFragment() : PermissionBase() {
 
   private fun addExpenseApi(expenseProperty: CreateExpenseProperty, groupId: String) {
     startHttpConnectionMenu(doneButton, nowLoading, requireContext())
-    Api.retrofitService.addExpense("Bearer ${id}", expenseProperty, groupId)
+    Api.retrofitService.addExpense("Bearer $id", expenseProperty, groupId)
       .enqueue(object : Callback<CreateExpenseResponse> {
         override fun onFailure(call: Call<CreateExpenseResponse>, t: Throwable) {
           Toast.makeText(activity, t.message, Toast.LENGTH_LONG).show()
@@ -297,15 +317,15 @@ class AddExpenseFragment() : PermissionBase() {
     }
     val input = EditText(requireContext())
     input.setBackgroundResource(android.R.color.transparent)
-    input.setText(commentEditText.text)
+    input.text = commentEditText.text
 
     builder?.setTitle(resources.getString(R.string.add_comment))
-      ?.setPositiveButton(resources.getString(R.string.add),
-        DialogInterface.OnClickListener { _, _ ->
-          commentEditText.setText(input.text.toString())
-          commentEditText.visibility = EditText.VISIBLE
-          commentText.visibility = TextView.VISIBLE
-        })
+      ?.setPositiveButton(resources.getString(R.string.add)
+      ) { _, _ ->
+        commentEditText.setText(input.text.toString())
+        commentEditText.visibility = EditText.VISIBLE
+        commentText.visibility = TextView.VISIBLE
+      }
       ?.setNegativeButton(resources.getString(R.string.cancel), null)
       ?.setView(input)
     val dialog: AlertDialog? = builder?.create()
@@ -340,7 +360,7 @@ class AddExpenseFragment() : PermissionBase() {
   }
 
   companion object {
-    val TAG = "AddExpenseFragment"
+    const val TAG = "AddExpenseFragment"
   }
 
 }

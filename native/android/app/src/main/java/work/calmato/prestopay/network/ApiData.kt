@@ -69,7 +69,7 @@ data class CreateExpenseResponse(
 @Parcelize
 data class UserExpense(
   val id:String,
-  val amount:Float
+  var amount:Float
 ): Parcelable {}
 
 @Parcelize
