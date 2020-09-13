@@ -5,7 +5,9 @@ import (
 	"time"
 
 	"github.com/calmato/presto-pay/api/calc/internal/domain"
+	"github.com/calmato/presto-pay/api/calc/internal/domain/group"
 	"github.com/calmato/presto-pay/api/calc/internal/domain/payment"
+	"github.com/calmato/presto-pay/api/calc/internal/domain/user"
 	"github.com/calmato/presto-pay/api/calc/internal/infrastructure/api"
 	"github.com/calmato/presto-pay/api/calc/internal/infrastructure/notification"
 	"github.com/google/uuid"
@@ -16,6 +18,7 @@ type paymentService struct {
 	paymentDomainValidation payment.PaymentDomainValidation
 	paymentRepository       payment.PaymentRepository
 	paymentUploader         payment.PaymentUploader
+	groupRepository         group.GroupRepository
 	apiClient               api.APIClient
 	notificationClient      notification.NotificationClient
 }
@@ -23,15 +26,55 @@ type paymentService struct {
 // NewPaymentService - PaymentServiceの生成
 func NewPaymentService(
 	pdv payment.PaymentDomainValidation, pr payment.PaymentRepository, pu payment.PaymentUploader,
-	ac api.APIClient, nc notification.NotificationClient,
+	gr group.GroupRepository, ac api.APIClient, nc notification.NotificationClient,
 ) payment.PaymentService {
 	return &paymentService{
 		paymentDomainValidation: pdv,
 		paymentRepository:       pr,
 		paymentUploader:         pu,
+		groupRepository:         gr,
 		apiClient:               ac,
 		notificationClient:      nc,
 	}
+}
+
+func (ps *paymentService) Index(ctx context.Context, groupID string) ([]*payment.Payment, error) {
+	// グループ情報取得
+	g, err := ps.groupRepository.Show(ctx, groupID)
+	if err != nil {
+		return nil, domain.ErrorInDatastore.New(err)
+	}
+
+	// グループに所属するユーザー情報一覧取得
+	us := map[string]*user.User{}
+
+	for _, userID := range g.UserIDs {
+		u, err := ps.apiClient.ShowUser(ctx, userID)
+		if err != nil {
+			return nil, domain.ErrorInDatastore.New(err)
+		}
+
+		us[userID] = u
+	}
+
+	// 支払い情報一覧取得
+	payments, err := ps.paymentRepository.Index(ctx, groupID)
+	if err != nil {
+		return nil, domain.ErrorInDatastore.New(err)
+	}
+
+	for _, payment := range payments {
+		for i, payer := range payment.Payers {
+			u := us[payer.ID]
+			if u == nil {
+				payment.Payers[i].Name = "Unknown User"
+			} else {
+				payment.Payers[i].Name = us[payer.ID].Name
+			}
+		}
+	}
+
+	return payments, nil
 }
 
 func (ps *paymentService) Create(ctx context.Context, p *payment.Payment, groupID string) (*payment.Payment, error) {
