@@ -328,6 +328,12 @@ paths:
             format: uuid
           required: true
           description: グループUUID
+        - in: query
+          name: after
+          schema:
+            type: string
+            format: uuid
+          description: TODO - 50件以上取得するときように使えるように
       responses:
         '200':
           $ref: '#/components/responses/IndexPayments'

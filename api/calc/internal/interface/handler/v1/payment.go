@@ -31,10 +31,10 @@ func NewAPIV1PaymentHandler(pa application.PaymentApplication) APIV1PaymentHandl
 
 func (ph *apiV1PaymentHandler) Index(ctx *gin.Context) {
 	groupID := ctx.Params.ByName("groupID")
-	// # TODO: startAtの取得
+	startAt := ctx.DefaultQuery("after", "")
 
 	c := middleware.GinContextToContext(ctx)
-	ps, err := ph.paymentApplication.Index(c, groupID)
+	ps, err := ph.paymentApplication.Index(c, groupID, startAt)
 	if err != nil {
 		handler.ErrorHandling(ctx, err)
 		return

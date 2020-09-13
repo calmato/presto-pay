@@ -82,7 +82,7 @@ func (ur *userRepository) IndexByUsername(ctx context.Context, username string) 
 
 	usernameLower := strings.ToLower(username)
 
-	docs, err := ur.firestore.Search(ctx, userCollection, "username_lower", usernameLower, 50)
+	docs, err := ur.firestore.Search(ctx, userCollection, "username_lower", "asc", usernameLower, 50)
 	if err != nil {
 		return nil, err
 	}
@@ -109,7 +109,7 @@ func (ur *userRepository) IndexByUsernameFromStartAt(
 
 	usernameLower := strings.ToLower(username)
 
-	docs, err := ur.firestore.SearchFromStartAt(ctx, userCollection, "username_lower", usernameLower, startAt, 50)
+	docs, err := ur.firestore.SearchFromStartAt(ctx, userCollection, "username_lower", "asc", usernameLower, startAt, 50)
 	if err != nil {
 		return nil, err
 	}
