@@ -18,6 +18,29 @@ func NewPaymentRepository(fs *firestore.Firestore) payment.PaymentRepository {
 	}
 }
 
+func (pr *paymentRepository) Index(ctx context.Context, groupID string) ([]*payment.Payment, error) {
+	paymentCollection := getPaymentCollection(groupID)
+
+	docs, err := pr.firestore.GetAllFirst(ctx, paymentCollection, 50)
+	if err != nil {
+		return nil, err
+	}
+
+	ps := make([]*payment.Payment, len(docs))
+
+	for i, doc := range docs {
+		p := &payment.Payment{}
+
+		if err = doc.DataTo(p); err != nil {
+			return nil, err
+		}
+
+		ps[i] = p
+	}
+
+	return ps, nil
+}
+
 func (pr *paymentRepository) Create(ctx context.Context, p *payment.Payment, groupID string) error {
 	paymentCollection := getPaymentCollection(groupID)
 
