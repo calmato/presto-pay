@@ -11,6 +11,7 @@ import android.view.*
 import android.widget.*
 import androidx.activity.OnBackPressedCallback
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -31,11 +32,7 @@ import kotlin.math.absoluteValue
 
 class AddExpenseFragment : PermissionBase() {
   private val viewModelFriend: ViewModelFriend by lazy {
-    val activity = requireNotNull(this.activity) {
-      "You can only access the viewModel after onActivityCreated()"
-    }
-    ViewModelProviders.of(this, ViewModelFriend.Factory(activity.application))
-      .get(ViewModelFriend::class.java)
+    ViewModelProvider(this).get(ViewModelFriend::class.java)
   }
 
   private var groupsList: Groups? = null
