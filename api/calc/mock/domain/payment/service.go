@@ -35,18 +35,18 @@ func (m *MockPaymentService) EXPECT() *MockPaymentServiceMockRecorder {
 }
 
 // Index mocks base method
-func (m *MockPaymentService) Index(ctx context.Context, groupID string) ([]*payment.Payment, error) {
+func (m *MockPaymentService) Index(ctx context.Context, groupID, startAt string) ([]*payment.Payment, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Index", ctx, groupID)
+	ret := m.ctrl.Call(m, "Index", ctx, groupID, startAt)
 	ret0, _ := ret[0].([]*payment.Payment)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // Index indicates an expected call of Index
-func (mr *MockPaymentServiceMockRecorder) Index(ctx, groupID interface{}) *gomock.Call {
+func (mr *MockPaymentServiceMockRecorder) Index(ctx, groupID, startAt interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Index", reflect.TypeOf((*MockPaymentService)(nil).Index), ctx, groupID)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Index", reflect.TypeOf((*MockPaymentService)(nil).Index), ctx, groupID, startAt)
 }
 
 // Create mocks base method

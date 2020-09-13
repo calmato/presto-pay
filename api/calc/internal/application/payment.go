@@ -15,7 +15,7 @@ import (
 
 // PaymentApplication - PaymentApplicationインターフェース
 type PaymentApplication interface {
-	Index(ctx context.Context, groupID string) ([]*payment.Payment, error)
+	Index(ctx context.Context, groupID string, startAt string) ([]*payment.Payment, error)
 	Create(ctx context.Context, req *request.CreatePayment, groupID string) (*payment.Payment, error)
 }
 
@@ -37,7 +37,7 @@ func NewPaymentApplication(
 }
 
 // TODO: startAtの引数追加
-func (pa *paymentApplication) Index(ctx context.Context, groupID string) ([]*payment.Payment, error) {
+func (pa *paymentApplication) Index(ctx context.Context, groupID string, startAt string) ([]*payment.Payment, error) {
 	u, err := pa.userService.Authentication(ctx)
 	if err != nil {
 		return nil, domain.Unauthorized.New(err)
@@ -53,7 +53,7 @@ func (pa *paymentApplication) Index(ctx context.Context, groupID string) ([]*pay
 		return nil, domain.Forbidden.New(err)
 	}
 
-	ps, err := pa.paymentService.Index(ctx, groupID)
+	ps, err := pa.paymentService.Index(ctx, groupID, startAt)
 	if err != nil {
 		return nil, err
 	}

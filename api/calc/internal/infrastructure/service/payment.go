@@ -38,7 +38,7 @@ func NewPaymentService(
 	}
 }
 
-func (ps *paymentService) Index(ctx context.Context, groupID string) ([]*payment.Payment, error) {
+func (ps *paymentService) Index(ctx context.Context, groupID string, startAt string) ([]*payment.Payment, error) {
 	// グループ情報取得
 	g, err := ps.groupRepository.Show(ctx, groupID)
 	if err != nil {
