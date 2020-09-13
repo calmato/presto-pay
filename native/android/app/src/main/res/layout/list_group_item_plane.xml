@@ -16,10 +16,10 @@
 
     <ImageView
       android:id="@+id/thumbnail"
-      android:layout_width="75dp"
-      android:layout_height="75dp"
+      android:layout_width="40dp"
+      android:layout_height="40dp"
       android:layout_marginStart="8dp"
-      android:layout_marginTop="8dp"
+      android:layout_marginTop="2dp"
       android:layout_marginBottom="8dp"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintStart_toStartOf="parent"
@@ -31,16 +31,17 @@
     <TextView
       android:id="@+id/userName"
       android:layout_width="0dp"
-      android:layout_height="wrap_content"
-      android:layout_marginStart="8dp"
+      android:layout_height="40dp"
+      android:layout_marginStart="12dp"
       android:layout_marginEnd="8dp"
       android:textSize="24sp"
+      app:groupName="@{groupPropertyResponse}"
       app:layout_constraintBottom_toBottomOf="@+id/thumbnail"
       app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.0"
       app:layout_constraintStart_toEndOf="@+id/thumbnail"
       app:layout_constraintTop_toTopOf="@+id/thumbnail"
-      app:layout_constraintVertical_bias="0.5"
-      app:groupName="@{groupPropertyResponse}"
+      app:layout_constraintVertical_bias="0.0"
       tools:text="groupName" />
 
   </androidx.constraintlayout.widget.ConstraintLayout>
