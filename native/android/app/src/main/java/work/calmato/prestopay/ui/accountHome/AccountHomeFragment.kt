@@ -51,7 +51,7 @@ class AccountHomeFragment : Fragment() {
       )
     }
 
-    displayProfileButton.setOnClickListener {
+    displayProfile.setOnClickListener {
       this.findNavController().navigate(
         AccountHomeFragmentDirections.actionAccountHomeToAccountEditFragment()
       )

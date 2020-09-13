@@ -131,35 +131,14 @@
         app:layout_constraintStart_toStartOf="parent" />
 
       <TextView
-        android:id="@+id/profileText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/private_information"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="@+id/displayProfileButton"
-        app:layout_constraintStart_toStartOf="@+id/accountSettingText"
-        app:layout_constraintTop_toTopOf="@+id/displayProfileButton"
-        app:layout_constraintVertical_bias="0.571" />
-
-      <TextView
-        android:id="@+id/accountSettingText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:text="@string/account_setting"
-        android:textSize="12sp"
-        app:layout_constraintStart_toStartOf="@+id/UserAccountThumnail"
-        app:layout_constraintTop_toBottomOf="@+id/horizonBar" />
-
-      <TextView
         android:id="@+id/applicationSettingText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:text="@string/app_setting"
         android:textSize="12sp"
-        app:layout_constraintStart_toStartOf="@+id/profileText"
-        app:layout_constraintTop_toBottomOf="@+id/displayProfileButton" />
+        app:layout_constraintStart_toStartOf="@+id/UserAccountThumnail"
+        app:layout_constraintTop_toBottomOf="@+id/horizonBar" />
 
       <TextView
         android:id="@+id/textView14"
@@ -298,30 +277,6 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/horizonBar7" />
-
-      <View
-        android:id="@+id/horizonBar10"
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:background="#A4A7A7"
-        android:visibility="visible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/displayProfileButton" />
-
-      <Button
-        android:id="@+id/displayProfileButton"
-        android:layout_width="0dp"
-        android:layout_height="64dp"
-        android:layout_marginTop="12dp"
-        android:alpha="0.2"
-        android:background="@drawable/clear_button_bg"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/accountSettingText" />
 
       <View
         android:id="@+id/horizonBar2"
