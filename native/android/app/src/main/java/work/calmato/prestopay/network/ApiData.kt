@@ -1,6 +1,7 @@
 package work.calmato.prestopay.network
 
 import android.os.Parcelable
+import com.squareup.moshi.Json
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
@@ -73,6 +74,13 @@ data class UserExpense(
 ): Parcelable {}
 
 @Parcelize
+data class NetworkPayer(
+  val id:String,
+  val name:String,
+  val amount: Float
+) : Parcelable
+
+@Parcelize
 data class GroupPropertyResponse(
   val id: String,
   val name: String,
@@ -91,6 +99,36 @@ data class GetGroupDetail(
   val users: List<UserProperty>,
   val created_at: String,
   val updated_at: String
+) : Parcelable {}
+
+@Parcelize
+data class PaymentPropertyPost(
+  val id:String,
+  val name:String,
+  val currency:String,
+  val total:Float,
+  val payers:List<Payer>,
+  val tags:List<String>,
+  val comment: String,
+  val imageUrls:List<String>,
+  val paidAt:String,
+  val createdAt:String,
+  val updatedAt:String
+) : Parcelable {}
+
+@Parcelize
+data class PaymentPropertyGet(
+  val id:String,
+  val name:String,
+  val currency:String,
+  val total:Float,
+  val payers:List<NetworkPayer>,
+  val tags:List<String>,
+  val comment: String,
+  val imageUrls:List<String>,
+  val paidAt:String,
+  val createdAt:String,
+  val updatedAt:String
 ) : Parcelable {}
 
 @Parcelize
@@ -142,6 +180,12 @@ data class CurrencyApi(
   val date: String,
   val rates: Map<String,Float>
 )
+
+@Parcelize
+data class Payer(
+  val id:String,
+  val amount:Float
+): Parcelable
 
 
 
