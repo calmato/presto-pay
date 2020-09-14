@@ -35,9 +35,9 @@ data class NetworkPayment(
   val currency:String,
   val total:Float,
   @Json(name = "payers")val payers:List<NetworkPayer>,
-  @Json(name = "tags")val tags:List<String>,
-  val comment:String,
-  @Json(name = "imageUrls")val imageUrls:List<String>,
+  @Json(name = "tags")val tags:List<String>?,
+  val comment:String?,
+  @Json(name = "imageUrls")val imageUrls:List<String>?,
   val paidAt:String,
   val createdAt:String,
   val updatedAt:String

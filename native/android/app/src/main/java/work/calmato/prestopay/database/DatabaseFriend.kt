@@ -39,9 +39,9 @@ data class DatabasePayment(
   val currency: String,
   val total: Float,
   val payers: List<NetworkPayer>,
-  val tags: List<String>,
-  val comment: String,
-  val imageUrls: List<String>,
+  val tags: List<String>?,
+  val comment: String?,
+  val imageUrls: List<String>?,
   val paidAt: String,
   val createdAt: String,
   val updatedAt: String

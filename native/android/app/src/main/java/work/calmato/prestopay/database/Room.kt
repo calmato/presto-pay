@@ -47,7 +47,7 @@ interface PaymentDao{
   [DatabaseFriend::class,
     DatabaseGroup::class,
     DatabasePayment::class],
-  version = 3,
+  version = 4,
   exportSchema = false
 )
 

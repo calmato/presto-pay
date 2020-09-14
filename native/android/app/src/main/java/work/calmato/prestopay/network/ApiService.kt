@@ -121,7 +121,7 @@ interface ApiService {
   fun getPayments(
     @Header("Authorization") token: String,
     @Path("groupId") groupId: String
-  ): Deferred<NetworkPayment>
+  ): Deferred<NetworkPaymentContainer>
 
 }
 

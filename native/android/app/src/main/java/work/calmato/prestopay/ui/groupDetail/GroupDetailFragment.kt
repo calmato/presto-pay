@@ -40,5 +40,6 @@ class GroupDetailFragment : Fragment() {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
+    viewModel.getPayments("2add2794-ebcf-4943-9299-e7fde3bf1258")
   }
 }
