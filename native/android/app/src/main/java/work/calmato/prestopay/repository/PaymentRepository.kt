@@ -8,6 +8,7 @@ import work.calmato.prestopay.database.AppDatabase
 import work.calmato.prestopay.database.asPaymentModel
 import work.calmato.prestopay.network.Api
 import work.calmato.prestopay.network.PaymentPropertyGet
+import work.calmato.prestopay.network.asDatabaseModel
 
 class PaymentRepository(private val database:AppDatabase) {
   val payments:LiveData<List<PaymentPropertyGet>> =
@@ -19,7 +20,7 @@ class PaymentRepository(private val database:AppDatabase) {
     withContext(Dispatchers.IO){
       val paymentsList = Api.retrofitService.getPayments(id,groupId).await()
       database.paymentDao.deleteAll()
-      database.paymentDao.insertAll()
+      database.paymentDao.insertAll(*paymentsList.asDatabaseModel())
     }
   }
 }
