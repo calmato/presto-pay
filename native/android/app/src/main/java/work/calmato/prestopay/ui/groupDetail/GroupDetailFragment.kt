@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_group_detail.*
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentGroupDetailBinding
+import work.calmato.prestopay.network.GroupPropertyResponse
 import work.calmato.prestopay.network.PaymentPropertyGet
 import work.calmato.prestopay.util.AdapterPayment
 import work.calmato.prestopay.util.ViewModelPayment
@@ -20,8 +21,8 @@ class GroupDetailFragment : Fragment() {
   private val viewModel : ViewModelPayment by lazy {
     ViewModelProvider(this).get(ViewModelPayment::class.java)
   }
-
   private var recycleAdapter:AdapterPayment? = null
+  private var groupDetail : GroupPropertyResponse? = null
 
   override fun onCreateView(
     inflater: LayoutInflater,
@@ -37,12 +38,15 @@ class GroupDetailFragment : Fragment() {
       layoutManager = LinearLayoutManager(context)
       adapter = recycleAdapter
     }
+    groupDetail = GroupDetailFragmentArgs.fromBundle(requireArguments()).groupDetail
     return binding.root
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    viewModel.getPayments("2add2794-ebcf-4943-9299-e7fde3bf1258")
+    groupDetail?.let {
+      viewModel.getPayments(it.id)
+    }
     viewModel.paymentsList.observe(viewLifecycleOwner, Observer<List<PaymentPropertyGet>>{
       it?.apply {
         recycleAdapter?.paymentList = it
