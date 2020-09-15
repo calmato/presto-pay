@@ -21,6 +21,10 @@ class ViewModelGroup(application: Application) : AndroidViewModel(application) {
   val groupList: LiveData<List<GroupPropertyResponse>>
     get() = _groupList
 
+  private val _refreshing = MutableLiveData<Boolean>()
+  val refreshing: LiveData<Boolean>
+    get() = _refreshing
+
   // Create a Coroutine scope using a job to be able to cancel when needed
   private var viewModelGroupJob = SupervisorJob()
 
@@ -30,14 +34,17 @@ class ViewModelGroup(application: Application) : AndroidViewModel(application) {
   private val database = getAppDatabase(application)
   private val groupsRepository = GroupsRepository(database)
   private val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplication())
-  private val id = sharedPreferences.getString("token", null)
+  private var id = sharedPreferences.getString("token", null)
 
   fun groupListView() {
+    id = sharedPreferences.getString("token", null)
     viewModelScope.launch {
       try {
+        startRefreshing()
         groupsRepository.refreshGroups(id!!)
       } catch (e: java.lang.Exception) {
-        Log.i(TAG, "Trying to refresh id")
+        Log.i(TAG, "${e.message}")
+        endRefreshing()
       }
     }
   }
@@ -53,14 +60,12 @@ class ViewModelGroup(application: Application) : AndroidViewModel(application) {
     _itemClickedGroup.value = group
   }
 
-  class Factory(val app: Application) : ViewModelProvider.Factory {
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-      if (modelClass.isAssignableFrom(ViewModelGroup::class.java)) {
-        @Suppress("UNCHECKED_CAST")
-        return ViewModelGroup(app) as T
-      }
-      throw IllegalArgumentException("Unable to construct viewmodel")
-    }
+  private fun startRefreshing() {
+    _refreshing.value = true
+  }
+
+  fun endRefreshing() {
+    _refreshing.value = false
   }
 
   companion object {

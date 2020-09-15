@@ -9,9 +9,11 @@ import androidx.activity.OnBackPressedCallback
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import kotlinx.android.synthetic.main.fragment_home.*
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentGroupListBinding
 import work.calmato.prestopay.network.GroupPropertyResponse
@@ -21,11 +23,7 @@ import work.calmato.prestopay.util.ViewModelGroup
 
 class GroupListFragment : Fragment() {
   private val viewModelGroup: ViewModelGroup by lazy {
-    val activity = requireNotNull(this.activity) {
-      "You can only access the viewModel after onActivityCreated()"
-    }
-    ViewModelProviders.of(this, ViewModelGroup.Factory(activity.application))
-      .get(ViewModelGroup::class.java)
+    ViewModelProvider(this).get(ViewModelGroup::class.java)
   }
 
   private var recycleGroupListAdapter: AdapterGroupPlane? = null
@@ -62,7 +60,6 @@ class GroupListFragment : Fragment() {
     clickListenerHomeGroup =
       AdapterGroupPlane.OnClickListener { viewModelGroup.itemIsClickedGroup(it) }
     recycleGroupListAdapter = AdapterGroupPlane(clickListenerHomeGroup)
-    viewModelGroup.groupListView()
     binding.groupChoiceRecycle.apply {
       layoutManager = LinearLayoutManager(context)
       adapter = recycleGroupListAdapter
@@ -73,6 +70,20 @@ class GroupListFragment : Fragment() {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
+    viewModelGroup.groupsList.observe(viewLifecycleOwner, Observer<List<GroupPropertyResponse>> {
+      it?.apply {
+        recycleGroupListAdapter?.groupList = it
+        viewModelGroup.endRefreshing()
+      }
+    })
+    viewModelGroup.refreshing.observe(viewLifecycleOwner, Observer<Boolean> {
+      it?.apply {
+        swipeContainer.isRefreshing = it
+      }
+    })
+    swipeContainer.setOnRefreshListener {
+      viewModelGroup.groupListView()
+    }
     viewModelGroup.itemClickedGroup.observe(viewLifecycleOwner, Observer {
       if (null != it) {
         it.selected = true

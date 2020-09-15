@@ -11,19 +11,21 @@ import work.calmato.prestopay.network.GroupPropertyResponse
 import work.calmato.prestopay.network.asDatabaseModel
 
 class GroupsRepository(private val database: AppDatabase) {
-  val groups:LiveData<List<GroupPropertyResponse>> =
+  val groups: LiveData<List<GroupPropertyResponse>> =
     Transformations.map(database.groupDao.getGroups()) {
       it.asGroupModel()
     }
-  suspend fun refreshGroups(id:String) {
+
+  suspend fun refreshGroups(id: String) {
     withContext(Dispatchers.IO) {
       val groupList = Api.retrofitService.getGroups(id).await()
       database.groupDao.deleteGroupAll()
       database.groupDao.insertAll(*groupList.asDatabaseModel())
     }
   }
-  suspend fun deleteGroupAll(){
-    withContext(Dispatchers.IO){
+
+  suspend fun deleteGroupAll() {
+    withContext(Dispatchers.IO) {
       database.groupDao.deleteGroupAll()
     }
   }

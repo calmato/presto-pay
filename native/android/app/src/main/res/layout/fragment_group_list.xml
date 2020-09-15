@@ -23,16 +23,24 @@
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.recyclerview.widget.RecyclerView
-      android:id="@+id/groupChoiceRecycle"
-      android:layout_width="392dp"
-      android:layout_height="658dp"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+      android:id="@+id/swipeContainer"
+      android:layout_width="match_parent"
+      android:layout_height="0dp"
+      android:layout_marginStart="8dp"
       android:layout_marginTop="16dp"
+      android:layout_marginEnd="8dp"
+      android:layout_marginBottom="8dp"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintHorizontal_bias="0.473"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/groupListTitle"
-      app:layout_constraintVertical_bias="0.0" />
+      app:layout_constraintVertical_bias="0.0">
+
+      <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/groupChoiceRecycle"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
   </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -1,6 +1,7 @@
 package work.calmato.prestopay.ui.home
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,6 +9,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,22 +24,10 @@ import work.calmato.prestopay.util.ViewModelGroup
 
 class HomeFragment : Fragment() {
   private val viewModelGroup: ViewModelGroup by lazy {
-    val activity = requireNotNull(this.activity) {
-      "You can only access the viewModel after onActivityCreated()"
-    }
-    ViewModelProviders.of(this, ViewModelGroup.Factory(activity.application))
-      .get(ViewModelGroup::class.java)
+    ViewModelProvider(this).get(ViewModelGroup::class.java)
   }
 
   private var recycleGroupAdapter: AdapterGroupPlane? = null
-  override fun onActivityCreated(savedInstanceState: Bundle?) {
-    super.onActivityCreated(savedInstanceState)
-    viewModelGroup.groupsList.observe(viewLifecycleOwner, Observer<List<GroupPropertyResponse>> {
-      it?.apply {
-        recycleGroupAdapter?.groupList = it
-      }
-    })
-  }
 
   private lateinit var clickListenerHomeGroup: AdapterGroupPlane.OnClickListener
 
@@ -56,7 +46,6 @@ class HomeFragment : Fragment() {
       viewModelGroup.itemIsClickedGroup(it)
     }
     recycleGroupAdapter = AdapterGroupPlane(clickListenerHomeGroup)
-    viewModelGroup.groupListView()
     binding.groupHomeRecycle.apply {
       layoutManager = LinearLayoutManager(context)
       adapter = recycleGroupAdapter
@@ -67,6 +56,20 @@ class HomeFragment : Fragment() {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
+    viewModelGroup.groupsList.observe(viewLifecycleOwner, Observer<List<GroupPropertyResponse>> {
+      it?.apply {
+        recycleGroupAdapter?.groupList = it
+        viewModelGroup.endRefreshing()
+      }
+    })
+    viewModelGroup.refreshing.observe(viewLifecycleOwner, Observer<Boolean> {
+      it?.apply {
+        swipeContainer.isRefreshing = it
+      }
+    })
+    swipeContainer.setOnRefreshListener {
+      viewModelGroup.groupListView()
+    }
     floatingActionButton.setOnClickListener {
       this.findNavController().navigate(
         HomeFragmentDirections.actionHomeFragmentToGroupListFragment(
@@ -97,5 +100,6 @@ class HomeFragment : Fragment() {
         override fun handleOnBackPressed() {
         }
       })
+
   }
 }

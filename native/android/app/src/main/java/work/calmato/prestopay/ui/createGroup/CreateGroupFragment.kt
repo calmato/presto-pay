@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -26,11 +27,7 @@ class CreateGroupFragment : PermissionBase() {
   private var usersList: Users? = null
   private var usersListToBeSent: Users? = null
   private val viewModel: ViewModelFriendGroup by lazy {
-    val activity = requireNotNull(this.activity) {
-      "You can only access the viewModel after onActivityCreated()"
-    }
-    ViewModelProviders.of(this, ViewModelFriendGroup.Factory(activity.application))
-      .get(ViewModelFriendGroup::class.java)
+    ViewModelProvider(this).get(ViewModelFriendGroup::class.java)
   }
   private lateinit var recycleAdapter: AdapterGrid
   private lateinit var clickListener: AdapterGrid.OnClickListener
