@@ -18,19 +18,19 @@ import work.calmato.prestopay.util.AdapterPayment
 import work.calmato.prestopay.util.ViewModelPayment
 
 class GroupDetailFragment : Fragment() {
-  private val viewModel : ViewModelPayment by lazy {
+  private val viewModel: ViewModelPayment by lazy {
     ViewModelProvider(this).get(ViewModelPayment::class.java)
   }
-  private var recycleAdapter:AdapterPayment? = null
-  private var groupDetail : GroupPropertyResponse? = null
+  private var recycleAdapter: AdapterPayment? = null
+  private var groupDetail: GroupPropertyResponse? = null
 
   override fun onCreateView(
     inflater: LayoutInflater,
     container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View? {
-    val binding:FragmentGroupDetailBinding =
-      DataBindingUtil.inflate(inflater, R.layout.fragment_group_detail,container,false)
+    val binding: FragmentGroupDetailBinding =
+      DataBindingUtil.inflate(inflater, R.layout.fragment_group_detail, container, false)
     binding.lifecycleOwner = this
     binding.viewModelGroupDetail = viewModel
     recycleAdapter = AdapterPayment()
@@ -47,10 +47,20 @@ class GroupDetailFragment : Fragment() {
     groupDetail?.let {
       viewModel.getPayments(it.id)
     }
-    viewModel.paymentsList.observe(viewLifecycleOwner, Observer<List<PaymentPropertyGet>>{
+    viewModel.paymentsList.observe(viewLifecycleOwner, Observer<List<PaymentPropertyGet>> {
       it?.apply {
         recycleAdapter?.paymentList = it
       }
     })
+    viewModel.refreshing.observe(viewLifecycleOwner, Observer {
+      it?.apply {
+        swipeContainer.isRefreshing = it
+      }
+    })
+    swipeContainer.setOnRefreshListener {
+      groupDetail?.let {
+        viewModel.getPayments(it.id)
+      }
+    }
   }
 }
