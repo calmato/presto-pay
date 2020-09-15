@@ -106,7 +106,6 @@ class HomeFragment : Fragment() {
         }
       })
 
-  }
   private fun navigateToDetail(list:GroupPropertyResponse){
     this.findNavController().navigate(
       HomeFragmentDirections.actionHomeFragmentToGroupDetail(list)
