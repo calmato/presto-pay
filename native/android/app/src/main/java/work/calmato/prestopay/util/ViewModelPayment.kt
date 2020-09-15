@@ -20,7 +20,7 @@ class ViewModelPayment(application: Application) : AndroidViewModel(application)
   private val paymentRepository = PaymentRepository(database)
   private val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplication())
   private val id = sharedPreferences.getString("token", null)
-  private val paymentsList = paymentRepository.payments
+  val paymentsList = paymentRepository.payments
   private val _refreshing = MutableLiveData<Boolean>()
   val refreshing: LiveData<Boolean>
     get() = _refreshing
@@ -28,12 +28,12 @@ class ViewModelPayment(application: Application) : AndroidViewModel(application)
   fun getPayments(groupId: String) {
     startRefreshing()
     viewModelScope.launch {
-//      try {
+      try {
       paymentRepository.refreshPayments(id!!, groupId)
       endRefreshing()
-//      } catch (e:java.lang.Exception){
-//        endRefreshing()
-//      }
+      } catch (e:java.lang.Exception){
+        endRefreshing()
+      }
     }
   }
 

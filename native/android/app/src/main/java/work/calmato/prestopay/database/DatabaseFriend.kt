@@ -93,7 +93,7 @@ fun List<DatabasePayment>.asPaymentModel():List<PaymentPropertyGet>{
 
 class ListTypeConverter {
     @TypeConverter
-    fun toString(userIds: List<String>): String = userIds.joinToString()
+    fun toString(userIds: List<String?>?): String? = userIds?.joinToString() ?: ""
 
     @TypeConverter
     fun toList(userIds: String): List<String> = listOf(userIds)
