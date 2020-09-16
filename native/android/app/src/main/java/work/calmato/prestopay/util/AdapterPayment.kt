@@ -1,13 +1,16 @@
 package work.calmato.prestopay.util
 
+import android.content.Context
+import android.preference.PreferenceManager
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import work.calmato.prestopay.databinding.ListItemPaymentBinding
 import work.calmato.prestopay.databinding.ListItemPlaneBinding
 import work.calmato.prestopay.network.PaymentPropertyGet
+import kotlin.math.max
 
-class AdapterPayment() : RecyclerView.Adapter<AdapterPayment.PaymentViewHolder>() {
+class AdapterPayment(val context:Context) : RecyclerView.Adapter<AdapterPayment.PaymentViewHolder>() {
   var paymentList: List<PaymentPropertyGet> = emptyList()
     set(value) {
       field = value
@@ -17,8 +20,15 @@ class AdapterPayment() : RecyclerView.Adapter<AdapterPayment.PaymentViewHolder>(
   override fun getItemCount() = paymentList.size
 
   override fun onBindViewHolder(holder: PaymentViewHolder, position: Int) {
-    holder.binding.also {
-      it.payment = paymentList[position]
+    val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+    val name = sharedPreferences.getString("name", "")
+    holder.binding.also { it ->
+      val thisPayment = paymentList[position]
+      it.payment = thisPayment
+      it.amount = thisPayment.currency + thisPayment.payers.filter { it.name == name }[0].amount.toString()
+      val maxAmount = thisPayment.payers.map { it.amount }.max()
+      val maxPayer = thisPayment.payers.filter { it.amount == maxAmount }[0].name
+      it.whoPaid = maxPayer + "が" + thisPayment.currency + maxAmount + "払った"
     }
   }
 

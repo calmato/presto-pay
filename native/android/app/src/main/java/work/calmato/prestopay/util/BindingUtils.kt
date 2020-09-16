@@ -9,6 +9,7 @@ import com.squareup.picasso.Picasso
 import work.calmato.prestopay.network.GroupPropertyResponse
 import work.calmato.prestopay.network.PaymentPropertyGet
 import work.calmato.prestopay.network.UserProperty
+import java.text.SimpleDateFormat
 
 @BindingAdapter("thumbnail")
 fun ImageView.setThumbnail(item:UserProperty?){
@@ -75,5 +76,33 @@ fun CheckBox.setTagCheckBox(item:Tag?){
 fun TextView.setPaymentName(item:PaymentPropertyGet?){
   item?.let {
     text = item.name
+  }
+}
+
+@BindingAdapter("paymentAmount")
+fun TextView.setPaymentAmount(item:String){
+  item?.let {
+    text = item
+  }
+}
+
+@BindingAdapter("paymentWhoPaid")
+fun TextView.setWhoPaid(item:String?){
+  item?.let {
+    text = item
+  }
+}
+
+//@BindingAdapter("paymentTag")
+//fun ImageView.setTag(item:PaymentPropertyGet?){
+//  item?.let{
+//    setImageResource()
+//  }
+//}
+
+@BindingAdapter("paymentDate")
+fun TextView.setDate(item:PaymentPropertyGet?){
+  item?.let{
+    text = item.paidAt.split("T")[0]
   }
 }

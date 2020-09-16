@@ -33,7 +33,7 @@ class GroupDetailFragment : Fragment() {
       DataBindingUtil.inflate(inflater, R.layout.fragment_group_detail, container, false)
     binding.lifecycleOwner = this
     binding.viewModelGroupDetail = viewModel
-    recycleAdapter = AdapterPayment()
+    recycleAdapter = AdapterPayment(requireContext())
     binding.recyclerViewPayment.apply {
       layoutManager = LinearLayoutManager(context)
       adapter = recycleAdapter
