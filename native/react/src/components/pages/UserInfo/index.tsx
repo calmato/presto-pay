@@ -3,11 +3,11 @@ import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 
 import { Context, Status } from "~/contexts/ui";
 
+import { Profile } from "~/components/organisms"
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
   },
 });
 
@@ -16,6 +16,7 @@ export default function Groups() {
 
   return (
     <View style={styles.container}>
+      <Profile />
       <Text>UserInfo</Text>
       <TouchableOpacity onPress={() => setApplicationState(Status.UN_AUTHORIZED)}>
         <Text>SignOut</Text>
