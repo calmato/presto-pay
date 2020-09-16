@@ -60,6 +60,10 @@ class ViewModelGroup(application: Application) : AndroidViewModel(application) {
     _itemClickedGroup.value = group
   }
 
+  fun navigationCompleted(){
+    _itemClickedGroup.value = null
+  }
+
   private fun startRefreshing() {
     _refreshing.value = true
   }

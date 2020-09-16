@@ -56,6 +56,11 @@ class HomeFragment : Fragment() {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
+    viewModelGroup.itemClickedGroup.observe(viewLifecycleOwner, Observer {
+      it?.apply {
+        navigateToDetail(it)
+      }
+    })
     viewModelGroup.groupsList.observe(viewLifecycleOwner, Observer<List<GroupPropertyResponse>> {
       it?.apply {
         recycleGroupAdapter?.groupList = it
@@ -100,6 +105,11 @@ class HomeFragment : Fragment() {
         override fun handleOnBackPressed() {
         }
       })
-
+  }
+  private fun navigateToDetail(list:GroupPropertyResponse){
+    this.findNavController().navigate(
+      HomeFragmentDirections.actionHomeFragmentToGroupDetail(list)
+    )
+    viewModelGroup.navigationCompleted()
   }
 }

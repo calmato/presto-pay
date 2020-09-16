@@ -111,11 +111,17 @@ interface ApiService {
 
   @POST("groups/{groupId}/payment")
   fun addExpense(
-    @Header("Authorization") token: String
-    , @Body createExpenseProperty: CreateExpenseProperty
-    , @Path("groupId") groupId: String
+    @Header("Authorization") token: String,
+    @Body createExpenseProperty: CreateExpenseProperty,
+    @Path("groupId") groupId: String
   ):
     Call<CreateExpenseResponse>
+
+  @GET("groups/{groupId}/payment")
+  fun getPayments(
+    @Header("Authorization") token: String,
+    @Path("groupId") groupId: String
+  ): Deferred<NetworkPaymentContainer>
 
 }
 

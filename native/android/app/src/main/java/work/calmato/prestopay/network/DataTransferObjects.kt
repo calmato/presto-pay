@@ -1,9 +1,11 @@
 package work.calmato.prestopay.network
 
+import androidx.room.Database
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import work.calmato.prestopay.database.DatabaseFriend
 import work.calmato.prestopay.database.DatabaseGroup
+import work.calmato.prestopay.database.DatabasePayment
 
 @JsonClass(generateAdapter = true)
 data class NetworkFriend(
@@ -27,10 +29,28 @@ data class NetworkGroup(
 )
 
 @JsonClass(generateAdapter = true)
+data class NetworkPayment(
+  val id:String,
+  val name:String,
+  val currency:String,
+  val total:Float,
+  @Json(name = "payers")val payers:List<NetworkPayer>,
+  @Json(name = "tags")val tags:List<String>?,
+  val comment:String?,
+  @Json(name = "imageUrls")val imageUrls:List<String>?,
+  val paidAt:String,
+  val createdAt:String,
+  val updatedAt:String
+)
+
+@JsonClass(generateAdapter = true)
 data class NetworkFriendContainer(val users: List<NetworkFriend>)
 
 @JsonClass(generateAdapter = true)
 data class NetworkGroupContainer(val groups: List<NetworkGroup>)
+
+@JsonClass(generateAdapter = true)
+data class NetworkPaymentContainer(val payments:List<NetworkPayment>)
 
 fun NetworkFriend.asDomainModel(): UserProperty {
   return UserProperty(id, name, username, email, thumbnailUrl, checked)
@@ -38,6 +58,10 @@ fun NetworkFriend.asDomainModel(): UserProperty {
 
 fun NetworkGroup.asDomainModel(): GroupPropertyResponse {
   return GroupPropertyResponse(id, name, thumbnail_url, userIds, created_at, updated_at, selected)
+}
+
+fun NetworkPayment.asDomainModel(): PaymentPropertyGet{
+  return PaymentPropertyGet(id, name, currency, total, payers, tags, comment, imageUrls, paidAt, createdAt, updatedAt)
 }
 
 fun NetworkFriendContainer.asDomainModel(): List<UserProperty> {
@@ -63,6 +87,24 @@ fun NetworkGroupContainer.asDomainModel(): List<GroupPropertyResponse> {
       created_at = it.created_at,
       updated_at = it.updated_at,
       selected = it.selected
+    )
+  }
+}
+
+fun NetworkPaymentContainer.asDomainModel(): List<PaymentPropertyGet>{
+  return payments.map {
+    PaymentPropertyGet(
+      id = it.id,
+      name = it.name,
+      currency = it.currency,
+      total = it.total,
+      payers = it.payers,
+      tags = it.tags,
+      comment = it.comment,
+      imageUrls = it.imageUrls,
+      paidAt = it.paidAt,
+      createdAt = it.createdAt,
+      updatedAt = it.updatedAt
     )
   }
 }
@@ -93,3 +135,20 @@ fun NetworkGroupContainer.asDatabaseModel(): Array<DatabaseGroup> {
   }.toTypedArray()
 }
 
+fun NetworkPaymentContainer.asDatabaseModel():Array<DatabasePayment>{
+  return payments.map {
+    DatabasePayment(
+      id = it.id,
+      name = it.name,
+      currency = it.currency,
+      total = it.total,
+      payers = it.payers,
+      tags = it.tags,
+      comment = it.comment,
+      imageUrls = it.imageUrls,
+      paidAt = it.paidAt,
+      createdAt = it.createdAt,
+      updatedAt = it.updatedAt
+    )
+  }.toTypedArray()
+}

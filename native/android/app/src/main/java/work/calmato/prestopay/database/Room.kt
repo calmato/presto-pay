@@ -30,18 +30,32 @@ interface GroupDao {
   fun deleteGroupAll()
 }
 
+@Dao
+interface PaymentDao{
+  @Query("select * from databasepayment")
+    fun getPayments():LiveData<List<DatabasePayment>>
+  @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertPayment(payment:DatabasePayment)
+  @Query("delete from databasepayment")
+    fun deleteAll()
+  @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertAll(vararg payments:DatabasePayment)
+}
+
 @Database(
   entities =
   [DatabaseFriend::class,
-    DatabaseGroup::class],
-  version = 2,
+    DatabaseGroup::class,
+    DatabasePayment::class],
+  version = 4,
   exportSchema = false
 )
 
-@TypeConverters(ListTypeConverter::class)
+@TypeConverters(ListTypeConverter::class,ListPayerConverter::class)
 abstract class AppDatabase : RoomDatabase() {
   abstract val friendDao: FriendDao
   abstract val groupDao: GroupDao
+  abstract val paymentDao : PaymentDao
 }
 
 private lateinit var INSTANCE: AppDatabase
