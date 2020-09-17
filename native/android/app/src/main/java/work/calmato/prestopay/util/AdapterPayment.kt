@@ -8,7 +8,10 @@ import androidx.recyclerview.widget.RecyclerView
 import work.calmato.prestopay.databinding.ListItemPaymentBinding
 import work.calmato.prestopay.databinding.ListItemPlaneBinding
 import work.calmato.prestopay.network.PaymentPropertyGet
+import java.lang.Math.round
 import kotlin.math.max
+import kotlin.math.roundToInt
+import kotlin.math.roundToLong
 
 class AdapterPayment(val context:Context) : RecyclerView.Adapter<AdapterPayment.PaymentViewHolder>() {
   var paymentList: List<PaymentPropertyGet> = emptyList()
@@ -25,10 +28,12 @@ class AdapterPayment(val context:Context) : RecyclerView.Adapter<AdapterPayment.
     holder.binding.also { it ->
       val thisPayment = paymentList[position]
       it.payment = thisPayment
-      it.amount = thisPayment.currency + thisPayment.payers.filter { it.name == name }[0].amount.toString()
+      it.amount = thisPayment.currency + (thisPayment.payers.filter { it.name == name }[0].amount * 100).roundToInt().toFloat() / 100
       val maxAmount = thisPayment.payers.map { it.amount }.max()
       val maxPayer = thisPayment.payers.filter { it.amount == maxAmount }[0].name
-      it.whoPaid = maxPayer + "が" + thisPayment.currency + maxAmount + "払った"
+      if (maxAmount != null) {
+        it.whoPaid = maxPayer + "が" + thisPayment.currency + (maxAmount * 100).roundToInt().toFloat() / 100 + "払った"
+      }
     }
   }
 

@@ -26,9 +26,7 @@
       android:layout_marginStart="8dp"
       android:layout_marginTop="8dp"
       android:layout_marginEnd="8dp"
-      android:layout_marginBottom="8dp"
       android:textSize="24sp"
-      app:layout_constraintBottom_toTopOf="@+id/whoPaidView"
       app:layout_constraintEnd_toStartOf="@+id/plusMinus"
       app:layout_constraintHorizontal_bias="0.5"
       app:layout_constraintStart_toEndOf="@+id/tag"
@@ -40,36 +38,32 @@
       android:id="@+id/plusMinus"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_marginTop="8dp"
       android:layout_marginEnd="8dp"
-      app:layout_constraintBottom_toTopOf="@+id/date"
+      app:layout_constraintBottom_toBottomOf="@+id/paymentName"
       app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintTop_toTopOf="parent"
+      app:layout_constraintTop_toTopOf="@+id/paymentName"
       app:paymentAmount="@{amount}"
-      tools:text="amount"/>
+      tools:text="amount" />
 
     <TextView
       android:id="@+id/date"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_marginTop="8dp"
-      android:layout_marginBottom="8dp"
-      app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="@+id/plusMinus"
-      app:layout_constraintTop_toBottomOf="@+id/plusMinus"
+      app:layout_constraintTop_toTopOf="@+id/whoPaidView"
       app:paymentDate="@{payment}"
       tools:text="date" />
 
     <ImageView
       android:id="@+id/tag"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
+      android:layout_width="48dp"
+      android:layout_height="48dp"
       android:layout_marginStart="8dp"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent"
-      app:srcCompat="@drawable/ic_baseline_label_24"
-      app:paymentTag = "@{payment}"/>
+      app:paymentTag="@{payment}"
+      app:srcCompat="@drawable/ic_baseline_label_24" />
 
     <TextView
       android:id="@+id/whoPaidView"
@@ -80,7 +74,7 @@
       app:layout_constraintStart_toStartOf="@+id/paymentName"
       app:layout_constraintTop_toBottomOf="@+id/paymentName"
       app:paymentWhoPaid="@{whoPaid}"
-      tools:text="who paid"/>
+      tools:text="who paid" />
 
   </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
