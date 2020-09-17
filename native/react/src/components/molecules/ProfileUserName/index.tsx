@@ -1,25 +1,33 @@
 import React from "react";
-import { Text, View, StyleSheet, ViewStyle } from 'react-native';
+import { Text, StyleSheet, ViewStyle } from "react-native";
+
+import { width } from "~/lib/window";
 
 interface Props {
-  uri?: string;
+  name: string;
   style?: ViewStyle;
 }
 
 const styles = StyleSheet.create({
   name: {
-  }
-})
+    margin: 20,
+    fontSize: 18,
+    maxWidth: width * 0.6,
+  },
+});
 
-export default function ProfileUserName(props: Props) {
-  // const { onPress, title, style, disabled, disabledStyle, icon } = props;
+const ProfileUserName = function ProfileUserName(props: Props) {
+  const { name } = props;
 
   return (
-    <View>
-      <Text>
-        浜田広大
-      </Text>
-    </View>
+    <Text style={styles.name} numberOfLines={1}>
+      {name}
+    </Text>
   );
-}
+};
 
+ProfileUserName.defaultProps = {
+  name: "test-user",
+};
+
+export default ProfileUserName;
