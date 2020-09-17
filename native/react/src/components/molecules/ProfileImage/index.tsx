@@ -1,24 +1,28 @@
 import React from "react";
-import { Image, ViewStyle, Text } from 'react-native';
+import { Image, ViewStyle } from "react-native";
 
 interface Props {
-  uri?: string;
+  uri: string;
   style?: ViewStyle;
 }
 
-export default function ProfileImage(props: Props) {
+const ProfileImage = function ProfileImage(props: Props) {
   const { uri } = props;
 
   return (
     <Image
-      source={{
-        uri: 'https://reactnative.dev/img/tiny_logo.png',
-      }}
+      source={{ uri }}
       style={{
         width: 50,
         height: 50,
-        borderRadius: 25
+        borderRadius: 25,
       }}
     />
   );
-}
+};
+
+ProfileImage.defaultProps = {
+  uri: "https://reactnative.dev/img/tiny_logo.png",
+};
+
+export default ProfileImage;
