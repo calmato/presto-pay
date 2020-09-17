@@ -1,9 +1,8 @@
 import React from "react";
 import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 
+import { Profile } from "~/components/organisms";
 import { Context, Status } from "~/contexts/ui";
-
-import { Profile } from "~/components/organisms"
 
 const styles = StyleSheet.create({
   container: {
