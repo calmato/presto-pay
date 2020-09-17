@@ -47,6 +47,16 @@ data class DatabasePayment(
   val updatedAt: String
 )
 
+@Entity
+data class DatabaseTag(
+  @PrimaryKey
+  val name:String,
+  val imageId:Int,
+  var isSelected:Boolean = false
+)
+
+
+
 fun List<DatabaseFriend>.asDomainModel(): List<UserProperty> {
   return map {
     UserProperty(
@@ -89,6 +99,14 @@ fun List<DatabasePayment>.asPaymentModel():List<PaymentPropertyGet>{
       updatedAt = it.updatedAt
     )
   }
+}
+
+fun DatabaseTag.asTagModel():Tag{
+  return Tag(
+      name = this.name,
+      imageId = this.imageId,
+      isSelected = this.isSelected
+    )
 }
 
 class ListTypeConverter {

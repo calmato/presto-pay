@@ -1,13 +1,10 @@
 package work.calmato.prestopay.util
 
-import android.content.res.Resources
-import android.content.res.TypedArray
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.CheckBox
 import androidx.recyclerview.widget.RecyclerView
 import work.calmato.prestopay.databinding.ListItemTagBinding
+import work.calmato.prestopay.network.Tag
 
 
 class AdapterTag():RecyclerView.Adapter<AdapterTag.TagViewHolder>() {
@@ -21,10 +18,10 @@ class AdapterTag():RecyclerView.Adapter<AdapterTag.TagViewHolder>() {
   class TagViewHolder(val binding:ListItemTagBinding):
     RecyclerView.ViewHolder(binding.root){
     companion object{
-      fun from(parent: ViewGroup): AdapterTag.TagViewHolder {
+      fun from(parent: ViewGroup): TagViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val binding = ListItemTagBinding.inflate(layoutInflater, parent, false)
-        return AdapterTag.TagViewHolder(
+        return TagViewHolder(
           binding
         )
       }
@@ -46,27 +43,3 @@ class AdapterTag():RecyclerView.Adapter<AdapterTag.TagViewHolder>() {
     }
   }
 }
-
-class Tag(val name:String,val imageId:Int,var isSelected:Boolean)
-
-/**
- * Returns resource ids from the array resource id.
- */
-fun Resources.getIdList(arrayResourceId: Int): List<Int> {
-  with(obtainTypedArray(arrayResourceId)) {
-    try {
-      return (0 until length()).map { getResourceId(it) }
-    } finally {
-      recycle()
-    }
-  }
-}
-
-/**
- * Returns the resource id.
- * @throws IllegalStateException when the resource id does not exist.
- */
-fun TypedArray.getResourceId(index: Int): Int {
-  return getResourceId(index, 0).apply { if (this == 0) throw IllegalStateException("resourceId not found.") }
-}
-

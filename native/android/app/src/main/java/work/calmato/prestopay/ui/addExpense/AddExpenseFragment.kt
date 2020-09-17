@@ -11,8 +11,7 @@ import android.view.*
 import android.widget.*
 import androidx.activity.OnBackPressedCallback
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.*
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -22,8 +21,10 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import work.calmato.prestopay.R
+import work.calmato.prestopay.database.getAppDatabase
 import work.calmato.prestopay.databinding.FragmentAddExpenseBindingImpl
 import work.calmato.prestopay.network.*
+import work.calmato.prestopay.repository.TagRepository
 import work.calmato.prestopay.util.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -66,11 +67,9 @@ class AddExpenseFragment : PermissionBase() {
     return binding.root
   }
 
-  private lateinit var imageIds: List<Int>
-  private lateinit var tagNames: Array<String>
-  private lateinit var tagList: MutableList<Tag>
   private lateinit var id: String
   private lateinit var doneButton: MenuItem
+  private lateinit var tagList:List<Tag>
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     if (requestCode == CODE && resultCode == Activity.RESULT_OK) {
@@ -99,6 +98,9 @@ class AddExpenseFragment : PermissionBase() {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     thread {
+      tagList = TagRepository(getAppDatabase(requireContext())).tags
+    }
+    thread {
       try {
         Api.retrofitService.getGroupDetail("Bearer $id", getGroupInfo!!.id)
           .enqueue(object : Callback<GetGroupDetail> {
@@ -122,13 +124,6 @@ class AddExpenseFragment : PermissionBase() {
       } catch (e: Exception) {
         Log.d(TAG, "debug $e")
       }
-    }
-
-    imageIds = resources.getIdList(R.array.tag_array)
-    tagNames = resources.getStringArray(R.array.tag_name)
-    tagList = mutableListOf()
-    for (i in tagNames.indices) {
-      tagList.add(Tag(tagNames[i], imageIds[i], false))
     }
     val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
     id = sharedPreferences.getString("token", "")!!

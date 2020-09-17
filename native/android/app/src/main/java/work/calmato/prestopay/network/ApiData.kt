@@ -43,40 +43,40 @@ data class CreateGroupProperty(
 @Parcelize
 data class CreateExpenseProperty(
   val name: String,
-  val currency:String,
-  val total:Float,
-  val payers:List<UserExpense>,
-  val tags:List<String>,
-  val comment:String,
+  val currency: String,
+  val total: Float,
+  val payers: List<UserExpense>,
+  val tags: List<String>,
+  val comment: String,
   val images: List<String>,
-  val paidAt:String
+  val paidAt: String
 ) : Parcelable {}
 
 @Parcelize
 data class CreateExpenseResponse(
-  val id:String,
+  val id: String,
   val name: String,
-  val currency:String,
-  val total:Float,
-  val payers:List<UserExpense>,
-  val tags:List<String>,
-  val comment:String,
+  val currency: String,
+  val total: Float,
+  val payers: List<UserExpense>,
+  val tags: List<String>,
+  val comment: String,
   val imageUrls: List<String>,
-  val paidAt:String,
-  val createdAt:String,
-  val updatedAt:String
+  val paidAt: String,
+  val createdAt: String,
+  val updatedAt: String
 ) : Parcelable {}
 
 @Parcelize
 data class UserExpense(
-  val id:String,
-  var amount:Float
-): Parcelable {}
+  val id: String,
+  var amount: Float
+) : Parcelable {}
 
 @Parcelize
 data class NetworkPayer(
-  val id:String,
-  val name:String,
+  val id: String,
+  val name: String,
   val amount: Float
 ) : Parcelable
 
@@ -103,32 +103,32 @@ data class GetGroupDetail(
 
 @Parcelize
 data class PaymentPropertyPost(
-  val id:String,
-  val name:String,
-  val currency:String,
-  val total:Float,
-  val payers:List<Payer>,
-  val tags:List<String>,
+  val id: String,
+  val name: String,
+  val currency: String,
+  val total: Float,
+  val payers: List<Payer>,
+  val tags: List<String>,
   val comment: String,
-  val imageUrls:List<String>,
-  val paidAt:String,
-  val createdAt:String,
-  val updatedAt:String
+  val imageUrls: List<String>,
+  val paidAt: String,
+  val createdAt: String,
+  val updatedAt: String
 ) : Parcelable {}
 
 @Parcelize
 data class PaymentPropertyGet(
-  val id:String,
-  val name:String,
-  val currency:String,
-  val total:Float,
-  val payers:List<NetworkPayer>,
-  val tags:List<String>?,
+  val id: String,
+  val name: String,
+  val currency: String,
+  val total: Float,
+  val payers: List<NetworkPayer>,
+  val tags: List<String>?,
   val comment: String?,
-  val imageUrls:List<String>?,
-  val paidAt:String,
-  val createdAt:String,
-  val updatedAt:String
+  val imageUrls: List<String>?,
+  val paidAt: String,
+  val createdAt: String,
+  val updatedAt: String
 ) : Parcelable {}
 
 @Parcelize
@@ -178,14 +178,21 @@ data class AccountResponse(
 data class CurrencyApi(
   val base: String,
   val date: String,
-  val rates: Map<String,Float>
+  val rates: Map<String, Float>
 )
 
 @Parcelize
 data class Payer(
-  val id:String,
-  val amount:Float
-): Parcelable
+  val id: String,
+  val amount: Float
+) : Parcelable
+
+@Parcelize
+data class Tag(
+  val name: String,
+  val imageId: Int,
+  var isSelected: Boolean
+) : Parcelable
 
 
 

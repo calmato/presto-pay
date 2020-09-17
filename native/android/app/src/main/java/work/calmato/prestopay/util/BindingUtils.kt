@@ -1,15 +1,17 @@
 package work.calmato.prestopay.util
 
-import android.media.Image
 import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.squareup.picasso.Picasso
+import work.calmato.prestopay.database.getAppDatabase
 import work.calmato.prestopay.network.GroupPropertyResponse
 import work.calmato.prestopay.network.PaymentPropertyGet
+import work.calmato.prestopay.network.Tag
 import work.calmato.prestopay.network.UserProperty
-import java.text.SimpleDateFormat
+import work.calmato.prestopay.repository.TagRepository
+import kotlin.concurrent.thread
 
 @BindingAdapter("thumbnail")
 fun ImageView.setThumbnail(item:UserProperty?){
@@ -52,7 +54,7 @@ fun TextView.setUserName(item:GroupPropertyResponse?){
 
 
 @BindingAdapter("tagName")
-fun TextView.setTagName(item:Tag?){
+fun TextView.setTagName(item: Tag?){
   item?.let {
     text = item.name
   }
@@ -93,12 +95,21 @@ fun TextView.setWhoPaid(item:String?){
   }
 }
 
-//@BindingAdapter("paymentTag")
-//fun ImageView.setTag(item:PaymentPropertyGet?){
-//  item?.let{
-//    setImageResource()
-//  }
-//}
+@BindingAdapter("paymentTag")
+fun ImageView.setTag(item:PaymentPropertyGet?){
+  item?.let{
+    val tagName = it.tags?.get(0)
+    var tag = emptyList<Tag>()
+    thread {
+      tag = TagRepository(getAppDatabase(context)).tags.filter { thisTag->
+        thisTag.name == tagName
+      }
+    }.join()
+    if(tag.isNotEmpty()){
+      setImageResource(tag[0].imageId)
+    }
+  }
+}
 
 @BindingAdapter("paymentDate")
 fun TextView.setDate(item:PaymentPropertyGet?){
