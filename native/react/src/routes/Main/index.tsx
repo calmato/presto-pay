@@ -3,9 +3,9 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 import { createStackNavigator, StackCardInterpolationProps } from "@react-navigation/stack";
 import React from "react";
 
+import { SignInStackScreen } from "./Auth";
 import GroupList from "./GroupList";
 import Home from "./Home";
-import { SignInStackScreen } from "./Auth";
 import UserInfo from "./UserInfo";
 
 import { Initial, Loading } from "~/components/pages";
