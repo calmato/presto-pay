@@ -5,7 +5,7 @@ import React from "react";
 
 import GroupList from "./GroupList";
 import Home from "./Home";
-import SignIn from "./SignIn";
+import { SignInStackScreen } from "./Auth";
 import UserInfo from "./UserInfo";
 
 import { Initial, Loading } from "~/components/pages";
@@ -91,7 +91,7 @@ function TabRoutes(): JSX.Element {
 function SwitchingAuthStatus(status: UiContext.Status): JSX.Element {
   switch (status) {
     case UiContext.Status.UN_AUTHORIZED:
-      return <Stack.Screen name={SIGN_IN} component={SignIn} />;
+      return <Stack.Screen name={SIGN_IN} component={SignInStackScreen} />;
     case UiContext.Status.AUTHORIZED:
       return <Stack.Screen name={HOME} component={TabRoutes} />;
     case UiContext.Status.FIRST_OPEN:
