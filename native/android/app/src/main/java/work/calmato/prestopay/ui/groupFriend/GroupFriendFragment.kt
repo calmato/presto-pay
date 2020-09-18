@@ -104,7 +104,7 @@ class GroupFriendFragment : Fragment() {
         GroupFriendFragmentDirections.actionGroupFriendFragmentToAddFriendFragment()
       )
     }
-    addGroup.setOnClickListener {
+    groupEditAddFriend.setOnClickListener {
       this.findNavController().navigate(
         GroupFriendFragmentDirections.actionGroupFriendFragmentToFriendListFragment(
           Users(emptyList<UserProperty>())

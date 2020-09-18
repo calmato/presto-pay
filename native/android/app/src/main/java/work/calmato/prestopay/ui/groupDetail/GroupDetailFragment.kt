@@ -8,6 +8,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_group_detail.*
 import work.calmato.prestopay.R
@@ -46,6 +47,11 @@ class GroupDetailFragment : Fragment() {
     super.onViewCreated(view, savedInstanceState)
     groupDetail?.let {
       viewModel.getPayments(it.id)
+    }
+    setting.setOnClickListener {
+      this.findNavController().navigate(
+      GroupDetailFragmentDirections.actionGroupDetailToGroupEditFragment()
+      )
     }
     viewModel.paymentsList.observe(viewLifecycleOwner, Observer<List<PaymentPropertyGet>> {
       it?.apply {
