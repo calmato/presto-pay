@@ -118,9 +118,11 @@ func (gs *groupService) Update(ctx context.Context, g *group.Group, userIDs []st
 	removeUserIDs := make([]string, 0)
 	for _, userID := range g.UserIDs {
 		if containsUserID(userIDs, userID) {
-			removeUserIDs = append(removeUserIDs, userID)
-			g.UserIDs = common.RemoveString(g.UserIDs, userID)
+			continue
 		}
+
+		removeUserIDs = append(removeUserIDs, userID)
+		g.UserIDs = common.RemoveString(g.UserIDs, userID)
 	}
 
 	// Update Group
