@@ -105,7 +105,6 @@ class HomeFragment : Fragment() {
         override fun handleOnBackPressed() {
         }
       })
-
   }
   private fun navigateToDetail(list:GroupPropertyResponse){
     this.findNavController().navigate(
