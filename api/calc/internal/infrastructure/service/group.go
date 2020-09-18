@@ -8,6 +8,7 @@ import (
 	"github.com/calmato/presto-pay/api/calc/internal/domain/group"
 	"github.com/calmato/presto-pay/api/calc/internal/domain/user"
 	"github.com/calmato/presto-pay/api/calc/internal/infrastructure/api"
+	"github.com/calmato/presto-pay/api/calc/lib/common"
 	"github.com/google/uuid"
 	"golang.org/x/xerrors"
 )
@@ -96,6 +97,53 @@ func (gs *groupService) Create(ctx context.Context, g *group.Group) (*group.Grou
 	return g, nil
 }
 
+func (gs *groupService) Update(ctx context.Context, g *group.Group, userIDs []string) (*group.Group, error) {
+	if ves := gs.groupDomainValidation.Group(ctx, g); len(ves) > 0 {
+		err := xerrors.New("Failed to DomainValidation")
+		return nil, domain.Unknown.New(err, ves...)
+	}
+
+	// Add Users
+	addUserIDs := make([]string, 0)
+	for _, userID := range userIDs {
+		if containsUserID(g.UserIDs, userID) {
+			continue
+		}
+
+		addUserIDs = append(addUserIDs, userID)
+		g.UserIDs = append(g.UserIDs, userID)
+	}
+
+	// Remove Users
+	removeUserIDs := make([]string, 0)
+	for _, userID := range g.UserIDs {
+		if containsUserID(userIDs, userID) {
+			removeUserIDs = append(removeUserIDs, userID)
+			g.UserIDs = common.RemoveString(g.UserIDs, userID)
+		}
+	}
+
+	// Update Group
+	current := time.Now()
+	g.UpdatedAt = current
+
+	if err := gs.groupRepository.Update(ctx, g); err != nil {
+		return nil, domain.ErrorInDatastore.New(err)
+	}
+
+	// Update Users (add)
+	for _, userID := range addUserIDs {
+		gs.apiClient.AddGroup(ctx, userID, g.ID)
+	}
+
+	// Update Users (remove)
+	for _, userID := range removeUserIDs {
+		gs.apiClient.RemoveGroup(ctx, userID, g.ID)
+	}
+
+	return g, nil
+}
+
 func (gs *groupService) AddUsers(
 	ctx context.Context, groupID string, userIDs []string,
 ) (*group.Group, error) {
@@ -105,7 +153,7 @@ func (gs *groupService) AddUsers(
 	}
 
 	for _, userID := range userIDs {
-		if containsUserID(g, userID) {
+		if containsUserID(g.UserIDs, userID) {
 			err := xerrors.New("Failed to Servicee")
 			return nil, domain.AlreadyExistsInDatastore.New(err)
 		}
@@ -118,11 +166,17 @@ func (gs *groupService) AddUsers(
 		return nil, domain.Unknown.New(err, ves...)
 	}
 
+	// Update Group
 	current := time.Now()
 	g.UpdatedAt = current
 
 	if err := gs.groupRepository.Update(ctx, g); err != nil {
 		return nil, domain.ErrorInDatastore.New(err)
+	}
+
+	// Update Users (add)
+	for _, userID := range userIDs {
+		gs.apiClient.AddGroup(ctx, userID, g.ID)
 	}
 
 	return g, nil
@@ -153,12 +207,12 @@ func (gs *groupService) ContainsUserID(ctx context.Context, g *group.Group, user
 	return false, nil
 }
 
-func containsUserID(g *group.Group, userID string) bool {
-	if g == nil {
+func containsUserID(userIDs []string, userID string) bool {
+	if userIDs == nil {
 		return false
 	}
 
-	for _, v := range g.UserIDs {
+	for _, v := range userIDs {
 		if v == userID {
 			return true
 		}
