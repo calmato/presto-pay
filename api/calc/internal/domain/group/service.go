@@ -13,6 +13,7 @@ type GroupService interface {
 	Create(ctx context.Context, g *Group) (*Group, error)
 	Update(ctx context.Context, g *Group, userIDs []string) (*Group, error)
 	AddUsers(ctx context.Context, groupID string, userIDs []string) (*Group, error)
+	RemoveUsers(ctx context.Context, groupID string, userIDs []string) (*Group, error)
 	UploadThumbnail(ctx context.Context, data []byte) (string, error)
 	ContainsUserID(ctx context.Context, g *Group, userID string) (bool, error)
 }

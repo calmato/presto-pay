@@ -67,3 +67,13 @@ type AddUsersInGroup struct {
 	CreatedAt    time.Time `json:"created_at"`
 	UpdatedAt    time.Time `json:"updated_at"`
 }
+
+// RemoveUsersInGroup - グループのユーザー削除APIのレスポンス
+type RemoveUsersInGroup struct {
+	ID           string    `json:"id"`
+	Name         string    `json:"name"`
+	ThumbnailURL string    `json:"thumbnail_url"`
+	UserIDs      []string  `json:"user_ids"`
+	CreatedAt    time.Time `json:"created_at"`
+	UpdatedAt    time.Time `json:"updated_at"`
+}

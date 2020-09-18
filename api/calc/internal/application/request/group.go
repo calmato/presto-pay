@@ -18,3 +18,8 @@ type UpdateGroup struct {
 type AddUsersInGroup struct {
 	UserIDs []string `json:"userIds" validate:"unique"`
 }
+
+// RemoveUsersInGroup - グループのユーザー削除APIのリクエスト
+type RemoveUsersInGroup struct {
+	UserIDs []string `json:"userIds" validate:"unique"`
+}

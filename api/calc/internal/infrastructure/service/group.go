@@ -182,6 +182,44 @@ func (gs *groupService) AddUsers(
 	return g, nil
 }
 
+func (gs *groupService) RemoveUsers(
+	ctx context.Context, groupID string, userIDs []string,
+) (*group.Group, error) {
+	g, err := gs.groupRepository.Show(ctx, groupID)
+	if err != nil {
+		return nil, domain.ErrorInDatastore.New(err)
+	}
+
+	for _, userID := range userIDs {
+		if !containsUserID(g.UserIDs, userID) {
+			err := xerrors.New("Failed to Servicee")
+			return nil, domain.NotEqualRequestWithDatastore.New(err)
+		}
+
+		g.UserIDs = common.RemoveString(g.UserIDs, userID)
+	}
+
+	if ves := gs.groupDomainValidation.Group(ctx, g); len(ves) > 0 {
+		err := xerrors.New("Failed to DomainValidation")
+		return nil, domain.Unknown.New(err, ves...)
+	}
+
+	// Update Group
+	current := time.Now()
+	g.UpdatedAt = current
+
+	if err := gs.groupRepository.Update(ctx, g); err != nil {
+		return nil, domain.ErrorInDatastore.New(err)
+	}
+
+	// Update Users (add)
+	for _, userID := range userIDs {
+		gs.apiClient.RemoveGroup(ctx, userID, g.ID)
+	}
+
+	return g, nil
+}
+
 func (gs *groupService) UploadThumbnail(ctx context.Context, data []byte) (string, error) {
 	thumbnailURL, err := gs.groupUploader.UploadThumbnail(ctx, data)
 	if err != nil {
