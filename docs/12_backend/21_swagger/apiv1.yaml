@@ -287,6 +287,32 @@ paths:
         '500':
           $ref: '#/components/responses/Unkown'
 
+    patch:
+      summary: グループ編集
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: groupId
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: グループUUID
+      requestBody:
+        $ref: '#/components/requestBodies/UpdateGroup'
+      responses:
+        '200':
+          $ref: '#/components/responses/UpdateGroup'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/Unkown'
+
   /groups/{groupId}/users:
     post:
       summary: グループ ユーザー追加
@@ -305,6 +331,32 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/AddUsersInGroup'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/Unkown'
+
+    delete:
+      summary: グループ ユーザー削除
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: groupId
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: グループUUID
+      requestBody:
+        $ref: '#/components/requestBodies/RemoveUsersInGroup'
+      responses:
+        '200':
+          $ref: '#/components/responses/RemoveUsersInGroup'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -559,8 +611,46 @@ components:
             required:
               - name
 
+    UpdateGroup:
+      description: グループ編集
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+                description: グループ名
+              thumbnail:
+                type: string
+                description: サムネイル
+              userIds:
+                type: array
+                description: ユーザーID一覧
+                items:
+                  type: string
+                  format: uuid
+            required:
+              - name
+
     AddUsersInGroup:
       description: グループ ユーザー追加
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              userIds:
+                type: array
+                description: ユーザーID一覧
+                items:
+                  type: string
+                  format: uuid
+
+    RemoveUsersInGroup:
+      description: グループ ユーザー削除
       required: true
       content:
         application/json:
@@ -1123,8 +1213,72 @@ components:
                 format: date-time
                 description: 更新日時
 
+    UpdateGroup:
+      description: グループ編集APIのレスポンス
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              id:
+                type: string
+                format: uuid
+                description: グループID
+              name:
+                type: string
+                description: グループ名
+              thumbnailUrl:
+                type: string
+                description: サムネイルURL
+              userIds:
+                type: array
+                description: ユーザーID一覧
+                items:
+                  type: string
+                  format: uuid
+              createdAt:
+                type: string
+                format: date-time
+                description: 作成日時
+              updatedAt:
+                type: string
+                format: date-time
+                description: 更新日時
+
     AddUsersInGroup:
       description: グループ ユーザー追加APIのレスポンス
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              id:
+                type: string
+                format: uuid
+                description: グループID
+              name:
+                type: string
+                description: グループ名
+              thumbnailUrl:
+                type: string
+                description: サムネイルURL
+              userIds:
+                type: array
+                description: ユーザーID一覧
+                items:
+                  type: string
+                  format: uuid
+              createdAt:
+                type: string
+                format: date-time
+                description: 作成日時
+              updatedAt:
+                type: string
+                format: date-time
+                description: 更新日時
+
+    RemoveUsersInGroup:
+      description: グループ ユーザー削除APIのレスポンス
       content:
         application/json:
           schema:
