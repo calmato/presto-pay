@@ -7,6 +7,7 @@ import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.squareup.picasso.Picasso
 import work.calmato.prestopay.network.GroupPropertyResponse
+import work.calmato.prestopay.network.PaymentPropertyGet
 import work.calmato.prestopay.network.UserProperty
 
 @BindingAdapter("thumbnail")
@@ -67,5 +68,12 @@ fun ImageView.setTagImage(item:Tag?){
 fun CheckBox.setTagCheckBox(item:Tag?){
   item?.let {
     isChecked = item.isSelected
+  }
+}
+
+@BindingAdapter("paymentName")
+fun TextView.setPaymentName(item:PaymentPropertyGet?){
+  item?.let {
+    text = item.name
   }
 }

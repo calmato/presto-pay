@@ -13,7 +13,7 @@ import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -30,11 +30,7 @@ import work.calmato.prestopay.util.ViewModelFriendGroup
 
 class GroupFriendFragment : Fragment() {
   private val viewModel: ViewModelFriendGroup by lazy {
-    val activity = requireNotNull(this.activity) {
-      "You can only access the viewModel after onActivityCreated()"
-    }
-    ViewModelProviders.of(this, ViewModelFriendGroup.Factory(activity.application))
-      .get(ViewModelFriendGroup::class.java)
+    ViewModelProvider(this).get(ViewModelFriendGroup::class.java)
   }
   private var recycleAdapter: AdapterFriendPlane? = null
   private var recycleGroupAdapter: AdapterGroupPlane? = null
@@ -76,9 +72,6 @@ class GroupFriendFragment : Fragment() {
       layoutManager = LinearLayoutManager(context)
       adapter = recycleAdapter
     }
-
-    viewModel.userListView()
-    viewModel.groupListView()
     binding.groupRecycleView.apply {
       layoutManager = LinearLayoutManager(context)
       adapter = recycleGroupAdapter
@@ -89,12 +82,29 @@ class GroupFriendFragment : Fragment() {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
+    viewModel.refreshingFriend.observe(viewLifecycleOwner, Observer<Boolean> {
+      it?.apply {
+        swipeContainer.isRefreshing = it
+      }
+    })
+    viewModel.refreshingGroup.observe(viewLifecycleOwner, Observer<Boolean> {
+      it?.apply {
+        swipeContainerGroup.isRefreshing = it
+      }
+    })
+    swipeContainer.setOnRefreshListener {
+      viewModel.userListView()
+    }
+    swipeContainerGroup.setOnRefreshListener {
+      viewModel.groupListView()
+    }
+
     addFriend.setOnClickListener {
       this.findNavController().navigate(
         GroupFriendFragmentDirections.actionGroupFriendFragmentToAddFriendFragment()
       )
     }
-    addGroup.setOnClickListener {
+    groupEditAddFriend.setOnClickListener {
       this.findNavController().navigate(
         GroupFriendFragmentDirections.actionGroupFriendFragmentToFriendListFragment(
           Users(emptyList<UserProperty>())
@@ -150,17 +160,17 @@ class GroupFriendFragment : Fragment() {
       Picasso.with(context).load(thumbnailUrl).into(thumbnail)
     }
     groupSwitcher.setOnClickListener {
-      if(groupRecycleView.visibility==RecyclerView.VISIBLE && friendsRecycleView.visibility==RecyclerView.VISIBLE){
-        groupRecycleView.visibility = RecyclerView.GONE
+      if(swipeContainerGroup.visibility==RecyclerView.VISIBLE && swipeContainer.visibility==RecyclerView.VISIBLE){
+        swipeContainerGroup.visibility = RecyclerView.GONE
       }else{
-        groupRecycleView.visibility = RecyclerView.VISIBLE
+        swipeContainerGroup.visibility = RecyclerView.VISIBLE
       }
     }
     friendSwitcher.setOnClickListener {
-      if(friendsRecycleView.visibility==RecyclerView.VISIBLE && groupRecycleView.visibility==RecyclerView.VISIBLE){
-        friendsRecycleView.visibility = RecyclerView.GONE
+      if(swipeContainer.visibility==RecyclerView.VISIBLE && swipeContainerGroup.visibility==RecyclerView.VISIBLE){
+        swipeContainer.visibility = RecyclerView.GONE
       }else{
-        friendsRecycleView.visibility = RecyclerView.VISIBLE
+        swipeContainer.visibility = RecyclerView.VISIBLE
       }
     }
   }

@@ -132,6 +132,9 @@
   <string name="group_choice_list">グループを選択</string>
   <string name="successed_to_create_account">アカウントの作成に成功しました</string>
   <string name="log_in_with_twitter">Log in with Twitter</string>
+    <string name="settle_up">精算</string>
+    <string name="groupName">グループ名</string>
+  <string name="groupDisplayToggle">非表示</string>
   <string-array name="currency_array">
     <item>￥</item>
     <item>＄</item>

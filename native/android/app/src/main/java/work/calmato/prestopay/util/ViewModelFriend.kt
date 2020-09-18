@@ -35,6 +35,10 @@ class ViewModelFriend(application:Application): AndroidViewModel(application) {
   val nowLoading: LiveData<Boolean>
     get() = _nowLoading
 
+  private val _refreshingFriend = MutableLiveData<Boolean>()
+  val refreshingFriend: LiveData<Boolean>
+    get() = _refreshingFriend
+
   // Create a Coroutine scope using a job to be able to cancel when needed
   private var viewModelJob = SupervisorJob()
 
@@ -46,14 +50,16 @@ class ViewModelFriend(application:Application): AndroidViewModel(application) {
 
   private val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplication())
   private val id = sharedPreferences.getString("token", null)
-
   val friendsList = friendsRepository.friends
   fun userListView() {
+    startRefreshingFriend()
     viewModelScope.launch {
       try {
         friendsRepository.refreshFriends(id!!)
+        endRefreshingFriend()
       } catch (e: java.lang.Exception) {
-        Log.i(ViewModelFriendGroup.TAG, "Trying to refresh id")
+        Log.i("ViewModelFriend", "Trying to refresh id")
+        endRefreshingFriend()
       }
     }
   }
@@ -155,6 +161,13 @@ class ViewModelFriend(application:Application): AndroidViewModel(application) {
 
   fun navigationCompleted() {
     _navigateToHome.value = false
+  }
+
+  private fun startRefreshingFriend(){
+    _refreshingFriend.value = true
+  }
+  private fun endRefreshingFriend(){
+    _refreshingFriend.value = false
   }
 
   /**
