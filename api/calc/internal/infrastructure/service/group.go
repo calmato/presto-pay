@@ -133,12 +133,12 @@ func (gs *groupService) Update(ctx context.Context, g *group.Group, userIDs []st
 
 	// Update Users (add)
 	for _, userID := range addUserIDs {
-		gs.apiClient.AddGroup(ctx, userID, g.ID)
+		_ = gs.apiClient.AddGroup(ctx, userID, g.ID)
 	}
 
 	// Update Users (remove)
 	for _, userID := range removeUserIDs {
-		gs.apiClient.RemoveGroup(ctx, userID, g.ID)
+		_ = gs.apiClient.RemoveGroup(ctx, userID, g.ID)
 	}
 
 	return g, nil
@@ -176,7 +176,7 @@ func (gs *groupService) AddUsers(
 
 	// Update Users (add)
 	for _, userID := range userIDs {
-		gs.apiClient.AddGroup(ctx, userID, g.ID)
+		_ = gs.apiClient.AddGroup(ctx, userID, g.ID)
 	}
 
 	return g, nil
@@ -214,7 +214,7 @@ func (gs *groupService) RemoveUsers(
 
 	// Update Users (add)
 	for _, userID := range userIDs {
-		gs.apiClient.RemoveGroup(ctx, userID, g.ID)
+		_ = gs.apiClient.RemoveGroup(ctx, userID, g.ID)
 	}
 
 	return g, nil
