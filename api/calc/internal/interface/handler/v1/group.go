@@ -18,7 +18,9 @@ type APIV1GroupHandler interface {
 	Index(ctx *gin.Context)
 	Show(ctx *gin.Context)
 	Create(ctx *gin.Context)
+	Update(ctx *gin.Context)
 	AddUsers(ctx *gin.Context)
+	RemoveUsers(ctx *gin.Context)
 }
 
 type apiV1GroupHandler struct {
@@ -128,6 +130,34 @@ func (gh *apiV1GroupHandler) Create(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, res)
 }
 
+func (gh *apiV1GroupHandler) Update(ctx *gin.Context) {
+	groupID := ctx.Params.ByName("groupID")
+
+	req := &request.UpdateGroup{}
+	if err := ctx.BindJSON(req); err != nil {
+		handler.ErrorHandling(ctx, domain.Unauthorized.New(err))
+		return
+	}
+
+	c := middleware.GinContextToContext(ctx)
+	g, err := gh.groupApplication.Update(c, req, groupID)
+	if err != nil {
+		handler.ErrorHandling(ctx, err)
+		return
+	}
+
+	res := &response.UpdateGroup{
+		ID:           g.ID,
+		Name:         g.Name,
+		ThumbnailURL: g.ThumbnailURL,
+		UserIDs:      g.UserIDs,
+		CreatedAt:    g.CreatedAt,
+		UpdatedAt:    g.UpdatedAt,
+	}
+
+	ctx.JSON(http.StatusOK, res)
+}
+
 func (gh *apiV1GroupHandler) AddUsers(ctx *gin.Context) {
 	groupID := ctx.Params.ByName("groupID")
 
@@ -144,7 +174,35 @@ func (gh *apiV1GroupHandler) AddUsers(ctx *gin.Context) {
 		return
 	}
 
-	res := &response.CreateGroup{
+	res := &response.AddUsersInGroup{
+		ID:           g.ID,
+		Name:         g.Name,
+		ThumbnailURL: g.ThumbnailURL,
+		UserIDs:      g.UserIDs,
+		CreatedAt:    g.CreatedAt,
+		UpdatedAt:    g.UpdatedAt,
+	}
+
+	ctx.JSON(http.StatusOK, res)
+}
+
+func (gh *apiV1GroupHandler) RemoveUsers(ctx *gin.Context) {
+	groupID := ctx.Params.ByName("groupID")
+
+	req := &request.RemoveUsersInGroup{}
+	if err := ctx.BindJSON(req); err != nil {
+		handler.ErrorHandling(ctx, domain.Unauthorized.New(err))
+		return
+	}
+
+	c := middleware.GinContextToContext(ctx)
+	g, err := gh.groupApplication.RemoveUsers(c, req, groupID)
+	if err != nil {
+		handler.ErrorHandling(ctx, err)
+		return
+	}
+
+	res := &response.RemoveUsersInGroup{
 		ID:           g.ID,
 		Name:         g.Name,
 		ThumbnailURL: g.ThumbnailURL,

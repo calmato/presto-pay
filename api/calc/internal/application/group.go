@@ -18,7 +18,9 @@ type GroupApplication interface {
 	Index(ctx context.Context) ([]*group.Group, error)
 	Show(ctx context.Context, groupID string) (*group.Group, error)
 	Create(ctx context.Context, req *request.CreateGroup) (*group.Group, error)
+	Update(ctx context.Context, req *request.UpdateGroup, groupID string) (*group.Group, error)
 	AddUsers(ctx context.Context, req *request.AddUsersInGroup, groupID string) (*group.Group, error)
+	RemoveUsers(ctx context.Context, req *request.RemoveUsersInGroup, groupID string) (*group.Group, error)
 }
 
 type groupApplication struct {
@@ -114,6 +116,54 @@ func (ga *groupApplication) Create(ctx context.Context, req *request.CreateGroup
 	return g, nil
 }
 
+func (ga *groupApplication) Update(
+	ctx context.Context, req *request.UpdateGroup, groupID string,
+) (*group.Group, error) {
+	u, err := ga.userService.Authentication(ctx)
+	if err != nil {
+		return nil, domain.Unauthorized.New(err)
+	}
+
+	contain, err := ga.userService.ContainsGroupID(ctx, u, groupID)
+	if err != nil {
+		return nil, err
+	}
+
+	if !contain {
+		err := xerrors.New("Failed to Application")
+		return nil, domain.Forbidden.New(err)
+	}
+
+	if ves := ga.groupRequestValidation.UpdateGroup(req); len(ves) > 0 {
+		err := xerrors.New("Failed to RequestValidation")
+		return nil, domain.InvalidRequestValidation.New(err, ves...)
+	}
+
+	g, err := ga.groupService.Show(ctx, groupID)
+	if err != nil {
+		err := xerrors.New("Faliled to Application")
+		return nil, domain.NotFound.New(err)
+	}
+
+	thumbnailURL, err := getThumbnailURL(ctx, ga, req.Thumbnail)
+	if err != nil {
+		return nil, err
+	}
+
+	if thumbnailURL != "" {
+		g.ThumbnailURL = thumbnailURL
+	}
+
+	g.Name = req.Name
+
+	// TODO: Update Group
+	if _, err = ga.groupService.Update(ctx, g, req.UserIDs); err != nil {
+		return nil, err
+	}
+
+	return g, nil
+}
+
 func (ga *groupApplication) AddUsers(
 	ctx context.Context, req *request.AddUsersInGroup, groupID string,
 ) (*group.Group, error) {
@@ -128,7 +178,7 @@ func (ga *groupApplication) AddUsers(
 	}
 
 	if !contain {
-		err := xerrors.New("Failed to Service")
+		err := xerrors.New("Failed to Application")
 		return nil, domain.Forbidden.New(err)
 	}
 
@@ -138,6 +188,37 @@ func (ga *groupApplication) AddUsers(
 	}
 
 	g, err := ga.groupService.AddUsers(ctx, groupID, req.UserIDs)
+	if err != nil {
+		return nil, err
+	}
+
+	return g, nil
+}
+
+func (ga *groupApplication) RemoveUsers(
+	ctx context.Context, req *request.RemoveUsersInGroup, groupID string,
+) (*group.Group, error) {
+	u, err := ga.userService.Authentication(ctx)
+	if err != nil {
+		return nil, domain.Unauthorized.New(err)
+	}
+
+	contain, err := ga.userService.ContainsGroupID(ctx, u, groupID)
+	if err != nil {
+		return nil, err
+	}
+
+	if !contain {
+		err := xerrors.New("Failed to Application")
+		return nil, domain.Forbidden.New(err)
+	}
+
+	if ves := ga.groupRequestValidation.RemoveUsersInGroup(req); len(ves) > 0 {
+		err := xerrors.New("Failed to RequestValidation")
+		return nil, domain.InvalidRequestValidation.New(err, ves...)
+	}
+
+	g, err := ga.groupService.RemoveUsers(ctx, groupID, req.UserIDs)
 	if err != nil {
 		return nil, err
 	}
