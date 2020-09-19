@@ -1,18 +1,23 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import React from "react";
 
-import { Groups, Home, UserInfo } from "~/components/pages";
-import { GROUPS, HOME, USER_INFO } from "~/constants/path";
+import { GroupListStackScreen } from "./Group";
+import { PaymentSelectStackScreen } from "./Payment";
+import { UserInfoStackScreen } from "./System";
+
+import { Home } from "~/components/pages";
+import { GROUP_LIST, HOME, PAYMENT_SELECT, USER_INFO } from "~/constants/path";
 import { HeaderLeft } from "~/routes/Header";
 
 const Stack = createStackNavigator();
 
-export default function HomeNavigator() {
+export default function HomeStackScreen() {
   return (
     <Stack.Navigator initialRouteName={HOME}>
       <Stack.Screen name={HOME} component={Home} options={{ headerLeft: () => <HeaderLeft /> }} />
-      <Stack.Screen name={GROUPS} component={Groups} />
-      <Stack.Screen name={USER_INFO} component={UserInfo} />
+      <Stack.Screen name={GROUP_LIST} component={GroupListStackScreen} />
+      <Stack.Screen name={PAYMENT_SELECT} component={PaymentSelectStackScreen} />
+      <Stack.Screen name={USER_INFO} component={UserInfoStackScreen} />
     </Stack.Navigator>
   );
 }

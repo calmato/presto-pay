@@ -3,7 +3,7 @@ import React from "react";
 
 import MainRoutes from "./Main";
 
-export default function LoggingRoutes() {
+export default function Routes() {
   return (
     <NavigationContainer>
       <MainRoutes />
