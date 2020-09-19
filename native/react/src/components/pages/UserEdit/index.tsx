@@ -1,5 +1,5 @@
-import React from "react";
 import { useNavigation } from "@react-navigation/native";
+import React from "react";
 import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 
 import { Context, Status } from "~/contexts/ui";

@@ -1,6 +1,6 @@
+import { useNavigation } from "@react-navigation/native";
 import React from "react";
 import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
-import { useNavigation } from "@react-navigation/native";
 
 import { FRIEND_SEARCH, GROUP, GROUP_NEW } from "~/constants/path";
 
