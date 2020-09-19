@@ -9,6 +9,9 @@
       type="work.calmato.prestopay.network.PaymentPropertyGet" />
     <variable
       name="amount"
+      type="Float" />
+    <variable
+      name="currency"
       type="String" />
     <variable
       name="whoPaid"
@@ -43,6 +46,7 @@
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintTop_toTopOf="@+id/paymentName"
       app:paymentAmount="@{amount}"
+      app:paymentCurrency = "@{currency}"
       tools:text="amount" />
 
     <TextView

@@ -5,6 +5,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.squareup.picasso.Picasso
+import work.calmato.prestopay.R
 import work.calmato.prestopay.database.getAppDatabase
 import work.calmato.prestopay.network.GroupPropertyResponse
 import work.calmato.prestopay.network.PaymentPropertyGet
@@ -81,10 +82,16 @@ fun TextView.setPaymentName(item:PaymentPropertyGet?){
   }
 }
 
-@BindingAdapter("paymentAmount")
-fun TextView.setPaymentAmount(item:String){
-  item?.let {
-    text = item
+@BindingAdapter("paymentAmount","paymentCurrency")
+fun TextView.setPaymentAmount(amount:Float,currency:String){
+  amount.let {
+    if(it > 0){
+      setTextColor(resources.getColor(R.color.positiveNumberColor,null))
+    } else if(it < 0){
+      setTextColor(resources.getColor(R.color.negativeNumberColor,null))
+    }
+    val output = it.toString() + currency
+    text = output
   }
 }
 

@@ -28,7 +28,8 @@ class AdapterPayment(val context:Context) : RecyclerView.Adapter<AdapterPayment.
     holder.binding.also { it ->
       val thisPayment = paymentList[position]
       it.payment = thisPayment
-      it.amount = thisPayment.currency + (thisPayment.payers.filter { it.name == name }[0].amount * 100).roundToInt().toFloat() / 100
+      it.currency = thisPayment.currency
+      it.amount =  (thisPayment.payers.filter { it.name == name }[0].amount * 100).roundToInt().toFloat() / 100
       val maxAmount = thisPayment.payers.map { it.amount }.max()
       val maxPayer = thisPayment.payers.filter { it.amount == maxAmount }[0].name
       if (maxAmount != null) {
