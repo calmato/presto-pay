@@ -49,6 +49,36 @@ func (mr *MockPaymentServiceMockRecorder) Index(ctx, groupID, startAt interface{
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Index", reflect.TypeOf((*MockPaymentService)(nil).Index), ctx, groupID, startAt)
 }
 
+// IndexByIsCompleted mocks base method
+func (m *MockPaymentService) IndexByIsCompleted(ctx context.Context, groupID string, isCompleted bool) ([]*payment.Payment, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "IndexByIsCompleted", ctx, groupID, isCompleted)
+	ret0, _ := ret[0].([]*payment.Payment)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// IndexByIsCompleted indicates an expected call of IndexByIsCompleted
+func (mr *MockPaymentServiceMockRecorder) IndexByIsCompleted(ctx, groupID, isCompleted interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "IndexByIsCompleted", reflect.TypeOf((*MockPaymentService)(nil).IndexByIsCompleted), ctx, groupID, isCompleted)
+}
+
+// Show mocks base method
+func (m *MockPaymentService) Show(ctx context.Context, groupID, paymentID string) (*payment.Payment, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Show", ctx, groupID, paymentID)
+	ret0, _ := ret[0].(*payment.Payment)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// Show indicates an expected call of Show
+func (mr *MockPaymentServiceMockRecorder) Show(ctx, groupID, paymentID interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Show", reflect.TypeOf((*MockPaymentService)(nil).Show), ctx, groupID, paymentID)
+}
+
 // Create mocks base method
 func (m *MockPaymentService) Create(ctx context.Context, p *payment.Payment, groupID string) (*payment.Payment, error) {
 	m.ctrl.T.Helper()
@@ -62,6 +92,36 @@ func (m *MockPaymentService) Create(ctx context.Context, p *payment.Payment, gro
 func (mr *MockPaymentServiceMockRecorder) Create(ctx, p, groupID interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockPaymentService)(nil).Create), ctx, p, groupID)
+}
+
+// Update mocks base method
+func (m *MockPaymentService) Update(ctx context.Context, p *payment.Payment, groupID string) (*payment.Payment, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Update", ctx, p, groupID)
+	ret0, _ := ret[0].(*payment.Payment)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// Update indicates an expected call of Update
+func (mr *MockPaymentServiceMockRecorder) Update(ctx, p, groupID interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Update", reflect.TypeOf((*MockPaymentService)(nil).Update), ctx, p, groupID)
+}
+
+// UpdatePayer mocks base method
+func (m *MockPaymentService) UpdatePayer(ctx context.Context, groupID, paymentID string, payer *payment.Payer) (*payment.Payment, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdatePayer", ctx, groupID, paymentID, payer)
+	ret0, _ := ret[0].(*payment.Payment)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// UpdatePayer indicates an expected call of UpdatePayer
+func (mr *MockPaymentServiceMockRecorder) UpdatePayer(ctx, groupID, paymentID, payer interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdatePayer", reflect.TypeOf((*MockPaymentService)(nil).UpdatePayer), ctx, groupID, paymentID, payer)
 }
 
 // UploadImage mocks base method

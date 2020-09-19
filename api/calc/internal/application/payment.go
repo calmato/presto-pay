@@ -227,7 +227,9 @@ func (pa *paymentApplication) UpdatePayer(
 }
 
 // UpdateStatus - 支払い完了フラグの更新
-func (pa *paymentApplication) UpdateStatus(ctx context.Context, groupID string, paymentID string) (*payment.Payment, error) {
+func (pa *paymentApplication) UpdateStatus(
+	ctx context.Context, groupID string, paymentID string,
+) (*payment.Payment, error) {
 	u, err := pa.userService.Authentication(ctx)
 	if err != nil {
 		return nil, domain.Unauthorized.New(err)

@@ -38,6 +38,10 @@ func NewPaymentService(
 	}
 }
 
+var (
+	unknownUsername = "Unknown User"
+)
+
 func (ps *paymentService) Index(ctx context.Context, groupID string, startAt string) ([]*payment.Payment, error) {
 	// グループ情報取得
 	g, err := ps.groupRepository.Show(ctx, groupID)
@@ -67,7 +71,7 @@ func (ps *paymentService) Index(ctx context.Context, groupID string, startAt str
 		for i, payer := range payment.Payers {
 			u := us[payer.ID]
 			if u == nil {
-				payment.Payers[i].Name = "Unknown User"
+				payment.Payers[i].Name = unknownUsername
 			} else {
 				payment.Payers[i].Name = us[payer.ID].Name
 			}
@@ -108,7 +112,7 @@ func (ps *paymentService) IndexByIsCompleted(
 		for i, payer := range payment.Payers {
 			u := us[payer.ID]
 			if u == nil {
-				payment.Payers[i].Name = "Unknown User"
+				payment.Payers[i].Name = unknownUsername
 			} else {
 				payment.Payers[i].Name = us[payer.ID].Name
 			}
@@ -127,7 +131,7 @@ func (ps *paymentService) Show(ctx context.Context, groupID string, paymentID st
 
 	for i, payer := range p.Payers {
 		if u, _ := ps.apiClient.ShowUser(ctx, payer.ID); u == nil {
-			p.Payers[i].Name = "Unknown User"
+			p.Payers[i].Name = unknownUsername
 		} else {
 			p.Payers[i].Name = u.Name
 		}
