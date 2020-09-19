@@ -28,7 +28,6 @@ type PayerInUpdatePayment struct {
 }
 
 // UpdatePayment - 支払い情報作成APIのリクエスト
-// TODO: 金の更新はいったん無視
 type UpdatePayment struct {
 	Name        string                  `json:"name" validate:"required,max=64"`
 	Currency    string                  `json:"currency"`

@@ -155,14 +155,21 @@ func (ps *paymentService) Update(ctx context.Context, p *payment.Payment, groupI
 	p.UpdatedAt = current
 
 	// 支払い完了フラグの更新
-	for i, payer := range p.Payers {
-		if !payer.IsPaid {
-			p.IsCompleted = false
-			break
+	// - isCompletedがtrue -> isPaidをtrueに
+	// - isCompletedがfalse -> isPaidがすべてtrueなら、isCompletedをtrueに
+	if p.IsCompleted {
+		for i := 0; i < len(p.Payers); i++ {
+			p.Payers[i].IsPaid = true
 		}
+	} else {
+		for i, payer := range p.Payers {
+			if !payer.IsPaid {
+				break
+			}
 
-		if i == len(p.Payers)-1 {
-			p.IsCompleted = true
+			if i == len(p.Payers)-1 {
+				p.IsCompleted = true
+			}
 		}
 	}
 
