@@ -5,6 +5,7 @@ import (
 
 	"github.com/calmato/presto-pay/api/calc/internal/domain/payment"
 	"github.com/calmato/presto-pay/api/calc/lib/firebase/firestore"
+	"google.golang.org/api/iterator"
 )
 
 type paymentRepository struct {
@@ -61,6 +62,39 @@ func (pr *paymentRepository) IndexFromStartAt(
 		}
 
 		ps[i] = p
+	}
+
+	return ps, nil
+}
+
+func (pr *paymentRepository) IndexByIsCompleted(
+	ctx context.Context, groupID string, isCompleted bool,
+) ([]*payment.Payment, error) {
+	paymentCollection := getPaymentCollection(groupID)
+
+	q := &firestore.Query{
+		Field:    "is_completed",
+		Operator: "==",
+		Value:    isCompleted,
+	}
+
+	ps := make([]*payment.Payment, 0)
+
+	iter := pr.firestore.GetByQuery(ctx, paymentCollection, q)
+	for {
+		doc, err := iter.Next()
+		if err == iterator.Done {
+			break
+		}
+
+		p := &payment.Payment{}
+
+		err = doc.DataTo(p)
+		if err != nil {
+			return nil, err
+		}
+
+		ps = append(ps, p)
 	}
 
 	return ps, nil

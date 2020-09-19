@@ -77,6 +77,47 @@ func (ps *paymentService) Index(ctx context.Context, groupID string, startAt str
 	return payments, nil
 }
 
+func (ps *paymentService) IndexByIsCompleted(
+	ctx context.Context, groupID string, isCompleted bool,
+) ([]*payment.Payment, error) {
+	// グループ情報取得
+	g, err := ps.groupRepository.Show(ctx, groupID)
+	if err != nil {
+		return nil, domain.ErrorInDatastore.New(err)
+	}
+
+	// グループに所属するユーザー情報一覧取得
+	us := map[string]*user.User{}
+
+	for _, userID := range g.UserIDs {
+		u, err := ps.apiClient.ShowUser(ctx, userID)
+		if err != nil {
+			return nil, domain.ErrorInDatastore.New(err)
+		}
+
+		us[userID] = u
+	}
+
+	// 支払い情報一覧取得
+	payments, err := ps.paymentRepository.IndexByIsCompleted(ctx, groupID, isCompleted)
+	if err != nil {
+		return nil, domain.ErrorInDatastore.New(err)
+	}
+
+	for _, payment := range payments {
+		for i, payer := range payment.Payers {
+			u := us[payer.ID]
+			if u == nil {
+				payment.Payers[i].Name = "Unknown User"
+			} else {
+				payment.Payers[i].Name = us[payer.ID].Name
+			}
+		}
+	}
+
+	return payments, nil
+}
+
 func (ps *paymentService) Show(ctx context.Context, groupID string, paymentID string) (*payment.Payment, error) {
 	p, err := ps.paymentRepository.Show(ctx, groupID, paymentID)
 	if err != nil {

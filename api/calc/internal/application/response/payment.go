@@ -76,3 +76,8 @@ type UpdatePayment struct {
 	CreatedAt   time.Time               `json:"createdAt"`
 	UpdatedAt   time.Time               `json:"updatedAt"`
 }
+
+// UpdatePayments - 支払い情報一括更新APIのレスポンス
+type UpdatePayments struct {
+	Payments []*UpdatePayment `json:"payments"`
+}

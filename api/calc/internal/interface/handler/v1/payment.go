@@ -18,6 +18,7 @@ type APIV1PaymentHandler interface {
 	Create(ctx *gin.Context)
 	Update(ctx *gin.Context)
 	UpdateStatus(ctx *gin.Context)
+	UpdateStatusAll(ctx *gin.Context)
 	UpdatePayer(ctx *gin.Context)
 }
 
@@ -204,6 +205,58 @@ func (ph *apiV1PaymentHandler) UpdateStatus(ctx *gin.Context) {
 		IsCompleted: p.IsCompleted,
 		CreatedAt:   p.CreatedAt,
 		UpdatedAt:   p.UpdatedAt,
+	}
+
+	ctx.JSON(http.StatusOK, res)
+}
+
+func (ph *apiV1PaymentHandler) UpdateStatusAll(ctx *gin.Context) {
+	groupID := ctx.Params.ByName("groupID")
+
+	req := &request.UpdatePayment{}
+	if err := ctx.BindJSON(req); err != nil {
+		handler.ErrorHandling(ctx, domain.Unauthorized.New(err))
+		return
+	}
+
+	c := middleware.GinContextToContext(ctx)
+	ps, err := ph.paymentApplication.UpdateStatusAll(c, groupID)
+	if err != nil {
+		handler.ErrorHandling(ctx, err)
+		return
+	}
+
+	prs := make([]*response.UpdatePayment, len(ps))
+	for i, p := range ps {
+		payers := make([]*response.PayerInUpdatePayment, len(p.Payers))
+		for i, payer := range p.Payers {
+			payers[i] = &response.PayerInUpdatePayment{
+				ID:     payer.ID,
+				Amount: payer.Amount,
+				IsPaid: payer.IsPaid,
+			}
+		}
+
+		pr := &response.UpdatePayment{
+			ID:          p.ID,
+			Name:        p.Name,
+			Currency:    p.Currency,
+			Total:       p.Total,
+			Payers:      payers,
+			Tags:        p.Tags,
+			Comment:     p.Comment,
+			ImageURLs:   p.ImageURLs,
+			PaidAt:      p.PaidAt,
+			IsCompleted: p.IsCompleted,
+			CreatedAt:   p.CreatedAt,
+			UpdatedAt:   p.UpdatedAt,
+		}
+
+		prs[i] = pr
+	}
+
+	res := &response.UpdatePayments{
+		Payments: prs,
 	}
 
 	ctx.JSON(http.StatusOK, res)
