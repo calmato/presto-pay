@@ -1,5 +1,8 @@
 import React from "react";
-import { StyleSheet, View, Text } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
+
+import { GROUP_USER_SEARCH } from "~/constants/path";
 
 const styles = StyleSheet.create({
   container: {
@@ -7,12 +10,25 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  title: {
+    textAlign: "center",
+    fontSize: 36,
+    fontWeight: "bold",
+  },
 });
 
 export default function GroupUserList() {
+  const navigation = useNavigation();
+
   return (
     <View style={styles.container}>
-      <Text>GroupUserList</Text>
+      <Text style={styles.title}>GroupEdit</Text>
+      <TouchableOpacity onPress={() => navigation.goBack()}>
+        <Text>GroupEdit</Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={() => navigation.navigate(GROUP_USER_SEARCH)}>
+        <Text>GroupUserSearch</Text>
+      </TouchableOpacity>
     </View>
   );
 }

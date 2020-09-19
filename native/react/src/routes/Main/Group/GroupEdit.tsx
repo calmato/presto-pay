@@ -1,6 +1,8 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import React from "react";
 
+import GroupUserListStackScreen from "./GroupUserList";
+
 import { Group, GroupEdit, GroupUserList } from "~/components/pages";
 import { GROUP, GROUP_EDIT, GROUP_USER_LIST } from "~/constants/path";
 
@@ -11,7 +13,7 @@ export default function GroupEditStackScreen() {
     <Stack.Navigator initialRouteName={GROUP_EDIT}>
       <Stack.Screen name={GROUP_EDIT} component={GroupEdit} />
       <Stack.Screen name={GROUP} component={Group} />
-      <Stack.Screen name={GROUP_USER_LIST} component={GroupUserList} />
+      <Stack.Screen name={GROUP_USER_LIST} component={GroupUserListStackScreen} />
     </Stack.Navigator>
   );
 }

@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigation } from "@react-navigation/native";
 import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 
 import { Context, Status } from "~/contexts/ui";
@@ -9,12 +10,22 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  title: {
+    textAlign: "center",
+    fontSize: 36,
+    fontWeight: "bold",
+  },
 });
 
 export default function UserEdit() {
+  const navigation = useNavigation();
+
   return (
     <View style={styles.container}>
-      <Text>UserEdit</Text>
+      <Text style={styles.title}>UserEdit</Text>
+      <TouchableOpacity onPress={() => navigation.goBack()}>
+        <Text>goBack</Text>
+      </TouchableOpacity>
     </View>
   );
 }
