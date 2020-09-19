@@ -127,6 +127,82 @@ func (ps *paymentService) Create(ctx context.Context, p *payment.Payment, groupI
 	return p, nil
 }
 
+func (ps *paymentService) Update(ctx context.Context, p *payment.Payment, groupID string) (*payment.Payment, error) {
+	if ves := ps.paymentDomainValidation.Payment(ctx, p); len(ves) > 0 {
+		err := xerrors.New("Failed to DomainValidation")
+		return nil, domain.Unknown.New(err, ves...)
+	}
+
+	current := time.Now()
+	p.UpdatedAt = current
+
+	// 支払い完了フラグの更新
+	for i, payer := range p.Payers {
+		if !payer.IsPaid {
+			p.IsCompleted = false
+			break
+		}
+
+		if i == len(p.Payers)-1 {
+			p.IsCompleted = true
+		}
+	}
+
+	if err := ps.paymentRepository.Update(ctx, p, groupID); err != nil {
+		err = xerrors.Errorf("Failed to Repository: %w", err)
+		return nil, domain.ErrorInDatastore.New(err)
+	}
+
+	return p, nil
+}
+
+func (ps *paymentService) UpdatePayers(
+	ctx context.Context, groupID string, paymentID string, payer *payment.Payer,
+) (*payment.Payment, error) {
+	p, err := ps.paymentRepository.Show(ctx, groupID, paymentID)
+	if err != nil {
+		err = xerrors.Errorf("Failed to Repository: %w", err)
+		return nil, domain.NotFound.New(err)
+	}
+
+	if ves := ps.paymentDomainValidation.Payment(ctx, p); len(ves) > 0 {
+		err := xerrors.New("Failed to DomainValidation")
+		return nil, domain.Unknown.New(err, ves...)
+	}
+
+	current := time.Now()
+	p.UpdatedAt = current
+
+	// ユーザ毎の支払い情報更新
+	for i, v := range p.Payers {
+		if v.ID != payer.ID {
+			continue
+		}
+
+		p.Payers[i].Amount = payer.Amount
+		p.Payers[i].IsPaid = payer.IsPaid
+	}
+
+	// 支払い完了フラグの更新
+	for i, payer := range p.Payers {
+		if !payer.IsPaid {
+			p.IsCompleted = false
+			break
+		}
+
+		if i == len(p.Payers)-1 {
+			p.IsCompleted = true
+		}
+	}
+
+	if err := ps.paymentRepository.Update(ctx, p, groupID); err != nil {
+		err = xerrors.Errorf("Failed to Repository: %w", err)
+		return nil, domain.ErrorInDatastore.New(err)
+	}
+
+	return p, nil
+}
+
 func (ps *paymentService) UploadImage(ctx context.Context, data []byte) (string, error) {
 	imageURL, err := ps.paymentUploader.UploadImage(ctx, data)
 	if err != nil {
