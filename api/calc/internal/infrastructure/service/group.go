@@ -222,6 +222,15 @@ func (gs *groupService) RemoveUsers(
 	return g, nil
 }
 
+func (gs *groupService) Destroy(ctx context.Context, groupID string) error {
+	if err := gs.groupRepository.Destroy(ctx, groupID); err != nil {
+		err = xerrors.Errorf("Failed to Repository: %w", err)
+		return domain.ErrorInDatastore.New(err)
+	}
+
+	return nil
+}
+
 func (gs *groupService) UploadThumbnail(ctx context.Context, data []byte) (string, error) {
 	thumbnailURL, err := gs.groupUploader.UploadThumbnail(ctx, data)
 	if err != nil {

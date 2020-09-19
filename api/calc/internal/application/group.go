@@ -21,6 +21,7 @@ type GroupApplication interface {
 	Update(ctx context.Context, req *request.UpdateGroup, groupID string) (*group.Group, error)
 	AddUsers(ctx context.Context, req *request.AddUsersInGroup, groupID string) (*group.Group, error)
 	RemoveUsers(ctx context.Context, req *request.RemoveUsersInGroup, groupID string) (*group.Group, error)
+	Destroy(ctx context.Context, groupID string) error
 }
 
 type groupApplication struct {
@@ -224,6 +225,34 @@ func (ga *groupApplication) RemoveUsers(
 	}
 
 	return g, nil
+}
+
+func (ga *groupApplication) Destroy(ctx context.Context, groupID string) error {
+	u, err := ga.userService.Authentication(ctx)
+	if err != nil {
+		return domain.Unauthorized.New(err)
+	}
+
+	contain, err := ga.userService.ContainsGroupID(ctx, u, groupID)
+	if err != nil {
+		return err
+	}
+
+	if !contain {
+		err := xerrors.New("Failed to Application")
+		return domain.Forbidden.New(err)
+	}
+
+	_, err = ga.groupService.Show(ctx, groupID)
+	if err != nil {
+		return err
+	}
+
+	if err = ga.groupService.Destroy(ctx, groupID); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func getThumbnailURL(ctx context.Context, ga *groupApplication, thumbnail string) (string, error) {

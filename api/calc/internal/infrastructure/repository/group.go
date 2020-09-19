@@ -54,3 +54,13 @@ func (gr *groupRepository) Update(ctx context.Context, g *group.Group) error {
 
 	return nil
 }
+
+func (gr *groupRepository) Destroy(ctx context.Context, groupID string) error {
+	groupCollection := getGroupCollection()
+
+	if err := gr.firestore.DeleteDoc(ctx, groupCollection, groupID); err != nil {
+		return err
+	}
+
+	return nil
+}
