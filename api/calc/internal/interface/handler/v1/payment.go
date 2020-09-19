@@ -20,6 +20,7 @@ type APIV1PaymentHandler interface {
 	UpdateStatus(ctx *gin.Context)
 	UpdateStatusAll(ctx *gin.Context)
 	UpdatePayer(ctx *gin.Context)
+	Destroy(ctx *gin.Context)
 }
 
 type apiV1PaymentHandler struct {
@@ -305,4 +306,17 @@ func (ph *apiV1PaymentHandler) UpdatePayer(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, res)
+}
+
+func (ph *apiV1PaymentHandler) Destroy(ctx *gin.Context) {
+	groupID := ctx.Params.ByName("groupID")
+	paymentID := ctx.Params.ByName("paymentID")
+
+	c := middleware.GinContextToContext(ctx)
+	if err := ph.paymentApplication.Destroy(c, groupID, paymentID); err != nil {
+		handler.ErrorHandling(ctx, err)
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{})
 }

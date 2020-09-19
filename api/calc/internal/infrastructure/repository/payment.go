@@ -128,9 +128,19 @@ func (pr *paymentRepository) Create(ctx context.Context, p *payment.Payment, gro
 }
 
 func (pr *paymentRepository) Update(ctx context.Context, p *payment.Payment, groupID string) error {
-	PaymentCollection := getPaymentCollection(groupID)
+	paymentCollection := getPaymentCollection(groupID)
 
-	if err := pr.firestore.Set(ctx, PaymentCollection, p.ID, p); err != nil {
+	if err := pr.firestore.Set(ctx, paymentCollection, p.ID, p); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (pr *paymentRepository) Destroy(ctx context.Context, groupID string, paymentID string) error {
+	paymentCollection := getPaymentCollection(groupID)
+
+	if err := pr.firestore.DeleteDoc(ctx, paymentCollection, paymentID); err != nil {
 		return err
 	}
 
