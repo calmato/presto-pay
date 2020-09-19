@@ -62,6 +62,10 @@ class GroupDetailFragment : Fragment() {
     viewModel.refreshing.observe(viewLifecycleOwner, Observer {
       it?.apply {
         swipeContainer.isRefreshing = it
+        floatingActionButton.isClickable = !it
+        groupIcon.isClickable = !it
+        settleUp.isClickable = !it
+        setting.isClickable = !it
       }
     })
     swipeContainer.setOnRefreshListener {
@@ -88,6 +92,11 @@ class GroupDetailFragment : Fragment() {
         }
         else -> true
       }
+    }
+    floatingActionButton.setOnClickListener {
+      this.findNavController().navigate(
+        GroupDetailFragmentDirections.actionGroupDetailToAddExpenseFragment(groupDetail!!)
+      )
     }
   }
 }
