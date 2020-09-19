@@ -76,3 +76,17 @@ func (mr *MockGroupRepositoryMockRecorder) Update(ctx, g interface{}) *gomock.Ca
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Update", reflect.TypeOf((*MockGroupRepository)(nil).Update), ctx, g)
 }
+
+// Destroy mocks base method
+func (m *MockGroupRepository) Destroy(ctx context.Context, groupID string) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Destroy", ctx, groupID)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// Destroy indicates an expected call of Destroy
+func (mr *MockGroupRepositoryMockRecorder) Destroy(ctx, groupID interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Destroy", reflect.TypeOf((*MockGroupRepository)(nil).Destroy), ctx, groupID)
+}
