@@ -4,9 +4,10 @@ import { createStackNavigator, StackCardInterpolationProps } from "@react-naviga
 import React from "react";
 
 import { SignInStackScreen } from "./Auth";
-import GroupList from "./GroupList";
-import Home from "./Home";
-import UserInfo from "./UserInfo";
+import { GroupListStackScreen } from "./Group";
+import { default as HomeStackScreen } from "./Home";
+import { PaymentSelectStackScreen } from "./Payment";
+import { UserInfoStackScreen } from "./System";
 
 import { Initial, Loading } from "~/components/pages";
 import { GROUP_LIST, HOME, INITIAL, LOADING, SIGN_IN, USER_INFO } from "~/constants/path";
@@ -42,8 +43,8 @@ const getActiveRouteName = (state: any): string => {
 function GroupsWithDrawer(): JSX.Element {
   return (
     <GroupsDrawer.Navigator initialRouteName={GROUP_LIST}>
-      <GroupsDrawer.Screen name={GROUP_LIST} component={GroupList} />
-      <GroupsDrawer.Screen name={HOME} component={Home} />
+      <GroupsDrawer.Screen name={HOME} component={HomeStackScreen} />
+      <GroupsDrawer.Screen name={GROUP_LIST} component={GroupListStackScreen} />
     </GroupsDrawer.Navigator>
   );
 }
@@ -51,8 +52,8 @@ function GroupsWithDrawer(): JSX.Element {
 function HomeWithDrawer(): JSX.Element {
   return (
     <HomeDrawer.Navigator initialRouteName={HOME}>
-      <HomeDrawer.Screen name={HOME} component={Home} />
-      <HomeDrawer.Screen name={USER_INFO} component={UserInfo} />
+      <HomeDrawer.Screen name={HOME} component={HomeStackScreen} />
+      <HomeDrawer.Screen name={USER_INFO} component={UserInfoStackScreen} />
     </HomeDrawer.Navigator>
   );
 }
@@ -60,8 +61,8 @@ function HomeWithDrawer(): JSX.Element {
 function UserInfoWithDrawer(): JSX.Element {
   return (
     <GroupsDrawer.Navigator initialRouteName={USER_INFO}>
-      <GroupsDrawer.Screen name={USER_INFO} component={UserInfo} />
-      <GroupsDrawer.Screen name={HOME} component={Home} />
+      <GroupsDrawer.Screen name={HOME} component={HomeStackScreen} />
+      <GroupsDrawer.Screen name={USER_INFO} component={UserInfoStackScreen} />
     </GroupsDrawer.Navigator>
   );
 }
