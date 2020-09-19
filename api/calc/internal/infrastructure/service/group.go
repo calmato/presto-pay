@@ -222,6 +222,24 @@ func (gs *groupService) RemoveUsers(
 	return g, nil
 }
 
+func (gs *groupService) Destroy(ctx context.Context, groupID string) error {
+	g, err := gs.groupRepository.Show(ctx, groupID)
+	if err != nil {
+		return domain.ErrorInDatastore.New(err)
+	}
+
+	for _, userID := range g.UserIDs {
+		_ = gs.apiClient.RemoveGroup(ctx, userID, g.ID)
+	}
+
+	if err := gs.groupRepository.Destroy(ctx, groupID); err != nil {
+		err = xerrors.Errorf("Failed to Repository: %w", err)
+		return domain.ErrorInDatastore.New(err)
+	}
+
+	return nil
+}
+
 func (gs *groupService) UploadThumbnail(ctx context.Context, data []byte) (string, error) {
 	thumbnailURL, err := gs.groupUploader.UploadThumbnail(ctx, data)
 	if err != nil {

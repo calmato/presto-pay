@@ -53,3 +53,31 @@ type CreatePayment struct {
 	CreatedAt   time.Time               `json:"createdAt"`
 	UpdatedAt   time.Time               `json:"updatedAt"`
 }
+
+// PayerInUpdatePayment - 支払い情報更新の支払い者情報
+type PayerInUpdatePayment struct {
+	ID     string  `json:"id"`
+	Amount float64 `json:"amount"`
+	IsPaid bool    `json:"isPaid"`
+}
+
+// UpdatePayment - 支払い情報更新APIのレスポンス
+type UpdatePayment struct {
+	ID          string                  `json:"id"`
+	Name        string                  `json:"name"`
+	Currency    string                  `json:"currency"`
+	Total       float64                 `json:"total"`
+	Payers      []*PayerInUpdatePayment `json:"payers"`
+	Tags        []string                `json:"tags"`
+	Comment     string                  `json:"comment"`
+	ImageURLs   []string                `json:"imageUrls"`
+	PaidAt      time.Time               `json:"paidAt"`
+	IsCompleted bool                    `json:"isCompleted"`
+	CreatedAt   time.Time               `json:"createdAt"`
+	UpdatedAt   time.Time               `json:"updatedAt"`
+}
+
+// UpdatePayments - 支払い情報一括更新APIのレスポンス
+type UpdatePayments struct {
+	Payments []*UpdatePayment `json:"payments"`
+}

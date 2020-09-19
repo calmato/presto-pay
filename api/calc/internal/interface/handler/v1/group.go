@@ -21,6 +21,7 @@ type APIV1GroupHandler interface {
 	Update(ctx *gin.Context)
 	AddUsers(ctx *gin.Context)
 	RemoveUsers(ctx *gin.Context)
+	Destroy(ctx *gin.Context)
 }
 
 type apiV1GroupHandler struct {
@@ -212,4 +213,17 @@ func (gh *apiV1GroupHandler) RemoveUsers(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, res)
+}
+
+func (gh *apiV1GroupHandler) Destroy(ctx *gin.Context) {
+	groupID := ctx.Params.ByName("groupID")
+
+	c := middleware.GinContextToContext(ctx)
+	err := gh.groupApplication.Destroy(c, groupID)
+	if err != nil {
+		handler.ErrorHandling(ctx, err)
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{})
 }

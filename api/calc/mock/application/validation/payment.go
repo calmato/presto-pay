@@ -47,3 +47,31 @@ func (mr *MockPaymentRequestValidationMockRecorder) CreatePayment(req interface{
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreatePayment", reflect.TypeOf((*MockPaymentRequestValidation)(nil).CreatePayment), req)
 }
+
+// UpdatePayment mocks base method
+func (m *MockPaymentRequestValidation) UpdatePayment(req *request.UpdatePayment) []*domain.ValidationError {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdatePayment", req)
+	ret0, _ := ret[0].([]*domain.ValidationError)
+	return ret0
+}
+
+// UpdatePayment indicates an expected call of UpdatePayment
+func (mr *MockPaymentRequestValidationMockRecorder) UpdatePayment(req interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdatePayment", reflect.TypeOf((*MockPaymentRequestValidation)(nil).UpdatePayment), req)
+}
+
+// UpdatePayerInPayment mocks base method
+func (m *MockPaymentRequestValidation) UpdatePayerInPayment(req *request.UpdatePayerInPayment) []*domain.ValidationError {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdatePayerInPayment", req)
+	ret0, _ := ret[0].([]*domain.ValidationError)
+	return ret0
+}
+
+// UpdatePayerInPayment indicates an expected call of UpdatePayerInPayment
+func (mr *MockPaymentRequestValidationMockRecorder) UpdatePayerInPayment(req interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdatePayerInPayment", reflect.TypeOf((*MockPaymentRequestValidation)(nil).UpdatePayerInPayment), req)
+}
