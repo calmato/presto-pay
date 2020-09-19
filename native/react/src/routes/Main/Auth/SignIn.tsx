@@ -1,9 +1,10 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import React from "react";
 
+import PasswordReset from "./PasswordReset";
 import SignUp from "./SignUp";
 
-import { PasswordReset, SignIn } from "~/components/pages";
+import { SignIn } from "~/components/pages";
 import { PASSWORD_RESET, SIGN_IN, SIGN_UP } from "~/constants/path";
 
 const Stack = createStackNavigator();

@@ -4,7 +4,7 @@ import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import { Card } from "react-native-elements";
 
 import { Button, TextField } from "~/components/atoms";
-import { SIGN_UP } from "~/constants/path";
+import { SIGN_UP, PASSWORD_RESET } from "~/constants/path";
 import { COLOR } from "~/constants/theme";
 import { Context, Status } from "~/contexts/ui";
 
@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
 });
 
 export default function SignIn() {
-  const { navigate } = useNavigation();
+  const navigation = useNavigation();
   const { setApplicationState } = React.useContext(Context);
 
   // TODO: コンポーネント分割, アイコン追加
@@ -49,7 +49,9 @@ export default function SignIn() {
           style={styles.button}
           backgroundColor={COLOR.PRIMARY}
         />
-        <Text style={styles.link}>パスワードを忘れた方</Text>
+        <TouchableOpacity onPress={() => navigation.navigate(PASSWORD_RESET)}>
+          <Text style={styles.link}>パスワードを忘れた方</Text>
+        </TouchableOpacity>
         <Card.Divider />
         <Button
           onPress={() => console.log("click", "google")}
@@ -72,7 +74,7 @@ export default function SignIn() {
           style={styles.button}
           type="outline"
         />
-        <TouchableOpacity onPress={() => navigate(SIGN_UP)}>
+        <TouchableOpacity onPress={() => navigation.navigate(SIGN_UP)}>
           <Text style={styles.link}>アカウントをお持ちでない方</Text>
         </TouchableOpacity>
       </Card>
