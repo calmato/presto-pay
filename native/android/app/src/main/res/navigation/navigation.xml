@@ -120,6 +120,9 @@
     <action
       android:id="@+id/action_groupFriendFragment_to_friendListFragment"
       app:destination="@id/friendListFragment" />
+    <action
+      android:id="@+id/action_groupFriendFragment_to_home_fragment"
+      app:destination="@id/home_fragment" />
   </fragment>
   <fragment
     android:id="@+id/addFriendFragment"
@@ -219,5 +222,11 @@
     <action
       android:id="@+id/action_groupDetail_to_groupEditFragment"
       app:destination="@id/groupEditFragment" />
+    <action
+      android:id="@+id/action_groupDetail_to_groupFriendFragment"
+      app:destination="@id/groupFriendFragment" />
+    <action
+      android:id="@+id/action_groupDetail_to_account_home"
+      app:destination="@id/account_home" />
   </fragment>
 </navigation>

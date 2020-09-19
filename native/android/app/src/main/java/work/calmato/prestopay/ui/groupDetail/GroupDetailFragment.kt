@@ -72,5 +72,22 @@ class GroupDetailFragment : Fragment() {
     groupDetail?.thumbnail_url?.let {
       Picasso.with(requireContext()).load(it).into(groupIcon)
     }
+    bottom_navigation.setOnNavigationItemSelectedListener { item ->
+      when (item.itemId) {
+        R.id.action_person -> {
+          this.findNavController().navigate(
+            GroupDetailFragmentDirections.actionGroupDetailToAccountHome()
+          )
+          true
+        }
+        R.id.action_people -> {
+          this.findNavController().navigate(
+            GroupDetailFragmentDirections.actionGroupDetailToGroupFriendFragment()
+          )
+          true
+        }
+        else -> true
+      }
+    }
   }
 }
