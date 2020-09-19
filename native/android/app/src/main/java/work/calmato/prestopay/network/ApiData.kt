@@ -95,10 +95,10 @@ data class GroupPropertyResponse(
 data class GetGroupDetail(
   val id: String,
   val name: String,
-  val thumbnail_url: String,
+  val thumbnailUrl: String,
   val users: List<UserProperty>,
-  val created_at: String,
-  val updated_at: String
+  val createdAt: String,
+  val updatedAt: String
 ) : Parcelable {}
 
 @Parcelize

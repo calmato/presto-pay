@@ -200,8 +200,8 @@
       android:id="@+id/action_addExpenseFragment_to_groupListFragment"
       app:destination="@id/groupListFragment" />
     <argument
-      android:name="groupsList"
-      app:argType="work.calmato.prestopay.network.Groups"
+      android:name="group"
+      app:argType="work.calmato.prestopay.network.GroupPropertyResponse"
       app:nullable="false" />
     <action
       android:id="@+id/action_addExpenseFragment_to_home_fragment"

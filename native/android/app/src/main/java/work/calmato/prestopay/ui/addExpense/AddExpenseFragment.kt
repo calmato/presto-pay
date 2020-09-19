@@ -36,8 +36,6 @@ class AddExpenseFragment : PermissionBase() {
     ViewModelProvider(this).get(ViewModelFriend::class.java)
   }
 
-  private var groupsList: Groups? = null
-  private var checkedGroup: Groups? = null
   private var getGroupInfo: GroupPropertyResponse? = null
   private var recycleAdapter: AdapterCheck? = null
   private lateinit var clickListener: AdapterCheck.OnClickListener
@@ -56,14 +54,7 @@ class AddExpenseFragment : PermissionBase() {
     )
     clickListener = AdapterCheck.OnClickListener { viewModelFriend.itemIsClicked(it) }
     recycleAdapter = AdapterCheck(clickListener)
-    groupsList = AddExpenseFragmentArgs.fromBundle(requireArguments()).groupsList
-    checkedGroup =
-      Groups(groupsList!!.groups.filter { groupPropertyResponse -> groupPropertyResponse.selected })
-    checkedGroup.let {
-      if (it != null) {
-        getGroupInfo = it.groups[0]
-      }
-    }
+    getGroupInfo = AddExpenseFragmentArgs.fromBundle(requireArguments()).group
     return binding.root
   }
 
@@ -205,7 +196,7 @@ class AddExpenseFragment : PermissionBase() {
     val totalString = amountEdit.text.toString()
     val currency = currencySpinner.selectedItem.toString()
     val payer = payerSpinner.selectedItem
-    val payers = mutableListOf<UserExpense>(
+    val payers = mutableListOf(
       UserExpense(groupMembers.filter { userProperty -> userProperty.name == payer }[0].id, totalString.toFloat())
     )
     val targetUsers = groupMembers.filter { it.checked && it.name != payer }
@@ -247,7 +238,7 @@ class AddExpenseFragment : PermissionBase() {
         for (i in payers) {
           sumPayment += i.amount
         }
-        Log.i(TAG, "sendRequest: ${sumPayment}")
+        Log.i(TAG, "sendRequest: $sumPayment")
         Log.i(TAG, "sendRequest: $payers")
         if (sumPayment.absoluteValue < 0.01f) {
           val expenseProperty = CreateExpenseProperty(
