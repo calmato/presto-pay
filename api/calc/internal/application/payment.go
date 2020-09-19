@@ -114,6 +114,7 @@ func (pa *paymentApplication) Create(
 		Comment:   req.Comment,
 		ImageURLs: imageURLs,
 		Payers:    payers,
+		PaidAt:    req.PaidAt,
 	}
 
 	if _, err = pa.paymentService.Create(ctx, p, groupID); err != nil {
@@ -161,10 +162,24 @@ func (pa *paymentApplication) Update(
 		imageURLs[i] = imageURL
 	}
 
+	payers := make([]*payment.Payer, len(req.Payers))
+	for i, payer := range req.Payers {
+		payers[i] = &payment.Payer{
+			ID:     payer.ID,
+			Amount: payer.Amount,
+			IsPaid: payer.IsPaid,
+		}
+	}
+
 	p.Name = req.Name
+	p.Currency = req.Currency
+	p.Total = req.Total
+	p.Payers = payers
+	p.IsCompleted = req.IsCompleted
 	p.Tags = req.Tags
 	p.Comment = req.Comment
 	p.ImageURLs = append(p.ImageURLs, imageURLs...)
+	p.PaidAt = req.PaidAt
 
 	if _, err := pa.paymentService.Update(ctx, p, groupID); err != nil {
 		return nil, err
