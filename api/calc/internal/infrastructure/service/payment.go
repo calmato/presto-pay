@@ -77,6 +77,24 @@ func (ps *paymentService) Index(ctx context.Context, groupID string, startAt str
 	return payments, nil
 }
 
+func (ps *paymentService) Show(ctx context.Context, groupID string, paymentID string) (*payment.Payment, error) {
+	p, err := ps.paymentRepository.Show(ctx, groupID, paymentID)
+	if err != nil {
+		err = xerrors.Errorf("Failed to Repository: %w", err)
+		return nil, domain.NotFound.New(err)
+	}
+
+	for i, payer := range p.Payers {
+		if u, _ := ps.apiClient.ShowUser(ctx, payer.ID); u == nil {
+			p.Payers[i].Name = "Unknown User"
+		} else {
+			p.Payers[i].Name = u.Name
+		}
+	}
+
+	return p, nil
+}
+
 func (ps *paymentService) Create(ctx context.Context, p *payment.Payment, groupID string) (*payment.Payment, error) {
 	if ves := ps.paymentDomainValidation.Payment(ctx, p); len(ves) > 0 {
 		err := xerrors.New("Failed to DomainValidation")
@@ -156,18 +174,13 @@ func (ps *paymentService) Update(ctx context.Context, p *payment.Payment, groupI
 	return p, nil
 }
 
-func (ps *paymentService) UpdatePayers(
+func (ps *paymentService) UpdatePayer(
 	ctx context.Context, groupID string, paymentID string, payer *payment.Payer,
 ) (*payment.Payment, error) {
 	p, err := ps.paymentRepository.Show(ctx, groupID, paymentID)
 	if err != nil {
 		err = xerrors.Errorf("Failed to Repository: %w", err)
 		return nil, domain.NotFound.New(err)
-	}
-
-	if ves := ps.paymentDomainValidation.Payment(ctx, p); len(ves) > 0 {
-		err := xerrors.New("Failed to DomainValidation")
-		return nil, domain.Unknown.New(err, ves...)
 	}
 
 	current := time.Now()
@@ -179,7 +192,6 @@ func (ps *paymentService) UpdatePayers(
 			continue
 		}
 
-		p.Payers[i].Amount = payer.Amount
 		p.Payers[i].IsPaid = payer.IsPaid
 	}
 

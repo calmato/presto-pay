@@ -39,8 +39,14 @@ func Router(reg *registry.Registry) *gin.Engine {
 		{
 			groups.POST("/users", reg.V1Group.AddUsers)
 			groups.DELETE("/users", reg.V1Group.RemoveUsers)
-			groups.GET("/payment", reg.V1Payment.Index)
-			groups.POST("/payment", reg.V1Payment.Create)
+			groups.GET("/payments", reg.V1Payment.Index)
+			groups.POST("/payments", reg.V1Payment.Create)
+			groups.PATCH("/payments/:paymentID", reg.V1Payment.Update)
+
+			payments := groups.Group("/payments/:paymentID")
+			{
+				payments.PATCH("/payers/:payerID", reg.V1Payment.UpdatePayer)
+			}
 		}
 	}
 

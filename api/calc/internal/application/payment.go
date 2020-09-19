@@ -17,6 +17,10 @@ import (
 type PaymentApplication interface {
 	Index(ctx context.Context, groupID string, startAt string) ([]*payment.Payment, error)
 	Create(ctx context.Context, req *request.CreatePayment, groupID string) (*payment.Payment, error)
+	Update(ctx context.Context, req *request.UpdatePayment, groupID string, paymentID string) (*payment.Payment, error)
+	UpdatePayer(
+		ctx context.Context, req *request.UpdatePayerInPayment, groupID string, paymentID string, payerID string,
+	) (*payment.Payment, error)
 }
 
 type paymentApplication struct {
@@ -113,6 +117,92 @@ func (pa *paymentApplication) Create(
 	}
 
 	if _, err = pa.paymentService.Create(ctx, p, groupID); err != nil {
+		return nil, err
+	}
+
+	return p, nil
+}
+
+func (pa *paymentApplication) Update(
+	ctx context.Context, req *request.UpdatePayment, groupID string, paymentID string,
+) (*payment.Payment, error) {
+	u, err := pa.userService.Authentication(ctx)
+	if err != nil {
+		return nil, domain.Unauthorized.New(err)
+	}
+
+	if ves := pa.paymentRequestValidation.UpdatePayment(req); len(ves) > 0 {
+		err := xerrors.New("Failed to RequestValidation")
+		return nil, domain.InvalidRequestValidation.New(err, ves...)
+	}
+
+	contain, err := pa.userService.ContainsGroupID(ctx, u, groupID)
+	if err != nil {
+		return nil, err
+	}
+
+	if !contain {
+		err := xerrors.New("Failed to Application")
+		return nil, domain.Forbidden.New(err)
+	}
+
+	p, err := pa.paymentService.Show(ctx, groupID, paymentID)
+	if err != nil {
+		return nil, err
+	}
+
+	imageURLs := make([]string, len(req.Images))
+	for i, image := range req.Images {
+		imageURL, err := getImageURL(ctx, pa, image)
+		if err != nil {
+			return nil, err
+		}
+
+		imageURLs[i] = imageURL
+	}
+
+	p.Name = req.Name
+	p.Tags = req.Tags
+	p.Comment = req.Comment
+	p.ImageURLs = append(p.ImageURLs, imageURLs...)
+
+	if _, err := pa.paymentService.Update(ctx, p, groupID); err != nil {
+		return nil, err
+	}
+
+	return p, nil
+}
+
+func (pa *paymentApplication) UpdatePayer(
+	ctx context.Context, req *request.UpdatePayerInPayment, groupID string, paymentID string, payerID string,
+) (*payment.Payment, error) {
+	u, err := pa.userService.Authentication(ctx)
+	if err != nil {
+		return nil, domain.Unauthorized.New(err)
+	}
+
+	if ves := pa.paymentRequestValidation.UpdatePayerInPayment(req); len(ves) > 0 {
+		err := xerrors.New("Failed to RequestValidation")
+		return nil, domain.InvalidRequestValidation.New(err, ves...)
+	}
+
+	contain, err := pa.userService.ContainsGroupID(ctx, u, groupID)
+	if err != nil {
+		return nil, err
+	}
+
+	if !contain {
+		err := xerrors.New("Failed to Application")
+		return nil, domain.Forbidden.New(err)
+	}
+
+	payer := &payment.Payer{
+		ID:     payerID,
+		IsPaid: req.IsPaid,
+	}
+
+	p, err := pa.paymentService.UpdatePayer(ctx, groupID, paymentID, payer)
+	if err != nil {
 		return nil, err
 	}
 

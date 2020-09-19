@@ -20,18 +20,17 @@ type CreatePayment struct {
 	PaidAt   time.Time               `json:"paidAt" validate:"required"`
 }
 
-// PayerInUpdatePayment - 支払い情報更新用 支払い者情報
-type PayerInUpdatePayment struct {
-	ID     string `json:"id"`
-	IsPaid bool   `json:"isPaid"`
-}
-
 // UpdatePayment - 支払い情報作成APIのリクエスト
 // TODO: 金の更新はいったん無視
 type UpdatePayment struct {
-	Name    string                  `json:"name" validate:"required,max=64"`
-	Payers  []*PayerInUpdatePayment `json:"payers" validate:"min=2"`
-	Tags    []string                `json:"tags" validate:"min=0,dive,max=32"`
-	Comment string                  `json:"comment" validate:"max=256"`
-	Images  []string                `json:"images"`
+	Name    string   `json:"name" validate:"required,max=64"`
+	Tags    []string `json:"tags" validate:"min=0,dive,max=32"`
+	Comment string   `json:"comment" validate:"max=256"`
+	Images  []string `json:"images"`
+}
+
+// UpdatePayerInPayment - ユーザー毎の支払い情報編集APIのリクエスト
+// TODO: 金の更新はいったん無視
+type UpdatePayerInPayment struct {
+	IsPaid bool `json:"isPaid"`
 }

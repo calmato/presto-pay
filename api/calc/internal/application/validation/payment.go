@@ -9,6 +9,7 @@ import (
 type PaymentRequestValidation interface {
 	CreatePayment(req *request.CreatePayment) []*domain.ValidationError
 	UpdatePayment(req *request.UpdatePayment) []*domain.ValidationError
+	UpdatePayerInPayment(req *request.UpdatePayerInPayment) []*domain.ValidationError
 }
 
 type paymentRequestValidation struct {
@@ -29,5 +30,11 @@ func (prv *paymentRequestValidation) CreatePayment(req *request.CreatePayment) [
 }
 
 func (prv *paymentRequestValidation) UpdatePayment(req *request.UpdatePayment) []*domain.ValidationError {
+	return prv.validator.Run(req)
+}
+
+func (prv *paymentRequestValidation) UpdatePayerInPayment(
+	req *request.UpdatePayerInPayment,
+) []*domain.ValidationError {
 	return prv.validator.Run(req)
 }
