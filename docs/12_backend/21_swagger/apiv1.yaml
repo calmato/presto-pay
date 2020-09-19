@@ -441,9 +441,50 @@ paths:
             type: string
             format: uuid
           required: true
-          description: グループUUID
+          description: 支払いUUID
       requestBody:
         $ref: '#/components/requestBodies/UpdatePayment'
+      responses:
+        '200':
+          $ref: '#/components/responses/UpdatePayment'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/Unkown'
+
+  /groups/{groupId}/payments/{paymentId}/payers/{payerId}:
+    patch:
+      summary: 支払い情報 支払い者情報更新
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: groupId
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: グループUUID
+        - in: path
+          name: paymentId
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: 支払いUUID
+        - in: path
+          name: payerId
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: ユーザーUUID
+      requestBody:
+        $ref: '#/components/requestBodies/UpdatePayerInPayment'
       responses:
         '200':
           $ref: '#/components/responses/UpdatePayment'
@@ -776,6 +817,9 @@ components:
                     amount:
                       type: integer
                       description: 支払い金額
+                    isPaid:
+                      type: boolean
+                      description: 支払い完了フラグ
               isCompleted:
                 type: boolean
                 description: 支払い完了フラグ
@@ -801,6 +845,20 @@ components:
               - total
               - isCompleted
               - paidAt
+
+    UpdatePayerInPayment:
+      description: 支払い情報 支払い者情報編集
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isPaid:
+                type: boolean
+                description: 支払い完了フラグ
+            required:
+              - isPaid
 
   responses:
     BadRequest:
