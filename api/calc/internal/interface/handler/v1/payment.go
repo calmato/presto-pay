@@ -17,6 +17,7 @@ type APIV1PaymentHandler interface {
 	Index(ctx *gin.Context)
 	Create(ctx *gin.Context)
 	Update(ctx *gin.Context)
+	UpdateStatus(ctx *gin.Context)
 	UpdatePayer(ctx *gin.Context)
 }
 
@@ -132,6 +133,50 @@ func (ph *apiV1PaymentHandler) Update(ctx *gin.Context) {
 
 	c := middleware.GinContextToContext(ctx)
 	p, err := ph.paymentApplication.Update(c, req, groupID, paymentID)
+	if err != nil {
+		handler.ErrorHandling(ctx, err)
+		return
+	}
+
+	payers := make([]*response.PayerInUpdatePayment, len(p.Payers))
+	for i, payer := range p.Payers {
+		payers[i] = &response.PayerInUpdatePayment{
+			ID:     payer.ID,
+			Amount: payer.Amount,
+			IsPaid: payer.IsPaid,
+		}
+	}
+
+	res := &response.UpdatePayment{
+		ID:          p.ID,
+		Name:        p.Name,
+		Currency:    p.Currency,
+		Total:       p.Total,
+		Payers:      payers,
+		Tags:        p.Tags,
+		Comment:     p.Comment,
+		ImageURLs:   p.ImageURLs,
+		PaidAt:      p.PaidAt,
+		IsCompleted: p.IsCompleted,
+		CreatedAt:   p.CreatedAt,
+		UpdatedAt:   p.UpdatedAt,
+	}
+
+	ctx.JSON(http.StatusOK, res)
+}
+
+func (ph *apiV1PaymentHandler) UpdateStatus(ctx *gin.Context) {
+	groupID := ctx.Params.ByName("groupID")
+	paymentID := ctx.Params.ByName("paymentID")
+
+	req := &request.UpdatePayment{}
+	if err := ctx.BindJSON(req); err != nil {
+		handler.ErrorHandling(ctx, domain.Unauthorized.New(err))
+		return
+	}
+
+	c := middleware.GinContextToContext(ctx)
+	p, err := ph.paymentApplication.UpdateStatus(c, groupID, paymentID)
 	if err != nil {
 		handler.ErrorHandling(ctx, err)
 		return

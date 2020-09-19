@@ -21,6 +21,8 @@ type PaymentApplication interface {
 	UpdatePayer(
 		ctx context.Context, req *request.UpdatePayerInPayment, groupID string, paymentID string, payerID string,
 	) (*payment.Payment, error)
+	UpdateStatus(ctx context.Context, groupID string, paymentID string) (*payment.Payment, error)
+	UpdateStatusAll(ctx context.Context, groupID string) ([]*payment.Payment, error)
 }
 
 type paymentApplication struct {
@@ -222,6 +224,50 @@ func (pa *paymentApplication) UpdatePayer(
 	}
 
 	return p, nil
+}
+
+// UpdateStatus - 支払い完了フラグの更新
+func (pa *paymentApplication) UpdateStatus(ctx context.Context, groupID string, paymentID string) (*payment.Payment, error) {
+	u, err := pa.userService.Authentication(ctx)
+	if err != nil {
+		return nil, domain.Unauthorized.New(err)
+	}
+
+	if ves := pa.paymentRequestValidation.UpdatePayerInPayment(req); len(ves) > 0 {
+		err := xerrors.New("Failed to RequestValidation")
+		return nil, domain.InvalidRequestValidation.New(err, ves...)
+	}
+
+	contain, err := pa.userService.ContainsGroupID(ctx, u, groupID)
+	if err != nil {
+		return nil, err
+	}
+
+	if !contain {
+		err := xerrors.New("Failed to Application")
+		return nil, domain.Forbidden.New(err)
+	}
+
+	p, err := pa.paymentService.Show(ctx, groupID, paymentID)
+	if err != nil {
+		return nil, err
+	}
+
+	p.IsCompleted = !p.IsCompleted
+	for i := 0; i < len(p.Payers); i++ {
+		p.Payers[i].IsPaid = p.IsCompleted
+	}
+
+	if _, err := pa.paymentService.Update(ctx, p, groupID); err != nil {
+		return nil, err
+	}
+
+	return p, nil
+}
+
+// UpdateStatusAll - グループ内の支払い情報全ての支払い完了フラグを完了に
+func (pa *paymentApplication) UpdateStatusAll(ctx context.Context, groupID string) ([]*payment.Payment, error) {
+	return nil, nil
 }
 
 func getImageURL(ctx context.Context, pa *paymentApplication, image string) (string, error) {
