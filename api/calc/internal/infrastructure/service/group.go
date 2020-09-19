@@ -223,6 +223,15 @@ func (gs *groupService) RemoveUsers(
 }
 
 func (gs *groupService) Destroy(ctx context.Context, groupID string) error {
+	g, err := gs.groupRepository.Show(ctx, groupID)
+	if err != nil {
+		return domain.ErrorInDatastore.New(err)
+	}
+
+	for _, userID := range g.UserIDs {
+		_ = gs.apiClient.RemoveGroup(ctx, userID, g.ID)
+	}
+
 	if err := gs.groupRepository.Destroy(ctx, groupID); err != nil {
 		err = xerrors.Errorf("Failed to Repository: %w", err)
 		return domain.ErrorInDatastore.New(err)
