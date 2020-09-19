@@ -125,6 +125,20 @@ func (mr *MockGroupServiceMockRecorder) RemoveUsers(ctx, groupID, userIDs interf
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RemoveUsers", reflect.TypeOf((*MockGroupService)(nil).RemoveUsers), ctx, groupID, userIDs)
 }
 
+// Destroy mocks base method
+func (m *MockGroupService) Destroy(ctx context.Context, groupID string) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Destroy", ctx, groupID)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// Destroy indicates an expected call of Destroy
+func (mr *MockGroupServiceMockRecorder) Destroy(ctx, groupID interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Destroy", reflect.TypeOf((*MockGroupService)(nil).Destroy), ctx, groupID)
+}
+
 // UploadThumbnail mocks base method
 func (m *MockGroupService) UploadThumbnail(ctx context.Context, data []byte) (string, error) {
 	m.ctrl.T.Helper()

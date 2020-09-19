@@ -23,6 +23,7 @@ type PaymentApplication interface {
 	) (*payment.Payment, error)
 	UpdateStatus(ctx context.Context, groupID string, paymentID string) (*payment.Payment, error)
 	UpdateStatusAll(ctx context.Context, groupID string) ([]*payment.Payment, error)
+	Destroy(ctx context.Context, groupID string, paymentID string) error
 }
 
 type paymentApplication struct {
@@ -298,6 +299,34 @@ func (pa *paymentApplication) UpdateStatusAll(ctx context.Context, groupID strin
 	}
 
 	return ps, nil
+}
+
+func (pa *paymentApplication) Destroy(ctx context.Context, groupID string, paymentID string) error {
+	u, err := pa.userService.Authentication(ctx)
+	if err != nil {
+		return domain.Unauthorized.New(err)
+	}
+
+	contain, err := pa.userService.ContainsGroupID(ctx, u, groupID)
+	if err != nil {
+		return err
+	}
+
+	if !contain {
+		err := xerrors.New("Failed to Application")
+		return domain.Forbidden.New(err)
+	}
+
+	_, err = pa.paymentService.Show(ctx, groupID, paymentID)
+	if err != nil {
+		return err
+	}
+
+	if err = pa.paymentService.Destroy(ctx, groupID, paymentID); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func getImageURL(ctx context.Context, pa *paymentApplication, image string) (string, error) {

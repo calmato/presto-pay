@@ -267,6 +267,15 @@ func (ps *paymentService) UpdatePayer(
 	return p, nil
 }
 
+func (ps *paymentService) Destroy(ctx context.Context, groupID string, paymentID string) error {
+	if err := ps.paymentRepository.Destroy(ctx, groupID, paymentID); err != nil {
+		err = xerrors.Errorf("Failed to Repository: %w", err)
+		return domain.ErrorInDatastore.New(err)
+	}
+
+	return nil
+}
+
 func (ps *paymentService) UploadImage(ctx context.Context, data []byte) (string, error) {
 	imageURL, err := ps.paymentUploader.UploadImage(ctx, data)
 	if err != nil {

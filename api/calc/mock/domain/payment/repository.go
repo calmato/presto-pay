@@ -121,3 +121,17 @@ func (mr *MockPaymentRepositoryMockRecorder) Update(ctx, p, groupID interface{})
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Update", reflect.TypeOf((*MockPaymentRepository)(nil).Update), ctx, p, groupID)
 }
+
+// Destroy mocks base method
+func (m *MockPaymentRepository) Destroy(ctx context.Context, groupID, paymentID string) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Destroy", ctx, groupID, paymentID)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// Destroy indicates an expected call of Destroy
+func (mr *MockPaymentRepositoryMockRecorder) Destroy(ctx, groupID, paymentID interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Destroy", reflect.TypeOf((*MockPaymentRepository)(nil).Destroy), ctx, groupID, paymentID)
+}

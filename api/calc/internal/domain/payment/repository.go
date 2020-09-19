@@ -10,4 +10,5 @@ type PaymentRepository interface {
 	Show(ctx context.Context, groupID string, paymentID string) (*Payment, error)
 	Create(ctx context.Context, p *Payment, groupID string) error
 	Update(ctx context.Context, p *Payment, groupID string) error
+	Destroy(ctx context.Context, groupID string, paymentID string) error
 }
