@@ -59,6 +59,7 @@ func (ph *apiV1PaymentHandler) Index(ctx *gin.Context) {
 
 		payments[i] = &response.PaymentInIndexPayments{
 			ID:          p.ID,
+			GroupID:     p.GroupID,
 			Name:        p.Name,
 			Currency:    p.Currency,
 			Total:       p.Total,
@@ -107,6 +108,7 @@ func (ph *apiV1PaymentHandler) Create(ctx *gin.Context) {
 
 	res := &response.CreatePayment{
 		ID:          p.ID,
+		GroupID:     p.GroupID,
 		Name:        p.Name,
 		Currency:    p.Currency,
 		Total:       p.Total,
@@ -151,6 +153,7 @@ func (ph *apiV1PaymentHandler) Update(ctx *gin.Context) {
 
 	res := &response.UpdatePayment{
 		ID:          p.ID,
+		GroupID:     p.GroupID,
 		Name:        p.Name,
 		Currency:    p.Currency,
 		Total:       p.Total,
@@ -195,6 +198,7 @@ func (ph *apiV1PaymentHandler) UpdateStatus(ctx *gin.Context) {
 
 	res := &response.UpdatePayment{
 		ID:          p.ID,
+		GroupID:     p.GroupID,
 		Name:        p.Name,
 		Currency:    p.Currency,
 		Total:       p.Total,
@@ -240,6 +244,7 @@ func (ph *apiV1PaymentHandler) UpdateStatusAll(ctx *gin.Context) {
 
 		pr := &response.UpdatePayment{
 			ID:          p.ID,
+			GroupID:     p.GroupID,
 			Name:        p.Name,
 			Currency:    p.Currency,
 			Total:       p.Total,
@@ -292,6 +297,7 @@ func (ph *apiV1PaymentHandler) UpdatePayer(ctx *gin.Context) {
 
 	res := &response.UpdatePayment{
 		ID:          p.ID,
+		GroupID:     p.GroupID,
 		Name:        p.Name,
 		Currency:    p.Currency,
 		Total:       p.Total,
