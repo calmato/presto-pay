@@ -2,8 +2,7 @@ import { useNavigation } from "@react-navigation/native";
 import React from "react";
 import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 
-import { CHECK_EMAIL } from "~/constants/path";
-import { Context, Status } from "~/contexts/ui";
+import { PAYMENT_ADD } from "~/constants/path";
 
 const styles = StyleSheet.create({
   container: {
@@ -18,21 +17,17 @@ const styles = StyleSheet.create({
   },
 });
 
-export default function SignUp() {
+export default function PaymentSelect() {
   const navigation = useNavigation();
-  const { setApplicationState } = React.useContext(Context);
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>SignUp</Text>
+      <Text style={styles.title}>PaymentSelect</Text>
       <TouchableOpacity onPress={() => navigation.goBack()}>
-        <Text>SignIn</Text>
+        <Text>goBack</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => setApplicationState(Status.AUTHORIZED)}>
-        <Text>SignUp</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.navigate(CHECK_EMAIL)}>
-        <Text>CheckEmail</Text>
+      <TouchableOpacity onPress={() => navigation.navigate(PAYMENT_ADD)}>
+        <Text>PaymentAdd</Text>
       </TouchableOpacity>
     </View>
   );

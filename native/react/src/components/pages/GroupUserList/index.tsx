@@ -2,8 +2,7 @@ import { useNavigation } from "@react-navigation/native";
 import React from "react";
 import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 
-import { CHECK_EMAIL } from "~/constants/path";
-import { Context, Status } from "~/contexts/ui";
+import { GROUP_USER_SEARCH } from "~/constants/path";
 
 const styles = StyleSheet.create({
   container: {
@@ -18,21 +17,17 @@ const styles = StyleSheet.create({
   },
 });
 
-export default function SignUp() {
+export default function GroupUserList() {
   const navigation = useNavigation();
-  const { setApplicationState } = React.useContext(Context);
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>SignUp</Text>
+      <Text style={styles.title}>GroupEdit</Text>
       <TouchableOpacity onPress={() => navigation.goBack()}>
-        <Text>SignIn</Text>
+        <Text>GroupEdit</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => setApplicationState(Status.AUTHORIZED)}>
-        <Text>SignUp</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.navigate(CHECK_EMAIL)}>
-        <Text>CheckEmail</Text>
+      <TouchableOpacity onPress={() => navigation.navigate(GROUP_USER_SEARCH)}>
+        <Text>GroupUserSearch</Text>
       </TouchableOpacity>
     </View>
   );

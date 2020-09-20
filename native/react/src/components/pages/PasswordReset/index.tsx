@@ -3,7 +3,6 @@ import React from "react";
 import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 
 import { CHECK_EMAIL } from "~/constants/path";
-import { Context, Status } from "~/contexts/ui";
 
 const styles = StyleSheet.create({
   container: {
@@ -18,18 +17,14 @@ const styles = StyleSheet.create({
   },
 });
 
-export default function SignUp() {
+export default function PasswordReset() {
   const navigation = useNavigation();
-  const { setApplicationState } = React.useContext(Context);
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>SignUp</Text>
+      <Text style={styles.title}>PasswordReset</Text>
       <TouchableOpacity onPress={() => navigation.goBack()}>
         <Text>SignIn</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => setApplicationState(Status.AUTHORIZED)}>
-        <Text>SignUp</Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={() => navigation.navigate(CHECK_EMAIL)}>
         <Text>CheckEmail</Text>

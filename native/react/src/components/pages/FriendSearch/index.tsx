@@ -2,8 +2,7 @@ import { useNavigation } from "@react-navigation/native";
 import React from "react";
 import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 
-import { CHECK_EMAIL } from "~/constants/path";
-import { Context, Status } from "~/contexts/ui";
+import { FRIEND_ADD, FRIEND_INVITED } from "~/constants/path";
 
 const styles = StyleSheet.create({
   container: {
@@ -18,21 +17,20 @@ const styles = StyleSheet.create({
   },
 });
 
-export default function SignUp() {
+export default function FriendSearch() {
   const navigation = useNavigation();
-  const { setApplicationState } = React.useContext(Context);
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>SignUp</Text>
+      <Text style={styles.title}>FriendSearch</Text>
       <TouchableOpacity onPress={() => navigation.goBack()}>
-        <Text>SignIn</Text>
+        <Text>goBack</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => setApplicationState(Status.AUTHORIZED)}>
-        <Text>SignUp</Text>
+      <TouchableOpacity onPress={() => navigation.navigate(FRIEND_ADD)}>
+        <Text>FriendAdd</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.navigate(CHECK_EMAIL)}>
-        <Text>CheckEmail</Text>
+      <TouchableOpacity onPress={() => navigation.navigate(FRIEND_INVITED)}>
+        <Text>FriendInvited</Text>
       </TouchableOpacity>
     </View>
   );
