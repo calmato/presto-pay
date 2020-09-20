@@ -35,10 +35,12 @@ data class DatabaseGroup(
 data class DatabasePayment(
   @PrimaryKey
   val id: String,
+  val groupId: String,
   val name: String,
   val currency: String,
   val total: Float,
   val payers: List<NetworkPayer>,
+  val isCompleted: Boolean,
   val tags: List<String>?,
   val comment: String?,
   val imageUrls: List<String>?,

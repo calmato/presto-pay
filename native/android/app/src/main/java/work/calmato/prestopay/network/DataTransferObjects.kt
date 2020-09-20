@@ -21,20 +21,22 @@ data class NetworkFriend(
 data class NetworkGroup(
   val id: String,
   val name: String,
-  val thumbnail_url: String,
+  val thumbnailUrl: String,
   @Json(name = "userIds")val userIds: List<String>,
-  val created_at: String,
-  val updated_at: String,
+  val createdAt: String,
+  val updatedAt: String,
   var selected: Boolean = false
 )
 
 @JsonClass(generateAdapter = true)
 data class NetworkPayment(
   val id:String,
+  val groupId:String,
   val name:String,
   val currency:String,
   val total:Float,
   @Json(name = "payers")val payers:List<NetworkPayer>,
+  val isCompleted:Boolean,
   @Json(name = "tags")val tags:List<String>?,
   val comment:String?,
   @Json(name = "imageUrls")val imageUrls:List<String>?,
@@ -57,7 +59,7 @@ fun NetworkFriend.asDomainModel(): UserProperty {
 }
 
 fun NetworkGroup.asDomainModel(): GroupPropertyResponse {
-  return GroupPropertyResponse(id, name, thumbnail_url, userIds, created_at, updated_at, selected)
+  return GroupPropertyResponse(id, name, thumbnailUrl, userIds, createdAt, updatedAt, selected)
 }
 
 fun NetworkPayment.asDomainModel(): PaymentPropertyGet{
@@ -82,10 +84,10 @@ fun NetworkGroupContainer.asDomainModel(): List<GroupPropertyResponse> {
     GroupPropertyResponse(
       id = it.id,
       name = it.name,
-      thumbnail_url = it.thumbnail_url,
+      thumbnail_url = it.thumbnailUrl,
       user_ids = it.userIds,
-      created_at = it.created_at,
-      updated_at = it.updated_at,
+      created_at = it.createdAt,
+      updated_at = it.updatedAt,
       selected = it.selected
     )
   }
@@ -127,10 +129,10 @@ fun NetworkGroupContainer.asDatabaseModel(): Array<DatabaseGroup> {
     DatabaseGroup(
       id = it.id,
       name = it.name,
-      thumbnailUrl = it.thumbnail_url,
+      thumbnailUrl = it.thumbnailUrl,
       userIds = it.userIds,
-      createdAt = it.created_at,
-      updateAt = it.updated_at
+      createdAt = it.createdAt,
+      updateAt = it.updatedAt
     )
   }.toTypedArray()
 }
@@ -139,10 +141,12 @@ fun NetworkPaymentContainer.asDatabaseModel():Array<DatabasePayment>{
   return payments.map {
     DatabasePayment(
       id = it.id,
+      groupId = it.groupId,
       name = it.name,
       currency = it.currency,
       total = it.total,
       payers = it.payers,
+      isCompleted = it.isCompleted,
       tags = it.tags,
       comment = it.comment,
       imageUrls = it.imageUrls,

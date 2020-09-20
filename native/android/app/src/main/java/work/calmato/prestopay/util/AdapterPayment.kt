@@ -33,7 +33,7 @@ class AdapterPayment(val context:Context) : RecyclerView.Adapter<AdapterPayment.
       val maxAmount = thisPayment.payers.map { it.amount }.max()
       val maxPayer = thisPayment.payers.filter { it.amount == maxAmount }[0].name
       if (maxAmount != null) {
-        it.whoPaid = maxPayer + "が" + thisPayment.currency + (maxAmount * 100).roundToInt().toFloat() / 100 + "払った"
+        it.whoPaid = maxPayer + "が" + thisPayment.currency + (maxAmount * 100).roundToInt().toFloat() / 100 + "多く払った"
       }
     }
   }

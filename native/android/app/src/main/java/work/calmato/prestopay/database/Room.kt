@@ -36,14 +36,14 @@ interface GroupDao {
 
 @Dao
 interface PaymentDao {
-  @Query("select * from databasepayment")
-  fun getPayments(): LiveData<List<DatabasePayment>>
+  @Query("select * from databasepayment where groupId = :groupId")
+  fun getPayments(groupId:String): LiveData<List<DatabasePayment>>
 
   @Insert(onConflict = OnConflictStrategy.REPLACE)
   fun insertPayment(payment: DatabasePayment)
 
-  @Query("delete from databasepayment")
-  fun deleteAll()
+  @Query("delete from databasepayment where id = :groupId")
+  fun deleteAll(groupId:String)
 
   @Insert(onConflict = OnConflictStrategy.REPLACE)
   fun insertAll(vararg payments: DatabasePayment)
@@ -64,7 +64,7 @@ interface TagDao {
     DatabaseGroup::class,
     DatabasePayment::class,
     DatabaseTag::class],
-  version = 5,
+  version = 7,
   exportSchema = false
 )
 

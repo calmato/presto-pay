@@ -41,6 +41,7 @@ class GroupDetailFragment : Fragment() {
       adapter = recycleAdapter
     }
     groupDetail = GroupDetailFragmentArgs.fromBundle(requireArguments()).groupDetail
+    viewModel.setInitPaymentList(groupDetail!!.id)
     return binding.root
   }
 
@@ -54,7 +55,7 @@ class GroupDetailFragment : Fragment() {
       GroupDetailFragmentDirections.actionGroupDetailToGroupEditFragment()
       )
     }
-    viewModel.paymentsList.observe(viewLifecycleOwner, Observer<List<PaymentPropertyGet>> {
+    viewModel.paymentsList!!.observe(viewLifecycleOwner, Observer<List<PaymentPropertyGet>> {
       it?.apply {
         recycleAdapter?.paymentList = it
       }
