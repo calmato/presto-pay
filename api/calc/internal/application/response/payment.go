@@ -13,6 +13,7 @@ type PayerInIndexPayments struct {
 // PaymentInIndexPayments - 支払い情報一覧取得の支払い情報
 type PaymentInIndexPayments struct {
 	ID          string                  `json:"id"`
+	GroupID     string                  `json:"groupId"`
 	Name        string                  `json:"name"`
 	Currency    string                  `json:"currency"`
 	Total       float64                 `json:"total"`
@@ -41,6 +42,7 @@ type PayerInCreatePayment struct {
 // CreatePayment - 支払い情報作成APIのレスポンス
 type CreatePayment struct {
 	ID          string                  `json:"id"`
+	GroupID     string                  `json:"groupId"`
 	Name        string                  `json:"name"`
 	Currency    string                  `json:"currency"`
 	Total       float64                 `json:"total"`
@@ -64,6 +66,7 @@ type PayerInUpdatePayment struct {
 // UpdatePayment - 支払い情報更新APIのレスポンス
 type UpdatePayment struct {
 	ID          string                  `json:"id"`
+	GroupID     string                  `json:"groupId"`
 	Name        string                  `json:"name"`
 	Currency    string                  `json:"currency"`
 	Total       float64                 `json:"total"`

@@ -67,13 +67,15 @@ func (ps *paymentService) Index(ctx context.Context, groupID string, startAt str
 		return nil, domain.ErrorInDatastore.New(err)
 	}
 
-	for _, payment := range payments {
-		for i, payer := range payment.Payers {
+	for i, payment := range payments {
+		payments[i].GroupID = groupID
+
+		for j, payer := range payment.Payers {
 			u := us[payer.ID]
 			if u == nil {
-				payment.Payers[i].Name = unknownUsername
+				payment.Payers[j].Name = unknownUsername
 			} else {
-				payment.Payers[i].Name = us[payer.ID].Name
+				payment.Payers[j].Name = us[payer.ID].Name
 			}
 		}
 	}
@@ -108,13 +110,15 @@ func (ps *paymentService) IndexByIsCompleted(
 		return nil, domain.ErrorInDatastore.New(err)
 	}
 
-	for _, payment := range payments {
-		for i, payer := range payment.Payers {
+	for i, payment := range payments {
+		payments[i].GroupID = groupID
+
+		for j, payer := range payment.Payers {
 			u := us[payer.ID]
 			if u == nil {
-				payment.Payers[i].Name = unknownUsername
+				payment.Payers[j].Name = unknownUsername
 			} else {
-				payment.Payers[i].Name = us[payer.ID].Name
+				payment.Payers[j].Name = us[payer.ID].Name
 			}
 		}
 	}
@@ -128,6 +132,8 @@ func (ps *paymentService) Show(ctx context.Context, groupID string, paymentID st
 		err = xerrors.Errorf("Failed to Repository: %w", err)
 		return nil, domain.NotFound.New(err)
 	}
+
+	p.GroupID = groupID
 
 	for i, payer := range p.Payers {
 		if u, _ := ps.apiClient.ShowUser(ctx, payer.ID); u == nil {
@@ -150,6 +156,7 @@ func (ps *paymentService) Create(ctx context.Context, p *payment.Payment, groupI
 	current := time.Now()
 
 	p.ID = uuid.New().String()
+	p.GroupID = groupID
 	p.IsCompleted = false
 	p.CreatedAt = current
 	p.UpdatedAt = current
@@ -197,6 +204,7 @@ func (ps *paymentService) Update(ctx context.Context, p *payment.Payment, groupI
 	}
 
 	current := time.Now()
+	p.GroupID = groupID
 	p.UpdatedAt = current
 
 	// 支払い完了フラグの更新
@@ -236,6 +244,7 @@ func (ps *paymentService) UpdatePayer(
 	}
 
 	current := time.Now()
+	p.GroupID = groupID
 	p.UpdatedAt = current
 
 	// ユーザ毎の支払い情報更新

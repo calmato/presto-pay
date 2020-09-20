@@ -7,6 +7,7 @@ import (
 // Payment - 支払い エンティティ
 type Payment struct {
 	ID          string    `firestore:"id"`           // UUID
+	GroupID     string    `firestore:"-"`            // グループUUID
 	Name        string    `firestore:"name"`         // 支払い名
 	Currency    string    `firestore:"currency"`     // 通貨
 	Total       float64   `firestore:"total"`        // 合計金額
