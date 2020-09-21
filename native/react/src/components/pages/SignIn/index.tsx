@@ -7,6 +7,8 @@ import { Button, TextField } from "~/components/atoms";
 import { SIGN_UP, PASSWORD_RESET } from "~/constants/path";
 import { COLOR } from "~/constants/theme";
 import { Context, Status } from "~/contexts/ui";
+import { signInWithPasswordToFirebase } from "~/lib/firebase";
+import { useControlledComponent } from "~/lib/hooks";
 
 const styles = StyleSheet.create({
   container: {
@@ -34,16 +36,30 @@ const styles = StyleSheet.create({
 export default function SignIn() {
   const navigation = useNavigation();
   const { setApplicationState } = React.useContext(Context);
+  const email = useControlledComponent("");
+  const password = useControlledComponent("");
+
+  const signInWithPassword = React.useCallback(async () => {
+    // TODO: ログイン処理の方法が決まり次第リファクタ
+    const userInformation = await signInWithPasswordToFirebase(email.value, password.value)
+    console.log("debug:", "SignIn", userInformation);
+    setApplicationState(Status.AUTHORIZED);
+  }, [email.value, password.value, setApplicationState]);
 
   // TODO: コンポーネント分割, アイコン追加
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Presto Pay</Text>
       <Card>
-        <TextField placeholder="Email" />
-        <TextField placeholder="Password" secureTextEntry={true} />
+        <TextField placeholder="Email" value={email.value} onChangeText={email.onChangeText} />
+        <TextField
+          placeholder="Password"
+          secureTextEntry={true}
+          value={password.value}
+          onChangeText={password.onChangeText}
+        />
         <Button
-          onPress={() => setApplicationState(Status.AUTHORIZED)}
+          onPress={signInWithPassword}
           title="ログイン"
           titleColor={COLOR.MAIN}
           style={styles.button}
