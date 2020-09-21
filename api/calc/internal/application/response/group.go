@@ -17,20 +17,20 @@ type UserToShowGroup struct {
 type ShowGroup struct {
 	ID           string             `json:"id"`
 	Name         string             `json:"name"`
-	ThumbnailURL string             `json:"thumbnail_url"`
+	ThumbnailURL string             `json:"thumbnailUrl"`
 	Users        []*UserToShowGroup `json:"users"`
-	CreatedAt    time.Time          `json:"created_at"`
-	UpdatedAt    time.Time          `json:"updated_at"`
+	CreatedAt    time.Time          `json:"createdAt"`
+	UpdatedAt    time.Time          `json:"updatedAt"`
 }
 
 // IndexGroup - グループ一覧取得APIのグループ情報
 type IndexGroup struct {
 	ID           string    `json:"id"`
 	Name         string    `json:"name"`
-	ThumbnailURL string    `json:"thumbnail_url"`
+	ThumbnailURL string    `json:"thumbnailUrl"`
 	UserIDs      []string  `json:"userIds"`
-	CreatedAt    time.Time `json:"created_at"`
-	UpdatedAt    time.Time `json:"updated_at"`
+	CreatedAt    time.Time `json:"createdAt"`
+	UpdatedAt    time.Time `json:"updatedAt"`
 }
 
 // IndexGroups - グループ一覧取得APIのレスポンス
@@ -42,18 +42,38 @@ type IndexGroups struct {
 type CreateGroup struct {
 	ID           string    `json:"id"`
 	Name         string    `json:"name"`
-	ThumbnailURL string    `json:"thumbnail_url"`
-	UserIDs      []string  `json:"user_ids"`
-	CreatedAt    time.Time `json:"created_at"`
-	UpdatedAt    time.Time `json:"updated_at"`
+	ThumbnailURL string    `json:"thumbnailUrl"`
+	UserIDs      []string  `json:"userIds"`
+	CreatedAt    time.Time `json:"createdAt"`
+	UpdatedAt    time.Time `json:"updatedAt"`
+}
+
+// UpdateGroup - グループ編集APIのレスポンス
+type UpdateGroup struct {
+	ID           string    `json:"id"`
+	Name         string    `json:"name"`
+	ThumbnailURL string    `json:"thumbnailUrl"`
+	UserIDs      []string  `json:"userIds"`
+	CreatedAt    time.Time `json:"createdAt"`
+	UpdatedAt    time.Time `json:"updatedAt"`
 }
 
 // AddUsersInGroup - グループへユーザー追加APIのレスポンス
 type AddUsersInGroup struct {
 	ID           string    `json:"id"`
 	Name         string    `json:"name"`
-	ThumbnailURL string    `json:"thumbnail_url"`
-	UserIDs      []string  `json:"user_ids"`
-	CreatedAt    time.Time `json:"created_at"`
-	UpdatedAt    time.Time `json:"updated_at"`
+	ThumbnailURL string    `json:"thumbnailUrl"`
+	UserIDs      []string  `json:"userIds"`
+	CreatedAt    time.Time `json:"createdAt"`
+	UpdatedAt    time.Time `json:"updatedAt"`
+}
+
+// RemoveUsersInGroup - グループのユーザー削除APIのレスポンス
+type RemoveUsersInGroup struct {
+	ID           string    `json:"id"`
+	Name         string    `json:"name"`
+	ThumbnailURL string    `json:"thumbnailUrl"`
+	UserIDs      []string  `json:"userIds"`
+	CreatedAt    time.Time `json:"createdAt"`
+	UpdatedAt    time.Time `json:"updatedAt"`
 }

@@ -15,7 +15,7 @@ type Firestore struct {
 // Query - Where()メソッドのフィルタリング使用するクエリ構造体
 type Query struct {
 	Field    string
-	Operator string
+	Operator string // <、<=、==、>、>=
 	Value    interface{}
 }
 

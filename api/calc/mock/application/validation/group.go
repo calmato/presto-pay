@@ -48,6 +48,20 @@ func (mr *MockGroupRequestValidationMockRecorder) CreateGroup(req interface{}) *
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateGroup", reflect.TypeOf((*MockGroupRequestValidation)(nil).CreateGroup), req)
 }
 
+// UpdateGroup mocks base method
+func (m *MockGroupRequestValidation) UpdateGroup(req *request.UpdateGroup) []*domain.ValidationError {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdateGroup", req)
+	ret0, _ := ret[0].([]*domain.ValidationError)
+	return ret0
+}
+
+// UpdateGroup indicates an expected call of UpdateGroup
+func (mr *MockGroupRequestValidationMockRecorder) UpdateGroup(req interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateGroup", reflect.TypeOf((*MockGroupRequestValidation)(nil).UpdateGroup), req)
+}
+
 // AddUsersInGroup mocks base method
 func (m *MockGroupRequestValidation) AddUsersInGroup(req *request.AddUsersInGroup) []*domain.ValidationError {
 	m.ctrl.T.Helper()
@@ -60,4 +74,18 @@ func (m *MockGroupRequestValidation) AddUsersInGroup(req *request.AddUsersInGrou
 func (mr *MockGroupRequestValidationMockRecorder) AddUsersInGroup(req interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AddUsersInGroup", reflect.TypeOf((*MockGroupRequestValidation)(nil).AddUsersInGroup), req)
+}
+
+// RemoveUsersInGroup mocks base method
+func (m *MockGroupRequestValidation) RemoveUsersInGroup(req *request.RemoveUsersInGroup) []*domain.ValidationError {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "RemoveUsersInGroup", req)
+	ret0, _ := ret[0].([]*domain.ValidationError)
+	return ret0
+}
+
+// RemoveUsersInGroup indicates an expected call of RemoveUsersInGroup
+func (mr *MockGroupRequestValidationMockRecorder) RemoveUsersInGroup(req interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RemoveUsersInGroup", reflect.TypeOf((*MockGroupRequestValidation)(nil).RemoveUsersInGroup), req)
 }

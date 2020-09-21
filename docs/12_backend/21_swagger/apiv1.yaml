@@ -287,6 +287,56 @@ paths:
         '500':
           $ref: '#/components/responses/Unkown'
 
+    patch:
+      summary: グループ編集
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: groupId
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: グループUUID
+      requestBody:
+        $ref: '#/components/requestBodies/UpdateGroup'
+      responses:
+        '200':
+          $ref: '#/components/responses/UpdateGroup'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/Unkown'
+
+    delete:
+      summary: グループ削除
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: groupId
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: グループUUID
+      responses:
+        '200':
+          $ref: '#/components/responses/Empty'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/Unkown'
+
   /groups/{groupId}/users:
     post:
       summary: グループ ユーザー追加
@@ -314,8 +364,90 @@ paths:
         '500':
           $ref: '#/components/responses/Unkown'
 
+    delete:
+      summary: グループ ユーザー削除
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: groupId
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: グループUUID
+      requestBody:
+        $ref: '#/components/requestBodies/RemoveUsersInGroup'
+      responses:
+        '200':
+          $ref: '#/components/responses/RemoveUsersInGroup'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/Unkown'
 
-  /groups/{groupId}/payment:
+  /groups/{groupId}/payments-status:
+    patch:
+      summary: 支払い完了フラグ一括更新 (trueのみ)
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: groupId
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: グループUUID
+      responses:
+        '200':
+          $ref: '#/components/responses/UpdatePayments'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/Unkown'
+
+  /groups/{groupId}/payments-status/{paymentId}:
+    patch:
+      summary: 支払い完了フラグ更新
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: groupId
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: グループUUID
+        - in: path
+          name: paymentId
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: 支払いUUID
+      responses:
+        '200':
+          $ref: '#/components/responses/UpdatePayment'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/Unkown'
+
+  /groups/{groupId}/payments:
     get:
       summary: 支払い情報一覧取得
       security:
@@ -361,6 +493,112 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/CreatePayment'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/Unkown'
+
+  /groups/{groupId}/payments/{paymentId}:
+    patch:
+      summary: 支払い情報更新
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: groupId
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: グループUUID
+        - in: path
+          name: paymentId
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: 支払いUUID
+      requestBody:
+        $ref: '#/components/requestBodies/UpdatePayment'
+      responses:
+        '200':
+          $ref: '#/components/responses/UpdatePayment'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/Unkown'
+
+    delete:
+      summary: 支払い情報削除
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: groupId
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: グループUUID
+        - in: path
+          name: paymentId
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: 支払いUUID
+      responses:
+        '200':
+          $ref: '#/components/responses/Empty'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/Unkown'
+
+  /groups/{groupId}/payments/{paymentId}/payers/{payerId}:
+    patch:
+      summary: 支払い情報 支払い者情報更新
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: groupId
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: グループUUID
+        - in: path
+          name: paymentId
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: 支払いUUID
+        - in: path
+          name: payerId
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: ユーザーUUID
+      requestBody:
+        $ref: '#/components/requestBodies/UpdatePayerInPayment'
+      responses:
+        '200':
+          $ref: '#/components/responses/UpdatePayment'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -559,8 +797,46 @@ components:
             required:
               - name
 
+    UpdateGroup:
+      description: グループ編集
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+                description: グループ名
+              thumbnail:
+                type: string
+                description: サムネイル
+              userIds:
+                type: array
+                description: ユーザーID一覧
+                items:
+                  type: string
+                  format: uuid
+            required:
+              - name
+
     AddUsersInGroup:
       description: グループ ユーザー追加
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              userIds:
+                type: array
+                description: ユーザーID一覧
+                items:
+                  type: string
+                  format: uuid
+
+    RemoveUsersInGroup:
+      description: グループ ユーザー削除
       required: true
       content:
         application/json:
@@ -623,6 +899,77 @@ components:
               - name
               - total
               - paidAt
+
+    UpdatePayment:
+      description: 支払い情報編集
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+                description: 支払い名
+              currency:
+                type: string
+                description: 通貨
+              total:
+                type: integer
+                description: 合計金額
+              payers:
+                type: array
+                description: 支払い者一覧
+                items:
+                  properties:
+                    id:
+                      type: string
+                      description: ユーザーID
+                    amount:
+                      type: integer
+                      description: 支払い金額
+                    isPaid:
+                      type: boolean
+                      description: 支払い完了フラグ
+              isCompleted:
+                type: boolean
+                description: 支払い完了フラグ
+              tags:
+                type: array
+                description: タグ一覧
+                items:
+                  type: string
+              comment:
+                type: string
+                description: コメント
+              images:
+                type: array
+                description: 添付画像一覧
+                items:
+                  type: string
+              paidAt:
+                type: string
+                format: date-time
+                description: 支払い日時
+            required:
+              - name
+              - total
+              - isCompleted
+              - paidAt
+
+    UpdatePayerInPayment:
+      description: 支払い情報 支払い者情報編集
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isPaid:
+                type: boolean
+                description: 支払い完了フラグ
+            required:
+              - isPaid
 
   responses:
     BadRequest:
@@ -1123,8 +1470,72 @@ components:
                 format: date-time
                 description: 更新日時
 
+    UpdateGroup:
+      description: グループ編集APIのレスポンス
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              id:
+                type: string
+                format: uuid
+                description: グループID
+              name:
+                type: string
+                description: グループ名
+              thumbnailUrl:
+                type: string
+                description: サムネイルURL
+              userIds:
+                type: array
+                description: ユーザーID一覧
+                items:
+                  type: string
+                  format: uuid
+              createdAt:
+                type: string
+                format: date-time
+                description: 作成日時
+              updatedAt:
+                type: string
+                format: date-time
+                description: 更新日時
+
     AddUsersInGroup:
       description: グループ ユーザー追加APIのレスポンス
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              id:
+                type: string
+                format: uuid
+                description: グループID
+              name:
+                type: string
+                description: グループ名
+              thumbnailUrl:
+                type: string
+                description: サムネイルURL
+              userIds:
+                type: array
+                description: ユーザーID一覧
+                items:
+                  type: string
+                  format: uuid
+              createdAt:
+                type: string
+                format: date-time
+                description: 作成日時
+              updatedAt:
+                type: string
+                format: date-time
+                description: 更新日時
+
+    RemoveUsersInGroup:
+      description: グループ ユーザー削除APIのレスポンス
       content:
         application/json:
           schema:
@@ -1166,6 +1577,10 @@ components:
                 type: string
                 format: uuid
                 description: 支払いID
+              groupId:
+                type: string
+                format: uuid
+                description: グループID
               name:
                 type: string
                 description: 支払い名
@@ -1186,6 +1601,77 @@ components:
                     amount:
                       type: integer
                       description: 支払い金額
+                    isPaid:
+                      type: boolean
+                      description: 支払い完了フラグ
+              isCompleted:
+                type: boolean
+                description: 支払い完了フラグ
+              tags:
+                type: array
+                description: タグ一覧
+                items:
+                  type: string
+              comment:
+                type: string
+                description: コメント
+              imageUrls:
+                type: array
+                description: 添付画像一覧
+                items:
+                  type: string
+              paidAt:
+                type: string
+                format: date-time
+                description: 支払い日時
+              createdAt:
+                type: string
+                format: date-time
+                description: 作成日時
+              updatedAt:
+                type: string
+
+    UpdatePayment:
+      description: 支払い情報編集APIのレスポンス
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              id:
+                type: string
+                format: uuid
+                description: 支払いID
+              groupId:
+                type: string
+                format: uuid
+                description: グループID
+              name:
+                type: string
+                description: 支払い名
+              currency:
+                type: string
+                description: 通貨
+              total:
+                type: integer
+                description: 合計金額
+              payers:
+                type: array
+                description: 支払い者一覧
+                items:
+                  properties:
+                    id:
+                      type: string
+                      description: ユーザーID
+                    amount:
+                      type: integer
+                      description: 支払い金額
+                    isPaid:
+                      type: boolean
+                      description: 支払い完了フラグ
+              isCompleted:
+                type: boolean
+                description: 支払い完了フラグ
               tags:
                 type: array
                 description: タグ一覧
@@ -1226,6 +1712,10 @@ components:
                       type: string
                       format: uuid
                       description: 支払いID
+                    groupId:
+                      type: string
+                      format: uuid
+                      description: グループID
                     name:
                       type: string
                       description: 支払い名
@@ -1249,6 +1739,85 @@ components:
                           amount:
                             type: integer
                             description: 支払い金額
+                          isPaid:
+                            type: boolean
+                            description: 支払い完了フラグ
+                    isCompleted:
+                      type: boolean
+                      description: 支払い完了フラグ
+                    tags:
+                      type: array
+                      description: タグ一覧
+                      items:
+                        type: string
+                    comment:
+                      type: string
+                      description: コメント
+                    imageUrls:
+                      type: array
+                      description: 添付画像一覧
+                      items:
+                        type: string
+                    paidAt:
+                      type: string
+                      format: date-time
+                      description: 支払い日時
+                    createdAt:
+                      type: string
+                      format: date-time
+                      description: 作成日時
+                    updatedAt:
+                      type: string
+
+    UpdatePayments:
+      description: 支払い情報一括更新APIのレスポンス
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              payments:
+                type: array
+                description: 支払い一覧
+                items:
+                  properties:
+                    id:
+                      type: string
+                      format: uuid
+                      description: 支払いID
+                    groupId:
+                      type: string
+                      format: uuid
+                      description: グループID
+                    name:
+                      type: string
+                      description: 支払い名
+                    currency:
+                      type: string
+                      description: 通貨
+                    total:
+                      type: integer
+                      description: 合計金額
+                    payers:
+                      type: array
+                      description: 支払い者一覧
+                      items:
+                        properties:
+                          id:
+                            type: string
+                            description: ユーザーID
+                          name:
+                            type: string
+                            description: ユーザー名
+                          amount:
+                            type: integer
+                            description: 支払い金額
+                          isPaid:
+                            type: boolean
+                            description: 支払い完了フラグ
+                    isCompleted:
+                      type: boolean
+                      description: 支払い完了フラグ
                     tags:
                       type: array
                       description: タグ一覧

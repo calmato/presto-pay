@@ -80,6 +80,21 @@ func (mr *MockGroupServiceMockRecorder) Create(ctx, g interface{}) *gomock.Call 
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockGroupService)(nil).Create), ctx, g)
 }
 
+// Update mocks base method
+func (m *MockGroupService) Update(ctx context.Context, g *group.Group, userIDs []string) (*group.Group, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Update", ctx, g, userIDs)
+	ret0, _ := ret[0].(*group.Group)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// Update indicates an expected call of Update
+func (mr *MockGroupServiceMockRecorder) Update(ctx, g, userIDs interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Update", reflect.TypeOf((*MockGroupService)(nil).Update), ctx, g, userIDs)
+}
+
 // AddUsers mocks base method
 func (m *MockGroupService) AddUsers(ctx context.Context, groupID string, userIDs []string) (*group.Group, error) {
 	m.ctrl.T.Helper()
@@ -93,6 +108,35 @@ func (m *MockGroupService) AddUsers(ctx context.Context, groupID string, userIDs
 func (mr *MockGroupServiceMockRecorder) AddUsers(ctx, groupID, userIDs interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AddUsers", reflect.TypeOf((*MockGroupService)(nil).AddUsers), ctx, groupID, userIDs)
+}
+
+// RemoveUsers mocks base method
+func (m *MockGroupService) RemoveUsers(ctx context.Context, groupID string, userIDs []string) (*group.Group, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "RemoveUsers", ctx, groupID, userIDs)
+	ret0, _ := ret[0].(*group.Group)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// RemoveUsers indicates an expected call of RemoveUsers
+func (mr *MockGroupServiceMockRecorder) RemoveUsers(ctx, groupID, userIDs interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RemoveUsers", reflect.TypeOf((*MockGroupService)(nil).RemoveUsers), ctx, groupID, userIDs)
+}
+
+// Destroy mocks base method
+func (m *MockGroupService) Destroy(ctx context.Context, groupID string) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Destroy", ctx, groupID)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// Destroy indicates an expected call of Destroy
+func (mr *MockGroupServiceMockRecorder) Destroy(ctx, groupID interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Destroy", reflect.TypeOf((*MockGroupService)(nil).Destroy), ctx, groupID)
 }
 
 // UploadThumbnail mocks base method
