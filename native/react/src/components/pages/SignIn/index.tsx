@@ -9,6 +9,7 @@ import { COLOR } from "~/constants/theme";
 import { Context, Status } from "~/contexts/ui";
 import { signInWithPasswordToFirebase } from "~/lib/firebase";
 import { useControlledComponent } from "~/lib/hooks";
+import useNetworker from "~/lib/hooks/use-networker";
 
 const styles = StyleSheet.create({
   container: {
@@ -36,15 +37,18 @@ const styles = StyleSheet.create({
 export default function SignIn() {
   const navigation = useNavigation();
   const { setApplicationState } = React.useContext(Context);
+  const networker = useNetworker();
   const email = useControlledComponent("");
   const password = useControlledComponent("");
 
   const signInWithPassword = React.useCallback(async () => {
     // TODO: ログイン処理の方法が決まり次第リファクタ
-    const userInformation = await signInWithPasswordToFirebase(email.value, password.value)
-    console.log("debug:", "SignIn", userInformation);
-    setApplicationState(Status.AUTHORIZED);
-  }, [email.value, password.value, setApplicationState]);
+    await networker(async () => {
+      const userInformation = await signInWithPasswordToFirebase(email.value, password.value)
+      console.log("debug:", "SignIn", userInformation);
+      setApplicationState(Status.AUTHORIZED);
+    })
+  }, [email.value, password.value, setApplicationState, networker]);
 
   // TODO: コンポーネント分割, アイコン追加
   return (
