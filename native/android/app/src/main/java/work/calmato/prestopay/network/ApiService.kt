@@ -117,7 +117,7 @@ interface ApiService {
   ):
     Call<CreateExpenseResponse>
 
-  @GET("groups/{groupId}/payment")
+  @GET("groups/{groupId}/payments")
   fun getPayments(
     @Header("Authorization") token: String,
     @Path("groupId") groupId: String

@@ -11,8 +11,7 @@ import android.view.*
 import android.widget.*
 import androidx.activity.OnBackPressedCallback
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.*
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -22,8 +21,10 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import work.calmato.prestopay.R
+import work.calmato.prestopay.database.getAppDatabase
 import work.calmato.prestopay.databinding.FragmentAddExpenseBindingImpl
 import work.calmato.prestopay.network.*
+import work.calmato.prestopay.repository.TagRepository
 import work.calmato.prestopay.util.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -35,8 +36,6 @@ class AddExpenseFragment : PermissionBase() {
     ViewModelProvider(this).get(ViewModelFriend::class.java)
   }
 
-  private var groupsList: Groups? = null
-  private var checkedGroup: Groups? = null
   private var getGroupInfo: GroupPropertyResponse? = null
   private var recycleAdapter: AdapterCheck? = null
   private lateinit var clickListener: AdapterCheck.OnClickListener
@@ -55,22 +54,13 @@ class AddExpenseFragment : PermissionBase() {
     )
     clickListener = AdapterCheck.OnClickListener { viewModelFriend.itemIsClicked(it) }
     recycleAdapter = AdapterCheck(clickListener)
-    groupsList = AddExpenseFragmentArgs.fromBundle(requireArguments()).groupsList
-    checkedGroup =
-      Groups(groupsList!!.groups.filter { groupPropertyResponse -> groupPropertyResponse.selected })
-    checkedGroup.let {
-      if (it != null) {
-        getGroupInfo = it.groups[0]
-      }
-    }
+    getGroupInfo = AddExpenseFragmentArgs.fromBundle(requireArguments()).group
     return binding.root
   }
 
-  private lateinit var imageIds: List<Int>
-  private lateinit var tagNames: Array<String>
-  private lateinit var tagList: MutableList<Tag>
   private lateinit var id: String
   private lateinit var doneButton: MenuItem
+  private lateinit var tagList:List<Tag>
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     if (requestCode == CODE && resultCode == Activity.RESULT_OK) {
@@ -99,6 +89,9 @@ class AddExpenseFragment : PermissionBase() {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     thread {
+      tagList = TagRepository(getAppDatabase(requireContext())).tags
+    }
+    thread {
       try {
         Api.retrofitService.getGroupDetail("Bearer $id", getGroupInfo!!.id)
           .enqueue(object : Callback<GetGroupDetail> {
@@ -122,13 +115,6 @@ class AddExpenseFragment : PermissionBase() {
       } catch (e: Exception) {
         Log.d(TAG, "debug $e")
       }
-    }
-
-    imageIds = resources.getIdList(R.array.tag_array)
-    tagNames = resources.getStringArray(R.array.tag_name)
-    tagList = mutableListOf()
-    for (i in tagNames.indices) {
-      tagList.add(Tag(tagNames[i], imageIds[i], false))
     }
     val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
     id = sharedPreferences.getString("token", "")!!
@@ -210,7 +196,7 @@ class AddExpenseFragment : PermissionBase() {
     val totalString = amountEdit.text.toString()
     val currency = currencySpinner.selectedItem.toString()
     val payer = payerSpinner.selectedItem
-    val payers = mutableListOf<UserExpense>(
+    val payers = mutableListOf(
       UserExpense(groupMembers.filter { userProperty -> userProperty.name == payer }[0].id, totalString.toFloat())
     )
     val targetUsers = groupMembers.filter { it.checked && it.name != payer }
@@ -252,7 +238,7 @@ class AddExpenseFragment : PermissionBase() {
         for (i in payers) {
           sumPayment += i.amount
         }
-        Log.i(TAG, "sendRequest: ${sumPayment}")
+        Log.i(TAG, "sendRequest: $sumPayment")
         Log.i(TAG, "sendRequest: $payers")
         if (sumPayment.absoluteValue < 0.01f) {
           val expenseProperty = CreateExpenseProperty(

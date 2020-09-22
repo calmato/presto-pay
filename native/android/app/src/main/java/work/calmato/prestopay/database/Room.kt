@@ -8,14 +8,18 @@ import androidx.room.*
 interface FriendDao {
   @Query("select * from databasefriend")
   fun getFriends(): LiveData<List<DatabaseFriend>>
+
   @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAll(vararg friends:DatabaseFriend)
+  fun insertAll(vararg friends: DatabaseFriend)
+
   @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertFriend(friend: DatabaseFriend)
+  fun insertFriend(friend: DatabaseFriend)
+
   @Query("delete from databasefriend where id = :userId")
-    fun deleteFriend(userId:String)
+  fun deleteFriend(userId: String)
+
   @Query("delete from databasefriend")
-    fun deleteFriendAll()
+  fun deleteFriendAll()
 }
 
 @Dao
@@ -31,31 +35,45 @@ interface GroupDao {
 }
 
 @Dao
-interface PaymentDao{
-  @Query("select * from databasepayment")
-    fun getPayments():LiveData<List<DatabasePayment>>
+interface PaymentDao {
+  @Query("select * from databasepayment where groupId = :groupId")
+  fun getPayments(groupId:String): LiveData<List<DatabasePayment>>
+
   @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertPayment(payment:DatabasePayment)
-  @Query("delete from databasepayment")
-    fun deleteAll()
+  fun insertPayment(payment: DatabasePayment)
+
+  @Query("delete from databasepayment where id = :groupId")
+  fun deleteAll(groupId:String)
+
   @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAll(vararg payments:DatabasePayment)
+  fun insertAll(vararg payments: DatabasePayment)
+}
+
+@Dao
+interface TagDao {
+  @Query("select * from databasetag")
+  fun getTags(): List<DatabaseTag>
+
+  @Insert(onConflict = OnConflictStrategy.REPLACE)
+  fun insertTags(vararg tag: DatabaseTag)
 }
 
 @Database(
   entities =
   [DatabaseFriend::class,
     DatabaseGroup::class,
-    DatabasePayment::class],
-  version = 4,
+    DatabasePayment::class,
+    DatabaseTag::class],
+  version = 7,
   exportSchema = false
 )
 
-@TypeConverters(ListTypeConverter::class,ListPayerConverter::class)
+@TypeConverters(ListTypeConverter::class, ListPayerConverter::class)
 abstract class AppDatabase : RoomDatabase() {
   abstract val friendDao: FriendDao
   abstract val groupDao: GroupDao
-  abstract val paymentDao : PaymentDao
+  abstract val paymentDao: PaymentDao
+  abstract val tagDao:TagDao
 }
 
 private lateinit var INSTANCE: AppDatabase

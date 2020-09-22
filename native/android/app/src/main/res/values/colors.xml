@@ -6,4 +6,6 @@
   <color name="ourTheme">#2BACFC</color>
 
   <color name="clearButtonPressed">#868585</color>
+  <color name="positiveNumberColor">#2ECC71 </color>
+  <color name="negativeNumberColor">#E74C3C</color>
 </resources>

@@ -11,25 +11,31 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import work.calmato.prestopay.database.getAppDatabase
+import work.calmato.prestopay.network.PaymentPropertyGet
 import work.calmato.prestopay.repository.PaymentRepository
 
 class ViewModelPayment(application: Application) : AndroidViewModel(application) {
   private var viewModelJob = SupervisorJob()
   private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
   private val database = getAppDatabase(application)
-  private val paymentRepository = PaymentRepository(database)
+  private var paymentRepository:PaymentRepository? = null
   private val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplication())
   private val id = sharedPreferences.getString("token", null)
-  val paymentsList = paymentRepository.payments
+  var paymentsList:LiveData<List<PaymentPropertyGet>>? = null
   private val _refreshing = MutableLiveData<Boolean>()
   val refreshing: LiveData<Boolean>
     get() = _refreshing
+
+  fun setInitPaymentList(groupId: String){
+    paymentRepository = PaymentRepository(database,groupId)
+    paymentsList = paymentRepository!!.payments
+  }
 
   fun getPayments(groupId: String) {
     startRefreshing()
     viewModelScope.launch {
       try {
-      paymentRepository.refreshPayments(id!!, groupId)
+      paymentRepository!!.refreshPayments(id!!, groupId)
       endRefreshing()
       } catch (e:java.lang.Exception){
         endRefreshing()

@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.facebook.*
 import com.facebook.login.LoginManager
@@ -43,6 +44,7 @@ import work.calmato.prestopay.network.asDomainModel
 import work.calmato.prestopay.network.RegisterDeviceIdProperty
 import work.calmato.prestopay.repository.FriendsRepository
 import work.calmato.prestopay.repository.GroupsRepository
+import work.calmato.prestopay.repository.TagRepository
 import work.calmato.prestopay.util.*
 
 
@@ -313,6 +315,9 @@ class LoginFragment : Fragment() {
           "token" -> {
             if (isFirstLogin) {
               sendFirebaseCloudMessageToken()
+              lifecycleScope.launch(Dispatchers.IO) {
+                TagRepository(getAppDatabase(requireContext())).setTagDatabase(resources)
+              }
             }
           }
         }

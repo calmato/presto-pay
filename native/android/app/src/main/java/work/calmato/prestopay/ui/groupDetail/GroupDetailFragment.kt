@@ -10,6 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_group_detail.*
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentGroupDetailBinding
@@ -34,12 +35,13 @@ class GroupDetailFragment : Fragment() {
       DataBindingUtil.inflate(inflater, R.layout.fragment_group_detail, container, false)
     binding.lifecycleOwner = this
     binding.viewModelGroupDetail = viewModel
-    recycleAdapter = AdapterPayment()
+    recycleAdapter = AdapterPayment(requireContext())
     binding.recyclerViewPayment.apply {
       layoutManager = LinearLayoutManager(context)
       adapter = recycleAdapter
     }
     groupDetail = GroupDetailFragmentArgs.fromBundle(requireArguments()).groupDetail
+    viewModel.setInitPaymentList(groupDetail!!.id)
     return binding.root
   }
 
@@ -53,7 +55,7 @@ class GroupDetailFragment : Fragment() {
       GroupDetailFragmentDirections.actionGroupDetailToGroupEditFragment()
       )
     }
-    viewModel.paymentsList.observe(viewLifecycleOwner, Observer<List<PaymentPropertyGet>> {
+    viewModel.paymentsList!!.observe(viewLifecycleOwner, Observer<List<PaymentPropertyGet>> {
       it?.apply {
         recycleAdapter?.paymentList = it
       }
@@ -61,12 +63,41 @@ class GroupDetailFragment : Fragment() {
     viewModel.refreshing.observe(viewLifecycleOwner, Observer {
       it?.apply {
         swipeContainer.isRefreshing = it
+        floatingActionButton.isClickable = !it
+        groupIcon.isClickable = !it
+        settleUp.isClickable = !it
+        setting.isClickable = !it
       }
     })
     swipeContainer.setOnRefreshListener {
       groupDetail?.let {
         viewModel.getPayments(it.id)
       }
+    }
+    groupDetail?.thumbnail_url?.let {
+      Picasso.with(requireContext()).load(it).into(groupIcon)
+    }
+    bottom_navigation.setOnNavigationItemSelectedListener { item ->
+      when (item.itemId) {
+        R.id.action_person -> {
+          this.findNavController().navigate(
+            GroupDetailFragmentDirections.actionGroupDetailToAccountHome()
+          )
+          true
+        }
+        R.id.action_people -> {
+          this.findNavController().navigate(
+            GroupDetailFragmentDirections.actionGroupDetailToGroupFriendFragment()
+          )
+          true
+        }
+        else -> true
+      }
+    }
+    floatingActionButton.setOnClickListener {
+      this.findNavController().navigate(
+        GroupDetailFragmentDirections.actionGroupDetailToAddExpenseFragment(groupDetail!!)
+      )
     }
   }
 }
