@@ -4,8 +4,8 @@ import React from "react";
 import PasswordReset from "./PasswordReset";
 import SignUp from "./SignUp";
 
-import { SignIn } from "~/containers";
 import { PASSWORD_RESET, SIGN_IN, SIGN_UP } from "~/constants/path";
+import { SignIn } from "~/containers";
 
 const Stack = createStackNavigator();
 
