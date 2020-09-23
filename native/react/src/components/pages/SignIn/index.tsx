@@ -4,6 +4,7 @@ import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import { Card } from "react-native-elements";
 
 import { Button, TextField } from "~/components/atoms";
+import Icon from "~/components/atoms/Icon";
 import { SIGN_UP, PASSWORD_RESET } from "~/constants/path";
 import { COLOR } from "~/constants/theme";
 import { Context, Status } from "~/contexts/ui";
@@ -22,8 +23,12 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: COLOR.MAIN,
   },
+  icon: {
+    fontSize: 22,
+    marginRight: 10,
+  },
   button: {
-    padding: 10,
+    margin: 10,
   },
   link: {
     padding: 10,
@@ -33,6 +38,10 @@ const styles = StyleSheet.create({
   },
 });
 
+const icon = (name: string): JSX.Element => {
+  return <Icon name={name} style={styles.icon} />;
+};
+
 export default function SignIn() {
   const navigation = useNavigation();
   const { setApplicationState } = React.useContext(Context);
@@ -41,7 +50,7 @@ export default function SignIn() {
 
   const signInWithPassword = React.useCallback(async () => {
     // TODO: ログイン処理の方法が決まり次第リファクタ
-    const userInformation = await signInWithPasswordToFirebase(email.value, password.value)
+    const userInformation = await signInWithPasswordToFirebase(email.value, password.value);
     console.log("debug:", "SignIn", userInformation);
     setApplicationState(Status.AUTHORIZED);
   }, [email.value, password.value, setApplicationState]);
@@ -70,6 +79,7 @@ export default function SignIn() {
         </TouchableOpacity>
         <Card.Divider />
         <Button
+          icon={icon("logo-google")}
           onPress={() => console.log("click", "google")}
           title="Googleでサインイン"
           titleColor={COLOR.DARK}
@@ -77,6 +87,7 @@ export default function SignIn() {
           type="outline"
         />
         <Button
+          icon={icon("logo-twitter")}
           onPress={() => console.log("click", "twitter")}
           title="Twitterでサインイン"
           titleColor={COLOR.DARK}
@@ -84,6 +95,7 @@ export default function SignIn() {
           type="outline"
         />
         <Button
+          icon={icon("logo-facebook")}
           onPress={() => console.log("click", "facebook")}
           title="Facebookでサインイン"
           titleColor={COLOR.DARK}
