@@ -29,7 +29,7 @@
         android:id="@+id/textView2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/create_group"
+        android:text="@string/add_member"
         android:textAlignment="center"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="@+id/imageView5"
@@ -130,6 +130,7 @@
       app:layout_constraintTop_toTopOf="@+id/groupEditFriendFrame" />
 
     <androidx.recyclerview.widget.RecyclerView
+      android:id="@+id/friendsRecycleView"
       android:layout_width="409dp"
       android:layout_height="377dp"
       app:layout_constraintEnd_toEndOf="parent"
