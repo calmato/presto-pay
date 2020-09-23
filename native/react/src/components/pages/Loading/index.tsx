@@ -3,8 +3,8 @@ import { StyleSheet, View, ActivityIndicator } from "react-native";
 
 import { Context as AuthContext } from "~/contexts/auth";
 import { Context as UiContext, Status } from "~/contexts/ui";
-import * as LocalStorage from "~/lib/local-storage";
 import { firebase } from "~/lib/firebase";
+import * as LocalStorage from "~/lib/local-storage";
 
 const styles = StyleSheet.create({
   container: {

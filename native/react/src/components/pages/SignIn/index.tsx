@@ -6,10 +6,8 @@ import { Card } from "react-native-elements";
 import { Button, TextField } from "~/components/atoms";
 import { SIGN_UP, PASSWORD_RESET } from "~/constants/path";
 import { COLOR } from "~/constants/theme";
-import { Context, Status } from "~/contexts/ui";
-import { signInWithPasswordToFirebase } from "~/lib/firebase";
-import { useControlledComponent } from "~/lib/hooks";
-import useNetworker from "~/lib/hooks/use-networker";
+import { UiContext, AuthContext } from "~/contexts";
+import { useControlledComponent, useNetworker } from "~/lib/hooks";
 
 const styles = StyleSheet.create({
   container: {
@@ -34,21 +32,26 @@ const styles = StyleSheet.create({
   },
 });
 
-export default function SignIn() {
+interface Props {
+  actions: {
+    signInWithPasswordSync: (email: string, password: string) => void;
+  };
+}
+
+export default function SignIn(props: Props) {
   const navigation = useNavigation();
-  const { setApplicationState } = React.useContext(Context);
+  const { setAuthState } = React.useContext(AuthContext);
+  const { setApplicationState, setError } = React.useContext(UiContext);
   const networker = useNetworker();
   const email = useControlledComponent("");
   const password = useControlledComponent("");
+  const { signInWithPasswordSync } = props.actions;
 
   const signInWithPassword = React.useCallback(async () => {
-    // TODO: ログイン処理の方法が決まり次第リファクタ
     await networker(async () => {
-      const userInformation = await signInWithPasswordToFirebase(email.value, password.value)
-      console.log("debug:", "SignIn", userInformation);
-      setApplicationState(Status.AUTHORIZED);
-    })
-  }, [email.value, password.value, setApplicationState, networker]);
+      await signInWithPasswordSync(email.value, password.value);
+    });
+  }, [email.value, password.value, setAuthState, setApplicationState, networker, signInWithPasswordSync]);
 
   // TODO: コンポーネント分割, アイコン追加
   return (

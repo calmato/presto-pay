@@ -22,7 +22,7 @@ export function createSnackbarInitialState() {
     visible: false,
     message: "",
     label: "Done",
-  }
+  };
 }
 
 type SnackbarState = ReturnType<typeof createSnackbarInitialState>;

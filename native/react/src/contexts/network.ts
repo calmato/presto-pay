@@ -17,9 +17,9 @@ interface Context {
 
 export function reducer(state: State, action: Action): number {
   switch (action.type) {
-    case 'begin':
+    case "begin":
       return state + 1;
-    case 'end':
+    case "end":
       return state - 1;
     default:
       return state;

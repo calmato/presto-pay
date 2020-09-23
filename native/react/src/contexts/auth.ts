@@ -2,9 +2,13 @@ import React from "react";
 
 export interface Auth {
   id: string;
-  name: string | null;
-  createdAt: number | null;
-  lastLoginAt: number | null;
+  name?: string;
+  username?: string;
+  email?: string;
+  thumbnailUrl?: string;
+  createdAt?: number;
+  updatedAt?: number;
+  lastLoginAt?: number;
 }
 
 export type AuthInformation = Auth | null;

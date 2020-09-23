@@ -7,5 +7,5 @@ export default function ConnectedLoading() {
   const dispatch = useDispatch();
   const actions = React.useMemo(() => ({}), [dispatch]);
 
-  return <Loading actions={actions} />
+  return <Loading actions={actions} />;
 }
