@@ -35,10 +35,12 @@ data class DatabaseGroup(
 data class DatabasePayment(
   @PrimaryKey
   val id: String,
+  val groupId: String,
   val name: String,
   val currency: String,
   val total: Float,
   val payers: List<NetworkPayer>,
+  val isCompleted: Boolean,
   val tags: List<String>?,
   val comment: String?,
   val imageUrls: List<String>?,
@@ -46,6 +48,16 @@ data class DatabasePayment(
   val createdAt: String,
   val updatedAt: String
 )
+
+@Entity
+data class DatabaseTag(
+  @PrimaryKey
+  val name:String,
+  val imageId:Int,
+  var isSelected:Boolean = false
+)
+
+
 
 fun List<DatabaseFriend>.asDomainModel(): List<UserProperty> {
   return map {
@@ -89,6 +101,14 @@ fun List<DatabasePayment>.asPaymentModel():List<PaymentPropertyGet>{
       updatedAt = it.updatedAt
     )
   }
+}
+
+fun DatabaseTag.asTagModel():Tag{
+  return Tag(
+      name = this.name,
+      imageId = this.imageId,
+      isSelected = this.isSelected
+    )
 }
 
 class ListTypeConverter {

@@ -120,6 +120,9 @@
     <action
       android:id="@+id/action_groupFriendFragment_to_friendListFragment"
       app:destination="@id/friendListFragment" />
+    <action
+      android:id="@+id/action_groupFriendFragment_to_home_fragment"
+      app:destination="@id/home_fragment" />
   </fragment>
   <fragment
     android:id="@+id/addFriendFragment"
@@ -197,8 +200,8 @@
       android:id="@+id/action_addExpenseFragment_to_groupListFragment"
       app:destination="@id/groupListFragment" />
     <argument
-      android:name="groupsList"
-      app:argType="work.calmato.prestopay.network.Groups"
+      android:name="group"
+      app:argType="work.calmato.prestopay.network.GroupPropertyResponse"
       app:nullable="false" />
     <action
       android:id="@+id/action_addExpenseFragment_to_home_fragment"
@@ -219,5 +222,14 @@
     <action
       android:id="@+id/action_groupDetail_to_groupEditFragment"
       app:destination="@id/groupEditFragment" />
+    <action
+      android:id="@+id/action_groupDetail_to_groupFriendFragment"
+      app:destination="@id/groupFriendFragment" />
+    <action
+      android:id="@+id/action_groupDetail_to_account_home"
+      app:destination="@id/account_home" />
+    <action
+      android:id="@+id/action_groupDetail_to_addExpenseFragment"
+      app:destination="@id/addExpenseFragment" />
   </fragment>
 </navigation>

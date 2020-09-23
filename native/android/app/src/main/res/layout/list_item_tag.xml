@@ -6,7 +6,7 @@
   <data>
     <variable
       name="tag"
-      type="work.calmato.prestopay.util.Tag" />
+      type="work.calmato.prestopay.network.Tag" />
   </data>
 
   <androidx.constraintlayout.widget.ConstraintLayout

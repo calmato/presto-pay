@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.activity.OnBackPressedCallback
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -173,6 +174,16 @@ class GroupFriendFragment : Fragment() {
         swipeContainer.visibility = RecyclerView.VISIBLE
       }
     }
+    requireActivity().onBackPressedDispatcher.addCallback(
+      viewLifecycleOwner,
+      object  : OnBackPressedCallback(true){
+        override fun handleOnBackPressed() {
+          findNavController().navigate(
+            GroupFriendFragmentDirections.actionGroupFriendFragmentToHomeFragment()
+          )
+        }
+      }
+    )
   }
 
   companion object {

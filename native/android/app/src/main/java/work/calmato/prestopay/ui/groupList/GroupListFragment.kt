@@ -85,16 +85,8 @@ class GroupListFragment : Fragment() {
       viewModelGroup.groupListView()
     }
     viewModelGroup.itemClickedGroup.observe(viewLifecycleOwner, Observer {
-      if (null != it) {
-        it.selected = true
-        Log.d(TAG, it.toString())
-        this.findNavController().navigate(
-          GroupListFragmentDirections.actionGroupListFragmentToAddExpenseFragment(
-            Groups(
-              groupListArg
-            )
-          )
-        )
+      it?.apply {
+        navigateToAddExpense(it)
       }
     })
     setHasOptionsMenu(true)
@@ -111,6 +103,12 @@ class GroupListFragment : Fragment() {
   private fun goBackHome() {
     this.findNavController().navigate(
       GroupListFragmentDirections.actionGroupListFragmentToHomeFragment()
+    )
+  }
+
+  private fun navigateToAddExpense(group:GroupPropertyResponse){
+    this.findNavController().navigate(
+      GroupListFragmentDirections.actionGroupListFragmentToAddExpenseFragment(group)
     )
   }
 
