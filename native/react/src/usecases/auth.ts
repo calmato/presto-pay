@@ -40,5 +40,5 @@ export function authStateChangedSync() {
         reject(new Error("User is not exists"));
       });
     });
-  }
+  };
 }
