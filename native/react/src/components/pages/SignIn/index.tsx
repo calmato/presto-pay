@@ -6,8 +6,10 @@ import { Card } from "react-native-elements";
 import { Button, TextField } from "~/components/atoms";
 import { SIGN_UP, PASSWORD_RESET } from "~/constants/path";
 import { COLOR } from "~/constants/theme";
-import { UiContext, AuthContext } from "~/contexts";
-import { useControlledComponent, useNetworker } from "~/lib/hooks";
+import { UiContext } from "~/contexts";
+import { Status } from "~/contexts/ui";
+import { Auth } from "~/domain/models";
+import { useControlledComponent } from "~/lib/hooks";
 
 const styles = StyleSheet.create({
   container: {
@@ -34,24 +36,22 @@ const styles = StyleSheet.create({
 
 interface Props {
   actions: {
-    signInWithPasswordSync: (email: string, password: string) => void;
+    signInWithPassword: (email: string, password: string) => Promise<Auth.AuthValues>;
   };
 }
 
 export default function SignIn(props: Props) {
   const navigation = useNavigation();
-  const { setAuthState } = React.useContext(AuthContext);
-  const { setApplicationState, setError } = React.useContext(UiContext);
-  const networker = useNetworker();
+  const { setApplicationState } = React.useContext(UiContext);
   const email = useControlledComponent("");
   const password = useControlledComponent("");
-  const { signInWithPasswordSync } = props.actions;
+  const { signInWithPassword } = props.actions;
 
-  const signInWithPassword = React.useCallback(async () => {
-    await networker(async () => {
-      await signInWithPasswordSync(email.value, password.value);
-    });
-  }, [email.value, password.value, setAuthState, setApplicationState, networker, signInWithPasswordSync]);
+  const handleSignInWithPassword = React.useCallback(async () => {
+    await signInWithPassword(email.value, password.value)
+      .then(() => setApplicationState(Status.AUTHORIZED))
+      .catch((err: Error) => console.log("failure:", err)); // TODO: エラー処理
+  }, [email.value, password.value, setApplicationState, signInWithPassword]);
 
   // TODO: コンポーネント分割, アイコン追加
   return (
@@ -66,7 +66,7 @@ export default function SignIn(props: Props) {
           onChangeText={password.onChangeText}
         />
         <Button
-          onPress={signInWithPassword}
+          onPress={handleSignInWithPassword}
           title="ログイン"
           titleColor={COLOR.MAIN}
           style={styles.button}

@@ -1,14 +1,13 @@
 import { Dispatch } from "redux";
 
 import { Auth } from "~/domain/models";
-import { signInWithPasswordToFirebase, AuthUser } from "~/lib/firebase";
+import { firebase, signInWithPasswordToFirebase, AuthUser } from "~/lib/firebase";
 import * as LocalStorage from "~/lib/local-storage";
-import { AppState } from "~/modules";
 import { setAuth } from "~/modules/auth";
 
 export function signInWithPasswordSync(email: string, password: string) {
-  return (dispatch: Dispatch, getState: () => AppState) => {
-    return new Promise((resolve: () => void, reject: (reason: Error) => void) => {
+  return (dispatch: Dispatch): Promise<Auth.AuthValues> => {
+    return new Promise((resolve: (value: Auth.AuthValues) => void, reject: (reason: Error) => void) => {
       signInWithPasswordToFirebase(email, password)
         .then(async (res: AuthUser) => {
           const payload: Auth.AuthValues = {
@@ -20,13 +19,26 @@ export function signInWithPasswordSync(email: string, password: string) {
 
           dispatch(setAuth(payload));
           await LocalStorage.AuthInformation.save(payload);
-          console.log(getState()); // TODO: remove
 
-          resolve();
+          resolve(payload);
         })
         .catch((err: Error) => {
           reject(err);
         });
     });
   };
+}
+
+export function authStateChangedSync() {
+  return (): Promise<void> => {
+    return new Promise((resolve: () => void, reject: (reason: Error) => void) => {
+      firebase.auth().onAuthStateChanged((user: firebase.User | null) => {
+        if (user) {
+          resolve();
+        }
+
+        reject(new Error("User is not exists"));
+      });
+    });
+  }
 }

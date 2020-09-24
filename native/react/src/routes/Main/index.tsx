@@ -109,8 +109,7 @@ export default function MainRoutes() {
       {uiContext.applicationState !== UiContext.Status.LOADING ? (
         SwitchingAuthStatus(uiContext.applicationState)
       ) : (
-        // <Stack.Screen name={LOADING} component={Loading} />
-        <Stack.Screen name={SIGN_IN} component={SignInStackScreen} />
+        <Stack.Screen name={LOADING} component={Loading} />
       )}
     </Stack.Navigator>
   );

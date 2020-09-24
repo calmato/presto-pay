@@ -18,11 +18,7 @@ const styles = StyleSheet.create({
   },
 });
 
-interface Props {
-  actions: object;
-}
-
-function useAuthInformation(): () => Promise<void> {
+function useAuthInformation() {
   const { setAuthState } = React.useContext(AuthContext);
   const { setApplicationState, setError } = React.useContext(UiContext);
 
@@ -36,20 +32,18 @@ function useAuthInformation(): () => Promise<void> {
     setApplicationState(Status.UN_AUTHORIZED);
   }
 
-  function initialiseFirebaseAuthentication() {
-    return new Promise((resolve, reject) => {
-      firebase.auth().onAuthStateChanged((user) => {
-        if (!user) {
-          setApplicationState(Status.UN_AUTHORIZED);
-          return;
-        }
+  function initialiseFirebaseAuthentication(): void {
+    firebase.auth().onAuthStateChanged((user: firebase.User | null) => {
+      if (!user) {
+        setApplicationState(Status.UN_AUTHORIZED);
+        return;
+      }
 
-        console.log("debug:", "initialiseFirebaseAuthentication", user);
-      });
+      setApplicationState(Status.AUTHORIZED);
     });
   }
 
-  async function retrieveAuthFormation() {
+  async function retrieveAuthInformation() {
     try {
       const authInformation = await LocalStorage.AuthInformation.retrieve();
 
@@ -65,16 +59,15 @@ function useAuthInformation(): () => Promise<void> {
     }
   }
 
-  return retrieveAuthFormation;
+  return retrieveAuthInformation;
 }
 
-export default function Loading(props: Props) {
-  console.log("props:", "Loading", props);
-  const retrieveAuthFormation = useAuthInformation();
+export default function Loading() {
+  const retrieveAuthInformation = useAuthInformation();
 
   React.useEffect(() => {
-    retrieveAuthFormation();
-  }, [retrieveAuthFormation]);
+    retrieveAuthInformation();
+  }, [retrieveAuthInformation]);
 
   return (
     <View style={styles.container}>
