@@ -1,17 +1,37 @@
+import { AuthUser } from "./authentication";
 import firebase from "./config";
 
-// TODO: アカウント情報の型, レスポンスのエラー処理が決まり次第リファクタ
-export default async function signInWithPassword(
-  email: string,
-  password: string
-): Promise<firebase.auth.UserCredential | void> {
+export default async function signInWithPassword(email: string, password: string): Promise<AuthUser> {
   return await firebase
     .auth()
     .signInWithEmailAndPassword(email, password)
-    .then((res: firebase.auth.UserCredential) => {
-      return res; // TODO: refactor
+    .then(async (res: firebase.auth.UserCredential) => {
+      if (!res.user) {
+        throw new Error("user is null");
+      }
+
+      const authInformation: AuthUser = {
+        id: res.user.uid,
+        email: res.user.email || "",
+        emailVerified: res.user.emailVerified,
+        token: "",
+        creationTime: res.user.metadata?.creationTime,
+        lastSignInTime: res.user.metadata?.lastSignInTime,
+      };
+
+      await firebase
+        .auth()
+        .currentUser?.getIdToken()
+        .then((token: string) => {
+          authInformation.token = token;
+        })
+        .catch((err: Error) => {
+          throw err;
+        });
+
+      return authInformation;
     })
-    .catch((err: any) => {
-      console.log("error:", "signInWithPassword", err); // TODO: refactor
+    .catch((err: Error) => {
+      throw err;
     });
 }
