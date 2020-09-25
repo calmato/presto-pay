@@ -6,3 +6,7 @@ export async function isInitialLaunch() {
   const opened = await AsyncStorage.getItem(IS_OPENED_KEY);
   return !!opened;
 }
+
+export async function markAsTutorialIsDone() {
+  await AsyncStorage.setItem(IS_OPENED_KEY, JSON.stringify(true));
+}

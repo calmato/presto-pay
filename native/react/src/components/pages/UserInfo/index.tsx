@@ -52,7 +52,7 @@ export default function UserInfo(props: Props) {
 
   const handleSignOut = React.useCallback(() => {
     signOut().finally(() => setApplicationState(Status.UN_AUTHORIZED));
-  }, [signOut]);
+  }, [signOut, setApplicationState]);
 
   return (
     <View style={styles.container}>
