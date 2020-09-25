@@ -7,12 +7,13 @@ import GroupNewStackScreen from "./GroupNew";
 
 import { GroupList } from "~/components/pages";
 import { FRIEND_SEARCH, GROUP, GROUP_NEW, GROUP_LIST } from "~/constants/path";
+import { HEADER_STYLE } from "~/constants/theme";
 
 const Stack = createStackNavigator();
 
 export default function GroupListStackScreen() {
   return (
-    <Stack.Navigator initialRouteName={GROUP_LIST}>
+    <Stack.Navigator initialRouteName={GROUP_LIST} screenOptions={{ ...HEADER_STYLE }}>
       <Stack.Screen name={GROUP_LIST} component={GroupList} />
       <Stack.Screen name={GROUP} component={GroupStackScreen} />
       <Stack.Screen name={GROUP_NEW} component={GroupNewStackScreen} />
