@@ -1,3 +1,4 @@
+import { Ionicons } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { createStackNavigator, StackCardInterpolationProps } from "@react-navigation/stack";
@@ -11,6 +12,7 @@ import { UserInfoStackScreen } from "./System";
 
 import { Initial } from "~/components/pages";
 import { GROUP_LIST, HOME, INITIAL, LOADING, SIGN_IN, USER_INFO } from "~/constants/path";
+import { COLOR } from "~/constants/theme";
 import { Loading } from "~/containers";
 import * as UiContext from "~/contexts/ui";
 
@@ -73,12 +75,33 @@ function TabRoutes(): JSX.Element {
   return (
     <Tab.Navigator
       initialRouteName={HOME}
-      screenOptions={(props: any) => {
-        const routeName = getActiveRouteName(props.route.state);
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ focused, size }) => {
+          let iconName: string;
 
-        return {
-          tabBarVisible: routeName !== USER_INFO,
-        };
+          switch (route.name) {
+            case "HOME":
+              iconName = "md-home";
+              break;
+            case "USER_INFO":
+              iconName = "md-person";
+              break;
+            case "GROUP_LIST":
+              iconName = "md-people";
+              break;
+            default:
+              iconName = "md-person";
+              break;
+          }
+
+          return <Ionicons name={iconName} size={size} color={focused ? COLOR.PRIMARY : COLOR.MAIN_DARK} />;
+        },
+      })}
+      tabBarOptions={{
+        tabStyle: {
+          backgroundColor: COLOR.MAIN,
+        },
+        inactiveTintColor: COLOR.MAIN_DARK,
       }}
     >
       <Tab.Screen name={GROUP_LIST} component={GroupsWithDrawer} />

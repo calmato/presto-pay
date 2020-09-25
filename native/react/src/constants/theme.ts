@@ -11,3 +11,10 @@ export const COLOR = {
   SUCCESS: "#4CAF50",
   WARNING: "#FFC107",
 };
+
+export const HEADER_STYLE = {
+  headerStyle: {
+    backgroundColor: COLOR.PRIMARY,
+  },
+  headerTintColor: COLOR.MAIN,
+};
