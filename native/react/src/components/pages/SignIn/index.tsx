@@ -7,8 +7,9 @@ import { Button, TextField } from "~/components/atoms";
 import Icon from "~/components/atoms/Icon";
 import { SIGN_UP, PASSWORD_RESET } from "~/constants/path";
 import { COLOR } from "~/constants/theme";
-import { Context, Status } from "~/contexts/ui";
-import { signInWithPasswordToFirebase } from "~/lib/firebase";
+import { UiContext } from "~/contexts";
+import { Status } from "~/contexts/ui";
+import { Auth } from "~/domain/models";
 import { useControlledComponent } from "~/lib/hooks";
 
 const styles = StyleSheet.create({
@@ -42,18 +43,24 @@ const icon = (name: string): JSX.Element => {
   return <Icon name={name} style={styles.icon} />;
 };
 
-export default function SignIn() {
+interface Props {
+  actions: {
+    signInWithPassword: (email: string, password: string) => Promise<Auth.AuthValues>;
+  };
+}
+
+export default function SignIn(props: Props) {
   const navigation = useNavigation();
-  const { setApplicationState } = React.useContext(Context);
+  const { setApplicationState } = React.useContext(UiContext);
   const email = useControlledComponent("");
   const password = useControlledComponent("");
+  const { signInWithPassword } = props.actions;
 
-  const signInWithPassword = React.useCallback(async () => {
-    // TODO: ログイン処理の方法が決まり次第リファクタ
-    const userInformation = await signInWithPasswordToFirebase(email.value, password.value);
-    console.log("debug:", "SignIn", userInformation);
-    setApplicationState(Status.AUTHORIZED);
-  }, [email.value, password.value, setApplicationState]);
+  const handleSignInWithPassword = React.useCallback(async () => {
+    await signInWithPassword(email.value, password.value)
+      .then(() => setApplicationState(Status.AUTHORIZED))
+      .catch((err: Error) => console.log("failure:", err)); // TODO: エラー処理
+  }, [email.value, password.value, setApplicationState, signInWithPassword]);
 
   // TODO: コンポーネント分割, アイコン追加
   return (
@@ -68,7 +75,7 @@ export default function SignIn() {
           onChangeText={password.onChangeText}
         />
         <Button
-          onPress={signInWithPassword}
+          onPress={handleSignInWithPassword}
           title="ログイン"
           titleColor={COLOR.MAIN}
           style={styles.button}
