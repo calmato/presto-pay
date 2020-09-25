@@ -18,9 +18,16 @@ const styles = StyleSheet.create({
   },
 });
 
-function useAuthInformation() {
+interface Props {
+  actions: {
+    authStateChanged: () => Promise<void>;
+  },
+}
+
+function useAuthInformation(props: Props) {
   const { setAuthState } = React.useContext(AuthContext);
   const { setApplicationState, setError } = React.useContext(UiContext);
+  const { authStateChanged } = props.actions;
 
   async function navigateNextScreen() {
     const isOpened = await LocalStorage.InitialLaunch.isInitialLaunch();
@@ -32,15 +39,10 @@ function useAuthInformation() {
     setApplicationState(Status.UN_AUTHORIZED);
   }
 
-  function initialiseFirebaseAuthentication(): void {
-    firebase.auth().onAuthStateChanged((user: firebase.User | null) => {
-      if (!user) {
-        setApplicationState(Status.UN_AUTHORIZED);
-        return;
-      }
-
-      setApplicationState(Status.AUTHORIZED);
-    });
+  async function initialiseFirebaseAuthentication(): Promise<void> {
+    await authStateChanged()
+      .then(() => setApplicationState(Status.AUTHORIZED))
+      .catch(() => setApplicationState(Status.UN_AUTHORIZED));
   }
 
   async function retrieveAuthInformation() {
@@ -62,8 +64,8 @@ function useAuthInformation() {
   return retrieveAuthInformation;
 }
 
-export default function Loading() {
-  const retrieveAuthInformation = useAuthInformation();
+export default function Loading(props: Props) {
+  const retrieveAuthInformation = useAuthInformation(props);
 
   React.useEffect(() => {
     retrieveAuthInformation();

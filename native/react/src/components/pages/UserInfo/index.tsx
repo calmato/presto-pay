@@ -39,9 +39,20 @@ const DATA = [
   },
 ];
 
-export default function UserInfo() {
+interface Props {
+  actions: {
+    signOut: () => Promise<void>;
+  };
+}
+
+export default function UserInfo(props: Props) {
   const navigation = useNavigation();
   const { setApplicationState } = React.useContext(Context);
+  const { signOut } = props.actions;
+
+  const handleSignOut = React.useCallback(() => {
+    signOut().finally(() => setApplicationState(Status.UN_AUTHORIZED));
+  }, [signOut]);
 
   return (
     <View style={styles.container}>
@@ -58,7 +69,7 @@ export default function UserInfo() {
       <TouchableOpacity onPress={() => navigation.navigate(NOTIFICATION_INFO)}>
         <Text>NotificationInfo</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => setApplicationState(Status.UN_AUTHORIZED)}>
+      <TouchableOpacity onPress={handleSignOut}>
         <Text>SignOut</Text>
       </TouchableOpacity>
     </View>

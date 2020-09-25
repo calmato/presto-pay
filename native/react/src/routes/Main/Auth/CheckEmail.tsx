@@ -1,8 +1,9 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import React from "react";
 
-import { CheckEmail, SignIn, SignUp } from "~/components/pages";
+import { CheckEmail, SignUp } from "~/components/pages";
 import { CHECK_EMAIL, SIGN_IN, SIGN_UP } from "~/constants/path";
+import { SignIn } from "~/containers";
 
 const Stack = createStackNavigator();
 
