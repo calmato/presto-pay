@@ -10,6 +10,7 @@ export type State = ReturnType<typeof createInitialState>;
 // Actions
 export const SET_AUTH = "presto-pay/auth/SET_AUTH";
 export const SET_USER = "presto-pay/auth/SET_USER";
+export const RESET = "presto-pay/auth/RESET";
 
 // Action Creators
 export function setAuth(auth: Auth.AuthValues) {
@@ -41,6 +42,8 @@ export default function reducer(state = createInitialState(), action: Action) {
       return Auth.setAuth(state, payload.auth);
     case SET_USER:
       return Auth.setUser(state, payload.auth);
+    case RESET:
+      return Auth.factory();
     default:
       return state;
   }

@@ -1,7 +1,7 @@
 import { Dispatch } from "redux";
 
 import { Auth } from "~/domain/models";
-import { firebase, signInWithPasswordToFirebase, AuthUser } from "~/lib/firebase";
+import { firebase, signInWithPasswordToFirebase, signOutFromFirebase, AuthUser } from "~/lib/firebase";
 import * as LocalStorage from "~/lib/local-storage";
 import { setAuth } from "~/modules/auth";
 
@@ -39,6 +39,22 @@ export function authStateChangedSync() {
 
         reject(new Error("User is not exists"));
       });
+    });
+  };
+}
+
+export function signOutSync() {
+  return (): Promise<void> => {
+    return new Promise((resolve: () => void, reject: (reason: Error) => void) => {
+      signOutFromFirebase()
+        .catch((err: Error) => {
+          reject(err);
+        })
+        .finally(async () => {
+          await LocalStorage.AuthInformation.clear();
+
+          resolve();
+        });
     });
   };
 }

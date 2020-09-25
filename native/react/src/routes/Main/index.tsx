@@ -10,9 +10,10 @@ import { default as HomeStackScreen } from "./Home";
 import { PaymentSelectStackScreen } from "./Payment";
 import { UserInfoStackScreen } from "./System";
 
-import { Initial, Loading } from "~/components/pages";
+import { Initial } from "~/components/pages";
 import { GROUP_LIST, HOME, INITIAL, LOADING, SIGN_IN, USER_INFO } from "~/constants/path";
 import { COLOR } from "~/constants/theme";
+import { Loading } from "~/containers";
 import * as UiContext from "~/contexts/ui";
 
 const Stack = createStackNavigator();

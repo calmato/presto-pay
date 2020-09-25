@@ -3,8 +3,9 @@ import React from "react";
 
 import CheckEmail from "./CheckEmail";
 
-import { SignIn, PasswordReset } from "~/components/pages";
+import { PasswordReset } from "~/components/pages";
 import { CHECK_EMAIL, SIGN_IN, PASSWORD_RESET } from "~/constants/path";
+import { SignIn } from "~/containers";
 
 const Stack = createStackNavigator();
 

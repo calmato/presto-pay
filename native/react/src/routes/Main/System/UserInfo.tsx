@@ -1,9 +1,10 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import React from "react";
 
-import { NotificationInfo, UserEdit, UserInfo, UserPasswordEdit } from "~/components/pages";
+import { NotificationInfo, UserEdit, UserPasswordEdit } from "~/components/pages";
 import { NOTIFICATION_INFO, USER_EDIT, USER_INFO, USER_PASSWORD_EDIT } from "~/constants/path";
 import { HEADER_STYLE } from "~/constants/theme";
+import { UserInfo } from "~/containers";
 
 const Stack = createStackNavigator();
 
