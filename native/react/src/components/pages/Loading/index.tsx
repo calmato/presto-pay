@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
 interface Props {
   actions: {
     authStateChanged: () => Promise<void>;
-  },
+  };
 }
 
 function useAuthInformation(props: Props) {
