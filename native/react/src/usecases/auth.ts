@@ -43,6 +43,14 @@ export function authStateChangedAsync() {
   };
 }
 
+export function showAuthUser() {
+  return (dispatch: Dispatch): Promise<void> => {
+    return new Promise((resolve: () => void, reject: (reason: Error) => void) => {
+      resolve();
+    });
+  };
+}
+
 export function signOutAsync() {
   return (dispatch: Dispatch): Promise<void> => {
     return new Promise((resolve: () => void, reject: (reason: Error) => void) => {
