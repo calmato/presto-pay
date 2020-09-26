@@ -4,6 +4,7 @@ import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import { Card } from "react-native-elements";
 
 import { Button, TextField } from "~/components/atoms";
+import Icon from "~/components/atoms/Icon";
 import { SIGN_UP, PASSWORD_RESET } from "~/constants/path";
 import { COLOR } from "~/constants/theme";
 import { UiContext } from "~/contexts";
@@ -23,8 +24,12 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: COLOR.MAIN,
   },
+  icon: {
+    fontSize: 22,
+    marginRight: 10,
+  },
   button: {
-    padding: 10,
+    margin: 10,
   },
   link: {
     padding: 10,
@@ -33,6 +38,10 @@ const styles = StyleSheet.create({
     color: COLOR.PRIMARY,
   },
 });
+
+const icon = (name: string): JSX.Element => {
+  return <Icon name={name} style={styles.icon} />;
+};
 
 interface Props {
   actions: {
@@ -77,6 +86,7 @@ export default function SignIn(props: Props) {
         </TouchableOpacity>
         <Card.Divider />
         <Button
+          icon={icon("logo-google")}
           onPress={() => console.log("click", "google")}
           title="Googleでサインイン"
           titleColor={COLOR.DARK}
@@ -84,6 +94,7 @@ export default function SignIn(props: Props) {
           type="outline"
         />
         <Button
+          icon={icon("logo-twitter")}
           onPress={() => console.log("click", "twitter")}
           title="Twitterでサインイン"
           titleColor={COLOR.DARK}
@@ -91,6 +102,7 @@ export default function SignIn(props: Props) {
           type="outline"
         />
         <Button
+          icon={icon("logo-facebook")}
           onPress={() => console.log("click", "facebook")}
           title="Facebookでサインイン"
           titleColor={COLOR.DARK}

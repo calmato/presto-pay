@@ -2,9 +2,9 @@ import AsyncStorage from "@react-native-community/async-storage";
 
 import { AUTH_KEY } from "./key";
 
-import { AuthInformation } from "~/contexts/auth";
+import { Auth } from "~/domain/models";
 
-export async function save(authInformation: AuthInformation) {
+export async function save(authInformation: Auth.Model) {
   await AsyncStorage.setItem(AUTH_KEY, JSON.stringify(authInformation));
 }
 

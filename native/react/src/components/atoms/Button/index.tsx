@@ -7,14 +7,14 @@ import { COLOR } from "~/constants/theme";
 interface Props {
   backgroundColor?: string;
   disabled?: boolean;
-  disabledStyle?: ViewStyle | ViewStyle[];
-  icon?: any;
+  disabledStyle?: ViewStyle;
+  icon?: JSX.Element;
   onPress: () => void;
-  style?: ViewStyle | ViewStyle[];
+  style?: ViewStyle;
   title?: string;
   titleColor?: string;
   type?: "solid" | "clear" | "outline";
-  textStyle?: TextStyle | TextStyle[];
+  textStyle?: TextStyle;
 }
 
 export default function Button(props: Props) {
