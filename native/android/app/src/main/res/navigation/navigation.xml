@@ -193,6 +193,12 @@
       android:name="groupEditList"
       app:argType="work.calmato.prestopay.network.GroupPropertyResponse"
       app:nullable="true" />
+    <action
+      android:id="@+id/action_groupEditFragment_to_groupDetail"
+      app:destination="@id/groupDetail" />
+    <action
+      android:id="@+id/action_groupEditFragment_to_home_fragment"
+      app:destination="@id/home_fragment" />
   </fragment>
   <fragment
     android:id="@+id/addExpenseFragment"

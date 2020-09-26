@@ -99,6 +99,14 @@ interface ApiService {
   fun createGroup(@Header("Authorization") token: String, @Body userId: CreateGroupProperty):
     Call<GroupPropertyResponse>
 
+  @PATCH("groups/{groupId}")
+  fun editGroup(
+    @Header("Authorization") token: String,
+    @Body accountProperty: EditGroup,
+    @Path("groupId") groupId: String
+  ):
+    Call<EditGroup>
+
   @POST("auth")
   fun createAccount(
     @Body accountProperty: NewAccountProperty
