@@ -1,13 +1,13 @@
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
-import { ViewStyle } from "react-native";
+import { TextStyle, ViewStyle } from "react-native";
 
 import { COLOR } from "~/constants/theme";
 
 interface Props {
   name: string;
   color: string;
-  style?: ViewStyle;
+  style?: TextStyle;
 }
 
 const Icon = function Icon(props: Props) {
