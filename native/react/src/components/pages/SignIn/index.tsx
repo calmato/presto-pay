@@ -45,7 +45,7 @@ const icon = (name: string): JSX.Element => {
 
 interface Props {
   actions: {
-    signInWithPassword: (email: string, password: string) => Promise<Auth.AuthValues>;
+    signInWithPassword: (email: string, password: string) => Promise<void>;
   };
 }
 
