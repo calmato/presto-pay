@@ -2,7 +2,7 @@ import React from "react";
 import { useDispatch } from "react-redux";
 
 import { UserInfo } from "~/components/pages";
-import { signOutSync } from "~/usecases/auth";
+import { signOutAsync } from "~/usecases/auth";
 
 export default function ConnectedUserInfo() {
   const dispatch = useDispatch();
@@ -10,7 +10,7 @@ export default function ConnectedUserInfo() {
   const actions = React.useMemo(
     () => ({
       signOut(): Promise<void> {
-        return dispatch(signOutSync());
+        return dispatch(signOutAsync());
       },
     }),
     [dispatch]

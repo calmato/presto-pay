@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 
 import { SignIn } from "~/components/pages";
 import { Auth } from "~/domain/models";
-import { signInWithPasswordSync } from "~/usecases/auth";
+import { signInWithPasswordAsync } from "~/usecases/auth";
 
 export default function ConnectedSignIn() {
   const dispatch = useDispatch();
@@ -11,7 +11,7 @@ export default function ConnectedSignIn() {
   const actions = React.useMemo(
     () => ({
       signInWithPassword(email: string, password: string): Promise<Auth.AuthValues> {
-        return dispatch(signInWithPasswordSync(email, password));
+        return dispatch(signInWithPasswordAsync(email, password));
       },
     }),
     [dispatch]

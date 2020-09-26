@@ -5,7 +5,7 @@ import { firebase, signInWithPasswordToFirebase, signOutFromFirebase, AuthUser }
 import * as LocalStorage from "~/lib/local-storage";
 import { setAuth } from "~/modules/auth";
 
-export function signInWithPasswordSync(email: string, password: string) {
+export function signInWithPasswordAsync(email: string, password: string) {
   return (dispatch: Dispatch): Promise<Auth.AuthValues> => {
     return new Promise((resolve: (value: Auth.AuthValues) => void, reject: (reason: Error) => void) => {
       signInWithPasswordToFirebase(email, password)
@@ -29,7 +29,7 @@ export function signInWithPasswordSync(email: string, password: string) {
   };
 }
 
-export function authStateChangedSync() {
+export function authStateChangedAsync() {
   return (): Promise<void> => {
     return new Promise((resolve: () => void, reject: (reason: Error) => void) => {
       firebase.auth().onAuthStateChanged((user: firebase.User | null) => {
@@ -43,7 +43,7 @@ export function authStateChangedSync() {
   };
 }
 
-export function signOutSync() {
+export function signOutAsync() {
   return (): Promise<void> => {
     return new Promise((resolve: () => void, reject: (reason: Error) => void) => {
       signOutFromFirebase()
