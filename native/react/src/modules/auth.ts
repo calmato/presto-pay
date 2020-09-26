@@ -38,10 +38,13 @@ export function reset() {
   };
 }
 
-export type Action = Readonly<ReturnType<typeof setAuth>> | Readonly<ReturnType<typeof setUser>>;
+export type Action =
+  | Readonly<ReturnType<typeof setAuth>>
+  | Readonly<ReturnType<typeof setUser>>
+  | Readonly<ReturnType<typeof reset>>;
 
 // Reducer
-export default function reducer(state = createInitialState(), action: Action) {
+export default function reducer(state: State = createInitialState(), action: Action) {
   const { payload } = action;
 
   switch (action.type) {

@@ -29,7 +29,7 @@ const forFade = ({ current }: StackCardInterpolationProps) => ({
 });
 
 // 現在の画面名を取得
-const getActiveRouteName = (state: any): string => {
+const getActiveRouteName = (state): string => {
   if (!state || !state.routes) {
     return "";
   }

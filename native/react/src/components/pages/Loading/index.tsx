@@ -1,9 +1,7 @@
 import React from "react";
 import { StyleSheet, View, ActivityIndicator } from "react-native";
 
-import { Context as AuthContext } from "~/contexts/auth";
 import { Context as UiContext, Status } from "~/contexts/ui";
-import { firebase } from "~/lib/firebase";
 import * as LocalStorage from "~/lib/local-storage";
 
 const styles = StyleSheet.create({
@@ -25,7 +23,6 @@ interface Props {
 }
 
 function useAuthInformation(props: Props) {
-  const { setAuthState } = React.useContext(AuthContext);
   const { setApplicationState, setError } = React.useContext(UiContext);
   const { authStateChanged } = props.actions;
 
@@ -54,7 +51,6 @@ function useAuthInformation(props: Props) {
         return;
       }
 
-      setAuthState(authInformation);
       await initialiseFirebaseAuthentication();
     } catch (err) {
       setError(err);
