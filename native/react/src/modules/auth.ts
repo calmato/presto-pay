@@ -31,6 +31,13 @@ export function setUser(auth: Auth.UserValues) {
   };
 }
 
+export function reset() {
+  return {
+    type: RESET,
+    payload: {},
+  };
+}
+
 export type Action = Readonly<ReturnType<typeof setAuth>> | Readonly<ReturnType<typeof setUser>>;
 
 // Reducer

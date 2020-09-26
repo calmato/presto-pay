@@ -3,7 +3,7 @@ import { Dispatch } from "redux";
 import { Auth } from "~/domain/models";
 import { firebase, signInWithPasswordToFirebase, signOutFromFirebase, AuthUser } from "~/lib/firebase";
 import * as LocalStorage from "~/lib/local-storage";
-import { setAuth } from "~/modules/auth";
+import { setAuth, reset } from "~/modules/auth";
 
 export function signInWithPasswordAsync(email: string, password: string) {
   return (dispatch: Dispatch): Promise<Auth.AuthValues> => {
@@ -44,13 +44,14 @@ export function authStateChangedAsync() {
 }
 
 export function signOutAsync() {
-  return (): Promise<void> => {
+  return (dispatch: Dispatch): Promise<void> => {
     return new Promise((resolve: () => void, reject: (reason: Error) => void) => {
       signOutFromFirebase()
         .catch((err: Error) => {
           reject(err);
         })
         .finally(async () => {
+          dispatch(reset());
           await LocalStorage.AuthInformation.clear();
 
           resolve();
