@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 
 import { SignIn } from "~/components/pages";
 import { Auth } from "~/domain/models";
-import { signInWithPasswordAsync } from "~/usecases/auth";
+import { signInWithPasswordAsync, showAuthUserAsync } from "~/usecases/auth";
 
 export default function ConnectedSignIn() {
   const dispatch = useDispatch();
@@ -12,6 +12,9 @@ export default function ConnectedSignIn() {
     () => ({
       signInWithPassword(email: string, password: string): Promise<void> {
         return dispatch(signInWithPasswordAsync(email, password));
+      },
+      showAuthUser(): Promise<void> {
+        return dispatch(showAuthUserAsync());
       },
     }),
     [dispatch]
