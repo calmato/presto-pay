@@ -153,12 +153,8 @@ class GroupEditFragment : Fragment() {
   private fun sendRequest() {
     val thumbnails = encodeImage2Base64(groupThumnail)
     val groupName: String = groupEditName.text.toString()
-    var sendGroupMembers: MutableList<String> = mutableListOf()
-    for (user in groupDetail!!.users) {
-      sendGroupMembers.add(user.id)
-    }
     try {
-      val editGroup = EditGroup(groupName, thumbnails, sendGroupMembers)
+      val editGroup = EditGroup(groupName, thumbnails, groupDetail!!.users.map { it.id })
       execute(editGroup, getGroupInfo!!.id)
     } catch (e: Exception) {
       Log.d(TAG, "debug $e")
