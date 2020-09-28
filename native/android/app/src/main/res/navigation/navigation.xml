@@ -189,8 +189,17 @@
     android:name="work.calmato.prestopay.ui.groupEdit.GroupEditFragment"
     android:label="fragment_group_edit"
     tools:layout="@layout/fragment_group_edit">
+    <argument
+      android:name="groupEditList"
+      app:argType="work.calmato.prestopay.network.GroupPropertyResponse"
+      app:nullable="true" />
+    <action
+      android:id="@+id/action_groupEditFragment_to_groupDetail"
+      app:destination="@id/groupDetail" />
+    <action
+      android:id="@+id/action_groupEditFragment_to_home_fragment"
+      app:destination="@id/home_fragment" />
   </fragment>
-
   <fragment
     android:id="@+id/addExpenseFragment"
     android:name="work.calmato.prestopay.ui.addExpense.AddExpenseFragment"

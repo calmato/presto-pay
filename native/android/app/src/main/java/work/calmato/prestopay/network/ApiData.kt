@@ -1,7 +1,6 @@
 package work.calmato.prestopay.network
 
 import android.os.Parcelable
-import com.squareup.moshi.Json
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
@@ -35,6 +34,13 @@ data class RegisterDeviceIdProperty(
 
 @Parcelize
 data class CreateGroupProperty(
+  val name: String,
+  val thumbnail: String,
+  val userIds: List<String>
+) : Parcelable {}
+
+@Parcelize
+data class EditGroup(
   val name: String,
   val thumbnail: String,
   val userIds: List<String>

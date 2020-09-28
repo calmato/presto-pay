@@ -52,7 +52,7 @@ class GroupDetailFragment : Fragment() {
     }
     setting.setOnClickListener {
       this.findNavController().navigate(
-      GroupDetailFragmentDirections.actionGroupDetailToGroupEditFragment()
+      GroupDetailFragmentDirections.actionGroupDetailToGroupEditFragment(groupDetail)
       )
     }
     viewModel.paymentsList!!.observe(viewLifecycleOwner, Observer<List<PaymentPropertyGet>> {
