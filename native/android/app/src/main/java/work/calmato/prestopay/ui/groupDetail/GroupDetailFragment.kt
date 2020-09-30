@@ -74,7 +74,7 @@ class GroupDetailFragment : Fragment() {
         viewModel.getPayments(it.id)
       }
     }
-    groupDetail?.thumbnail_url?.let {
+    groupDetail?.thumbnailUrl?.let {
       Picasso.with(requireContext()).load(it).into(groupIcon)
     }
     bottom_navigation.setOnNavigationItemSelectedListener { item ->

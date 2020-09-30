@@ -42,7 +42,7 @@ data class CreateGroupProperty(
 @Parcelize
 data class EditGroup(
   val name: String,
-  val thumbnail: String,
+  val thumbnailUrl: String,
   val userIds: List<String>
 ) : Parcelable {}
 
@@ -90,10 +90,10 @@ data class NetworkPayer(
 data class GroupPropertyResponse(
   val id: String,
   val name: String,
-  val thumbnail_url: String,
-  val user_ids: List<String>,
-  val created_at: String,
-  val updated_at: String,
+  val thumbnailUrl: String,
+  val userIds: List<String>,
+  val createdAt: String,
+  val updatedAt: String,
   var selected: Boolean = false
 ) : Parcelable {}
 
