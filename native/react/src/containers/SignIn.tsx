@@ -1,12 +1,11 @@
 import React from "react";
-import { useDispatch } from "react-redux";
 
 import { SignIn } from "~/components/pages";
-import { Auth } from "~/domain/models";
+import { useReduxDispatch } from "~/modules";
 import { signInWithPasswordAsync, showAuthUserAsync } from "~/usecases/auth";
 
 export default function ConnectedSignIn() {
-  const dispatch = useDispatch();
+  const dispatch = useReduxDispatch();
 
   const actions = React.useMemo(
     () => ({

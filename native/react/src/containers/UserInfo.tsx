@@ -1,15 +1,16 @@
 import React from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 
 import { UserInfo } from "~/components/pages";
 import { Auth } from "~/domain/models";
+import { useReduxDispatch } from "~/modules";
 import { authSelector } from "~/selectors/auth";
 import { signOutAsync, showAuthUserAsync } from "~/usecases/auth";
 
 export default function ConnectedUserInfo() {
   const auth: Auth.Model = useSelector(authSelector);
 
-  const dispatch = useDispatch();
+  const dispatch = useReduxDispatch();
 
   const actions = React.useMemo(
     () => ({
