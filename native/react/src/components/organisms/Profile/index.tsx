@@ -43,7 +43,8 @@ Profile.defaultProps = {
     username: "test-display-user-name",
     email: "sample@sample.com",
     emailVerified: true,
-    thumbnailUrl: "https://avatars3.githubusercontent.com/u/45778633?s=400&u=d3e6035ae09c6fc39656916113866903c43d73a9&v=4",
+    thumbnailUrl:
+      "https://avatars3.githubusercontent.com/u/45778633?s=400&u=d3e6035ae09c6fc39656916113866903c43d73a9&v=4",
   },
 };
 
