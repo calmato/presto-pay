@@ -9,7 +9,7 @@ import { setAuth, setUser, reset } from "~/modules/auth";
 import { ShowAuthResponse } from "~/types/response/auth";
 
 export function signInWithPasswordAsync(email: string, password: string) {
-  return (dispatch: Dispatch, getState: AppState): Promise<void> => {
+  return (dispatch: Dispatch, getState: () => AppState): Promise<void> => {
     return new Promise((resolve: () => void, reject: (reason: Error) => void) => {
       signInWithPasswordToFirebase(email, password)
         .then(async (res: AuthUser) => {
@@ -22,7 +22,7 @@ export function signInWithPasswordAsync(email: string, password: string) {
 
           dispatch(setAuth(payload));
 
-          const auth: Auth.Model = getState.auth;
+          const auth: Auth.Model = getState().auth;
           await LocalStorage.AuthInformation.save(auth);
 
           resolve();
@@ -49,7 +49,7 @@ export function authStateChangedAsync() {
 }
 
 export function showAuthUserAsync() {
-  return (dispatch: Dispatch, getState: AppState): Promise<void> => {
+  return (dispatch: Dispatch, getState: () => AppState): Promise<void> => {
     return new Promise((resolve: () => void, reject: (reason: Error) => void) => {
       axios
         .get("/v1/auth")
@@ -67,7 +67,7 @@ export function showAuthUserAsync() {
 
           dispatch(setUser(payload));
 
-          const auth: Auth.Model = getState.auth;
+          const auth: Auth.Model = getState().auth;
           await LocalStorage.AuthInformation.save(auth);
 
           resolve();

@@ -11,7 +11,9 @@ export default function ConnectedSignIn() {
   const actions = React.useMemo(
     () => ({
       signInWithPassword(email: string, password: string): Promise<void> {
-        return dispatch(signInWithPasswordAsync(email, password));
+        return dispatch(signInWithPasswordAsync(email, password)).then(() => {
+          dispatch(showAuthUserAsync());
+        });
       },
       showAuthUser(): Promise<void> {
         return dispatch(showAuthUserAsync());
