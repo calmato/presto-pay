@@ -1,6 +1,5 @@
 package work.calmato.prestopay.network
 
-import androidx.room.Database
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import work.calmato.prestopay.database.DatabaseFriend
@@ -84,10 +83,10 @@ fun NetworkGroupContainer.asDomainModel(): List<GroupPropertyResponse> {
     GroupPropertyResponse(
       id = it.id,
       name = it.name,
-      thumbnail_url = it.thumbnailUrl,
-      user_ids = it.userIds,
-      created_at = it.createdAt,
-      updated_at = it.updatedAt,
+      thumbnailUrl = it.thumbnailUrl,
+      userIds = it.userIds,
+      createdAt = it.createdAt,
+      updatedAt = it.updatedAt,
       selected = it.selected
     )
   }

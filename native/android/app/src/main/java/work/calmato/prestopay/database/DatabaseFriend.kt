@@ -1,6 +1,5 @@
 package work.calmato.prestopay.database
 
-import android.net.Network
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverter
@@ -77,10 +76,10 @@ fun List<DatabaseGroup>.asGroupModel(): List<GroupPropertyResponse> {
     GroupPropertyResponse(
       id = it.id,
       name = it.name,
-      thumbnail_url = it.thumbnailUrl,
-      user_ids = it.userIds as List<String>,
-      created_at = it.createdAt,
-      updated_at = it.updateAt
+      thumbnailUrl = it.thumbnailUrl,
+      userIds = it.userIds as List<String>,
+      createdAt = it.createdAt,
+      updatedAt = it.updateAt
     )
   }
 }

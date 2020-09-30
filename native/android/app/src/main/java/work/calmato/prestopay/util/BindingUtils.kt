@@ -39,9 +39,9 @@ fun CheckBox.isChecked(item:UserProperty?){
 
 @BindingAdapter("thumbnailGroup")
 fun ImageView.setThumbnail(item:GroupPropertyResponse?){
-  item?.thumbnail_url?.let{
-    if(item.thumbnail_url.isNotEmpty()) {
-      Picasso.with(context).load(item.thumbnail_url).into(this)
+  item?.thumbnailUrl?.let{
+    if(item.thumbnailUrl.isNotEmpty()) {
+      Picasso.with(context).load(item.thumbnailUrl).into(this)
     }
   }
 }
