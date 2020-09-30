@@ -27,9 +27,7 @@ export function signInWithPasswordAsync(email: string, password: string) {
 
           resolve();
         })
-        .catch((err: Error) => {
-          reject(err);
-        });
+        .catch((err: Error) => reject(err));
     });
   };
 }
@@ -81,9 +79,7 @@ export function signOutAsync() {
   return (dispatch: Dispatch): Promise<void> => {
     return new Promise((resolve: () => void, reject: (reason: Error) => void) => {
       signOutFromFirebase()
-        .catch((err: Error) => {
-          reject(err);
-        })
+        .catch((err: Error) => reject(err))
         .finally(async () => {
           dispatch(reset());
           await LocalStorage.AuthInformation.clear();
