@@ -16,6 +16,7 @@ export default combineReducers<AppState>({
   auth: Auth.default,
 });
 
+// TODO: 型定義
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type ReduxDispatch = ThunkDispatch<AppState, any, Action>;
 
