@@ -9,7 +9,6 @@ import { SIGN_UP, PASSWORD_RESET } from "~/constants/path";
 import { COLOR } from "~/constants/theme";
 import { UiContext } from "~/contexts";
 import { Status } from "~/contexts/ui";
-import { Auth } from "~/domain/models";
 import { useControlledComponent } from "~/lib/hooks";
 
 const styles = StyleSheet.create({
@@ -45,7 +44,8 @@ const icon = (name: string): JSX.Element => {
 
 interface Props {
   actions: {
-    signInWithPassword: (email: string, password: string) => Promise<Auth.AuthValues>;
+    signInWithPassword: (email: string, password: string) => Promise<void>;
+    showAuthUser: () => Promise<void>;
   };
 }
 
@@ -54,11 +54,14 @@ export default function SignIn(props: Props) {
   const { setApplicationState } = React.useContext(UiContext);
   const email = useControlledComponent("");
   const password = useControlledComponent("");
-  const { signInWithPassword } = props.actions;
+  const { signInWithPassword, showAuthUser } = props.actions;
 
   const handleSignInWithPassword = React.useCallback(async () => {
     await signInWithPassword(email.value, password.value)
-      .then(() => setApplicationState(Status.AUTHORIZED))
+      .then(async () => {
+        await showAuthUser();
+        setApplicationState(Status.AUTHORIZED);
+      })
       .catch((err: Error) => console.log("failure:", err)); // TODO: エラー処理
   }, [email.value, password.value, setApplicationState, signInWithPassword]);
 

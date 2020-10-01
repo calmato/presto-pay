@@ -1,11 +1,11 @@
 import React from "react";
-import { useDispatch } from "react-redux";
 
 import { Loading } from "~/components/pages";
+import { useReduxDispatch } from "~/modules";
 import { authStateChangedAsync } from "~/usecases/auth";
 
 export default function ConnectedLoading() {
-  const dispatch = useDispatch();
+  const dispatch = useReduxDispatch();
 
   const actions = React.useMemo(
     () => ({

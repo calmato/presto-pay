@@ -4,8 +4,8 @@ import { AUTH_KEY } from "./key";
 
 import { Auth } from "~/domain/models";
 
-export async function save(authInformation: Auth.Model) {
-  await AsyncStorage.setItem(AUTH_KEY, JSON.stringify(authInformation));
+export async function save(values: Auth.Model) {
+  await AsyncStorage.setItem(AUTH_KEY, JSON.stringify(values));
 }
 
 export async function retrieve() {

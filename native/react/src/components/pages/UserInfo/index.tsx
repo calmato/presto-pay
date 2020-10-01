@@ -5,6 +5,7 @@ import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import { Profile, UserInfoList } from "~/components/organisms";
 import { USER_EDIT, USER_PASSWORD_EDIT, NOTIFICATION_INFO } from "~/constants/path";
 import { Context, Status } from "~/contexts/ui";
+import { Auth } from "~/domain/models";
 
 const styles = StyleSheet.create({
   container: {
@@ -40,6 +41,7 @@ const DATA = [
 ];
 
 interface Props {
+  auth: Auth.Model;
   actions: {
     signOut: () => Promise<void>;
   };
@@ -56,7 +58,7 @@ export default function UserInfo(props: Props) {
 
   return (
     <View style={styles.container}>
-      <Profile />
+      <Profile auth={props.auth} />
       <UserInfoList items={DATA} />
       <Text>UserInfo</Text>
       <Text style={styles.title}>UserInfo</Text>
