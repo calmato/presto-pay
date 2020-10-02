@@ -46,6 +46,19 @@ api-start:
 	docker-compose -f docker-compose.api.yaml up
 
 ##################################################
+# Container Commands - React Native
+##################################################
+.PHONY: react-start
+
+react-start:
+	$(eval IP := $(shell ifconfig | grep inet | cut -d " " -f2 | grep "[0-9]*\.[0-9]*\.[0-9]*\.[0-9]*" | awk 'NR==2'))
+	@echo "REACT_NATIVE_PACKAGER_HOSTNAME=$(IP)" > .rn.env
+	docker-compose -f docker-compose.rn.yaml up
+
+react-install:
+	docker-compose -f docker-compose.rn.yaml run --rm rn yarn
+
+##################################################
 # Container Commands - Terraform
 ##################################################
 .PHONY: terraform-stg-setup
