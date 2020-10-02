@@ -1,0 +1,19 @@
+version: '3.7'
+
+services:
+  # react-native as rn
+  rn:
+    container_name: presto_pay_rn
+    build:
+      context: ./infra/docker/native/react
+      dockerfile: Dockerfile
+    working_dir: /native/react
+    volumes:
+      - ./native/react:/native/react:cached
+    # ローカルのIPをコンテナに渡す必要があるが動的にIPは変化するので別ファイルで管理する
+    env_file: .rn.env
+    command: yarn start
+    ports:
+      - 19000:19000
+      - 19001:19001
+      - 19002:19002
