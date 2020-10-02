@@ -11,6 +11,7 @@ pids
 # secret variables file
 .env
 .envrc
+.rn.env
 !.env.temp
 !.envrc.temp
 
