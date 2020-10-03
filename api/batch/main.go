@@ -90,7 +90,7 @@ func main() {
 		panic(err)
 	}
 
-	// Redisへ値を保存
+	// Redisへ値を保存, TODO: 関数化
 	rv := reflect.ValueOf(res.Rates).Elem()
 	rt := rv.Type()
 
