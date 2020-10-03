@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools">
+<androidx.constraintlayout.widget.ConstraintLayout
+  android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+  <TextView
+    android:id="@+id/date"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="8dp"
+    android:layout_marginTop="8dp"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    tools:text="2020/10/02" />
+
+  <TextView
+    android:id="@+id/groupName"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="8dp"
+    android:textSize="30sp"
+    android:textStyle="bold"
+    app:layout_constraintStart_toStartOf="@+id/date"
+    app:layout_constraintTop_toBottomOf="@+id/date"
+    tools:text="Group name" />
+
+  <ImageView
+    android:id="@+id/thumbnail"
+    android:layout_width="80dp"
+    android:layout_height="80dp"
+    android:layout_marginTop="8dp"
+    android:layout_marginEnd="8dp"
+    android:contentDescription="thumbnail"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    app:srcCompat="@android:drawable/ic_menu_camera" />
+
+  <TextView
+    android:id="@+id/expenseName"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="16dp"
+    android:textSize="24sp"
+    app:layout_constraintStart_toStartOf="@+id/groupName"
+    app:layout_constraintTop_toBottomOf="@+id/groupName"
+    tools:text="支払い名" />
+
+  <TextView
+    android:id="@+id/amount"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="8dp"
+    android:textSize="24sp"
+    app:layout_constraintStart_toStartOf="@+id/expenseName"
+    app:layout_constraintTop_toBottomOf="@+id/expenseName"
+    tools:text="$1000" />
+
+  <androidx.recyclerview.widget.RecyclerView
+    android:id="@+id/tagRecyclerView"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/amount" />
+
+  <TextView
+    android:id="@+id/comment"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="8dp"
+    android:layout_marginTop="8dp"
+    android:layout_marginEnd="8dp"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/tagRecyclerView"
+    tools:text="comment" />
+
+  <Button
+    android:id="@+id/completed"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="32dp"
+    android:layout_marginEnd="32dp"
+    android:layout_marginBottom="8dp"
+    android:backgroundTint="@color/ourTheme"
+    android:text="@string/paymentCompleted"
+    android:textSize="24sp"
+    android:textStyle="bold"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
