@@ -199,6 +199,22 @@
     <action
       android:id="@+id/action_groupEditFragment_to_home_fragment"
       app:destination="@id/home_fragment" />
+    <action
+      android:id="@+id/action_groupEditFragment_to_groupEditAddFriend"
+      app:destination="@id/groupEditAddFriend" />
+  </fragment>
+  <fragment
+    android:id="@+id/groupEditAddFriend"
+    android:name="work.calmato.prestopay.ui.groupEdit.GroupEditAddFriendFragment"
+    android:label="fragment_group_edit_add_friendd"
+    tools:layout="@layout/fragment_group_edit_add_friend">
+    <argument
+      android:name="groupEditList"
+      app:argType="work.calmato.prestopay.network.GetGroupDetail"
+      app:nullable="true" />
+    <action
+      android:id="@+id/groupEditAddFriend"
+      app:destination="@id/groupEditFragment" />
   </fragment>
   <fragment
     android:id="@+id/addExpenseFragment"
