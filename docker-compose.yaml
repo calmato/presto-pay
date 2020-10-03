@@ -51,6 +51,24 @@ services:
       - api
       - loki
 
+  batch:
+    container_name: presto_pay_batch
+    build:
+      context: ./infra/docker/api/batch
+      dockerfile: Dockerfile_development
+    working_dir: /go/src/github.com/calmato/presto-pay/api/batch
+    volumes:
+      - ./api/batch:/go/src/github.com/calmato/presto-pay/api/batch:cached
+    networks:
+      - api
+
+  redis:
+    container_name: presto_pay_redis
+    build:
+      context: ./infra/docker/redi
+    networks:
+      - api
+
   admin:
     container_name: presto_pay_admin
     build:
