@@ -10,6 +10,13 @@ type PayerInIndexPayments struct {
 	IsPaid bool    `json:"isPaid"`
 }
 
+// UserInIndexPayments - ユーザー毎の支払い情報
+type UserInIndexPayments struct {
+	ID     string  `json:"id"`
+	Name   string  `json:"name"`
+	Amount float64 `json:"amount"`
+}
+
 // PaymentInIndexPayments - 支払い情報一覧取得の支払い情報
 type PaymentInIndexPayments struct {
 	ID          string                  `json:"id"`
@@ -29,7 +36,8 @@ type PaymentInIndexPayments struct {
 
 // IndexPayments - 支払い情報一覧取得APIのレスポンス
 type IndexPayments struct {
-	Payments []*PaymentInIndexPayments `json:"payments"`
+	Payments []*PaymentInIndexPayments       `json:"payments"`
+	Users    map[string]*UserInIndexPayments `json:"users"`
 }
 
 // PayerInCreatePayment - 支払い情報作成の支払い者情報

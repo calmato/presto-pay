@@ -3,6 +3,7 @@ package application
 import (
 	"context"
 	"encoding/base64"
+	"reflect"
 	"strings"
 
 	"github.com/calmato/presto-pay/api/calc/internal/application/request"
@@ -16,7 +17,9 @@ import (
 
 // PaymentApplication - PaymentApplicationインターフェース
 type PaymentApplication interface {
-	Index(ctx context.Context, groupID string, startAt string, currency string) ([]*payment.Payment, error)
+	Index(
+		ctx context.Context, groupID string, startAt string, currency string,
+	) ([]*payment.Payment, map[string]*payment.Payer, string, error)
 	Create(ctx context.Context, req *request.CreatePayment, groupID string) (*payment.Payment, error)
 	Update(ctx context.Context, req *request.UpdatePayment, groupID string, paymentID string) (*payment.Payment, error)
 	UpdatePayer(
@@ -50,28 +53,78 @@ func NewPaymentApplication(
 // TODO: startAtの引数追加
 func (pa *paymentApplication) Index(
 	ctx context.Context, groupID string, startAt string, currency string,
-) ([]*payment.Payment, error) {
+) ([]*payment.Payment, map[string]*payment.Payer, string, error) {
 	u, err := pa.userService.Authentication(ctx)
 	if err != nil {
-		return nil, domain.Unauthorized.New(err)
+		return nil, nil, "", domain.Unauthorized.New(err)
 	}
 
 	contain, err := pa.userService.ContainsGroupID(ctx, u, groupID)
 	if err != nil {
-		return nil, err
+		return nil, nil, "", err
 	}
 
 	if !contain {
 		err := xerrors.New("Failed to Service")
-		return nil, domain.Forbidden.New(err)
+		return nil, nil, "", domain.Forbidden.New(err)
 	}
 
 	ps, err := pa.paymentService.Index(ctx, groupID, startAt)
 	if err != nil {
-		return nil, err
+		return nil, nil, "", err
 	}
 
-	return ps, err
+	// 為替レート一覧のmapを作成
+	ers, err := pa.exchangeService.Index(ctx)
+	if err != nil {
+		return nil, nil, "", err
+	}
+
+	rv := reflect.ValueOf(ers.Rates).Elem()
+	rt := rv.Type()
+
+	rates := map[string]float64{}
+	for i := 0; i < rt.NumField(); i++ {
+		k := rt.Field(i).Tag.Get("json")
+		v := rv.Field(i).Interface().(float64)
+
+		rates[k] = v
+	}
+
+	// ユーザー毎の支払額合計作成 (支払いが済んでないものをまとめる)
+	payers := map[string]*payment.Payer{}
+	for _, p := range ps {
+		if p.IsCompleted {
+			continue
+		}
+
+		// 支払い情報に登録されている通貨情報を取得
+		currentRate := rates[p.Currency]
+		if currentRate == 0 {
+			currentRate = rates[ers.Base]
+		}
+
+		for _, payer := range p.Payers {
+			if payer.IsPaid {
+				continue
+			}
+
+			if payers[payer.ID] == nil {
+				payers[payer.ID] = &payment.Payer{
+					ID:     payer.ID,
+					Name:   payer.Name,
+					Amount: 0,
+					IsPaid: false,
+				}
+			}
+
+			// 為替レートの反映
+			amount := payer.Amount * rates[currency] / currentRate
+			payers[payer.ID].Amount = payers[payer.ID].Amount + amount
+		}
+	}
+
+	return ps, payers, currency, err
 }
 
 func (pa *paymentApplication) Create(
