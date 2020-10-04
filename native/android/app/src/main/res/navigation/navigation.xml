@@ -213,7 +213,7 @@
       app:argType="work.calmato.prestopay.network.GetGroupDetail"
       app:nullable="true" />
     <action
-      android:id="@+id/groupEditAddFriend"
+      android:id="@+id/action_groupEditAddFriend_to_groupEditFragment"
       app:destination="@id/groupEditFragment" />
   </fragment>
   <fragment

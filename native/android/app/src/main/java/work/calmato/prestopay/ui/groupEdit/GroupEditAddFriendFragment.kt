@@ -34,6 +34,7 @@ class GroupEditAddFriendFragment : Fragment() {
 
   private var getGroupInfo: GetGroupDetail? = null
   private var recycleAdapter: AdapterCheck? = null
+  private var responseGroup: GroupPropertyResponse? = null
   private lateinit var friendListArg: List<UserProperty>
   private lateinit var clickListener: AdapterCheck.OnClickListener
   private lateinit var id: String
@@ -93,7 +94,7 @@ class GroupEditAddFriendFragment : Fragment() {
 
   private fun sendRequest() {
     Log.d(TAG, "success")
-    var friendids: List<String> = friendListArg.map { item ->  item.id }
+    var friendids: List<String> = friendListArg.filter { it.checked }.map { item ->  item.id }
     Api.retrofitService.registerFriendToGroup("Bearer $id", mapOf("userIds" to friendids), getGroupInfo!!.id)
       .enqueue(object : Callback<GroupPropertyResponse> {
         override fun onFailure(call: Call<GroupPropertyResponse>, t: Throwable) {
@@ -105,11 +106,13 @@ class GroupEditAddFriendFragment : Fragment() {
           response: Response<GroupPropertyResponse>
         ) {
           if (response.isSuccessful) {
+            responseGroup = response.body()
             Toast.makeText(
               activity,
               "グループに友達を追加しました",
               Toast.LENGTH_SHORT
             ).show()
+
           } else {
             Toast.makeText(
               activity,
