@@ -90,7 +90,16 @@ func main() {
 		panic(err)
 	}
 
-	// Redisへ値を保存, TODO: 関数化
+	// Redisへ値を保存
+	if err = setRedis(rdb, "date", res.Date, 0); err != nil {
+		panic(err)
+	}
+
+	if err = setRedis(rdb, "base", res.Base, 0); err != nil {
+		panic(err)
+	}
+
+	// TODO: 関数化
 	rv := reflect.ValueOf(res.Rates).Elem()
 	rt := rv.Type()
 
@@ -100,7 +109,7 @@ func main() {
 
 		log.Printf("key: %v, value: %v", k, v)
 
-		if err = rdb.Set(ctx, k, v, 0).Err(); err != nil {
+		if err = setRedis(rdb, k, v, 0); err != nil {
 			panic(err)
 		}
 	}
@@ -166,4 +175,8 @@ func newRedisClient(env *Environment) (*redis.Client, error) {
 	}
 
 	return rdb, nil
+}
+
+func setRedis(rdb *redis.Client, key string, value interface{}, expiration int) error {
+	return rdb.Set(ctx, key, value, 0).Err()
 }
