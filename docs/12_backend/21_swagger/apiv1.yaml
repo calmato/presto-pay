@@ -1773,6 +1773,9 @@ components:
                       description: 作成日時
                     updatedAt:
                       type: string
+              currency:
+                type: object
+                description: ユーザーごとの未支払い合計額を計算するときの通貨
               users:
                 type: object
                 description: ユーザーごとの未支払い合計額
