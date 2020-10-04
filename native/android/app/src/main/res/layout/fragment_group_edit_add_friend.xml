@@ -8,7 +8,7 @@
     android:layout_height="match_parent">
 
     <SearchView
-      android:id="@+id/search"
+      android:id="@+id/searchFriend"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:iconifiedByDefault="false"
@@ -27,7 +27,7 @@
       android:textSize="18sp"
       android:textStyle="bold"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/search" />
+      app:layout_constraintTop_toBottomOf="@+id/searchFriend" />
 
     <androidx.recyclerview.widget.RecyclerView
       android:id="@+id/groupAddFriendRecycle"

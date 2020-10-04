@@ -4,7 +4,9 @@ import android.os.Bundle
 import android.preference.PreferenceManager
 import android.util.Log
 import android.view.*
+import android.widget.SearchView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
@@ -13,6 +15,7 @@ import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.android.synthetic.main.fragment_group_edit_add_friend.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -78,7 +81,31 @@ class GroupEditAddFriendFragment : Fragment() {
         viewModel.itemIsClickedCompleted()
       }
     })
+
     setHasOptionsMenu(true)
+    searchFriend.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+      override fun onQueryTextChange(newText: String): Boolean {
+        // text changed
+        if (newText.isNullOrBlank()) {
+          recycleAdapter?.friendList = friendListArg
+        } else {
+          recycleAdapter?.friendList = friendListArg.filter { !groupMembers.contains(it) && it.name.toLowerCase().contains(newText) }
+        }
+        return false
+      }
+      override fun onQueryTextSubmit(query: String): Boolean {
+        // submit button pressed
+        return false
+      }
+    })
+    requireActivity().onBackPressedDispatcher.addCallback(
+      viewLifecycleOwner,
+      object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+          goBackHome()
+        }
+      }
+    )
   }
 
   override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -122,6 +149,9 @@ class GroupEditAddFriendFragment : Fragment() {
           }
         }
       })
+  }
+
+  private fun goBackHome() {
   }
 
   companion object {

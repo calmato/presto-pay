@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -14,7 +13,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
@@ -62,7 +60,7 @@ class AddFriendFragment : Fragment() {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    search.setOnClickListener {
+    searchFriend.setOnClickListener {
       val name = userName.text.toString()
       if (name.isEmpty()){
         Toast.makeText(requireContext(),resources.getString(R.string.fill_friend_username),Toast.LENGTH_SHORT).show()
@@ -77,9 +75,9 @@ class AddFriendFragment : Fragment() {
     })
     viewModel.nowLoading.observe(viewLifecycleOwner, Observer {
       if(it){
-        startHttpConnection(search,nowLoading,requireContext())
+        startHttpConnection(searchFriend,nowLoading,requireContext())
       }else{
-        finishHttpConnection(search,nowLoading)
+        finishHttpConnection(searchFriend,nowLoading)
       }
     })
     viewModel.itemClicked.observe(viewLifecycleOwner, Observer {
