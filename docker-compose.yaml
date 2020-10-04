@@ -55,6 +55,7 @@ services:
     container_name: presto_pay_batch
     build:
       context: ./infra/docker/api/batch
+      dockerfile: Dockerfile_development
     working_dir: /go/src/github.com/calmato/presto-pay/api/batch
     volumes:
       - ./api/batch:/go/src/github.com/calmato/presto-pay/api/batch:cached
