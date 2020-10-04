@@ -2,8 +2,8 @@ package repository
 
 import (
 	"context"
-	"reflect"
 	"strconv"
+	"strings"
 
 	"github.com/calmato/presto-pay/api/calc/internal/domain/exchange"
 	"github.com/calmato/presto-pay/api/calc/lib/redis"
@@ -22,7 +22,7 @@ func NewExchangeRepository(r *redis.Client) exchange.ExchangeRepository {
 }
 
 func (er *exchangeRepository) Index(ctx context.Context) (*exchange.ExchangeRates, error) {
-	ers := &exchange.ExchangeRates{}
+	rs := map[string]float64{}
 
 	// 為替レート評価日の取得
 	date, err := er.redis.Get(ctx, "date")
@@ -37,13 +37,8 @@ func (er *exchangeRepository) Index(ctx context.Context) (*exchange.ExchangeRate
 	}
 
 	// 為替レート一覧の取得
-	rv := reflect.ValueOf(ers.Rates).Elem()
-	rt := rv.Type()
-
-	for i := 0; i < rt.NumField(); i++ {
-		k := rt.Field(i).Tag.Get("json")
-
-		rateStr, err := er.redis.Get(ctx, k)
+	for _, c := range exchange.Currencies {
+		rateStr, err := er.redis.Get(ctx, c)
 		if err != nil {
 			continue
 		}
@@ -53,11 +48,14 @@ func (er *exchangeRepository) Index(ctx context.Context) (*exchange.ExchangeRate
 			continue
 		}
 
-		rv.Field(i).SetFloat(rate)
+		rs[c] = rate
 	}
 
-	ers.Date = date
-	ers.Base = base
+	ers := &exchange.ExchangeRates{
+		Date:  date,
+		Base:  strings.ToLower(base),
+		Rates: rs,
+	}
 
 	return ers, nil
 }

@@ -3,7 +3,7 @@ package application
 import (
 	"context"
 	"encoding/base64"
-	"reflect"
+	"fmt"
 	"strings"
 
 	"github.com/calmato/presto-pay/api/calc/internal/application/request"
@@ -80,16 +80,12 @@ func (pa *paymentApplication) Index(
 		return nil, nil, "", err
 	}
 
-	rv := reflect.ValueOf(ers.Rates).Elem()
-	rt := rv.Type()
-
-	rates := map[string]float64{}
-	for i := 0; i < rt.NumField(); i++ {
-		k := rt.Field(i).Tag.Get("json")
-		v := rv.Field(i).Interface().(float64)
-
-		rates[k] = v
+	currency = strings.ToLower(currency)
+	if ers.Rates[currency] == 0 {
+		currency = ers.Base
 	}
+
+	fmt.Println(ers)
 
 	// ユーザー毎の支払額合計作成 (支払いが済んでないものをまとめる)
 	payers := map[string]*payment.Payer{}
@@ -99,9 +95,9 @@ func (pa *paymentApplication) Index(
 		}
 
 		// 支払い情報に登録されている通貨情報を取得
-		currentRate := rates[p.Currency]
+		currentRate := ers.Rates[p.Currency]
 		if currentRate == 0 {
-			currentRate = rates[ers.Base]
+			currentRate = ers.Rates[ers.Base]
 		}
 
 		for _, payer := range p.Payers {
@@ -119,7 +115,8 @@ func (pa *paymentApplication) Index(
 			}
 
 			// 為替レートの反映
-			amount := payer.Amount * rates[currency] / currentRate
+			amount := payer.Amount * ers.Rates[currency] / currentRate
+			fmt.Printf("currency: %v, rate: %v, amount: %v\n", currency, currentRate, amount)
 			payers[payer.ID].Amount = payers[payer.ID].Amount + amount
 		}
 	}
