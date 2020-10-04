@@ -10,6 +10,7 @@ require (
 	github.com/fluent/fluent-logger-golang v1.5.0
 	github.com/gin-gonic/gin v1.6.3
 	github.com/go-playground/validator/v10 v10.2.0
+	github.com/go-redis/redis/v8 v8.2.3 // indirect
 	github.com/golang/mock v1.4.3
 	github.com/google/uuid v1.1.1
 	github.com/kelseyhightower/envconfig v1.4.0
