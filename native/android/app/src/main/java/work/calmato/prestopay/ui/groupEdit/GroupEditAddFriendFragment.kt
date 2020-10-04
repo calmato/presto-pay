@@ -2,7 +2,6 @@ package work.calmato.prestopay.ui.groupEdit
 
 import android.os.Bundle
 import android.preference.PreferenceManager
-import android.util.Log
 import android.view.*
 import android.widget.SearchView
 import android.widget.Toast
@@ -13,6 +12,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_group_edit_add_friend.*
@@ -89,20 +89,24 @@ class GroupEditAddFriendFragment : Fragment() {
         if (newText.isNullOrBlank()) {
           recycleAdapter?.friendList = friendListArg
         } else {
-          recycleAdapter?.friendList = friendListArg.filter { !groupMembers.contains(it) && it.name.toLowerCase().contains(newText) }
+          recycleAdapter?.friendList = friendListArg.filter {
+            !groupMembers.contains(it) && it.name.toLowerCase().contains(newText)
+          }
         }
         return false
       }
+
       override fun onQueryTextSubmit(query: String): Boolean {
         // submit button pressed
         return false
       }
     })
+    // TODO: 戻るボタンはとりあえず無効にしているので実装する
     requireActivity().onBackPressedDispatcher.addCallback(
       viewLifecycleOwner,
       object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
-          goBackHome()
+          sendRequest()
         }
       }
     )
@@ -120,9 +124,12 @@ class GroupEditAddFriendFragment : Fragment() {
   }
 
   private fun sendRequest() {
-    Log.d(TAG, "success")
-    var friendids: List<String> = friendListArg.filter { it.checked }.map { item ->  item.id }
-    Api.retrofitService.registerFriendToGroup("Bearer $id", mapOf("userIds" to friendids), getGroupInfo!!.id)
+    var friendids: List<String> = friendListArg.filter { it.checked }.map { item -> item.id }
+    Api.retrofitService.registerFriendToGroup(
+      "Bearer $id",
+      mapOf("userIds" to friendids),
+      getGroupInfo!!.id
+    )
       .enqueue(object : Callback<GroupPropertyResponse> {
         override fun onFailure(call: Call<GroupPropertyResponse>, t: Throwable) {
           Toast.makeText(activity, t.message, Toast.LENGTH_LONG).show()
@@ -134,12 +141,7 @@ class GroupEditAddFriendFragment : Fragment() {
         ) {
           if (response.isSuccessful) {
             responseGroup = response.body()
-            Toast.makeText(
-              activity,
-              "グループに友達を追加しました",
-              Toast.LENGTH_SHORT
-            ).show()
-
+            applyBackHome(responseGroup)
           } else {
             Toast.makeText(
               activity,
@@ -151,7 +153,10 @@ class GroupEditAddFriendFragment : Fragment() {
       })
   }
 
-  private fun goBackHome() {
+  private fun applyBackHome(response: GroupPropertyResponse?) {
+    this.findNavController().navigate(
+      GroupEditAddFriendFragmentDirections.actionGroupEditAddFriendToGroupEditFragment(responseGroup)
+    )
   }
 
   companion object {
