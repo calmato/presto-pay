@@ -1,6 +1,12 @@
 package repository
 
-import "github.com/calmato/presto-pay/api/calc/internal/domain/exchange"
+import (
+	"context"
+	"strconv"
+
+	"github.com/calmato/presto-pay/api/calc/internal/domain/exchange"
+	"github.com/calmato/presto-pay/api/calc/lib/redis"
+)
 
 type exchangeRepository struct {
 	redis *redis.Client
@@ -15,7 +21,7 @@ func NewExchangeRepository(r *redis.Client) exchange.ExchangeRepository {
 }
 
 // TODO: 後で実装
-func (er *exchangeRepository) Index(ctx context.Context) (*ExchangeRates, error) {
+func (er *exchangeRepository) Index(ctx context.Context) (*exchange.ExchangeRates, error) {
 	return nil, nil
 }
 
