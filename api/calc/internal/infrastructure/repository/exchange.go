@@ -29,18 +29,18 @@ func (er *exchangeRepository) Show(ctx context.Context, currency string) (float6
 	// 為替レート評価日の取得
 	date, err := er.redis.Get(ctx, "date")
 	if err != nil {
-		return 0, "N/A", err
+		return 0, "", err
 	}
 
 	// 為替レートの取得
 	rateStr, err := er.redis.Get(ctx, "date")
 	if err != nil {
-		return 0, "N/A", err
+		return 0, "", err
 	}
 
 	rate, err := strconv.ParseFloat(rateStr, 64)
 	if err != nil {
-		return 0, "N/A", err
+		return 0, "", err
 	}
 
 	return rate, date, nil
