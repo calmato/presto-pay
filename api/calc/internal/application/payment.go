@@ -115,9 +115,7 @@ func (pa *paymentApplication) Index(
 			}
 
 			// 為替レートの反映
-			amount := payer.Amount * ers.Rates[currency] / currentRate
-			fmt.Printf("currency: %v, rate: %v, amount: %v\n", currency, currentRate, amount)
-			payers[payer.ID].Amount = payers[payer.ID].Amount + amount
+			payers[payer.ID].Amount += payer.Amount * ers.Rates[currency] / currentRate
 		}
 	}
 

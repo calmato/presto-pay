@@ -38,6 +38,7 @@ type PaymentInIndexPayments struct {
 type IndexPayments struct {
 	Payments []*PaymentInIndexPayments       `json:"payments"`
 	Users    map[string]*UserInIndexPayments `json:"users"`
+	Currency string                          `json:"currency"`
 }
 
 // PayerInCreatePayment - 支払い情報作成の支払い者情報

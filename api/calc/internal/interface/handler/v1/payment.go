@@ -87,6 +87,7 @@ func (ph *apiV1PaymentHandler) Index(ctx *gin.Context) {
 	res := &response.IndexPayments{
 		Payments: paymentsResponse,
 		Users:    usersResponse,
+		Currency: currency,
 	}
 
 	ctx.JSON(http.StatusOK, res)
