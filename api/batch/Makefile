@@ -1,4 +1,4 @@
-.PHONY: run
+.PHONY: run build fmt vet
 
 PACKAGES := $(shell go list ./...)
 
