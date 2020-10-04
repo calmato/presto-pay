@@ -16,7 +16,7 @@ env:
   GCR_IMAGE_TAG: ${{ github.sha }}
   GKE_ZONE: ${{ secrets.STG_GKE_ZONE }}
   GKE_CLUSTER_NAME: ${{ secrets.STG_GKE_CLUSTER_NAME }}
-  GKE_DEPLOYMENT_NAME: batch-api
+  GKE_CRONJOB_NAME: batch
 
 jobs:
   deploy_image_for_stg:
@@ -87,4 +87,4 @@ jobs:
 
       - name: Udpate pod image
         working-directory: ./infra/kubernetes
-        run: make update-deployment APP_NAME=${GKE_DEPLOYMENT_NAME}
+        run: make update-cronjob APP_NAME=${GKE_CRONJOB_NAME}

@@ -9,9 +9,15 @@ spec:
 
   jobTemplate:
     spec:
-      containers:
-        - name: batch
-          image: asia.gcr.io/<PROJECT-ID>/presto-pay-stg-batch-api:latest
-          imagePullPolicy: Always
-          args: ["./app"]
-      restartPolicy: OnFailure
+      template:
+        metadata:
+          labels:
+            app: batch
+
+        spec:
+          containers:
+            - name: batch
+              image: asia.gcr.io/<PROJECT-ID>/presto-pay-stg-batch-api:latest
+              imagePullPolicy: Always
+              args: ["./app"]
+          restartPolicy: OnFailure

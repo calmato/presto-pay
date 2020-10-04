@@ -32,6 +32,10 @@ generate-manifest:
 update-deployment:
 	kubectl patch deploy ${APP_NAME} -p "{\"spec\": {\"template\": {\"metadata\": {\"labels\": {\"date\": \"${CURRENT}\" }}}}}"
 
-update-deployment-all:
+update-cronjob:
+	kubectl patch deploy ${APP_NAME} -p "{\"spec\": {\"template\": {\"metadata\": {\"labels\": {\"date\": \"${CURRENT}\" }}}}}"
+
+update-manifest-all:
 	$(MAKE) update-deployment APP_NAME=user-api
 	$(MAKE) update-deployment APP_NAME=calc-api
+	$(MAKE) update-cronjob APP_NAME=batch
