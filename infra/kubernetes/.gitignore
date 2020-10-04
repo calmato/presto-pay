@@ -1,4 +1,5 @@
 deployment-*-api.yaml
+cronjob-*.yaml
 
 secret-*.yaml
 
