@@ -8,6 +8,7 @@ import (
 	"github.com/calmato/presto-pay/api/calc/internal/application/request"
 	"github.com/calmato/presto-pay/api/calc/internal/application/validation"
 	"github.com/calmato/presto-pay/api/calc/internal/domain"
+	"github.com/calmato/presto-pay/api/calc/internal/domain/exchange"
 	"github.com/calmato/presto-pay/api/calc/internal/domain/payment"
 	"github.com/calmato/presto-pay/api/calc/internal/domain/user"
 	"golang.org/x/xerrors"
@@ -15,7 +16,7 @@ import (
 
 // PaymentApplication - PaymentApplicationインターフェース
 type PaymentApplication interface {
-	Index(ctx context.Context, groupID string, startAt string) ([]*payment.Payment, error)
+	Index(ctx context.Context, groupID string, startAt string, currency string) ([]*payment.Payment, error)
 	Create(ctx context.Context, req *request.CreatePayment, groupID string) (*payment.Payment, error)
 	Update(ctx context.Context, req *request.UpdatePayment, groupID string, paymentID string) (*payment.Payment, error)
 	UpdatePayer(
@@ -30,21 +31,26 @@ type paymentApplication struct {
 	paymentRequestValidation validation.PaymentRequestValidation
 	userService              user.UserService
 	paymentService           payment.PaymentService
+	exchangeService          exchange.ExchangeService
 }
 
 // NewPaymentApplication - PaymentApplicationの生成
 func NewPaymentApplication(
-	prv validation.PaymentRequestValidation, us user.UserService, ps payment.PaymentService,
+	prv validation.PaymentRequestValidation, us user.UserService,
+	ps payment.PaymentService, es exchange.ExchangeService,
 ) PaymentApplication {
 	return &paymentApplication{
 		paymentRequestValidation: prv,
 		userService:              us,
 		paymentService:           ps,
+		exchangeService:          es,
 	}
 }
 
 // TODO: startAtの引数追加
-func (pa *paymentApplication) Index(ctx context.Context, groupID string, startAt string) ([]*payment.Payment, error) {
+func (pa *paymentApplication) Index(
+	ctx context.Context, groupID string, startAt string, currency string,
+) ([]*payment.Payment, error) {
 	u, err := pa.userService.Authentication(ctx)
 	if err != nil {
 		return nil, domain.Unauthorized.New(err)
