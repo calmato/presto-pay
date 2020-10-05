@@ -51,9 +51,8 @@ api-start:
 .PHONY: react-start
 
 react-start:
-	$(eval IP := $(shell ifconfig | grep inet | cut -d " " -f2 | grep "[0-9]*\.[0-9]*\.[0-9]*\.[0-9]*" | awk 'NR==2'))
-	@echo "REACT_NATIVE_PACKAGER_HOSTNAME=$(IP)" > .rn.env
-	docker-compose -f docker-compose.rn.yaml up
+	./infra/bin/get-local-ip-addr.sh
+	docker-compose -f docker-compose.expo.yaml up --remove-orphans
 
 react-install:
 	docker-compose -f docker-compose.rn.yaml run --rm rn yarn
