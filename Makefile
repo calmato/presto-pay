@@ -46,6 +46,18 @@ api-start:
 	docker-compose -f docker-compose.api.yaml up
 
 ##################################################
+# Container Commands - React Native
+##################################################
+.PHONY: react-start
+
+react-start:
+	./infra/bin/get-local-ip-addr.sh
+	docker-compose -f docker-compose.expo.yaml up --remove-orphans
+
+react-install:
+	docker-compose -f docker-compose.rn.yaml run --rm rn yarn
+
+##################################################
 # Container Commands - Terraform
 ##################################################
 .PHONY: terraform-stg-setup
