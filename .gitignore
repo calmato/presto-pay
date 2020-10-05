@@ -23,3 +23,6 @@ secrets/
 
 # parcel-bundler cache (https://parceljs.org/)
 .cache
+
+# sed backup file
+*.bak
