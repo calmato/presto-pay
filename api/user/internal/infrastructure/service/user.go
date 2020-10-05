@@ -35,6 +35,14 @@ func (us *userService) Authentication(ctx context.Context) (*user.User, error) {
 		return nil, domain.Unauthorized.New(err)
 	}
 
+	if u.GroupIDs == nil {
+		u.GroupIDs = make([]string, 0)
+	}
+
+	if u.FriendIDs == nil {
+		u.FriendIDs = make([]string, 0)
+	}
+
 	return u, nil
 }
 
@@ -81,6 +89,14 @@ func (us *userService) Show(ctx context.Context, userID string) (*user.User, err
 	if err != nil {
 		err = xerrors.Errorf("Failed to Repository: %w", err)
 		return nil, domain.NotFound.New(err)
+	}
+
+	if u.GroupIDs == nil {
+		u.GroupIDs = make([]string, 0)
+	}
+
+	if u.FriendIDs == nil {
+		u.FriendIDs = make([]string, 0)
 	}
 
 	return u, nil
