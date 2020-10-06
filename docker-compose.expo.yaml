@@ -1,0 +1,18 @@
+version: '3.7'
+
+services:
+  expo:
+    container_name: presto_pay_expo
+    build:
+      context: ./infra/docker/native/react
+      dockerfile: Dockerfile
+    working_dir: /native/react
+    volumes:
+      - ./native/react:/native/react:cached
+    environment:
+      - REACT_NATIVE_PACKAGER_HOSTNAME=${LOCAL_IP_ADDR}
+    command: yarn start
+    ports:
+      - 19000:19000
+      - 19001:19001
+      - 19002:19002

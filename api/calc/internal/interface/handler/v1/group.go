@@ -108,7 +108,7 @@ func (gh *apiV1GroupHandler) Show(ctx *gin.Context) {
 func (gh *apiV1GroupHandler) Create(ctx *gin.Context) {
 	req := &request.CreateGroup{}
 	if err := ctx.BindJSON(req); err != nil {
-		handler.ErrorHandling(ctx, domain.Unauthorized.New(err))
+		handler.ErrorHandling(ctx, domain.UnableParseJSON.New(err))
 		return
 	}
 
@@ -136,7 +136,7 @@ func (gh *apiV1GroupHandler) Update(ctx *gin.Context) {
 
 	req := &request.UpdateGroup{}
 	if err := ctx.BindJSON(req); err != nil {
-		handler.ErrorHandling(ctx, domain.Unauthorized.New(err))
+		handler.ErrorHandling(ctx, domain.UnableParseJSON.New(err))
 		return
 	}
 
@@ -164,7 +164,7 @@ func (gh *apiV1GroupHandler) AddUsers(ctx *gin.Context) {
 
 	req := &request.AddUsersInGroup{}
 	if err := ctx.BindJSON(req); err != nil {
-		handler.ErrorHandling(ctx, domain.Unauthorized.New(err))
+		handler.ErrorHandling(ctx, domain.UnableParseJSON.New(err))
 		return
 	}
 
@@ -192,7 +192,7 @@ func (gh *apiV1GroupHandler) RemoveUsers(ctx *gin.Context) {
 
 	req := &request.RemoveUsersInGroup{}
 	if err := ctx.BindJSON(req); err != nil {
-		handler.ErrorHandling(ctx, domain.Unauthorized.New(err))
+		handler.ErrorHandling(ctx, domain.UnableParseJSON.New(err))
 		return
 	}
 

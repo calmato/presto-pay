@@ -14,6 +14,9 @@ type Environment struct {
 	GoogleApplicationCredentials string `envconfig:"GOOGLE_APPLICATION_CREDENTIALS" required:"true"`
 	GCPStorageBucketName         string `envconfig:"GCP_STORAGE_BUCKET_NAME" required:"true"`
 	UserAPIURL                   string `envconfig:"USER_API_URL" default:"http://user_api:8080"`
+	RedisHost                    string `envconfig:"REDIS_HOST" default:"redis"`
+	RedisPort                    string `envconfig:"REDIS_PORT" default:"6379"`
+	RedisDB                      int    `envconfig:"REDIS_DB" default:"0"`
 }
 
 // LoadEnvironment - 環境変数の取得

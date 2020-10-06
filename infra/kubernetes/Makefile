@@ -11,7 +11,7 @@ get-external-ip:
 #############################
 # Setup
 #############################
-.PHONY: generate-parivate-key generate-deployment
+.PHONY: generate-parivate-key generate-manifest
 
 generate-private-key:
 	openssl req -x509 -nodes \
@@ -19,8 +19,10 @@ generate-private-key:
 		-keyout privkey.pem -out cert.pem \
 		-subj "/CN=${EXTERNAL_IP}"
 
-generate-deployment:
+generate-manifest:
 	cd ./${ENV}; sed 's/<PROJECT-ID>/${GCP_STORAGE_BUCKET_NAME}/' default/deployment-user-api.yaml.temp > default/deployment-user-api.yaml
+	cd ./${ENV}; sed 's/<PROJECT-ID>/${GCP_STORAGE_BUCKET_NAME}/' default/deployment-calc-api.yaml.temp > default/deployment-calc-api.yaml
+	cd ./${ENV}; sed 's/<PROJECT-ID>/${GCP_STORAGE_BUCKET_NAME}/' default/cronjob-batch.yaml.temp > default/cronjob-batch.yaml
 
 #############################
 # Update
@@ -30,6 +32,10 @@ generate-deployment:
 update-deployment:
 	kubectl patch deploy ${APP_NAME} -p "{\"spec\": {\"template\": {\"metadata\": {\"labels\": {\"date\": \"${CURRENT}\" }}}}}"
 
-update-deployment-all:
+update-cronjob:
+	kubectl patch cronjob ${APP_NAME} -p "{\"spec\": {\"template\": {\"metadata\": {\"labels\": {\"date\": \"${CURRENT}\" }}}}}"
+
+update-manifest-all:
 	$(MAKE) update-deployment APP_NAME=user-api
 	$(MAKE) update-deployment APP_NAME=calc-api
+	$(MAKE) update-cronjob APP_NAME=batch

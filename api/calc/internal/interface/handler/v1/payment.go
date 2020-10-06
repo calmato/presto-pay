@@ -86,7 +86,7 @@ func (ph *apiV1PaymentHandler) Create(ctx *gin.Context) {
 
 	req := &request.CreatePayment{}
 	if err := ctx.BindJSON(req); err != nil {
-		handler.ErrorHandling(ctx, domain.Unauthorized.New(err))
+		handler.ErrorHandling(ctx, domain.UnableParseJSON.New(err))
 		return
 	}
 
@@ -131,7 +131,7 @@ func (ph *apiV1PaymentHandler) Update(ctx *gin.Context) {
 
 	req := &request.UpdatePayment{}
 	if err := ctx.BindJSON(req); err != nil {
-		handler.ErrorHandling(ctx, domain.Unauthorized.New(err))
+		handler.ErrorHandling(ctx, domain.UnableParseJSON.New(err))
 		return
 	}
 
@@ -176,7 +176,7 @@ func (ph *apiV1PaymentHandler) UpdateStatus(ctx *gin.Context) {
 
 	req := &request.UpdatePayment{}
 	if err := ctx.BindJSON(req); err != nil {
-		handler.ErrorHandling(ctx, domain.Unauthorized.New(err))
+		handler.ErrorHandling(ctx, domain.UnableParseJSON.New(err))
 		return
 	}
 
@@ -220,7 +220,7 @@ func (ph *apiV1PaymentHandler) UpdateStatusAll(ctx *gin.Context) {
 
 	req := &request.UpdatePayment{}
 	if err := ctx.BindJSON(req); err != nil {
-		handler.ErrorHandling(ctx, domain.Unauthorized.New(err))
+		handler.ErrorHandling(ctx, domain.UnableParseJSON.New(err))
 		return
 	}
 
@@ -275,7 +275,7 @@ func (ph *apiV1PaymentHandler) UpdatePayer(ctx *gin.Context) {
 
 	req := &request.UpdatePayerInPayment{}
 	if err := ctx.BindJSON(req); err != nil {
-		handler.ErrorHandling(ctx, domain.Unauthorized.New(err))
+		handler.ErrorHandling(ctx, domain.UnableParseJSON.New(err))
 		return
 	}
 
