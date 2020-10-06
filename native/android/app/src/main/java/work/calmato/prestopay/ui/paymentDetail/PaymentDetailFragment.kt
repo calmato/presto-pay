@@ -23,7 +23,7 @@ import work.calmato.prestopay.network.PaymentPropertyGet
 import work.calmato.prestopay.util.PermissionBase
 
 
-class PaymentDetailFragment : PermissionBase()  {
+class PaymentDetailFragment : PermissionBase() {
   private lateinit var paymentDetail: PaymentPropertyGet
   override fun onCreateView(
     inflater: LayoutInflater,
@@ -40,25 +40,27 @@ class PaymentDetailFragment : PermissionBase()  {
     super.onViewCreated(view, savedInstanceState)
     date.text = paymentDetail.createdAt.split("T")[0]
     paymentDetail.imageUrls!![0].let {
-      if(it.isNotEmpty()){
+      if (it.isNotEmpty()) {
         Picasso.with(requireContext()).load(it).into(thumbnail)
       }
     }
     expenseName.text = paymentDetail.name
     amount.text = paymentDetail.total.toString().plus(" ").plus(paymentDetail.currency)
     comment.text = paymentDetail.comment
+    setGraph()
+  }
 
-    // グラフ
-    val entries : MutableList<BarEntry> = arrayListOf()
+  private fun setGraph() {
+    val entries: MutableList<BarEntry> = arrayListOf()
     val nonZeroPayers = paymentDetail.payers.filter { it.amount != 0f }
     val colors = nonZeroPayers.map {
-      if(it.amount > 0){
-        ContextCompat.getColor(requireContext(),R.color.positiveNumberColor)
-      } else{
-        ContextCompat.getColor(requireContext(),R.color.negativeNumberColor)
+      if (it.amount > 0) {
+        ContextCompat.getColor(requireContext(), R.color.positiveNumberColor)
+      } else {
+        ContextCompat.getColor(requireContext(), R.color.negativeNumberColor)
       }
     }
-    for ((idx, payer) in nonZeroPayers.withIndex()){
+    for ((idx, payer) in nonZeroPayers.withIndex()) {
       entries.add(BarEntry(idx.toFloat(), kotlin.math.abs(payer.amount)))
     }
     Log.i("PaymentDetailFragment", "onViewCreated: $entries")
@@ -92,12 +94,11 @@ class PaymentDetailFragment : PermissionBase()  {
     data.setValueTextSize(14f)
     chart.data = data
     chart.invalidate() // refresh
-
-
   }
+
 }
 
-class XLabelFormatter(payers: List<NetworkPayer>) : ValueFormatter(){
+class XLabelFormatter(payers: List<NetworkPayer>) : ValueFormatter() {
   private val names = payers.map { it.name }
   override fun getAxisLabel(value: Float, axis: AxisBase?): String {
     return names.getOrNull(value.toInt()) ?: value.toString()
