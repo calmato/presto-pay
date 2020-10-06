@@ -461,6 +461,11 @@ paths:
           required: true
           description: グループUUID
         - in: query
+          name: currency
+          schema:
+            type: string
+          description: ユーザー毎の未支払い額取得時の通貨
+        - in: query
           name: after
           schema:
             type: string
@@ -1768,6 +1773,24 @@ components:
                       description: 作成日時
                     updatedAt:
                       type: string
+              currency:
+                type: object
+                description: ユーザーごとの未支払い合計額を計算するときの通貨
+              users:
+                type: object
+                description: ユーザーごとの未支払い合計額
+                additionalProperties:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      description: ユーザーID
+                    name:
+                      type: string
+                      description: ユーザー名
+                    amount:
+                      type: number
+                      description: 未支払い合計額
 
     UpdatePayments:
       description: 支払い情報一括更新APIのレスポンス

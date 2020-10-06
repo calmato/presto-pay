@@ -13,10 +13,12 @@ import (
 	"github.com/calmato/presto-pay/api/calc/lib/firebase/firestore"
 	"github.com/calmato/presto-pay/api/calc/lib/firebase/messaging"
 	gcs "github.com/calmato/presto-pay/api/calc/lib/firebase/storage"
+	"github.com/calmato/presto-pay/api/calc/lib/redis"
 )
 
 func v1PaymentInjection(
-	fs *firestore.Firestore, cs *gcs.Storage, cm *messaging.Messaging, ac api.APIClient,
+	fs *firestore.Firestore, cs *gcs.Storage, cm *messaging.Messaging,
+	rdb *redis.Client, ac api.APIClient,
 ) v1.APIV1PaymentHandler {
 	nc := notification.NewNotificationClient(cm)
 
@@ -24,12 +26,15 @@ func v1PaymentInjection(
 
 	gr := repository.NewGroupRepository(fs)
 
+	er := repository.NewExchangeRepository(rdb)
+	es := service.NewExchangeService(er)
+
 	pr := repository.NewPaymentRepository(fs)
 	pdv := dv.NewPaymentDomainValidation(ac)
 	pu := storage.NewPaymentUploader(cs)
 	prv := rv.NewPaymentRequestValidation()
 	ps := service.NewPaymentService(pdv, pr, pu, gr, ac, nc)
-	pa := application.NewPaymentApplication(prv, us, ps)
+	pa := application.NewPaymentApplication(prv, us, ps, es)
 	ph := v1.NewAPIV1PaymentHandler(pa)
 
 	return ph
