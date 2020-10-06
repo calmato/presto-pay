@@ -136,6 +136,7 @@
   <string name="groupName">グループ名</string>
   <string name="groupDisplayToggle">非表示</string>
   <string name="paymentCompleted">精算完了</string>
+  <string name="messagePaymentCompleted">この支払いの精算を完了する</string>
   <string-array name="currency_array">
     <item>￥</item>
     <item>＄</item>

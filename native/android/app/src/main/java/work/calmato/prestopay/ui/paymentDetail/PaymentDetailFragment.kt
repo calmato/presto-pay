@@ -1,5 +1,6 @@
 package work.calmato.prestopay.ui.paymentDetail
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -48,6 +49,19 @@ class PaymentDetailFragment : PermissionBase() {
     amount.text = paymentDetail.total.toString().plus(" ").plus(paymentDetail.currency)
     comment.text = paymentDetail.comment
     setGraph()
+    completed.setOnClickListener {
+      val builder: AlertDialog.Builder? = requireActivity().let {
+        AlertDialog.Builder(it)
+      }
+      builder?.setTitle(resources.getString(R.string.paymentCompleted))
+        ?.setPositiveButton(resources.getString(R.string.done)){_,_ ->
+          
+        }
+        ?.setNegativeButton(resources.getString(R.string.cancel)){_,_-> }
+        ?.setMessage(resources.getString(R.string.messagePaymentCompleted))
+      val dialog: AlertDialog? = builder?.create()
+      dialog?.show()
+    }
   }
 
   private fun setGraph() {
