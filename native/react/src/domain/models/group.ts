@@ -1,4 +1,5 @@
 import { assertIsDefined } from "~/lib/assert";
+import { formatDateTime } from "~/lib/datetime";
 
 // Models
 export interface Model {
@@ -38,8 +39,13 @@ export function set(group: Model, values: Values): Model {
   assertIsDefined(values.id);
   assertIsDefined(values.name);
 
+  const createdAt: string = formatDateTime(values.createdAt);
+  const updatedAt: string = formatDateTime(values.updatedAt);
+
   return {
     ...group,
     ...values,
+    createdAt,
+    updatedAt,
   };
 }
