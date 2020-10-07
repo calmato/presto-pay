@@ -1,13 +1,9 @@
 package work.calmato.prestopay.ui.groupEdit
 
-import android.app.AlertDialog
-import android.content.DialogInterface
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.util.Log
 import android.view.*
-import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -16,7 +12,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_friend_list.*
 import kotlinx.android.synthetic.main.fragment_group_edit.*
 import retrofit2.Call
@@ -102,8 +97,14 @@ class GroupEditFragment : Fragment() {
       }
     })
 
-    // TODO: Group上での友達の削除として対応できていないため実装予定
-    viewModel.itemClicked.observe(viewLifecycleOwner, Observer {
+    groupEditAddFriend.setOnClickListener {
+      this.findNavController().navigate(
+        GroupEditFragmentDirections.actionGroupEditFragmentToGroupEditAddFriend(groupDetail)
+      )
+    }
+
+    // TODO: Group上での友達の削除として対応できていないため実装する場合ばここに記述する
+/*    viewModel.itemClicked.observe(viewLifecycleOwner, Observer {
       if (null != it) {
         val builder: AlertDialog.Builder? = requireActivity().let {
           AlertDialog.Builder(it)
@@ -135,7 +136,7 @@ class GroupEditFragment : Fragment() {
         }
         viewModel.itemIsClickedCompleted()
       }
-    })
+    })*/
     setHasOptionsMenu(true)
   }
 

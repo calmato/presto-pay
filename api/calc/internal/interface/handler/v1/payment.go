@@ -37,19 +37,20 @@ func NewAPIV1PaymentHandler(pa application.PaymentApplication) APIV1PaymentHandl
 func (ph *apiV1PaymentHandler) Index(ctx *gin.Context) {
 	groupID := ctx.Params.ByName("groupID")
 	startAt := ctx.DefaultQuery("after", "")
+	currency := ctx.DefaultQuery("currency", "")
 
 	c := middleware.GinContextToContext(ctx)
-	ps, err := ph.paymentApplication.Index(c, groupID, startAt)
+	payments, payers, currency, err := ph.paymentApplication.Index(c, groupID, startAt, currency)
 	if err != nil {
 		handler.ErrorHandling(ctx, err)
 		return
 	}
 
-	payments := make([]*response.PaymentInIndexPayments, len(ps))
-	for i, p := range ps {
-		payers := make([]*response.PayerInIndexPayments, len(p.Payers))
-		for j, payer := range p.Payers {
-			payers[j] = &response.PayerInIndexPayments{
+	paymentsResponse := make([]*response.PaymentInIndexPayments, len(payments))
+	for i, payment := range payments {
+		payersResponse := make([]*response.PayerInIndexPayments, len(payment.Payers))
+		for j, payer := range payment.Payers {
+			payersResponse[j] = &response.PayerInIndexPayments{
 				ID:     payer.ID,
 				Name:   payer.Name,
 				Amount: payer.Amount,
@@ -57,25 +58,36 @@ func (ph *apiV1PaymentHandler) Index(ctx *gin.Context) {
 			}
 		}
 
-		payments[i] = &response.PaymentInIndexPayments{
-			ID:          p.ID,
-			GroupID:     p.GroupID,
-			Name:        p.Name,
-			Currency:    p.Currency,
-			Total:       p.Total,
-			Payers:      payers,
-			Tags:        p.Tags,
-			Comment:     p.Comment,
-			ImageURLs:   p.ImageURLs,
-			PaidAt:      p.PaidAt,
-			IsCompleted: p.IsCompleted,
-			CreatedAt:   p.CreatedAt,
-			UpdatedAt:   p.UpdatedAt,
+		paymentsResponse[i] = &response.PaymentInIndexPayments{
+			ID:          payment.ID,
+			GroupID:     payment.GroupID,
+			Name:        payment.Name,
+			Currency:    payment.Currency,
+			Total:       payment.Total,
+			Payers:      payersResponse,
+			Tags:        payment.Tags,
+			Comment:     payment.Comment,
+			ImageURLs:   payment.ImageURLs,
+			PaidAt:      payment.PaidAt,
+			IsCompleted: payment.IsCompleted,
+			CreatedAt:   payment.CreatedAt,
+			UpdatedAt:   payment.UpdatedAt,
+		}
+	}
+
+	usersResponse := map[string]*response.UserInIndexPayments{}
+	for id, payer := range payers {
+		usersResponse[id] = &response.UserInIndexPayments{
+			ID:     payer.ID,
+			Name:   payer.Name,
+			Amount: payer.Amount,
 		}
 	}
 
 	res := &response.IndexPayments{
-		Payments: payments,
+		Payments: paymentsResponse,
+		Users:    usersResponse,
+		Currency: currency,
 	}
 
 	ctx.JSON(http.StatusOK, res)
