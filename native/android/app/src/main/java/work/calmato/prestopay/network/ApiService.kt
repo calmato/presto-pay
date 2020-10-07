@@ -133,11 +133,6 @@ interface ApiService {
 
 }
 
-interface ApiServiceCurrency {
-  @GET("latest")
-  fun getLatestCurrency(): Call<CurrencyApi>
-}
-
 /**
  * A public Api object that exposes the lazy-initialized Retrofit service
  */
@@ -145,10 +140,3 @@ object Api {
   val retrofitService: ApiService by lazy { retrofit.create(ApiService::class.java) }
 }
 
-object ApiCurrency {
-  val retrofitServiceCurrency: ApiServiceCurrency by lazy {
-    retrofit_currency.create(
-      ApiServiceCurrency::class.java
-    )
-  }
-}
