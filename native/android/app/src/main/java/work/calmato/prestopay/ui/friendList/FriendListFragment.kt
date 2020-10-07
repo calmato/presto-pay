@@ -21,7 +21,7 @@ import work.calmato.prestopay.util.AdapterCheck
 import work.calmato.prestopay.util.ViewModelFriend
 
 class FriendListFragment : Fragment() {
-  private val viewModel  : ViewModelFriend by lazy {
+  private val viewModel: ViewModelFriend by lazy {
     ViewModelProvider(this).get(ViewModelFriend::class.java)
   }
 
@@ -31,14 +31,14 @@ class FriendListFragment : Fragment() {
   override fun onActivityCreated(savedInstanceState: Bundle?) {
     super.onActivityCreated(savedInstanceState)
     friendListArg = FriendListFragmentArgs.fromBundle(requireArguments()).friendsList!!.users
-    if(friendListArg.isEmpty()){
+    if (friendListArg.isEmpty()) {
       viewModel.friendsList.observe(viewLifecycleOwner, Observer<List<UserProperty>> {
         it?.apply {
           friendListArg = it
           recycleAdapter?.friendList = it
         }
       })
-    }else{
+    } else {
       recycleAdapter?.friendList = friendListArg
     }
   }
@@ -88,7 +88,7 @@ class FriendListFragment : Fragment() {
         }
       }
     )
-    searchEdit.addTextChangedListener (object:TextWatcher{
+    searchEdit.addTextChangedListener(object : TextWatcher {
       override fun afterTextChanged(s: Editable?) {}
 
       override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -110,7 +110,11 @@ class FriendListFragment : Fragment() {
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
     when (item.itemId) {
       R.id.done -> this.findNavController().navigate(
-        FriendListFragmentDirections.actionFriendListFragmentToCreateGroupFragment(Users(friendListArg))
+        FriendListFragmentDirections.actionFriendListFragmentToCreateGroupFragment(
+          Users(
+            friendListArg
+          )
+        )
       )
     }
     return super.onOptionsItemSelected(item)

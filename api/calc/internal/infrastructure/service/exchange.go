@@ -18,9 +18,13 @@ func NewExchangeService(er exchange.ExchangeRepository) exchange.ExchangeService
 	}
 }
 
-// TODO: 後日実装
 func (es *exchangeService) Index(ctx context.Context) (*exchange.ExchangeRates, error) {
-	return nil, nil
+	ers, err := es.exchangeRepository.Index(ctx)
+	if err != nil {
+		return nil, domain.ErrorInDatastore.New(err)
+	}
+
+	return ers, nil
 }
 
 func (es *exchangeService) Show(

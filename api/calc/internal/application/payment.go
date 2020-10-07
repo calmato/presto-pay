@@ -3,11 +3,13 @@ package application
 import (
 	"context"
 	"encoding/base64"
+	"fmt"
 	"strings"
 
 	"github.com/calmato/presto-pay/api/calc/internal/application/request"
 	"github.com/calmato/presto-pay/api/calc/internal/application/validation"
 	"github.com/calmato/presto-pay/api/calc/internal/domain"
+	"github.com/calmato/presto-pay/api/calc/internal/domain/exchange"
 	"github.com/calmato/presto-pay/api/calc/internal/domain/payment"
 	"github.com/calmato/presto-pay/api/calc/internal/domain/user"
 	"golang.org/x/xerrors"
@@ -15,7 +17,9 @@ import (
 
 // PaymentApplication - PaymentApplicationインターフェース
 type PaymentApplication interface {
-	Index(ctx context.Context, groupID string, startAt string) ([]*payment.Payment, error)
+	Index(
+		ctx context.Context, groupID string, startAt string, currency string,
+	) ([]*payment.Payment, map[string]*payment.Payer, string, error)
 	Create(ctx context.Context, req *request.CreatePayment, groupID string) (*payment.Payment, error)
 	Update(ctx context.Context, req *request.UpdatePayment, groupID string, paymentID string) (*payment.Payment, error)
 	UpdatePayer(
@@ -30,42 +34,92 @@ type paymentApplication struct {
 	paymentRequestValidation validation.PaymentRequestValidation
 	userService              user.UserService
 	paymentService           payment.PaymentService
+	exchangeService          exchange.ExchangeService
 }
 
 // NewPaymentApplication - PaymentApplicationの生成
 func NewPaymentApplication(
-	prv validation.PaymentRequestValidation, us user.UserService, ps payment.PaymentService,
+	prv validation.PaymentRequestValidation, us user.UserService,
+	ps payment.PaymentService, es exchange.ExchangeService,
 ) PaymentApplication {
 	return &paymentApplication{
 		paymentRequestValidation: prv,
 		userService:              us,
 		paymentService:           ps,
+		exchangeService:          es,
 	}
 }
 
 // TODO: startAtの引数追加
-func (pa *paymentApplication) Index(ctx context.Context, groupID string, startAt string) ([]*payment.Payment, error) {
+func (pa *paymentApplication) Index(
+	ctx context.Context, groupID string, startAt string, currency string,
+) ([]*payment.Payment, map[string]*payment.Payer, string, error) {
 	u, err := pa.userService.Authentication(ctx)
 	if err != nil {
-		return nil, domain.Unauthorized.New(err)
+		return nil, nil, "", domain.Unauthorized.New(err)
 	}
 
 	contain, err := pa.userService.ContainsGroupID(ctx, u, groupID)
 	if err != nil {
-		return nil, err
+		return nil, nil, "", err
 	}
 
 	if !contain {
 		err := xerrors.New("Failed to Service")
-		return nil, domain.Forbidden.New(err)
+		return nil, nil, "", domain.Forbidden.New(err)
 	}
 
 	ps, err := pa.paymentService.Index(ctx, groupID, startAt)
 	if err != nil {
-		return nil, err
+		return nil, nil, "", err
 	}
 
-	return ps, err
+	// 為替レート一覧のmapを作成
+	ers, err := pa.exchangeService.Index(ctx)
+	if err != nil {
+		return nil, nil, "", err
+	}
+
+	currency = strings.ToLower(currency)
+	if ers.Rates[currency] == 0 {
+		currency = ers.Base
+	}
+
+	fmt.Println(ers)
+
+	// ユーザー毎の支払額合計作成 (支払いが済んでないものをまとめる)
+	payers := map[string]*payment.Payer{}
+	for _, p := range ps {
+		if p.IsCompleted {
+			continue
+		}
+
+		// 支払い情報に登録されている通貨情報を取得
+		currentRate := ers.Rates[p.Currency]
+		if currentRate == 0 {
+			currentRate = ers.Rates[ers.Base]
+		}
+
+		for _, payer := range p.Payers {
+			if payer.IsPaid {
+				continue
+			}
+
+			if payers[payer.ID] == nil {
+				payers[payer.ID] = &payment.Payer{
+					ID:     payer.ID,
+					Name:   payer.Name,
+					Amount: 0,
+					IsPaid: false,
+				}
+			}
+
+			// 為替レートの反映
+			payers[payer.ID].Amount += payer.Amount * ers.Rates[currency] / currentRate
+		}
+	}
+
+	return ps, payers, currency, err
 }
 
 func (pa *paymentApplication) Create(
