@@ -1,4 +1,5 @@
 import { assertIsDefined } from "~/lib/assert";
+import { formatDateTime } from "~/lib/datetime";
 
 // Model関連
 export interface Model {
@@ -62,8 +63,13 @@ export function setAuth(auth: Model, values: AuthValues): Model {
 }
 
 export function setUser(auth: Model, values: UserValues): Model {
+  const createdAt: string = formatDateTime(values.createdAt);
+  const updatedAt: string = formatDateTime(values.updatedAt);
+
   return {
     ...auth,
     ...values,
+    createdAt,
+    updatedAt,
   };
 }
