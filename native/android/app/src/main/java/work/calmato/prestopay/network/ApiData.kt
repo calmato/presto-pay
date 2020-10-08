@@ -158,6 +158,11 @@ data class EditAccountResponse(
 ) : Parcelable {}
 
 @Parcelize
+data class AddFriendToGroupProperty(
+  val userIds: List<String>
+) : Parcelable
+
+@Parcelize
 data class NewAccountProperty(
   val name: String,
   val username: String,

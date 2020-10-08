@@ -88,6 +88,8 @@ interface ApiService {
     @Header("Authorization") token: String, @Path("groupId") groupId: String
   ): Call<GetGroupDetail>
 
+
+
   @PATCH("auth")
   fun editAccount(
     @Header("Authorization") token: String,
@@ -106,6 +108,14 @@ interface ApiService {
     @Path("groupId") groupId: String
   ):
     Call<EditGroup>
+
+  @POST("groups/{groupId}/users")
+  fun registerFriendToGroup(
+    @Header("Authorization") token: String,
+    @Body userIds: Map<String,@JvmSuppressWildcards List<String>>,
+    @Path("groupId") groupId: String
+  ):
+    Call<GroupPropertyResponse>
 
   @POST("auth")
   fun createAccount(

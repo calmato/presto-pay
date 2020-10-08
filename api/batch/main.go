@@ -23,6 +23,7 @@ type Response struct {
 
 // Rates - 為替レート用構造体
 type Rates struct {
+	EUR float64 `json:"eur"` // Euro
 	USD float64 `json:"usd"` // US dollar
 	JPY float64 `json:"jpy"` // Japanese yen
 	BGN float64 `json:"bgn"` // Bulgarian lev

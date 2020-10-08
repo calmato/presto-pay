@@ -46,8 +46,8 @@ func Router(reg *registry.Registry) *gin.Engine {
 			groups.PATCH("/payments/:paymentID", reg.V1Payment.Update)
 			groups.DELETE("/payments/:paymentID", reg.V1Payment.Destroy)
 
-			groups.PATCH("/payment-status", reg.V1Payment.UpdateStatusAll)
-			groups.PATCH("/payment-status/:paymentID", reg.V1Payment.UpdateStatus)
+			groups.PATCH("/payments-status", reg.V1Payment.UpdateStatusAll)
+			groups.PATCH("/payments-status/:paymentID", reg.V1Payment.UpdateStatus)
 
 			payments := groups.Group("/payments/:paymentID")
 			{
