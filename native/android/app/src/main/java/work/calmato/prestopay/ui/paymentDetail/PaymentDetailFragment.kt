@@ -1,11 +1,14 @@
 package work.calmato.prestopay.ui.paymentDetail
 
 import android.app.AlertDialog
+import android.content.SharedPreferences
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import com.github.mikephil.charting.components.AxisBase
@@ -17,15 +20,20 @@ import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_payment_detail.*
+import retrofit2.Call
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentPaymentDetailBinding
-import work.calmato.prestopay.network.NetworkPayer
-import work.calmato.prestopay.network.PaymentPropertyGet
 import work.calmato.prestopay.util.PermissionBase
+import retrofit2.Callback
+import retrofit2.Response
+import work.calmato.prestopay.network.*
 
 
 class PaymentDetailFragment : PermissionBase() {
   private lateinit var paymentDetail: PaymentPropertyGet
+  private lateinit var groupDetail: GroupPropertyResponse
+  private lateinit var sharedPreferences : SharedPreferences
+  private lateinit var id : String
   override fun onCreateView(
     inflater: LayoutInflater,
     container: ViewGroup?,
@@ -34,11 +42,14 @@ class PaymentDetailFragment : PermissionBase() {
     val binding: FragmentPaymentDetailBinding =
       DataBindingUtil.inflate(inflater, R.layout.fragment_payment_detail, container, false)
     paymentDetail = PaymentDetailFragmentArgs.fromBundle(requireArguments()).paymentPropertyGet
+    groupDetail = PaymentDetailFragmentArgs.fromBundle(requireArguments()).groupPropertyResponse
     return binding.root
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
+    sharedPreferences  = PreferenceManager.getDefaultSharedPreferences(requireContext())
+    id = sharedPreferences.getString("token", "")!!
     date.text = paymentDetail.createdAt.split("T")[0]
     paymentDetail.imageUrls!![0].let {
       if (it.isNotEmpty()) {
@@ -54,10 +65,10 @@ class PaymentDetailFragment : PermissionBase() {
         AlertDialog.Builder(it)
       }
       builder?.setTitle(resources.getString(R.string.paymentCompleted))
-        ?.setPositiveButton(resources.getString(R.string.done)){_,_ ->
-          
+        ?.setPositiveButton(resources.getString(R.string.done)) { _, _ ->
+          sendRequest()
         }
-        ?.setNegativeButton(resources.getString(R.string.cancel)){_,_-> }
+        ?.setNegativeButton(resources.getString(R.string.cancel)) { _, _ -> }
         ?.setMessage(resources.getString(R.string.messagePaymentCompleted))
       val dialog: AlertDialog? = builder?.create()
       dialog?.show()
@@ -108,6 +119,38 @@ class PaymentDetailFragment : PermissionBase() {
     data.setValueTextSize(14f)
     chart.data = data
     chart.invalidate() // refresh
+  }
+
+  private fun sendRequest() {
+    val paymentPropertyPost = PaymentPropertyPost(
+      name = paymentDetail.name,
+      currency = paymentDetail.currency,
+      total = paymentDetail.total,
+      payers = paymentDetail.payers,
+      isCompleted = true,
+      tags = paymentDetail.tags,
+      comment = paymentDetail.comment,
+      images = paymentDetail.imageUrls,
+      paidAt = paymentDetail.paidAt
+    )
+    Api.retrofitService.completePayment(id,groupDetail.id, paymentDetail.id)
+      .enqueue(object : Callback<PaymentPropertyGet> {
+        override fun onResponse(
+          call: Call<PaymentPropertyGet>,
+          response: Response<PaymentPropertyGet>
+        ) {
+          if (response.isSuccessful) {
+            Toast.makeText(requireContext(), "精算登録しました", Toast.LENGTH_LONG).show()
+            requireActivity().onBackPressed()
+          } else {
+            Toast.makeText(requireContext(),"精算登録に失敗しました",Toast.LENGTH_LONG).show()
+          }
+        }
+
+        override fun onFailure(call: Call<PaymentPropertyGet>, t: Throwable) {
+          Toast.makeText(requireContext(), t.message, Toast.LENGTH_LONG).show()
+        }
+      })
   }
 
 }

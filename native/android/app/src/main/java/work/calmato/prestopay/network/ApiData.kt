@@ -109,17 +109,15 @@ data class GetGroupDetail(
 
 @Parcelize
 data class PaymentPropertyPost(
-  val id: String,
   val name: String,
   val currency: String,
   val total: Float,
-  val payers: List<Payer>,
-  val tags: List<String>,
-  val comment: String,
-  val imageUrls: List<String>,
-  val paidAt: String,
-  val createdAt: String,
-  val updatedAt: String
+  val payers: List<NetworkPayer>,
+  val isCompleted: Boolean,
+  val tags: List<String>?,
+  val comment: String?,
+  val images: List<String>?,
+  val paidAt: String
 ) : Parcelable {}
 
 @Parcelize
@@ -129,6 +127,7 @@ data class PaymentPropertyGet(
   val currency: String,
   val total: Float,
   val payers: List<NetworkPayer>,
+  val isCompleted: Boolean,
   val tags: List<String>?,
   val comment: String?,
   val imageUrls: List<String>?,
@@ -180,12 +179,6 @@ data class AccountResponse(
   val createdAt: String,
   val updatedAt: String
 ) : Parcelable
-
-data class CurrencyApi(
-  val base: String,
-  val date: String,
-  val rates: Map<String, Float>
-)
 
 @Parcelize
 data class Payer(

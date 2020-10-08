@@ -131,6 +131,13 @@ interface ApiService {
     @Path("groupId") groupId: String
   ): Deferred<NetworkPaymentContainer>
 
+  @PATCH("groups/{groupId}/payments-status/{paymentId}")
+  fun completePayment(
+    @Header("Authorization") token: String,
+//    @Body completePaymentProperty: PaymentPropertyPost,
+    @Path("groupId") groupId: String,
+    @Path("paymentId") paymentId: String
+  ) : Call<PaymentPropertyGet>
 }
 
 /**

@@ -62,7 +62,7 @@ fun NetworkGroup.asDomainModel(): GroupPropertyResponse {
 }
 
 fun NetworkPayment.asDomainModel(): PaymentPropertyGet{
-  return PaymentPropertyGet(id, name, currency, total, payers, tags, comment, imageUrls, paidAt, createdAt, updatedAt)
+  return PaymentPropertyGet(id, name, currency, total, payers, isCompleted,tags, comment, imageUrls, paidAt, createdAt, updatedAt)
 }
 
 fun NetworkFriendContainer.asDomainModel(): List<UserProperty> {
@@ -100,6 +100,7 @@ fun NetworkPaymentContainer.asDomainModel(): List<PaymentPropertyGet>{
       currency = it.currency,
       total = it.total,
       payers = it.payers,
+      isCompleted = it.isCompleted,
       tags = it.tags,
       comment = it.comment,
       imageUrls = it.imageUrls,
