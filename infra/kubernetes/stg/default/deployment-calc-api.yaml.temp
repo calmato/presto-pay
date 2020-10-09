@@ -49,6 +49,10 @@ spec:
               value: '24224'
             - name: USER_API_URL
               value: 'http://user-api'
+            - name: REDIS_HOST
+              value: 'redis'
+            - name: REDIS_PORT
+              value: '6379'
             - name: GOOGLE_APPLICATION_CREDENTIALS
               value: '/secret/firebase-adminsdk.json'
             - name: GCP_STORAGE_BUCKET_NAME

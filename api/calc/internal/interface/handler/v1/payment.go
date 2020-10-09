@@ -186,12 +186,6 @@ func (ph *apiV1PaymentHandler) UpdateStatus(ctx *gin.Context) {
 	groupID := ctx.Params.ByName("groupID")
 	paymentID := ctx.Params.ByName("paymentID")
 
-	req := &request.UpdatePayment{}
-	if err := ctx.BindJSON(req); err != nil {
-		handler.ErrorHandling(ctx, domain.UnableParseJSON.New(err))
-		return
-	}
-
 	c := middleware.GinContextToContext(ctx)
 	p, err := ph.paymentApplication.UpdateStatus(c, groupID, paymentID)
 	if err != nil {
@@ -229,12 +223,6 @@ func (ph *apiV1PaymentHandler) UpdateStatus(ctx *gin.Context) {
 
 func (ph *apiV1PaymentHandler) UpdateStatusAll(ctx *gin.Context) {
 	groupID := ctx.Params.ByName("groupID")
-
-	req := &request.UpdatePayment{}
-	if err := ctx.BindJSON(req); err != nil {
-		handler.ErrorHandling(ctx, domain.UnableParseJSON.New(err))
-		return
-	}
 
 	c := middleware.GinContextToContext(ctx)
 	ps, err := ph.paymentApplication.UpdateStatusAll(c, groupID)
