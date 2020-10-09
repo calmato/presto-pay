@@ -135,14 +135,13 @@
   <string name="settle_up">精算</string>
   <string name="groupName">グループ名</string>
   <string name="groupDisplayToggle">非表示</string>
-    <string name="friendView">友達</string>
-    <string-array name="currency_array">
+  <string name="friendView">友達</string>
   <string name="paymentCompleted">精算完了</string>
   <string name="messagePaymentCompleted">この支払いの精算を完了する</string>
   <string-array name="currency_array">
-    <item>￥</item>
-    <item>＄</item>
-    <item>€</item>
+    <item>jpy</item>
+    <item>usd</item>
+    <item>sek</item>
   </string-array>
   <integer-array name="tag_array">
     <item>@drawable/ic_baseline_shopping_cart_24</item>
