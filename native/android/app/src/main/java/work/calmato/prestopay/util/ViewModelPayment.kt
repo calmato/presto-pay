@@ -15,6 +15,10 @@ import work.calmato.prestopay.network.PaymentPropertyGet
 import work.calmato.prestopay.repository.PaymentRepository
 
 class ViewModelPayment(application: Application) : AndroidViewModel(application) {
+  private val _itemClicked = MutableLiveData<PaymentPropertyGet>()
+  val itemClicked: LiveData<PaymentPropertyGet>
+    get() = _itemClicked
+
   private var viewModelJob = SupervisorJob()
   private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
   private val database = getAppDatabase(application)
@@ -54,5 +58,13 @@ class ViewModelPayment(application: Application) : AndroidViewModel(application)
 
   private fun endRefreshing() {
     _refreshing.value = false
+  }
+
+  fun itemIsClicked(payment : PaymentPropertyGet){
+    _itemClicked.value = payment
+  }
+
+  fun navigationCompleted(){
+    _itemClicked.value = null
   }
 }

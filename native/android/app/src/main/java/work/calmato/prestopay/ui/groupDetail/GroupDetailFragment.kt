@@ -25,6 +25,7 @@ class GroupDetailFragment : Fragment() {
   }
   private var recycleAdapter: AdapterPayment? = null
   private var groupDetail: GroupPropertyResponse? = null
+  private lateinit var clickListenerGroupDetail: AdapterPayment.OnClickListener
 
   override fun onCreateView(
     inflater: LayoutInflater,
@@ -35,7 +36,10 @@ class GroupDetailFragment : Fragment() {
       DataBindingUtil.inflate(inflater, R.layout.fragment_group_detail, container, false)
     binding.lifecycleOwner = this
     binding.viewModelGroupDetail = viewModel
-    recycleAdapter = AdapterPayment(requireContext())
+    clickListenerGroupDetail = AdapterPayment.OnClickListener{
+      viewModel.itemIsClicked(it)
+    }
+    recycleAdapter = AdapterPayment(requireContext(),clickListenerGroupDetail)
     binding.recyclerViewPayment.apply {
       layoutManager = LinearLayoutManager(context)
       adapter = recycleAdapter
@@ -47,6 +51,11 @@ class GroupDetailFragment : Fragment() {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
+    viewModel.itemClicked.observe(viewLifecycleOwner, Observer {
+      it?.apply {
+        navigateToDetail(this)
+      }
+    })
     groupDetail?.let {
       viewModel.getPayments(it.id)
     }
@@ -99,5 +108,11 @@ class GroupDetailFragment : Fragment() {
         GroupDetailFragmentDirections.actionGroupDetailToAddExpenseFragment(groupDetail!!)
       )
     }
+  }
+  private fun navigateToDetail(payment:PaymentPropertyGet){
+    this.findNavController().navigate(
+      GroupDetailFragmentDirections.actionGroupDetailToPaymentDetail(payment)
+    )
+    viewModel.navigationCompleted()
   }
 }

@@ -13,7 +13,7 @@ import kotlin.math.max
 import kotlin.math.roundToInt
 import kotlin.math.roundToLong
 
-class AdapterPayment(val context:Context) : RecyclerView.Adapter<AdapterPayment.PaymentViewHolder>() {
+class AdapterPayment(val context:Context, val onClickListener: OnClickListener) : RecyclerView.Adapter<AdapterPayment.PaymentViewHolder>() {
   var paymentList: List<PaymentPropertyGet> = emptyList()
     set(value) {
       field = value
@@ -36,6 +36,13 @@ class AdapterPayment(val context:Context) : RecyclerView.Adapter<AdapterPayment.
         it.whoPaid = maxPayer + "が" + thisPayment.currency + (maxAmount * 100).roundToInt().toFloat() / 100 + "多く払った"
       }
     }
+    holder.itemView.setOnClickListener {
+      onClickListener.onClick(paymentList[position])
+    }
+  }
+
+  class OnClickListener(val clickListener:(paymentPropertyGet: PaymentPropertyGet) -> Unit){
+    fun onClick(paymentPropertyGet: PaymentPropertyGet) = clickListener(paymentPropertyGet)
   }
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PaymentViewHolder {

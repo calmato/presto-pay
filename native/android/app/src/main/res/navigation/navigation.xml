@@ -256,5 +256,17 @@
     <action
       android:id="@+id/action_groupDetail_to_addExpenseFragment"
       app:destination="@id/addExpenseFragment" />
+    <action
+      android:id="@+id/action_groupDetail_to_paymentDetail"
+      app:destination="@id/paymentDetail" />
+  </fragment>
+  <fragment
+    android:id="@+id/paymentDetail"
+    android:name="work.calmato.prestopay.ui.paymentDetail.PaymentDetailFragment"
+    android:label="fragment_payment_detail"
+    tools:layout="@layout/fragment_payment_detail">
+    <argument
+      android:name="paymentPropertyGet"
+      app:argType="work.calmato.prestopay.network.PaymentPropertyGet"/>
   </fragment>
 </navigation>
