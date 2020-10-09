@@ -33,14 +33,28 @@ export function signInWithPasswordAsync(email: string, password: string) {
 }
 
 export function authStateChangedAsync() {
-  return (): Promise<void> => {
+  return (dispatch: Dispatch): Promise<void> => {
     return new Promise((resolve: () => void, reject: (reason: Error) => void) => {
-      firebase.auth().onAuthStateChanged((user: firebase.User | null) => {
-        if (user) {
-          resolve();
-        }
+      firebase.auth().onAuthStateChanged(async (user: firebase.User | null) => {
+        await user
+          ?.getIdToken()
+          .then(async (token: string) => {
+            const auth: Auth.Model = await LocalStorage.AuthInformation.retrieve();
 
-        reject(new Error("User is not exists"));
+            const payload: Auth.Model = {
+              ...auth,
+              id: user?.uid,
+              token,
+            };
+
+            dispatch(setUser({ ...payload }));
+            dispatch(setAuth({ ...payload }));
+
+            await LocalStorage.AuthInformation.save(payload);
+
+            resolve();
+          })
+          .catch(() => reject(new Error("User is not exists")));
       });
     });
   };
