@@ -32,8 +32,8 @@ import work.calmato.prestopay.network.*
 class PaymentDetailFragment : PermissionBase() {
   private lateinit var paymentDetail: PaymentPropertyGet
   private lateinit var groupDetail: GroupPropertyResponse
-  private lateinit var sharedPreferences : SharedPreferences
-  private lateinit var id : String
+  private lateinit var sharedPreferences: SharedPreferences
+  private lateinit var id: String
   override fun onCreateView(
     inflater: LayoutInflater,
     container: ViewGroup?,
@@ -48,7 +48,7 @@ class PaymentDetailFragment : PermissionBase() {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    sharedPreferences  = PreferenceManager.getDefaultSharedPreferences(requireContext())
+    sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
     id = sharedPreferences.getString("token", "")!!
     date.text = paymentDetail.createdAt.split("T")[0]
     paymentDetail.imageUrls!![0].let {
@@ -133,21 +133,21 @@ class PaymentDetailFragment : PermissionBase() {
       images = paymentDetail.imageUrls,
       paidAt = paymentDetail.paidAt
     )
-    Api.retrofitService.completePayment(id,groupDetail.id, paymentDetail.id)
-      .enqueue(object : Callback<PaymentPropertyGet> {
+    Api.retrofitService.completePayment(id, groupDetail.id, paymentDetail.id)
+      .enqueue(object : Callback<PaymentCompleteResponse> {
         override fun onResponse(
-          call: Call<PaymentPropertyGet>,
-          response: Response<PaymentPropertyGet>
+          call: Call<PaymentCompleteResponse>,
+          response: Response<PaymentCompleteResponse>
         ) {
           if (response.isSuccessful) {
             Toast.makeText(requireContext(), "精算登録しました", Toast.LENGTH_LONG).show()
             requireActivity().onBackPressed()
           } else {
-            Toast.makeText(requireContext(),"精算登録に失敗しました",Toast.LENGTH_LONG).show()
+            Toast.makeText(requireContext(), "精算登録に失敗しました", Toast.LENGTH_LONG).show()
           }
         }
 
-        override fun onFailure(call: Call<PaymentPropertyGet>, t: Throwable) {
+        override fun onFailure(call: Call<PaymentCompleteResponse>, t: Throwable) {
           Toast.makeText(requireContext(), t.message, Toast.LENGTH_LONG).show()
         }
       })

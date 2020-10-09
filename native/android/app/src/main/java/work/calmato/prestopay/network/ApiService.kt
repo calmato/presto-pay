@@ -146,7 +146,7 @@ interface ApiService {
     @Header("Authorization") token: String,
     @Path("groupId") groupId: String,
     @Path("paymentId") paymentId: String
-  ) : Call<PaymentPropertyGet>
+  ) : Call<PaymentCompleteResponse>
 }
 
 /**
