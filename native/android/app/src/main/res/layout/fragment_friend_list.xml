@@ -12,6 +12,7 @@
      android:layout_width="match_parent"
     android:layout_height="match_parent"
   android:backgroundTint="#875D5D">
+
   <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
     android:id="@+id/swipeContainer"
     android:layout_width="match_parent"
@@ -23,12 +24,12 @@
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/searchEdit" >
-  <androidx.recyclerview.widget.RecyclerView
-    android:id="@+id/friendsRecycleView"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-     />
+    app:layout_constraintTop_toBottomOf="@+id/searchView">
+
+    <androidx.recyclerview.widget.RecyclerView
+      android:id="@+id/friendsRecycleView"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent" />
   </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
   <TextView
@@ -42,19 +43,16 @@
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent" />
 
-  <EditText
-    android:id="@+id/searchEdit"
+  <SearchView
+    android:id="@+id/searchView"
     android:layout_width="0dp"
     android:layout_height="wrap_content"
     android:layout_marginStart="16dp"
     android:layout_marginTop="8dp"
     android:layout_marginEnd="16dp"
-    android:ems="10"
-    android:hint="@string/search"
-    android:inputType="textPersonName"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/textView6"
-    android:autofillHints="" />
+    app:layout_constraintTop_toBottomOf="@+id/textView6" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
