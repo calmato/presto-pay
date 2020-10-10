@@ -34,7 +34,7 @@ const initialState: Model = {
 export interface AuthValues {
   id: string;
   email?: string;
-  emailVerified: boolean;
+  emailVerified?: boolean;
   token: string;
 }
 
