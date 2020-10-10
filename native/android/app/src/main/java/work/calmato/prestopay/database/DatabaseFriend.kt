@@ -56,6 +56,12 @@ data class DatabaseTag(
   var isSelected:Boolean = false
 )
 
+@Entity
+data class DatabaseNationalFlag(
+  @PrimaryKey
+  val name:String,
+  val imageId:Int
+)
 
 
 fun List<DatabaseFriend>.asDomainModel(): List<UserProperty> {
@@ -111,6 +117,12 @@ fun DatabaseTag.asTagModel():Tag{
     )
 }
 
+fun DatabaseNationalFlag.asNationalFlagModel():NationalFlag{
+  return NationalFlag(
+    name = this.name,
+    imageId = this.imageId
+  )
+}
 class ListTypeConverter {
     @TypeConverter
     fun toString(userIds: List<String?>?): String? = userIds?.joinToString() ?: ""

@@ -6,6 +6,8 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.preference.PreferenceManager
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.*
 import android.widget.*
@@ -13,6 +15,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.*
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.yalantis.ucrop.UCrop
@@ -24,6 +27,7 @@ import work.calmato.prestopay.R
 import work.calmato.prestopay.database.getAppDatabase
 import work.calmato.prestopay.databinding.FragmentAddExpenseBindingImpl
 import work.calmato.prestopay.network.*
+import work.calmato.prestopay.repository.NationalFlagsRepository
 import work.calmato.prestopay.repository.TagRepository
 import work.calmato.prestopay.util.*
 import java.text.SimpleDateFormat
@@ -61,6 +65,7 @@ class AddExpenseFragment : PermissionBase() {
   private lateinit var id: String
   private lateinit var doneButton: MenuItem
   private lateinit var tagList:List<Tag>
+  private lateinit var countryList:List<NationalFlag>
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     if (requestCode == CODE && resultCode == Activity.RESULT_OK) {
@@ -90,6 +95,7 @@ class AddExpenseFragment : PermissionBase() {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     thread {
       tagList = TagRepository(getAppDatabase(requireContext())).tags
+      countryList = NationalFlagsRepository(getAppDatabase(requireContext())).nationalFlags
     }
     thread {
       try {
@@ -140,15 +146,9 @@ class AddExpenseFragment : PermissionBase() {
     tagImage.setOnClickListener {
       showTagDialog()
     }
-    ArrayAdapter.createFromResource(
-      requireContext(),
-      R.array.currency_array,
-      R.layout.spinner_item_currency
-    )
-      .also { adapter ->
-        adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line)
-        currencySpinner.adapter = adapter
-      }
+    currencyTextView.setOnClickListener {
+      showCurrencyDialog()
+    }
     setHasOptionsMenu(true)
 
     requireActivity().onBackPressedDispatcher.addCallback(
@@ -194,7 +194,7 @@ class AddExpenseFragment : PermissionBase() {
     val groupId = groupDetail!!.id
     val name = expenseName.text.toString()
     val totalString = amountEdit.text.toString()
-    val currency = currencySpinner.selectedItem.toString()
+    val currency = currencyTextView.text.toString()
     val payer = payerSpinner.selectedItem
     val payers = mutableListOf(
       UserExpense(groupMembers.filter { userProperty -> userProperty.name == payer }[0].id, totalString.toFloat())
@@ -323,12 +323,42 @@ class AddExpenseFragment : PermissionBase() {
     tagRecycleAdapter.tagList = tagList
     val recycleView = RecyclerView(requireContext())
     recycleView.apply {
-      layoutManager = LinearLayoutManager(requireContext())
+      layoutManager = GridLayoutManager(requireContext(),3)
       adapter = tagRecycleAdapter
     }
     builder?.setView(recycleView)
     val dialog: AlertDialog? = builder?.create()
     dialog?.show()
+  }
+  private fun showCurrencyDialog(){
+    val builder: AlertDialog.Builder? = requireActivity().let {
+      AlertDialog.Builder(it)
+    }
+    val currencyRecycleAdapter = AdapterCurrency(AdapterCurrency.OnClickListener {
+      currencyTextView.text = it.name
+      Log.i(TAG, "showCurrencyDialog: called")
+    })
+    currencyRecycleAdapter.countryList = countryList
+    val recycleView = RecyclerView(requireContext())
+    recycleView.apply {
+      layoutManager = GridLayoutManager(requireContext(),3)
+      adapter = currencyRecycleAdapter
+    }
+    builder?.setView(recycleView)
+    val dialog: AlertDialog? = builder?.create()
+    dialog?.show()
+    currencyTextView.addTextChangedListener(object :TextWatcher{
+      override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+      }
+
+      override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+        dialog?.dismiss()
+      }
+
+      override fun afterTextChanged(s: Editable?) {
+      }
+
+    })
   }
 
   private fun goBackHome() {

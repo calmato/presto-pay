@@ -5,9 +5,7 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
@@ -48,6 +46,7 @@ class PaymentDetailFragment : PermissionBase() {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
+    setHasOptionsMenu(true)
     sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
     id = sharedPreferences.getString("token", "")!!
     date.text = paymentDetail.createdAt.split("T")[0]
@@ -145,7 +144,9 @@ class PaymentDetailFragment : PermissionBase() {
         }
       })
   }
-
+  override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+    inflater.inflate(R.menu.header_edit, menu)
+  }
 }
 
 class XLabelFormatter(payers: List<NetworkPayer>) : ValueFormatter() {

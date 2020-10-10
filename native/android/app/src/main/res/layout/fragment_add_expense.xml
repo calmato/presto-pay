@@ -207,16 +207,6 @@
       app:layout_constraintTop_toTopOf="@+id/expenseName"
       app:srcCompat="@drawable/ic_baseline_label_24" />
 
-    <Spinner
-      android:id="@+id/currencySpinner"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginStart="16dp"
-      android:backgroundTint="@android:color/transparent"
-      android:spinnerMode="dialog"
-      app:layout_constraintBottom_toBottomOf="@+id/amountEdit"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="@+id/amountEdit" />
     <TextView
       android:id="@+id/nowLoading"
       android:layout_width="wrap_content"
@@ -239,6 +229,17 @@
       app:layout_constraintEnd_toEndOf="@+id/payerSpinner"
       app:layout_constraintStart_toStartOf="@+id/payerSpinner"
       app:layout_constraintTop_toTopOf="@+id/textView10" />
+
+    <TextView
+      android:id="@+id/currencyTextView"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="jpy"
+      android:textSize="24sp"
+      app:layout_constraintBottom_toBottomOf="@+id/amountEdit"
+      app:layout_constraintEnd_toEndOf="@+id/tagImage"
+      app:layout_constraintStart_toStartOf="@+id/tagImage"
+      app:layout_constraintTop_toTopOf="@+id/amountEdit" />
   </androidx.constraintlayout.widget.ConstraintLayout>
 
 

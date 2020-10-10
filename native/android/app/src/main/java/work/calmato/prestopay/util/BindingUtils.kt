@@ -8,10 +8,7 @@ import androidx.databinding.BindingAdapter
 import com.squareup.picasso.Picasso
 import work.calmato.prestopay.R
 import work.calmato.prestopay.database.getAppDatabase
-import work.calmato.prestopay.network.GroupPropertyResponse
-import work.calmato.prestopay.network.PaymentPropertyGet
-import work.calmato.prestopay.network.Tag
-import work.calmato.prestopay.network.UserProperty
+import work.calmato.prestopay.network.*
 import work.calmato.prestopay.repository.TagRepository
 import kotlin.concurrent.thread
 
@@ -69,10 +66,14 @@ fun ImageView.setTagImage(item:Tag?){
   }
 }
 
-@BindingAdapter("tagCheckbox")
-fun CheckBox.setTagCheckBox(item:Tag?){
+@BindingAdapter("tagCheck")
+fun ConstraintLayout.setTagCheck(item:Tag?){
   item?.let {
-    isChecked = item.isSelected
+    if(item.isSelected) {
+      setBackgroundColor(resources.getColor(R.color.completedPayment,null))
+    }else {
+      setBackgroundColor(resources.getColor(R.color.tw__solid_white,null))
+    }
   }
 }
 
@@ -135,3 +136,9 @@ fun ConstraintLayout.setBackColor(item:Boolean){
   }
 }
 
+@BindingAdapter("countryImage")
+fun ImageView.setCountryImage(item:NationalFlag?){
+  item?.let{
+    setImageResource(item.imageId)
+  }
+}
