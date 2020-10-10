@@ -64,12 +64,16 @@ class PaymentDetailFragment : PermissionBase() {
       val builder: AlertDialog.Builder? = requireActivity().let {
         AlertDialog.Builder(it)
       }
-      builder?.setTitle(resources.getString(R.string.paymentCompleted))
-        ?.setPositiveButton(resources.getString(R.string.done)) { _, _ ->
+      builder?.setTitle(resources.getString(R.string.paymentCompleteSetting))
+        ?.setPositiveButton(resources.getString(R.string.yes)) { _, _ ->
           sendRequest()
         }
         ?.setNegativeButton(resources.getString(R.string.cancel)) { _, _ -> }
-        ?.setMessage(resources.getString(R.string.messagePaymentCompleted))
+        ?.setMessage(
+          if (!paymentDetail.isCompleted) resources.getString(R.string.messagePaymentCompleted) else resources.getString(
+            R.string.messagePaymentUncomplete
+          )
+        )
       val dialog: AlertDialog? = builder?.create()
       dialog?.show()
     }
@@ -99,7 +103,7 @@ class PaymentDetailFragment : PermissionBase() {
     xAxis.position = XAxis.XAxisPosition.BOTTOM
     xAxis.setDrawGridLines(false)
     xAxis.textSize = 14f
-    xAxis.granularity = 1f; // minimum axis-step (interval) is 1
+    xAxis.granularity = 1f // minimum axis-step (interval) is 1
     xAxis.labelRotationAngle = -45f
     xAxis.spaceMin = 0f
     xAxis.spaceMax = 0f
@@ -107,10 +111,10 @@ class PaymentDetailFragment : PermissionBase() {
     val right = chart.axisRight
     left.axisMinimum = 0f
     right.axisMinimum = 0f
-    left.setDrawAxisLine(false); // no axis line
-    left.setDrawGridLines(false); // no grid lines
+    left.setDrawAxisLine(false) // no axis line
+    left.setDrawGridLines(false) // no grid lines
     right.isEnabled = false
-    right.setDrawGridLines(false); // no grid line
+    right.setDrawGridLines(false) // no grid line
     left.textSize = 14f
     chart.legend.isEnabled = false
     chart.description.isEnabled = false
@@ -122,17 +126,6 @@ class PaymentDetailFragment : PermissionBase() {
   }
 
   private fun sendRequest() {
-    val paymentPropertyPost = PaymentPropertyPost(
-      name = paymentDetail.name,
-      currency = paymentDetail.currency,
-      total = paymentDetail.total,
-      payers = paymentDetail.payers,
-      isCompleted = true,
-      tags = paymentDetail.tags,
-      comment = paymentDetail.comment,
-      images = paymentDetail.imageUrls,
-      paidAt = paymentDetail.paidAt
-    )
     Api.retrofitService.completePayment(id, groupDetail.id, paymentDetail.id)
       .enqueue(object : Callback<PaymentCompleteResponse> {
         override fun onResponse(

@@ -135,9 +135,10 @@
   <string name="settle_up">精算</string>
   <string name="groupName">グループ名</string>
   <string name="groupDisplayToggle">非表示</string>
-  <string name="paymentCompleted">精算完了</string>
+  <string name="paymentCompleteSetting">精算完了設定</string>
   <string name="friendView">友達</string>
   <string name="messagePaymentCompleted">この支払いの精算を完了する</string>
+  <string name="messagePaymentUncomplete">この支払いの精算を未完了する</string>
   <string-array name="currency_array">
     <item>jpy</item>
     <item>usd</item>

@@ -3,6 +3,7 @@ package work.calmato.prestopay.util
 import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.BindingAdapter
 import com.squareup.picasso.Picasso
 import work.calmato.prestopay.R
@@ -124,3 +125,13 @@ fun TextView.setDate(item:PaymentPropertyGet?){
     text = item.createdAt.split("T")[0]
   }
 }
+
+@BindingAdapter("paymentBackColor")
+fun ConstraintLayout.setBackColor(item:Boolean){
+  if (item){
+    setBackgroundColor(resources.getColor(R.color.completedPayment,null))
+  } else{
+    setBackgroundColor(resources.getColor(R.color.tw__solid_white,null))
+  }
+}
+
