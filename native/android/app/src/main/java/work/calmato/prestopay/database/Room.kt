@@ -3,6 +3,7 @@ package work.calmato.prestopay.database
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.room.*
+import kotlinx.coroutines.selects.select
 
 @Dao
 interface FriendDao {
@@ -58,13 +59,23 @@ interface TagDao {
   fun insertTags(vararg tag: DatabaseTag)
 }
 
+@Dao
+interface NationalFlagDao{
+  @Query("select * from databasenationalflag")
+  fun getNationalFlags():List<DatabaseNationalFlag>
+
+  @Insert(onConflict = OnConflictStrategy.REPLACE)
+  fun insertNationalFlags(vararg tag: DatabaseNationalFlag)
+}
+
 @Database(
   entities =
   [DatabaseFriend::class,
     DatabaseGroup::class,
     DatabasePayment::class,
-    DatabaseTag::class],
-  version = 7,
+    DatabaseTag::class,
+  DatabaseNationalFlag::class],
+  version = 8,
   exportSchema = false
 )
 
@@ -74,6 +85,7 @@ abstract class AppDatabase : RoomDatabase() {
   abstract val groupDao: GroupDao
   abstract val paymentDao: PaymentDao
   abstract val tagDao:TagDao
+  abstract val nationalFlagDao:NationalFlagDao
 }
 
 private lateinit var INSTANCE: AppDatabase

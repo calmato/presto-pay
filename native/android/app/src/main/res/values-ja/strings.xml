@@ -142,23 +142,38 @@
   <string-array name="currency_array">
     <item>jpy</item>
     <item>usd</item>
+    <item>eur</item>
     <item>sek</item>
+    <item>bgn</item>
+    <item>czk</item>
+    <item>dkk</item>
+    <item>gbp</item>
+    <item>huf</item>
+    <item>pln</item>
+    <item>ron</item>
+    <item>chf</item>
+    <item>isk</item>
+    <item>nok</item>
+    <item>hrk</item>
+    <item>rub</item>
+    <item>try</item>
+    <item>aud</item>
+    <item>brl</item>
+    <item>cad</item>
+    <item>cny</item>
+    <item>hkd</item>
+    <item>idr</item>
+    <item>ils</item>
+    <item>inr</item>
+    <item>krw</item>
+    <item>mxn</item>
+    <item>myr</item>
+    <item>nzd</item>
+    <item>php</item>
+    <item>sgd</item>
+    <item>thb</item>
+    <item>zar</item>
   </string-array>
-  <integer-array name="tag_array">
-    <item>@drawable/ic_baseline_shopping_cart_24</item>
-    <item>@drawable/ic_baseline_restaurant_24</item>
-    <item>@drawable/ic_baseline_train_24</item>
-    <item>@drawable/ic_baseline_hotel_24</item>
-    <item>@drawable/ic_baseline_local_movies_24</item>
-    <item>@drawable/ic_baseline_music_note_24</item>
-    <item>@drawable/ic_baseline_local_drink_24</item>
-    <item>@drawable/ic_baseline_local_gas_station_24</item>
-    <item>@drawable/ic_baseline_sports_soccer_24</item>
-    <item>@drawable/ic_baseline_cake_24</item>
-    <item>@drawable/ic_baseline_menu_book_24</item>
-    <item>@drawable/ic_baseline_home_24</item>
-    <item>@drawable/ic_baseline_attach_money_24</item>
-  </integer-array>
   <string-array name="tag_name">
     <item>食材</item>
     <item>レストラン</item>
@@ -172,6 +187,5 @@
     <item>プレゼント</item>
     <item>雑貨</item>
     <item>家賃</item>
-    <item>その他</item>
   </string-array>
 </resources>
