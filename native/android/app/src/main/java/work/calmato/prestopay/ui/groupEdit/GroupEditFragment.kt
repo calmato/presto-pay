@@ -5,6 +5,7 @@ import android.preference.PreferenceManager
 import android.util.Log
 import android.view.*
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -103,6 +104,16 @@ class GroupEditFragment : Fragment() {
       )
     }
 
+    // 戻るbuttonを押した時の処理
+    requireActivity().onBackPressedDispatcher.addCallback(
+      viewLifecycleOwner,
+      object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+          goBackHome()
+        }
+      }
+    )
+
     // TODO: Group上での友達の削除として対応できていないため実装する場合ばここに記述する
 /*    viewModel.itemClicked.observe(viewLifecycleOwner, Observer {
       if (null != it) {
@@ -190,6 +201,12 @@ class GroupEditFragment : Fragment() {
       })
     this.findNavController().navigate(
       GroupEditFragmentDirections.actionGroupEditFragmentToHomeFragment()
+    )
+  }
+
+  private fun goBackHome() {
+    this.findNavController().navigate(
+      GroupEditFragmentDirections.actionGroupEditFragmentToGroupDetail(getGroupInfo)
     )
   }
 

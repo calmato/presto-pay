@@ -101,7 +101,6 @@ class GroupEditAddFriendFragment : Fragment() {
         return false
       }
     })
-    // TODO: 戻るボタンはとりあえず無効にしているので実装する
     requireActivity().onBackPressedDispatcher.addCallback(
       viewLifecycleOwner,
       object : OnBackPressedCallback(true) {
