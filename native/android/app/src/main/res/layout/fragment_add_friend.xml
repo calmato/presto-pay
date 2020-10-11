@@ -11,28 +11,14 @@
   <androidx.constraintlayout.widget.ConstraintLayout android:layout_width="match_parent"
       android:layout_height="match_parent">
 
-    <EditText
-      android:id="@+id/userName"
-      android:layout_width="0dp"
-      android:layout_height="wrap_content"
-      android:layout_marginStart="16dp"
-      android:layout_marginTop="16dp"
-      android:autofillHints=""
-      android:ems="10"
-      android:hint="@string/username"
-      android:inputType="textPersonName"
-      app:layout_constraintEnd_toStartOf="@+id/searchFriend"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="parent" />
-
     <androidx.constraintlayout.widget.ConstraintLayout
       android:id="@+id/inviteConstraint"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
-      android:layout_marginTop="16dp"
+      android:layout_marginTop="8dp"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/userName">
+      app:layout_constraintTop_toBottomOf="@+id/searchView">
 
       <ImageView
         android:id="@+id/imageView"
@@ -66,16 +52,6 @@
         app:srcCompat="@drawable/ic_baseline_chevron_right_24" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <ImageView
-      android:id="@+id/searchFriend"
-      android:layout_width="50dp"
-      android:layout_height="0dp"
-      android:layout_marginEnd="16dp"
-      app:layout_constraintBottom_toBottomOf="@+id/userName"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintTop_toTopOf="@+id/userName"
-      app:srcCompat="@drawable/ic_baseline_search_24" />
-
     <androidx.recyclerview.widget.RecyclerView
       android:id="@+id/usersRecycleView"
       android:layout_width="0dp"
@@ -88,16 +64,15 @@
       app:layout_constraintTop_toBottomOf="@+id/inviteConstraint"
       app:layout_constraintVertical_bias="0.0" />
 
-    <TextView
-      android:id="@+id/nowLoading"
-      android:layout_width="wrap_content"
+    <SearchView
+      android:id="@+id/searchView"
+      android:layout_width="0dp"
       android:layout_height="wrap_content"
-      android:text="@string/now_loading"
-      android:textSize="18sp"
-      android:visibility="invisible"
-      app:layout_constraintBottom_toBottomOf="@+id/usersRecycleView"
-      app:layout_constraintEnd_toEndOf="@+id/usersRecycleView"
-      app:layout_constraintStart_toStartOf="@+id/usersRecycleView"
+      android:layout_marginStart="16dp"
+      android:layout_marginTop="8dp"
+      android:layout_marginEnd="16dp"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent" />
 
   </androidx.constraintlayout.widget.ConstraintLayout>

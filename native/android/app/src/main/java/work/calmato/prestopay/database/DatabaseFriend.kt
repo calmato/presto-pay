@@ -56,6 +56,13 @@ data class DatabaseTag(
   var isSelected:Boolean = false
 )
 
+@Entity
+data class DatabaseNationalFlag(
+  @PrimaryKey
+  val name:String,
+  val imageId:Int,
+  val fullName:String
+)
 
 
 fun List<DatabaseFriend>.asDomainModel(): List<UserProperty> {
@@ -92,6 +99,7 @@ fun List<DatabasePayment>.asPaymentModel():List<PaymentPropertyGet>{
       currency = it.currency,
       total = it.total,
       payers = it.payers,
+      isCompleted = it.isCompleted,
       tags = it.tags,
       comment = it.comment,
       imageUrls = it.imageUrls,
@@ -110,6 +118,13 @@ fun DatabaseTag.asTagModel():Tag{
     )
 }
 
+fun DatabaseNationalFlag.asNationalFlagModel():NationalFlag{
+  return NationalFlag(
+    name = this.name,
+    imageId = this.imageId,
+    fullName = this.fullName
+  )
+}
 class ListTypeConverter {
     @TypeConverter
     fun toString(userIds: List<String?>?): String? = userIds?.joinToString() ?: ""

@@ -38,8 +38,9 @@ class AdapterTag():RecyclerView.Adapter<AdapterTag.TagViewHolder>() {
     holder.binding.also {
       it.tag = tagList[position]
     }
-    holder.binding.tagCheckBox.setOnCheckedChangeListener { _, isChecked ->
-      holder.binding.tag?.isSelected = isChecked
+    holder.binding.parent.setOnClickListener {
+      holder.binding.tag?.isSelected = !holder.binding.tag?.isSelected!!
+      holder.binding.parent.setTagCheck(holder.binding.tag)
     }
   }
 }

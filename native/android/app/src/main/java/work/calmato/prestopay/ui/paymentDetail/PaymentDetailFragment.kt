@@ -1,10 +1,12 @@
 package work.calmato.prestopay.ui.paymentDetail
 
+import android.app.AlertDialog
+import android.content.SharedPreferences
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import com.github.mikephil.charting.components.AxisBase
@@ -16,15 +18,20 @@ import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_payment_detail.*
+import retrofit2.Call
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentPaymentDetailBinding
-import work.calmato.prestopay.network.NetworkPayer
-import work.calmato.prestopay.network.PaymentPropertyGet
 import work.calmato.prestopay.util.PermissionBase
+import retrofit2.Callback
+import retrofit2.Response
+import work.calmato.prestopay.network.*
 
 
 class PaymentDetailFragment : PermissionBase() {
   private lateinit var paymentDetail: PaymentPropertyGet
+  private lateinit var groupDetail: GroupPropertyResponse
+  private lateinit var sharedPreferences: SharedPreferences
+  private lateinit var id: String
   override fun onCreateView(
     inflater: LayoutInflater,
     container: ViewGroup?,
@@ -33,11 +40,15 @@ class PaymentDetailFragment : PermissionBase() {
     val binding: FragmentPaymentDetailBinding =
       DataBindingUtil.inflate(inflater, R.layout.fragment_payment_detail, container, false)
     paymentDetail = PaymentDetailFragmentArgs.fromBundle(requireArguments()).paymentPropertyGet
+    groupDetail = PaymentDetailFragmentArgs.fromBundle(requireArguments()).groupPropertyResponse
     return binding.root
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
+    setHasOptionsMenu(true)
+    sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
+    id = sharedPreferences.getString("token", "")!!
     date.text = paymentDetail.createdAt.split("T")[0]
     paymentDetail.imageUrls!![0].let {
       if (it.isNotEmpty()) {
@@ -48,6 +59,23 @@ class PaymentDetailFragment : PermissionBase() {
     amount.text = paymentDetail.total.toString().plus(" ").plus(paymentDetail.currency)
     comment.text = paymentDetail.comment
     setGraph()
+    completed.setOnClickListener {
+      val builder: AlertDialog.Builder? = requireActivity().let {
+        AlertDialog.Builder(it)
+      }
+      builder?.setTitle(resources.getString(R.string.paymentCompleteSetting))
+        ?.setPositiveButton(resources.getString(R.string.yes)) { _, _ ->
+          sendRequest()
+        }
+        ?.setNegativeButton(resources.getString(R.string.cancel)) { _, _ -> }
+        ?.setMessage(
+          if (!paymentDetail.isCompleted) resources.getString(R.string.messagePaymentCompleted) else resources.getString(
+            R.string.messagePaymentUncomplete
+          )
+        )
+      val dialog: AlertDialog? = builder?.create()
+      dialog?.show()
+    }
   }
 
   private fun setGraph() {
@@ -74,7 +102,7 @@ class PaymentDetailFragment : PermissionBase() {
     xAxis.position = XAxis.XAxisPosition.BOTTOM
     xAxis.setDrawGridLines(false)
     xAxis.textSize = 14f
-    xAxis.granularity = 1f; // minimum axis-step (interval) is 1
+    xAxis.granularity = 1f // minimum axis-step (interval) is 1
     xAxis.labelRotationAngle = -45f
     xAxis.spaceMin = 0f
     xAxis.spaceMax = 0f
@@ -82,10 +110,10 @@ class PaymentDetailFragment : PermissionBase() {
     val right = chart.axisRight
     left.axisMinimum = 0f
     right.axisMinimum = 0f
-    left.setDrawAxisLine(false); // no axis line
-    left.setDrawGridLines(false); // no grid lines
+    left.setDrawAxisLine(false) // no axis line
+    left.setDrawGridLines(false) // no grid lines
     right.isEnabled = false
-    right.setDrawGridLines(false); // no grid line
+    right.setDrawGridLines(false) // no grid line
     left.textSize = 14f
     chart.legend.isEnabled = false
     chart.description.isEnabled = false
@@ -96,6 +124,29 @@ class PaymentDetailFragment : PermissionBase() {
     chart.invalidate() // refresh
   }
 
+  private fun sendRequest() {
+    Api.retrofitService.completePayment(id, groupDetail.id, paymentDetail.id)
+      .enqueue(object : Callback<PaymentCompleteResponse> {
+        override fun onResponse(
+          call: Call<PaymentCompleteResponse>,
+          response: Response<PaymentCompleteResponse>
+        ) {
+          if (response.isSuccessful) {
+            Toast.makeText(requireContext(), "精算登録しました", Toast.LENGTH_LONG).show()
+            requireActivity().onBackPressed()
+          } else {
+            Toast.makeText(requireContext(), "精算登録に失敗しました", Toast.LENGTH_LONG).show()
+          }
+        }
+
+        override fun onFailure(call: Call<PaymentCompleteResponse>, t: Throwable) {
+          Toast.makeText(requireContext(), t.message, Toast.LENGTH_LONG).show()
+        }
+      })
+  }
+  override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+    inflater.inflate(R.menu.header_edit, menu)
+  }
 }
 
 class XLabelFormatter(payers: List<NetworkPayer>) : ValueFormatter() {

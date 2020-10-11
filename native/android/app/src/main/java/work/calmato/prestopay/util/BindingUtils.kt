@@ -3,14 +3,12 @@ package work.calmato.prestopay.util
 import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.BindingAdapter
 import com.squareup.picasso.Picasso
 import work.calmato.prestopay.R
 import work.calmato.prestopay.database.getAppDatabase
-import work.calmato.prestopay.network.GroupPropertyResponse
-import work.calmato.prestopay.network.PaymentPropertyGet
-import work.calmato.prestopay.network.Tag
-import work.calmato.prestopay.network.UserProperty
+import work.calmato.prestopay.network.*
 import work.calmato.prestopay.repository.TagRepository
 import kotlin.concurrent.thread
 
@@ -68,10 +66,14 @@ fun ImageView.setTagImage(item:Tag?){
   }
 }
 
-@BindingAdapter("tagCheckbox")
-fun CheckBox.setTagCheckBox(item:Tag?){
+@BindingAdapter("tagCheck")
+fun ConstraintLayout.setTagCheck(item:Tag?){
   item?.let {
-    isChecked = item.isSelected
+    if(item.isSelected) {
+      setBackgroundColor(resources.getColor(R.color.completedPayment,null))
+    }else {
+      setBackgroundColor(resources.getColor(R.color.tw__solid_white,null))
+    }
   }
 }
 
@@ -122,5 +124,35 @@ fun ImageView.setTag(item:PaymentPropertyGet?){
 fun TextView.setDate(item:PaymentPropertyGet?){
   item?.let{
     text = item.createdAt.split("T")[0]
+  }
+}
+
+@BindingAdapter("paymentBackColor")
+fun ConstraintLayout.setBackColor(item:Boolean){
+  if (item){
+    setBackgroundColor(resources.getColor(R.color.completedPayment,null))
+  } else{
+    setBackgroundColor(resources.getColor(R.color.tw__solid_white,null))
+  }
+}
+
+@BindingAdapter("countryImage")
+fun ImageView.setCountryImage(item:NationalFlag?){
+  item?.let{
+    setImageResource(item.imageId)
+  }
+}
+
+@BindingAdapter("countryCode")
+fun TextView.setCountryCode(item:NationalFlag?){
+  item?.let {
+    text = item.name
+  }
+}
+
+@BindingAdapter("countryFullName")
+fun TextView.setCountryFullName(item:NationalFlag?){
+  item?.let{
+    text = item.fullName
   }
 }
