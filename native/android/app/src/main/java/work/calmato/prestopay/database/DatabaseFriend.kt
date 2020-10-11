@@ -92,6 +92,7 @@ fun List<DatabasePayment>.asPaymentModel():List<PaymentPropertyGet>{
       currency = it.currency,
       total = it.total,
       payers = it.payers,
+      isCompleted = it.isCompleted,
       tags = it.tags,
       comment = it.comment,
       imageUrls = it.imageUrls,

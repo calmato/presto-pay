@@ -141,11 +141,12 @@ interface ApiService {
     @Path("groupId") groupId: String
   ): Deferred<NetworkPaymentContainer>
 
-}
-
-interface ApiServiceCurrency {
-  @GET("latest")
-  fun getLatestCurrency(): Call<CurrencyApi>
+  @PATCH("groups/{groupId}/payments-status/{paymentId}")
+  fun completePayment(
+    @Header("Authorization") token: String,
+    @Path("groupId") groupId: String,
+    @Path("paymentId") paymentId: String
+  ) : Call<PaymentCompleteResponse>
 }
 
 /**
@@ -155,10 +156,3 @@ object Api {
   val retrofitService: ApiService by lazy { retrofit.create(ApiService::class.java) }
 }
 
-object ApiCurrency {
-  val retrofitServiceCurrency: ApiServiceCurrency by lazy {
-    retrofit_currency.create(
-      ApiServiceCurrency::class.java
-    )
-  }
-}

@@ -111,7 +111,7 @@ class GroupDetailFragment : Fragment() {
   }
   private fun navigateToDetail(payment:PaymentPropertyGet){
     this.findNavController().navigate(
-      GroupDetailFragmentDirections.actionGroupDetailToPaymentDetail(payment)
+      GroupDetailFragmentDirections.actionGroupDetailToPaymentDetail(payment,groupDetail!!)
     )
     viewModel.navigationCompleted()
   }

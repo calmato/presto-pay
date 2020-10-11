@@ -268,5 +268,11 @@
     <argument
       android:name="paymentPropertyGet"
       app:argType="work.calmato.prestopay.network.PaymentPropertyGet"/>
+    <argument
+      android:name="groupPropertyResponse"
+      app:argType="work.calmato.prestopay.network.GroupPropertyResponse"/>
+    <action
+      android:id="@+id/action_paymentDetail_self"
+      app:destination="@id/paymentDetail" />
   </fragment>
 </navigation>

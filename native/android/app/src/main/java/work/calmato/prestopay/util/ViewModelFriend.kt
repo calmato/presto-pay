@@ -128,29 +128,6 @@ class ViewModelFriend(application:Application): AndroidViewModel(application) {
       })
   }
 
-  fun getCurrency(){
-    ApiCurrency.retrofitServiceCurrency.getLatestCurrency()
-      .enqueue(object : Callback<CurrencyApi>{
-        override fun onFailure(call: Call<CurrencyApi>, t: Throwable) {
-          Log.i(ViewModelFriendGroup.TAG, "onFailure: ${t.message}")
-        }
-
-        override fun onResponse(call: Call<CurrencyApi>, response: Response<CurrencyApi>) {
-          if(response.isSuccessful){
-            coroutineScope.launch {
-              try {
-                Log.i(ViewModelFriendGroup.TAG, "onResponse: ${response.body()}")
-              }catch (e:java.lang.Exception){
-                Log.i(ViewModelFriendGroup.TAG, "onResponse: ${e.message}")
-              }
-            }
-          }else{
-            Log.i(ViewModelFriendGroup.TAG, "onResponse: ${response.body()}")
-          }
-        }
-      })
-  }
-
   fun itemIsClicked(userProperty: UserProperty) {
     _itemClicked.value = userProperty
   }

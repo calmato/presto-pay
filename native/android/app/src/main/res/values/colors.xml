@@ -8,4 +8,5 @@
   <color name="clearButtonPressed">#868585</color>
   <color name="positiveNumberColor">#2ECC71 </color>
   <color name="negativeNumberColor">#E74C3C</color>
+  <color name="completedPayment">#D0D3D4</color>
 </resources>
