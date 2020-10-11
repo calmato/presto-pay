@@ -43,8 +43,8 @@ class AddExpenseFragment : PermissionBase() {
   private var getGroupInfo: GroupPropertyResponse? = null
   private var recycleAdapter: AdapterCheck? = null
   private lateinit var clickListener: AdapterCheck.OnClickListener
-  private var groupMembers:MutableList<UserProperty> = mutableListOf()
-  private var groupDetail:GetGroupDetail? = null
+  private var groupMembers: MutableList<UserProperty> = mutableListOf()
+  private var groupDetail: GetGroupDetail? = null
 
   private val CODE = 11
 
@@ -53,7 +53,7 @@ class AddExpenseFragment : PermissionBase() {
     container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View? {
-     val binding: FragmentAddExpenseBindingImpl = DataBindingUtil.inflate(
+    val binding: FragmentAddExpenseBindingImpl = DataBindingUtil.inflate(
       inflater, R.layout.fragment_add_expense, container, false
     )
     clickListener = AdapterCheck.OnClickListener { viewModelFriend.itemIsClicked(it) }
@@ -64,8 +64,8 @@ class AddExpenseFragment : PermissionBase() {
 
   private lateinit var id: String
   private lateinit var doneButton: MenuItem
-  private lateinit var tagList:List<Tag>
-  private lateinit var countryList:List<NationalFlag>
+  private lateinit var tagList: List<Tag>
+  private lateinit var countryList: List<NationalFlag>
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     if (requestCode == CODE && resultCode == Activity.RESULT_OK) {
@@ -86,8 +86,8 @@ class AddExpenseFragment : PermissionBase() {
 
   private fun addExpensePayer(groupDetail: GetGroupDetail) {
     groupMembers.addAll(groupDetail.users)
-    val adapter = ArrayAdapter<String>(requireContext(),android.R.layout.simple_list_item_checked,
-      groupMembers.map { it.name})
+    val adapter = ArrayAdapter<String>(requireContext(), android.R.layout.simple_list_item_checked,
+      groupMembers.map { it.name })
     adapter.setDropDownViewResource(android.R.layout.simple_list_item_checked)
     payerSpinner.adapter = adapter
   }
@@ -161,20 +161,22 @@ class AddExpenseFragment : PermissionBase() {
     )
   }
 
-  fun showTargetDialog(){
-    groupMembers.filter { userProperty -> userProperty.name == payerSpinner.selectedItem }[0].checked = true
+  fun showTargetDialog() {
+    groupMembers.filter { userProperty -> userProperty.name == payerSpinner.selectedItem }[0].checked =
+      true
     val builder: AlertDialog.Builder? = requireActivity().let {
       AlertDialog.Builder(it)
     }
     val targetRecycleAdapter = AdapterCheck(null)
-    targetRecycleAdapter.friendList = groupDetail!!.users.filter { userProperty -> userProperty.name != payerSpinner.selectedItem }
+    targetRecycleAdapter.friendList =
+      groupDetail!!.users.filter { userProperty -> userProperty.name != payerSpinner.selectedItem }
     val recyclerView = RecyclerView(requireContext())
     recyclerView.apply {
       layoutManager = LinearLayoutManager(requireContext())
       adapter = targetRecycleAdapter
     }
     builder?.setView(recyclerView)
-    val dialog:AlertDialog? = builder?.create()
+    val dialog: AlertDialog? = builder?.create()
     dialog?.show()
   }
 
@@ -192,22 +194,38 @@ class AddExpenseFragment : PermissionBase() {
 
   private fun sendRequest() {
     val groupId = groupDetail!!.id
-    val name = expenseName.text.toString()
-    val totalString = amountEdit.text.toString()
+    //TODO: 必要な値はSTEPごとに入力させる
+    val name = if (expenseName.text.isEmpty()) {
+      "unko"
+    } else {
+      expenseName.text.toString()
+    }
+    val totalString = if (amountEdit.text.isEmpty()){
+      "100.0"
+    } else{
+      amountEdit.text.toString()
+    }
     val currency = currencyTextView.text.toString()
     val payer = payerSpinner.selectedItem
     val payers = mutableListOf(
-      UserExpense(groupMembers.filter { userProperty -> userProperty.name == payer }[0].id, totalString.toFloat())
+      UserExpense(
+        groupMembers.filter { userProperty -> userProperty.name == payer }[0].id,
+        totalString.toFloat()
+      )
     )
     val targetUsers = groupMembers.filter { it.checked && it.name != payer }
-    val isPayerIncluded = groupMembers.filter { userProperty -> userProperty.name == payer }[0].checked
+    val isPayerIncluded =
+      groupMembers.filter { userProperty -> userProperty.name == payer }[0].checked
     val targetProperty = targetUsers.map { userProperty ->
       val isPayerIncludedInt = if (isPayerIncluded) 1 else 0
-      UserExpense(userProperty.id,totalString.toFloat()/(targetUsers.size + isPayerIncludedInt) * -1f)
+      UserExpense(
+        userProperty.id,
+        totalString.toFloat() / (targetUsers.size + isPayerIncludedInt) * -1f
+      )
     }
     payers.addAll(targetProperty)
-    if(isPayerIncluded){
-      payers[0].amount = payers[0].amount - totalString.toFloat()/(targetUsers.size + 1)
+    if (isPayerIncluded) {
+      payers[0].amount = payers[0].amount - totalString.toFloat() / (targetUsers.size + 1)
     }
     val tags = mutableListOf<String>()
     for (i in tagList.filter { it.isSelected }) {
@@ -303,7 +321,8 @@ class AddExpenseFragment : PermissionBase() {
     input.text = commentEditText.text
 
     builder?.setTitle(resources.getString(R.string.add_comment))
-      ?.setPositiveButton(resources.getString(R.string.add)
+      ?.setPositiveButton(
+        resources.getString(R.string.add)
       ) { _, _ ->
         commentEditText.setText(input.text.toString())
         commentEditText.visibility = EditText.VISIBLE
@@ -323,15 +342,16 @@ class AddExpenseFragment : PermissionBase() {
     tagRecycleAdapter.tagList = tagList
     val recycleView = RecyclerView(requireContext())
     recycleView.apply {
-      layoutManager = GridLayoutManager(requireContext(),3)
+      layoutManager = GridLayoutManager(requireContext(), 3)
       adapter = tagRecycleAdapter
     }
     builder?.setView(recycleView)
-      ?.setPositiveButton(resources.getString(R.string.done),null)
+      ?.setPositiveButton(resources.getString(R.string.done), null)
     val dialog: AlertDialog? = builder?.create()
     dialog?.show()
   }
-  private fun showCurrencyDialog(){
+
+  private fun showCurrencyDialog() {
     val builder: AlertDialog.Builder? = requireActivity().let {
       AlertDialog.Builder(it)
     }
@@ -348,7 +368,7 @@ class AddExpenseFragment : PermissionBase() {
     builder?.setView(recycleView)
     val dialog: AlertDialog? = builder?.create()
     dialog?.show()
-    currencyTextView.addTextChangedListener(object :TextWatcher{
+    currencyTextView.addTextChangedListener(object : TextWatcher {
       override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
       }
 
