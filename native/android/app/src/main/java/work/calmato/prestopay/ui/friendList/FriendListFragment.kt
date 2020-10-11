@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.*
+import android.widget.SearchView
 import androidx.activity.OnBackPressedCallback
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -19,6 +20,7 @@ import work.calmato.prestopay.network.UserProperty
 import work.calmato.prestopay.network.Users
 import work.calmato.prestopay.util.AdapterCheck
 import work.calmato.prestopay.util.ViewModelFriend
+import java.util.*
 
 class FriendListFragment : Fragment() {
   private val viewModel: ViewModelFriend by lazy {
@@ -70,7 +72,6 @@ class FriendListFragment : Fragment() {
       }
     })
     swipeContainer.setOnRefreshListener {
-      searchEdit.setText("")
       viewModel.userListView()
     }
     viewModel.itemClicked.observe(viewLifecycleOwner, Observer {
@@ -88,17 +89,20 @@ class FriendListFragment : Fragment() {
         }
       }
     )
-    searchEdit.addTextChangedListener(object : TextWatcher {
-      override fun afterTextChanged(s: Editable?) {}
+    searchView.setOnQueryTextListener(object:SearchView.OnQueryTextListener{
+      override fun onQueryTextSubmit(query: String?): Boolean {
+        return true
+      }
 
-      override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
-      override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-        if (s.isNullOrEmpty()) {
-          recycleAdapter?.friendList = friendListArg
-        } else {
-          recycleAdapter?.friendList = friendListArg.filter { it.name.toLowerCase().contains(s) }
+      override fun onQueryTextChange(newText: String?): Boolean {
+        if (newText != null) {
+          if (newText.isNotEmpty()) {
+            recycleAdapter?.friendList = friendListArg.filter { it.name.startsWith(newText,true) }
+          }else{
+            recycleAdapter?.friendList = friendListArg
+          }
         }
+        return true
       }
     })
   }

@@ -200,6 +200,13 @@ data class Tag(
 ) : Parcelable
 
 @Parcelize
+data class NationalFlag(
+  val name:String,
+  val imageId:Int,
+  val fullName:String
+) : Parcelable
+
+@Parcelize
 data class PaymentCompleteResponse(
   val id: String,
   val name: String,

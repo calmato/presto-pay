@@ -44,6 +44,7 @@ import work.calmato.prestopay.network.asDomainModel
 import work.calmato.prestopay.network.RegisterDeviceIdProperty
 import work.calmato.prestopay.repository.FriendsRepository
 import work.calmato.prestopay.repository.GroupsRepository
+import work.calmato.prestopay.repository.NationalFlagsRepository
 import work.calmato.prestopay.repository.TagRepository
 import work.calmato.prestopay.util.*
 
@@ -317,6 +318,7 @@ class LoginFragment : Fragment() {
               sendFirebaseCloudMessageToken()
               lifecycleScope.launch(Dispatchers.IO) {
                 TagRepository(getAppDatabase(requireContext())).setTagDatabase(resources)
+                NationalFlagsRepository(getAppDatabase(requireContext())).setNationalFlagDatabase(resources)
               }
             }
           }
@@ -360,7 +362,7 @@ class LoginFragment : Fragment() {
                 try {
                   Log.i("Ok", "setSharedPreferenceId: ${id}")
                   GroupsRepository(getAppDatabase(requireContext())).refreshGroups(id!!)
-                  FriendsRepository(getAppDatabase(requireContext())).refreshFriends(id!!)
+                  FriendsRepository(getAppDatabase(requireContext())).refreshFriends(id)
                   val userProperty =
                     Api.retrofitService.getLoginUserInformation("Bearer $id").await()
                       .asDomainModel()

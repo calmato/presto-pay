@@ -142,8 +142,108 @@
   <string-array name="currency_array">
     <item>jpy</item>
     <item>usd</item>
+    <item>eur</item>
     <item>sek</item>
+    <item>bgn</item>
+    <item>czk</item>
+    <item>dkk</item>
+    <item>gbp</item>
+    <item>huf</item>
+    <item>pln</item>
+    <item>ron</item>
+    <item>chf</item>
+    <item>isk</item>
+    <item>nok</item>
+    <item>hrk</item>
+    <item>rub</item>
+    <item>try</item>
+    <item>aud</item>
+    <item>brl</item>
+    <item>cad</item>
+    <item>cny</item>
+    <item>hkd</item>
+    <item>idr</item>
+    <item>ils</item>
+    <item>inr</item>
+    <item>krw</item>
+    <item>mxn</item>
+    <item>myr</item>
+    <item>nzd</item>
+    <item>php</item>
+    <item>sgd</item>
+    <item>thb</item>
+    <item>zar</item>
   </string-array>
+  <string-array name="country_names">
+    <item>Japanese Yen</item>
+    <item>US Dollar</item>
+    <item>Euro</item>
+    <item>Swedish Krone</item>
+    <item>Bulgarian Lev</item>
+    <item>Czech Koruna</item>
+    <item>Danish Krone</item>
+    <item>Pound Sterling</item>
+    <item>Forint</item>
+    <item>Zloty</item>
+    <item>Romanian Leu</item>
+    <item>Swiss Franc</item>
+    <item>Iceland Krona</item>
+    <item>Norwegian Krone</item>
+    <item>Kuna</item>
+    <item>Russian Ruble</item>
+    <item>Turkish Lira</item>
+    <item>Australian Dollar</item>
+    <item>Brazilian Real</item>
+    <item>Canadian Dollar</item>
+    <item>Yuan Renminbi</item>
+    <item>Hong Kong Dollar</item>
+    <item>Rupiah</item>
+    <item>New Israeli Sheqel</item>
+    <item>Indian Rupee</item>
+    <item>Won</item>
+    <item>Mexican Peso</item>
+    <item>Malaysian Ringgit</item>
+    <item>New Zealand Dollar</item>
+    <item>Philippine Peso</item>
+    <item>Singapore Dollar</item>
+    <item>Baht</item>
+    <item>Rand</item>
+  </string-array>
+  <integer-array name="national_flags_array">
+    <item>@drawable/japan_flag_round_icon_256</item>
+    <item>@drawable/united_states_of_america_flag_round_icon_256</item>
+    <item>@drawable/europe_flag_round_icon_256</item>
+    <item>@drawable/sweden_flag_round_icon_256</item>
+    <item>@drawable/bulgaria_flag_round_icon_256</item>
+    <item>@drawable/czech_republic_flag_round_icon_256</item>
+    <item>@drawable/denmark_flag_round_icon_256</item>
+    <item>@drawable/united_kingdom_flag_round_icon_256</item>
+    <item>@drawable/hungary_flag_round_icon_256</item>
+    <item>@drawable/poland_flag_round_icon_256</item>
+    <item>@drawable/romania_flag_round_icon_256</item>
+    <item>@drawable/switzerland_flag_round_icon_256</item>
+    <item>@drawable/iceland_flag_round_icon_256</item>
+    <item>@drawable/norway_flag_round_icon_256</item>
+    <item>@drawable/croatia_flag_round_icon_256</item>
+    <item>@drawable/russia_flag_round_icon_256</item>
+    <item>@drawable/turkey_flag_round_icon_256</item>
+    <item>@drawable/australia_flag_round_icon_256</item>
+    <item>@drawable/brazil_flag_round_icon_256</item>
+    <item>@drawable/canada_flag_round_icon_256</item>
+    <item>@drawable/china_flag_round_icon_256</item>
+    <item>@drawable/hongkong_flag_round_icon_256</item>
+    <item>@drawable/indonesia_flag_round_icon_256</item>
+    <item>@drawable/israel_flag_round_icon_256</item>
+    <item>@drawable/india_flag_round_icon_256</item>
+    <item>@drawable/south_korea_flag_round_icon_256</item>
+    <item>@drawable/mexico_flag_round_icon_256</item>
+    <item>@drawable/malaysia_flag_round_icon_256</item>
+    <item>@drawable/new_zealand_flag_round_icon_256</item>
+    <item>@drawable/philippines_flag_round_icon_256</item>
+    <item>@drawable/singapore_flag_round_icon_256</item>
+    <item>@drawable/thailand_flag_round_icon_256</item>
+    <item>@drawable/south_africa_flag_round_icon_256</item>
+  </integer-array>
   <integer-array name="tag_array">
     <item>@drawable/ic_baseline_shopping_cart_24</item>
     <item>@drawable/ic_baseline_restaurant_24</item>
@@ -151,22 +251,20 @@
     <item>@drawable/ic_baseline_hotel_24</item>
     <item>@drawable/ic_baseline_local_movies_24</item>
     <item>@drawable/ic_baseline_music_note_24</item>
-    <item>@drawable/ic_baseline_local_drink_24</item>
     <item>@drawable/ic_baseline_local_gas_station_24</item>
     <item>@drawable/ic_baseline_sports_soccer_24</item>
     <item>@drawable/ic_baseline_cake_24</item>
     <item>@drawable/ic_baseline_menu_book_24</item>
     <item>@drawable/ic_baseline_home_24</item>
-    <item>@drawable/ic_baseline_attach_money_24</item>
+    <item>@drawable/ic_baseline_menu_24</item>
   </integer-array>
   <string-array name="tag_name">
-    <item>食材</item>
+    <item>買い物</item>
     <item>レストラン</item>
     <item>交通費</item>
     <item>ホテル</item>
     <item>映画</item>
     <item>アミューズメント</item>
-    <item>お酒</item>
     <item>ガソリン</item>
     <item>スポーツ</item>
     <item>プレゼント</item>
