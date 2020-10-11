@@ -14,7 +14,7 @@
     android:layout_height="wrap_content"
     android:layout_marginStart="0dp">
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
       android:id="@+id/thumbnail"
       android:layout_width="40dp"
       android:layout_height="40dp"
@@ -25,7 +25,6 @@
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent"
       app:layout_constraintVertical_bias="0.0"
-      app:srcCompat="@drawable/circle_theme_color"
       app:thumbnailGroup="@{groupPropertyResponse}" />
 
     <TextView
