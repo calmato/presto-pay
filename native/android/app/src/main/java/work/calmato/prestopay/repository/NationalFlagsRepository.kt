@@ -18,8 +18,9 @@ class NationalFlagsRepository(private val database:AppDatabase) {
       val countryList = mutableListOf<DatabaseNationalFlag>()
       val imageIds = resources.getIdList(R.array.national_flags_array)
       val countryCodes = resources.getStringArray(R.array.currency_array)
+      val fullNames = resources.getStringArray(R.array.country_names)
       for (i in countryCodes.indices){
-        countryList.add(DatabaseNationalFlag(countryCodes[i],imageIds[i]))
+        countryList.add(DatabaseNationalFlag(countryCodes[i],imageIds[i],fullNames[i]))
       }
       database.nationalFlagDao.insertNationalFlags(*countryList.toTypedArray())
     }

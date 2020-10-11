@@ -327,6 +327,7 @@ class AddExpenseFragment : PermissionBase() {
       adapter = tagRecycleAdapter
     }
     builder?.setView(recycleView)
+      ?.setPositiveButton(resources.getString(R.string.done),null)
     val dialog: AlertDialog? = builder?.create()
     dialog?.show()
   }
@@ -341,7 +342,7 @@ class AddExpenseFragment : PermissionBase() {
     currencyRecycleAdapter.countryList = countryList
     val recycleView = RecyclerView(requireContext())
     recycleView.apply {
-      layoutManager = GridLayoutManager(requireContext(),3)
+      layoutManager = LinearLayoutManager(requireContext())
       adapter = currencyRecycleAdapter
     }
     builder?.setView(recycleView)

@@ -202,7 +202,8 @@ data class Tag(
 @Parcelize
 data class NationalFlag(
   val name:String,
-  val imageId:Int
+  val imageId:Int,
+  val fullName:String
 ) : Parcelable
 
 @Parcelize
