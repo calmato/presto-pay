@@ -77,6 +77,6 @@ jobs:
             --type robo \
             --app app-debug/app-debug.apk \
             --device model=H8416,version=28 \
-            --timeout 10m \
+            --timeout 0m \
             --no-auto-google-login \
             --robo-directives text:loginEmailField=${APP_EMAIL},text:loginPasswordField=${APP_PASSWORD},ignore:thumbnailEdit=,text:searchEdit=keio,text:groupName=GroupTest,text:userName=keio
