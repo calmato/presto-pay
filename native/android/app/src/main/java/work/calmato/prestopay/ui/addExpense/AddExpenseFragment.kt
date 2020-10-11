@@ -2,7 +2,6 @@ package work.calmato.prestopay.ui.addExpense
 
 import android.app.Activity
 import android.app.AlertDialog
-import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.preference.PreferenceManager
@@ -13,7 +12,7 @@ import android.view.*
 import android.widget.*
 import androidx.activity.OnBackPressedCallback
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.*
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -195,12 +194,12 @@ class AddExpenseFragment : PermissionBase() {
   private fun sendRequest() {
     val groupId = groupDetail!!.id
     //TODO: 必要な値はSTEPごとに入力させる
-    val name = if (expenseName.text.isEmpty()) {
+    val name = if (expenseName.text.isNullOrBlank()) {
       "unko"
     } else {
       expenseName.text.toString()
     }
-    val totalString = if (amountEdit.text.isEmpty()){
+    val totalString = if (amountEdit.text.isNullOrBlank()){
       "100.0"
     } else{
       amountEdit.text.toString()
