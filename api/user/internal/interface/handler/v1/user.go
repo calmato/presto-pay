@@ -134,16 +134,17 @@ func (uh *apiV1UserHandler) ShowInternal(ctx *gin.Context) {
 	}
 
 	res := &response.ShowUserInternal{
-		ID:           u.ID,
-		Name:         u.Name,
-		Username:     u.Username,
-		Email:        u.Email,
-		ThumbnailURL: u.ThumbnailURL,
-		GroupIDs:     u.GroupIDs,
-		FriendIDs:    u.FriendIDs,
-		InstanceID:   u.InstanceID,
-		CreatedAt:    u.CreatedAt,
-		UpdatedAt:    u.UpdatedAt,
+		ID:              u.ID,
+		Name:            u.Name,
+		Username:        u.Username,
+		Email:           u.Email,
+		ThumbnailURL:    u.ThumbnailURL,
+		GroupIDs:        u.GroupIDs,
+		HidddenGroupIDs: u.HiddenGroupIds,
+		FriendIDs:       u.FriendIDs,
+		InstanceID:      u.InstanceID,
+		CreatedAt:       u.CreatedAt,
+		UpdatedAt:       u.UpdatedAt,
 	}
 
 	ctx.JSON(http.StatusOK, res)
@@ -158,15 +159,16 @@ func (uh *apiV1UserHandler) ShowProfile(ctx *gin.Context) {
 	}
 
 	res := &response.ShowProfile{
-		ID:           u.ID,
-		Name:         u.Name,
-		Username:     u.Username,
-		Email:        u.Email,
-		ThumbnailURL: u.ThumbnailURL,
-		GroupIDs:     u.GroupIDs,
-		FriendIDs:    u.FriendIDs,
-		CreatedAt:    u.CreatedAt,
-		UpdatedAt:    u.UpdatedAt,
+		ID:              u.ID,
+		Name:            u.Name,
+		Username:        u.Username,
+		Email:           u.Email,
+		ThumbnailURL:    u.ThumbnailURL,
+		GroupIDs:        u.GroupIDs,
+		HidddenGroupIDs: u.HiddenGroupIds,
+		FriendIDs:       u.FriendIDs,
+		CreatedAt:       u.CreatedAt,
+		UpdatedAt:       u.UpdatedAt,
 	}
 
 	ctx.JSON(http.StatusOK, res)
@@ -187,15 +189,16 @@ func (uh *apiV1UserHandler) Create(ctx *gin.Context) {
 	}
 
 	res := &response.CreateUser{
-		ID:           u.ID,
-		Name:         u.Name,
-		Username:     u.Username,
-		Email:        u.Email,
-		ThumbnailURL: u.ThumbnailURL,
-		GroupIDs:     u.GroupIDs,
-		FriendIDs:    u.FriendIDs,
-		CreatedAt:    u.CreatedAt,
-		UpdatedAt:    u.UpdatedAt,
+		ID:              u.ID,
+		Name:            u.Name,
+		Username:        u.Username,
+		Email:           u.Email,
+		ThumbnailURL:    u.ThumbnailURL,
+		GroupIDs:        u.GroupIDs,
+		HidddenGroupIDs: u.HiddenGroupIds,
+		FriendIDs:       u.FriendIDs,
+		CreatedAt:       u.CreatedAt,
+		UpdatedAt:       u.UpdatedAt,
 	}
 
 	ctx.JSON(http.StatusOK, res)
@@ -216,15 +219,16 @@ func (uh *apiV1UserHandler) RegisterInstanceID(ctx *gin.Context) {
 	}
 
 	res := &response.CreateUser{
-		ID:           u.ID,
-		Name:         u.Name,
-		Username:     u.Username,
-		Email:        u.Email,
-		ThumbnailURL: u.ThumbnailURL,
-		GroupIDs:     u.GroupIDs,
-		FriendIDs:    u.FriendIDs,
-		CreatedAt:    u.CreatedAt,
-		UpdatedAt:    u.UpdatedAt,
+		ID:              u.ID,
+		Name:            u.Name,
+		Username:        u.Username,
+		Email:           u.Email,
+		ThumbnailURL:    u.ThumbnailURL,
+		GroupIDs:        u.GroupIDs,
+		HidddenGroupIDs: u.HiddenGroupIds,
+		FriendIDs:       u.FriendIDs,
+		CreatedAt:       u.CreatedAt,
+		UpdatedAt:       u.UpdatedAt,
 	}
 
 	ctx.JSON(http.StatusOK, res)
@@ -245,15 +249,16 @@ func (uh *apiV1UserHandler) UpdateProfile(ctx *gin.Context) {
 	}
 
 	res := &response.UpdateProfile{
-		ID:           u.ID,
-		Name:         u.Name,
-		Username:     u.Username,
-		Email:        u.Email,
-		ThumbnailURL: u.ThumbnailURL,
-		GroupIDs:     u.GroupIDs,
-		FriendIDs:    u.FriendIDs,
-		CreatedAt:    u.CreatedAt,
-		UpdatedAt:    u.UpdatedAt,
+		ID:              u.ID,
+		Name:            u.Name,
+		Username:        u.Username,
+		Email:           u.Email,
+		ThumbnailURL:    u.ThumbnailURL,
+		GroupIDs:        u.GroupIDs,
+		HidddenGroupIDs: u.HiddenGroupIds,
+		FriendIDs:       u.FriendIDs,
+		CreatedAt:       u.CreatedAt,
+		UpdatedAt:       u.UpdatedAt,
 	}
 
 	ctx.JSON(http.StatusOK, res)
@@ -330,15 +335,16 @@ func (uh *apiV1UserHandler) AddGroup(ctx *gin.Context) {
 	}
 
 	res := &response.AddGroup{
-		ID:           u.ID,
-		Name:         u.Name,
-		Username:     u.Username,
-		Email:        u.Email,
-		ThumbnailURL: u.ThumbnailURL,
-		GroupIDs:     u.GroupIDs,
-		FriendIDs:    u.FriendIDs,
-		CreatedAt:    u.CreatedAt,
-		UpdatedAt:    u.UpdatedAt,
+		ID:              u.ID,
+		Name:            u.Name,
+		Username:        u.Username,
+		Email:           u.Email,
+		ThumbnailURL:    u.ThumbnailURL,
+		GroupIDs:        u.GroupIDs,
+		HidddenGroupIDs: u.HiddenGroupIds,
+		FriendIDs:       u.FriendIDs,
+		CreatedAt:       u.CreatedAt,
+		UpdatedAt:       u.UpdatedAt,
 	}
 
 	ctx.JSON(http.StatusOK, res)
@@ -356,15 +362,16 @@ func (uh *apiV1UserHandler) RemoveGroup(ctx *gin.Context) {
 	}
 
 	res := &response.RemoveGroup{
-		ID:           u.ID,
-		Name:         u.Name,
-		Username:     u.Username,
-		Email:        u.Email,
-		ThumbnailURL: u.ThumbnailURL,
-		GroupIDs:     u.GroupIDs,
-		FriendIDs:    u.FriendIDs,
-		CreatedAt:    u.CreatedAt,
-		UpdatedAt:    u.UpdatedAt,
+		ID:              u.ID,
+		Name:            u.Name,
+		Username:        u.Username,
+		Email:           u.Email,
+		ThumbnailURL:    u.ThumbnailURL,
+		GroupIDs:        u.GroupIDs,
+		HidddenGroupIDs: u.HiddenGroupIds,
+		FriendIDs:       u.FriendIDs,
+		CreatedAt:       u.CreatedAt,
+		UpdatedAt:       u.UpdatedAt,
 	}
 
 	ctx.JSON(http.StatusOK, res)
@@ -385,15 +392,16 @@ func (uh *apiV1UserHandler) AddFriend(ctx *gin.Context) {
 	}
 
 	res := &response.AddFriend{
-		ID:           u.ID,
-		Name:         u.Name,
-		Username:     u.Username,
-		Email:        u.Email,
-		ThumbnailURL: u.ThumbnailURL,
-		GroupIDs:     u.GroupIDs,
-		FriendIDs:    u.FriendIDs,
-		CreatedAt:    u.CreatedAt,
-		UpdatedAt:    u.UpdatedAt,
+		ID:              u.ID,
+		Name:            u.Name,
+		Username:        u.Username,
+		Email:           u.Email,
+		ThumbnailURL:    u.ThumbnailURL,
+		GroupIDs:        u.GroupIDs,
+		HidddenGroupIDs: u.HiddenGroupIds,
+		FriendIDs:       u.FriendIDs,
+		CreatedAt:       u.CreatedAt,
+		UpdatedAt:       u.UpdatedAt,
 	}
 
 	ctx.JSON(http.StatusOK, res)
@@ -410,15 +418,16 @@ func (uh *apiV1UserHandler) RemoveFriend(ctx *gin.Context) {
 	}
 
 	res := &response.RemoveFriend{
-		ID:           u.ID,
-		Name:         u.Name,
-		Username:     u.Username,
-		Email:        u.Email,
-		ThumbnailURL: u.ThumbnailURL,
-		GroupIDs:     u.GroupIDs,
-		FriendIDs:    u.FriendIDs,
-		CreatedAt:    u.CreatedAt,
-		UpdatedAt:    u.UpdatedAt,
+		ID:              u.ID,
+		Name:            u.Name,
+		Username:        u.Username,
+		Email:           u.Email,
+		ThumbnailURL:    u.ThumbnailURL,
+		GroupIDs:        u.GroupIDs,
+		HidddenGroupIDs: u.HiddenGroupIds,
+		FriendIDs:       u.FriendIDs,
+		CreatedAt:       u.CreatedAt,
+		UpdatedAt:       u.UpdatedAt,
 	}
 
 	ctx.JSON(http.StatusOK, res)
