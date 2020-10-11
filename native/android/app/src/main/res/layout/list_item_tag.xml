@@ -32,5 +32,14 @@
       app:srcCompat="@drawable/circle_theme_color"
       app:tagImage="@{tag}" />
 
+    <TextView
+      android:id="@+id/tagName"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      app:layout_constraintEnd_toEndOf="@+id/image"
+      app:layout_constraintStart_toStartOf="@+id/image"
+      app:layout_constraintTop_toBottomOf="@+id/image"
+      app:tagName="@{tag}"/>
+
   </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -60,7 +60,8 @@ data class DatabaseTag(
 data class DatabaseNationalFlag(
   @PrimaryKey
   val name:String,
-  val imageId:Int
+  val imageId:Int,
+  val fullName:String
 )
 
 
@@ -120,7 +121,8 @@ fun DatabaseTag.asTagModel():Tag{
 fun DatabaseNationalFlag.asNationalFlagModel():NationalFlag{
   return NationalFlag(
     name = this.name,
-    imageId = this.imageId
+    imageId = this.imageId,
+    fullName = this.fullName
   )
 }
 class ListTypeConverter {

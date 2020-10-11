@@ -142,3 +142,17 @@ fun ImageView.setCountryImage(item:NationalFlag?){
     setImageResource(item.imageId)
   }
 }
+
+@BindingAdapter("countryCode")
+fun TextView.setCountryCode(item:NationalFlag?){
+  item?.let {
+    text = item.name
+  }
+}
+
+@BindingAdapter("countryFullName")
+fun TextView.setCountryFullName(item:NationalFlag?){
+  item?.let{
+    text = item.fullName
+  }
+}

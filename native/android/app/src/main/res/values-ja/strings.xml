@@ -175,17 +175,17 @@
     <item>zar</item>
   </string-array>
   <string-array name="tag_name">
-    <item>食材</item>
+    <item>買い物</item>
     <item>レストラン</item>
     <item>交通費</item>
     <item>ホテル</item>
     <item>映画</item>
     <item>アミューズメント</item>
-    <item>お酒</item>
     <item>ガソリン</item>
     <item>スポーツ</item>
     <item>プレゼント</item>
     <item>雑貨</item>
     <item>家賃</item>
+    <item>その他</item>
   </string-array>
 </resources>
