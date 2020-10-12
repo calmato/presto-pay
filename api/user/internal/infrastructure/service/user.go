@@ -215,6 +215,21 @@ func (us *userService) ContainsGroupID(ctx context.Context, u *user.User, groupI
 	return false, nil
 }
 
+func (us *userService) ContainsHiddenGroupID(ctx context.Context, u *user.User, groupID string) (bool, error) {
+	if u == nil {
+		err := xerrors.New("User is empty")
+		return false, domain.NotFound.New(err)
+	}
+
+	for _, v := range u.HiddenGroupIds {
+		if v == groupID {
+			return true, nil
+		}
+	}
+
+	return false, nil
+}
+
 func (us *userService) ContainsFriendID(ctx context.Context, u *user.User, friendID string) (bool, error) {
 	if u == nil {
 		err := xerrors.New("User is empty")
