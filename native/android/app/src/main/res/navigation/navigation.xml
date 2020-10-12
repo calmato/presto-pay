@@ -161,6 +161,9 @@
     <action
       android:id="@+id/action_groupListFragment_to_home_fragment"
       app:destination="@id/home_fragment" />
+    <action
+      android:id="@+id/action_groupListFragment_to_addPayment"
+      app:destination="@id/addPayment" />
   </fragment>
   <fragment
     android:id="@+id/createGroupFragment"
@@ -259,6 +262,9 @@
     <action
       android:id="@+id/action_groupDetail_to_paymentDetail"
       app:destination="@id/paymentDetail" />
+    <action
+      android:id="@+id/action_groupDetail_to_home_fragment2"
+      app:destination="@id/home_fragment" />
   </fragment>
   <fragment
     android:id="@+id/paymentDetail"
@@ -274,5 +280,18 @@
     <action
       android:id="@+id/action_paymentDetail_self"
       app:destination="@id/paymentDetail" />
+  </fragment>
+  <fragment
+    android:id="@+id/addPayment"
+    android:name="work.calmato.prestopay.ui.addPayment.AddPaymentFragment"
+    android:label="fragment_add_payment"
+    tools:layout="@layout/fragment_add_payment">
+    <argument
+      android:name="group"
+      app:argType="work.calmato.prestopay.network.GroupPropertyResponse"
+      app:nullable="false" />
+    <action
+      android:id="@+id/action_addPayment_to_groupDetail"
+      app:destination="@id/groupDetail" />
   </fragment>
 </navigation>

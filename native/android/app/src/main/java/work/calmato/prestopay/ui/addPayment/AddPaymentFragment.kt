@@ -1,0 +1,75 @@
+package work.calmato.prestopay.ui.addPayment
+
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
+import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
+import kotlinx.android.synthetic.main.fragment_add_payment.*
+import work.calmato.prestopay.R
+import work.calmato.prestopay.databinding.FragmentAddPaymentBindingImpl
+import work.calmato.prestopay.network.GroupPropertyResponse
+import work.calmato.prestopay.network.NationalFlag
+import work.calmato.prestopay.network.NetworkPayer
+import work.calmato.prestopay.util.ViewModelAddPayment
+import java.lang.StringBuilder
+
+class AddPaymentFragment : Fragment() {
+  private lateinit var group: GroupPropertyResponse
+  private val viewModel: ViewModelAddPayment by lazy {
+    ViewModelProvider(this).get(ViewModelAddPayment::class.java)
+  }
+
+  override fun onCreateView(
+    inflater: LayoutInflater,
+    container: ViewGroup?,
+    savedInstanceState: Bundle?
+  ): View? {
+    val binding: FragmentAddPaymentBindingImpl =
+      DataBindingUtil.inflate(inflater, R.layout.fragment_add_payment, container, false)
+    return binding.root
+  }
+
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    super.onViewCreated(view, savedInstanceState)
+    viewModel.groupName.observe(viewLifecycleOwner, Observer<String> {
+      groupName.text = it
+    })
+    viewModel.total.observe(viewLifecycleOwner, Observer<Float> {
+      total.text = it.toString()
+    })
+    viewModel.currency.observe(viewLifecycleOwner, Observer<NationalFlag> {
+      currency.text = it.name
+    })
+    viewModel.paymentName.observe(viewLifecycleOwner, Observer<String> {
+      paymentName.text = it
+    })
+    viewModel.payers.observe(viewLifecycleOwner, Observer<List<NetworkPayer>> { it ->
+      paymentName.text =
+        it.filter { it.amount > 0 }.joinTo(StringBuilder(), separator = ", ") { it.name }
+    })
+    group = AddPaymentFragmentArgs.fromBundle(requireArguments()).group
+    viewModel.setGroupName(group.name)
+
+    requireActivity().onBackPressedDispatcher.addCallback(
+      viewLifecycleOwner,
+      object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+          goBack(group)
+        }
+      }
+    )
+  }
+
+  private fun goBack(group : GroupPropertyResponse){
+    this.viewModelStore.clear()
+    this.findNavController().navigate(
+      AddPaymentFragmentDirections.actionAddPaymentToGroupDetail(group)
+    )
+  }
+}

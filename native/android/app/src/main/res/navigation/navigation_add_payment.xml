@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/navigation_add_payment"
+  xmlns:tools="http://schemas.android.com/tools"
+  app:startDestination="@id/addPaymentStep1">
+  <fragment
+    android:id="@+id/addPaymentStep1"
+    android:name="work.calmato.prestopay.ui.addPayment.AddPaymentStep1Fragment"
+    android:label="fragment_add_payment_step1"
+    tools:layout="@layout/fragment_add_payment_step1">
+  </fragment>
+</navigation>

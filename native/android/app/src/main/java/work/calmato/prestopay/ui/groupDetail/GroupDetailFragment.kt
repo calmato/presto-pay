@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -108,11 +109,24 @@ class GroupDetailFragment : Fragment() {
         GroupDetailFragmentDirections.actionGroupDetailToAddExpenseFragment(groupDetail!!)
       )
     }
+    requireActivity().onBackPressedDispatcher.addCallback(
+      viewLifecycleOwner,
+      object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+          goBackHome()
+        }
+      }
+    )
   }
   private fun navigateToDetail(payment:PaymentPropertyGet){
     this.findNavController().navigate(
       GroupDetailFragmentDirections.actionGroupDetailToPaymentDetail(payment,groupDetail!!)
     )
     viewModel.navigationCompleted()
+  }
+  private fun goBackHome(){
+    this.findNavController().navigate(
+      GroupDetailFragmentDirections.actionGroupDetailToAccountHome()
+    )
   }
 }
