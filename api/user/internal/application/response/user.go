@@ -115,6 +115,34 @@ type RemoveGroup struct {
 	UpdatedAt       time.Time `json:"updatedAt"`
 }
 
+// AddHiddenGroup - 非公開のグループ追加APIのレスポンス
+type AddHiddenGroup struct {
+	ID              string    `json:"id"`
+	Name            string    `json:"name"`
+	Username        string    `json:"username"`
+	Email           string    `json:"email"`
+	ThumbnailURL    string    `json:"thumbnailUrl"`
+	GroupIDs        []string  `json:"groupIds"`
+	HidddenGroupIDs []string  `json:"hiddenGroupIds"`
+	FriendIDs       []string  `json:"friendIds"`
+	CreatedAt       time.Time `json:"createdAt"`
+	UpdatedAt       time.Time `json:"updatedAt"`
+}
+
+// RemoveHiddenGroup - 非公開のグループ削除APIのレスポンス
+type RemoveHiddenGroup struct {
+	ID              string    `json:"id"`
+	Name            string    `json:"name"`
+	Username        string    `json:"username"`
+	Email           string    `json:"email"`
+	ThumbnailURL    string    `json:"thumbnailUrl"`
+	GroupIDs        []string  `json:"groupIds"`
+	HidddenGroupIDs []string  `json:"hiddenGroupIds"`
+	FriendIDs       []string  `json:"friendIds"`
+	CreatedAt       time.Time `json:"createdAt"`
+	UpdatedAt       time.Time `json:"updatedAt"`
+}
+
 // AddFriend - 友達追加APIのレスポンス
 type AddFriend struct {
 	ID              string    `json:"id"`
