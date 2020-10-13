@@ -15,5 +15,6 @@ type UserService interface {
 	UniqueCheckEmail(ctx context.Context, u *User, email string) bool
 	UniqueCheckUsername(ctx context.Context, u *User, username string) bool
 	ContainsGroupID(ctx context.Context, u *User, groupID string) (bool, error)
+	ContainsHiddenGroupID(ctx context.Context, u *User, groupID string) (bool, error)
 	ContainsFriendID(ctx context.Context, u *User, friendID string) (bool, error)
 }
