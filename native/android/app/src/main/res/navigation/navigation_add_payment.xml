@@ -8,5 +8,15 @@
     android:name="work.calmato.prestopay.ui.addPayment.AddPaymentStep1Fragment"
     android:label="fragment_add_payment_step1"
     tools:layout="@layout/fragment_add_payment_step1">
+    <action
+      android:id="@+id/action_addPaymentStep1_to_addPaymentStep2"
+      app:destination="@id/addPaymentStep2" />
+  </fragment>
+
+  <fragment
+    android:id="@+id/addPaymentStep2"
+    android:name="work.calmato.prestopay.ui.addPayment.AddPaymentStep2Fragment"
+    android:label="fragment_add_payment_step2"
+    tools:layout="@layout/fragment_add_payment_step2">
   </fragment>
 </navigation>

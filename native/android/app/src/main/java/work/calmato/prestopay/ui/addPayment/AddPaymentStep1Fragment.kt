@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_add_expense.*
@@ -18,6 +19,7 @@ import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentAddPaymentStep1Binding
 import work.calmato.prestopay.util.AdapterCurrency
 import work.calmato.prestopay.util.ViewModelAddPayment
+import work.calmato.prestopay.util.hideSoftKeyboard
 
 class AddPaymentStep1Fragment: Fragment() {
   private val viewModel: ViewModelAddPayment by lazy {
@@ -41,6 +43,10 @@ class AddPaymentStep1Fragment: Fragment() {
       viewModel.setPaymentName(paymentName.text.toString())
       viewModel.setTotal(amount.text.toString().toFloat())
       viewModel.setCurrency(currency.text.toString())
+      this.findNavController().navigate(
+        AddPaymentStep1FragmentDirections.actionAddPaymentStep1ToAddPaymentStep2()
+      )
+      hideSoftKeyboard(requireActivity())
     }
     currency.setOnClickListener {
       showCurrencyDialog()
