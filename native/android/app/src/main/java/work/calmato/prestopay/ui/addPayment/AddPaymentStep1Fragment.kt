@@ -14,7 +14,7 @@ import work.calmato.prestopay.util.ViewModelAddPayment
 
 class AddPaymentStep1Fragment: Fragment() {
   private val viewModel: ViewModelAddPayment by lazy {
-    ViewModelProvider(AddPaymentFragment()).get(ViewModelAddPayment::class.java)
+    ViewModelProvider(requireParentFragment().requireParentFragment()).get(ViewModelAddPayment::class.java)
   }
 
   override fun onCreateView(
