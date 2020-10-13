@@ -39,7 +39,7 @@
       android:hint="支払い名"
       android:inputType="textPersonName"
       android:textSize="24sp"
-      android:windowSoftInputMode="adjustResize"
+      android:windowSoftInputMode="adjustPan"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/textView15" />
@@ -53,15 +53,15 @@
       android:hint="総額"
       android:inputType="numberDecimal"
       android:textSize="24sp"
-      app:layout_constraintEnd_toStartOf="@+id/textView16"
+      app:layout_constraintEnd_toStartOf="@+id/currency"
       app:layout_constraintStart_toStartOf="@+id/paymentName"
       app:layout_constraintTop_toBottomOf="@+id/paymentName" />
 
     <TextView
-      android:id="@+id/textView16"
+      android:id="@+id/currency"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:text="J"
+      android:text="jpy"
       android:textSize="24sp"
       app:layout_constraintBottom_toBottomOf="@+id/amount"
       app:layout_constraintEnd_toEndOf="@+id/paymentName"

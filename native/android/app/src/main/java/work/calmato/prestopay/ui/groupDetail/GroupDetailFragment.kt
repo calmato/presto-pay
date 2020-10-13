@@ -126,7 +126,7 @@ class GroupDetailFragment : Fragment() {
   }
   private fun goBackHome(){
     this.findNavController().navigate(
-      GroupDetailFragmentDirections.actionGroupDetailToAccountHome()
+      GroupDetailFragmentDirections.actionGroupDetailToHomeFragment()
     )
   }
 }
