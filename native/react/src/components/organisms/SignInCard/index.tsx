@@ -1,35 +1,13 @@
 import { useNavigation } from "@react-navigation/native";
 import React from "react";
-import { StyleSheet, Text, TouchableOpacity } from "react-native";
 import { Card } from "react-native-elements";
 
-import { Button, Icon } from "~/components/atoms";
-import { SignInForm } from "~/components/molecules";
+import { SignInForm, SignInLink, SignInSocialButton } from "~/components/molecules";
 import { SIGN_UP, PASSWORD_RESET } from "~/constants/path";
 import { COLOR } from "~/constants/theme";
 import { UiContext } from "~/contexts";
 import { Status } from "~/contexts/ui";
 import { useControlledComponent } from "~/lib/hooks";
-
-const styles = StyleSheet.create({
-  icon: {
-    fontSize: 22,
-    marginRight: 10,
-  },
-  button: {
-    margin: 10,
-  },
-  link: {
-    padding: 10,
-    textAlign: "center",
-    textDecorationLine: "underline",
-    color: COLOR.PRIMARY,
-  },
-});
-
-const icon = (name: string): JSX.Element => {
-  return <Icon name={name} style={styles.icon} />;
-};
 
 interface Props {
   actions: {
@@ -57,37 +35,35 @@ export default function SignInCard(props: Props) {
   return (
     <Card>
       <SignInForm formData={{ email, password }} actions={{ handleSignIn: handleSignInWithPassword }} />
-      <TouchableOpacity onPress={() => navigation.navigate(PASSWORD_RESET)}>
-        <Text style={styles.link}>パスワードを忘れた方</Text>
-      </TouchableOpacity>
+      <SignInLink
+        text="パスワードを忘れた方"
+        color={COLOR.PRIMARY}
+        onPress={() => navigation.navigate(PASSWORD_RESET)}
+      />
       <Card.Divider />
-      <Button
-        icon={icon("logo-google")}
-        onPress={() => console.log("click", "google")}
+      <SignInSocialButton
         title="Googleでサインイン"
         titleColor={COLOR.DARK}
-        style={styles.button}
-        type="outline"
+        icon="logo-google"
+        onPress={() => console.log("click", "google")}
       />
-      <Button
-        icon={icon("logo-twitter")}
-        onPress={() => console.log("click", "twitter")}
+      <SignInSocialButton
         title="Twitterでサインイン"
         titleColor={COLOR.DARK}
-        style={styles.button}
-        type="outline"
+        icon="logo-twitter"
+        onPress={() => console.log("click", "twitter")}
       />
-      <Button
-        icon={icon("logo-facebook")}
-        onPress={() => console.log("click", "facebook")}
+      <SignInSocialButton
         title="Facebookでサインイン"
         titleColor={COLOR.DARK}
-        style={styles.button}
-        type="outline"
+        icon="logo-facebook"
+        onPress={() => console.log("click", "facebook")}
       />
-      <TouchableOpacity onPress={() => navigation.navigate(SIGN_UP)}>
-        <Text style={styles.link}>アカウントをお持ちでない方</Text>
-      </TouchableOpacity>
+      <SignInLink
+        text="アカウントをお持ちでない方"
+        color={COLOR.PRIMARY}
+        onPress={() => navigation.navigate(SIGN_UP)}
+      />
     </Card>
   );
 }
