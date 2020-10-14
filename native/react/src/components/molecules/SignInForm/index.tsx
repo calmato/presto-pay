@@ -28,7 +28,12 @@ export default function SignInForm(props: Props) {
   return (
     <>
       <TextField placeholder="Email" value={email.value} onChangeText={email.onChangeText} />
-      <TextField placeholder="Password" value={password.value} onChangeText={password.onChangeText} secureTextEntry={true} />
+      <TextField
+        placeholder="Password"
+        value={password.value}
+        onChangeText={password.onChangeText}
+        secureTextEntry={true}
+      />
       <Button
         onPress={handleSignIn}
         title="ログイン"

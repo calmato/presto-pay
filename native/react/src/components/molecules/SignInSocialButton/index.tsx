@@ -22,7 +22,7 @@ interface Props {
 
 const SocialIcon = (name: string): JSX.Element => {
   return <Icon name={name} style={styles.icon} />;
-}
+};
 
 export default function SignInSocialButton(props: Props) {
   const { title, titleColor, icon, onPress } = props;
