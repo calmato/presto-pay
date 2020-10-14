@@ -1,8 +1,9 @@
+import React from "react";
 import { StyleSheet } from "react-native";
 
 import { Button, TextField } from "~/components/atoms";
 import { COLOR } from "~/constants/theme";
-import { Form, useControlledComponent } from "~/lib/hooks";
+import { Form } from "~/lib/hooks";
 
 const styles = StyleSheet.create({
   button: {
@@ -38,10 +39,3 @@ export default function SignInForm(props: Props) {
     </>
   );
 }
-
-SignInForm.defaultProps = {
-  formData: {
-    email: useControlledComponent(""),
-    password: useControlledComponent(""),
-  },
-};

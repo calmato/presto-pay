@@ -3,7 +3,8 @@ import React from "react";
 import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import { Card } from "react-native-elements";
 
-import { Button, Icon, TextField } from "~/components/atoms";
+import { Button, Icon } from "~/components/atoms";
+import { SignInForm } from "~/components/molecules";
 import { SIGN_UP, PASSWORD_RESET } from "~/constants/path";
 import { COLOR } from "~/constants/theme";
 import { UiContext } from "~/contexts";
@@ -69,20 +70,7 @@ export default function SignIn(props: Props) {
     <View style={styles.container}>
       <Text style={styles.title}>Presto Pay</Text>
       <Card>
-        <TextField placeholder="Email" value={email.value} onChangeText={email.onChangeText} />
-        <TextField
-          placeholder="Password"
-          secureTextEntry={true}
-          value={password.value}
-          onChangeText={password.onChangeText}
-        />
-        <Button
-          onPress={handleSignInWithPassword}
-          title="ログイン"
-          titleColor={COLOR.MAIN}
-          style={styles.button}
-          backgroundColor={COLOR.PRIMARY}
-        />
+        <SignInForm formData={{ email, password }} actions={{ handleSignIn: handleSignInWithPassword }} />
         <TouchableOpacity onPress={() => navigation.navigate(PASSWORD_RESET)}>
           <Text style={styles.link}>パスワードを忘れた方</Text>
         </TouchableOpacity>
