@@ -3,8 +3,7 @@ import React from "react";
 import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import { Card } from "react-native-elements";
 
-import { Button, TextField } from "~/components/atoms";
-import Icon from "~/components/atoms/Icon";
+import { Button, Icon, TextField } from "~/components/atoms";
 import { SIGN_UP, PASSWORD_RESET } from "~/constants/path";
 import { COLOR } from "~/constants/theme";
 import { UiContext } from "~/contexts";
