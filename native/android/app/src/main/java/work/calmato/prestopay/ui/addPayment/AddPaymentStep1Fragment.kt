@@ -13,7 +13,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.fragment_add_expense.*
 import kotlinx.android.synthetic.main.fragment_add_payment_step1.*
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentAddPaymentStep1Binding
@@ -39,7 +38,7 @@ class AddPaymentStep1Fragment: Fragment() {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     viewModel.getCountryList()
-    buttonStep1.setOnClickListener {
+    buttonStep2.setOnClickListener {
       viewModel.setPaymentName(paymentName.text.toString())
       viewModel.setTotal(amount.text.toString().toFloat())
       viewModel.setCurrency(currency.text.toString())

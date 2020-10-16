@@ -7,6 +7,36 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+    <Button
+      android:id="@+id/buttonStep3"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="16dp"
+      android:layout_marginBottom="8dp"
+      android:backgroundTint="#000000"
+      android:text="Back"
+      android:textColor="@color/cardview_light_background"
+      android:textSize="18sp"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/recyclerView"
+      app:layout_constraintVertical_bias="1.0" />
+
+    <Button
+      android:id="@+id/buttonStep"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginEnd="8dp"
+      android:layout_marginBottom="8dp"
+      android:backgroundTint="#000000"
+      android:text="金額詳細入力"
+      android:textColor="@color/cardview_light_background"
+      android:textSize="18sp"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toStartOf="@+id/buttonStep2"
+      app:layout_constraintTop_toBottomOf="@+id/recyclerView"
+      app:layout_constraintVertical_bias="1.0" />
+
     <TextView
       android:id="@+id/textView12"
       android:layout_width="wrap_content"
@@ -29,11 +59,11 @@
       app:layout_constraintTop_toBottomOf="@+id/textView12" />
 
     <Button
-      android:id="@+id/buttonStep1"
+      android:id="@+id/buttonStep2"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginEnd="16dp"
-      android:layout_marginBottom="16dp"
+      android:layout_marginBottom="8dp"
       android:backgroundTint="#000000"
       android:text="Next"
       android:textColor="@color/cardview_light_background"
@@ -52,5 +82,6 @@
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/textView15" />
+
   </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

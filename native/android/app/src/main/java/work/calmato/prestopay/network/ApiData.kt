@@ -222,3 +222,11 @@ data class PaymentCompleteResponse(
   val updatedAt: String
 ) : Parcelable {}
 
+@Parcelize
+data class PayerAddPayment(
+  val id: String,
+  val name:String,
+  val thumbnail: String,
+  var amount: Float,
+  var isPaid: Boolean
+) : Parcelable

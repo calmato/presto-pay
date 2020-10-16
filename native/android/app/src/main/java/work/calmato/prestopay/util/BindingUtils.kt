@@ -6,11 +6,13 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.BindingAdapter
 import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.list_item_add_payment_check.view.*
 import work.calmato.prestopay.R
 import work.calmato.prestopay.database.getAppDatabase
 import work.calmato.prestopay.network.*
 import work.calmato.prestopay.repository.TagRepository
 import kotlin.concurrent.thread
+import kotlin.math.roundToInt
 
 @BindingAdapter("thumbnail")
 fun ImageView.setThumbnail(item:UserProperty?){
@@ -154,5 +156,35 @@ fun TextView.setCountryCode(item:NationalFlag?){
 fun TextView.setCountryFullName(item:NationalFlag?){
   item?.let{
     text = item.fullName
+  }
+}
+
+@BindingAdapter("addPaymentUserName")
+fun TextView.setAddPaymentUserName(item:PayerAddPayment?){
+  item?.let {
+    text = item.name
+  }
+}
+
+@BindingAdapter("addPaymentThumbnail")
+fun ImageView.setAddPaymentThumbnail(item:PayerAddPayment?){
+  item?.thumbnail?.let{
+    if(it.isNotEmpty()){
+      Picasso.with(context).load(it).into(this)
+    }
+  }
+}
+
+@BindingAdapter("addPaymentAmount")
+fun TextView.setAddPaymentAmount(item:PayerAddPayment?){
+  item?.let {
+    text = ((item.amount * 100).roundToInt().toFloat() / 100).toString()
+  }
+}
+
+@BindingAdapter("addPaymentCheckBox")
+fun CheckBox.setAddPaymentAmount(item:PayerAddPayment?){
+  item?.let {
+    isChecked = it.isPaid
   }
 }

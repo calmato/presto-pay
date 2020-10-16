@@ -2,6 +2,7 @@ package work.calmato.prestopay.ui.addPayment
 
 import android.app.AlertDialog
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -30,7 +31,6 @@ import work.calmato.prestopay.util.ViewModelAddPayment
 import java.lang.StringBuilder
 
 class AddPaymentFragment : Fragment() {
-  private lateinit var group: GroupPropertyResponse
   private val viewModel: ViewModelAddPayment by lazy {
     ViewModelProvider(this).get(ViewModelAddPayment::class.java)
   }
@@ -47,6 +47,10 @@ class AddPaymentFragment : Fragment() {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
+    viewModel.setGroupInfo(AddPaymentFragmentArgs.fromBundle(requireArguments()).group)
+    val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
+    viewModel.setId(sharedPreferences.getString("token", "")!!)
+    viewModel.getGroupDetail()
     viewModel.groupName.observe(viewLifecycleOwner, Observer<String> {
       groupName.text = it
     })
@@ -63,14 +67,13 @@ class AddPaymentFragment : Fragment() {
       paymentName.text =
         it.filter { it.amount > 0 }.joinTo(StringBuilder(), separator = ", ") { it.name }
     })
-    group = AddPaymentFragmentArgs.fromBundle(requireArguments()).group
-    viewModel.setGroupName(group.name)
+
 
     requireActivity().onBackPressedDispatcher.addCallback(
       viewLifecycleOwner,
       object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
-          goBack(group)
+          goBack(viewModel.groupInfo)
         }
       }
     )

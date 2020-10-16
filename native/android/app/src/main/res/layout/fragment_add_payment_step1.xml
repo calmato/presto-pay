@@ -68,7 +68,7 @@
       app:layout_constraintTop_toTopOf="@+id/amount" />
 
     <Button
-      android:id="@+id/buttonStep1"
+      android:id="@+id/buttonStep2"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginTop="8dp"

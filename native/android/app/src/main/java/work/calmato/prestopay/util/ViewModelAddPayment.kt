@@ -1,14 +1,19 @@
 package work.calmato.prestopay.util
 
 import android.app.Application
+import android.preference.PreferenceManager
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import work.calmato.prestopay.database.getAppDatabase
-import work.calmato.prestopay.network.NationalFlag
-import work.calmato.prestopay.network.NetworkPayer
+import work.calmato.prestopay.network.*
 import work.calmato.prestopay.repository.NationalFlagsRepository
+import kotlin.coroutines.coroutineContext
 
 class ViewModelAddPayment(application: Application): AndroidViewModel(application) {
   private val _groupName = MutableLiveData<String>()
@@ -31,13 +36,22 @@ class ViewModelAddPayment(application: Application): AndroidViewModel(applicatio
   val payers : LiveData<List<NetworkPayer>>
     get() = _payers
 
+  private val _payersAddPayment = MutableLiveData<List<PayerAddPayment>>()
+  val payersAddPayment: LiveData<List<PayerAddPayment>>
+    get() = _payersAddPayment
+
   private val _navigateToPaymentComfirmation = MutableLiveData<Boolean>()
   val navigateToPaymentComfirmation: LiveData<Boolean>
     get() = _navigateToPaymentComfirmation
 
-  private var viewModelJob = SupervisorJob()
-  private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
+  private val _itemClicked = MutableLiveData<PayerAddPayment>()
+  val itemClicked: LiveData<PayerAddPayment>
+    get() = _itemClicked
+
   lateinit var countryList: List<NationalFlag>
+  lateinit var groupDetail: GetGroupDetail
+  private lateinit var id:String
+  lateinit var groupInfo: GroupPropertyResponse
 
   fun setGroupName(name:String){
     _groupName.value = name
@@ -54,9 +68,45 @@ class ViewModelAddPayment(application: Application): AndroidViewModel(applicatio
   fun setCurrency(currency: String){
     _currency.value = currency
   }
+
+  fun itemIsClicked(payerAddPayment: PayerAddPayment) {
+    _itemClicked.value = payerAddPayment
+  }
+
+  fun setPayersAddPayment(payers: List<UserProperty>){
+    _payersAddPayment.value = payers.map {
+      PayerAddPayment(
+        it.id,it.name,it.thumbnailUrl!!,0f,false
+      )
+    }
+  }
+
   fun getCountryList(){
     CoroutineScope(Dispatchers.IO).launch {
       countryList = NationalFlagsRepository(getAppDatabase(getApplication())).nationalFlags
     }
+  }
+  fun getGroupDetail(){
+    CoroutineScope(Dispatchers.IO).launch {
+      Api.retrofitService.getGroupDetail("Bearer $id", groupInfo.id)
+        .enqueue(object : Callback<GetGroupDetail> {
+          override fun onResponse(call: Call<GetGroupDetail>, response: Response<GetGroupDetail>) {
+            groupDetail = response.body()!!
+            setPayersAddPayment(groupDetail.users)
+          }
+
+          override fun onFailure(call: Call<GetGroupDetail>, t: Throwable) {
+            Log.d("ViewModelAddPayment", t.message)
+          }
+        })
+    }
+  }
+  fun setId(idInput:String){
+    id = idInput
+  }
+  @JvmName("setGroupInfo1")
+  fun setGroupInfo(groupInfoInput:GroupPropertyResponse){
+    groupInfo = groupInfoInput
+    setGroupName(groupInfo.name)
   }
 }
