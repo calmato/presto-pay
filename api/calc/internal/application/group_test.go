@@ -44,13 +44,13 @@ func TestGroupApplication_Index(t *testing.T) {
 		usm.EXPECT().Authentication(ctx).Return(u, nil)
 
 		gsm := mock_group.NewMockGroupService(ctrl)
-		gsm.EXPECT().Index(ctx, u).Return(testCase.Expected, nil)
+		gsm.EXPECT().Index(ctx, u).Return(testCase.Expected, nil, nil)
 
 		// Start test
 		t.Run(result, func(t *testing.T) {
 			target := NewGroupApplication(grvm, usm, gsm)
 
-			got, err := target.Index(ctx)
+			got, _, err := target.Index(ctx)
 			if err != nil {
 				t.Fatalf("error: %v", err)
 				return
