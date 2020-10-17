@@ -298,14 +298,3 @@ func containsHiddenGroupIDs(u *user.User, groupID string) bool {
 
 	return false
 }
-
-func remove(gs []*group.Group, groupID string) []*group.Group {
-	groups := []*group.Group{}
-	for _, g := range gs {
-		if g.ID != groupID {
-			groups = append(groups, g)
-		}
-	}
-
-	return groups
-}
