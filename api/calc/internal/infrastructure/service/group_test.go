@@ -61,7 +61,7 @@ func TestGroupService_Index(t *testing.T) {
 		t.Run(result, func(t *testing.T) {
 			target := NewGroupService(gdvm, grm, gum, acm)
 
-			got, err := target.Index(ctx, testCase.User)
+			got, _, err := target.Index(ctx, testCase.User)
 			if err != nil {
 				t.Fatalf("error: %v", err)
 				return
