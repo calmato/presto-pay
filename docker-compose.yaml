@@ -65,7 +65,7 @@ services:
   redis:
     container_name: presto_pay_redis
     build:
-      context: ./infra/docker/redi
+      context: ./infra/docker/redis
     networks:
       - api
 
