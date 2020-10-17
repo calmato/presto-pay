@@ -1,8 +1,10 @@
 import { useNavigation } from "@react-navigation/native";
 import React from "react";
+import { StyleSheet, TextStyle } from "react-native";
 import { Card } from "react-native-elements";
 
-import { SignInForm, SignInLink, SignInSocialButton } from "~/components/molecules";
+import { Link } from "~/components/atoms";
+import { SignInForm, SignInSocialButton } from "~/components/molecules";
 import { SIGN_UP, PASSWORD_RESET } from "~/constants/path";
 import { COLOR } from "~/constants/theme";
 import { UiContext } from "~/contexts";
@@ -15,6 +17,17 @@ interface Props {
     showAuthUser: () => Promise<void>;
   };
 }
+
+interface Style {
+  link: TextStyle;
+}
+
+const styles = StyleSheet.create<Style>({
+  link: {
+    padding: 20,
+    textAlign: "center",
+  },
+});
 
 export default function SignInCard(props: Props) {
   const navigation = useNavigation();
@@ -35,9 +48,9 @@ export default function SignInCard(props: Props) {
   return (
     <Card>
       <SignInForm formData={{ email, password }} actions={{ handleSignIn: handleSignInWithPassword }} />
-      <SignInLink
+      <Link
         text="パスワードを忘れた方"
-        color={COLOR.PRIMARY}
+        style={styles.link}
         onPress={() => navigation.navigate(PASSWORD_RESET)}
       />
       <Card.Divider />
@@ -59,9 +72,9 @@ export default function SignInCard(props: Props) {
         icon="logo-facebook"
         onPress={() => console.log("click", "facebook")}
       />
-      <SignInLink
+      <Link
         text="アカウントをお持ちでない方"
-        color={COLOR.PRIMARY}
+        style={styles.link}
         onPress={() => navigation.navigate(SIGN_UP)}
       />
     </Card>
