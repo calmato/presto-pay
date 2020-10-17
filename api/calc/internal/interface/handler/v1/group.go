@@ -58,7 +58,7 @@ func (gh *apiV1GroupHandler) Index(ctx *gin.Context) {
 	}
 
 	ghrs := make([]*response.IndexGroup, len(ghs))
-	for i, g := range gs {
+	for i, g := range ghs {
 		gr := &response.IndexGroup{
 			ID:           g.ID,
 			Name:         g.Name,

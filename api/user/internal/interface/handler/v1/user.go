@@ -409,7 +409,7 @@ func (uh *apiV1UserHandler) RemoveHiddenGroup(ctx *gin.Context) {
 	groupID := ctx.Params.ByName("groupID")
 
 	c := middleware.GinContextToContext(ctx)
-	u, err := uh.userApplication.AddHiddenGroup(c, groupID)
+	u, err := uh.userApplication.RemoveHiddenGroup(c, groupID)
 	if err != nil {
 		handler.ErrorHandling(ctx, err)
 		return
