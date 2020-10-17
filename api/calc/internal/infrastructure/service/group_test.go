@@ -50,7 +50,7 @@ func TestGroupService_Index(t *testing.T) {
 
 		grm := mock_group.NewMockGroupRepository(ctrl)
 		for i, groupID := range testCase.User.GroupIDs {
-			grm.EXPECT().Show(ctx, groupID).Return(testCase.Expected[i], nil)
+			grm.EXPECT().Show(ctx, groupID).Return(testCase.Expected[i], nil, nil)
 		}
 
 		gum := mock_group.NewMockGroupUploader(ctrl)
