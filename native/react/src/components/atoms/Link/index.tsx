@@ -32,4 +32,4 @@ export default function Link(props: Props) {
 
 Link.defaultProps = {
   color: COLOR.PRIMARY,
-}
+};

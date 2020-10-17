@@ -48,11 +48,7 @@ export default function SignInCard(props: Props) {
   return (
     <Card>
       <SignInForm formData={{ email, password }} actions={{ handleSignIn: handleSignInWithPassword }} />
-      <Link
-        text="パスワードを忘れた方"
-        style={styles.link}
-        onPress={() => navigation.navigate(PASSWORD_RESET)}
-      />
+      <Link text="パスワードを忘れた方" style={styles.link} onPress={() => navigation.navigate(PASSWORD_RESET)} />
       <Card.Divider />
       <SignInSocialButton
         title="Googleでサインイン"
@@ -72,11 +68,7 @@ export default function SignInCard(props: Props) {
         icon="logo-facebook"
         onPress={() => console.log("click", "facebook")}
       />
-      <Link
-        text="アカウントをお持ちでない方"
-        style={styles.link}
-        onPress={() => navigation.navigate(SIGN_UP)}
-      />
+      <Link text="アカウントをお持ちでない方" style={styles.link} onPress={() => navigation.navigate(SIGN_UP)} />
     </Card>
   );
 }
