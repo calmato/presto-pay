@@ -92,7 +92,7 @@ paths:
           description: グループID
       responses:
         '200':
-          $ref: '#/components/responses/AddGroup'
+          $ref: '#/components/responses/ShowGroup'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -115,7 +115,7 @@ paths:
           description: グループID
       responses:
         '200':
-          $ref: '#/components/responses/RemoveGroup'
+          $ref: '#/components/responses/ShowGroup'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
