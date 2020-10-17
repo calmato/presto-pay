@@ -36,12 +36,13 @@ func (m *MockGroupService) EXPECT() *MockGroupServiceMockRecorder {
 }
 
 // Index mocks base method
-func (m *MockGroupService) Index(ctx context.Context, u *user.User) ([]*group.Group, error) {
+func (m *MockGroupService) Index(ctx context.Context, u *user.User) ([]*group.Group, []*group.Group, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Index", ctx, u)
 	ret0, _ := ret[0].([]*group.Group)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
+	ret1, _ := ret[1].([]*group.Group)
+	ret2, _ := ret[2].(error)
+	return ret0, ret1, ret2
 }
 
 // Index indicates an expected call of Index

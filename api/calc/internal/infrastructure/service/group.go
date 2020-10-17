@@ -33,19 +33,25 @@ func NewGroupService(
 	}
 }
 
-func (gs *groupService) Index(ctx context.Context, u *user.User) ([]*group.Group, error) {
-	groups := make([]*group.Group, len(u.GroupIDs))
+func (gs *groupService) Index(ctx context.Context, u *user.User) ([]*group.Group, []*group.Group, error) {
+	groups := make([]*group.Group, 0)
+	hiddenGroups := make([]*group.Group, 0)
 
-	for i, groupID := range u.GroupIDs {
+	for _, groupID := range u.GroupIDs {
 		g, err := gs.groupRepository.Show(ctx, groupID)
 		if err != nil {
-			return nil, domain.ErrorInDatastore.New(err)
+			return nil, nil, domain.ErrorInDatastore.New(err)
 		}
 
-		groups[i] = g
+		// 非公開グループ設定がされている場合、groupsから削除
+		if containsHiddenGroupIDs(u, g.ID) {
+			hiddenGroups = append(hiddenGroups, g)
+		} else {
+			groups = append(groups, g)
+		}
 	}
 
-	return groups, nil
+	return groups, hiddenGroups, nil
 }
 
 func (gs *groupService) Show(ctx context.Context, groupID string) (*group.Group, error) {
@@ -272,6 +278,20 @@ func containsUserID(userIDs []string, userID string) bool {
 
 	for _, v := range userIDs {
 		if v == userID {
+			return true
+		}
+	}
+
+	return false
+}
+
+func containsHiddenGroupIDs(u *user.User, groupID string) bool {
+	if u == nil {
+		return false
+	}
+
+	for _, hiddenGroupID := range u.HiddenGroupIDs {
+		if hiddenGroupID == groupID {
 			return true
 		}
 	}

@@ -294,7 +294,7 @@ func (ua *userApplication) AddHiddenGroup(ctx context.Context, groupID string) (
 		return nil, domain.AlreadyExistsInDatastore.New(err)
 	}
 
-	u.HiddenGroupIds = append(u.HiddenGroupIds, groupID)
+	u.HiddenGroupIDs = append(u.HiddenGroupIDs, groupID)
 
 	if _, err := ua.userService.Update(ctx, u); err != nil {
 		return nil, err
@@ -319,7 +319,7 @@ func (ua *userApplication) RemoveHiddenGroup(ctx context.Context, groupID string
 		return nil, domain.NotFound.New(err)
 	}
 
-	u.HiddenGroupIds = common.RemoveString(u.HiddenGroupIds, groupID)
+	u.HiddenGroupIDs = common.RemoveString(u.HiddenGroupIDs, groupID)
 
 	if _, err := ua.userService.Update(ctx, u); err != nil {
 		return nil, err

@@ -15,7 +15,7 @@ import (
 
 // GroupApplication - GroupApplicationインターフェース
 type GroupApplication interface {
-	Index(ctx context.Context) ([]*group.Group, error)
+	Index(ctx context.Context) ([]*group.Group, []*group.Group, error)
 	Show(ctx context.Context, groupID string) (*group.Group, error)
 	Create(ctx context.Context, req *request.CreateGroup) (*group.Group, error)
 	Update(ctx context.Context, req *request.UpdateGroup, groupID string) (*group.Group, error)
@@ -41,18 +41,18 @@ func NewGroupApplication(
 	}
 }
 
-func (ga *groupApplication) Index(ctx context.Context) ([]*group.Group, error) {
+func (ga *groupApplication) Index(ctx context.Context) ([]*group.Group, []*group.Group, error) {
 	u, err := ga.userService.Authentication(ctx)
 	if err != nil {
-		return nil, domain.Unauthorized.New(err)
+		return nil, nil, domain.Unauthorized.New(err)
 	}
 
-	gs, err := ga.groupService.Index(ctx, u)
+	gs, hgs, err := ga.groupService.Index(ctx, u)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
-	return gs, nil
+	return gs, hgs, nil
 }
 
 func (ga *groupApplication) Show(ctx context.Context, groupID string) (*group.Group, error) {
