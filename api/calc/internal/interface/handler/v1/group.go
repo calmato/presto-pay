@@ -37,16 +37,13 @@ func NewAPIV1GroupHandler(ga application.GroupApplication) APIV1GroupHandler {
 
 func (gh *apiV1GroupHandler) Index(ctx *gin.Context) {
 	c := middleware.GinContextToContext(ctx)
-	gs, err := gh.groupApplication.Index(c)
+	gs, ghs, err := gh.groupApplication.Index(c)
 	if err != nil {
 		handler.ErrorHandling(ctx, err)
 		return
 	}
 
-	res := &response.IndexGroups{
-		Groups: make([]*response.IndexGroup, len(gs)),
-	}
-
+	grs := make([]*response.IndexGroup, len(gs))
 	for i, g := range gs {
 		gr := &response.IndexGroup{
 			ID:           g.ID,
@@ -57,7 +54,26 @@ func (gh *apiV1GroupHandler) Index(ctx *gin.Context) {
 			UpdatedAt:    g.UpdatedAt,
 		}
 
-		res.Groups[i] = gr
+		grs[i] = gr
+	}
+
+	ghrs := make([]*response.IndexGroup, len(ghs))
+	for i, g := range gs {
+		gr := &response.IndexGroup{
+			ID:           g.ID,
+			Name:         g.Name,
+			ThumbnailURL: g.ThumbnailURL,
+			UserIDs:      g.UserIDs,
+			CreatedAt:    g.CreatedAt,
+			UpdatedAt:    g.UpdatedAt,
+		}
+
+		ghrs[i] = gr
+	}
+
+	res := &response.IndexGroups{
+		Groups:       grs,
+		HiddenGroups: ghrs,
 	}
 
 	ctx.JSON(http.StatusOK, res)
