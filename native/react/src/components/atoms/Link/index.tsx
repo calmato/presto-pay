@@ -1,13 +1,7 @@
 import React from "react";
-import { StyleSheet, Text, TextStyle, TouchableOpacity, ViewStyle } from "react-native";
+import { StyleSheet, Text, TextStyle, TouchableOpacity } from "react-native";
 
 import { COLOR } from "~/constants/theme";
-
-const styles = StyleSheet.create({
-  link: {
-    textDecorationLine: "underline",
-  },
-});
 
 interface Props {
   text: string;
@@ -15,6 +9,16 @@ interface Props {
   style?: TextStyle;
   onPress: () => void;
 }
+
+interface Style {
+  link: TextStyle;
+}
+
+const styles = StyleSheet.create<Style>({
+  link: {
+    textDecorationLine: "underline",
+  },
+});
 
 export default function Link(props: Props) {
   const { text, color, style, onPress } = props;

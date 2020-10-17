@@ -1,15 +1,9 @@
 import React from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, ViewStyle } from "react-native";
 
 import { Button, TextField } from "~/components/atoms";
 import { COLOR } from "~/constants/theme";
 import { Form } from "~/lib/hooks";
-
-const styles = StyleSheet.create({
-  button: {
-    margin: 10,
-  },
-});
 
 interface Props {
   formData: {
@@ -20,6 +14,16 @@ interface Props {
     handleSignIn: () => void;
   };
 }
+
+interface Style {
+  button: ViewStyle;
+}
+
+const styles = StyleSheet.create<Style>({
+  button: {
+    margin: 10,
+  },
+});
 
 export default function SignInForm(props: Props) {
   const { email, password } = props.formData;

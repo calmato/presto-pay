@@ -1,17 +1,7 @@
 import React from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, TextStyle, ViewStyle } from "react-native";
 
 import { Button, Icon } from "~/components/atoms";
-
-const styles = StyleSheet.create({
-  icon: {
-    fontSize: 22,
-    marginRight: 10,
-  },
-  button: {
-    margin: 10,
-  },
-});
 
 interface Props {
   title: string;
@@ -19,6 +9,21 @@ interface Props {
   icon: string;
   onPress: () => void;
 }
+
+interface Style {
+  button: ViewStyle;
+  icon: TextStyle;
+}
+
+const styles = StyleSheet.create<Style>({
+  button: {
+    margin: 10,
+  },
+  icon: {
+    fontSize: 22,
+    marginRight: 10,
+  },
+});
 
 const SocialIcon = (name: string): JSX.Element => {
   return <Icon name={name} style={styles.icon} />;
@@ -29,12 +34,12 @@ export default function SignInSocialButton(props: Props) {
 
   return (
     <Button
-      icon={SocialIcon(icon)}
-      onPress={onPress}
       title={title}
       titleColor={titleColor}
-      style={styles.button}
       type="outline"
+      style={styles.button}
+      icon={SocialIcon(icon)}
+      onPress={onPress}
     />
   );
 }

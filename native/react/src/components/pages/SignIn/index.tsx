@@ -1,10 +1,22 @@
 import React from "react";
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet, View, Text, ViewStyle, TextStyle } from "react-native";
 
 import { SignInCard } from "~/components/organisms";
 import { COLOR } from "~/constants/theme";
 
-const styles = StyleSheet.create({
+interface Props {
+  actions: {
+    signInWithPassword: (email: string, password: string) => Promise<void>;
+    showAuthUser: () => Promise<void>;
+  };
+}
+
+interface Style {
+  container: ViewStyle;
+  title: TextStyle;
+}
+
+const styles = StyleSheet.create<Style>({
   container: {
     flex: 1,
     justifyContent: "center",
@@ -17,13 +29,6 @@ const styles = StyleSheet.create({
     color: COLOR.MAIN,
   },
 });
-
-interface Props {
-  actions: {
-    signInWithPassword: (email: string, password: string) => Promise<void>;
-    showAuthUser: () => Promise<void>;
-  };
-}
 
 export default function SignIn(props: Props) {
   const { signInWithPassword, showAuthUser } = props.actions;
