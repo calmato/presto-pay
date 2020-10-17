@@ -37,13 +37,11 @@ func (gs *groupService) Index(ctx context.Context, u *user.User) ([]*group.Group
 	groups := make([]*group.Group, 0)
 	hiddenGroups := make([]*group.Group, 0)
 
-	for i, groupID := range u.GroupIDs {
+	for _, groupID := range u.GroupIDs {
 		g, err := gs.groupRepository.Show(ctx, groupID)
 		if err != nil {
 			return nil, nil, domain.ErrorInDatastore.New(err)
 		}
-
-		groups[i] = g
 
 		// 非公開グループ設定がされている場合、groupsから削除
 		if containsHiddenGroupIDs(u, g.ID) {
