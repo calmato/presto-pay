@@ -139,7 +139,8 @@
   <string name="paymentCompleteSetting">精算完了設定</string>
   <string name="messagePaymentCompleted">この支払いの精算を完了する</string>
   <string name="messagePaymentUncomplete">この支払いの精算を未完了にする</string>
-  <string-array name="currency_array">
+    <string name="hiddenGroups">グループ非表示一覧</string>
+    <string-array name="currency_array">
     <item>jpy</item>
     <item>usd</item>
     <item>eur</item>
