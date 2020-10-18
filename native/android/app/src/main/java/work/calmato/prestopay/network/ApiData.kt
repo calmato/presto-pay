@@ -29,7 +29,7 @@ data class Groups(
 
 @Parcelize
 data class HiddenGroups(
-  val hiddenGroups: List<GroupPropertyResponse>
+  val hiddenGroupList: List<GroupPropertyResponse>
 ) : Parcelable {}
 
 @Parcelize

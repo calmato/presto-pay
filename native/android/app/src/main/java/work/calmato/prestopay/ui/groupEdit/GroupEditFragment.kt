@@ -114,7 +114,7 @@ class GroupEditFragment : Fragment() {
       }
     )
 
-    // TODO: Group上での友達の削除として対応できていないため実装する場合ばここに記述する
+    // TODO: Group上での友達の削除として対応できていないため実装する場合はここに記述する
 /*    viewModel.itemClicked.observe(viewLifecycleOwner, Observer {
       if (null != it) {
         val builder: AlertDialog.Builder? = requireActivity().let {

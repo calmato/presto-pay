@@ -83,6 +83,12 @@ interface ApiService {
   fun getGroups(@Header("Authorization") token: String):
     Deferred<NetworkGroupContainer>
 
+  @GET("groups")
+  fun getHiddenGroups(
+    @Header("Authorization") token: String
+  ): Call<HiddenGroups>
+
+
   @GET("groups/{groupId}")
   fun getGroupDetail(
     @Header("Authorization") token: String, @Path("groupId") groupId: String
