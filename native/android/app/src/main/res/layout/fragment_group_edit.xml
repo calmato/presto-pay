@@ -93,11 +93,11 @@
       android:ems="10"
       android:hint="@string/groupName"
       android:inputType="textPersonName"
+      android:maxLength="31"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintHorizontal_bias="0.497"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/groupThumnail"
-      android:maxLength="31" />
+      app:layout_constraintTop_toBottomOf="@+id/groupThumnail" />
 
     <TextView
       android:id="@+id/groupDisplay"
@@ -115,6 +115,10 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginStart="200dp"
+      android:theme="@style/CustomSwitch"
+      android:thumb="@drawable/switch_thumb"
+      android:track="@drawable/switch_bg"
+      android:background="@drawable/switch_bg"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toEndOf="@+id/groupDisplay"
       app:layout_constraintTop_toTopOf="@+id/groupDisplay" />
