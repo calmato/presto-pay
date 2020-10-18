@@ -2,7 +2,7 @@
 
 create:
 	mkdir -p ./env/${ENV}
-	cp -r ./examples/${PROVIDER} ./env/${ENV}/
+	cp -r ./examples/${PROVIDER}/ ./env/${ENV}/
 	mv ./env/${ENV}/backend.tf.sample ./env/${ENV}/backend.tf
 	mv ./env/${ENV}/terraform.tfvars.sample ./env/${ENV}/terraform.tfvars
 
