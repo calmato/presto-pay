@@ -3,12 +3,20 @@ package work.calmato.prestopay.ui.groupList
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import work.calmato.prestopay.R
+import work.calmato.prestopay.databinding.FragmentHiddenGroupListBinding
 import work.calmato.prestopay.network.Api
 import work.calmato.prestopay.network.GroupPropertyResponse
 import work.calmato.prestopay.network.HiddenGroups
@@ -16,7 +24,7 @@ import work.calmato.prestopay.util.AdapterGroupPlane
 import work.calmato.prestopay.util.ViewModelGroup
 import kotlin.concurrent.thread
 
-class HiddenGroupListFragment : Fragment() {
+class GroupListHiddenFragment : Fragment() {
   private val viewModelGroup: ViewModelGroup by lazy {
     ViewModelProvider(this).get(ViewModelGroup::class.java)
   }
@@ -51,6 +59,25 @@ class HiddenGroupListFragment : Fragment() {
     }
     val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
     id = sharedPreferences.getString("token", "")!!
+  }
+
+  private lateinit var clickListener: AdapterGroupPlane.OnClickListener
+
+  override fun onCreateView(
+    inflater: LayoutInflater,
+    container: ViewGroup?,
+    savedInstanceState: Bundle?
+  ): View? {
+    val binding: FragmentHiddenGroupListBinding =
+      DataBindingUtil.inflate(inflater, R.layout.fragment_hidden_group_list, container, false)
+    clickListener = AdapterGroupPlane.OnClickListener { viewModelGroup.itemIsClickedGroup(it) }
+    recycleGroupListAdapter = AdapterGroupPlane(clickListener)
+
+    binding.root.findViewById<RecyclerView>(R.id.groupHiddenRecycle).apply {
+      layoutManager = LinearLayoutManager(context)
+      adapter = recycleGroupListAdapter
+    }
+    return binding.root
   }
 
   companion object {
