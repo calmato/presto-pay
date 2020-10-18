@@ -55,7 +55,7 @@ resource "oci_core_route_table" "public" {
     description       = "Default Route"
 
     # 宛先
-    description_type  = "CIDR_BLOCK"
+    destination_type  = "CIDR_BLOCK"
     destination       = "0.0.0.0/0"
 
     # ネクストホップ

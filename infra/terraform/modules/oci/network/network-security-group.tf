@@ -33,48 +33,62 @@ resource "oci_core_network_security_group_security_rule" "this" {
   protocol = each.value.protocol
 
   # --- ICMP options ---
-  icmp_options {
+  dynamic "icmp_options" {
     for_each = each.value.protocol == "1" ? [1] : []
 
-    type = each.value.icmp_type
-    code = each.value.icmp_code
+    content {
+      type = each.value.icmp_type
+      code = each.value.icmp_code
+    }
   }
 
   # --- UDP options ---
   dynamic "udp_options" {
     for_each = each.value.protocol == "17" ? [1] : []
 
-    dynamic "source_port_range" {
-      for_each = each.value.direction == "EGRESS" ? [1] : []
+    content {
+      dynamic "source_port_range" {
+        for_each = each.value.direction == "EGRESS" ? [1] : []
 
-      max = var.value.port_from
-      min = var.value.port_to
-    }
+        content {
+          max = each.value.port_from
+          min = each.value.port_to
+        }
+      }
 
-    dynamic "destination_port_range" {
-      for_each = each.value.direction == "INGRESS" ? [1] : []
+      dynamic "destination_port_range" {
+        for_each = each.value.direction == "INGRESS" ? [1] : []
 
-      max = var.value.port_from
-      min = var.value.port_to
+        content {
+          max = each.value.port_from
+          min = each.value.port_to
+        }
+      }
     }
   }
 
   # --- TCP options ---
-  tcp_options {
+  dynamic "tcp_options" {
     for_each = each.value.protocol == "6" ? [1] : []
 
-    dynamic "source_port_range" {
-      for_each = each.value.direction == "EGRESS" ? [1] : []
+    content {
+      dynamic "source_port_range" {
+        for_each = each.value.direction == "EGRESS" ? [1] : []
 
-      max = var.value.port_from
-      min = var.value.port_to
-    }
+        content {
+          max = each.value.port_from
+          min = each.value.port_to
+        }
+      }
 
-    dynamic "destination_port_range" {
-      for_each = each.value.direction == "INGRESS" ? [1] : []
+      dynamic "destination_port_range" {
+        for_each = each.value.direction == "INGRESS" ? [1] : []
 
-      max = var.value.port_from
-      min = var.value.port_to
+        content {
+          max = each.value.port_from
+          min = each.value.port_to
+        }
+      }
     }
   }
 }

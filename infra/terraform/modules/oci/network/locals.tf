@@ -1,5 +1,5 @@
 locals {
-  subnets = coalescelist([
+  subnets = {
     for s in var.subnets : s.name => {
       name                = s.name
       cidr_block          = s.cidr_block
@@ -7,17 +7,18 @@ locals {
       prohibit_public_ip  = s.prohibit_public_ip
       security_list_ids   = []
     }
-  ])
+  }
 
-  network_security_groups = coalescelist([
+  network_security_groups = {
     for nsg in var.network_security_groups : nsg.name => {
       name = nsg.name
     }
-  ])
+  }
 
-  network_security_group_rules = coalescelist([
+  rules = flatten([
     for nsg in var.network_security_groups : [
-      for r in nsg.rules : "${nsg.name}-${direction}-${protocol}-${port_from}-${port_to}" => {
+      for r in nsg.rules : {
+        name                      = "${nsg.name}-${r.direction}-${r.protocol}-${r.port_from}-${r.port_to}"
         network_security_group_id = oci_core_network_security_group.this[nsg.name].id
         description               = upper(r.description)
         direction                 = upper(r.direction)
@@ -34,4 +35,8 @@ locals {
       }
     ]
   ])
+
+  network_security_group_rules = {
+    for r in local.rules : r.name => r
+  }
 }

@@ -1,6 +1,4 @@
 provider "oci" {
-  version          = ">= 3.0.0"
-
   tenancy_ocid     = var.tenancy_ocid
   region           = var.region
 
@@ -68,75 +66,75 @@ module "network" {
         {
           direction   = "INGRESS"
           stateless   = false
-          destination = "Allow SSH"
+          description = "Allow SSH"
           protocol    = "6" # TCP
           source      = "0.0.0.0/0"
-          direction   = "192.168.100.0/27"
+          destination = "192.168.100.0/27"
           port_from   = 22
           port_to     = 22
         },
         {
           direction   = "INGRESS"
           stateless   = false
-          destination = "Allow HTTP"
+          description = "Allow HTTP"
           protocol    = "6" # TCP
           source      = "0.0.0.0/0"
-          direction   = "192.168.100.0/27"
+          destination = "192.168.100.0/27"
           port_from   = 80
           port_to     = 80
         },
         {
           direction   = "INGRESS"
           stateless   = false
-          destination = "Allow HTTPS"
+          description = "Allow HTTPS"
           protocol    = "6" # TCP
           source      = "0.0.0.0/0"
-          direction   = "192.168.100.0/27"
+          destination = "192.168.100.0/27"
           port_from   = 443
           port_to     = 443
         },
         {
           direction   = "EGRESS"
           stateless   = false
-          destination = "Allow All"
+          description = "Allow All"
           protocol    = "all"
           source      = "192.168.100.0/27"
-          direction   = "0.0.0.0/0"
+          destination = "0.0.0.0/0"
           port_from   = "all"
           port_to     = "all"
         },
       ]
     },
-        {
+    {
       name = "presto-pay-dev-nsg-api"
       rules = [
         {
           direction   = "INGRESS"
           stateless   = false
-          destination = "Allow SSH"
+          description = "Allow SSH"
           protocol    = "6" # TCP
           source      = "0.0.0.0/0"
-          direction   = "192.168.100.0/27"
+          destination = "192.168.100.0/27"
           port_from   = 22
           port_to     = 22
         },
         {
           direction   = "INGRESS"
           stateless   = false
-          destination = "Allow HTTP"
+          description = "Allow HTTP"
           protocol    = "6" # TCP
           source      = "0.0.0.0/0"
-          direction   = "192.168.100.0/27"
+          destination = "192.168.100.0/27"
           port_from   = 80
           port_to     = 80
         },
         {
           direction   = "EGRESS"
           stateless   = false
-          destination = "Allow All"
+          description = "Allow All"
           protocol    = "all"
           source      = "192.168.100.0/27"
-          direction   = "0.0.0.0/0"
+          destination = "0.0.0.0/0"
           port_from   = "all"
           port_to     = "all"
         },

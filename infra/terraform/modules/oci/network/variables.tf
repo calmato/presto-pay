@@ -72,7 +72,7 @@ variable "network_security_groups" {
       stateless   = bool   # ステートレス設定
       protocol    = string # プロトコル番号 or all
       source      = string # ソース
-      direction   = string # 宛先
+      destination = string # 宛先
       port_from   = string # ポート範囲 (開始位置)
       port_to     = string # ポート範囲 (終了位置)
       description = string # NSGルール説明
