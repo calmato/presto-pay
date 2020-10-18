@@ -198,15 +198,13 @@ class GroupEditFragment : Fragment() {
     val mSwitch: Switch = hiddenSwitch
     if (mSwitch.isChecked) {
       Api.retrofitService.addHiddenGroup("Bearer $id", groupId)
-        .enqueue(object : Callback<List<GroupPropertyResponse>> {
-          override fun onFailure(call: Call<List<GroupPropertyResponse>>, t: Throwable) {
+        .enqueue(object : Callback<HiddenGroups> {
+          override fun onFailure(call: Call<HiddenGroups>, t: Throwable) {
             Toast.makeText(activity, t.message, Toast.LENGTH_LONG).show()
+            Log.d(TAG, t.message)
           }
 
-          override fun onResponse(
-            call: Call<List<GroupPropertyResponse>>,
-            response: Response<List<GroupPropertyResponse>>
-          ) {
+          override fun onResponse(call: Call<HiddenGroups>, response: Response<HiddenGroups>) {
             if (!response.isSuccessful) {
               Toast.makeText(
                 activity,

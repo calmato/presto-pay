@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -18,7 +17,6 @@ import retrofit2.Response
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentHiddenGroupListBinding
 import work.calmato.prestopay.network.Api
-import work.calmato.prestopay.network.GroupPropertyResponse
 import work.calmato.prestopay.network.HiddenGroups
 import work.calmato.prestopay.util.AdapterGroupPlane
 import work.calmato.prestopay.util.ViewModelGroup
@@ -45,12 +43,9 @@ class GroupListHiddenFragment : Fragment() {
             override fun onResponse(call: Call<HiddenGroups>, response: Response<HiddenGroups>) {
               Log.d(TAG, response.body().toString())
               hiddenGroups = response.body()
-              viewModelGroup.groupsList.observe(
-                viewLifecycleOwner,
-                Observer<List<GroupPropertyResponse>> {
-                  recycleGroupListAdapter?.groupList = hiddenGroups?.hiddenGroupList!!
-                })
-              hiddenGroups?.hiddenGroupList
+              Log.d(TAG, hiddenGroups.toString())
+              recycleGroupListAdapter?.groupList = hiddenGroups?.hiddenGroups!!
+              recycleGroupListAdapter?.notifyDataSetChanged()
             }
           })
       } catch (e: Exception) {
