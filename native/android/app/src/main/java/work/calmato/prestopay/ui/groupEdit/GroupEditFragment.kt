@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.preference.PreferenceManager
 import android.util.Log
 import android.view.*
+import android.widget.Switch
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.databinding.DataBindingUtil
@@ -184,13 +185,7 @@ class GroupEditFragment : Fragment() {
           call: Call<EditGroup>,
           response: Response<EditGroup>
         ) {
-          if (response.isSuccessful) {
-            Toast.makeText(
-              activity,
-              "グループ情報を変更しました",
-              Toast.LENGTH_SHORT
-            ).show()
-          } else {
+          if (!response.isSuccessful) {
             Toast.makeText(
               activity,
               "グループ情報を変更できませんでした",
@@ -199,6 +194,30 @@ class GroupEditFragment : Fragment() {
           }
         }
       })
+
+    val mSwitch: Switch = hiddenSwitch
+    if (mSwitch.isChecked) {
+      Api.retrofitService.addHiddenGroup("Bearer $id", groupId)
+        .enqueue(object : Callback<List<GroupPropertyResponse>> {
+          override fun onFailure(call: Call<List<GroupPropertyResponse>>, t: Throwable) {
+            Toast.makeText(activity, t.message, Toast.LENGTH_LONG).show()
+          }
+
+          override fun onResponse(
+            call: Call<List<GroupPropertyResponse>>,
+            response: Response<List<GroupPropertyResponse>>
+          ) {
+            if (!response.isSuccessful) {
+              Toast.makeText(
+                activity,
+                "グループ情報を変更できませんでした",
+                Toast.LENGTH_SHORT
+              )
+            }
+          }
+        })
+    }
+
     this.findNavController().navigate(
       GroupEditFragmentDirections.actionGroupEditFragmentToHomeFragment()
     )

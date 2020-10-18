@@ -94,7 +94,10 @@ interface ApiService {
     @Header("Authorization") token: String, @Path("groupId") groupId: String
   ): Call<GetGroupDetail>
 
-
+  @POST("auth/groups/{groupId}")
+  fun addHiddenGroup(
+    @Header("Authorization") token: String, @Path("groupId") groupId: String
+  ): Call<List<GroupPropertyResponse>>
 
   @PATCH("auth")
   fun editAccount(
