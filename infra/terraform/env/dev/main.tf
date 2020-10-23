@@ -32,14 +32,20 @@ module "network" {
   ##################################################
   subnets = [
     {
-      name                = "presto-pay-dev-sub-pub"
+      name                = "presto-pay-dev-sub-lb"
       cidr_block          = "192.168.100.0/27"
       availability_domain = ""
       prohibit_public_ip  = false
     },
     {
-      name                = "presto-pay-dev-sub-pri"
+      name                = "presto-pay-dev-sub-pub"
       cidr_block          = "192.168.100.32/27"
+      availability_domain = ""
+      prohibit_public_ip  = false
+    },
+    {
+      name                = "presto-pay-dev-sub-pri"
+      cidr_block          = "192.168.100.64/27"
       availability_domain = ""
       prohibit_public_ip  = true
     },
@@ -70,8 +76,18 @@ module "network" {
           protocol    = "6" # TCP
           source      = "0.0.0.0/0"
           destination = "192.168.100.0/27"
-          port_from   = 22
-          port_to     = 22
+          port_from   = 10022
+          port_to     = 10022
+        },
+        {
+          direction   = "INGRESS"
+          stateless   = false
+          description = "Allow SSH"
+          protocol    = "6" # TCP
+          source      = "0.0.0.0/0"
+          destination = "192.168.100.0/27"
+          port_from   = 20022
+          port_to     = 20022
         },
         {
           direction   = "INGRESS"
@@ -113,7 +129,7 @@ module "network" {
           stateless   = false
           description = "Allow SSH"
           protocol    = "6" # TCP
-          source      = "0.0.0.0/0"
+          source      = "192.168.100.0/27"
           destination = "192.168.100.0/27"
           port_from   = 22
           port_to     = 22
