@@ -1,0 +1,49 @@
+#cloud-config
+
+hostname: presto-pay-dev-vm-api01
+timezone: Asia/Tokyo
+locale: ja_JP.utf8
+
+disable_root: false
+
+package_update: true
+package_upgrade: true
+package_reboot_if_required: true
+
+packages:
+  - bash-completion
+  - bind-utils
+  - chrony
+  - docker-engine
+  - epel-release
+  - git
+  - net-tools
+  - traceroute
+  - tree
+  - unzip
+  - vim
+  - wget
+
+yum_repos:
+  dockerrepo:
+    name: Docker Repository
+    baseurl: https://yum.dockerproject.org/repo/main/centos/$releasever/
+    enabled: true
+    gpgcheck: true
+    gpgkey: https://yum.dockerproject.org/gpg
+    failovermethod: priority
+
+write_files:
+  - path: /etc/sysctl.conf
+    append: true
+    content: |
+      net.ipv6.conf.all.disable_ipv6 = 1
+      net.ipv6.conf.default.disable_ipv6 = 1
+
+runcmd:
+  - sed -i -e 's/^(SELINUX=).*$/\1disabled/' /etc/selinux/config
+  - curl -L https://github.com/docker/compose/releases/download/1.16.1/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
+  - chmod +x /usr/local/bin/docker-compose
+  - systemctl disable firewalld
+  - service docker start
+  - chkconfig docker on
