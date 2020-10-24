@@ -228,6 +228,64 @@ func (gs *groupService) RemoveUsers(
 	return g, nil
 }
 
+func (gs *groupService) AddHiddenGroup(
+	ctx context.Context, groupID string,
+) ([]*group.Group, []*group.Group, error) {
+	u, err := gs.apiClient.AddHiddenGroup(ctx, groupID)
+	if err != nil {
+		err = xerrors.Errorf("Failed to User API: %w", err)
+		return nil, nil, domain.ErrorInOtherAPI.New(err)
+	}
+
+	groups := make([]*group.Group, 0)
+	hiddenGroups := make([]*group.Group, 0)
+
+	for _, groupID := range u.GroupIDs {
+		g, err := gs.groupRepository.Show(ctx, groupID)
+		if err != nil {
+			return nil, nil, domain.ErrorInDatastore.New(err)
+		}
+
+		// 非公開グループ設定がされている場合、groupsから削除
+		if containsHiddenGroupIDs(u, g.ID) {
+			hiddenGroups = append(hiddenGroups, g)
+		} else {
+			groups = append(groups, g)
+		}
+	}
+
+	return groups, hiddenGroups, nil
+}
+
+func (gs *groupService) RemoveHiddenGroup(
+	ctx context.Context, groupID string,
+) ([]*group.Group, []*group.Group, error) {
+	u, err := gs.apiClient.RemoveHiddenGroup(ctx, groupID)
+	if err != nil {
+		err = xerrors.Errorf("Failed to User API: %w", err)
+		return nil, nil, domain.ErrorInOtherAPI.New(err)
+	}
+
+	groups := make([]*group.Group, 0)
+	hiddenGroups := make([]*group.Group, 0)
+
+	for _, groupID := range u.GroupIDs {
+		g, err := gs.groupRepository.Show(ctx, groupID)
+		if err != nil {
+			return nil, nil, domain.ErrorInDatastore.New(err)
+		}
+
+		// 非公開グループ設定がされている場合、groupsから削除
+		if containsHiddenGroupIDs(u, g.ID) {
+			hiddenGroups = append(hiddenGroups, g)
+		} else {
+			groups = append(groups, g)
+		}
+	}
+
+	return groups, hiddenGroups, nil
+}
+
 func (gs *groupService) Destroy(ctx context.Context, groupID string) error {
 	g, err := gs.groupRepository.Show(ctx, groupID)
 	if err != nil {

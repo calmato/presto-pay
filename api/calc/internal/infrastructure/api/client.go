@@ -18,6 +18,8 @@ type APIClient interface {
 	UserExists(ctx context.Context, userID string) (bool, error)
 	AddGroup(ctx context.Context, userID string, groupID string) error
 	RemoveGroup(ctx context.Context, userID string, groupID string) error
+	AddHiddenGroup(ctx context.Context, groupID string) (*user.User, error)
+	RemoveHiddenGroup(ctx context.Context, groupID string) (*user.User, error)
 }
 
 // Client - 他のAPI管理用の構造体
@@ -169,6 +171,70 @@ func (c *Client) RemoveGroup(ctx context.Context, userID string, groupID string)
 	}
 
 	return nil
+}
+
+// AddHiddenGroup - 非公開のグループ一覧に追加
+func (c *Client) AddHiddenGroup(ctx context.Context, groupID string) (*user.User, error) {
+	url := c.userAPIURL + "/internal/groups/" + groupID
+	req, _ := http.NewRequest("POST", url, nil)
+
+	if err := setHeader(ctx, req); err != nil {
+		return nil, err
+	}
+
+	res, err := getResponse(req)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, err := getStatus(res); err != nil {
+		return nil, err
+	}
+
+	defer res.Body.Close()
+	body, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	u := &user.User{}
+	if err = json.Unmarshal(body, u); err != nil {
+		return nil, err
+	}
+
+	return u, nil
+}
+
+// RemoveHiddenGroup - 非公開のグループ一覧から削除
+func (c *Client) RemoveHiddenGroup(ctx context.Context, groupID string) (*user.User, error) {
+	url := c.userAPIURL + "/internal/groups/" + groupID
+	req, _ := http.NewRequest("DELETE", url, nil)
+
+	if err := setHeader(ctx, req); err != nil {
+		return nil, err
+	}
+
+	res, err := getResponse(req)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, err := getStatus(res); err != nil {
+		return nil, err
+	}
+
+	defer res.Body.Close()
+	body, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	u := &user.User{}
+	if err = json.Unmarshal(body, u); err != nil {
+		return nil, err
+	}
+
+	return u, nil
 }
 
 /*
