@@ -32,8 +32,6 @@ func Router(reg *registry.Registry) *gin.Engine {
 	{
 		apiV1.GET("/auth", reg.V1User.ShowProfile)
 		apiV1.POST("/auth", reg.V1User.Create)
-		apiV1.POST("/auth/groups/:groupID", reg.V1User.AddHiddenGroup)      // TODO: remove
-		apiV1.DELETE("/auth/groups/:groupID", reg.V1User.RemoveHiddenGroup) // TODO: remove
 		apiV1.GET("/auth/friends", reg.V1User.IndexFriends)
 		apiV1.POST("/auth/friends", reg.V1User.AddFriend)
 		apiV1.DELETE("/auth/friends/:userID", reg.V1User.RemoveFriend)
