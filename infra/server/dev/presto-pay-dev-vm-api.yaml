@@ -1,6 +1,6 @@
 #cloud-config
 
-hostname: presto-pay-dev-vm-api02
+hostname: presto-pay-dev-vm-api
 timezone: Asia/Tokyo
 locale: ja_JP.utf8
 
@@ -54,34 +54,6 @@ yum_repos:
     gpgcheck: 1
     gpgkey: https://download.docker.com/linux/centos/gpg
 
-ntp:
-  enabled: true
-  ntp_client: chrony
-  config:
-    confpath: /etc/chrony.conf
-    template: |
-      ## template:jinja
-      {% if pools -%}# pools{% endif %}
-      {% for pool in pools -%}
-      pool {{pool}} iburst
-      {% endfor %}
-      {%- if servers %}# servers
-      {% endif %}
-      {% for server in servers -%}
-      server {{server}} iburst
-      {% endfor %}
-      port 0
-  servers:
-    - ntp1.jst.mfeed.ad.jp
-    - ntp2.jst.mfeed.ad.jp
-    - ntp3.jst.mfeed.ad.jp
-
-manage_resolv_conf: false
-resolv_conf:
-  nameservers:
-    - 1.1.1.1
-    - 8.8.8.8
-
 write_files:
   - path: /etc/sysctl.conf
     append: true
@@ -89,10 +61,26 @@ write_files:
       net.ipv6.conf.all.disable_ipv6 = 1
       net.ipv6.conf.default.disable_ipv6 = 1
 
+  - path: /etc/dhcp/dhclient.conf
+    owner: root:root
+    permissions: '0755'
+    content: |
+      supersede domain-name-servers 1.1.1.1 8.8.8.8;
+
+  - path: /etc/chrony.conf
+    append: true
+    content: |
+      server ntp1.jst.mfeed.ad.jp iburst
+      server ntp2.jst.mfeed.ad.jp iburst
+      server ntp3.jst.mfeed.ad.jp iburst
+      port 0
+
 runcmd:
   - sed -i -e 's/^(SELINUX=).*$/\1disabled/' /etc/selinux/config
   - curl -L "https://github.com/docker/compose/releases/download/1.27.4/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
   - chmod +x /usr/local/bin/docker-compose
   - ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
   - systemctl disable --now firewalld
+  - systemctl disable --now postfix
+  - systemctl enable --now chrony
   - systemctl enable --now docker
