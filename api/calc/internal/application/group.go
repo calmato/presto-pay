@@ -21,6 +21,8 @@ type GroupApplication interface {
 	Update(ctx context.Context, req *request.UpdateGroup, groupID string) (*group.Group, error)
 	AddUsers(ctx context.Context, req *request.AddUsersInGroup, groupID string) (*group.Group, error)
 	RemoveUsers(ctx context.Context, req *request.RemoveUsersInGroup, groupID string) (*group.Group, error)
+	AddHiddenGroup(ctx context.Context, groupID string) ([]*group.Group, []*group.Group, error)
+	RemoveHiddenGroup(ctx context.Context, groupID string) ([]*group.Group, []*group.Group, error)
 	Destroy(ctx context.Context, groupID string) error
 }
 
@@ -225,6 +227,58 @@ func (ga *groupApplication) RemoveUsers(
 	}
 
 	return g, nil
+}
+
+func (ga *groupApplication) AddHiddenGroup(
+	ctx context.Context, groupID string,
+) ([]*group.Group, []*group.Group, error) {
+	u, err := ga.userService.Authentication(ctx)
+	if err != nil {
+		return nil, nil, domain.Unauthorized.New(err)
+	}
+
+	contain, err := ga.userService.ContainsGroupID(ctx, u, groupID)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	if !contain {
+		err := xerrors.New("Failed to Application")
+		return nil, nil, domain.Forbidden.New(err)
+	}
+
+	gs, hgs, err := ga.groupService.AddHiddenGroup(ctx, groupID)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	return gs, hgs, nil
+}
+
+func (ga *groupApplication) RemoveHiddenGroup(
+	ctx context.Context, groupID string,
+) ([]*group.Group, []*group.Group, error) {
+	u, err := ga.userService.Authentication(ctx)
+	if err != nil {
+		return nil, nil, domain.Unauthorized.New(err)
+	}
+
+	contain, err := ga.userService.ContainsGroupID(ctx, u, groupID)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	if !contain {
+		err := xerrors.New("Failed to Application")
+		return nil, nil, domain.Forbidden.New(err)
+	}
+
+	gs, hgs, err := ga.groupService.RemoveHiddenGroup(ctx, groupID)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	return gs, hgs, nil
 }
 
 func (ga *groupApplication) Destroy(ctx context.Context, groupID string) error {
