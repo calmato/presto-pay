@@ -4,7 +4,7 @@ provider "google" {
 }
 
 module "this" {
-  source = "./../../modules"
+  source = "./../../modules/gcp"
 
   location = "asia-northeast1-a"
 

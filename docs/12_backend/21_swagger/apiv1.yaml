@@ -8,8 +8,10 @@ info:
 servers:
   - url: https://api.presto-pay-stg.calmato.work/v1
     description: 検証環境
+  - url: http://api.presto-pay-dev.calmato.work/v1
+    description: 開発環境 (クラウド)
   - url: http://localhost:8080/v1
-    description: 開発環境
+    description: 開発環境 (ローカル)
 
 paths:
   /auth:
@@ -92,7 +94,7 @@ paths:
           description: グループID
       responses:
         '200':
-          $ref: '#/components/responses/ShowGroup'
+          $ref: '#/components/responses/ShowProfile'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -115,7 +117,7 @@ paths:
           description: グループID
       responses:
         '200':
-          $ref: '#/components/responses/ShowGroup'
+          $ref: '#/components/responses/ShowProfile'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':

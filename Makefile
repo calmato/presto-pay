@@ -48,7 +48,7 @@ api-start:
 ##################################################
 # Container Commands - React Native
 ##################################################
-.PHONY: react-start
+.PHONY: react-start react-install
 
 react-start:
 	./infra/bin/get-local-ip-addr.sh
@@ -60,7 +60,7 @@ react-install:
 ##################################################
 # Container Commands - Terraform
 ##################################################
-.PHONY: terraform-stg-setup
+.PHONY: terraform-stg-setup terraform-stg-lint terraform-stg-plan terraform-sg-apply terraform-stg-destroy
 
 terraform-stg-setup:
 	docker-compose run --rm terraform make init ENV=stg
