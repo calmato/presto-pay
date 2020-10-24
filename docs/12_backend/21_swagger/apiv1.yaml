@@ -1440,6 +1440,35 @@ components:
                       type: string
                       format: date-time
                       description: 更新日時
+              hiddenGroups:
+                type: array
+                description: グループ一覧
+                items:
+                  properties:
+                    id:
+                      type: string
+                      format: uuid
+                      description: グループID
+                    name:
+                      type: string
+                      description: グループ名
+                    thumbnailUrl:
+                      type: string
+                      description: サムネイルURL
+                    userIds:
+                      type: array
+                      description: ユーザーID一覧
+                      items:
+                        type: string
+                        format: uuid
+                    createdAt:
+                      type: string
+                      format: date-time
+                      description: 作成日時
+                    updatedAt:
+                      type: string
+                      format: date-time
+                      description: 更新日時
 
     ShowGroup:
       description: グループ詳細取得APIのレスポンス

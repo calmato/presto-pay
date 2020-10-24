@@ -35,7 +35,8 @@ type IndexGroup struct {
 
 // IndexGroups - グループ一覧取得APIのレスポンス
 type IndexGroups struct {
-	Groups []*IndexGroup `json:"groups"`
+	Groups       []*IndexGroup `json:"groups"`
+	HiddenGroups []*IndexGroup `json:"hiddenGroups"`
 }
 
 // CreateGroup - グループ作成APIのレスポンス

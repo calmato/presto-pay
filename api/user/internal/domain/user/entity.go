@@ -11,7 +11,7 @@ type User struct {
 	Email          string    `firestore:"email"`            // メールアドレス
 	ThumbnailURL   string    `firestore:"thumbnail_url"`    // サムネイル
 	GroupIDs       []string  `firestore:"group_ids"`        // グループID一覧
-	HiddenGroupIds []string  `firestore:"hidden_group_ids"` // 非表示グループID一覧
+	HiddenGroupIDs []string  `firestore:"hidden_group_ids"` // 非表示グループID一覧
 	FriendIDs      []string  `firestore:"friend_ids"`       // 友達のユーザーID一覧
 	Password       string    `firestore:"-"`                // パスワード
 	InstanceID     string    `firestore:"instance_id"`      // 端末のデバイスID

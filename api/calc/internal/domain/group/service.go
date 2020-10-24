@@ -8,7 +8,7 @@ import (
 
 // GroupService - GroupServiceインターフェース
 type GroupService interface {
-	Index(ctx context.Context, u *user.User) ([]*Group, error)
+	Index(ctx context.Context, u *user.User) ([]*Group, []*Group, error)
 	Show(ctx context.Context, groupID string) (*Group, error)
 	Create(ctx context.Context, g *Group) (*Group, error)
 	Update(ctx context.Context, g *Group, userIDs []string) (*Group, error)

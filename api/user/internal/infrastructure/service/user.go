@@ -39,6 +39,10 @@ func (us *userService) Authentication(ctx context.Context) (*user.User, error) {
 		u.GroupIDs = make([]string, 0)
 	}
 
+	if u.HiddenGroupIDs == nil {
+		u.HiddenGroupIDs = make([]string, 0)
+	}
+
 	if u.FriendIDs == nil {
 		u.FriendIDs = make([]string, 0)
 	}
@@ -93,6 +97,10 @@ func (us *userService) Show(ctx context.Context, userID string) (*user.User, err
 
 	if u.GroupIDs == nil {
 		u.GroupIDs = make([]string, 0)
+	}
+
+	if u.HiddenGroupIDs == nil {
+		u.HiddenGroupIDs = make([]string, 0)
 	}
 
 	if u.FriendIDs == nil {
@@ -221,7 +229,7 @@ func (us *userService) ContainsHiddenGroupID(ctx context.Context, u *user.User, 
 		return false, domain.NotFound.New(err)
 	}
 
-	for _, v := range u.HiddenGroupIds {
+	for _, v := range u.HiddenGroupIDs {
 		if v == groupID {
 			return true, nil
 		}
