@@ -231,8 +231,12 @@ func (gs *groupService) RemoveUsers(
 func (gs *groupService) AddHiddenGroup(
 	ctx context.Context, groupID string,
 ) ([]*group.Group, []*group.Group, error) {
-	u, err := gs.apiClient.AddHiddenGroup(ctx, groupID)
+	u, status, err := gs.apiClient.AddHiddenGroup(ctx, groupID)
 	if err != nil {
+		if status == 409 {
+			return nil, nil, domain.AlreadyExistsInDatastore.New(err)
+		}
+
 		err = xerrors.Errorf("Failed to User API: %w", err)
 		return nil, nil, domain.ErrorInOtherAPI.New(err)
 	}
@@ -260,8 +264,12 @@ func (gs *groupService) AddHiddenGroup(
 func (gs *groupService) RemoveHiddenGroup(
 	ctx context.Context, groupID string,
 ) ([]*group.Group, []*group.Group, error) {
-	u, err := gs.apiClient.RemoveHiddenGroup(ctx, groupID)
+	u, status, err := gs.apiClient.RemoveHiddenGroup(ctx, groupID)
 	if err != nil {
+		if status == 404 {
+			return nil, nil, domain.NotEqualRequestWithDatastore.New(err)
+		}
+
 		err = xerrors.Errorf("Failed to User API: %w", err)
 		return nil, nil, domain.ErrorInOtherAPI.New(err)
 	}

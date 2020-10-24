@@ -54,8 +54,8 @@ func Router(reg *registry.Registry) *gin.Engine {
 		internal.POST("/users/:userID/groups/:groupID", reg.V1User.AddGroup)
 		internal.DELETE("/users/:userID/groups/:groupID", reg.V1User.RemoveGroup)
 
-		apiV1.POST("/groups/:groupID", reg.V1User.AddHiddenGroup)
-		apiV1.DELETE("/groups/:groupID", reg.V1User.RemoveHiddenGroup)
+		internal.POST("/groups/:groupID", reg.V1User.AddHiddenGroup)
+		internal.DELETE("/groups/:groupID", reg.V1User.RemoveHiddenGroup)
 	}
 
 	return r
