@@ -94,6 +94,51 @@ paths:
         '500':
           $ref: '#/components/responses/Unkown'
 
+  /groups/{groupId}:
+    post:
+      summary: 非公開グループ追加
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: groupId
+          schema:
+            type: string
+          required: true
+          description: グループID
+      responses:
+        '200':
+          $ref: '#/components/responses/HiddenGroupUser'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/Unkown'
+
+    delete:
+      summary: 非公開グループ削除
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: groupId
+          schema:
+            type: string
+          required: true
+          description: グループID
+      responses:
+        '200':
+          $ref: '#/components/responses/HiddenGroupUser'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/Unkown'
+
 components:
   securitySchemes:
     BearerAuth:
@@ -199,6 +244,12 @@ components:
                 items:
                   type: string
                   format: uuid
+              hiddenGroupIds:
+                type: array
+                description: グループID一覧
+                items:
+                  type: string
+                  format: uuid
               friendIds:
                 type: array
                 description: 友達ID一覧
@@ -243,6 +294,12 @@ components:
                 description: グループID一覧
                 items:
                   type: string
+              hiddenGroupIds:
+                type: array
+                description: グループID一覧
+                items:
+                  type: string
+                  format: uuid
               friendIds:
                 type: array
                 description: 友達ID一覧
@@ -283,6 +340,66 @@ components:
                 type: string
                 description: サムネイルURL
               groupIds:
+                type: array
+                description: グループID一覧
+                items:
+                  type: string
+                  format: uuid
+              hiddenGroupIds:
+                type: array
+                description: グループID一覧
+                items:
+                  type: string
+                  format: uuid
+              friendIds:
+                type: array
+                description: 友達ID一覧
+                items:
+                  type: string
+                  format: uuid
+              instanceId:
+                type: string
+                description: インスタンスID
+              createdAt:
+                type: string
+                format: date-time
+                description: 作成日時
+              updatedAt:
+                type: string
+                format: date-time
+                description: 更新日時
+
+    HiddenGroupUser:
+      description: ユーザー グループ公開設定APIのレスポンス
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              id:
+                type: string
+                format: uuid
+                description: ユーザーID
+              name:
+                type: string
+                description: 表示名
+              username:
+                type: string
+                description: ユーザー名
+              email:
+                type: string
+                format: email
+                description: メールアドレス
+              thumbnail:
+                type: string
+                description: サムネイルURL
+              groupIds:
+                type: array
+                description: グループID一覧
+                items:
+                  type: string
+                  format: uuid
+              hiddenGroupIds:
                 type: array
                 description: グループID一覧
                 items:

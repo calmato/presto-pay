@@ -8,8 +8,10 @@ info:
 servers:
   - url: https://api.presto-pay-stg.calmato.work/v1
     description: 検証環境
+  - url: http://api.presto-pay-dev.calmato.work/v1
+    description: 開発環境 (クラウド)
   - url: http://localhost:8080/v1
-    description: 開発環境
+    description: 開発環境 (ローカル)
 
 paths:
   /auth:
@@ -75,51 +77,6 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '409':
           $ref: '#/components/responses/Conflict'
-        '500':
-          $ref: '#/components/responses/Unkown'
-
-  /auth/groups/{groupId}:
-    post:
-      summary: 非公開グループ追加
-      security:
-        - BearerAuth: []
-      parameters:
-        - in: path
-          name: groupId
-          schema:
-            type: string
-          required: true
-          description: グループID
-      responses:
-        '200':
-          $ref: '#/components/responses/ShowGroup'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '409':
-          $ref: '#/components/responses/Conflict'
-        '500':
-          $ref: '#/components/responses/Unkown'
-
-    delete:
-      summary: 非公開グループ削除
-      security:
-        - BearerAuth: []
-      parameters:
-        - in: path
-          name: groupId
-          schema:
-            type: string
-          required: true
-          description: グループID
-      responses:
-        '200':
-          $ref: '#/components/responses/ShowGroup'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
         '500':
           $ref: '#/components/responses/Unkown'
 
@@ -432,6 +389,51 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/Unkown'
+
+  /groups/{groupId}/hidden:
+    post:
+      summary: 非公開グループ追加
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: groupId
+          schema:
+            type: string
+          required: true
+          description: グループID
+      responses:
+        '200':
+          $ref: '#/components/responses/IndexGroups'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/Unkown'
+
+    delete:
+      summary: 非公開グループ削除
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: groupId
+          schema:
+            type: string
+          required: true
+          description: グループID
+      responses:
+        '200':
+          $ref: '#/components/responses/IndexGroups'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
         '500':
           $ref: '#/components/responses/Unkown'
 
