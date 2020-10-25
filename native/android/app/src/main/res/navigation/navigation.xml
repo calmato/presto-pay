@@ -90,6 +90,9 @@
     <action
       android:id="@+id/action_account_home_to_notificationSetFragment"
       app:destination="@id/notificationSetFragment" />
+    <action
+      android:id="@+id/action_account_home_to_groupListHidden"
+      app:destination="@id/groupListHidden" />
   </fragment>
   <fragment
     android:id="@+id/resetPassFragment"
@@ -206,7 +209,7 @@
   <fragment
     android:id="@+id/groupEditAddFriend"
     android:name="work.calmato.prestopay.ui.groupEdit.GroupEditAddFriendFragment"
-    android:label="fragment_group_edit_add_friendd"
+    android:label="fragment_group_edit_add_friend"
     tools:layout="@layout/fragment_group_edit_add_friend">
     <argument
       android:name="groupEditList"
@@ -215,6 +218,12 @@
     <action
       android:id="@+id/action_groupEditAddFriend_to_groupEditFragment"
       app:destination="@id/groupEditFragment" />
+  </fragment>
+  <fragment
+    android:id="@+id/groupListHidden"
+    android:name="work.calmato.prestopay.ui.groupList.GroupListHiddenFragment"
+    android:label="fragment_group_list_hidden"
+    tools:layout="@layout/fragment_hidden_group_list">
   </fragment>
   <fragment
     android:id="@+id/addExpenseFragment"

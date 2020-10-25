@@ -25,4 +25,9 @@
     <item name="android:textColor">@color/design_default_color_on_secondary</item>
   </style>
 
+  <style name="CustomSwitch" parent="Theme.AppCompat.Light">
+    <!--ボタンON時のボタンの通り道（透明度30%）・ボタンとタッチフィードバックカラー-->
+    <item name="colorControlActivated">#ececec</item>
+  </style>
+
 </resources>
