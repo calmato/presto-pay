@@ -5,57 +5,58 @@
 
   <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent">
 
     <TextView
       android:id="@+id/textView12"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginStart="16dp"
-      android:layout_marginTop="8dp"
+      android:layout_marginBottom="8dp"
       android:text="Step1"
       android:textSize="36sp"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="parent" />
+      app:layout_constraintBottom_toTopOf="@+id/textView15"
+      app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
       android:id="@+id/textView15"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_marginTop="8dp"
+      android:layout_marginBottom="8dp"
       android:text="支払い名と総額は？"
       android:textSize="30sp"
-      app:layout_constraintStart_toStartOf="@+id/textView12"
-      app:layout_constraintTop_toBottomOf="@+id/textView12" />
+      app:layout_constraintBottom_toTopOf="@+id/paymentName"
+      app:layout_constraintStart_toStartOf="@+id/textView12" />
 
     <EditText
       android:id="@+id/paymentName"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:layout_marginStart="32dp"
-      android:layout_marginTop="16dp"
       android:layout_marginEnd="32dp"
+      android:layout_marginBottom="8dp"
       android:ems="10"
       android:hint="支払い名"
       android:inputType="textPersonName"
       android:textSize="24sp"
       android:windowSoftInputMode="adjustPan"
+      app:layout_constraintBottom_toTopOf="@+id/amount"
       app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/textView15" />
+      app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
       android:id="@+id/amount"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
-      android:layout_marginTop="8dp"
+      android:layout_marginEnd="8dp"
+      android:layout_marginBottom="8dp"
       android:ems="10"
       android:hint="総額"
       android:inputType="numberDecimal"
       android:textSize="24sp"
+      app:layout_constraintBottom_toTopOf="@+id/buttonStep2"
       app:layout_constraintEnd_toStartOf="@+id/currency"
-      app:layout_constraintStart_toStartOf="@+id/paymentName"
-      app:layout_constraintTop_toBottomOf="@+id/paymentName" />
+      app:layout_constraintStart_toStartOf="@+id/paymentName" />
 
     <TextView
       android:id="@+id/currency"
@@ -71,7 +72,6 @@
       android:id="@+id/buttonStep2"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_marginTop="8dp"
       android:layout_marginEnd="16dp"
       android:layout_marginBottom="16dp"
       android:backgroundTint="#000000"
@@ -79,7 +79,6 @@
       android:textColor="@color/cardview_light_background"
       android:textSize="18sp"
       app:layout_constraintBottom_toBottomOf="parent"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/amount" />
+      app:layout_constraintEnd_toEndOf="parent" />
   </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

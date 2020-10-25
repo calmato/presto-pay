@@ -13,9 +13,15 @@ import work.calmato.prestopay.network.PayerAddPayment
 import work.calmato.prestopay.util.Constant.Companion.NUMBER
 import work.calmato.prestopay.util.Constant.Companion.RATIO
 
-class AdapterAddPaymentCheck(val onClickListener: OnClickListener?) :
+class AdapterAddPaymentCheck(private val onClickListener: OnClickListener?, val unit:String) :
   RecyclerView.Adapter<AdapterAddPaymentCheck.AddPaymentCheckViewHolder>() {
   var payers: List<PayerAddPayment> = emptyList()
+    set(value) {
+      field = value
+      notifyDataSetChanged()
+    }
+
+  var amounts: MutableList<Float> = mutableListOf()
     set(value) {
       field = value
       notifyDataSetChanged()
@@ -31,26 +37,8 @@ class AdapterAddPaymentCheck(val onClickListener: OnClickListener?) :
 
     holder.binding.also { binding ->
       binding.payer = payers[position]
-      binding.persent.visibility = TextView.INVISIBLE
-//      binding.amount.addTextChangedListener (
-//        object : TextWatcher {
-//          override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-//          }
-//
-//          override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-//          }
-//
-//          override fun afterTextChanged(s: Editable?) {
-//            Log.i("AdapterAdd", "afterTextChanged: ${s.toString()}")
-//            if(s.isNullOrEmpty() || s.isNullOrEmpty()){
-//              binding.amount.setText("0.0")
-//            }
-//            payers[position].amount = binding.amount.text.toString().toFloat()
-//            payers[position].isPaid = payers[position].amount != 0f
-//            binding.checkBox.isChecked = payers[position].isPaid
-//          }
-//        }
-//      )
+      binding.amountVar = amounts[position]
+      binding.unit.text = unit
     }
     holder.itemView.setOnClickListener {
       onClickListener?.onClick(payers[position])

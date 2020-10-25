@@ -8,7 +8,7 @@
       name="payer"
       type="work.calmato.prestopay.network.PayerAddPayment" />
     <variable
-      name="amountVar"
+      name="amount"
       type="Float" />
   </data>
 
@@ -18,30 +18,19 @@
     android:layout_height="wrap_content"
     android:layout_marginStart="0dp">
 
-    <CheckBox
-      android:id="@+id/checkBox"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:clickable="false"
-      android:gravity="center_vertical"
-      app:addPaymentCheckBox="@{payer}"
-      app:layout_constraintBottom_toBottomOf="parent"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="parent" />
-
     <de.hdodenhof.circleimageview.CircleImageView
       android:id="@+id/thumbnail"
       android:layout_width="@dimen/thumbnail_list_size"
       android:layout_height="@dimen/thumbnail_list_size"
-      android:layout_marginStart="32dp"
+      android:layout_marginStart="8dp"
       android:layout_marginTop="8dp"
       android:layout_marginBottom="8dp"
+      app:addPaymentThumbnail="@{payer}"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent"
       app:layout_constraintVertical_bias="0.0"
-      app:srcCompat="@drawable/circle_theme_color"
-      app:addPaymentThumbnail="@{payer}"/>
+      app:srcCompat="@drawable/circle_theme_color" />
 
     <TextView
       android:id="@+id/userName"
@@ -64,18 +53,22 @@
       android:text="%"
       android:textSize="24sp"
       app:layout_constraintBottom_toBottomOf="@+id/userName"
-      app:layout_constraintEnd_toEndOf="parent" />
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintTop_toTopOf="@+id/userName" />
 
-    <TextView
-      android:id="@+id/amount"
-      android:layout_width="wrap_content"
+    <EditText
+      android:id="@+id/inputAmount"
+      android:layout_width="100dp"
       android:layout_height="wrap_content"
       android:layout_marginEnd="8dp"
-      android:textSize="18sp"
+      android:ems="10"
+      android:inputType="numberDecimal"
+      android:textAlignment="viewEnd"
       app:layout_constraintBottom_toBottomOf="@+id/unit"
       app:layout_constraintEnd_toStartOf="@+id/unit"
       app:layout_constraintTop_toTopOf="@+id/unit"
-      app:paymentAmountCheck="@{amountVar}"/>
+      app:paymentAmount="@{amount}"/>
+
 
   </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

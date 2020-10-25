@@ -73,13 +73,14 @@
       android:id="@+id/fragment2"
       android:name="androidx.navigation.fragment.NavHostFragment"
       android:layout_width="match_parent"
-      android:layout_height="wrap_content"
+      android:layout_height="0dp"
       app:defaultNavHost="true"
       app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/whoPaidtext"
       app:layout_constraintVertical_bias="1.0"
-      app:navGraph="@navigation/navigation_add_payment"
-      tools:layout_editor_absoluteX="1dp" />
+      app:navGraph="@navigation/navigation_add_payment" />
 
   </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

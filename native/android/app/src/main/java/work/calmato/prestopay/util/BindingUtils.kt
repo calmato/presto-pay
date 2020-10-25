@@ -1,6 +1,7 @@
 package work.calmato.prestopay.util
 
 import android.widget.CheckBox
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -186,5 +187,18 @@ fun TextView.setAddPaymentAmount(item:PayerAddPayment?){
 fun CheckBox.setAddPaymentAmount(item:PayerAddPayment?){
   item?.let {
     isChecked = it.isPaid
+  }
+}
+
+@BindingAdapter("paymentAmount")
+fun EditText.setPaymentAmount(item:Float?){
+    item?.let {
+      this.setText(item.toString())
+    }
+}
+@BindingAdapter("paymentAmountCheck")
+fun TextView.setPaymentAmountCheck(item:Float?){
+  item?.let {
+    this.text = item.toString()
   }
 }
