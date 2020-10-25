@@ -8,25 +8,25 @@
     android:layout_height="match_parent">
 
     <TextView
-      android:id="@+id/textView12"
+      android:id="@+id/step"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginStart="16dp"
       android:layout_marginBottom="8dp"
       android:text="Step1"
       android:textSize="36sp"
-      app:layout_constraintBottom_toTopOf="@+id/textView15"
+      app:layout_constraintBottom_toTopOf="@+id/sentence"
       app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-      android:id="@+id/textView15"
+      android:id="@+id/sentence"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginBottom="8dp"
       android:text="支払い名と総額は？"
       android:textSize="30sp"
       app:layout_constraintBottom_toTopOf="@+id/paymentName"
-      app:layout_constraintStart_toStartOf="@+id/textView12" />
+      app:layout_constraintStart_toStartOf="@+id/step" />
 
     <EditText
       android:id="@+id/paymentName"

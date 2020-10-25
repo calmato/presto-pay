@@ -10,6 +10,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayoutMediator
@@ -121,6 +122,7 @@ class EquallyDivideFragment(val position: Int) : Fragment() {
             viewModel.payersAddPayment.value!!.mapIndexed { index, payerAddPayment ->
               payerAddPayment.amount = recycleAdapterCheck.amounts[index]
             }
+            navigateToStep3()
             Log.i("AddPaymentStep", "onViewCreated: ${viewModel.payersAddPayment.value!!}")
           }
         }
@@ -140,6 +142,7 @@ class EquallyDivideFragment(val position: Int) : Fragment() {
               viewModel.payersAddPayment.value!!.mapIndexed { index, payerAddPayment ->
                 payerAddPayment.amount = recycleAdapterInputAmount2.amounts[index]
               }
+              navigateToStep3()
               Log.i("AddPaymentStep", "onViewCreated: ${viewModel.payersAddPayment.value!!}")
             }else {
               Toast.makeText(requireContext(),"支払い合計が総額と一致しません",Toast.LENGTH_LONG).show()
@@ -163,6 +166,7 @@ class EquallyDivideFragment(val position: Int) : Fragment() {
               viewModel.payersAddPayment.value!!.mapIndexed { index, payerAddPayment ->
                 payerAddPayment.amount = recycleAdapterInputAmount3.amounts[index]
               }
+              navigateToStep3()
               Log.i("AddPaymentStep", "onViewCreated: ${recycleAdapterInputAmount3.amounts}")
             } else{
              Toast.makeText(requireContext(),"合計を100％にしてください",Toast.LENGTH_LONG).show()
@@ -171,5 +175,10 @@ class EquallyDivideFragment(val position: Int) : Fragment() {
         }
       }
     }
+  }
+  private fun navigateToStep3(){
+    this.findNavController().navigate(
+      AddPaymentStep2FragmentDirections.actionAddPaymentStep2ToAddPaymentStep3()
+    )
   }
 }

@@ -12,23 +12,23 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       app:layout_constraintBottom_toTopOf="@+id/viewPager2"
-      app:layout_constraintTop_toBottomOf="@+id/textView15"
+      app:layout_constraintTop_toBottomOf="@+id/sentence"
       tools:layout_editor_absoluteX="-37dp" />
 
     <TextView
-      android:id="@+id/textView12"
+      android:id="@+id/step"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:text="Step2"
       android:textSize="36sp"
-      app:layout_constraintBottom_toTopOf="@+id/textView15"
-      app:layout_constraintStart_toStartOf="@+id/textView15"
+      app:layout_constraintBottom_toTopOf="@+id/sentence"
+      app:layout_constraintStart_toStartOf="@+id/sentence"
       app:layout_constraintTop_toTopOf="parent"
       app:layout_constraintVertical_bias="1.0"
       app:layout_constraintVertical_chainStyle="packed" />
 
     <TextView
-      android:id="@+id/textView15"
+      android:id="@+id/sentence"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginStart="16dp"
@@ -36,7 +36,7 @@
       android:textSize="30sp"
       app:layout_constraintBottom_toTopOf="@+id/tab_layout"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/textView12" />
+      app:layout_constraintTop_toBottomOf="@+id/step" />
 
     <androidx.viewpager2.widget.ViewPager2
       android:id="@+id/viewPager2"
