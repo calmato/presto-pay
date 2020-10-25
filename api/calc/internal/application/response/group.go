@@ -78,3 +78,25 @@ type RemoveUsersInGroup struct {
 	CreatedAt    time.Time `json:"createdAt"`
 	UpdatedAt    time.Time `json:"updatedAt"`
 }
+
+// HiddenGroup - グループ一覧取得APIのグループ情報
+type HiddenGroup struct {
+	ID           string    `json:"id"`
+	Name         string    `json:"name"`
+	ThumbnailURL string    `json:"thumbnailUrl"`
+	UserIDs      []string  `json:"userIds"`
+	CreatedAt    time.Time `json:"createdAt"`
+	UpdatedAt    time.Time `json:"updatedAt"`
+}
+
+// AddHiddenGroup - グループ非公開設定APIのレスポンス
+type AddHiddenGroup struct {
+	Groups       []*HiddenGroup `json:"groups"`
+	HiddenGroups []*HiddenGroup `json:"hiddenGroups"`
+}
+
+// RemoveHiddenGroup - グループ公開設定APIのレスポンス
+type RemoveHiddenGroup struct {
+	Groups       []*HiddenGroup `json:"groups"`
+	HiddenGroups []*HiddenGroup `json:"hiddenGroups"`
+}

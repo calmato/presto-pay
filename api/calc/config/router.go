@@ -35,6 +35,8 @@ func Router(reg *registry.Registry) *gin.Engine {
 		apiV1.GET("/groups/:groupID", reg.V1Group.Show)
 		apiV1.PATCH("/groups/:groupID", reg.V1Group.Update)
 		apiV1.DELETE("/groups/:groupID", reg.V1Group.Destroy)
+		apiV1.POST("/groups/:groupID/hidden", reg.V1Group.AddHiddenGroup)
+		apiV1.DELETE("/groups/:groupID/hidden", reg.V1Group.RemoveHiddenGroup)
 
 		groups := apiV1.Group("/groups/:groupID")
 		{

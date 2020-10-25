@@ -106,3 +106,35 @@ func (mr *MockAPIClientMockRecorder) RemoveGroup(ctx, userID, groupID interface{
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RemoveGroup", reflect.TypeOf((*MockAPIClient)(nil).RemoveGroup), ctx, userID, groupID)
 }
+
+// AddHiddenGroup mocks base method
+func (m *MockAPIClient) AddHiddenGroup(ctx context.Context, groupID string) (*user.User, int, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "AddHiddenGroup", ctx, groupID)
+	ret0, _ := ret[0].(*user.User)
+	ret1, _ := ret[1].(int)
+	ret2, _ := ret[2].(error)
+	return ret0, ret1, ret2
+}
+
+// AddHiddenGroup indicates an expected call of AddHiddenGroup
+func (mr *MockAPIClientMockRecorder) AddHiddenGroup(ctx, groupID interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AddHiddenGroup", reflect.TypeOf((*MockAPIClient)(nil).AddHiddenGroup), ctx, groupID)
+}
+
+// RemoveHiddenGroup mocks base method
+func (m *MockAPIClient) RemoveHiddenGroup(ctx context.Context, groupID string) (*user.User, int, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "RemoveHiddenGroup", ctx, groupID)
+	ret0, _ := ret[0].(*user.User)
+	ret1, _ := ret[1].(int)
+	ret2, _ := ret[2].(error)
+	return ret0, ret1, ret2
+}
+
+// RemoveHiddenGroup indicates an expected call of RemoveHiddenGroup
+func (mr *MockAPIClientMockRecorder) RemoveHiddenGroup(ctx, groupID interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RemoveHiddenGroup", reflect.TypeOf((*MockAPIClient)(nil).RemoveHiddenGroup), ctx, groupID)
+}
