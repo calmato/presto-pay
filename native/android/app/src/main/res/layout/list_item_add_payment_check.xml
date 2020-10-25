@@ -19,6 +19,7 @@
       android:id="@+id/checkBox"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
+      android:clickable="false"
       android:gravity="center_vertical"
       app:addPaymentCheckBox="@{payer}"
       app:layout_constraintBottom_toBottomOf="parent"
@@ -45,24 +46,33 @@
       android:layout_height="wrap_content"
       android:layout_marginStart="8dp"
       android:textSize="24sp"
+      app:addPaymentUserName="@{payer}"
       app:layout_constraintBottom_toBottomOf="@+id/thumbnail"
       app:layout_constraintStart_toEndOf="@+id/thumbnail"
       app:layout_constraintTop_toTopOf="@+id/thumbnail"
       app:layout_constraintVertical_bias="0.5"
-      app:addPaymentUserName="@{payer}"
       tools:text="userName" />
+
+    <TextView
+      android:id="@+id/persent"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginEnd="8dp"
+      android:text="%"
+      android:textSize="24sp"
+      app:layout_constraintBottom_toBottomOf="@+id/userName"
+      app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
       android:id="@+id/amount"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_marginEnd="16dp"
-      android:text="100"
-      android:textSize="24sp"
-      app:addPaymentAmount="@{payer}"
-      app:layout_constraintBottom_toBottomOf="@+id/userName"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintTop_toTopOf="@+id/userName" />
+      android:layout_marginEnd="8dp"
+      android:textSize="18sp"
+      app:layout_constraintBottom_toBottomOf="@+id/persent"
+      app:layout_constraintEnd_toStartOf="@+id/persent"
+      app:layout_constraintTop_toTopOf="@+id/persent"
+      app:addPaymentAmount="@{payer}"/>
 
   </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

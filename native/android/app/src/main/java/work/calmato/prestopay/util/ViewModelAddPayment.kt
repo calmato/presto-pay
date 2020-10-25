@@ -1,7 +1,6 @@
 package work.calmato.prestopay.util
 
 import android.app.Application
-import android.preference.PreferenceManager
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
@@ -13,7 +12,7 @@ import retrofit2.Response
 import work.calmato.prestopay.database.getAppDatabase
 import work.calmato.prestopay.network.*
 import work.calmato.prestopay.repository.NationalFlagsRepository
-import kotlin.coroutines.coroutineContext
+import java.lang.Exception
 
 class ViewModelAddPayment(application: Application): AndroidViewModel(application) {
   private val _groupName = MutableLiveData<String>()
@@ -40,9 +39,9 @@ class ViewModelAddPayment(application: Application): AndroidViewModel(applicatio
   val payersAddPayment: LiveData<List<PayerAddPayment>>
     get() = _payersAddPayment
 
-  private val _navigateToPaymentComfirmation = MutableLiveData<Boolean>()
-  val navigateToPaymentComfirmation: LiveData<Boolean>
-    get() = _navigateToPaymentComfirmation
+  private val _navigateToPaymentConfirmation = MutableLiveData<Boolean>()
+  val navigateToPaymentConfirmation: LiveData<Boolean>
+    get() = _navigateToPaymentConfirmation
 
   private val _itemClicked = MutableLiveData<PayerAddPayment>()
   val itemClicked: LiveData<PayerAddPayment>
@@ -91,8 +90,13 @@ class ViewModelAddPayment(application: Application): AndroidViewModel(applicatio
       Api.retrofitService.getGroupDetail("Bearer $id", groupInfo.id)
         .enqueue(object : Callback<GetGroupDetail> {
           override fun onResponse(call: Call<GetGroupDetail>, response: Response<GetGroupDetail>) {
-            groupDetail = response.body()!!
-            setPayersAddPayment(groupDetail.users)
+            try {
+              groupDetail = response.body()!!
+              setPayersAddPayment(groupDetail.users)
+            } catch (e: Exception) {
+              Log.i("ViewModelAddPayment", "onResponse: ${e.message}")
+            }
+
           }
 
           override fun onFailure(call: Call<GetGroupDetail>, t: Throwable) {

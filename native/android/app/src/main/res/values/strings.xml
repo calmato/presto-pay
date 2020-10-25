@@ -272,4 +272,9 @@
     <item>家賃</item>
     <item>その他</item>
   </string-array>
+  <string-array name="dividingMethod">
+    <item>割り勘</item>
+    <item>金額詳細入力</item>
+    <item>金額割合入力</item>
+  </string-array>
 </resources>

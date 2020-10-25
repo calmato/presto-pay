@@ -7,36 +7,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <Button
-      android:id="@+id/buttonStep3"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginStart="16dp"
-      android:layout_marginBottom="8dp"
-      android:backgroundTint="#000000"
-      android:text="Back"
-      android:textColor="@color/cardview_light_background"
-      android:textSize="18sp"
-      app:layout_constraintBottom_toBottomOf="parent"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/recyclerView"
-      app:layout_constraintVertical_bias="1.0" />
-
-    <Button
-      android:id="@+id/buttonStep"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginEnd="8dp"
-      android:layout_marginBottom="8dp"
-      android:backgroundTint="#000000"
-      android:text="金額詳細入力"
-      android:textColor="@color/cardview_light_background"
-      android:textSize="18sp"
-      app:layout_constraintBottom_toBottomOf="parent"
-      app:layout_constraintEnd_toStartOf="@+id/buttonStep2"
-      app:layout_constraintTop_toBottomOf="@+id/recyclerView"
-      app:layout_constraintVertical_bias="1.0" />
-
     <TextView
       android:id="@+id/textView12"
       android:layout_width="wrap_content"
@@ -58,30 +28,22 @@
       app:layout_constraintStart_toStartOf="@+id/textView12"
       app:layout_constraintTop_toBottomOf="@+id/textView12" />
 
-    <Button
-      android:id="@+id/buttonStep2"
-      android:layout_width="wrap_content"
+    <com.google.android.material.tabs.TabLayout
+      android:id="@+id/tab_layout"
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_marginEnd="16dp"
-      android:layout_marginBottom="8dp"
-      android:backgroundTint="#000000"
-      android:text="Next"
-      android:textColor="@color/cardview_light_background"
-      android:textSize="18sp"
+      app:layout_constraintBottom_toTopOf="@+id/viewPager2"
+      app:layout_constraintTop_toBottomOf="@+id/textView15"
+      app:layout_constraintVertical_bias="1.0"
+      tools:layout_editor_absoluteX="39dp" />
+
+    <androidx.viewpager2.widget.ViewPager2
+      android:id="@+id/viewPager2"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/recyclerView" />
-
-    <androidx.recyclerview.widget.RecyclerView
-      android:id="@+id/recyclerView"
-      android:layout_width="0dp"
-      android:layout_height="240dp"
-      android:layout_marginStart="8dp"
-      android:layout_marginTop="8dp"
-      android:layout_marginEnd="8dp"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/textView15" />
+      app:layout_constraintStart_toStartOf="parent" />
 
   </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
