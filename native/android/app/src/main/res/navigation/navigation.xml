@@ -224,6 +224,9 @@
     android:name="work.calmato.prestopay.ui.groupList.GroupListHiddenFragment"
     android:label="fragment_group_list_hidden"
     tools:layout="@layout/fragment_hidden_group_list">
+    <action
+      android:id="@+id/action_groupListHidden_to_account_home"
+      app:destination="@id/account_home" />
   </fragment>
   <fragment
     android:id="@+id/addExpenseFragment"

@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -102,6 +103,19 @@ class GroupListHiddenFragment : Fragment() {
                 ?.setPositiveButton(
                   resources.getString(R.string.delete),
                   DialogInterface.OnClickListener { _, _ ->
+                    Api.retrofitService.deleteHiddenGroup("Bearer ${id}", it.id)
+                      .enqueue(object : Callback<HiddenGroups> {
+                        override fun onResponse(call: Call<HiddenGroups>, response: Response<HiddenGroups>) {
+                          Log.d(ViewModelGroup.TAG, response.body().toString())
+                          hiddenGroups = response.body()
+                          Log.d(ViewModelGroup.TAG, hiddenGroups.toString())
+                        }
+
+                        override fun onFailure(call: Call<HiddenGroups>, t: Throwable) {
+                          Toast.makeText(activity, t.message, Toast.LENGTH_LONG).show()
+                          Log.d(ViewModelGroup.TAG, t.message)
+                        }
+                      })
                     viewModelGroup.deleteHiddenGroup(it.id, requireActivity())
                   })
                 ?.setNegativeButton(resources.getString(R.string.cancel), null)
