@@ -31,6 +31,10 @@ class ViewModelAddPayment(application: Application): AndroidViewModel(applicatio
   val total: LiveData<Float>
     get() = _total
 
+  private val _comment = MutableLiveData<String>()
+  val comment: LiveData<String>
+    get() = _comment
+
   private val _payers = MutableLiveData<List<NetworkPayer>>()
   val payers : LiveData<List<NetworkPayer>>
     get() = _payers
@@ -112,6 +116,9 @@ class ViewModelAddPayment(application: Application): AndroidViewModel(applicatio
           }
         })
     }
+  }
+  fun setComment(comment:String){
+    _comment.value = comment
   }
   fun setId(idInput:String){
     id = idInput

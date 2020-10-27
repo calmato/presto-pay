@@ -11,11 +11,11 @@
       android:id="@+id/tagImage3"
       android:layout_width="95dp"
       android:layout_height="95dp"
-      app:layout_constraintBottom_toBottomOf="@+id/constraintDate"
+      app:layout_constraintBottom_toBottomOf="@+id/constraintDate2"
       app:layout_constraintEnd_toStartOf="@+id/camera2"
       app:layout_constraintHorizontal_bias="0.5"
-      app:layout_constraintStart_toEndOf="@+id/constraintDate"
-      app:layout_constraintTop_toTopOf="@+id/constraintDate"
+      app:layout_constraintStart_toEndOf="@+id/constraintDate2"
+      app:layout_constraintTop_toTopOf="@+id/constraintDate2"
       app:srcCompat="@drawable/ic_baseline_label_24" />
 
     <ImageView
@@ -23,11 +23,11 @@
       android:layout_width="95dp"
       android:layout_height="95dp"
       android:src="@android:drawable/ic_menu_camera"
-      app:layout_constraintBottom_toBottomOf="@+id/constraintDate"
+      app:layout_constraintBottom_toBottomOf="@+id/constraintDate2"
       app:layout_constraintEnd_toStartOf="@+id/comment2"
       app:layout_constraintHorizontal_bias="0.5"
       app:layout_constraintStart_toEndOf="@+id/tagImage3"
-      app:layout_constraintTop_toTopOf="@+id/constraintDate"
+      app:layout_constraintTop_toTopOf="@+id/constraintDate2"
       app:layout_constraintVertical_bias="1.0" />
 
     <ImageView
@@ -35,14 +35,14 @@
       android:layout_width="85dp"
       android:layout_height="85dp"
       android:src="@drawable/ic_baseline_comment_24"
-      app:layout_constraintBottom_toBottomOf="@+id/constraintDate"
+      app:layout_constraintBottom_toBottomOf="@+id/constraintDate2"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintHorizontal_bias="0.5"
       app:layout_constraintStart_toEndOf="@+id/camera2"
-      app:layout_constraintTop_toTopOf="@+id/constraintDate" />
+      app:layout_constraintTop_toTopOf="@+id/constraintDate2" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-      android:id="@+id/constraintDate"
+      android:id="@+id/constraintDate2"
       android:layout_width="wrap_content"
       android:layout_height="0dp"
       android:layout_marginBottom="8dp"

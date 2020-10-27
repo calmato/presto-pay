@@ -95,11 +95,11 @@
       android:layout_width="95dp"
       android:layout_height="95dp"
       android:src="@android:drawable/ic_menu_camera"
-      app:layout_constraintBottom_toBottomOf="@+id/constraintDate"
+      app:layout_constraintBottom_toBottomOf="@+id/constraintDate2"
       app:layout_constraintEnd_toStartOf="@+id/comment"
       app:layout_constraintHorizontal_bias="0.5"
-      app:layout_constraintStart_toEndOf="@+id/constraintDate"
-      app:layout_constraintTop_toTopOf="@+id/constraintDate" />
+      app:layout_constraintStart_toEndOf="@+id/constraintDate2"
+      app:layout_constraintTop_toTopOf="@+id/constraintDate2" />
 
     <ImageView
       android:id="@+id/comment"

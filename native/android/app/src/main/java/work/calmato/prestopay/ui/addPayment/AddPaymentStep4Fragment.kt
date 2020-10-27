@@ -1,22 +1,39 @@
 package work.calmato.prestopay.ui.addPayment
 
+import android.app.Activity
+import android.app.AlertDialog
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.yalantis.ucrop.UCrop
+import kotlinx.android.synthetic.main.fragment_add_expense.*
 import kotlinx.android.synthetic.main.fragment_add_payment_step4.*
+import kotlinx.android.synthetic.main.fragment_add_payment_step4.calendar
+import kotlinx.android.synthetic.main.fragment_add_payment_step4.calendarDate
+import kotlinx.android.synthetic.main.fragment_add_payment_step4.calendarYear
 import work.calmato.prestopay.R
+import work.calmato.prestopay.database.getAppDatabase
 import work.calmato.prestopay.databinding.FragmentAddPaymentStep4Binding
-import work.calmato.prestopay.util.ViewModelAddPayment
-import work.calmato.prestopay.util.inflateGraph
+import work.calmato.prestopay.network.Tag
+import work.calmato.prestopay.repository.TagRepository
+import work.calmato.prestopay.util.*
+import kotlin.concurrent.thread
 
-class AddPaymentStep4Fragment:Fragment() {
+class AddPaymentStep4Fragment : PermissionBase(){
   private val viewModel: ViewModelAddPayment by lazy {
     ViewModelProvider(requireParentFragment().requireParentFragment()).get(ViewModelAddPayment::class.java)
   }
+  private val CODE = 11
+  private lateinit var tagList: List<Tag>
 
   override fun onCreateView(
     inflater: LayoutInflater,
@@ -31,5 +48,83 @@ class AddPaymentStep4Fragment:Fragment() {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     inflateGraph(chart,viewModel.payersAddPayment.value!!.map { it.name },viewModel.getSumUppedAmountList(),requireContext())
+    constraintDate2.setOnClickListener {
+      val datePickerFragment = DatePickerFragment()
+      datePickerFragment.setTargetFragment(this, CODE)
+      datePickerFragment.show(parentFragmentManager, "datePicker")
+    }
+    camera2.setOnClickListener {
+      requestPermission()
+    }
+    comment2.setOnClickListener {
+      showCommentDialog()
+    }
+    tagImage3.setOnClickListener {
+      showTagDialog()
+    }
+    thread {
+      tagList = TagRepository(getAppDatabase(requireContext())).tags
+    }
+  }
+
+  override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    if (requestCode == CODE && resultCode == Activity.RESULT_OK) {
+      inflateDate(data?.getStringExtra("selectedDate"))
+      calendar.visibility = ImageView.INVISIBLE
+      calendarYear.visibility = TextView.VISIBLE
+      calendarDate.visibility = TextView.VISIBLE
+    }
+    if (resultCode == Activity.RESULT_OK && requestCode == Constant.IMAGE_PICK_CODE) {
+      cropImage(data?.data!!)
+    }
+    if (resultCode == Activity.RESULT_OK && requestCode == UCrop.REQUEST_CROP) {
+      val resultUri = UCrop.getOutput(data!!)
+      camera2.setImageURI(resultUri)
+      camera2.visibility = ImageView.VISIBLE
+
+    }
+  }
+
+  private fun inflateDate(yearDate: String?) {
+    val dateList = yearDate?.split("/")
+    calendarYear.text = dateList!![0]
+    val concatDate = dateList[1] + "/" + dateList[2]
+    calendarDate.text = concatDate
+  }
+
+  private fun showCommentDialog() {
+    val builder: AlertDialog.Builder? = requireActivity().let {
+      AlertDialog.Builder(it)
+    }
+    val input = EditText(requireContext())
+    input.setBackgroundResource(android.R.color.transparent)
+
+    builder?.setTitle(resources.getString(R.string.add_comment))
+      ?.setPositiveButton(
+        resources.getString(R.string.add)
+      ) { _, _ ->
+        viewModel.setComment(input.text.toString())
+      }
+      ?.setNegativeButton(resources.getString(R.string.cancel), null)
+      ?.setView(input)
+    val dialog: AlertDialog? = builder?.create()
+    dialog?.show()
+  }
+
+  private fun showTagDialog() {
+    val builder: AlertDialog.Builder? = requireActivity().let {
+      AlertDialog.Builder(it)
+    }
+    val tagRecycleAdapter = AdapterTag()
+    tagRecycleAdapter.tagList = tagList
+    val recycleView = RecyclerView(requireContext())
+    recycleView.apply {
+      layoutManager = GridLayoutManager(requireContext(), 3)
+      adapter = tagRecycleAdapter
+    }
+    builder?.setView(recycleView)
+      ?.setPositiveButton(resources.getString(R.string.done), null)
+    val dialog: AlertDialog? = builder?.create()
+    dialog?.show()
   }
 }
