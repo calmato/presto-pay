@@ -92,18 +92,20 @@ class GroupListHiddenFragment : Fragment() {
         val builder: AlertDialog.Builder? = requireActivity().let {
           AlertDialog.Builder(it)
         }
-          ?.setPositiveButton(resources.getString(R.string.delete_hidden_group)
-            , DialogInterface.OnClickListener{ _, _->
-              val builder2:AlertDialog.Builder? = requireActivity().let {
+        builder?.setView(R.layout.dialog_add_friend)
+          ?.setPositiveButton(resources.getString(R.string.delete_hidden_group),
+            DialogInterface.OnClickListener { _, _ ->
+              val builder2: AlertDialog.Builder? = requireActivity().let {
                 AlertDialog.Builder(it)
               }
               builder2?.setMessage(resources.getString(R.string.delete_question))
-                ?.setPositiveButton(resources.getString(R.string.delete)
-                  , DialogInterface.OnClickListener{ _, _->
+                ?.setPositiveButton(
+                  resources.getString(R.string.delete),
+                  DialogInterface.OnClickListener { _, _ ->
                     viewModelGroup.deleteHiddenGroup(it.id, requireActivity())
                   })
-                ?.setNegativeButton(resources.getString(R.string.cancel),null)
-              val dialog2:AlertDialog? = builder2?.create()
+                ?.setNegativeButton(resources.getString(R.string.cancel), null)
+              val dialog2: AlertDialog? = builder2?.create()
               dialog2?.show()
             })
         val dialog: AlertDialog? = builder?.create()
