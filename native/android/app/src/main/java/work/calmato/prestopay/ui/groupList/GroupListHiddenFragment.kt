@@ -40,7 +40,8 @@ class GroupListHiddenFragment : Fragment() {
   override fun onActivityCreated(savedInstanceState: Bundle?) {
     super.onActivityCreated(savedInstanceState)
     thread {
-      try {
+      renderGroupListView()
+/*      try {
         Api.retrofitService.getHiddenGroups("Bearer $id")
           .enqueue(object : Callback<HiddenGroups> {
             override fun onFailure(call: Call<HiddenGroups>, t: Throwable) {
@@ -57,7 +58,7 @@ class GroupListHiddenFragment : Fragment() {
           })
       } catch (e: Exception) {
         Log.d(TAG, "debug $e")
-      }
+      }*/
     }
     val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
     id = sharedPreferences.getString("token", "")!!
@@ -109,6 +110,7 @@ class GroupListHiddenFragment : Fragment() {
                           Log.d(ViewModelGroup.TAG, response.body().toString())
                           hiddenGroups = response.body()
                           Log.d(ViewModelGroup.TAG, hiddenGroups.toString())
+                          renderGroupListView()
                         }
 
                         override fun onFailure(call: Call<HiddenGroups>, t: Throwable) {
@@ -116,7 +118,6 @@ class GroupListHiddenFragment : Fragment() {
                           Log.d(ViewModelGroup.TAG, t.message)
                         }
                       })
-                    viewModelGroup.deleteHiddenGroup(it.id, requireActivity())
                   })
                 ?.setNegativeButton(resources.getString(R.string.cancel), null)
               val dialog2: AlertDialog? = builder2?.create()
@@ -133,6 +134,27 @@ class GroupListHiddenFragment : Fragment() {
         viewModelGroup.itemIsClickedCompleted()
       }
     })
+  }
+
+  fun renderGroupListView() {
+    try {
+      Api.retrofitService.getHiddenGroups("Bearer $id")
+        .enqueue(object : Callback<HiddenGroups> {
+          override fun onFailure(call: Call<HiddenGroups>, t: Throwable) {
+            Log.d(ViewModelGroup.TAG, t.message)
+          }
+
+          override fun onResponse(call: Call<HiddenGroups>, response: Response<HiddenGroups>) {
+            Log.d(TAG, response.body().toString())
+            hiddenGroups = response.body()
+            Log.d(TAG, hiddenGroups.toString())
+            recycleGroupListAdapter?.groupList = hiddenGroups?.hiddenGroups!!
+            recycleGroupListAdapter?.notifyDataSetChanged()
+          }
+        })
+    } catch (e: Exception) {
+      Log.d(TAG, "debug $e")
+    }
   }
 
   companion object {
