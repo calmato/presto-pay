@@ -47,6 +47,14 @@ class ViewModelAddPayment(application: Application): AndroidViewModel(applicatio
   val itemClicked: LiveData<PayerAddPayment>
     get() = _itemClicked
 
+  private val _lendersAddPayment = MutableLiveData<List<Float>>()
+  val lendersAddPayment: LiveData<List<Float>>
+    get() = _lendersAddPayment
+
+  private val _borrowersAddPayment = MutableLiveData<List<Float>>()
+  val borrowersAddPayment: LiveData<List<Float>>
+    get() = _borrowersAddPayment
+
   lateinit var countryList: List<NationalFlag>
   lateinit var groupDetail: GetGroupDetail
   private lateinit var id:String
@@ -112,5 +120,13 @@ class ViewModelAddPayment(application: Application): AndroidViewModel(applicatio
   fun setGroupInfo(groupInfoInput:GroupPropertyResponse){
     groupInfo = groupInfoInput
     setGroupName(groupInfo.name)
+  }
+
+  fun setLendersList(list:List<Float>){
+    _lendersAddPayment.value = list
+  }
+
+  fun setBorrowersList(list:List<Float>){
+    _borrowersAddPayment.value = list
   }
 }

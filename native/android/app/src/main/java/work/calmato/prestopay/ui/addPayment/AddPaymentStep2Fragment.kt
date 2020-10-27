@@ -19,6 +19,7 @@ import kotlinx.android.synthetic.main.fragment_add_payment_step2.*
 import kotlinx.android.synthetic.main.fragment_add_payment_step2_view_pager.*
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentAddPaymentStep2Binding
+import work.calmato.prestopay.network.PayerAddPayment
 import work.calmato.prestopay.util.AdapterAddPaymentCheck
 import work.calmato.prestopay.util.AdapterAddPaymentInputAmount
 import work.calmato.prestopay.util.Constant.Companion.STEP2
@@ -90,7 +91,9 @@ class EquallyDivideFragment(val position: Int,private val step:Int) : Fragment()
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-    val payersList = viewModel.payersAddPayment.value!!
+    val payersList : List<PayerAddPayment> = viewModel.payersAddPayment.value!!.map {
+      PayerAddPayment(it.id,it.name,it.thumbnail,it.amount,false)
+    }
     arguments?.takeIf { it.containsKey(ARG_OBJECT) }?.apply {
       when (position) {
         //割り勘画面
@@ -122,12 +125,11 @@ class EquallyDivideFragment(val position: Int,private val step:Int) : Fragment()
           }
           nextButton.setOnClickListener {
             if(step == STEP2){
-              viewModel.payersAddPayment.value!!.mapIndexed { index, payerAddPayment ->
-                payerAddPayment.amount = recycleAdapterCheck.amounts[index]
-              }
+              viewModel.setLendersList(recycleAdapterCheck.amounts)
               navigateToStep3()
               Log.i("AddPaymentStep", "onViewCreated: ${viewModel.payersAddPayment.value!!}")
             } else if(step==STEP3){
+              viewModel.setBorrowersList(recycleAdapterCheck.amounts)
               navigateToStep4()
             }
           }
@@ -146,12 +148,11 @@ class EquallyDivideFragment(val position: Int,private val step:Int) : Fragment()
             //合計金額があっているかの確認
             if(recycleAdapterInputAmount2.amounts.sum()==viewModel.total.value!!){
               if (step== STEP2){
-                viewModel.payersAddPayment.value!!.mapIndexed { index, payerAddPayment ->
-                  payerAddPayment.amount = recycleAdapterInputAmount2.amounts[index]
-                }
+                viewModel.setLendersList(recycleAdapterInputAmount2.amounts)
                 navigateToStep3()
                 Log.i("AddPaymentStep", "onViewCreated: ${viewModel.payersAddPayment.value!!}")
               }else if(step== STEP3){
+                viewModel.setBorrowersList(recycleAdapterInputAmount2.amounts)
                 navigateToStep4()
               }
             }else {
@@ -174,12 +175,11 @@ class EquallyDivideFragment(val position: Int,private val step:Int) : Fragment()
             if(recycleAdapterInputAmount3.amounts.sum() == 100f){
               if(step== STEP2){
                 //ViewModel内の支払いデータに反映
-                viewModel.payersAddPayment.value!!.mapIndexed { index, payerAddPayment ->
-                  payerAddPayment.amount = recycleAdapterInputAmount3.amounts[index]
-                }
+                viewModel.setLendersList(recycleAdapterInputAmount3.amounts)
                 navigateToStep3()
                 Log.i("AddPaymentStep", "onViewCreated: ${recycleAdapterInputAmount3.amounts}")
               }else if(step== STEP3){
+                viewModel.setBorrowersList(recycleAdapterInputAmount3.amounts)
                 navigateToStep4()
               }
             } else{
