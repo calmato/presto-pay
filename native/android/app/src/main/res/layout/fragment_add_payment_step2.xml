@@ -11,9 +11,13 @@
       android:id="@+id/tab_layout"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
+      android:background="@color/ourTheme"
       app:layout_constraintBottom_toTopOf="@+id/viewPager2"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/sentence"
-      tools:layout_editor_absoluteX="-37dp" />
+      app:tabIndicatorColor="#000000"
+      app:tabInlineLabel="false" />
 
     <TextView
       android:id="@+id/step"

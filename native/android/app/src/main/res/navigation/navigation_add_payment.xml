@@ -27,5 +27,14 @@
     android:name="work.calmato.prestopay.ui.addPayment.AddPaymentStep3Fragment"
     android:label="fragment_add_payment_step3"
     tools:layout="@layout/fragment_add_payment_step2">
+    <action
+      android:id="@+id/action_addPaymentStep3_to_addPaymentStep4"
+      app:destination="@id/addPaymentStep4" />
+  </fragment>
+  <fragment
+    android:id="@+id/addPaymentStep4"
+    android:name="work.calmato.prestopay.ui.addPayment.AddPaymentStep4Fragment"
+    android:label="fragment_add_payment_step4"
+    tools:layout="@layout/fragment_add_payment_step4">
   </fragment>
 </navigation>

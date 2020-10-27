@@ -10,8 +10,6 @@ import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.RecyclerView
 import work.calmato.prestopay.databinding.ListItemAddPaymentCheckBinding
 import work.calmato.prestopay.network.PayerAddPayment
-import work.calmato.prestopay.util.Constant.Companion.NUMBER
-import work.calmato.prestopay.util.Constant.Companion.RATIO
 
 class AdapterAddPaymentCheck(private val onClickListener: OnClickListener?, val unit:String) :
   RecyclerView.Adapter<AdapterAddPaymentCheck.AddPaymentCheckViewHolder>() {

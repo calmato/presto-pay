@@ -21,6 +21,8 @@ import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentAddPaymentStep2Binding
 import work.calmato.prestopay.util.AdapterAddPaymentCheck
 import work.calmato.prestopay.util.AdapterAddPaymentInputAmount
+import work.calmato.prestopay.util.Constant.Companion.STEP2
+import work.calmato.prestopay.util.Constant.Companion.STEP3
 import work.calmato.prestopay.util.ViewModelAddPayment
 import kotlin.math.round
 
@@ -41,7 +43,7 @@ class AddPaymentStep2Fragment : Fragment() {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
 
-    demoCollectionAdapter = DemoCollectionAdapter(this)
+    demoCollectionAdapter = DemoCollectionAdapter(this,STEP2)
     viewPager2.adapter = demoCollectionAdapter
     // ViewPager2のタブを作成
     TabLayoutMediator(tab_layout, viewPager2) { tab, position ->
@@ -50,13 +52,13 @@ class AddPaymentStep2Fragment : Fragment() {
   }
 }
 //ViewPager2の入れ物
-class DemoCollectionAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
+class DemoCollectionAdapter(fragment: Fragment, private val step: Int) : FragmentStateAdapter(fragment) {
 
   override fun getItemCount(): Int = 3
 
   override fun createFragment(position: Int): Fragment {
     // Return a NEW fragment instance in createFragment(int)
-    val fragment = EquallyDivideFragment(position)
+    val fragment = EquallyDivideFragment(position,step)
     fragment.arguments = Bundle().apply {
       putInt(ARG_OBJECT, position)
     }
@@ -67,7 +69,7 @@ class DemoCollectionAdapter(fragment: Fragment) : FragmentStateAdapter(fragment)
 private const val ARG_OBJECT = "3"
 
 // ViewPager2の中身
-class EquallyDivideFragment(val position: Int) : Fragment() {
+class EquallyDivideFragment(val position: Int,private val step:Int) : Fragment() {
   private val viewModel: ViewModelAddPayment by lazy {
     ViewModelProvider(requireParentFragment().requireParentFragment().requireParentFragment()).get(
       ViewModelAddPayment::class.java
@@ -119,11 +121,15 @@ class EquallyDivideFragment(val position: Int) : Fragment() {
             adapter = recycleAdapterCheck
           }
           nextButton.setOnClickListener {
-            viewModel.payersAddPayment.value!!.mapIndexed { index, payerAddPayment ->
-              payerAddPayment.amount = recycleAdapterCheck.amounts[index]
+            if(step == STEP2){
+              viewModel.payersAddPayment.value!!.mapIndexed { index, payerAddPayment ->
+                payerAddPayment.amount = recycleAdapterCheck.amounts[index]
+              }
+              navigateToStep3()
+              Log.i("AddPaymentStep", "onViewCreated: ${viewModel.payersAddPayment.value!!}")
+            } else if(step==STEP3){
+              navigateToStep4()
             }
-            navigateToStep3()
-            Log.i("AddPaymentStep", "onViewCreated: ${viewModel.payersAddPayment.value!!}")
           }
         }
         //金額入力の画面
@@ -139,11 +145,15 @@ class EquallyDivideFragment(val position: Int) : Fragment() {
           nextButton.setOnClickListener {
             //合計金額があっているかの確認
             if(recycleAdapterInputAmount2.amounts.sum()==viewModel.total.value!!){
-              viewModel.payersAddPayment.value!!.mapIndexed { index, payerAddPayment ->
-                payerAddPayment.amount = recycleAdapterInputAmount2.amounts[index]
+              if (step== STEP2){
+                viewModel.payersAddPayment.value!!.mapIndexed { index, payerAddPayment ->
+                  payerAddPayment.amount = recycleAdapterInputAmount2.amounts[index]
+                }
+                navigateToStep3()
+                Log.i("AddPaymentStep", "onViewCreated: ${viewModel.payersAddPayment.value!!}")
+              }else if(step== STEP3){
+                navigateToStep4()
               }
-              navigateToStep3()
-              Log.i("AddPaymentStep", "onViewCreated: ${viewModel.payersAddPayment.value!!}")
             }else {
               Toast.makeText(requireContext(),"支払い合計が総額と一致しません",Toast.LENGTH_LONG).show()
             }
@@ -162,12 +172,16 @@ class EquallyDivideFragment(val position: Int) : Fragment() {
           nextButton.setOnClickListener {
             // 合計が100％かの確認
             if(recycleAdapterInputAmount3.amounts.sum() == 100f){
-              //ViewModel内の支払いデータに反映
-              viewModel.payersAddPayment.value!!.mapIndexed { index, payerAddPayment ->
-                payerAddPayment.amount = recycleAdapterInputAmount3.amounts[index]
+              if(step== STEP2){
+                //ViewModel内の支払いデータに反映
+                viewModel.payersAddPayment.value!!.mapIndexed { index, payerAddPayment ->
+                  payerAddPayment.amount = recycleAdapterInputAmount3.amounts[index]
+                }
+                navigateToStep3()
+                Log.i("AddPaymentStep", "onViewCreated: ${recycleAdapterInputAmount3.amounts}")
+              }else if(step== STEP3){
+                navigateToStep4()
               }
-              navigateToStep3()
-              Log.i("AddPaymentStep", "onViewCreated: ${recycleAdapterInputAmount3.amounts}")
             } else{
              Toast.makeText(requireContext(),"合計を100％にしてください",Toast.LENGTH_LONG).show()
             }
@@ -179,6 +193,11 @@ class EquallyDivideFragment(val position: Int) : Fragment() {
   private fun navigateToStep3(){
     this.findNavController().navigate(
       AddPaymentStep2FragmentDirections.actionAddPaymentStep2ToAddPaymentStep3()
+    )
+  }
+  private fun navigateToStep4(){
+    this.findNavController().navigate(
+      AddPaymentStep3FragmentDirections.actionAddPaymentStep3ToAddPaymentStep4()
     )
   }
 }

@@ -10,6 +10,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.android.synthetic.main.fragment_add_payment_step2.*
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentAddPaymentStep2Binding
+import work.calmato.prestopay.util.Constant.Companion.STEP3
 
 class AddPaymentStep3Fragment : Fragment()  {
   private lateinit var demoCollectionAdapter: DemoCollectionAdapter
@@ -28,7 +29,7 @@ class AddPaymentStep3Fragment : Fragment()  {
     super.onViewCreated(view, savedInstanceState)
     step.text = "Step3"
     sentence.text = "対象者は？"
-    demoCollectionAdapter = DemoCollectionAdapter(this)
+    demoCollectionAdapter = DemoCollectionAdapter(this,STEP3)
     viewPager2.adapter = demoCollectionAdapter
     // ViewPager2のタブを作成
     TabLayoutMediator(tab_layout, viewPager2) { tab, position ->
