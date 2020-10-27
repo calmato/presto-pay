@@ -129,4 +129,10 @@ class ViewModelAddPayment(application: Application): AndroidViewModel(applicatio
   fun setBorrowersList(list:List<Float>){
     _borrowersAddPayment.value = list
   }
+
+  fun getSumUppedAmountList() : List<Float>{
+    return _lendersAddPayment.value!!.zip(_borrowersAddPayment.value!!){x,y ->
+      x - y
+    }
+  }
 }

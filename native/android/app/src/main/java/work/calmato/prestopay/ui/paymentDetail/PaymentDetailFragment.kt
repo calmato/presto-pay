@@ -4,18 +4,9 @@ import android.app.AlertDialog
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.preference.PreferenceManager
-import android.util.Log
 import android.view.*
 import android.widget.Toast
-import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
-import com.github.mikephil.charting.components.AxisBase
-import com.github.mikephil.charting.components.XAxis
-import com.github.mikephil.charting.components.YAxis
-import com.github.mikephil.charting.data.BarData
-import com.github.mikephil.charting.data.BarDataSet
-import com.github.mikephil.charting.data.BarEntry
-import com.github.mikephil.charting.formatter.ValueFormatter
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_payment_detail.*
 import retrofit2.Call
@@ -25,6 +16,7 @@ import work.calmato.prestopay.util.PermissionBase
 import retrofit2.Callback
 import retrofit2.Response
 import work.calmato.prestopay.network.*
+import work.calmato.prestopay.util.inflateGraph
 
 
 class PaymentDetailFragment : PermissionBase() {
@@ -58,7 +50,13 @@ class PaymentDetailFragment : PermissionBase() {
     expenseName.text = paymentDetail.name
     amount.text = paymentDetail.total.toString().plus(" ").plus(paymentDetail.currency)
     comment.text = paymentDetail.comment
-    setGraph()
+    val nonzeroPayers = paymentDetail.payers.filter { it.amount != 0f }
+    inflateGraph(
+      chart,
+      nonzeroPayers.map { it.name },
+      nonzeroPayers.map { it.amount },
+      requireContext()
+    )
     completed.setOnClickListener {
       val builder: AlertDialog.Builder? = requireActivity().let {
         AlertDialog.Builder(it)
@@ -76,52 +74,6 @@ class PaymentDetailFragment : PermissionBase() {
       val dialog: AlertDialog? = builder?.create()
       dialog?.show()
     }
-  }
-
-  private fun setGraph() {
-    val entries: MutableList<BarEntry> = arrayListOf()
-    val nonZeroPayers = paymentDetail.payers.filter { it.amount != 0f }
-    val colors = nonZeroPayers.map {
-      if (it.amount > 0) {
-        ContextCompat.getColor(requireContext(), R.color.positiveNumberColor)
-      } else {
-        ContextCompat.getColor(requireContext(), R.color.negativeNumberColor)
-      }
-    }
-    for ((idx, payer) in nonZeroPayers.withIndex()) {
-      entries.add(BarEntry(idx.toFloat(), kotlin.math.abs(payer.amount)))
-    }
-    Log.i("PaymentDetailFragment", "onViewCreated: $entries")
-    val set = BarDataSet(entries, "BarDataSet")
-    set.axisDependency = YAxis.AxisDependency.LEFT
-    set.colors = colors
-
-    chart.setFitBars(true) // make the x-axis fit exactly all bars
-    val xAxis = chart.xAxis
-    xAxis.valueFormatter = XLabelFormatter(nonZeroPayers)
-    xAxis.position = XAxis.XAxisPosition.BOTTOM
-    xAxis.setDrawGridLines(false)
-    xAxis.textSize = 14f
-    xAxis.granularity = 1f // minimum axis-step (interval) is 1
-    xAxis.labelRotationAngle = -45f
-    xAxis.spaceMin = 0f
-    xAxis.spaceMax = 0f
-    val left = chart.axisLeft
-    val right = chart.axisRight
-    left.axisMinimum = 0f
-    right.axisMinimum = 0f
-    left.setDrawAxisLine(false) // no axis line
-    left.setDrawGridLines(false) // no grid lines
-    right.isEnabled = false
-    right.setDrawGridLines(false) // no grid line
-    left.textSize = 14f
-    chart.legend.isEnabled = false
-    chart.description.isEnabled = false
-    val data = BarData(set)
-    data.barWidth = 0.9f // set custom bar width
-    data.setValueTextSize(14f)
-    chart.data = data
-    chart.invalidate() // refresh
   }
 
   private fun sendRequest() {
@@ -144,15 +96,11 @@ class PaymentDetailFragment : PermissionBase() {
         }
       })
   }
+
   override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
     inflater.inflate(R.menu.header_edit, menu)
   }
 }
 
-class XLabelFormatter(payers: List<NetworkPayer>) : ValueFormatter() {
-  private val names = payers.map { it.name }
-  override fun getAxisLabel(value: Float, axis: AxisBase?): String {
-    return names.getOrNull(value.toInt()) ?: value.toString()
-  }
-}
+
 
