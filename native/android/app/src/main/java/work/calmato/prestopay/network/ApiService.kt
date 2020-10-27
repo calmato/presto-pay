@@ -99,6 +99,11 @@ interface ApiService {
     @Header("Authorization") token: String, @Path("groupId") groupId: String
   ): Call<HiddenGroups>
 
+  @DELETE("groups/{groupId}/hidden")
+  fun deleteHiddenGroup(
+    @Header("Authorization") token: String, @Path("groupId") groupId: String
+  ) : Call<HiddenGroups>
+
   @PATCH("auth")
   fun editAccount(
     @Header("Authorization") token: String,
