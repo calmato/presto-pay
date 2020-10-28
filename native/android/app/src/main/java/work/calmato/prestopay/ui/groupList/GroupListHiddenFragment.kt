@@ -1,23 +1,21 @@
 package work.calmato.prestopay.ui.groupList
 
-import android.app.AlertDialog
-import android.content.DialogInterface
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.fragment_hidden_group_list.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -33,6 +31,7 @@ class GroupListHiddenFragment : Fragment() {
   private val viewModelGroup: ViewModelGroup by lazy {
     ViewModelProvider(this).get(ViewModelGroup::class.java)
   }
+
   private var hiddenGroups: HiddenGroups? = null
   private var recycleGroupListAdapter: AdapterGroupPlane? = null
   private lateinit var id: String
@@ -62,6 +61,8 @@ class GroupListHiddenFragment : Fragment() {
     }
     val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
     id = sharedPreferences.getString("token", "")!!
+    val swipeToDismissTouchHelper = getSwipeToDismissTouchHelper(recycleGroupListAdapter!!)
+    swipeToDismissTouchHelper.attachToRecyclerView(groupHiddenRecycle)
   }
 
   private lateinit var clickListener: AdapterGroupPlane.OnClickListener
@@ -83,13 +84,16 @@ class GroupListHiddenFragment : Fragment() {
     binding.root.findViewById<RecyclerView>(R.id.groupHiddenRecycle).apply {
       layoutManager = LinearLayoutManager(context)
       adapter = recycleGroupListAdapter
+
     }
     return binding.root
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    viewModelGroup.itemClickedGroup.observe(viewLifecycleOwner, Observer {
+
+    // Groupの削除click ver
+/*    viewModelGroup.itemClickedGroup.observe(viewLifecycleOwner, Observer {
       if (it != null) {
         val builder: AlertDialog.Builder? = requireActivity().let {
           AlertDialog.Builder(it)
@@ -133,8 +137,71 @@ class GroupListHiddenFragment : Fragment() {
         }
         viewModelGroup.itemIsClickedCompleted()
       }
-    })
+    })*/
   }
+
+  private fun getSwipeToDismissTouchHelper(adapter: RecyclerView.Adapter<AdapterGroupPlane.AddGroupViewHolder>) =
+    ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(
+      ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT,
+      ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
+    ) {
+      override fun onMove(
+        recyclerView: RecyclerView,
+        viewHolder: RecyclerView.ViewHolder,
+        target: RecyclerView.ViewHolder
+      ): Boolean {
+        return false
+      }
+
+      //スワイプ時に実行
+      override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+        //データリストからスワイプしたデータを削除
+        //dataList.removeAt(viewHolder.adapterPosition)
+
+        //リストからスワイプしたカードを削除
+        adapter.notifyItemRemoved(viewHolder.adapterPosition)
+      }
+
+      //スワイプした時の背景を設定
+      override fun onChildDraw(
+        c: Canvas,
+        recyclerView: RecyclerView,
+        viewHolder: RecyclerView.ViewHolder,
+        dX: Float,
+        dY: Float,
+        actionState: Int,
+        isCurrentlyActive: Boolean
+      ) {
+        super.onChildDraw(
+          c,
+          recyclerView,
+          viewHolder,
+          dX,
+          dY,
+          actionState,
+          isCurrentlyActive
+        )
+        val itemView = viewHolder.itemView
+        val background = ColorDrawable()
+        background.color = Color.parseColor("#f44336")
+        if (dX < 0)
+          background.setBounds(
+            itemView.right + dX.toInt(),
+            itemView.top,
+            itemView.right,
+            itemView.bottom
+          )
+        else
+          background.setBounds(
+            itemView.left,
+            itemView.top,
+            itemView.left + dX.toInt(),
+            itemView.bottom
+          )
+
+        background.draw(c)
+      }
+    })
 
   fun renderGroupListView() {
     try {
