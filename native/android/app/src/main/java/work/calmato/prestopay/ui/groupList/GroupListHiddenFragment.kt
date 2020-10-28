@@ -9,6 +9,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -142,8 +144,8 @@ class GroupListHiddenFragment : Fragment() {
 
   private fun getSwipeToDismissTouchHelper(adapter: RecyclerView.Adapter<AdapterGroupPlane.AddGroupViewHolder>) =
     ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(
-      ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT,
-      ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
+      ItemTouchHelper.LEFT,
+      ItemTouchHelper.LEFT
     ) {
       override fun onMove(
         recyclerView: RecyclerView,
@@ -155,11 +157,21 @@ class GroupListHiddenFragment : Fragment() {
 
       //スワイプ時に実行
       override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-        //データリストからスワイプしたデータを削除
-        //dataList.removeAt(viewHolder.adapterPosition)
+        // ここを変更すれば他でも対応可能
+        Api.retrofitService.deleteHiddenGroup("Bearer ${id}", hiddenGroups!!.hiddenGroups[viewHolder.adapterPosition].id)
+          .enqueue(object : Callback<HiddenGroups> {
+            override fun onResponse(call: Call<HiddenGroups>, response: Response<HiddenGroups>) {
+              Log.d(ViewModelGroup.TAG, response.body().toString())
+              hiddenGroups = response.body()
+              Log.d(ViewModelGroup.TAG, hiddenGroups.toString())
+              renderGroupListView()
+            }
 
-        //リストからスワイプしたカードを削除
-        adapter.notifyItemRemoved(viewHolder.adapterPosition)
+            override fun onFailure(call: Call<HiddenGroups>, t: Throwable) {
+              Toast.makeText(activity, t.message, Toast.LENGTH_LONG).show()
+              Log.d(ViewModelGroup.TAG, t.message)
+            }
+          })
       }
 
       //スワイプした時の背景を設定
@@ -182,25 +194,30 @@ class GroupListHiddenFragment : Fragment() {
           isCurrentlyActive
         )
         val itemView = viewHolder.itemView
-        val background = ColorDrawable()
-        background.color = Color.parseColor("#f44336")
-        if (dX < 0)
-          background.setBounds(
-            itemView.right + dX.toInt(),
-            itemView.top,
-            itemView.right,
-            itemView.bottom
-          )
-        else
-          background.setBounds(
-            itemView.left,
-            itemView.top,
-            itemView.left + dX.toInt(),
-            itemView.bottom
-          )
+        val background = ColorDrawable(Color.RED)
+        val deleteIcon = AppCompatResources.getDrawable(
+          requireContext(),
+          R.drawable.ic_baseline_delete_sweep_24
+        )
+        val iconMarginVertical =
+          (viewHolder.itemView.height - deleteIcon!!.intrinsicHeight) / 2
 
+        deleteIcon.setBounds(
+          itemView.left + iconMarginVertical,
+          itemView.top + iconMarginVertical,
+          itemView.left + iconMarginVertical + deleteIcon.intrinsicWidth,
+          itemView.bottom - iconMarginVertical
+        )
+        background.setBounds(
+          itemView.left,
+          itemView.top,
+          itemView.right + dX.toInt(),
+          itemView.bottom
+        )
         background.draw(c)
+        deleteIcon.draw(c)
       }
+
     })
 
   fun renderGroupListView() {

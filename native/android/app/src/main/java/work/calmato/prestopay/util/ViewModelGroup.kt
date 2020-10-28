@@ -27,6 +27,10 @@ class ViewModelGroup(application: Application) : AndroidViewModel(application) {
   val itemClickedGroup: LiveData<GroupPropertyResponse>
     get() = _itemClickedGroup
 
+  private val _itemSwipedGroup = MutableLiveData<GroupPropertyResponse>()
+  val itemSwipedGroup: LiveData<GroupPropertyResponse>
+    get() = _itemClickedGroup
+
   private val _groupList = MutableLiveData<List<GroupPropertyResponse>>()
   val groupList: LiveData<List<GroupPropertyResponse>>
     get() = _groupList
