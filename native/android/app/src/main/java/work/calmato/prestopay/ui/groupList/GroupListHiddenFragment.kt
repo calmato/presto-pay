@@ -1,5 +1,7 @@
 package work.calmato.prestopay.ui.groupList
 
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -42,24 +44,6 @@ class GroupListHiddenFragment : Fragment() {
     super.onActivityCreated(savedInstanceState)
     thread {
       renderGroupListView()
-/*      try {
-        Api.retrofitService.getHiddenGroups("Bearer $id")
-          .enqueue(object : Callback<HiddenGroups> {
-            override fun onFailure(call: Call<HiddenGroups>, t: Throwable) {
-              Log.d(ViewModelGroup.TAG, t.message)
-            }
-
-            override fun onResponse(call: Call<HiddenGroups>, response: Response<HiddenGroups>) {
-              Log.d(TAG, response.body().toString())
-              hiddenGroups = response.body()
-              Log.d(TAG, hiddenGroups.toString())
-              recycleGroupListAdapter?.groupList = hiddenGroups?.hiddenGroups!!
-              recycleGroupListAdapter?.notifyDataSetChanged()
-            }
-          })
-      } catch (e: Exception) {
-        Log.d(TAG, "debug $e")
-      }*/
     }
     val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
     id = sharedPreferences.getString("token", "")!!
@@ -91,57 +75,6 @@ class GroupListHiddenFragment : Fragment() {
     return binding.root
   }
 
-  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-    super.onViewCreated(view, savedInstanceState)
-
-    // Groupの削除click ver
-/*    viewModelGroup.itemClickedGroup.observe(viewLifecycleOwner, Observer {
-      if (it != null) {
-        val builder: AlertDialog.Builder? = requireActivity().let {
-          AlertDialog.Builder(it)
-        }
-        builder?.setView(R.layout.dialog_add_friend)
-          ?.setPositiveButton(resources.getString(R.string.delete_hidden_group),
-            DialogInterface.OnClickListener { _, _ ->
-              val builder2: AlertDialog.Builder? = requireActivity().let {
-                AlertDialog.Builder(it)
-              }
-              builder2?.setMessage(resources.getString(R.string.delete_question))
-                ?.setPositiveButton(
-                  resources.getString(R.string.delete),
-                  DialogInterface.OnClickListener { _, _ ->
-                    Api.retrofitService.deleteHiddenGroup("Bearer ${id}", it.id)
-                      .enqueue(object : Callback<HiddenGroups> {
-                        override fun onResponse(call: Call<HiddenGroups>, response: Response<HiddenGroups>) {
-                          Log.d(ViewModelGroup.TAG, response.body().toString())
-                          hiddenGroups = response.body()
-                          Log.d(ViewModelGroup.TAG, hiddenGroups.toString())
-                          renderGroupListView()
-                        }
-
-                        override fun onFailure(call: Call<HiddenGroups>, t: Throwable) {
-                          Toast.makeText(activity, t.message, Toast.LENGTH_LONG).show()
-                          Log.d(ViewModelGroup.TAG, t.message)
-                        }
-                      })
-                  })
-                ?.setNegativeButton(resources.getString(R.string.cancel), null)
-              val dialog2: AlertDialog? = builder2?.create()
-              dialog2?.show()
-            })
-        val dialog: AlertDialog? = builder?.create()
-        dialog?.show()
-        val name = dialog?.findViewById<TextView>(R.id.username_dialog)
-        val thumbnail = dialog?.findViewById<ImageView>(R.id.thumbnail_dialog)
-        name!!.text = it.name
-        if (it.thumbnailUrl != null && it.thumbnailUrl.isNotEmpty()) {
-          Picasso.with(context).load(it.thumbnailUrl).into(thumbnail)
-        }
-        viewModelGroup.itemIsClickedCompleted()
-      }
-    })*/
-  }
-
   private fun getSwipeToDismissTouchHelper(adapter: RecyclerView.Adapter<AdapterGroupPlane.AddGroupViewHolder>) =
     ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(
       ItemTouchHelper.LEFT,
@@ -157,21 +90,38 @@ class GroupListHiddenFragment : Fragment() {
 
       //スワイプ時に実行
       override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-        // ここを変更すれば他でも対応可能
-        Api.retrofitService.deleteHiddenGroup("Bearer ${id}", hiddenGroups!!.hiddenGroups[viewHolder.adapterPosition].id)
-          .enqueue(object : Callback<HiddenGroups> {
-            override fun onResponse(call: Call<HiddenGroups>, response: Response<HiddenGroups>) {
-              Log.d(ViewModelGroup.TAG, response.body().toString())
-              hiddenGroups = response.body()
-              Log.d(ViewModelGroup.TAG, hiddenGroups.toString())
-              renderGroupListView()
-            }
+        val builder: AlertDialog.Builder? = requireActivity().let {
+          AlertDialog.Builder(it)
+        }
+        builder?.setMessage(resources.getString(R.string.delete_question))
+          ?.setPositiveButton(
+            resources.getString(R.string.delete),
+            DialogInterface.OnClickListener { _, _ ->
+              Api.retrofitService.deleteHiddenGroup(
+                "Bearer ${id}",
+                hiddenGroups!!.hiddenGroups[viewHolder.adapterPosition].id
+              )
+                .enqueue(object : Callback<HiddenGroups> {
+                  override fun onResponse(
+                    call: Call<HiddenGroups>,
+                    response: Response<HiddenGroups>
+                  ) {
+                    Log.d(ViewModelGroup.TAG, response.body().toString())
+                    hiddenGroups = response.body()
+                    Log.d(ViewModelGroup.TAG, hiddenGroups.toString())
+                    renderGroupListView()
+                  }
 
-            override fun onFailure(call: Call<HiddenGroups>, t: Throwable) {
-              Toast.makeText(activity, t.message, Toast.LENGTH_LONG).show()
-              Log.d(ViewModelGroup.TAG, t.message)
-            }
-          })
+                  override fun onFailure(call: Call<HiddenGroups>, t: Throwable) {
+                    Toast.makeText(activity, t.message, Toast.LENGTH_LONG).show()
+                    Log.d(ViewModelGroup.TAG, t.message)
+                  }
+                })
+            })
+          ?.setNegativeButton(resources.getString(R.string.cancel), null)
+        renderGroupListView()
+        val dialog: AlertDialog? = builder?.create()
+        dialog?.show()
       }
 
       //スワイプした時の背景を設定
