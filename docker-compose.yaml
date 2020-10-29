@@ -65,7 +65,7 @@ services:
   redis:
     container_name: presto_pay_redis
     build:
-      context: ./infra/docker/redi
+      context: ./infra/docker/redis
     networks:
       - api
 
@@ -162,6 +162,7 @@ services:
     volumes:
       - ./infra/terraform:/terraform:cached
       - ./secrets:/secrets
+      - ~/.ssh:/root/.ssh
     tty: true
     stdin_open: true
     environment:

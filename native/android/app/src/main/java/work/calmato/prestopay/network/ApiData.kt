@@ -28,6 +28,11 @@ data class Groups(
 ) : Parcelable {}
 
 @Parcelize
+data class HiddenGroups(
+  val hiddenGroups: List<GroupPropertyResponse>
+) : Parcelable {}
+
+@Parcelize
 data class RegisterDeviceIdProperty(
   val instanceId: String
 ) : Parcelable {}

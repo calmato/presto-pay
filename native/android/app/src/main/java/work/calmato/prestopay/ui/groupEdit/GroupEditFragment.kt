@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.preference.PreferenceManager
 import android.util.Log
 import android.view.*
+import android.widget.Switch
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.databinding.DataBindingUtil
@@ -114,7 +115,7 @@ class GroupEditFragment : Fragment() {
       }
     )
 
-    // TODO: Group上での友達の削除として対応できていないため実装する場合ばここに記述する
+    // TODO: Group上での友達の削除として対応できていないため実装する場合はここに記述する
 /*    viewModel.itemClicked.observe(viewLifecycleOwner, Observer {
       if (null != it) {
         val builder: AlertDialog.Builder? = requireActivity().let {
@@ -184,13 +185,7 @@ class GroupEditFragment : Fragment() {
           call: Call<EditGroup>,
           response: Response<EditGroup>
         ) {
-          if (response.isSuccessful) {
-            Toast.makeText(
-              activity,
-              "グループ情報を変更しました",
-              Toast.LENGTH_SHORT
-            ).show()
-          } else {
+          if (!response.isSuccessful) {
             Toast.makeText(
               activity,
               "グループ情報を変更できませんでした",
@@ -199,6 +194,28 @@ class GroupEditFragment : Fragment() {
           }
         }
       })
+
+    val mSwitch: Switch = hiddenSwitch
+    if (mSwitch.isChecked) {
+      Api.retrofitService.addHiddenGroup("Bearer $id", groupId)
+        .enqueue(object : Callback<HiddenGroups> {
+          override fun onFailure(call: Call<HiddenGroups>, t: Throwable) {
+            Toast.makeText(activity, t.message, Toast.LENGTH_LONG).show()
+            Log.d(TAG, t.message)
+          }
+
+          override fun onResponse(call: Call<HiddenGroups>, response: Response<HiddenGroups>) {
+            if (!response.isSuccessful) {
+              Toast.makeText(
+                activity,
+                "グループ情報を変更できませんでした",
+                Toast.LENGTH_SHORT
+              )
+            }
+          }
+        })
+    }
+
     this.findNavController().navigate(
       GroupEditFragmentDirections.actionGroupEditFragmentToHomeFragment()
     )

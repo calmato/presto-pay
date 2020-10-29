@@ -35,7 +35,8 @@ type IndexGroup struct {
 
 // IndexGroups - グループ一覧取得APIのレスポンス
 type IndexGroups struct {
-	Groups []*IndexGroup `json:"groups"`
+	Groups       []*IndexGroup `json:"groups"`
+	HiddenGroups []*IndexGroup `json:"hiddenGroups"`
 }
 
 // CreateGroup - グループ作成APIのレスポンス
@@ -76,4 +77,26 @@ type RemoveUsersInGroup struct {
 	UserIDs      []string  `json:"userIds"`
 	CreatedAt    time.Time `json:"createdAt"`
 	UpdatedAt    time.Time `json:"updatedAt"`
+}
+
+// HiddenGroup - グループ一覧取得APIのグループ情報
+type HiddenGroup struct {
+	ID           string    `json:"id"`
+	Name         string    `json:"name"`
+	ThumbnailURL string    `json:"thumbnailUrl"`
+	UserIDs      []string  `json:"userIds"`
+	CreatedAt    time.Time `json:"createdAt"`
+	UpdatedAt    time.Time `json:"updatedAt"`
+}
+
+// AddHiddenGroup - グループ非公開設定APIのレスポンス
+type AddHiddenGroup struct {
+	Groups       []*HiddenGroup `json:"groups"`
+	HiddenGroups []*HiddenGroup `json:"hiddenGroups"`
+}
+
+// RemoveHiddenGroup - グループ公開設定APIのレスポンス
+type RemoveHiddenGroup struct {
+	Groups       []*HiddenGroup `json:"groups"`
+	HiddenGroups []*HiddenGroup `json:"hiddenGroups"`
 }

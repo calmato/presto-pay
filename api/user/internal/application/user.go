@@ -27,6 +27,8 @@ type UserApplication interface {
 	UniqueCheckUsername(ctx context.Context, req *request.UniqueCheckUserUsername) (bool, error)
 	AddGroup(ctx context.Context, userID string, groupID string) (*user.User, error)
 	RemoveGroup(ctx context.Context, userID string, groupID string) (*user.User, error)
+	AddHiddenGroup(ctx context.Context, groupID string) (*user.User, error)
+	RemoveHiddenGroup(ctx context.Context, groupID string) (*user.User, error)
 	AddFriend(ctx context.Context, req *request.AddFriend) (*user.User, error)
 	RemoveFriend(ctx context.Context, userID string) (*user.User, error)
 }
@@ -268,6 +270,56 @@ func (ua *userApplication) RemoveGroup(ctx context.Context, userID string, group
 	}
 
 	u.GroupIDs = common.RemoveString(u.GroupIDs, groupID)
+
+	if _, err := ua.userService.Update(ctx, u); err != nil {
+		return nil, err
+	}
+
+	return u, nil
+}
+
+func (ua *userApplication) AddHiddenGroup(ctx context.Context, groupID string) (*user.User, error) {
+	u, err := ua.userService.Authentication(ctx)
+	if err != nil {
+		return nil, domain.Unauthorized.New(err)
+	}
+
+	contains, err := ua.userService.ContainsHiddenGroupID(ctx, u, groupID)
+	if err != nil {
+		return nil, err
+	}
+
+	if contains {
+		err := xerrors.New("Failed to Service")
+		return nil, domain.AlreadyExistsInDatastore.New(err)
+	}
+
+	u.HiddenGroupIDs = append(u.HiddenGroupIDs, groupID)
+
+	if _, err := ua.userService.Update(ctx, u); err != nil {
+		return nil, err
+	}
+
+	return u, nil
+}
+
+func (ua *userApplication) RemoveHiddenGroup(ctx context.Context, groupID string) (*user.User, error) {
+	u, err := ua.userService.Authentication(ctx)
+	if err != nil {
+		return nil, domain.Unauthorized.New(err)
+	}
+
+	contains, err := ua.userService.ContainsHiddenGroupID(ctx, u, groupID)
+	if err != nil {
+		return nil, err
+	}
+
+	if !contains {
+		err := xerrors.New("Failed to Service")
+		return nil, domain.NotFound.New(err)
+	}
+
+	u.HiddenGroupIDs = common.RemoveString(u.HiddenGroupIDs, groupID)
 
 	if _, err := ua.userService.Update(ctx, u); err != nil {
 		return nil, err

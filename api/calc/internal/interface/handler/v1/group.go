@@ -21,6 +21,8 @@ type APIV1GroupHandler interface {
 	Update(ctx *gin.Context)
 	AddUsers(ctx *gin.Context)
 	RemoveUsers(ctx *gin.Context)
+	AddHiddenGroup(ctx *gin.Context)
+	RemoveHiddenGroup(ctx *gin.Context)
 	Destroy(ctx *gin.Context)
 }
 
@@ -37,16 +39,13 @@ func NewAPIV1GroupHandler(ga application.GroupApplication) APIV1GroupHandler {
 
 func (gh *apiV1GroupHandler) Index(ctx *gin.Context) {
 	c := middleware.GinContextToContext(ctx)
-	gs, err := gh.groupApplication.Index(c)
+	gs, ghs, err := gh.groupApplication.Index(c)
 	if err != nil {
 		handler.ErrorHandling(ctx, err)
 		return
 	}
 
-	res := &response.IndexGroups{
-		Groups: make([]*response.IndexGroup, len(gs)),
-	}
-
+	grs := make([]*response.IndexGroup, len(gs))
 	for i, g := range gs {
 		gr := &response.IndexGroup{
 			ID:           g.ID,
@@ -57,7 +56,26 @@ func (gh *apiV1GroupHandler) Index(ctx *gin.Context) {
 			UpdatedAt:    g.UpdatedAt,
 		}
 
-		res.Groups[i] = gr
+		grs[i] = gr
+	}
+
+	ghrs := make([]*response.IndexGroup, len(ghs))
+	for i, g := range ghs {
+		gr := &response.IndexGroup{
+			ID:           g.ID,
+			Name:         g.Name,
+			ThumbnailURL: g.ThumbnailURL,
+			UserIDs:      g.UserIDs,
+			CreatedAt:    g.CreatedAt,
+			UpdatedAt:    g.UpdatedAt,
+		}
+
+		ghrs[i] = gr
+	}
+
+	res := &response.IndexGroups{
+		Groups:       grs,
+		HiddenGroups: ghrs,
 	}
 
 	ctx.JSON(http.StatusOK, res)
@@ -210,6 +228,98 @@ func (gh *apiV1GroupHandler) RemoveUsers(ctx *gin.Context) {
 		UserIDs:      g.UserIDs,
 		CreatedAt:    g.CreatedAt,
 		UpdatedAt:    g.UpdatedAt,
+	}
+
+	ctx.JSON(http.StatusOK, res)
+}
+
+func (gh *apiV1GroupHandler) AddHiddenGroup(ctx *gin.Context) {
+	groupID := ctx.Params.ByName("groupID")
+
+	c := middleware.GinContextToContext(ctx)
+	gs, hgs, err := gh.groupApplication.AddHiddenGroup(c, groupID)
+	if err != nil {
+		handler.ErrorHandling(ctx, err)
+		return
+	}
+
+	grs := make([]*response.IndexGroup, len(gs))
+	for i, g := range gs {
+		gr := &response.IndexGroup{
+			ID:           g.ID,
+			Name:         g.Name,
+			ThumbnailURL: g.ThumbnailURL,
+			UserIDs:      g.UserIDs,
+			CreatedAt:    g.CreatedAt,
+			UpdatedAt:    g.UpdatedAt,
+		}
+
+		grs[i] = gr
+	}
+
+	hgrs := make([]*response.IndexGroup, len(hgs))
+	for i, g := range hgs {
+		gr := &response.IndexGroup{
+			ID:           g.ID,
+			Name:         g.Name,
+			ThumbnailURL: g.ThumbnailURL,
+			UserIDs:      g.UserIDs,
+			CreatedAt:    g.CreatedAt,
+			UpdatedAt:    g.UpdatedAt,
+		}
+
+		hgrs[i] = gr
+	}
+
+	res := &response.IndexGroups{
+		Groups:       grs,
+		HiddenGroups: hgrs,
+	}
+
+	ctx.JSON(http.StatusOK, res)
+}
+
+func (gh *apiV1GroupHandler) RemoveHiddenGroup(ctx *gin.Context) {
+	groupID := ctx.Params.ByName("groupID")
+
+	c := middleware.GinContextToContext(ctx)
+	gs, hgs, err := gh.groupApplication.RemoveHiddenGroup(c, groupID)
+	if err != nil {
+		handler.ErrorHandling(ctx, err)
+		return
+	}
+
+	grs := make([]*response.IndexGroup, len(gs))
+	for i, g := range gs {
+		gr := &response.IndexGroup{
+			ID:           g.ID,
+			Name:         g.Name,
+			ThumbnailURL: g.ThumbnailURL,
+			UserIDs:      g.UserIDs,
+			CreatedAt:    g.CreatedAt,
+			UpdatedAt:    g.UpdatedAt,
+		}
+
+		grs[i] = gr
+	}
+
+	hgrs := make([]*response.IndexGroup, len(hgs))
+	for i, g := range hgs {
+		gr := &response.IndexGroup{
+			ID:           g.ID,
+			Name:         g.Name,
+			ThumbnailURL: g.ThumbnailURL,
+			UserIDs:      g.UserIDs,
+			CreatedAt:    g.CreatedAt,
+			UpdatedAt:    g.UpdatedAt,
+		}
+
+		hgrs[i] = gr
+	}
+
+	res := &response.IndexGroups{
+		Groups:       grs,
+		HiddenGroups: hgrs,
 	}
 
 	ctx.JSON(http.StatusOK, res)

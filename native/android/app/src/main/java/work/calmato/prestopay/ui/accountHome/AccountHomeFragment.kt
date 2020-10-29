@@ -51,6 +51,12 @@ class AccountHomeFragment : Fragment() {
       )
     }
 
+    displayHiddenGroupButton.setOnClickListener {
+      this.findNavController().navigate(
+        AccountHomeFragmentDirections.actionAccountHomeToGroupListHidden()
+      )
+    }
+
     displayProfile.setOnClickListener {
       this.findNavController().navigate(
         AccountHomeFragmentDirections.actionAccountHomeToAccountEditFragment()
@@ -66,9 +72,9 @@ class AccountHomeFragment : Fragment() {
         }
       })
     sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
-    setUserNameText.text = sharedPreferences.getString("name","")
-    val thumbnailUrl = sharedPreferences.getString("thumbnailUrl","")
-    if(thumbnailUrl.isNotEmpty()) {
+    setUserNameText.text = sharedPreferences.getString("name", "")
+    val thumbnailUrl = sharedPreferences.getString("thumbnailUrl", "")
+    if (thumbnailUrl.isNotEmpty()) {
       Picasso.with(context).load(thumbnailUrl).into(UserAccountThumnail)
     }
     displayNotificationButton.setOnClickListener {

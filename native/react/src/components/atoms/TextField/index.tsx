@@ -25,3 +25,7 @@ export default function TextField(props: Props) {
     />
   );
 }
+
+TextField.defaultProps = {
+  value: "",
+};
