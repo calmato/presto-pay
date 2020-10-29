@@ -64,6 +64,7 @@
       android:id="@+id/currency"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
+      android:text="jpy"
       android:textSize="24sp"
       app:layout_constraintBottom_toBottomOf="@+id/amount"
       app:layout_constraintEnd_toEndOf="@+id/paymentName"

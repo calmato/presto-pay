@@ -180,11 +180,11 @@ class EquallyDivideFragment(val position: Int,private val step:Int) : Fragment()
             if(recycleAdapterInputAmount3.amounts.sum() == 100f){
               if(step== STEP2){
                 //ViewModel内の支払いデータに反映
-                viewModel.setLendersList(recycleAdapterInputAmount3.amounts)
+                viewModel.setLendersList(recycleAdapterInputAmount3.amounts.map { it * viewModel.total.value!! / 100 })
                 navigateToStep3()
                 Log.i("AddPaymentStep", "onViewCreated: ${recycleAdapterInputAmount3.amounts}")
               }else if(step== STEP3){
-                viewModel.setBorrowersList(recycleAdapterInputAmount3.amounts)
+                viewModel.setBorrowersList(recycleAdapterInputAmount3.amounts.map { it * viewModel.total.value!! / 100 })
                 navigateToStep4()
               }
             } else{
