@@ -2,6 +2,7 @@ package work.calmato.prestopay.util
 
 import android.app.Application
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -9,9 +10,11 @@ import kotlinx.coroutines.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import work.calmato.prestopay.R
 import work.calmato.prestopay.database.getAppDatabase
 import work.calmato.prestopay.network.*
 import work.calmato.prestopay.repository.NationalFlagsRepository
+import work.calmato.prestopay.repository.TagRepository
 import java.lang.Exception
 
 class ViewModelAddPayment(application: Application): AndroidViewModel(application) {
@@ -35,6 +38,14 @@ class ViewModelAddPayment(application: Application): AndroidViewModel(applicatio
   val comment: LiveData<String>
     get() = _comment
 
+  private val _thumbnail = MutableLiveData<String>()
+  val thumbnail: LiveData<String>
+    get() = _thumbnail
+
+  private val _paidAt = MutableLiveData<String>()
+  val paidAt: LiveData<String>
+    get() = _paidAt
+
   private val _payers = MutableLiveData<List<NetworkPayer>>()
   val payers : LiveData<List<NetworkPayer>>
     get() = _payers
@@ -43,9 +54,9 @@ class ViewModelAddPayment(application: Application): AndroidViewModel(applicatio
   val payersAddPayment: LiveData<List<PayerAddPayment>>
     get() = _payersAddPayment
 
-  private val _navigateToPaymentConfirmation = MutableLiveData<Boolean>()
-  val navigateToPaymentConfirmation: LiveData<Boolean>
-    get() = _navigateToPaymentConfirmation
+  private val _navigateToGroupDetail = MutableLiveData<GroupPropertyResponse>()
+  val navigateToGroupDetail: LiveData<GroupPropertyResponse>
+    get() = _navigateToGroupDetail
 
   private val _itemClicked = MutableLiveData<PayerAddPayment>()
   val itemClicked: LiveData<PayerAddPayment>
@@ -63,6 +74,7 @@ class ViewModelAddPayment(application: Application): AndroidViewModel(applicatio
   lateinit var groupDetail: GetGroupDetail
   private lateinit var id:String
   lateinit var groupInfo: GroupPropertyResponse
+  lateinit var tags:List<Tag>
 
   fun setGroupName(name:String){
     _groupName.value = name
@@ -120,6 +132,10 @@ class ViewModelAddPayment(application: Application): AndroidViewModel(applicatio
   fun setComment(comment:String){
     _comment.value = comment
   }
+  fun setThumbnail(thumbnail:String){
+    _thumbnail.value = thumbnail
+  }
+
   fun setId(idInput:String){
     id = idInput
   }
@@ -141,5 +157,58 @@ class ViewModelAddPayment(application: Application): AndroidViewModel(applicatio
     return _lendersAddPayment.value!!.zip(_borrowersAddPayment.value!!){x,y ->
       x - y
     }
+  }
+
+  fun setTag(){
+    CoroutineScope(Dispatchers.IO).launch {
+      tags = TagRepository(getAppDatabase(getApplication())).tags
+    }
+  }
+
+  fun setPaidAt(date:String){
+    _paidAt.value = date
+  }
+
+  fun navigationCompleted(){
+    _navigateToGroupDetail.value = null
+  }
+
+  fun sendRequest(s:String){
+    val payers = _payersAddPayment.value!!.zip(getSumUppedAmountList()){x,y ->
+      UserExpense(id = x.id,amount = y)
+    }
+    val expenseProperty = CreateExpenseProperty(
+      name = paymentName.value!!,
+      currency = currency.value!!,
+      total = total.value!!,
+      payers = payers,
+      tags = tags.filter { it.isSelected }.map { it.name },
+      comment = comment.value,
+      images = listOf(thumbnail.value!!),
+      paidAt = paidAt.value
+    )
+    Api.retrofitService.addExpense("Bearer $id", expenseProperty, groupInfo.id)
+      .enqueue(object : Callback<CreateExpenseResponse> {
+        override fun onResponse(
+          call: Call<CreateExpenseResponse>,
+          response: Response<CreateExpenseResponse>
+        ) {
+          if (response.isSuccessful) {
+            _navigateToGroupDetail.value = groupInfo
+          } else {
+            Toast.makeText(
+              getApplication(),
+              response.message(),
+              Toast.LENGTH_LONG
+            ).show()
+          }
+        }
+
+        override fun onFailure(call: Call<CreateExpenseResponse>, t: Throwable) {
+          Toast.makeText(getApplication(), t.message, Toast.LENGTH_LONG).show()
+          Log.i("ViewModelAddPayment", "onFailure: ${t.message}")
+        }
+
+      })
   }
 }

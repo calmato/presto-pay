@@ -15,25 +15,21 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.yalantis.ucrop.UCrop
-import kotlinx.android.synthetic.main.fragment_add_expense.*
 import kotlinx.android.synthetic.main.fragment_add_payment_step4.*
 import kotlinx.android.synthetic.main.fragment_add_payment_step4.calendar
 import kotlinx.android.synthetic.main.fragment_add_payment_step4.calendarDate
 import kotlinx.android.synthetic.main.fragment_add_payment_step4.calendarYear
 import work.calmato.prestopay.R
-import work.calmato.prestopay.database.getAppDatabase
 import work.calmato.prestopay.databinding.FragmentAddPaymentStep4Binding
-import work.calmato.prestopay.network.Tag
-import work.calmato.prestopay.repository.TagRepository
 import work.calmato.prestopay.util.*
-import kotlin.concurrent.thread
+import java.text.SimpleDateFormat
+import java.util.*
 
 class AddPaymentStep4Fragment : PermissionBase(){
   private val viewModel: ViewModelAddPayment by lazy {
     ViewModelProvider(requireParentFragment().requireParentFragment()).get(ViewModelAddPayment::class.java)
   }
   private val CODE = 11
-  private lateinit var tagList: List<Tag>
 
   override fun onCreateView(
     inflater: LayoutInflater,
@@ -62,9 +58,16 @@ class AddPaymentStep4Fragment : PermissionBase(){
     tagImage3.setOnClickListener {
       showTagDialog()
     }
-    thread {
-      tagList = TagRepository(getAppDatabase(requireContext())).tags
+    buttonStep4.setOnClickListener {
+      startHttpConnection(buttonStep4,nowLoadingStep4,requireContext())
+      viewModel.sendRequest(encodeImage2Base64(camera2))
+      finishHttpConnection(buttonStep4,nowLoadingStep4)
     }
+    viewModel.setThumbnail(encodeImage2Base64(camera2))
+    val c = Calendar.getInstance()
+    inflateDate(SimpleDateFormat("yyyy/MM/dd", Locale.getDefault()).format(c.time))
+    val monthDate = calendarDate.text.split("/")
+    viewModel.setPaidAt("${calendarYear.text}-${monthDate[0]}-${monthDate[1]}T00:00:00.000Z")
   }
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -73,6 +76,8 @@ class AddPaymentStep4Fragment : PermissionBase(){
       calendar.visibility = ImageView.INVISIBLE
       calendarYear.visibility = TextView.VISIBLE
       calendarDate.visibility = TextView.VISIBLE
+      val monthDate = calendarDate.text.split("/")
+      viewModel.setPaidAt("${calendarYear.text}-${monthDate[0]}-${monthDate[1]}T00:00:00.000Z")
     }
     if (resultCode == Activity.RESULT_OK && requestCode == Constant.IMAGE_PICK_CODE) {
       cropImage(data?.data!!)
@@ -81,7 +86,7 @@ class AddPaymentStep4Fragment : PermissionBase(){
       val resultUri = UCrop.getOutput(data!!)
       camera2.setImageURI(resultUri)
       camera2.visibility = ImageView.VISIBLE
-
+      viewModel.setThumbnail(encodeImage2Base64(camera2))
     }
   }
 
@@ -116,7 +121,7 @@ class AddPaymentStep4Fragment : PermissionBase(){
       AlertDialog.Builder(it)
     }
     val tagRecycleAdapter = AdapterTag()
-    tagRecycleAdapter.tagList = tagList
+    tagRecycleAdapter.tagList = viewModel.tags
     val recycleView = RecyclerView(requireContext())
     recycleView.apply {
       layoutManager = GridLayoutManager(requireContext(), 3)

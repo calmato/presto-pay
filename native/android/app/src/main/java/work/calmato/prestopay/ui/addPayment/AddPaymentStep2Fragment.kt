@@ -124,13 +124,18 @@ class EquallyDivideFragment(val position: Int,private val step:Int) : Fragment()
             adapter = recycleAdapterCheck
           }
           nextButton.setOnClickListener {
-            if(step == STEP2){
-              viewModel.setLendersList(recycleAdapterCheck.amounts)
-              navigateToStep3()
-              Log.i("AddPaymentStep", "onViewCreated: ${viewModel.payersAddPayment.value!!}")
-            } else if(step==STEP3){
-              viewModel.setBorrowersList(recycleAdapterCheck.amounts)
-              navigateToStep4()
+            // 1人はチェックされてなければならない確認
+            if(recycleAdapterCheck.payers.any { it.isPaid }){
+              if(step == STEP2){
+                viewModel.setLendersList(recycleAdapterCheck.amounts)
+                navigateToStep3()
+                Log.i("AddPaymentStep", "onViewCreated: ${viewModel.payersAddPayment.value!!}")
+              } else if(step==STEP3){
+                viewModel.setBorrowersList(recycleAdapterCheck.amounts)
+                navigateToStep4()
+              }
+            }else{
+              Toast.makeText(requireContext(),"チェックしてください",Toast.LENGTH_LONG).show()
             }
           }
         }

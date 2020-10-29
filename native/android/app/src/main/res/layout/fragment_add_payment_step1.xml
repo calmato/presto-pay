@@ -54,7 +54,7 @@
       android:hint="総額"
       android:inputType="numberDecimal"
       android:textSize="24sp"
-      app:layout_constraintBottom_toTopOf="@+id/buttonStep2"
+      app:layout_constraintBottom_toTopOf="@+id/buttonStep4"
       app:layout_constraintEnd_toStartOf="@+id/currency"
       app:layout_constraintStart_toStartOf="@+id/paymentName" />
 
@@ -69,7 +69,7 @@
       app:layout_constraintTop_toTopOf="@+id/amount" />
 
     <Button
-      android:id="@+id/buttonStep2"
+      android:id="@+id/buttonStep4"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginEnd="16dp"

@@ -67,7 +67,14 @@ class AddPaymentFragment : Fragment() {
       paymentName.text =
         it.filter { it.amount > 0 }.joinTo(StringBuilder(), separator = ", ") { it.name }
     })
-
+    viewModel.navigateToGroupDetail.observe(viewLifecycleOwner, Observer<GroupPropertyResponse> {
+      it?.let {
+        findNavController().navigate(
+          AddPaymentFragmentDirections.actionAddPaymentToGroupDetail(viewModel.groupInfo)
+        )
+        viewModel.navigationCompleted()
+      }
+    })
 
     requireActivity().onBackPressedDispatcher.addCallback(
       viewLifecycleOwner,

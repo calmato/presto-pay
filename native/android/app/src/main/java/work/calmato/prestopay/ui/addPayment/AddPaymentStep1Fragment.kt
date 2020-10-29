@@ -38,7 +38,8 @@ class AddPaymentStep1Fragment: Fragment() {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     viewModel.getCountryList()
-    buttonStep2.setOnClickListener {
+    viewModel.setTag()
+    buttonStep4.setOnClickListener {
       viewModel.setPaymentName(paymentName.text.toString())
       viewModel.setTotal(amount.text.toString().toFloat())
       viewModel.setCurrency(currency.text.toString())

@@ -110,7 +110,8 @@
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintHorizontal_bias="0.5"
       app:layout_constraintStart_toEndOf="@+id/camera"
-      app:layout_constraintTop_toTopOf="@+id/camera" />
+      app:layout_constraintTop_toTopOf="@+id/camera"
+      app:layout_constraintVertical_bias="1.0" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
       android:id="@+id/constraintDate"
@@ -172,17 +173,15 @@
 
     <EditText
       android:id="@+id/commentEditText"
-      android:layout_width="0dp"
+      android:layout_width="wrap_content"
       android:layout_height="0dp"
-      android:layout_marginTop="8dp"
-      android:layout_marginBottom="16dp"
       android:background="@android:color/transparent"
       android:gravity="top"
       android:maxLength="100"
       android:textSize="18sp"
       android:visibility="invisible"
-      app:layout_constraintBottom_toTopOf="@+id/camera"
-      app:layout_constraintEnd_toEndOf="@+id/targetText"
+      app:layout_constraintBottom_toTopOf="@+id/constraintDate"
+      app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="@+id/targetText"
       app:layout_constraintTop_toBottomOf="@+id/advancedSetting" />
 

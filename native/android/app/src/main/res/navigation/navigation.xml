@@ -265,6 +265,9 @@
     <action
       android:id="@+id/action_groupDetail_to_home_fragment2"
       app:destination="@id/home_fragment" />
+    <action
+      android:id="@+id/action_groupDetail_to_addPayment"
+      app:destination="@id/addPayment" />
   </fragment>
   <fragment
     android:id="@+id/paymentDetail"
