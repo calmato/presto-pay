@@ -139,6 +139,24 @@
   <string name="friendView">友達</string>
   <string name="messagePaymentCompleted">この支払いの精算を完了する</string>
   <string name="messagePaymentUncomplete">この支払いの精算を未完了する</string>
+  <string name="choose_involved_users">対象者を選択してください</string>
+  <string name="amount_do_not_up_to_toal_cost">支払い合計が総額と一致しません</string>
+  <string name="amount_do_not_up_to_100p">合計を100％にしてください</string>
+  <string name="who_are_involved">対象者は？</string>
+  <string name="payer">支払い者：</string>
+  <string name="step1">Step1</string>
+  <string name="step2">Step2</string>
+  <string name="step3">Step3</string>
+  <string name="step4">Step4</string>
+  <string name="payment_name_and_amount">支払い名と総額は？</string>
+  <string name="payment_name">支払い名</string>
+  <string name="next">Next</string>
+  <string name="who_paid">誰が支払った？</string>
+  <string name="tag">tag</string>
+  <string name="year">year</string>
+  <string name="date">date</string>
+  <string name="calendar">calendar</string>
+  <string name="register_payment">支払い登録</string>
   <string name="hiddenGroups">グループ非表示一覧</string>
   <string name="delete_hidden_group">非表示グループリストから削除する</string>
   <string-array name="currency_array">
@@ -189,5 +207,10 @@
     <item>雑貨</item>
     <item>家賃</item>
     <item>その他</item>
+  </string-array>
+  <string-array name="dividingMethod">
+    <item>割り勘</item>
+    <item>金額詳細入力</item>
+    <item>金額割合入力</item>
   </string-array>
 </resources>

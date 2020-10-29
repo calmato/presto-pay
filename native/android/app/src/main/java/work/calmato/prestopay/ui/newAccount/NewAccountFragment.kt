@@ -1,9 +1,7 @@
 package work.calmato.prestopay.ui.newAccount
 
-import android.Manifest
 import android.app.Activity
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
@@ -11,17 +9,11 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AnimationUtils
 import android.widget.Toast
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.yalantis.ucrop.UCrop
-import kotlinx.android.synthetic.main.fragment_login.*
 import kotlinx.android.synthetic.main.fragment_new_account.*
-import kotlinx.android.synthetic.main.fragment_new_account.nowLoading
 import kotlinx.android.synthetic.main.fragment_new_account.thumbnailEdit
 import org.json.JSONObject
 import retrofit2.Call
@@ -33,7 +25,6 @@ import work.calmato.prestopay.network.Api
 import work.calmato.prestopay.network.NewAccountProperty
 import work.calmato.prestopay.network.AccountResponse
 import work.calmato.prestopay.util.Constant.Companion.IMAGE_PICK_CODE
-import work.calmato.prestopay.util.Constant.Companion.MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE
 import work.calmato.prestopay.util.PermissionBase
 import work.calmato.prestopay.util.encodeImage2Base64
 import work.calmato.prestopay.util.finishHttpConnection

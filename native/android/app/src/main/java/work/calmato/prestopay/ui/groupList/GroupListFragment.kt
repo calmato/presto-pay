@@ -108,7 +108,7 @@ class GroupListFragment : Fragment() {
 
   private fun navigateToAddExpense(group:GroupPropertyResponse){
     this.findNavController().navigate(
-      GroupListFragmentDirections.actionGroupListFragmentToAddExpenseFragment(group)
+      GroupListFragmentDirections.actionGroupListFragmentToAddPayment(group)
     )
   }
 

@@ -15,7 +15,7 @@
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/groupEditFriendFrame">
 
-      <ImageView
+      <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/imageView5"
         android:layout_width="59dp"
         android:layout_height="46dp"

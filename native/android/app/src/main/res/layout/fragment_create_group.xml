@@ -13,7 +13,7 @@
     android:layout_height="match_parent"
     android:backgroundTint="#875D5D">
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
       android:id="@+id/thumbnailEdit"
       android:layout_width="85dp"
       android:layout_height="85dp"

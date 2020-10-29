@@ -53,14 +53,14 @@ data class EditGroup(
 
 @Parcelize
 data class CreateExpenseProperty(
-  val name: String,
-  val currency: String,
-  val total: Float,
-  val payers: List<UserExpense>,
-  val tags: List<String>,
-  val comment: String,
-  val images: List<String>,
-  val paidAt: String
+  var name: String,
+  var currency: String?,
+  var total: Float?,
+  var payers: List<UserExpense>?,
+  var tags: List<String>?,
+  var comment: String?,
+  var images: List<String>?,
+  var paidAt: String?
 ) : Parcelable {}
 
 @Parcelize
@@ -227,3 +227,11 @@ data class PaymentCompleteResponse(
   val updatedAt: String
 ) : Parcelable {}
 
+@Parcelize
+data class PayerAddPayment(
+  val id: String,
+  val name:String,
+  val thumbnail: String,
+  var amount: Float,
+  var isPaid: Boolean
+) : Parcelable

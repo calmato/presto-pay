@@ -141,7 +141,7 @@ interface ApiService {
   fun deleteFriend(@Header("Authorization") token: String, @Path("userId") userId: String):
     Call<AccountResponse>
 
-  @POST("groups/{groupId}/payment")
+  @POST("groups/{groupId}/payments")
   fun addExpense(
     @Header("Authorization") token: String,
     @Body createExpenseProperty: CreateExpenseProperty,

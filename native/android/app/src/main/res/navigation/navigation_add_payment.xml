@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/navigation_add_payment"
+  xmlns:tools="http://schemas.android.com/tools"
+  app:startDestination="@id/addPaymentStep1">
+  <fragment
+    android:id="@+id/addPaymentStep1"
+    android:name="work.calmato.prestopay.ui.addPayment.AddPaymentStep1Fragment"
+    android:label="fragment_add_payment_step1"
+    tools:layout="@layout/fragment_add_payment_step1">
+    <action
+      android:id="@+id/action_addPaymentStep1_to_addPaymentStep2"
+      app:destination="@id/addPaymentStep2" />
+  </fragment>
+
+  <fragment
+    android:id="@+id/addPaymentStep2"
+    android:name="work.calmato.prestopay.ui.addPayment.AddPaymentStep2Fragment"
+    android:label="fragment_add_payment_step2"
+    tools:layout="@layout/fragment_add_payment_step2">
+    <action
+      android:id="@+id/action_addPaymentStep2_to_addPaymentStep3"
+      app:destination="@id/addPaymentStep3" />
+  </fragment>
+  <fragment
+    android:id="@+id/addPaymentStep3"
+    android:name="work.calmato.prestopay.ui.addPayment.AddPaymentStep3Fragment"
+    android:label="fragment_add_payment_step3"
+    tools:layout="@layout/fragment_add_payment_step2">
+    <action
+      android:id="@+id/action_addPaymentStep3_to_addPaymentStep4"
+      app:destination="@id/addPaymentStep4" />
+  </fragment>
+  <fragment
+    android:id="@+id/addPaymentStep4"
+    android:name="work.calmato.prestopay.ui.addPayment.AddPaymentStep4Fragment"
+    android:label="fragment_add_payment_step4"
+    tools:layout="@layout/fragment_add_payment_step4">
+  </fragment>
+</navigation>
