@@ -135,7 +135,7 @@ class EquallyDivideFragment(val position: Int,private val step:Int) : Fragment()
                 navigateToStep4()
               }
             }else{
-              Toast.makeText(requireContext(),"チェックしてください",Toast.LENGTH_LONG).show()
+              Toast.makeText(requireContext(),resources.getString(R.string.choose_involved_users),Toast.LENGTH_LONG).show()
             }
           }
         }
@@ -161,7 +161,7 @@ class EquallyDivideFragment(val position: Int,private val step:Int) : Fragment()
                 navigateToStep4()
               }
             }else {
-              Toast.makeText(requireContext(),"支払い合計が総額と一致しません",Toast.LENGTH_LONG).show()
+              Toast.makeText(requireContext(),resources.getString(R.string.amount_do_not_up_to_toal_cost),Toast.LENGTH_LONG).show()
             }
           }
         }
@@ -188,7 +188,7 @@ class EquallyDivideFragment(val position: Int,private val step:Int) : Fragment()
                 navigateToStep4()
               }
             } else{
-             Toast.makeText(requireContext(),"合計を100％にしてください",Toast.LENGTH_LONG).show()
+             Toast.makeText(requireContext(),resources.getString(R.string.amount_do_not_up_to_100p),Toast.LENGTH_LONG).show()
             }
           }
         }

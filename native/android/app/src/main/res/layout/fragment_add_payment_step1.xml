@@ -13,7 +13,7 @@
       android:layout_height="wrap_content"
       android:layout_marginStart="16dp"
       android:layout_marginBottom="8dp"
-      android:text="Step1"
+      android:text="@string/step1"
       android:textSize="36sp"
       app:layout_constraintBottom_toTopOf="@+id/sentence"
       app:layout_constraintStart_toStartOf="parent" />
@@ -23,7 +23,7 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginBottom="8dp"
-      android:text="支払い名と総額は？"
+      android:text="@string/payment_name_and_amount"
       android:textSize="30sp"
       app:layout_constraintBottom_toTopOf="@+id/paymentName"
       app:layout_constraintStart_toStartOf="@+id/step" />
@@ -36,13 +36,14 @@
       android:layout_marginEnd="32dp"
       android:layout_marginBottom="8dp"
       android:ems="10"
-      android:hint="支払い名"
+      android:hint="@string/payment_name"
       android:inputType="textPersonName"
       android:textSize="24sp"
       android:windowSoftInputMode="adjustPan"
       app:layout_constraintBottom_toTopOf="@+id/amount"
       app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toStartOf="parent" />
+      app:layout_constraintStart_toStartOf="parent"
+      android:autofillHints="" />
 
     <EditText
       android:id="@+id/amount"
@@ -51,18 +52,18 @@
       android:layout_marginEnd="8dp"
       android:layout_marginBottom="8dp"
       android:ems="10"
-      android:hint="総額"
+      android:hint="@string/amount"
       android:inputType="numberDecimal"
       android:textSize="24sp"
       app:layout_constraintBottom_toTopOf="@+id/buttonStep4"
       app:layout_constraintEnd_toStartOf="@+id/currency"
-      app:layout_constraintStart_toStartOf="@+id/paymentName" />
+      app:layout_constraintStart_toStartOf="@+id/paymentName"
+      android:autofillHints="" />
 
     <TextView
       android:id="@+id/currency"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:text="jpy"
       android:textSize="24sp"
       app:layout_constraintBottom_toBottomOf="@+id/amount"
       app:layout_constraintEnd_toEndOf="@+id/paymentName"
@@ -75,8 +76,8 @@
       android:layout_marginEnd="16dp"
       android:layout_marginBottom="16dp"
       android:backgroundTint="#000000"
-      android:text="Next"
-      android:textColor="@color/cardview_light_background"
+      android:text="@string/next"
+      android:textColor="#FFFFFF"
       android:textSize="18sp"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent" />

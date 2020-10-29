@@ -27,8 +27,8 @@ class AddPaymentStep3Fragment : Fragment()  {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    step.text = "Step3"
-    sentence.text = "対象者は？"
+    step.text = resources.getString(R.string.step3)
+    sentence.text = resources.getText(R.string.who_are_involved)
     demoCollectionAdapter = DemoCollectionAdapter(this,STEP3)
     viewPager2.adapter = demoCollectionAdapter
     // ViewPager2のタブを作成
