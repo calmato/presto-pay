@@ -97,22 +97,20 @@ class GroupListHiddenFragment : Fragment() {
           ?.setPositiveButton(
             resources.getString(R.string.delete),
             DialogInterface.OnClickListener { _, _ ->
-              Api.retrofitService.deleteHiddenGroup(
+              Api.retrofitService.deleteGroup(
                 "Bearer ${id}",
                 hiddenGroups!!.hiddenGroups[viewHolder.adapterPosition].id
               )
-                .enqueue(object : Callback<HiddenGroups> {
+                .enqueue(object : Callback<Unit> {
                   override fun onResponse(
-                    call: Call<HiddenGroups>,
-                    response: Response<HiddenGroups>
+                    call: Call<Unit>,
+                    response: Response<Unit>
                   ) {
                     Log.d(ViewModelGroup.TAG, response.body().toString())
-                    hiddenGroups = response.body()
-                    Log.d(ViewModelGroup.TAG, hiddenGroups.toString())
                     renderGroupListView()
                   }
 
-                  override fun onFailure(call: Call<HiddenGroups>, t: Throwable) {
+                  override fun onFailure(call: Call<Unit>, t: Throwable) {
                     Toast.makeText(activity, t.message, Toast.LENGTH_LONG).show()
                     Log.d(ViewModelGroup.TAG, t.message)
                   }
