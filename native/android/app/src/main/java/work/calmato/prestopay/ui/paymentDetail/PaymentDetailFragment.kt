@@ -57,6 +57,7 @@ class PaymentDetailFragment : PermissionBase() {
       nonzeroPayers.map { it.amount },
       requireContext()
     )
+    chart.isDoubleTapToZoomEnabled = false
     completed.setOnClickListener {
       val builder: AlertDialog.Builder? = requireActivity().let {
         AlertDialog.Builder(it)

@@ -58,7 +58,7 @@
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/thumbnailEdit" />
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
       android:id="@+id/thumbnailEdit"
       android:layout_width="94dp"
       android:layout_height="81dp"

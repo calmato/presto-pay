@@ -16,7 +16,7 @@
     app:layout_constraintTop_toTopOf="parent"
     tools:text="2020/10/02" />
 
-  <ImageView
+  <de.hdodenhof.circleimageview.CircleImageView
     android:id="@+id/thumbnail"
     android:layout_width="80dp"
     android:layout_height="80dp"
