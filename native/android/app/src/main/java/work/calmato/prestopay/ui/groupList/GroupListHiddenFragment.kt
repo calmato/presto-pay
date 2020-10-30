@@ -15,7 +15,9 @@ import android.widget.Toast
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -26,6 +28,7 @@ import retrofit2.Response
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentHiddenGroupListBinding
 import work.calmato.prestopay.network.Api
+import work.calmato.prestopay.network.GroupPropertyResponse
 import work.calmato.prestopay.network.HiddenGroups
 import work.calmato.prestopay.util.AdapterGroupPlane
 import work.calmato.prestopay.util.ViewModelGroup
@@ -73,6 +76,21 @@ class GroupListHiddenFragment : Fragment() {
 
     }
     return binding.root
+  }
+
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    super.onViewCreated(view, savedInstanceState)
+    viewModelGroup.itemClickedGroup.observe(viewLifecycleOwner, Observer {
+      it?.apply {
+        navigateToGroupDetail(it)
+      }
+    })
+  }
+
+  private fun navigateToGroupDetail(group:GroupPropertyResponse){
+    this.findNavController().navigate(
+      GroupListHiddenFragmentDirections.actionGroupListHiddenToGroupDetail(group)
+    )
   }
 
   private fun getSwipeToDismissTouchHelper(adapter: RecyclerView.Adapter<AdapterGroupPlane.AddGroupViewHolder>) =
