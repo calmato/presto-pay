@@ -82,6 +82,7 @@ class GroupListHiddenFragment : Fragment() {
     super.onViewCreated(view, savedInstanceState)
     viewModelGroup.itemClickedGroup.observe(viewLifecycleOwner, Observer {
       it?.apply {
+        it.isHidden = true
         navigateToGroupDetail(it)
       }
     })

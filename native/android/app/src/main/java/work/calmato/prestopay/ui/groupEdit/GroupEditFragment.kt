@@ -114,7 +114,9 @@ class GroupEditFragment : Fragment() {
         }
       }
     )
-
+    if (getGroupInfo!!.isHidden) {
+      hiddenSwitch.isChecked = true
+    }
     // TODO: Group上での友達の削除として対応できていないため実装する場合はここに記述する
 /*    viewModel.itemClicked.observe(viewLifecycleOwner, Observer {
       if (null != it) {
@@ -190,13 +192,13 @@ class GroupEditFragment : Fragment() {
               activity,
               "グループ情報を変更できませんでした",
               Toast.LENGTH_SHORT
-            )
+            ).show()
           }
         }
       })
 
     val mSwitch: Switch = hiddenSwitch
-    if (mSwitch.isChecked) {
+    if (mSwitch.isChecked && !getGroupInfo!!.isHidden) {
       Api.retrofitService.addHiddenGroup("Bearer $id", groupId)
         .enqueue(object : Callback<HiddenGroups> {
           override fun onFailure(call: Call<HiddenGroups>, t: Throwable) {
@@ -210,10 +212,12 @@ class GroupEditFragment : Fragment() {
                 activity,
                 "グループ情報を変更できませんでした",
                 Toast.LENGTH_SHORT
-              )
+              ).show()
             }
           }
         })
+    } else if (!mSwitch.isChecked && getGroupInfo!!.isHidden) {
+      // TODO 非表示のグループを表示にするApiリクエストをここに書く
     }
 
     this.findNavController().navigate(
