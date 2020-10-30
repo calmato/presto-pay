@@ -173,7 +173,7 @@ class ViewModelAddPayment(application: Application): AndroidViewModel(applicatio
     _navigateToGroupDetail.value = null
   }
 
-  fun sendRequest(s:String){
+  fun sendRequest(){
     val payers = _payersAddPayment.value!!.zip(getSumUppedAmountList()){x,y ->
       UserExpense(id = x.id,amount = y)
     }
