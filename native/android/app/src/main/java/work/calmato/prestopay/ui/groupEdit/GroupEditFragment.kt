@@ -218,6 +218,23 @@ class GroupEditFragment : Fragment() {
         })
     } else if (!mSwitch.isChecked && getGroupInfo!!.isHidden) {
       // TODO 非表示のグループを表示にするApiリクエストをここに書く
+      Api.retrofitService.deleteHiddenGroup("Bearer $id", groupId)
+        .enqueue(object : Callback<HiddenGroups> {
+          override fun onFailure(call: Call<HiddenGroups>, t: Throwable) {
+            Toast.makeText(activity, t.message, Toast.LENGTH_LONG).show()
+            Log.d(TAG, t.message)
+          }
+
+          override fun onResponse(call: Call<HiddenGroups>, response: Response<HiddenGroups>) {
+            if (!response.isSuccessful) {
+              Toast.makeText(
+                activity,
+                "グループ情報を変更できませんでした",
+                Toast.LENGTH_SHORT
+              ).show()
+            }
+          }
+        })
     }
 
     this.findNavController().navigate(
