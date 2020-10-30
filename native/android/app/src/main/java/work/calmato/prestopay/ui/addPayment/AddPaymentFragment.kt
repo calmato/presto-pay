@@ -5,6 +5,7 @@ import android.preference.PreferenceManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -65,6 +66,19 @@ class AddPaymentFragment : Fragment() {
         viewModel.navigationCompleted()
       }
     })
+    viewModel.navigateToHome.observe(viewLifecycleOwner, Observer {
+      it?.let {
+        findNavController().navigate(
+          AddPaymentFragmentDirections.actionAddPaymentToHomeFragment()
+        )
+        viewModel.navigationCompleted()
+        Toast.makeText(
+          requireContext(),
+          resources.getString(R.string.bad_internet_connection),
+          Toast.LENGTH_LONG
+        ).show()
+      }
+    })
 
     requireActivity().onBackPressedDispatcher.addCallback(
       viewLifecycleOwner,
@@ -76,7 +90,7 @@ class AddPaymentFragment : Fragment() {
     )
   }
 
-  private fun goBack(group : GroupPropertyResponse){
+  private fun goBack(group: GroupPropertyResponse) {
     this.viewModelStore.clear()
     this.findNavController().navigate(
       AddPaymentFragmentDirections.actionAddPaymentToGroupDetail(group)

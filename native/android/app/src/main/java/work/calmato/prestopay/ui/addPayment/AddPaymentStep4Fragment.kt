@@ -60,7 +60,7 @@ class AddPaymentStep4Fragment : PermissionBase(){
     }
     buttonStep4.setOnClickListener {
       startHttpConnection(buttonStep4,nowLoadingStep4,requireContext())
-      viewModel.sendRequest(encodeImage2Base64(camera2))
+      viewModel.sendRequest()
       finishHttpConnection(buttonStep4,nowLoadingStep4)
     }
     viewModel.setThumbnail(encodeImage2Base64(camera2))
