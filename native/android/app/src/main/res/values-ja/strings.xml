@@ -159,6 +159,7 @@
   <string name="register_payment">支払い登録</string>
   <string name="hiddenGroups">グループ非表示一覧</string>
   <string name="delete_hidden_group">非表示グループリストから削除する</string>
+  <string name="bad_internet_connection">通信状況を確認してください</string>
   <string-array name="currency_array">
     <item>jpy</item>
     <item>usd</item>
