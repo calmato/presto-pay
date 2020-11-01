@@ -12,8 +12,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
-import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.content.res.AppCompatResources
@@ -32,10 +30,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentGroupFriendBinding
-import work.calmato.prestopay.network.Api
-import work.calmato.prestopay.network.GroupPropertyResponse
-import work.calmato.prestopay.network.UserProperty
-import work.calmato.prestopay.network.Users
+import work.calmato.prestopay.network.*
 import work.calmato.prestopay.util.AdapterFriendPlane
 import work.calmato.prestopay.util.AdapterGroupPlane
 import work.calmato.prestopay.util.ViewModelFriendGroup
@@ -46,6 +41,7 @@ class GroupFriendFragment : Fragment() {
     ViewModelProvider(this).get(ViewModelFriendGroup::class.java)
   }
   private var groups: List<GroupPropertyResponse>? = null
+  private var friends: List<UserProperty>? = null
 
   private var recycleAdapter: AdapterFriendPlane? = null
   private var recycleGroupAdapter: AdapterGroupPlane? = null
@@ -57,6 +53,7 @@ class GroupFriendFragment : Fragment() {
     viewModel.friendsList.observe(viewLifecycleOwner, Observer<List<UserProperty>> {
       it?.apply {
         recycleAdapter?.friendList = it
+        friends = it
       }
     })
 
@@ -68,8 +65,12 @@ class GroupFriendFragment : Fragment() {
     })
     val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
     id = sharedPreferences.getString("token", "")!!
-    val swipeToDismissTouchHelper = getGroupSwipeToDismissTouchHelper(recycleGroupAdapter!!)
-    swipeToDismissTouchHelper.attachToRecyclerView(groupRecycleView)
+
+    val swipeToGroupDismissTouchHelper = getGroupSwipeToDismissTouchHelper(recycleGroupAdapter!!)
+    swipeToGroupDismissTouchHelper.attachToRecyclerView(groupRecycleView)
+
+    val swipeToFriendDismissTouchHelper = getFriendSwipeToDismissTouchHelper(recycleAdapter!!)
+    swipeToFriendDismissTouchHelper.attachToRecyclerView(friendsRecycleView)
   }
 
   private lateinit var clickListener: AdapterFriendPlane.OnClickListener
@@ -144,39 +145,6 @@ class GroupFriendFragment : Fragment() {
       }
     })
 
-    viewModel.itemClicked.observe(viewLifecycleOwner, Observer {
-      if (null != it) {
-        val builder: AlertDialog.Builder? = requireActivity().let {
-          AlertDialog.Builder(it)
-        }
-        builder?.setView(R.layout.dialog_add_friend)
-          ?.setPositiveButton(
-            resources.getString(R.string.delete_friend),
-            DialogInterface.OnClickListener { _, _ ->
-              val builder2: AlertDialog.Builder? = requireActivity().let {
-                AlertDialog.Builder(it)
-              }
-              builder2?.setMessage(resources.getString(R.string.delete_question))
-                ?.setPositiveButton(
-                  resources.getString(R.string.delete),
-                  DialogInterface.OnClickListener { _, _ ->
-                    viewModel.deleteFriend(it.id, requireActivity())
-                  })
-                ?.setNegativeButton(resources.getString(R.string.cancel), null)
-              val dialog2: AlertDialog? = builder2?.create()
-              dialog2?.show()
-            })
-        val dialog: AlertDialog? = builder?.create()
-        dialog?.show()
-        val name = dialog?.findViewById<TextView>(R.id.username_dialog)
-        val thumbnail = dialog?.findViewById<ImageView>(R.id.thumbnail_dialog)
-        name!!.text = it.name
-        if (it.thumbnailUrl != null && it.thumbnailUrl.isNotEmpty()) {
-          Picasso.with(context).load(it.thumbnailUrl).into(thumbnail)
-        }
-        viewModel.itemIsClickedCompleted()
-      }
-    })
     val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
     userNameText.text = sharedPreferences.getString("name", "")
     val thumbnailUrl = sharedPreferences.getString("thumbnailUrl", "")
@@ -255,6 +223,102 @@ class GroupFriendFragment : Fragment() {
             })
           ?.setNegativeButton(resources.getString(R.string.cancel), null)
         recycleGroupAdapter?.notifyDataSetChanged()
+        val dialog: AlertDialog? = builder?.create()
+        dialog?.show()
+      }
+
+      //スワイプした時の背景を設定
+      override fun onChildDraw(
+        c: Canvas,
+        recyclerView: RecyclerView,
+        viewHolder: RecyclerView.ViewHolder,
+        dX: Float,
+        dY: Float,
+        actionState: Int,
+        isCurrentlyActive: Boolean
+      ) {
+        super.onChildDraw(
+          c,
+          recyclerView,
+          viewHolder,
+          dX,
+          dY,
+          actionState,
+          isCurrentlyActive
+        )
+        val itemView = viewHolder.itemView
+        val background = ColorDrawable(Color.RED)
+        val deleteIcon = AppCompatResources.getDrawable(
+          requireContext(),
+          R.drawable.ic_baseline_delete_sweep_24
+        )
+        val iconMarginVertical =
+          (viewHolder.itemView.height - deleteIcon!!.intrinsicHeight) / 2
+
+        deleteIcon.setBounds(
+          itemView.left + iconMarginVertical,
+          itemView.top + iconMarginVertical,
+          itemView.left + iconMarginVertical + deleteIcon.intrinsicWidth,
+          itemView.bottom - iconMarginVertical
+        )
+        background.setBounds(
+          itemView.left,
+          itemView.top,
+          itemView.right + dX.toInt(),
+          itemView.bottom
+        )
+        background.draw(c)
+        deleteIcon.draw(c)
+      }
+
+    })
+
+  private fun getFriendSwipeToDismissTouchHelper(adapter: RecyclerView.Adapter<AdapterFriendPlane.AddFriendViewHolder>) =
+    ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(
+      ItemTouchHelper.LEFT,
+      ItemTouchHelper.LEFT
+    ) {
+      override fun onMove(
+        recyclerView: RecyclerView,
+        viewHolder: RecyclerView.ViewHolder,
+        target: RecyclerView.ViewHolder
+      ): Boolean {
+        return false
+      }
+
+      //スワイプ時に実行
+      override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+        val builder: AlertDialog.Builder? = requireActivity().let {
+          AlertDialog.Builder(it)
+        }
+        builder?.setMessage(resources.getString(R.string.delete_question))
+          ?.setPositiveButton(
+            resources.getString(R.string.delete),
+            DialogInterface.OnClickListener { _, _ ->
+              Api.retrofitService.deleteFriend(
+                "Bearer ${id}",
+                friends!![viewHolder.adapterPosition].id
+              )
+                .enqueue(object : Callback<AccountResponse> {
+                  override fun onResponse(
+                    call: Call<AccountResponse>,
+                    response: Response<AccountResponse>
+                  ) {
+                    Log.d(ViewModelGroup.TAG, response.body().toString())
+                    viewModel.deleteFriendSwipe(
+                      friends!![viewHolder.adapterPosition].id,
+                      requireActivity()
+                    )
+                  }
+
+                  override fun onFailure(call: Call<AccountResponse>, t: Throwable) {
+                    Toast.makeText(activity, t.message, Toast.LENGTH_LONG).show()
+                    Log.d(ViewModelGroup.TAG, t.message)
+                  }
+                })
+            })
+          ?.setNegativeButton(resources.getString(R.string.cancel), null)
+        recycleAdapter?.notifyDataSetChanged()
         val dialog: AlertDialog? = builder?.create()
         dialog?.show()
       }

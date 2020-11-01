@@ -201,13 +201,31 @@ class ViewModelFriendGroup(application: Application) : AndroidViewModel(applicat
       })
   }
 
+  fun deleteFriendSwipe(friendId: String, activity: Activity) {
+    _nowLoading.value = true
+
+    coroutineScope.launch {
+      try {
+        viewModelScope.launch {
+          friendsRepository.deleteFriend(friendId)
+        }
+      } catch (e: java.lang.Exception) {
+        Toast.makeText(
+          activity,
+          getApplication<Application>().resources.getString(R.string.delete_friend_failed),
+          Toast.LENGTH_LONG
+        ).show()
+        Log.i(TAG, "onResponse: ${e.message}")
+      }
+    }
+    _nowLoading.value = false
+  }
+
   fun deleteGroup(groupId: String, activity: Activity) {
     _nowLoading.value = true
 
     coroutineScope.launch {
-      Log.d(TAG,"success1")
       try {
-        Log.d(TAG,"success2")
         viewModelScope.launch {
           groupsRepository.deleteGroup(groupId)
         }
