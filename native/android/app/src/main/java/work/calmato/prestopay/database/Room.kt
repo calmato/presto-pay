@@ -3,7 +3,6 @@ package work.calmato.prestopay.database
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import kotlinx.coroutines.selects.select
 
 @Dao
 interface FriendDao {
@@ -30,6 +29,9 @@ interface GroupDao {
 
   @Insert(onConflict = OnConflictStrategy.REPLACE)
   fun insertAll(vararg groups: DatabaseGroup)
+
+  @Query("delete from databasegroup where id = :groupId")
+  fun deleteGroup(groupId: String)
 
   @Query("delete from databasegroup")
   fun deleteGroupAll()
