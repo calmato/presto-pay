@@ -150,18 +150,20 @@ class GroupFriendFragment : Fragment() {
           AlertDialog.Builder(it)
         }
         builder?.setView(R.layout.dialog_add_friend)
-          ?.setPositiveButton(resources.getString(R.string.delete_friend)
-          ,DialogInterface.OnClickListener{_,_->
-              val builder2:AlertDialog.Builder? = requireActivity().let {
+          ?.setPositiveButton(
+            resources.getString(R.string.delete_friend),
+            DialogInterface.OnClickListener { _, _ ->
+              val builder2: AlertDialog.Builder? = requireActivity().let {
                 AlertDialog.Builder(it)
               }
               builder2?.setMessage(resources.getString(R.string.delete_question))
-                ?.setPositiveButton(resources.getString(R.string.delete)
-                ,DialogInterface.OnClickListener{_,_->
-                    viewModel.deleteFriend(it.id,requireActivity())
+                ?.setPositiveButton(
+                  resources.getString(R.string.delete),
+                  DialogInterface.OnClickListener { _, _ ->
+                    viewModel.deleteFriend(it.id, requireActivity())
                   })
-                ?.setNegativeButton(resources.getString(R.string.cancel),null)
-              val dialog2:AlertDialog? = builder2?.create()
+                ?.setNegativeButton(resources.getString(R.string.cancel), null)
+              val dialog2: AlertDialog? = builder2?.create()
               dialog2?.show()
             })
         val dialog: AlertDialog? = builder?.create()
@@ -182,22 +184,22 @@ class GroupFriendFragment : Fragment() {
       Picasso.with(context).load(thumbnailUrl).into(thumbnail)
     }
     groupSwitcher.setOnClickListener {
-      if(swipeContainerGroup.visibility==RecyclerView.VISIBLE && swipeContainer.visibility==RecyclerView.VISIBLE){
+      if (swipeContainerGroup.visibility == RecyclerView.VISIBLE && swipeContainer.visibility == RecyclerView.VISIBLE) {
         swipeContainerGroup.visibility = RecyclerView.GONE
-      }else{
+      } else {
         swipeContainerGroup.visibility = RecyclerView.VISIBLE
       }
     }
     friendSwitcher.setOnClickListener {
-      if(swipeContainer.visibility==RecyclerView.VISIBLE && swipeContainerGroup.visibility==RecyclerView.VISIBLE){
+      if (swipeContainer.visibility == RecyclerView.VISIBLE && swipeContainerGroup.visibility == RecyclerView.VISIBLE) {
         swipeContainer.visibility = RecyclerView.GONE
-      }else{
+      } else {
         swipeContainer.visibility = RecyclerView.VISIBLE
       }
     }
     requireActivity().onBackPressedDispatcher.addCallback(
       viewLifecycleOwner,
-      object  : OnBackPressedCallback(true){
+      object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
           findNavController().navigate(
             GroupFriendFragmentDirections.actionGroupFriendFragmentToHomeFragment()
@@ -239,7 +241,10 @@ class GroupFriendFragment : Fragment() {
                     response: Response<Unit>
                   ) {
                     Log.d(ViewModelGroup.TAG, response.body().toString())
-                    //renderGroupListView()
+                    viewModel.deleteGroup(
+                      groups!![viewHolder.adapterPosition].id,
+                      requireActivity()
+                    )
                   }
 
                   override fun onFailure(call: Call<Unit>, t: Throwable) {
@@ -249,7 +254,7 @@ class GroupFriendFragment : Fragment() {
                 })
             })
           ?.setNegativeButton(resources.getString(R.string.cancel), null)
-        //renderGroupListView()
+        recycleGroupAdapter?.notifyDataSetChanged()
         val dialog: AlertDialog? = builder?.create()
         dialog?.show()
       }

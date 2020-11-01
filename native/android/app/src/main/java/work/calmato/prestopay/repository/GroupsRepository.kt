@@ -24,6 +24,12 @@ class GroupsRepository(private val database: AppDatabase) {
     }
   }
 
+  suspend fun deleteGroup(groupId: String) {
+    withContext(Dispatchers.IO) {
+      database.groupDao.deleteGroup(groupId)
+    }
+  }
+
   suspend fun deleteGroupAll() {
     withContext(Dispatchers.IO) {
       database.groupDao.deleteGroupAll()
