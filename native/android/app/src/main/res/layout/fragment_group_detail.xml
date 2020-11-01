@@ -75,7 +75,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/groupIcon">
 
-
         <androidx.recyclerview.widget.RecyclerView
           android:id="@+id/recyclerViewPayment"
           android:layout_width="match_parent"
