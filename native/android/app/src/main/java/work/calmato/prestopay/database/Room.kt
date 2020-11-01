@@ -77,7 +77,7 @@ interface NationalFlagDao{
     DatabasePayment::class,
     DatabaseTag::class,
   DatabaseNationalFlag::class],
-  version = 9,
+  version = 10,
   exportSchema = false
 )
 

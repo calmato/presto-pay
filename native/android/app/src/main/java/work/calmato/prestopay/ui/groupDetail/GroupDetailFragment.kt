@@ -106,7 +106,7 @@ class GroupDetailFragment : Fragment() {
     }
     floatingActionButton.setOnClickListener {
       this.findNavController().navigate(
-        GroupDetailFragmentDirections.actionGroupDetailToAddPayment(groupDetail!!)
+        GroupDetailFragmentDirections.actionGroupDetailToAddPayment(groupDetail!!,null)
       )
     }
     requireActivity().onBackPressedDispatcher.addCallback(

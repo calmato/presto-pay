@@ -286,6 +286,10 @@
       android:name="group"
       app:argType="work.calmato.prestopay.network.GroupPropertyResponse"
       app:nullable="false" />
+    <argument
+      android:name="paymentPropertyGet"
+      app:argType="work.calmato.prestopay.network.PaymentPropertyGet"
+      app:nullable="true"/>
     <action
       android:id="@+id/action_addPayment_to_groupDetail"
       app:destination="@id/groupDetail" />

@@ -6,12 +6,10 @@ import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.google.zxing.client.result.BookmarkDoCoMoResultParser
 import kotlinx.coroutines.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import work.calmato.prestopay.R
 import work.calmato.prestopay.database.getAppDatabase
 import work.calmato.prestopay.network.*
 import work.calmato.prestopay.repository.NationalFlagsRepository
@@ -74,6 +72,14 @@ class ViewModelAddPayment(application: Application): AndroidViewModel(applicatio
   private val _borrowersAddPayment = MutableLiveData<List<Float>>()
   val borrowersAddPayment: LiveData<List<Float>>
     get() = _borrowersAddPayment
+
+  private val _editPaymentPositivePayers = MutableLiveData<List<UserExpense>>()
+  val editPaymentPositivePayers: LiveData<List<UserExpense>>
+    get() = _editPaymentPositivePayers
+
+  private val _editPaymentNegativePayers = MutableLiveData<List<UserExpense>>()
+  val editPaymentNegativePayers: LiveData<List<UserExpense>>
+    get() = _editPaymentNegativePayers
 
   lateinit var countryList: List<NationalFlag>
   lateinit var groupDetail: GetGroupDetail
@@ -182,6 +188,13 @@ class ViewModelAddPayment(application: Application): AndroidViewModel(applicatio
     _navigateToHome.value = null
   }
 
+  fun setPositivePayers(payers: List<UserExpense>){
+    _editPaymentPositivePayers.value = payers
+  }
+
+  fun setNegativePayers(payers: List<UserExpense>){
+    _editPaymentNegativePayers.value = payers
+  }
   fun sendRequest(){
     val payers = _payersAddPayment.value!!.zip(getSumUppedAmountList()){x,y ->
       UserExpense(id = x.id,amount = y)

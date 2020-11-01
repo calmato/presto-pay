@@ -18,6 +18,7 @@ import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentAddPaymentBindingImpl
 import work.calmato.prestopay.network.GroupPropertyResponse
 import work.calmato.prestopay.network.NetworkPayer
+import work.calmato.prestopay.network.UserExpense
 import work.calmato.prestopay.util.ViewModelAddPayment
 import java.lang.StringBuilder
 
@@ -39,6 +40,11 @@ class AddPaymentFragment : Fragment() {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     viewModel.setGroupInfo(AddPaymentFragmentArgs.fromBundle(requireArguments()).group)
+    //支払い編集のときは支払詳細が渡される。新規作成時はNULL
+    AddPaymentFragmentArgs.fromBundle(requireArguments()).paymentPropertyGet?.let {payments->
+      viewModel.setPositivePayers(payments.positivePayers.map { UserExpense(it.id,it.amount) })
+      viewModel.setNegativePayers(payments.negativePayers.map { UserExpense(it.id,it.amount) })
+    }
     val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
     viewModel.setId(sharedPreferences.getString("token", "")!!)
     viewModel.getGroupDetail()
