@@ -133,6 +133,8 @@ data class PaymentPropertyGet(
   val currency: String,
   val total: Float,
   val payers: List<NetworkPayer>,
+  val positivePayers: List<NetworkPayer>,
+  val negativePayers: List<NetworkPayer>,
   val isCompleted: Boolean,
   val tags: List<String>?,
   val comment: String?,

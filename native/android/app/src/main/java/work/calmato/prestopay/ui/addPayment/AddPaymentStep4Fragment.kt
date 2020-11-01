@@ -68,6 +68,7 @@ class AddPaymentStep4Fragment : PermissionBase(){
     inflateDate(SimpleDateFormat("yyyy/MM/dd", Locale.getDefault()).format(c.time))
     val monthDate = calendarDate.text.split("/")
     viewModel.setPaidAt("${calendarYear.text}-${monthDate[0]}-${monthDate[1]}T00:00:00.000Z")
+    chart.isDoubleTapToZoomEnabled = false
   }
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
