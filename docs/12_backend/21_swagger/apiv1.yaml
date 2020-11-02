@@ -919,9 +919,20 @@ components:
               total:
                 type: integer
                 description: 合計金額
-              payers:
+              positivePayers:
                 type: array
-                description: 支払い者一覧
+                description: 支払済ユーザ一覧
+                items:
+                  properties:
+                    id:
+                      type: string
+                      description: ユーザーID
+                    amount:
+                      type: integer
+                      description: 支払い金額
+              negativePayers:
+                type: array
+                description: 未支払いユーザ一覧
                 items:
                   properties:
                     id:
@@ -969,9 +980,9 @@ components:
               total:
                 type: integer
                 description: 合計金額
-              payers:
+              positivePayers:
                 type: array
-                description: 支払い者一覧
+                description: 支払済ユーザ一覧
                 items:
                   properties:
                     id:
@@ -980,9 +991,17 @@ components:
                     amount:
                       type: integer
                       description: 支払い金額
-                    isPaid:
-                      type: boolean
-                      description: 支払い完了フラグ
+              negativePayers:
+                type: array
+                description: 未支払いユーザ一覧
+                items:
+                  properties:
+                    id:
+                      type: string
+                      description: ユーザーID
+                    amount:
+                      type: integer
+                      description: 支払い金額
               isCompleted:
                 type: boolean
                 description: 支払い完了フラグ
