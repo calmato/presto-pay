@@ -21,7 +21,7 @@ func TestPaymentRequestValidation_CreatePayment(t *testing.T) {
 				Name:     "payment-test",
 				Currency: "dollar",
 				Total:    12345,
-				Payers: []*request.PayerInCreatePayment{
+				PositivePayers: []*request.PayerInCreatePayment{
 					{
 						ID:     "test-user01",
 						Amount: 100,
@@ -31,10 +31,11 @@ func TestPaymentRequestValidation_CreatePayment(t *testing.T) {
 						Amount: -100,
 					},
 				},
-				Tags:    []string{},
-				Comment: "",
-				Images:  []string{},
-				PaidAt:  current,
+				NegativePayers: []*request.PayerInCreatePayment{},
+				Tags:           []string{},
+				Comment:        "",
+				Images:         []string{},
+				PaidAt:         current,
 			},
 			Expected: make([]*domain.ValidationError, 0),
 		},
