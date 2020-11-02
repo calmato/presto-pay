@@ -8,6 +8,7 @@ import (
 	"github.com/calmato/presto-pay/api/calc/internal/domain/group"
 	"github.com/calmato/presto-pay/api/calc/internal/domain/user"
 	"github.com/calmato/presto-pay/api/calc/internal/infrastructure/api"
+	"github.com/calmato/presto-pay/api/calc/internal/infrastructure/notification"
 	"github.com/calmato/presto-pay/api/calc/lib/common"
 	"github.com/google/uuid"
 	"golang.org/x/xerrors"
@@ -18,18 +19,20 @@ type groupService struct {
 	groupRepository       group.GroupRepository
 	groupUploader         group.GroupUploader
 	apiClient             api.APIClient
+	notificationClient    notification.NotificationClient
 }
 
 // NewGroupService - GroupServiceの生成
 func NewGroupService(
 	gdv group.GroupDomainValidation, gr group.GroupRepository, gu group.GroupUploader,
-	ac api.APIClient,
+	ac api.APIClient, nc notification.NotificationClient,
 ) group.GroupService {
 	return &groupService{
 		groupDomainValidation: gdv,
 		groupRepository:       gr,
 		groupUploader:         gu,
 		apiClient:             ac,
+		notificationClient:    nc,
 	}
 }
 
@@ -93,11 +96,24 @@ func (gs *groupService) Create(ctx context.Context, g *group.Group) (*group.Grou
 		return nil, domain.ErrorInDatastore.New(err)
 	}
 
+	deviceTokens := []string{}
 	for _, userID := range g.UserIDs {
-		if err := gs.apiClient.AddGroup(ctx, userID, g.ID); err != nil {
+		u, err := gs.apiClient.AddGroup(ctx, userID, g.ID)
+		if err != nil {
 			err = xerrors.Errorf("Failed to API Client: %w", err)
 			return nil, domain.ErrorInOtherAPI.New(err)
 		}
+
+		if u == nil || u.InstanceID == "" {
+			continue
+		}
+
+		deviceTokens = append(deviceTokens, u.InstanceID)
+	}
+
+	if err := gs.notificationClient.Send(ctx, deviceTokens, g.Name, domain.CreatePaymentNotification); err != nil {
+		err = xerrors.Errorf("Failed to Firebase Cloud Messaging: %w", err)
+		return nil, domain.Unknown.New(err)
 	}
 
 	return g, nil
@@ -141,12 +157,27 @@ func (gs *groupService) Update(ctx context.Context, g *group.Group, userIDs []st
 
 	// Update Users (add)
 	for _, userID := range addUserIDs {
-		_ = gs.apiClient.AddGroup(ctx, userID, g.ID)
+		gs.apiClient.AddGroup(ctx, userID, g.ID)
 	}
 
 	// Update Users (remove)
 	for _, userID := range removeUserIDs {
-		_ = gs.apiClient.RemoveGroup(ctx, userID, g.ID)
+		gs.apiClient.RemoveGroup(ctx, userID, g.ID)
+	}
+
+	deviceTokens := []string{}
+	for _, userID := range g.UserIDs {
+		u, _ := gs.apiClient.ShowUser(ctx, userID)
+		if u == nil || u.InstanceID == "" {
+			continue
+		}
+
+		deviceTokens = append(deviceTokens, u.InstanceID)
+	}
+
+	if err := gs.notificationClient.Send(ctx, deviceTokens, g.Name, domain.UpdatePaymentNotification); err != nil {
+		err = xerrors.Errorf("Failed to Firebase Cloud Messaging: %w", err)
+		return nil, domain.Unknown.New(err)
 	}
 
 	return g, nil
@@ -183,8 +214,19 @@ func (gs *groupService) AddUsers(
 	}
 
 	// Update Users (add)
+	deviceTokens := []string{}
 	for _, userID := range userIDs {
-		_ = gs.apiClient.AddGroup(ctx, userID, g.ID)
+		u, _ := gs.apiClient.AddGroup(ctx, userID, g.ID)
+		if u == nil || u.InstanceID == "" {
+			continue
+		}
+
+		deviceTokens = append(deviceTokens, u.InstanceID)
+	}
+
+	if err := gs.notificationClient.Send(ctx, deviceTokens, g.Name, domain.AddUserInGroupNotification); err != nil {
+		err = xerrors.Errorf("Failed to Firebase Cloud Messaging: %w", err)
+		return nil, domain.Unknown.New(err)
 	}
 
 	return g, nil
@@ -222,7 +264,7 @@ func (gs *groupService) RemoveUsers(
 
 	// Update Users (add)
 	for _, userID := range userIDs {
-		_ = gs.apiClient.RemoveGroup(ctx, userID, g.ID)
+		gs.apiClient.RemoveGroup(ctx, userID, g.ID)
 	}
 
 	return g, nil
@@ -301,7 +343,7 @@ func (gs *groupService) Destroy(ctx context.Context, groupID string) error {
 	}
 
 	for _, userID := range g.UserIDs {
-		_ = gs.apiClient.RemoveGroup(ctx, userID, g.ID)
+		gs.apiClient.RemoveGroup(ctx, userID, g.ID)
 	}
 
 	if err := gs.groupRepository.Destroy(ctx, groupID); err != nil {
