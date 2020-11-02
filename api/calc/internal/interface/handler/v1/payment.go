@@ -49,11 +49,21 @@ func (ph *apiV1PaymentHandler) Index(ctx *gin.Context) {
 	paymentsResponse := make([]*response.PaymentInIndexPayments, len(payments))
 	for i, payment := range payments {
 		payersResponse := make([]*response.PayerInIndexPayments, len(payment.Payers))
+		positivePayersResponse := make([]*response.PayerInIndexPayments, 0)
+		negativePayersResponse := make([]*response.PayerInIndexPayments, 0)
 		for j, payer := range payment.Payers {
-			payersResponse[j] = &response.PayerInIndexPayments{
+			pr := &response.PayerInIndexPayments{
 				ID:     payer.ID,
 				Name:   payer.Name,
 				Amount: payer.Amount,
+			}
+
+			payersResponse[j] = pr
+
+			if payer.IsPaid {
+				positivePayersResponse = append(positivePayersResponse, pr)
+			} else {
+				negativePayersResponse = append(negativePayersResponse, pr)
 			}
 		}
 
@@ -64,8 +74,8 @@ func (ph *apiV1PaymentHandler) Index(ctx *gin.Context) {
 			Currency:       payment.Currency,
 			Total:          payment.Total,
 			Payers:         payersResponse,
-			PostivePayers:  []*response.PaymentInIndexPayments{},
-			NegativePayers: []*response.PaymentInIndexPayments{},
+			PostivePayers:  positivePayersResponse,
+			NegativePayers: negativePayersResponse,
 			Tags:           payment.Tags,
 			Comment:        payment.Comment,
 			ImageURLs:      payment.ImageURLs,
@@ -111,10 +121,20 @@ func (ph *apiV1PaymentHandler) Create(ctx *gin.Context) {
 	}
 
 	payers := make([]*response.PayerInCreatePayment, len(p.Payers))
+	positivePayers := make([]*response.PayerInCreatePayment, 0)
+	negativePayers := make([]*response.PayerInCreatePayment, 0)
 	for i, payer := range p.Payers {
-		payers[i] = &response.PayerInCreatePayment{
+		pr := &response.PayerInCreatePayment{
 			ID:     payer.ID,
 			Amount: payer.Amount,
+		}
+
+		payers[i] = pr
+
+		if payer.IsPaid {
+			positivePayers = append(positivePayers, pr)
+		} else {
+			negativePayers = append(negativePayers, pr)
 		}
 	}
 
@@ -125,8 +145,8 @@ func (ph *apiV1PaymentHandler) Create(ctx *gin.Context) {
 		Currency:       p.Currency,
 		Total:          p.Total,
 		Payers:         payers,
-		PostivePayers:  []*response.PayerInCreatePayment{},
-		NegativePayers: []*response.PayerInCreatePayment{},
+		PostivePayers:  positivePayers,
+		NegativePayers: negativePayers,
 		Tags:           p.Tags,
 		Comment:        p.Comment,
 		ImageURLs:      p.ImageURLs,
@@ -157,10 +177,20 @@ func (ph *apiV1PaymentHandler) Update(ctx *gin.Context) {
 	}
 
 	payers := make([]*response.PayerInUpdatePayment, len(p.Payers))
+	positivePayers := make([]*response.PayerInUpdatePayment, 0)
+	negativePayers := make([]*response.PayerInUpdatePayment, 0)
 	for i, payer := range p.Payers {
-		payers[i] = &response.PayerInUpdatePayment{
+		pr := &response.PayerInUpdatePayment{
 			ID:     payer.ID,
 			Amount: payer.Amount,
+		}
+
+		payers[i] = pr
+
+		if payer.IsPaid {
+			positivePayers = append(positivePayers, pr)
+		} else {
+			negativePayers = append(negativePayers, pr)
 		}
 	}
 
@@ -171,8 +201,8 @@ func (ph *apiV1PaymentHandler) Update(ctx *gin.Context) {
 		Currency:       p.Currency,
 		Total:          p.Total,
 		Payers:         payers,
-		PostivePayers:  []*response.PayerInUpdatePayment{},
-		NegativePayers: []*response.PayerInUpdatePayment{},
+		PostivePayers:  positivePayers,
+		NegativePayers: negativePayers,
 		Tags:           p.Tags,
 		Comment:        p.Comment,
 		ImageURLs:      p.ImageURLs,
@@ -197,10 +227,20 @@ func (ph *apiV1PaymentHandler) UpdateStatus(ctx *gin.Context) {
 	}
 
 	payers := make([]*response.PayerInUpdatePayment, len(p.Payers))
+	positivePayers := make([]*response.PayerInUpdatePayment, 0)
+	negativePayers := make([]*response.PayerInUpdatePayment, 0)
 	for i, payer := range p.Payers {
-		payers[i] = &response.PayerInUpdatePayment{
+		pr := &response.PayerInUpdatePayment{
 			ID:     payer.ID,
 			Amount: payer.Amount,
+		}
+
+		payers[i] = pr
+
+		if payer.IsPaid {
+			positivePayers = append(positivePayers, pr)
+		} else {
+			negativePayers = append(negativePayers, pr)
 		}
 	}
 
@@ -211,8 +251,8 @@ func (ph *apiV1PaymentHandler) UpdateStatus(ctx *gin.Context) {
 		Currency:       p.Currency,
 		Total:          p.Total,
 		Payers:         payers,
-		PostivePayers:  []*response.PayerInUpdatePayment{},
-		NegativePayers: []*response.PayerInUpdatePayment{},
+		PostivePayers:  positivePayers,
+		NegativePayers: negativePayers,
 		Tags:           p.Tags,
 		Comment:        p.Comment,
 		ImageURLs:      p.ImageURLs,
@@ -238,10 +278,20 @@ func (ph *apiV1PaymentHandler) UpdateStatusAll(ctx *gin.Context) {
 	prs := make([]*response.UpdatePayment, len(ps))
 	for i, p := range ps {
 		payers := make([]*response.PayerInUpdatePayment, len(p.Payers))
+		positivePayers := make([]*response.PayerInUpdatePayment, 0)
+		negativePayers := make([]*response.PayerInUpdatePayment, 0)
 		for i, payer := range p.Payers {
-			payers[i] = &response.PayerInUpdatePayment{
+			pr := &response.PayerInUpdatePayment{
 				ID:     payer.ID,
 				Amount: payer.Amount,
+			}
+
+			payers[i] = pr
+
+			if payer.IsPaid {
+				positivePayers = append(positivePayers, pr)
+			} else {
+				negativePayers = append(negativePayers, pr)
 			}
 		}
 
@@ -252,8 +302,8 @@ func (ph *apiV1PaymentHandler) UpdateStatusAll(ctx *gin.Context) {
 			Currency:       p.Currency,
 			Total:          p.Total,
 			Payers:         payers,
-			PostivePayers:  []*response.PayerInUpdatePayment{},
-			NegativePayers: []*response.PayerInUpdatePayment{},
+			PostivePayers:  positivePayers,
+			NegativePayers: negativePayers,
 			Tags:           p.Tags,
 			Comment:        p.Comment,
 			ImageURLs:      p.ImageURLs,
@@ -292,10 +342,20 @@ func (ph *apiV1PaymentHandler) UpdatePayer(ctx *gin.Context) {
 	}
 
 	payers := make([]*response.PayerInUpdatePayment, len(p.Payers))
+	positivePayers := make([]*response.PayerInUpdatePayment, 0)
+	negativePayers := make([]*response.PayerInUpdatePayment, 0)
 	for i, payer := range p.Payers {
-		payers[i] = &response.PayerInUpdatePayment{
+		pr := &response.PayerInUpdatePayment{
 			ID:     payer.ID,
 			Amount: payer.Amount,
+		}
+
+		payers[i] = pr
+
+		if payer.IsPaid {
+			positivePayers = append(positivePayers, pr)
+		} else {
+			negativePayers = append(negativePayers, pr)
 		}
 	}
 
@@ -306,8 +366,8 @@ func (ph *apiV1PaymentHandler) UpdatePayer(ctx *gin.Context) {
 		Currency:       p.Currency,
 		Total:          p.Total,
 		Payers:         payers,
-		PostivePayers:  []*response.PayerInUpdatePayment{},
-		NegativePayers: []*response.PayerInUpdatePayment{},
+		PostivePayers:  positivePayers,
+		NegativePayers: negativePayers,
 		Tags:           p.Tags,
 		Comment:        p.Comment,
 		ImageURLs:      p.ImageURLs,
