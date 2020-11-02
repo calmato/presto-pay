@@ -155,12 +155,25 @@ func (pa *paymentApplication) Create(
 		imageURLs[i] = imageURL
 	}
 
-	payers := make([]*payment.Payer, len(req.Payers))
-	for i, payer := range req.Payers {
-		payers[i] = &payment.Payer{
+	payers := make([]*payment.Payer, 0)
+	for _, payer := range req.PositivePayers {
+		p := &payment.Payer{
 			ID:     payer.ID,
 			Amount: payer.Amount,
+			IsPaid: true,
 		}
+
+		payers = append(payers, p)
+	}
+
+	for _, payer := range req.NegativePayers {
+		p := &payment.Payer{
+			ID:     payer.ID,
+			Amount: payer.Amount,
+			IsPaid: false,
+		}
+
+		payers = append(payers, p)
 	}
 
 	p := &payment.Payment{
@@ -219,13 +232,25 @@ func (pa *paymentApplication) Update(
 		imageURLs[i] = imageURL
 	}
 
-	payers := make([]*payment.Payer, len(req.Payers))
-	for i, payer := range req.Payers {
-		payers[i] = &payment.Payer{
+	payers := make([]*payment.Payer, 0)
+	for _, payer := range req.PositivePayers {
+		p := &payment.Payer{
 			ID:     payer.ID,
 			Amount: payer.Amount,
-			IsPaid: payer.IsPaid,
+			IsPaid: true,
 		}
+
+		payers = append(payers, p)
+	}
+
+	for _, payer := range req.NegativePayers {
+		p := &payment.Payer{
+			ID:     payer.ID,
+			Amount: payer.Amount,
+			IsPaid: false,
+		}
+
+		payers = append(payers, p)
 	}
 
 	p.Name = req.Name
