@@ -54,24 +54,25 @@ func (ph *apiV1PaymentHandler) Index(ctx *gin.Context) {
 				ID:     payer.ID,
 				Name:   payer.Name,
 				Amount: payer.Amount,
-				IsPaid: payer.IsPaid,
 			}
 		}
 
 		paymentsResponse[i] = &response.PaymentInIndexPayments{
-			ID:          payment.ID,
-			GroupID:     payment.GroupID,
-			Name:        payment.Name,
-			Currency:    payment.Currency,
-			Total:       payment.Total,
-			Payers:      payersResponse,
-			Tags:        payment.Tags,
-			Comment:     payment.Comment,
-			ImageURLs:   payment.ImageURLs,
-			PaidAt:      payment.PaidAt,
-			IsCompleted: payment.IsCompleted,
-			CreatedAt:   payment.CreatedAt,
-			UpdatedAt:   payment.UpdatedAt,
+			ID:             payment.ID,
+			GroupID:        payment.GroupID,
+			Name:           payment.Name,
+			Currency:       payment.Currency,
+			Total:          payment.Total,
+			Payers:         payersResponse,
+			PostivePayers:  []*response.PaymentInIndexPayments{},
+			NegativePayers: []*response.PaymentInIndexPayments{},
+			Tags:           payment.Tags,
+			Comment:        payment.Comment,
+			ImageURLs:      payment.ImageURLs,
+			PaidAt:         payment.PaidAt,
+			IsCompleted:    payment.IsCompleted,
+			CreatedAt:      payment.CreatedAt,
+			UpdatedAt:      payment.UpdatedAt,
 		}
 	}
 
@@ -114,24 +115,25 @@ func (ph *apiV1PaymentHandler) Create(ctx *gin.Context) {
 		payers[i] = &response.PayerInCreatePayment{
 			ID:     payer.ID,
 			Amount: payer.Amount,
-			IsPaid: payer.IsPaid,
 		}
 	}
 
 	res := &response.CreatePayment{
-		ID:          p.ID,
-		GroupID:     p.GroupID,
-		Name:        p.Name,
-		Currency:    p.Currency,
-		Total:       p.Total,
-		Payers:      payers,
-		Tags:        p.Tags,
-		Comment:     p.Comment,
-		ImageURLs:   p.ImageURLs,
-		PaidAt:      p.PaidAt,
-		IsCompleted: p.IsCompleted,
-		CreatedAt:   p.CreatedAt,
-		UpdatedAt:   p.UpdatedAt,
+		ID:             p.ID,
+		GroupID:        p.GroupID,
+		Name:           p.Name,
+		Currency:       p.Currency,
+		Total:          p.Total,
+		Payers:         payers,
+		PostivePayers:  []*response.PayerInCreatePayment{},
+		NegativePayers: []*response.PayerInCreatePayment{},
+		Tags:           p.Tags,
+		Comment:        p.Comment,
+		ImageURLs:      p.ImageURLs,
+		PaidAt:         p.PaidAt,
+		IsCompleted:    p.IsCompleted,
+		CreatedAt:      p.CreatedAt,
+		UpdatedAt:      p.UpdatedAt,
 	}
 
 	ctx.JSON(http.StatusOK, res)
@@ -159,24 +161,25 @@ func (ph *apiV1PaymentHandler) Update(ctx *gin.Context) {
 		payers[i] = &response.PayerInUpdatePayment{
 			ID:     payer.ID,
 			Amount: payer.Amount,
-			IsPaid: payer.IsPaid,
 		}
 	}
 
 	res := &response.UpdatePayment{
-		ID:          p.ID,
-		GroupID:     p.GroupID,
-		Name:        p.Name,
-		Currency:    p.Currency,
-		Total:       p.Total,
-		Payers:      payers,
-		Tags:        p.Tags,
-		Comment:     p.Comment,
-		ImageURLs:   p.ImageURLs,
-		PaidAt:      p.PaidAt,
-		IsCompleted: p.IsCompleted,
-		CreatedAt:   p.CreatedAt,
-		UpdatedAt:   p.UpdatedAt,
+		ID:             p.ID,
+		GroupID:        p.GroupID,
+		Name:           p.Name,
+		Currency:       p.Currency,
+		Total:          p.Total,
+		Payers:         payers,
+		PostivePayers:  []*response.PayerInUpdatePayment{},
+		NegativePayers: []*response.PayerInUpdatePayment{},
+		Tags:           p.Tags,
+		Comment:        p.Comment,
+		ImageURLs:      p.ImageURLs,
+		PaidAt:         p.PaidAt,
+		IsCompleted:    p.IsCompleted,
+		CreatedAt:      p.CreatedAt,
+		UpdatedAt:      p.UpdatedAt,
 	}
 
 	ctx.JSON(http.StatusOK, res)
@@ -198,24 +201,25 @@ func (ph *apiV1PaymentHandler) UpdateStatus(ctx *gin.Context) {
 		payers[i] = &response.PayerInUpdatePayment{
 			ID:     payer.ID,
 			Amount: payer.Amount,
-			IsPaid: payer.IsPaid,
 		}
 	}
 
 	res := &response.UpdatePayment{
-		ID:          p.ID,
-		GroupID:     p.GroupID,
-		Name:        p.Name,
-		Currency:    p.Currency,
-		Total:       p.Total,
-		Payers:      payers,
-		Tags:        p.Tags,
-		Comment:     p.Comment,
-		ImageURLs:   p.ImageURLs,
-		PaidAt:      p.PaidAt,
-		IsCompleted: p.IsCompleted,
-		CreatedAt:   p.CreatedAt,
-		UpdatedAt:   p.UpdatedAt,
+		ID:             p.ID,
+		GroupID:        p.GroupID,
+		Name:           p.Name,
+		Currency:       p.Currency,
+		Total:          p.Total,
+		Payers:         payers,
+		PostivePayers:  []*response.PayerInUpdatePayment{},
+		NegativePayers: []*response.PayerInUpdatePayment{},
+		Tags:           p.Tags,
+		Comment:        p.Comment,
+		ImageURLs:      p.ImageURLs,
+		PaidAt:         p.PaidAt,
+		IsCompleted:    p.IsCompleted,
+		CreatedAt:      p.CreatedAt,
+		UpdatedAt:      p.UpdatedAt,
 	}
 
 	ctx.JSON(http.StatusOK, res)
@@ -238,24 +242,25 @@ func (ph *apiV1PaymentHandler) UpdateStatusAll(ctx *gin.Context) {
 			payers[i] = &response.PayerInUpdatePayment{
 				ID:     payer.ID,
 				Amount: payer.Amount,
-				IsPaid: payer.IsPaid,
 			}
 		}
 
 		pr := &response.UpdatePayment{
-			ID:          p.ID,
-			GroupID:     p.GroupID,
-			Name:        p.Name,
-			Currency:    p.Currency,
-			Total:       p.Total,
-			Payers:      payers,
-			Tags:        p.Tags,
-			Comment:     p.Comment,
-			ImageURLs:   p.ImageURLs,
-			PaidAt:      p.PaidAt,
-			IsCompleted: p.IsCompleted,
-			CreatedAt:   p.CreatedAt,
-			UpdatedAt:   p.UpdatedAt,
+			ID:             p.ID,
+			GroupID:        p.GroupID,
+			Name:           p.Name,
+			Currency:       p.Currency,
+			Total:          p.Total,
+			Payers:         payers,
+			PostivePayers:  []*response.PayerInUpdatePayment{},
+			NegativePayers: []*response.PayerInUpdatePayment{},
+			Tags:           p.Tags,
+			Comment:        p.Comment,
+			ImageURLs:      p.ImageURLs,
+			PaidAt:         p.PaidAt,
+			IsCompleted:    p.IsCompleted,
+			CreatedAt:      p.CreatedAt,
+			UpdatedAt:      p.UpdatedAt,
 		}
 
 		prs[i] = pr
@@ -291,24 +296,25 @@ func (ph *apiV1PaymentHandler) UpdatePayer(ctx *gin.Context) {
 		payers[i] = &response.PayerInUpdatePayment{
 			ID:     payer.ID,
 			Amount: payer.Amount,
-			IsPaid: payer.IsPaid,
 		}
 	}
 
 	res := &response.UpdatePayment{
-		ID:          p.ID,
-		GroupID:     p.GroupID,
-		Name:        p.Name,
-		Currency:    p.Currency,
-		Total:       p.Total,
-		Payers:      payers,
-		Tags:        p.Tags,
-		Comment:     p.Comment,
-		ImageURLs:   p.ImageURLs,
-		PaidAt:      p.PaidAt,
-		IsCompleted: p.IsCompleted,
-		CreatedAt:   p.CreatedAt,
-		UpdatedAt:   p.UpdatedAt,
+		ID:             p.ID,
+		GroupID:        p.GroupID,
+		Name:           p.Name,
+		Currency:       p.Currency,
+		Total:          p.Total,
+		Payers:         payers,
+		PostivePayers:  []*response.PayerInUpdatePayment{},
+		NegativePayers: []*response.PayerInUpdatePayment{},
+		Tags:           p.Tags,
+		Comment:        p.Comment,
+		ImageURLs:      p.ImageURLs,
+		PaidAt:         p.PaidAt,
+		IsCompleted:    p.IsCompleted,
+		CreatedAt:      p.CreatedAt,
+		UpdatedAt:      p.UpdatedAt,
 	}
 
 	ctx.JSON(http.StatusOK, res)
