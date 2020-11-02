@@ -80,11 +80,12 @@ func (mr *MockAPIClientMockRecorder) UserExists(ctx, userID interface{}) *gomock
 }
 
 // AddGroup mocks base method
-func (m *MockAPIClient) AddGroup(ctx context.Context, userID, groupID string) error {
+func (m *MockAPIClient) AddGroup(ctx context.Context, userID, groupID string) (*user.User, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "AddGroup", ctx, userID, groupID)
-	ret0, _ := ret[0].(error)
-	return ret0
+	ret0, _ := ret[0].(*user.User)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
 }
 
 // AddGroup indicates an expected call of AddGroup
@@ -94,11 +95,12 @@ func (mr *MockAPIClientMockRecorder) AddGroup(ctx, userID, groupID interface{}) 
 }
 
 // RemoveGroup mocks base method
-func (m *MockAPIClient) RemoveGroup(ctx context.Context, userID, groupID string) error {
+func (m *MockAPIClient) RemoveGroup(ctx context.Context, userID, groupID string) (*user.User, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "RemoveGroup", ctx, userID, groupID)
-	ret0, _ := ret[0].(error)
-	return ret0
+	ret0, _ := ret[0].(*user.User)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
 }
 
 // RemoveGroup indicates an expected call of RemoveGroup

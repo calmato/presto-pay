@@ -111,9 +111,11 @@ func (gs *groupService) Create(ctx context.Context, g *group.Group) (*group.Grou
 		deviceTokens = append(deviceTokens, u.InstanceID)
 	}
 
-	if err := gs.notificationClient.Send(ctx, deviceTokens, g.Name, domain.CreatePaymentNotification); err != nil {
-		err = xerrors.Errorf("Failed to Firebase Cloud Messaging: %w", err)
-		return nil, domain.Unknown.New(err)
+	if len(deviceTokens) > 0 {
+		if err := gs.notificationClient.Send(ctx, deviceTokens, g.Name, domain.CreateGroupNotification); err != nil {
+			err = xerrors.Errorf("Failed to Firebase Cloud Messaging: %w", err)
+			return nil, domain.Unknown.New(err)
+		}
 	}
 
 	return g, nil
@@ -175,7 +177,7 @@ func (gs *groupService) Update(ctx context.Context, g *group.Group, userIDs []st
 		deviceTokens = append(deviceTokens, u.InstanceID)
 	}
 
-	if err := gs.notificationClient.Send(ctx, deviceTokens, g.Name, domain.UpdatePaymentNotification); err != nil {
+	if err := gs.notificationClient.Send(ctx, deviceTokens, g.Name, domain.UpdateGroupNotification); err != nil {
 		err = xerrors.Errorf("Failed to Firebase Cloud Messaging: %w", err)
 		return nil, domain.Unknown.New(err)
 	}
