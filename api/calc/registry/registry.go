@@ -23,7 +23,7 @@ func NewRegistry(
 	rdb *redis.Client, ac api.APIClient,
 ) *Registry {
 	health := healthInjection()
-	v1Group := v1GroupInjection(fs, cs, ac)
+	v1Group := v1GroupInjection(fs, cs, cm, ac)
 	v1Payment := v1PaymentInjection(fs, cs, cm, rdb, ac)
 
 	return &Registry{
