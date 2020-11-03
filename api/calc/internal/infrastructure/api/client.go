@@ -16,8 +16,8 @@ type APIClient interface {
 	Authentication(ctx context.Context) (*user.User, error)
 	ShowUser(ctx context.Context, userID string) (*user.User, error)
 	UserExists(ctx context.Context, userID string) (bool, error)
-	AddGroup(ctx context.Context, userID string, groupID string) error
-	RemoveGroup(ctx context.Context, userID string, groupID string) error
+	AddGroup(ctx context.Context, userID string, groupID string) (*user.User, error)
+	RemoveGroup(ctx context.Context, userID string, groupID string) (*user.User, error)
 	AddHiddenGroup(ctx context.Context, groupID string) (*user.User, int, error)
 	RemoveHiddenGroup(ctx context.Context, groupID string) (*user.User, int, error)
 }
@@ -132,45 +132,67 @@ func (c *Client) UserExists(ctx context.Context, userID string) (bool, error) {
 }
 
 // AddGroup - ユーザーをグループに追加
-func (c *Client) AddGroup(ctx context.Context, userID string, groupID string) error {
+func (c *Client) AddGroup(ctx context.Context, userID string, groupID string) (*user.User, error) {
 	url := c.userAPIURL + "/internal/users/" + userID + "/groups/" + groupID
 	req, _ := http.NewRequest("POST", url, nil)
 
 	if err := setHeader(ctx, req); err != nil {
-		return err
+		return nil, err
 	}
 
 	res, err := getResponse(req)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	if _, err := getStatus(res); err != nil {
-		return err
+		return nil, err
 	}
 
-	return nil
+	defer res.Body.Close()
+	body, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	u := &user.User{}
+	if err = json.Unmarshal(body, u); err != nil {
+		return nil, err
+	}
+
+	return u, nil
 }
 
 // RemoveGroup - ユーザーをグループから削除
-func (c *Client) RemoveGroup(ctx context.Context, userID string, groupID string) error {
+func (c *Client) RemoveGroup(ctx context.Context, userID string, groupID string) (*user.User, error) {
 	url := c.userAPIURL + "/internal/users/" + userID + "/groups/" + groupID
 	req, _ := http.NewRequest("DELETE", url, nil)
 
 	if err := setHeader(ctx, req); err != nil {
-		return err
+		return nil, err
 	}
 
 	res, err := getResponse(req)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	if _, err := getStatus(res); err != nil {
-		return err
+		return nil, err
 	}
 
-	return nil
+	defer res.Body.Close()
+	body, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	u := &user.User{}
+	if err = json.Unmarshal(body, u); err != nil {
+		return nil, err
+	}
+
+	return u, nil
 }
 
 // AddHiddenGroup - 非公開のグループ一覧に追加

@@ -345,6 +345,7 @@ func (uh *apiV1UserHandler) AddGroup(ctx *gin.Context) {
 		GroupIDs:        u.GroupIDs,
 		HidddenGroupIDs: u.HiddenGroupIDs,
 		FriendIDs:       u.FriendIDs,
+		InstanceID:      u.InstanceID,
 		CreatedAt:       u.CreatedAt,
 		UpdatedAt:       u.UpdatedAt,
 	}
@@ -372,6 +373,7 @@ func (uh *apiV1UserHandler) RemoveGroup(ctx *gin.Context) {
 		GroupIDs:        u.GroupIDs,
 		HidddenGroupIDs: u.HiddenGroupIDs,
 		FriendIDs:       u.FriendIDs,
+		InstanceID:      u.InstanceID,
 		CreatedAt:       u.CreatedAt,
 		UpdatedAt:       u.UpdatedAt,
 	}

@@ -40,13 +40,16 @@ interface GroupDao {
 @Dao
 interface PaymentDao {
   @Query("select * from databasepayment where groupId = :groupId")
-  fun getPayments(groupId:String): LiveData<List<DatabasePayment>>
+  fun getPayments(groupId: String): LiveData<List<DatabasePayment>>
 
   @Insert(onConflict = OnConflictStrategy.REPLACE)
   fun insertPayment(payment: DatabasePayment)
 
+  @Query("delete from databasepayment where id = :paymentId")
+  fun deletePayment(paymentId: String)
+
   @Query("delete from databasepayment where id = :groupId")
-  fun deleteAll(groupId:String)
+  fun deleteAll(groupId: String)
 
   @Insert(onConflict = OnConflictStrategy.REPLACE)
   fun insertAll(vararg payments: DatabasePayment)
@@ -62,9 +65,9 @@ interface TagDao {
 }
 
 @Dao
-interface NationalFlagDao{
+interface NationalFlagDao {
   @Query("select * from databasenationalflag")
-  fun getNationalFlags():List<DatabaseNationalFlag>
+  fun getNationalFlags(): List<DatabaseNationalFlag>
 
   @Insert(onConflict = OnConflictStrategy.REPLACE)
   fun insertNationalFlags(vararg tag: DatabaseNationalFlag)
@@ -86,8 +89,8 @@ abstract class AppDatabase : RoomDatabase() {
   abstract val friendDao: FriendDao
   abstract val groupDao: GroupDao
   abstract val paymentDao: PaymentDao
-  abstract val tagDao:TagDao
-  abstract val nationalFlagDao:NationalFlagDao
+  abstract val tagDao: TagDao
+  abstract val nationalFlagDao: NationalFlagDao
 }
 
 private lateinit var INSTANCE: AppDatabase

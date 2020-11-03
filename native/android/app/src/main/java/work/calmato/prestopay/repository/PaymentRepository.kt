@@ -23,4 +23,10 @@ class PaymentRepository(private val database:AppDatabase,groupId: String) {
       database.paymentDao.insertAll(*paymentsList.asDatabaseModel())
     }
   }
+
+  suspend fun deletePayment(paymentId: String) {
+    withContext(Dispatchers.IO) {
+      database.paymentDao.deletePayment(paymentId)
+    }
+  }
 }
