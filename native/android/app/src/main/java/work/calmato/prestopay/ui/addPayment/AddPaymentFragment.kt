@@ -2,6 +2,7 @@ package work.calmato.prestopay.ui.addPayment
 
 import android.os.Bundle
 import android.preference.PreferenceManager
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -40,8 +41,8 @@ class AddPaymentFragment : Fragment() {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     viewModel.setGroupInfo(AddPaymentFragmentArgs.fromBundle(requireArguments()).group)
-    //支払い編集のときは支払詳細が渡される。新規作成時はNULL
-    AddPaymentFragmentArgs.fromBundle(requireArguments()).paymentPropertyGet?.let {payments->
+    AddPaymentFragmentArgs.fromBundle(requireArguments()).payment?.let {payments ->
+      viewModel.setPaymentInfo(payments)
       viewModel.setPositivePayers(payments.positivePayers.map { UserExpense(it.id,it.amount) })
       viewModel.setNegativePayers(payments.negativePayers.map { UserExpense(it.id,it.amount) })
     }

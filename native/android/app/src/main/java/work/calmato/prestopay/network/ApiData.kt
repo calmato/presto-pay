@@ -56,7 +56,8 @@ data class CreateExpenseProperty(
   var name: String,
   var currency: String?,
   var total: Float?,
-  var payers: List<UserExpense>?,
+  var positivePayers: List<UserExpense>?,
+  var negativePayers: List<UserExpense>?,
   var tags: List<String>?,
   var comment: String?,
   var images: List<String>?,
@@ -70,6 +71,8 @@ data class CreateExpenseResponse(
   val currency: String,
   val total: Float,
   val payers: List<UserExpense>,
+  val positivePayers: List<UserExpense>,
+  val negativePayers: List<UserExpense>,
   val tags: List<String>,
   val comment: String,
   val imageUrls: List<String>,
@@ -88,7 +91,7 @@ data class UserExpense(
 data class NetworkPayer(
   val id: String,
   val name: String,
-  val amount: Float
+  var amount: Float
 ) : Parcelable
 
 @Parcelize
@@ -111,19 +114,6 @@ data class GetGroupDetail(
   val users: List<UserProperty>,
   val createdAt: String,
   val updatedAt: String
-) : Parcelable {}
-
-@Parcelize
-data class PaymentPropertyPost(
-  val name: String,
-  val currency: String,
-  val total: Float,
-  val payers: List<NetworkPayer>,
-  val isCompleted: Boolean,
-  val tags: List<String>?,
-  val comment: String?,
-  val images: List<String>?,
-  val paidAt: String
 ) : Parcelable {}
 
 @Parcelize
@@ -164,11 +154,6 @@ data class EditAccountResponse(
   val createdAt: String,
   val updatedAt: String
 ) : Parcelable {}
-
-@Parcelize
-data class AddFriendToGroupProperty(
-  val userIds: List<String>
-) : Parcelable
 
 @Parcelize
 data class NewAccountProperty(
