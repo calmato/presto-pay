@@ -7,6 +7,7 @@ import android.preference.PreferenceManager
 import android.view.*
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import androidx.navigation.fragment.findNavController
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_payment_detail.*
 import retrofit2.Call
@@ -75,6 +76,7 @@ class PaymentDetailFragment : PermissionBase() {
       val dialog: AlertDialog? = builder?.create()
       dialog?.show()
     }
+    setHasOptionsMenu(true)
   }
 
   private fun sendRequest() {
@@ -96,6 +98,16 @@ class PaymentDetailFragment : PermissionBase() {
           Toast.makeText(requireContext(), t.message, Toast.LENGTH_LONG).show()
         }
       })
+  }
+  override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    when (item.itemId) {
+      R.id.editMenuButton -> {
+        this.findNavController().navigate(
+          PaymentDetailFragmentDirections.actionPaymentDetailToAddPayment(groupDetail,paymentDetail)
+        )
+      }
+    }
+    return super.onOptionsItemSelected(item)
   }
 
   override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

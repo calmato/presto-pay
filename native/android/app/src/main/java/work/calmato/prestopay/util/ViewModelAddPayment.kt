@@ -74,10 +74,16 @@ class ViewModelAddPayment(application: Application): AndroidViewModel(applicatio
   lateinit var groupDetail: GetGroupDetail
   private lateinit var id:String
   lateinit var groupInfo: GroupPropertyResponse
+  var paymentInfo: PaymentPropertyGet? = null
   lateinit var tags:List<Tag>
 
   fun setGroupName(name:String){
     _groupName.value = name
+  }
+
+  @JvmName("setPaymentInfo1")
+  fun setPaymentInfo(payment:PaymentPropertyGet){
+    paymentInfo = payment
   }
 
   fun setPaymentName(name: String){
