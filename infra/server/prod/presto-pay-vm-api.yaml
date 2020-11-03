@@ -1,6 +1,6 @@
 #cloud-config
 
-hostname: presto-pay-dev-vm-api
+hostname: presto-pay-vm-api
 timezone: Asia/Tokyo
 locale: ja_JP.utf8
 

@@ -10,11 +10,6 @@
 
 ## Let's EncryptでSSL証明書を作成
 
-* 必要となるパッケージのインストール
-  > $ yum install -y \  
-  >     epel-release \  
-  >     jq
-
 * certbotのインストール
   > $ yum install -y \  
   >     certbot \  
