@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.google.zxing.client.result.BookmarkDoCoMoResultParser
 import kotlinx.coroutines.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -57,6 +58,10 @@ class ViewModelAddPayment(application: Application): AndroidViewModel(applicatio
   private val _navigateToGroupDetail = MutableLiveData<GroupPropertyResponse>()
   val navigateToGroupDetail: LiveData<GroupPropertyResponse>
     get() = _navigateToGroupDetail
+
+  private val _navigateToHome = MutableLiveData<Boolean>()
+  val navigateToHome: LiveData<Boolean>
+    get() = _navigateToHome
 
   private val _itemClicked = MutableLiveData<PayerAddPayment>()
   val itemClicked: LiveData<PayerAddPayment>
@@ -125,12 +130,12 @@ class ViewModelAddPayment(application: Application): AndroidViewModel(applicatio
               setPayersAddPayment(groupDetail.users)
             } catch (e: Exception) {
               Log.i("ViewModelAddPayment", "onResponse: ${e.message}")
+              _navigateToHome.value = true
             }
-
           }
-
           override fun onFailure(call: Call<GetGroupDetail>, t: Throwable) {
             Log.d("ViewModelAddPayment", t.message)
+            _navigateToHome.value = true
           }
         })
     }
@@ -177,6 +182,10 @@ class ViewModelAddPayment(application: Application): AndroidViewModel(applicatio
 
   fun navigationCompleted(){
     _navigateToGroupDetail.value = null
+  }
+
+  fun navigationToHomeCompleted(){
+    _navigateToHome.value = null
   }
 
   fun sendRequest(){

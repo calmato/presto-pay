@@ -3,7 +3,6 @@ package work.calmato.prestopay.database
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import kotlinx.coroutines.selects.select
 
 @Dao
 interface FriendDao {
@@ -31,6 +30,9 @@ interface GroupDao {
   @Insert(onConflict = OnConflictStrategy.REPLACE)
   fun insertAll(vararg groups: DatabaseGroup)
 
+  @Query("delete from databasegroup where id = :groupId")
+  fun deleteGroup(groupId: String)
+
   @Query("delete from databasegroup")
   fun deleteGroupAll()
 }
@@ -38,13 +40,16 @@ interface GroupDao {
 @Dao
 interface PaymentDao {
   @Query("select * from databasepayment where groupId = :groupId")
-  fun getPayments(groupId:String): LiveData<List<DatabasePayment>>
+  fun getPayments(groupId: String): LiveData<List<DatabasePayment>>
 
   @Insert(onConflict = OnConflictStrategy.REPLACE)
   fun insertPayment(payment: DatabasePayment)
 
+  @Query("delete from databasepayment where id = :paymentId")
+  fun deletePayment(paymentId: String)
+
   @Query("delete from databasepayment where id = :groupId")
-  fun deleteAll(groupId:String)
+  fun deleteAll(groupId: String)
 
   @Insert(onConflict = OnConflictStrategy.REPLACE)
   fun insertAll(vararg payments: DatabasePayment)
@@ -60,9 +65,9 @@ interface TagDao {
 }
 
 @Dao
-interface NationalFlagDao{
+interface NationalFlagDao {
   @Query("select * from databasenationalflag")
-  fun getNationalFlags():List<DatabaseNationalFlag>
+  fun getNationalFlags(): List<DatabaseNationalFlag>
 
   @Insert(onConflict = OnConflictStrategy.REPLACE)
   fun insertNationalFlags(vararg tag: DatabaseNationalFlag)
@@ -74,7 +79,7 @@ interface NationalFlagDao{
     DatabaseGroup::class,
     DatabasePayment::class,
     DatabaseTag::class,
-  DatabaseNationalFlag::class],
+    DatabaseNationalFlag::class],
   version = 9,
   exportSchema = false
 )
@@ -84,8 +89,8 @@ abstract class AppDatabase : RoomDatabase() {
   abstract val friendDao: FriendDao
   abstract val groupDao: GroupDao
   abstract val paymentDao: PaymentDao
-  abstract val tagDao:TagDao
-  abstract val nationalFlagDao:NationalFlagDao
+  abstract val tagDao: TagDao
+  abstract val nationalFlagDao: NationalFlagDao
 }
 
 private lateinit var INSTANCE: AppDatabase

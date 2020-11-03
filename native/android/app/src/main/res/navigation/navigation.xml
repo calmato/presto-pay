@@ -227,6 +227,9 @@
     <action
       android:id="@+id/action_groupListHidden_to_account_home"
       app:destination="@id/account_home" />
+    <action
+      android:id="@+id/action_groupListHidden_to_groupDetail"
+      app:destination="@id/groupDetail" />
   </fragment>
   <fragment
     android:id="@+id/groupDetail"
@@ -293,5 +296,8 @@
     <action
       android:id="@+id/action_addPayment_to_groupDetail"
       app:destination="@id/groupDetail" />
+    <action
+      android:id="@+id/action_addPayment_to_home_fragment"
+      app:destination="@id/home_fragment" />
   </fragment>
 </navigation>

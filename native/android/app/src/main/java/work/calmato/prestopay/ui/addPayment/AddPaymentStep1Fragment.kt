@@ -19,7 +19,6 @@ import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentAddPaymentStep1Binding
 import work.calmato.prestopay.util.AdapterCurrency
 import work.calmato.prestopay.util.ViewModelAddPayment
-import work.calmato.prestopay.util.hideSoftKeyboard
 
 class AddPaymentStep1Fragment: Fragment() {
   private val viewModel: ViewModelAddPayment by lazy {
@@ -52,7 +51,6 @@ class AddPaymentStep1Fragment: Fragment() {
         this.findNavController().navigate(
           AddPaymentStep1FragmentDirections.actionAddPaymentStep1ToAddPaymentStep2()
         )
-        hideSoftKeyboard(requireActivity())
       }
     }
     currency.setOnClickListener {

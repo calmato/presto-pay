@@ -15,7 +15,9 @@ import android.widget.Toast
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -26,6 +28,7 @@ import retrofit2.Response
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentHiddenGroupListBinding
 import work.calmato.prestopay.network.Api
+import work.calmato.prestopay.network.GroupPropertyResponse
 import work.calmato.prestopay.network.HiddenGroups
 import work.calmato.prestopay.util.AdapterGroupPlane
 import work.calmato.prestopay.util.ViewModelGroup
@@ -75,6 +78,22 @@ class GroupListHiddenFragment : Fragment() {
     return binding.root
   }
 
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    super.onViewCreated(view, savedInstanceState)
+    viewModelGroup.itemClickedGroup.observe(viewLifecycleOwner, Observer {
+      it?.apply {
+        it.isHidden = true
+        navigateToGroupDetail(it)
+      }
+    })
+  }
+
+  private fun navigateToGroupDetail(group:GroupPropertyResponse){
+    this.findNavController().navigate(
+      GroupListHiddenFragmentDirections.actionGroupListHiddenToGroupDetail(group)
+    )
+  }
+
   private fun getSwipeToDismissTouchHelper(adapter: RecyclerView.Adapter<AdapterGroupPlane.AddGroupViewHolder>) =
     ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(
       ItemTouchHelper.LEFT,
@@ -97,22 +116,20 @@ class GroupListHiddenFragment : Fragment() {
           ?.setPositiveButton(
             resources.getString(R.string.delete),
             DialogInterface.OnClickListener { _, _ ->
-              Api.retrofitService.deleteHiddenGroup(
+              Api.retrofitService.deleteGroup(
                 "Bearer ${id}",
                 hiddenGroups!!.hiddenGroups[viewHolder.adapterPosition].id
               )
-                .enqueue(object : Callback<HiddenGroups> {
+                .enqueue(object : Callback<Unit> {
                   override fun onResponse(
-                    call: Call<HiddenGroups>,
-                    response: Response<HiddenGroups>
+                    call: Call<Unit>,
+                    response: Response<Unit>
                   ) {
                     Log.d(ViewModelGroup.TAG, response.body().toString())
-                    hiddenGroups = response.body()
-                    Log.d(ViewModelGroup.TAG, hiddenGroups.toString())
                     renderGroupListView()
                   }
 
-                  override fun onFailure(call: Call<HiddenGroups>, t: Throwable) {
+                  override fun onFailure(call: Call<Unit>, t: Throwable) {
                     Toast.makeText(activity, t.message, Toast.LENGTH_LONG).show()
                     Log.d(ViewModelGroup.TAG, t.message)
                   }

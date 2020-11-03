@@ -97,6 +97,7 @@ type AddGroup struct {
 	GroupIDs        []string  `json:"groupIds"`
 	HidddenGroupIDs []string  `json:"hiddenGroupIds"`
 	FriendIDs       []string  `json:"friendIds"`
+	InstanceID      string    `json:"instanceId"`
 	CreatedAt       time.Time `json:"createdAt"`
 	UpdatedAt       time.Time `json:"updatedAt"`
 }
@@ -110,6 +111,7 @@ type RemoveGroup struct {
 	ThumbnailURL    string    `json:"thumbnailUrl"`
 	GroupIDs        []string  `json:"groupIds"`
 	HidddenGroupIDs []string  `json:"hiddenGroupIds"`
+	InstanceID      string    `json:"instanceId"`
 	FriendIDs       []string  `json:"friendIds"`
 	CreatedAt       time.Time `json:"createdAt"`
 	UpdatedAt       time.Time `json:"updatedAt"`

@@ -102,7 +102,8 @@ data class GroupPropertyResponse(
   val userIds: List<String>,
   val createdAt: String,
   val updatedAt: String,
-  var selected: Boolean = false
+  var selected: Boolean = false,
+  var isHidden: Boolean = false
 ) : Parcelable {}
 
 @Parcelize

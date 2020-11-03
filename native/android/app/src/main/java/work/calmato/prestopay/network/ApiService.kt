@@ -104,6 +104,11 @@ interface ApiService {
     @Header("Authorization") token: String, @Path("groupId") groupId: String
   ) : Call<HiddenGroups>
 
+  @DELETE("groups/{groupId}")
+  fun deleteGroup(
+    @Header("Authorization") token: String, @Path("groupId") groupId: String
+  ) : Call<Unit>
+
   @PATCH("auth")
   fun editAccount(
     @Header("Authorization") token: String,
@@ -161,6 +166,13 @@ interface ApiService {
     @Path("groupId") groupId: String,
     @Path("paymentId") paymentId: String
   ) : Call<PaymentCompleteResponse>
+
+  @DELETE("groups/{groupId}/payments/{paymentId}")
+  fun deletePayment(
+    @Header("Authorization") token: String,
+    @Path("groupId") groupId: String,
+    @Path("paymentId") paymentId: String
+  ) : Call<Unit>
 }
 
 /**
