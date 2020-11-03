@@ -2,6 +2,7 @@ package work.calmato.prestopay.util
 
 import android.app.Application
 import android.preference.PreferenceManager
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -33,6 +34,7 @@ class ViewModelPayment(application: Application) : AndroidViewModel(application)
   fun setInitPaymentList(groupId: String){
     paymentRepository = PaymentRepository(database,groupId)
     paymentsList = paymentRepository!!.payments
+    Log.i("ViewModelPayment", "setInitPaymentList: ${paymentRepository!!.payments.value}")
   }
 
   fun getPayments(groupId: String) {
@@ -40,8 +42,10 @@ class ViewModelPayment(application: Application) : AndroidViewModel(application)
     viewModelScope.launch {
       try {
       paymentRepository!!.refreshPayments(id!!, groupId)
+        Log.i("ViewModelPayment", "setInitPaymentList: ${paymentRepository!!.payments.value}")
       endRefreshing()
       } catch (e:java.lang.Exception){
+        Log.i("ViewModelPayment", "setInitPaymentList: ${e.message}")
         endRefreshing()
       }
     }

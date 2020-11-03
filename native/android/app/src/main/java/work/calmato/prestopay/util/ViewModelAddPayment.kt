@@ -173,25 +173,29 @@ class ViewModelAddPayment(application: Application): AndroidViewModel(applicatio
     _navigateToGroupDetail.value = null
   }
 
-  fun sendRequest(s:String){
-    val payers = _payersAddPayment.value!!.zip(getSumUppedAmountList()){x,y ->
+  fun sendRequest(){
+    val positivePayers = _payersAddPayment.value!!.zip(lendersAddPayment.value!!){x,y ->
       UserExpense(id = x.id,amount = y)
+    }
+    val negativePayers = _payersAddPayment.value!!.zip(borrowersAddPayment.value!!){x,y ->
+      UserExpense(id = x.id,amount = y * -1)
     }
     val expenseProperty = CreateExpenseProperty(
       name = paymentName.value!!,
       currency = currency.value!!,
       total = total.value!!,
-      payers = payers,
+      positivePayers = positivePayers.filter { it.amount != 0f },
+      negativePayers = negativePayers.filter { it.amount != 0f },
       tags = tags.filter { it.isSelected }.map { it.name },
       comment = comment.value,
       images = listOf(thumbnail.value!!),
       paidAt = paidAt.value
     )
     Api.retrofitService.addExpense("Bearer $id", expenseProperty, groupInfo.id)
-      .enqueue(object : Callback<CreateExpenseResponse> {
+      .enqueue(object : Callback<Unit> {
         override fun onResponse(
-          call: Call<CreateExpenseResponse>,
-          response: Response<CreateExpenseResponse>
+          call: Call<Unit>,
+          response: Response<Unit>
         ) {
           if (response.isSuccessful) {
             _navigateToGroupDetail.value = groupInfo
@@ -204,7 +208,7 @@ class ViewModelAddPayment(application: Application): AndroidViewModel(applicatio
           }
         }
 
-        override fun onFailure(call: Call<CreateExpenseResponse>, t: Throwable) {
+        override fun onFailure(call: Call<Unit>, t: Throwable) {
           Toast.makeText(getApplication(), t.message, Toast.LENGTH_LONG).show()
           Log.i("ViewModelAddPayment", "onFailure: ${t.message}")
         }

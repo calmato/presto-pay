@@ -147,7 +147,7 @@ interface ApiService {
     @Body createExpenseProperty: CreateExpenseProperty,
     @Path("groupId") groupId: String
   ):
-    Call<CreateExpenseResponse>
+    Call<Unit>
 
   @GET("groups/{groupId}/payments")
   fun getPayments(
