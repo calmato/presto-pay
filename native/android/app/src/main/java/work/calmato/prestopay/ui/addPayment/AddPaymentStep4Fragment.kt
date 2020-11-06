@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -67,11 +68,11 @@ class AddPaymentStep4Fragment : PermissionBase() {
       showTagDialog()
     }
     buttonStep4.setOnClickListener {
+      viewModel.setThumbnail(encodeImage2Base64(camera2))
       startHttpConnection(buttonStep4, nowLoadingStep4, requireContext())
       viewModel.sendRequest()
       finishHttpConnection(buttonStep4, nowLoadingStep4)
     }
-    viewModel.setThumbnail(encodeImage2Base64(camera2))
     viewModel.paymentInfo?.also {
       // 支払い編集時はここに来る
       // 日付
@@ -92,8 +93,9 @@ class AddPaymentStep4Fragment : PermissionBase() {
         }[0].imageId)
       }
       // 写真
-      Picasso.with(requireContext()).load(it.imageUrls!![0]).into(camera2)
-      viewModel.setThumbnail(encodeImage2Base64(camera2))
+      val images = it.imageUrls!![0].split(',')
+      Picasso.with(requireContext()).load(images[images.lastIndex].trim()).into(camera2)
+
       // コメント
       it.comment?.let { comment -> viewModel.setComment(comment) }
 

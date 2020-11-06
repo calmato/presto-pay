@@ -157,7 +157,7 @@ interface ApiService {
     @Header("Authorization") token: String,
     @Path("groupId") groupId: String,
     @Path("paymentId") paymentId: String
-  ) : Call<PaymentCompleteResponse>
+  ) : Call<Unit>
 
   @DELETE("groups/{groupId}/payments/{paymentId}")
   fun deletePayment(

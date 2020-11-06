@@ -81,10 +81,10 @@ class PaymentDetailFragment : PermissionBase() {
 
   private fun sendRequest() {
     Api.retrofitService.completePayment(id, groupDetail.id, paymentDetail.id)
-      .enqueue(object : Callback<PaymentCompleteResponse> {
+      .enqueue(object : Callback<Unit> {
         override fun onResponse(
-          call: Call<PaymentCompleteResponse>,
-          response: Response<PaymentCompleteResponse>
+          call: Call<Unit>,
+          response: Response<Unit>
         ) {
           if (response.isSuccessful) {
             Toast.makeText(requireContext(), "精算登録しました", Toast.LENGTH_LONG).show()
@@ -94,7 +94,7 @@ class PaymentDetailFragment : PermissionBase() {
           }
         }
 
-        override fun onFailure(call: Call<PaymentCompleteResponse>, t: Throwable) {
+        override fun onFailure(call: Call<Unit>, t: Throwable) {
           Toast.makeText(requireContext(), t.message, Toast.LENGTH_LONG).show()
         }
       })
