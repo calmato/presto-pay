@@ -35,7 +35,7 @@ type UpdatePayment struct {
 	Total          float64                 `json:"total" validate:"required,gte=0,lt=1048576"`
 	PositivePayers []*PayerInCreatePayment `json:"positivePayers" validate:"min=0"`
 	NegativePayers []*PayerInCreatePayment `json:"negativePayers" validate:"min=0"`
-	IsCompleted    bool                    `json:"isCompleted" validate:"required"`
+	IsCompleted    bool                    `json:"isCompleted"`
 	Tags           []string                `json:"tags" validate:"min=0,dive,max=32"`
 	Comment        string                  `json:"comment" validate:"max=256"`
 	Images         []string                `json:"images"`
