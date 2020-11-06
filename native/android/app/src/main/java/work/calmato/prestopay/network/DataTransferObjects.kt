@@ -35,7 +35,7 @@ data class NetworkPayment(
   val currency:String,
   val total:Float,
   @Json(name = "payers")val payers:List<NetworkPayer>,
-  @Json(name = "positivePayers")val positivePayers:List<NetworkPayer>,
+  @Json(name = "postivePayers")val postivePayers:List<NetworkPayer>,
   @Json(name = "negativePayers")val negativePayers:List<NetworkPayer>,
   val isCompleted:Boolean,
   @Json(name = "tags")val tags:List<String>?,
@@ -64,7 +64,7 @@ fun NetworkGroup.asDomainModel(): GroupPropertyResponse {
 }
 
 fun NetworkPayment.asDomainModel(): PaymentPropertyGet{
-  return PaymentPropertyGet(id, name, currency, total, payers, positivePayers, negativePayers, isCompleted,tags, comment, imageUrls, paidAt, createdAt, updatedAt)
+  return PaymentPropertyGet(id, name, currency, total, payers, postivePayers, negativePayers, isCompleted,tags, comment, imageUrls, paidAt, createdAt, updatedAt)
 }
 
 fun NetworkFriendContainer.asDomainModel(): List<UserProperty> {
@@ -102,7 +102,7 @@ fun NetworkPaymentContainer.asDomainModel(): List<PaymentPropertyGet>{
       currency = it.currency,
       total = it.total,
       payers = it.payers,
-      positivePayers = it.positivePayers,
+      positivePayers = it.postivePayers,
       negativePayers = it.negativePayers,
       isCompleted = it.isCompleted,
       tags = it.tags,
@@ -150,7 +150,7 @@ fun NetworkPaymentContainer.asDatabaseModel():Array<DatabasePayment>{
       currency = it.currency,
       total = it.total,
       payers = it.payers,
-      positivePayers = it.positivePayers,
+      positivePayers = it.postivePayers,
       negativePayers = it.negativePayers,
       isCompleted = it.isCompleted,
       tags = it.tags,

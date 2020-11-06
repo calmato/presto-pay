@@ -92,6 +92,18 @@ class EquallyDivideFragment(val position: Int,private val step:Int) : Fragment()
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    viewModel.paymentInfo?.let {
+      skipButton.visibility = View.VISIBLE
+      skipButton.setOnClickListener {
+        if (step == STEP2) {
+          viewModel.setLendersList(recycleAdapterCheck.amounts)
+          navigateToStep3()
+        }else if (step == STEP3) {
+          viewModel.setBorrowersList(recycleAdapterCheck.amounts.map { it * -1 })
+          navigateToStep4()
+        }
+      }
+    }
     val payersList : List<PayerAddPayment> = viewModel.payersAddPayment.value!!.map {
       PayerAddPayment(it.id,it.name,it.thumbnail,it.amount,false)
     }

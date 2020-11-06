@@ -14,6 +14,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.squareup.picasso.Picasso
 import com.yalantis.ucrop.UCrop
 import kotlinx.android.synthetic.main.fragment_add_payment_step4.*
 import kotlinx.android.synthetic.main.fragment_add_payment_step4.calendar
@@ -23,9 +24,11 @@ import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentAddPaymentStep4Binding
 import work.calmato.prestopay.util.*
 import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 
-class AddPaymentStep4Fragment : PermissionBase(){
+class AddPaymentStep4Fragment : PermissionBase() {
   private val viewModel: ViewModelAddPayment by lazy {
     ViewModelProvider(requireParentFragment().requireParentFragment()).get(ViewModelAddPayment::class.java)
   }
@@ -36,14 +39,19 @@ class AddPaymentStep4Fragment : PermissionBase(){
     container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View? {
-    val binding:FragmentAddPaymentStep4Binding =
-      DataBindingUtil.inflate(inflater, R.layout.fragment_add_payment_step4,container,false)
+    val binding: FragmentAddPaymentStep4Binding =
+      DataBindingUtil.inflate(inflater, R.layout.fragment_add_payment_step4, container, false)
     return binding.root
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    inflateGraph(chart,viewModel.payersAddPayment.value!!.map { it.name },viewModel.getSumUppedAmountList(),requireContext())
+    inflateGraph(
+      chart,
+      viewModel.payersAddPayment.value!!.map { it.name },
+      viewModel.getSumUppedAmountList(),
+      requireContext()
+    )
     constraintDate2.setOnClickListener {
       val datePickerFragment = DatePickerFragment()
       datePickerFragment.setTargetFragment(this, CODE)
@@ -59,15 +67,43 @@ class AddPaymentStep4Fragment : PermissionBase(){
       showTagDialog()
     }
     buttonStep4.setOnClickListener {
-      startHttpConnection(buttonStep4,nowLoadingStep4,requireContext())
+      startHttpConnection(buttonStep4, nowLoadingStep4, requireContext())
       viewModel.sendRequest()
-      finishHttpConnection(buttonStep4,nowLoadingStep4)
+      finishHttpConnection(buttonStep4, nowLoadingStep4)
     }
     viewModel.setThumbnail(encodeImage2Base64(camera2))
-    val c = Calendar.getInstance()
-    inflateDate(SimpleDateFormat("yyyy/MM/dd", Locale.getDefault()).format(c.time))
-    val monthDate = calendarDate.text.split("/")
-    viewModel.setPaidAt("${calendarYear.text}-${monthDate[0]}-${monthDate[1]}T00:00:00.000Z")
+    viewModel.paymentInfo?.also {
+      // 支払い編集時はここに来る
+      // 日付
+      inflateDate(it.paidAt.take(10).replace('-', '/', true))
+      viewModel.setPaidAt(it.paidAt)
+      calendar.visibility = ImageView.INVISIBLE
+      calendarYear.visibility = TextView.VISIBLE
+      calendarDate.visibility = TextView.VISIBLE
+      //　タグ
+      viewModel.tags.forEach { tag ->
+        if (it.tags!!.contains(tag.name)) {
+          tag.isSelected = true
+        }
+      }
+      if (viewModel.tags.map { it.isSelected }.contains(true)) {
+        tagImage3.setImageResource(viewModel.tags.filter { tag ->
+          tag.isSelected
+        }[0].imageId)
+      }
+      // 写真
+      Picasso.with(requireContext()).load(it.imageUrls!![0]).into(camera2)
+      viewModel.setThumbnail(it.imageUrls[0])
+      // コメント
+      it.comment?.let { comment -> viewModel.setComment(comment) }
+
+    } ?: run {
+      // 新規作成時はここに来る
+      val c = Calendar.getInstance()
+      inflateDate(SimpleDateFormat("yyyy/MM/dd", Locale.getDefault()).format(c.time))
+      val monthDate = calendarDate.text.split("/")
+      viewModel.setPaidAt("${calendarYear.text}-${monthDate[0]}-${monthDate[1]}T00:00:00.000Z")
+    }
     chart.isDoubleTapToZoomEnabled = false
   }
 
@@ -104,6 +140,9 @@ class AddPaymentStep4Fragment : PermissionBase(){
     }
     val input = EditText(requireContext())
     input.setBackgroundResource(android.R.color.transparent)
+    viewModel.comment.value?.let {
+      input.setText(it)
+    }
 
     builder?.setTitle(resources.getString(R.string.add_comment))
       ?.setPositiveButton(
