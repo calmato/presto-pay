@@ -12,7 +12,6 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.*
 
 private const val BASE_URL = "https://api.presto-pay-stg.calmato.work/v1/"
-private const val BASE_URL_CURRENCY = "https://api.exchangeratesapi.io/"
 
 /**
  * Build the Moshi object that Retrofit will be using, making sure to add the Kotlin adapter for
@@ -37,13 +36,6 @@ private val retrofit = Retrofit.Builder()
   .addConverterFactory(MoshiConverterFactory.create(moshi))
   .addCallAdapterFactory(CoroutineCallAdapterFactory())
   .baseUrl(BASE_URL)
-  .client(client)
-  .build()
-
-private val retrofit_currency = Retrofit.Builder()
-  .addConverterFactory(MoshiConverterFactory.create(moshi))
-  .addCallAdapterFactory(CoroutineCallAdapterFactory())
-  .baseUrl(BASE_URL_CURRENCY)
   .client(client)
   .build()
 
@@ -170,6 +162,14 @@ interface ApiService {
   @DELETE("groups/{groupId}/payments/{paymentId}")
   fun deletePayment(
     @Header("Authorization") token: String,
+    @Path("groupId") groupId: String,
+    @Path("paymentId") paymentId: String
+  ) : Call<Unit>
+
+  @PATCH("groups/{groupId}/payments/{paymentId}")
+  fun updatePayment(
+    @Header("Authorization") token: String,
+    @Body editExpenseProperty: EditExpenseProperty,
     @Path("groupId") groupId: String,
     @Path("paymentId") paymentId: String
   ) : Call<Unit>

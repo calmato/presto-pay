@@ -65,20 +65,17 @@ data class CreateExpenseProperty(
 ) : Parcelable {}
 
 @Parcelize
-data class CreateExpenseResponse(
-  val id: String,
-  val name: String,
-  val currency: String,
-  val total: Float,
-  val payers: List<UserExpense>,
-  val positivePayers: List<UserExpense>,
-  val negativePayers: List<UserExpense>,
-  val tags: List<String>,
-  val comment: String,
-  val imageUrls: List<String>,
-  val paidAt: String,
-  val createdAt: String,
-  val updatedAt: String
+data class EditExpenseProperty(
+  var name: String,
+  var currency: String?,
+  var total: Float?,
+  var positivePayers: List<UserExpense>?,
+  var negativePayers: List<UserExpense>?,
+  val isCompleted: Boolean,
+  var tags: List<String>?,
+  var comment: String?,
+  var images: List<String>?,
+  var paidAt: String?
 ) : Parcelable {}
 
 @Parcelize

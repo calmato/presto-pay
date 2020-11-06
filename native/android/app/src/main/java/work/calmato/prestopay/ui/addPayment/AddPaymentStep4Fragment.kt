@@ -93,7 +93,7 @@ class AddPaymentStep4Fragment : PermissionBase() {
       }
       // 写真
       Picasso.with(requireContext()).load(it.imageUrls!![0]).into(camera2)
-      viewModel.setThumbnail(it.imageUrls[0])
+      viewModel.setThumbnail(encodeImage2Base64(camera2))
       // コメント
       it.comment?.let { comment -> viewModel.setComment(comment) }
 

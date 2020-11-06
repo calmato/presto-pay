@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -208,39 +209,80 @@ class ViewModelAddPayment(application: Application): AndroidViewModel(applicatio
     val negativePayers = _payersAddPayment.value!!.zip(borrowersAddPayment.value!!){x,y ->
       UserExpense(id = x.id,amount = y * -1)
     }
-    val expenseProperty = CreateExpenseProperty(
-      name = paymentName.value!!,
-      currency = currency.value!!,
-      total = total.value!!,
-      positivePayers = positivePayers.filter { it.amount != 0f },
-      negativePayers = negativePayers.filter { it.amount != 0f },
-      tags = tags.filter { it.isSelected }.map { it.name },
-      comment = comment.value,
-      images = listOf(thumbnail.value!!),
-      paidAt = paidAt.value
-    )
-    Api.retrofitService.addExpense("Bearer $id", expenseProperty, groupInfo.id)
-      .enqueue(object : Callback<Unit> {
-        override fun onResponse(
-          call: Call<Unit>,
-          response: Response<Unit>
-        ) {
-          if (response.isSuccessful) {
-            _navigateToGroupDetail.value = groupInfo
-          } else {
-            Toast.makeText(
-              getApplication(),
-              response.message(),
-              Toast.LENGTH_LONG
-            ).show()
+
+    if(paymentInfo == null){
+      //　新規作成
+      val expenseProperty = CreateExpenseProperty(
+        name = paymentName.value!!,
+        currency = currency.value!!,
+        total = total.value!!,
+        positivePayers = positivePayers.filter { it.amount != 0f },
+        negativePayers = negativePayers.filter { it.amount != 0f },
+        tags = tags.filter { it.isSelected }.map { it.name },
+        comment = comment.value,
+        images = listOf(thumbnail.value!!),
+        paidAt = paidAt.value
+      )
+      Api.retrofitService.addExpense("Bearer $id", expenseProperty, groupInfo.id)
+        .enqueue(object : Callback<Unit> {
+          override fun onResponse(
+            call: Call<Unit>,
+            response: Response<Unit>
+          ) {
+            if (response.isSuccessful) {
+              _navigateToGroupDetail.value = groupInfo
+            } else {
+              Toast.makeText(
+                getApplication(),
+                response.message(),
+                Toast.LENGTH_LONG
+              ).show()
+            }
           }
-        }
 
-        override fun onFailure(call: Call<Unit>, t: Throwable) {
-          Toast.makeText(getApplication(), t.message, Toast.LENGTH_LONG).show()
-          Log.i("ViewModelAddPayment", "onFailure: ${t.message}")
-        }
+          override fun onFailure(call: Call<Unit>, t: Throwable) {
+            Toast.makeText(getApplication(), t.message, Toast.LENGTH_LONG).show()
+            Log.i("ViewModelAddPayment", "onFailure: ${t.message}")
+          }
 
-      })
+        })
+    } else {
+      //　支払い編集
+      val expenseProperty = EditExpenseProperty(
+        name = paymentName.value!!,
+        currency = currency.value!!,
+        total = total.value!!,
+        positivePayers = positivePayers.filter { it.amount != 0f },
+        negativePayers = negativePayers.filter { it.amount != 0f },
+        isCompleted = paymentInfo!!.isCompleted,
+        tags = tags.filter { it.isSelected }.map { it.name },
+        comment = comment.value,
+        images = listOf(thumbnail.value!!),
+        paidAt = paidAt.value
+      )
+      Api.retrofitService.updatePayment("Bearer $id", expenseProperty, groupInfo.id,paymentInfo!!.id)
+        .enqueue(object : Callback<Unit> {
+          override fun onResponse(
+            call: Call<Unit>,
+            response: Response<Unit>
+          ) {
+            if (response.isSuccessful) {
+              _navigateToGroupDetail.value = groupInfo
+            } else {
+              Toast.makeText(
+                getApplication(),
+                response.message(),
+                Toast.LENGTH_LONG
+              ).show()
+            }
+          }
+
+          override fun onFailure(call: Call<Unit>, t: Throwable) {
+            Toast.makeText(getApplication(), t.message, Toast.LENGTH_LONG).show()
+            Log.i("ViewModelAddPayment", "onFailure: ${t.message}")
+          }
+        })
+    }
+
   }
 }
