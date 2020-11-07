@@ -452,7 +452,7 @@ paths:
           description: グループUUID
       responses:
         '200':
-          $ref: '#/components/responses/UpdatePayments'
+          $ref: '#/components/responses/Payments'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -484,7 +484,7 @@ paths:
           description: 支払いUUID
       responses:
         '200':
-          $ref: '#/components/responses/UpdatePayment'
+          $ref: '#/components/responses/Payment'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -520,7 +520,7 @@ paths:
           description: TODO - 50件以上取得するときように使えるように
       responses:
         '200':
-          $ref: '#/components/responses/IndexPayments'
+          $ref: '#/components/responses/Payments'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -544,7 +544,7 @@ paths:
         $ref: '#/components/requestBodies/CreatePayment'
       responses:
         '200':
-          $ref: '#/components/responses/CreatePayment'
+          $ref: '#/components/responses/Payment'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -578,7 +578,7 @@ paths:
         $ref: '#/components/requestBodies/UpdatePayment'
       responses:
         '200':
-          $ref: '#/components/responses/UpdatePayment'
+          $ref: '#/components/responses/Payment'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -650,7 +650,7 @@ paths:
         $ref: '#/components/requestBodies/UpdatePayerInPayment'
       responses:
         '200':
-          $ref: '#/components/responses/UpdatePayment'
+          $ref: '#/components/responses/Payment'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -919,9 +919,20 @@ components:
               total:
                 type: integer
                 description: 合計金額
-              payers:
+              positivePayers:
                 type: array
-                description: 支払い者一覧
+                description: 支払済ユーザ一覧
+                items:
+                  properties:
+                    id:
+                      type: string
+                      description: ユーザーID
+                    amount:
+                      type: integer
+                      description: 支払い金額
+              negativePayers:
+                type: array
+                description: 未支払いユーザ一覧
                 items:
                   properties:
                     id:
@@ -969,9 +980,9 @@ components:
               total:
                 type: integer
                 description: 合計金額
-              payers:
+              positivePayers:
                 type: array
-                description: 支払い者一覧
+                description: 支払済ユーザ一覧
                 items:
                   properties:
                     id:
@@ -980,9 +991,17 @@ components:
                     amount:
                       type: integer
                       description: 支払い金額
-                    isPaid:
-                      type: boolean
-                      description: 支払い完了フラグ
+              negativePayers:
+                type: array
+                description: 未支払いユーザ一覧
+                items:
+                  properties:
+                    id:
+                      type: string
+                      description: ユーザーID
+                    amount:
+                      type: integer
+                      description: 支払い金額
               isCompleted:
                 type: boolean
                 description: 支払い完了フラグ
@@ -1646,8 +1665,8 @@ components:
                 format: date-time
                 description: 更新日時
 
-    CreatePayment:
-      description: 支払い情報追加APIのレスポンス
+    Payment:
+      description: 支払い情報取得関連APIのレスポンス
       content:
         application/json:
           schema:
@@ -1681,61 +1700,7 @@ components:
                     amount:
                       type: integer
                       description: 支払い金額
-                    isPaid:
-                      type: boolean
-                      description: 支払い完了フラグ
-              isCompleted:
-                type: boolean
-                description: 支払い完了フラグ
-              tags:
-                type: array
-                description: タグ一覧
-                items:
-                  type: string
-              comment:
-                type: string
-                description: コメント
-              imageUrls:
-                type: array
-                description: 添付画像一覧
-                items:
-                  type: string
-              paidAt:
-                type: string
-                format: date-time
-                description: 支払い日時
-              createdAt:
-                type: string
-                format: date-time
-                description: 作成日時
-              updatedAt:
-                type: string
-
-    UpdatePayment:
-      description: 支払い情報編集APIのレスポンス
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              id:
-                type: string
-                format: uuid
-                description: 支払いID
-              groupId:
-                type: string
-                format: uuid
-                description: グループID
-              name:
-                type: string
-                description: 支払い名
-              currency:
-                type: string
-                description: 通貨
-              total:
-                type: integer
-                description: 合計金額
-              payers:
+              positivePayers:
                 type: array
                 description: 支払い者一覧
                 items:
@@ -1746,9 +1711,17 @@ components:
                     amount:
                       type: integer
                       description: 支払い金額
-                    isPaid:
-                      type: boolean
-                      description: 支払い完了フラグ
+              negativePayers:
+                type: array
+                description: 支払い者一覧
+                items:
+                  properties:
+                    id:
+                      type: string
+                      description: ユーザーID
+                    amount:
+                      type: integer
+                      description: 支払い金額
               isCompleted:
                 type: boolean
                 description: 支払い完了フラグ
@@ -1776,8 +1749,8 @@ components:
               updatedAt:
                 type: string
 
-    IndexPayments:
-      description: 支払い情報一覧取得APIのレスポンス
+    Payments:
+      description: 支払い情報一覧取得関連APIのレスポンス
       content:
         application/json:
           schema:
@@ -1819,9 +1792,34 @@ components:
                           amount:
                             type: integer
                             description: 支払い金額
-                          isPaid:
-                            type: boolean
-                            description: 支払い完了フラグ
+                    positivePayers:
+                      type: array
+                      description: 支払い者一覧
+                      items:
+                        properties:
+                          id:
+                            type: string
+                            description: ユーザーID
+                          name:
+                            type: string
+                            description: ユーザー名
+                          amount:
+                            type: integer
+                            description: 支払い金額
+                    negativePayers:
+                      type: array
+                      description: 支払い者一覧
+                      items:
+                        properties:
+                          id:
+                            type: string
+                            description: ユーザーID
+                          name:
+                            type: string
+                            description: ユーザー名
+                          amount:
+                            type: integer
+                            description: 支払い金額
                     isCompleted:
                       type: boolean
                       description: 支払い完了フラグ
@@ -1866,76 +1864,3 @@ components:
                     amount:
                       type: number
                       description: 未支払い合計額
-
-    UpdatePayments:
-      description: 支払い情報一括更新APIのレスポンス
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              payments:
-                type: array
-                description: 支払い一覧
-                items:
-                  properties:
-                    id:
-                      type: string
-                      format: uuid
-                      description: 支払いID
-                    groupId:
-                      type: string
-                      format: uuid
-                      description: グループID
-                    name:
-                      type: string
-                      description: 支払い名
-                    currency:
-                      type: string
-                      description: 通貨
-                    total:
-                      type: integer
-                      description: 合計金額
-                    payers:
-                      type: array
-                      description: 支払い者一覧
-                      items:
-                        properties:
-                          id:
-                            type: string
-                            description: ユーザーID
-                          name:
-                            type: string
-                            description: ユーザー名
-                          amount:
-                            type: integer
-                            description: 支払い金額
-                          isPaid:
-                            type: boolean
-                            description: 支払い完了フラグ
-                    isCompleted:
-                      type: boolean
-                      description: 支払い完了フラグ
-                    tags:
-                      type: array
-                      description: タグ一覧
-                      items:
-                        type: string
-                    comment:
-                      type: string
-                      description: コメント
-                    imageUrls:
-                      type: array
-                      description: 添付画像一覧
-                      items:
-                        type: string
-                    paidAt:
-                      type: string
-                      format: date-time
-                      description: 支払い日時
-                    createdAt:
-                      type: string
-                      format: date-time
-                      description: 作成日時
-                    updatedAt:
-                      type: string

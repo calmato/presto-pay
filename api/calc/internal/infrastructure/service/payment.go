@@ -187,9 +187,7 @@ func (ps *paymentService) Create(ctx context.Context, p *payment.Payment, groupI
 		deviceTokens = append(deviceTokens, u.InstanceID)
 	}
 
-	message := "新しい支払い情報が追加されました."
-
-	if err := ps.notificationClient.Send(ctx, deviceTokens, p.Name, message); err != nil {
+	if err := ps.notificationClient.Send(ctx, deviceTokens, p.Name, domain.CreatePaymentNotification); err != nil {
 		err = xerrors.Errorf("Failed to Firebase Cloud Messaging: %w", err)
 		return nil, domain.Unknown.New(err)
 	}
@@ -229,6 +227,22 @@ func (ps *paymentService) Update(ctx context.Context, p *payment.Payment, groupI
 	if err := ps.paymentRepository.Update(ctx, p, groupID); err != nil {
 		err = xerrors.Errorf("Failed to Repository: %w", err)
 		return nil, domain.ErrorInDatastore.New(err)
+	}
+
+	// 支払い情報更新の通知
+	deviceTokens := []string{}
+	for _, payer := range p.Payers {
+		u, _ := ps.apiClient.ShowUser(ctx, payer.ID)
+		if u == nil || u.InstanceID == "" {
+			continue
+		}
+
+		deviceTokens = append(deviceTokens, u.InstanceID)
+	}
+
+	if err := ps.notificationClient.Send(ctx, deviceTokens, p.Name, domain.UpdatePaymentNotification); err != nil {
+		err = xerrors.Errorf("Failed to Firebase Cloud Messaging: %w", err)
+		return nil, domain.Unknown.New(err)
 	}
 
 	return p, nil
@@ -271,6 +285,22 @@ func (ps *paymentService) UpdatePayer(
 	if err := ps.paymentRepository.Update(ctx, p, groupID); err != nil {
 		err = xerrors.Errorf("Failed to Repository: %w", err)
 		return nil, domain.ErrorInDatastore.New(err)
+	}
+
+	// 支払い情報更新の通知
+	deviceTokens := []string{}
+	for _, payer := range p.Payers {
+		u, _ := ps.apiClient.ShowUser(ctx, payer.ID)
+		if u == nil || u.InstanceID == "" {
+			continue
+		}
+
+		deviceTokens = append(deviceTokens, u.InstanceID)
+	}
+
+	if err := ps.notificationClient.Send(ctx, deviceTokens, p.Name, domain.UpdatePaymentNotification); err != nil {
+		err = xerrors.Errorf("Failed to Firebase Cloud Messaging: %w", err)
+		return nil, domain.Unknown.New(err)
 	}
 
 	return p, nil
