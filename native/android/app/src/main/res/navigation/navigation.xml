@@ -261,6 +261,9 @@
     <action
       android:id="@+id/action_groupDetail_to_addPayment"
       app:destination="@id/addPayment" />
+    <action
+      android:id="@+id/action_groupDetail_to_settleUp"
+      app:destination="@id/settleUp" />
   </fragment>
   <fragment
     android:id="@+id/paymentDetail"
@@ -300,4 +303,9 @@
       android:id="@+id/action_addPayment_to_home_fragment"
       app:destination="@id/home_fragment" />
   </fragment>
+  <fragment
+    android:id="@+id/settleUp"
+    android:name="work.calmato.prestopay.ui.settleUp.SettleUpFragment"
+    android:label="fragment_sttle_up"
+    tools:layout="@layout/fragment_settle_up"/>
 </navigation>
