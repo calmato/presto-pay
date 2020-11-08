@@ -8,17 +8,17 @@
     android:layout_height="match_parent">
 
     <TextView
-      android:id="@+id/textView7"
+      android:id="@+id/currency"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:text="jpy"
       android:textSize="24sp"
-      app:layout_constraintBottom_toBottomOf="@+id/editTextNumberDecimal"
-      app:layout_constraintStart_toEndOf="@+id/editTextNumberDecimal"
-      app:layout_constraintTop_toTopOf="@+id/editTextNumberDecimal" />
+      app:layout_constraintBottom_toBottomOf="@+id/total"
+      app:layout_constraintStart_toEndOf="@+id/total"
+      app:layout_constraintTop_toTopOf="@+id/total" />
 
     <EditText
-      android:id="@+id/editTextNumberDecimal"
+      android:id="@+id/total"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:ems="10"
@@ -35,25 +35,27 @@
       android:id="@+id/thumbnail1"
       android:layout_width="75dp"
       android:layout_height="75dp"
+      android:background="@drawable/ic_baseline_person_24"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toStartOf="@+id/imageView8"
       app:layout_constraintHorizontal_bias="0.5"
       app:layout_constraintHorizontal_chainStyle="spread"
-      app:layout_constraintStart_toStartOf="@+id/editTextNumberDecimal"
-      app:layout_constraintTop_toBottomOf="@+id/editTextNumberDecimal"
+      app:layout_constraintStart_toStartOf="@+id/total"
+      app:layout_constraintTop_toBottomOf="@+id/total"
       app:layout_constraintVertical_bias="0.20"
-      app:srcCompat="@drawable/circle_theme_color" />
+      app:srcCompat="@drawable/ic_baseline_person_24" />
 
     <de.hdodenhof.circleimageview.CircleImageView
       android:id="@+id/thumbnail2"
       android:layout_width="75dp"
       android:layout_height="75dp"
+      android:background="@drawable/ic_baseline_person_24"
       app:layout_constraintBottom_toBottomOf="@+id/thumbnail1"
-      app:layout_constraintEnd_toStartOf="@+id/textView7"
+      app:layout_constraintEnd_toStartOf="@+id/currency"
       app:layout_constraintHorizontal_bias="0.5"
       app:layout_constraintStart_toEndOf="@+id/imageView8"
       app:layout_constraintTop_toTopOf="@+id/thumbnail1"
-      app:srcCompat="@drawable/circle_theme_color" />
+      app:srcCompat="@drawable/ic_baseline_person_24" />
 
     <ImageView
       android:id="@+id/imageView8"
@@ -85,5 +87,16 @@
       app:layout_constraintEnd_toEndOf="@+id/thumbnail2"
       app:layout_constraintStart_toStartOf="@+id/thumbnail2"
       app:layout_constraintTop_toBottomOf="@+id/thumbnail2" />
+
+    <TextView
+      android:id="@+id/nowLoading"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="@string/now_loading"
+      android:visibility="invisible"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent" />
   </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -279,7 +279,7 @@
     <item>@drawable/ic_baseline_cake_24</item>
     <item>@drawable/ic_baseline_menu_book_24</item>
     <item>@drawable/ic_baseline_home_24</item>
-    <item>@drawable/ic_baseline_menu_24</item>
+    <item>@drawable/ic_baseline_attach_money_24</item>
   </integer-array>
   <string-array name="tag_name">
     <item>買い物</item>
@@ -293,7 +293,7 @@
     <item>プレゼント</item>
     <item>雑貨</item>
     <item>家賃</item>
-    <item>その他</item>
+    <item>精算</item>
   </string-array>
   <string-array name="dividingMethod">
     <item>割り勘</item>

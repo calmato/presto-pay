@@ -307,5 +307,13 @@
     android:id="@+id/settleUp"
     android:name="work.calmato.prestopay.ui.settleUp.SettleUpFragment"
     android:label="fragment_sttle_up"
-    tools:layout="@layout/fragment_settle_up"/>
+    tools:layout="@layout/fragment_settle_up">
+    <argument
+      android:name="groupDetail"
+      app:argType="work.calmato.prestopay.network.GroupPropertyResponse"
+      />
+    <action
+      android:id="@+id/action_settleUp_to_groupDetail"
+      app:destination="@id/groupDetail" />
+  </fragment>
 </navigation>
