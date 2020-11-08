@@ -56,7 +56,8 @@ data class CreateExpenseProperty(
   var name: String,
   var currency: String?,
   var total: Float?,
-  var payers: List<UserExpense>?,
+  var positivePayers: List<UserExpense>?,
+  var negativePayers: List<UserExpense>?,
   var tags: List<String>?,
   var comment: String?,
   var images: List<String>?,
@@ -64,18 +65,17 @@ data class CreateExpenseProperty(
 ) : Parcelable {}
 
 @Parcelize
-data class CreateExpenseResponse(
-  val id: String,
-  val name: String,
-  val currency: String,
-  val total: Float,
-  val payers: List<UserExpense>,
-  val tags: List<String>,
-  val comment: String,
-  val imageUrls: List<String>,
-  val paidAt: String,
-  val createdAt: String,
-  val updatedAt: String
+data class EditExpenseProperty(
+  var name: String,
+  var currency: String?,
+  var total: Float?,
+  var positivePayers: List<UserExpense>?,
+  var negativePayers: List<UserExpense>?,
+  val isCompleted: Boolean,
+  var tags: List<String>?,
+  var comment: String?,
+  var images: List<String>?,
+  var paidAt: String?
 ) : Parcelable {}
 
 @Parcelize
@@ -88,7 +88,7 @@ data class UserExpense(
 data class NetworkPayer(
   val id: String,
   val name: String,
-  val amount: Float
+  var amount: Float
 ) : Parcelable
 
 @Parcelize
@@ -114,25 +114,14 @@ data class GetGroupDetail(
 ) : Parcelable {}
 
 @Parcelize
-data class PaymentPropertyPost(
-  val name: String,
-  val currency: String,
-  val total: Float,
-  val payers: List<NetworkPayer>,
-  val isCompleted: Boolean,
-  val tags: List<String>?,
-  val comment: String?,
-  val images: List<String>?,
-  val paidAt: String
-) : Parcelable {}
-
-@Parcelize
 data class PaymentPropertyGet(
   val id: String,
   val name: String,
   val currency: String,
   val total: Float,
   val payers: List<NetworkPayer>,
+  val positivePayers: List<NetworkPayer>,
+  val negativePayers: List<NetworkPayer>,
   val isCompleted: Boolean,
   val tags: List<String>?,
   val comment: String?,
@@ -162,11 +151,6 @@ data class EditAccountResponse(
   val createdAt: String,
   val updatedAt: String
 ) : Parcelable {}
-
-@Parcelize
-data class AddFriendToGroupProperty(
-  val userIds: List<String>
-) : Parcelable
 
 @Parcelize
 data class NewAccountProperty(

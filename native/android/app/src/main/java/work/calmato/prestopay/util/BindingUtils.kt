@@ -94,6 +94,8 @@ fun TextView.setPaymentAmount(amount:Float,currency:String){
       setTextColor(resources.getColor(R.color.positiveNumberColor,null))
     } else if(it < 0){
       setTextColor(resources.getColor(R.color.negativeNumberColor,null))
+    } else{
+      setTextColor(resources.getColor(R.color.clearButtonPressed,null))
     }
     val output = it.toString() + currency
     text = output
@@ -119,6 +121,8 @@ fun ImageView.setTag(item:PaymentPropertyGet?){
     }.join()
     if(tag.isNotEmpty()){
       setImageResource(tag[0].imageId)
+    } else{
+      setImageResource(R.drawable.ic_baseline_label_24)
     }
   }
 }

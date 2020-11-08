@@ -276,6 +276,9 @@
     <action
       android:id="@+id/action_paymentDetail_self"
       app:destination="@id/paymentDetail" />
+    <action
+      android:id="@+id/action_paymentDetail_to_addPayment"
+      app:destination="@id/addPayment" />
   </fragment>
   <fragment
     android:id="@+id/addPayment"
@@ -286,6 +289,10 @@
       android:name="group"
       app:argType="work.calmato.prestopay.network.GroupPropertyResponse"
       app:nullable="false" />
+    <argument
+      android:name="payment"
+      app:argType="work.calmato.prestopay.network.PaymentPropertyGet"
+      app:nullable="true"/>
     <action
       android:id="@+id/action_addPayment_to_groupDetail"
       app:destination="@id/groupDetail" />

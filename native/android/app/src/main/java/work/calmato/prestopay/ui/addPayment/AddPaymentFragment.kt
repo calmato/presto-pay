@@ -2,6 +2,7 @@ package work.calmato.prestopay.ui.addPayment
 
 import android.os.Bundle
 import android.preference.PreferenceManager
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,6 +19,7 @@ import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentAddPaymentBindingImpl
 import work.calmato.prestopay.network.GroupPropertyResponse
 import work.calmato.prestopay.network.NetworkPayer
+import work.calmato.prestopay.network.UserExpense
 import work.calmato.prestopay.util.ViewModelAddPayment
 import java.lang.StringBuilder
 
@@ -39,6 +41,11 @@ class AddPaymentFragment : Fragment() {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     viewModel.setGroupInfo(AddPaymentFragmentArgs.fromBundle(requireArguments()).group)
+    AddPaymentFragmentArgs.fromBundle(requireArguments()).payment?.let {payments ->
+      viewModel.setPaymentInfo(payments)
+      viewModel.setPositivePayers(payments.positivePayers.map { UserExpense(it.id,it.amount) })
+      viewModel.setNegativePayers(payments.negativePayers.map { UserExpense(it.id,it.amount) })
+    }
     val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
     viewModel.setId(sharedPreferences.getString("token", "")!!)
     viewModel.getGroupDetail()

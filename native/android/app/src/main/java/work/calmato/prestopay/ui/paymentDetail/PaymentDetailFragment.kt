@@ -7,6 +7,7 @@ import android.preference.PreferenceManager
 import android.view.*
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import androidx.navigation.fragment.findNavController
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_payment_detail.*
 import retrofit2.Call
@@ -75,14 +76,15 @@ class PaymentDetailFragment : PermissionBase() {
       val dialog: AlertDialog? = builder?.create()
       dialog?.show()
     }
+    setHasOptionsMenu(true)
   }
 
   private fun sendRequest() {
     Api.retrofitService.completePayment(id, groupDetail.id, paymentDetail.id)
-      .enqueue(object : Callback<PaymentCompleteResponse> {
+      .enqueue(object : Callback<Unit> {
         override fun onResponse(
-          call: Call<PaymentCompleteResponse>,
-          response: Response<PaymentCompleteResponse>
+          call: Call<Unit>,
+          response: Response<Unit>
         ) {
           if (response.isSuccessful) {
             Toast.makeText(requireContext(), "精算登録しました", Toast.LENGTH_LONG).show()
@@ -92,10 +94,20 @@ class PaymentDetailFragment : PermissionBase() {
           }
         }
 
-        override fun onFailure(call: Call<PaymentCompleteResponse>, t: Throwable) {
+        override fun onFailure(call: Call<Unit>, t: Throwable) {
           Toast.makeText(requireContext(), t.message, Toast.LENGTH_LONG).show()
         }
       })
+  }
+  override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    when (item.itemId) {
+      R.id.editMenuButton -> {
+        this.findNavController().navigate(
+          PaymentDetailFragmentDirections.actionPaymentDetailToAddPayment(groupDetail,paymentDetail)
+        )
+      }
+    }
+    return super.onOptionsItemSelected(item)
   }
 
   override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

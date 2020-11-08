@@ -30,7 +30,11 @@ class AdapterPayment(val context:Context, private val onClickListener: OnClickLi
       it.isCompleted = thisPayment.isCompleted
       it.payment = thisPayment
       it.currency = thisPayment.currency
-      it.amount =  (thisPayment.payers.filter { it.name == name }[0].amount * 100).roundToInt().toFloat() / 100
+      if (thisPayment.payers.none { it.name == name }){
+        it.amount =  0f
+      } else{
+        it.amount =  (thisPayment.payers.filter { it.name == name }[0].amount * 100).roundToInt().toFloat() / 100
+      }
       val maxAmount = thisPayment.payers.map { it.amount }.max()
       val maxPayer = thisPayment.payers.filter { it.amount == maxAmount }[0].name
       if (maxAmount != null) {

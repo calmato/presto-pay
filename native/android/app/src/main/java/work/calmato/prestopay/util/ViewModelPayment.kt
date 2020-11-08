@@ -41,6 +41,7 @@ class ViewModelPayment(application: Application) : AndroidViewModel(application)
   fun setInitPaymentList(groupId: String){
     paymentRepository = PaymentRepository(database,groupId)
     paymentsList = paymentRepository!!.payments
+    Log.i("ViewModelPayment", "setInitPaymentList: ${paymentRepository!!.payments.value}")
   }
 
   fun getPayments(groupId: String) {
@@ -48,8 +49,10 @@ class ViewModelPayment(application: Application) : AndroidViewModel(application)
     viewModelScope.launch {
       try {
       paymentRepository!!.refreshPayments(id!!, groupId)
+        Log.i("ViewModelPayment", "setInitPaymentList: ${paymentRepository!!.payments.value}")
       endRefreshing()
       } catch (e:java.lang.Exception){
+        Log.i("ViewModelPayment", "setInitPaymentList: ${e.message}")
         endRefreshing()
       }
     }

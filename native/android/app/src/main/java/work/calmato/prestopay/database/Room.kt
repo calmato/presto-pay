@@ -79,8 +79,8 @@ interface NationalFlagDao {
     DatabaseGroup::class,
     DatabasePayment::class,
     DatabaseTag::class,
-    DatabaseNationalFlag::class],
-  version = 9,
+  DatabaseNationalFlag::class],
+  version = 10,
   exportSchema = false
 )
 

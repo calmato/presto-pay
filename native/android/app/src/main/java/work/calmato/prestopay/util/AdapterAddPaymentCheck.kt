@@ -19,7 +19,7 @@ class AdapterAddPaymentCheck(private val onClickListener: OnClickListener?, val 
       notifyDataSetChanged()
     }
 
-  var amounts: MutableList<Float> = mutableListOf()
+  var amounts: List<Float> = listOf()
     set(value) {
       field = value
       notifyDataSetChanged()
