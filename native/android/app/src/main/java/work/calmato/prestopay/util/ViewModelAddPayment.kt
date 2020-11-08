@@ -11,13 +11,14 @@ import kotlinx.coroutines.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import work.calmato.prestopay.R
 import work.calmato.prestopay.database.getAppDatabase
 import work.calmato.prestopay.network.*
 import work.calmato.prestopay.repository.NationalFlagsRepository
 import work.calmato.prestopay.repository.TagRepository
 import java.lang.Exception
 
-class ViewModelAddPayment(application: Application): AndroidViewModel(application) {
+class ViewModelAddPayment(application: Application) : AndroidViewModel(application) {
   private val _groupName = MutableLiveData<String>()
   val groupName: LiveData<String>
     get() = _groupName
@@ -27,7 +28,7 @@ class ViewModelAddPayment(application: Application): AndroidViewModel(applicatio
     get() = _paymentName
 
   private val _currency = MutableLiveData<String>()
-  val currency : LiveData<String>
+  val currency: LiveData<String>
     get() = _currency
 
   private val _total = MutableLiveData<Float>()
@@ -47,7 +48,7 @@ class ViewModelAddPayment(application: Application): AndroidViewModel(applicatio
     get() = _paidAt
 
   private val _payers = MutableLiveData<List<NetworkPayer>>()
-  val payers : LiveData<List<NetworkPayer>>
+  val payers: LiveData<List<NetworkPayer>>
     get() = _payers
 
   private val _payersAddPayment = MutableLiveData<List<PayerAddPayment>>()
@@ -84,29 +85,29 @@ class ViewModelAddPayment(application: Application): AndroidViewModel(applicatio
 
   lateinit var countryList: List<NationalFlag>
   lateinit var groupDetail: GetGroupDetail
-  private lateinit var id:String
+  private lateinit var id: String
   lateinit var groupInfo: GroupPropertyResponse
   var paymentInfo: PaymentPropertyGet? = null
-  lateinit var tags:List<Tag>
+  lateinit var tags: List<Tag>
 
-  fun setGroupName(name:String){
+  fun setGroupName(name: String) {
     _groupName.value = name
   }
 
   @JvmName("setPaymentInfo1")
-  fun setPaymentInfo(payment:PaymentPropertyGet){
+  fun setPaymentInfo(payment: PaymentPropertyGet) {
     paymentInfo = payment
   }
 
-  fun setPaymentName(name: String){
+  fun setPaymentName(name: String) {
     _paymentName.value = name
   }
 
-  fun setTotal(total:Float){
+  fun setTotal(total: Float) {
     _total.value = total
   }
 
-  fun setCurrency(currency: String){
+  fun setCurrency(currency: String) {
     _currency.value = currency
   }
 
@@ -114,20 +115,21 @@ class ViewModelAddPayment(application: Application): AndroidViewModel(applicatio
     _itemClicked.value = payerAddPayment
   }
 
-  fun setPayersAddPayment(payers: List<UserProperty>){
+  fun setPayersAddPayment(payers: List<UserProperty>) {
     _payersAddPayment.value = payers.map {
       PayerAddPayment(
-        it.id,it.name,it.thumbnailUrl!!,0f,false
+        it.id, it.name, it.thumbnailUrl!!, 0f, false
       )
     }
   }
 
-  fun getCountryList(){
+  fun getCountryList() {
     CoroutineScope(Dispatchers.IO).launch {
       countryList = NationalFlagsRepository(getAppDatabase(getApplication())).nationalFlags
     }
   }
-  fun getGroupDetail(){
+
+  fun getGroupDetail() {
     CoroutineScope(Dispatchers.IO).launch {
       Api.retrofitService.getGroupDetail("Bearer $id", groupInfo.id)
         .enqueue(object : Callback<GetGroupDetail> {
@@ -140,6 +142,7 @@ class ViewModelAddPayment(application: Application): AndroidViewModel(applicatio
               _navigateToHome.value = true
             }
           }
+
           override fun onFailure(call: Call<GetGroupDetail>, t: Throwable) {
             Log.d("ViewModelAddPayment", t.message)
             _navigateToHome.value = true
@@ -147,70 +150,74 @@ class ViewModelAddPayment(application: Application): AndroidViewModel(applicatio
         })
     }
   }
-  fun setComment(comment:String){
+
+  fun setComment(comment: String) {
     _comment.value = comment
   }
-  fun setThumbnail(thumbnail:String){
+
+  fun setThumbnail(thumbnail: String) {
     _thumbnail.value = thumbnail
   }
 
-  fun setId(idInput:String){
+  fun setId(idInput: String) {
     id = idInput
   }
+
   @JvmName("setGroupInfo1")
-  fun setGroupInfo(groupInfoInput:GroupPropertyResponse){
+  fun setGroupInfo(groupInfoInput: GroupPropertyResponse) {
     groupInfo = groupInfoInput
     setGroupName(groupInfo.name)
   }
 
-  fun setLendersList(list:List<Float>){
+  fun setLendersList(list: List<Float>) {
     _lendersAddPayment.value = list
   }
 
-  fun setBorrowersList(list:List<Float>){
+  fun setBorrowersList(list: List<Float>) {
     _borrowersAddPayment.value = list
   }
 
-  fun getSumUppedAmountList() : List<Float>{
-    return _lendersAddPayment.value!!.zip(_borrowersAddPayment.value!!){x,y ->
+  fun getSumUppedAmountList(): List<Float> {
+    return _lendersAddPayment.value!!.zip(_borrowersAddPayment.value!!) { x, y ->
       x - y
     }
   }
 
-  fun setTag(){
+  fun setTag() {
     CoroutineScope(Dispatchers.IO).launch {
       tags = TagRepository(getAppDatabase(getApplication())).tags
     }
   }
 
-  fun setPaidAt(date:String){
+  fun setPaidAt(date: String) {
     _paidAt.value = date
   }
 
-  fun navigationCompleted(){
+  fun navigationCompleted() {
     _navigateToGroupDetail.value = null
   }
 
-  fun navigationToHomeCompleted(){
+  fun navigationToHomeCompleted() {
     _navigateToHome.value = null
   }
 
-  fun setPositivePayers(payers: List<UserExpense>){
+  fun setPositivePayers(payers: List<UserExpense>) {
     _editPaymentPositivePayers.value = payers
   }
 
-  fun setNegativePayers(payers: List<UserExpense>){
+  fun setNegativePayers(payers: List<UserExpense>) {
     _editPaymentNegativePayers.value = payers
   }
-  fun sendRequest(){
-    val positivePayers = _payersAddPayment.value!!.zip(lendersAddPayment.value!!){x,y ->
-      UserExpense(id = x.id,amount = y)
+
+  fun sendRequest() {
+    val positivePayers = _payersAddPayment.value!!.zip(lendersAddPayment.value!!) { x, y ->
+      UserExpense(id = x.id, amount = y)
     }
-    val negativePayers = _payersAddPayment.value!!.zip(borrowersAddPayment.value!!){x,y ->
-      UserExpense(id = x.id,amount = y * -1)
+    val negativePayers = _payersAddPayment.value!!.zip(borrowersAddPayment.value!!) { x, y ->
+      UserExpense(id = x.id, amount = y * -1)
     }
 
-    if(paymentInfo == null){
+    if (paymentInfo == null) {
       //　新規作成
       val expenseProperty = CreateExpenseProperty(
         name = paymentName.value!!,
@@ -260,7 +267,12 @@ class ViewModelAddPayment(application: Application): AndroidViewModel(applicatio
         images = listOf(thumbnail.value!!),
         paidAt = paidAt.value
       )
-      Api.retrofitService.updatePayment("Bearer $id", expenseProperty, groupInfo.id,paymentInfo!!.id)
+      Api.retrofitService.updatePayment(
+        "Bearer $id",
+        expenseProperty,
+        groupInfo.id,
+        paymentInfo!!.id
+      )
         .enqueue(object : Callback<Unit> {
           override fun onResponse(
             call: Call<Unit>,
@@ -285,4 +297,41 @@ class ViewModelAddPayment(application: Application): AndroidViewModel(applicatio
     }
 
   }
+
+  fun settleUp(borrower:UserExpense,lender:UserExpense) {
+    val expenseProperty = CreateExpenseProperty(
+      name = getApplication<Application>().resources.getString(R.string.settle_up),
+      currency = currency.value!!,
+      total = total.value!!,
+      positivePayers = listOf<UserExpense>(borrower),
+      negativePayers = listOf<UserExpense>(lender),
+      tags = listOf(getApplication<Application>().resources.getString(R.string.settle_up)),
+      comment = "",
+      images = listOf(thumbnail.value!!),
+      paidAt = paidAt.value
+    )
+    Api.retrofitService.addExpense("Bearer $id", expenseProperty, groupInfo.id)
+      .enqueue(object : Callback<Unit> {
+        override fun onResponse(
+          call: Call<Unit>,
+          response: Response<Unit>
+        ) {
+          if (response.isSuccessful) {
+            _navigateToGroupDetail.value = groupInfo
+          } else {
+            Toast.makeText(
+              getApplication(),
+              response.message(),
+              Toast.LENGTH_LONG
+            ).show()
+          }
+        }
+
+        override fun onFailure(call: Call<Unit>, t: Throwable) {
+          Toast.makeText(getApplication(), t.message, Toast.LENGTH_LONG).show()
+          Log.i("ViewModelAddPayment", "onFailure: ${t.message}")
+        }
+      })
+  }
+
 }
