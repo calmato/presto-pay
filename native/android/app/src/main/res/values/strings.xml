@@ -97,6 +97,7 @@
   <string name="no">いいえ</string>
   <string name="fill_expense_name">支払い名を入力してください</string>
   <string name="fill_total_amount">合計金額を入力してください</string>
+  <string name="fill_amount">金額を入力してください</string>
   <string name="total_amount_error">ユーザーの支払い金額の総計が合計金額と一致しません</string>
   <string name="registered_new_expense">新しい支払い情報を作成しました</string>
   <string name="failed_register_new_expense">支払い情報作成に失敗しました</string>

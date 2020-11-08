@@ -8,6 +8,7 @@ import android.text.TextWatcher
 import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -26,6 +27,7 @@ import work.calmato.prestopay.util.*
 import java.text.SimpleDateFormat
 import java.util.*
 import androidx.lifecycle.Observer
+import kotlinx.android.synthetic.main.dialog_add_friend.*
 
 class SettleUpFragment : Fragment() {
   private val viewModel: ViewModelAddPayment by lazy {
@@ -66,7 +68,7 @@ class SettleUpFragment : Fragment() {
     currency.setOnClickListener {
       showCurrencyDialog()
     }
-    viewModel.navigateToGroupDetail.observe(viewLifecycleOwner,Observer{
+    viewModel.navigateToGroupDetail.observe(viewLifecycleOwner, Observer {
       this.findNavController().navigate(
         SettleUpFragmentDirections.actionSettleUpToGroupDetail(viewModel.groupInfo)
       )
@@ -76,14 +78,28 @@ class SettleUpFragment : Fragment() {
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
     when (item.itemId) {
       R.id.done -> {
-        viewModel.setTotal(total.text.toString().toFloat())
-        viewModel.setCurrency(currency.text.toString())
-        viewModel.setThumbnail(encodeImage2Base64(thumbnail1))
-        lender.amount = viewModel.total.value!!
-        borrower.amount = viewModel.total.value!! * -1
-        startHttpConnectionMenu(doneButton, nowLoading, requireContext())
-        viewModel.settleUp(borrower, lender)
-        finishHttpConnectionMenu(doneButton, nowLoading)
+        if (total.text.isNullOrEmpty()) {
+          Toast.makeText(
+            requireContext(),
+            resources.getString(R.string.fill_amount),
+            Toast.LENGTH_LONG
+          ).show()
+        } else if(username1.text.isNullOrEmpty() || username2.text.isNullOrEmpty()){
+          Toast.makeText(
+            requireContext(),
+            resources.getString(R.string.choose_involved_users),
+            Toast.LENGTH_LONG
+          ).show()
+        } else{
+          viewModel.setTotal(total.text.toString().toFloat())
+          viewModel.setCurrency(currency.text.toString())
+          viewModel.setThumbnail(encodeImage2Base64(thumbnail1))
+          lender.amount = viewModel.total.value!!
+          borrower.amount = viewModel.total.value!! * -1
+          startHttpConnectionMenu(doneButton, nowLoading, requireContext())
+          viewModel.settleUp(borrower, lender)
+          finishHttpConnectionMenu(doneButton, nowLoading)
+        }
       }
     }
     return super.onOptionsItemSelected(item)
