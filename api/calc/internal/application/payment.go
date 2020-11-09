@@ -87,13 +87,9 @@ func (pa *paymentApplication) Index(
 
 	fmt.Println(ers)
 
-	// ユーザー毎の支払額合計作成 (支払いが済んでないものをまとめる)
+	// ユーザー毎の支払額合計作成
 	payers := map[string]*payment.Payer{}
 	for _, p := range ps {
-		if p.IsCompleted {
-			continue
-		}
-
 		// 支払い情報に登録されている通貨情報を取得
 		currentRate := ers.Rates[p.Currency]
 		if currentRate == 0 {
@@ -101,17 +97,23 @@ func (pa *paymentApplication) Index(
 		}
 
 		for _, payer := range p.Payers {
-			if payer.IsPaid {
+			if payer == nil {
 				continue
 			}
 
+			// 初期データを投入
 			if payers[payer.ID] == nil {
 				payers[payer.ID] = &payment.Payer{
 					ID:     payer.ID,
 					Name:   payer.Name,
 					Amount: 0,
-					IsPaid: false,
+					IsPaid: true,
 				}
+			}
+
+			// 1つでも未支払いのものがあれば、IsPaidをfalseに変更
+			if payers[payer.ID].IsPaid && !payer.IsPaid {
+				payers[payer.ID].IsPaid = false
 			}
 
 			// 為替レートの反映
