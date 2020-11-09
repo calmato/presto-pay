@@ -101,6 +101,7 @@
   <string name="no">いいえ</string>
   <string name="fill_expense_name">支払い名を入力してください</string>
   <string name="fill_total_amount">合計金額を入力してください</string>
+  <string name="fill_amount">金額を入力してください</string>
   <string name="total_amount_error">ユーザーの支払い金額の総計が合計金額と一致しません</string>
   <string name="registered_new_expense">新しい支払い情報を作成しました</string>
   <string name="failed_register_new_expense">支払い情報作成に失敗しました</string>
@@ -283,7 +284,7 @@
     <item>@drawable/ic_baseline_cake_24</item>
     <item>@drawable/ic_baseline_menu_book_24</item>
     <item>@drawable/ic_baseline_home_24</item>
-    <item>@drawable/ic_baseline_menu_24</item>
+    <item>@drawable/ic_baseline_attach_money_24</item>
   </integer-array>
   <string-array name="tag_name">
     <item>買い物</item>
@@ -297,7 +298,7 @@
     <item>プレゼント</item>
     <item>雑貨</item>
     <item>家賃</item>
-    <item>その他</item>
+    <item>精算</item>
   </string-array>
   <string-array name="dividingMethod">
     <item>割り勘</item>

@@ -133,6 +133,11 @@ class GroupDetailFragment : Fragment() {
         GroupDetailFragmentDirections.actionGroupDetailToAddPayment(groupDetail!!,null)
       )
     }
+    settleUp.setOnClickListener {
+      this.findNavController().navigate(
+        GroupDetailFragmentDirections.actionGroupDetailToSettleUp(groupDetail!!)
+      )
+    }
     requireActivity().onBackPressedDispatcher.addCallback(
       viewLifecycleOwner,
       object : OnBackPressedCallback(true) {
