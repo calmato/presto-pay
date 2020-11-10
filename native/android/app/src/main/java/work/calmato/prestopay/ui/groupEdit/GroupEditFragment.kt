@@ -1,5 +1,8 @@
 package work.calmato.prestopay.ui.groupEdit
 
+import android.app.Activity
+import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.util.Log
@@ -8,13 +11,13 @@ import android.widget.Switch
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
+import com.yalantis.ucrop.UCrop
 import kotlinx.android.synthetic.main.fragment_friend_list.*
 import kotlinx.android.synthetic.main.fragment_group_edit.*
 import retrofit2.Call
@@ -23,13 +26,10 @@ import retrofit2.Response
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentGroupEditBinding
 import work.calmato.prestopay.network.*
-import work.calmato.prestopay.util.AdapterFriendPlane
-import work.calmato.prestopay.util.ViewModelFriend
-import work.calmato.prestopay.util.ViewModelGroup
-import work.calmato.prestopay.util.encodeImage2Base64
+import work.calmato.prestopay.util.*
 import kotlin.concurrent.thread
 
-class GroupEditFragment : Fragment() {
+class GroupEditFragment : PermissionBase() {
   private val viewModel: ViewModelFriend by lazy {
     ViewModelProvider(this).get(ViewModelFriend::class.java)
   }
@@ -109,6 +109,10 @@ class GroupEditFragment : Fragment() {
       )
     }
 
+    groupThumnail.setOnClickListener {
+      requestPermission()
+    }
+
     // 戻るbuttonを押した時の処理
     requireActivity().onBackPressedDispatcher.addCallback(
       viewLifecycleOwner,
@@ -156,6 +160,19 @@ class GroupEditFragment : Fragment() {
       }
     })*/
     setHasOptionsMenu(true)
+  }
+
+  override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    super.onActivityResult(requestCode, resultCode, data)
+    if (resultCode == Activity.RESULT_OK && requestCode == Constant.IMAGE_PICK_CODE) {
+      cropImage(data?.data!!)
+    }
+    if (resultCode == Activity.RESULT_OK && requestCode == UCrop.REQUEST_CROP) {
+      val resultUri = UCrop.getOutput(data!!)
+      groupThumnail.setImageURI(resultUri)
+      groupThumnail.setBackgroundColor(Color.TRANSPARENT)
+      changeProfilePicture3.text = resources.getText(R.string.change_image)
+    }
   }
 
   override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
