@@ -146,7 +146,7 @@ class GroupFriendFragment : Fragment() {
     })
 
     val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
-    userNameText.text = sharedPreferences.getString("name", "")
+    userNameText.text = sharedPreferences.getString("username", "")
     val thumbnailUrl = sharedPreferences.getString("thumbnailUrl", "")
     if (thumbnailUrl.isNotEmpty()) {
       Picasso.with(context).load(thumbnailUrl).into(thumbnail)

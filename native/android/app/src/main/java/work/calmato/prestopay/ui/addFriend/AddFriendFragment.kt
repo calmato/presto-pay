@@ -21,7 +21,8 @@ import kotlinx.android.synthetic.main.fragment_add_friend.*
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentAddFriendBinding
 import work.calmato.prestopay.network.UserProperty
-import work.calmato.prestopay.util.*
+import work.calmato.prestopay.util.AdapterFriendPlane
+import work.calmato.prestopay.util.ViewModelFriendGroup
 
 class AddFriendFragment : Fragment() {
   private val viewModel: ViewModelFriendGroup by lazy {
@@ -99,7 +100,7 @@ class AddFriendFragment : Fragment() {
         dialog?.show()
         val name = dialog?.findViewById<TextView>(R.id.username_dialog)
         val thumbnail = dialog?.findViewById<ImageView>(R.id.thumbnail_dialog)
-        name!!.text = userProperty.name
+        name!!.text = userProperty.username
         if (userProperty.thumbnailUrl != null && userProperty.thumbnailUrl.isNotEmpty()) {
           Picasso.with(context).load(userProperty.thumbnailUrl).into(thumbnail)
         }
