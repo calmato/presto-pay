@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_friend_list.*
 import kotlinx.android.synthetic.main.fragment_group_edit.*
 import retrofit2.Call
@@ -55,6 +56,9 @@ class GroupEditFragment : Fragment() {
             ) {
               Log.d(ViewModelGroup.TAG, response.body().toString())
               groupDetail = response.body()
+              if (groupDetail?.thumbnailUrl!!.isNotEmpty()) {
+                Picasso.with(context).load(groupDetail!!.thumbnailUrl).into(groupThumnail)
+              }
               groupEditName.setText(groupDetail?.name)
               groupMembers.addAll(groupDetail!!.users)
               viewModel.friendsList.observe(viewLifecycleOwner, Observer<List<UserProperty>> {

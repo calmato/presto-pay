@@ -7,6 +7,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <TextView
+      android:id="@+id/changeProfilePicture3"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="8dp"
+      android:text="@string/change_profile_photo"
+      android:textColor="@color/ourTheme"
+      android:textSize="12sp"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/groupThumnail" />
+
     <androidx.constraintlayout.widget.ConstraintLayout
       android:id="@+id/groupEditAddFriend"
       android:layout_width="match_parent"
@@ -72,16 +84,15 @@
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/groupDisplay" />
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
       android:id="@+id/groupThumnail"
       android:layout_width="90dp"
       android:layout_height="90dp"
-      android:layout_marginTop="32dp"
+      android:layout_marginTop="16dp"
       android:background="@drawable/circle_theme_color"
       android:contentDescription="@string/icon"
       android:src="@drawable/ic_launcher_foreground"
       app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintHorizontal_bias="0.498"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent" />
 
@@ -95,9 +106,8 @@
       android:inputType="textPersonName"
       android:maxLength="31"
       app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintHorizontal_bias="0.497"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/groupThumnail" />
+      app:layout_constraintTop_toBottomOf="@+id/changeProfilePicture3" />
 
     <TextView
       android:id="@+id/groupDisplay"
@@ -115,10 +125,10 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginStart="200dp"
+      android:background="@drawable/switch_bg"
       android:theme="@style/CustomSwitch"
       android:thumb="@drawable/switch_thumb"
       android:track="@drawable/switch_bg"
-      android:background="@drawable/switch_bg"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toEndOf="@+id/groupDisplay"
       app:layout_constraintTop_toTopOf="@+id/groupDisplay" />
