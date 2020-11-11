@@ -66,19 +66,6 @@
         app:layout_constraintTop_toBottomOf="@+id/displayProfile" />
 
       <View
-        android:id="@+id/horizonBar3"
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:background="#A4A7A7"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="@+id/displayNotificationButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent" />
-
-      <View
         android:id="@+id/horizonBar4"
         android:layout_width="0dp"
         android:layout_height="1dp"
@@ -90,19 +77,6 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/displayPasswordButton" />
-
-      <View
-        android:id="@+id/horizonBar5"
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:background="#A4A7A7"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="@+id/displayPrestoPayButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent" />
 
       <View
         android:id="@+id/horizonBar6"
@@ -117,103 +91,29 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />
 
-      <View
-        android:id="@+id/horizonBar7"
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:background="#A4A7A7"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="@+id/displayInviteButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent" />
-
-      <TextView
-        android:id="@+id/applicationSettingText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:text="@string/app_setting"
-        android:textSize="12sp"
-        app:layout_constraintStart_toStartOf="@+id/UserAccountThumnail"
-        app:layout_constraintTop_toBottomOf="@+id/horizonBar" />
-
-      <TextView
-        android:id="@+id/textView14"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/notification_setting"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="@+id/displayNotificationButton"
-        app:layout_constraintStart_toStartOf="@+id/applicationSettingText"
-        app:layout_constraintTop_toTopOf="@+id/displayNotificationButton" />
 
       <Button
         android:id="@+id/displayPasswordButton"
         android:layout_width="0dp"
         android:layout_height="64dp"
-        android:alpha="0.2"
-        android:background="@drawable/clear_button_bg"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/horizonBar3" />
-
-      <Button
-        android:id="@+id/displayNotificationButton"
-        android:layout_width="0dp"
-        android:layout_height="64dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="32dp"
         android:alpha="0.2"
         android:background="@drawable/clear_button_bg"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/applicationSettingText" />
+        app:layout_constraintTop_toBottomOf="@+id/horizonBar" />
 
       <TextView
         android:id="@+id/passwordChangeText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
         android:text="@string/change_password"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="@+id/displayPasswordButton"
-        app:layout_constraintStart_toStartOf="@+id/textView14"
+        app:layout_constraintStart_toStartOf="@+id/displayPasswordButton"
         app:layout_constraintTop_toTopOf="@+id/displayPasswordButton" />
-
-      <TextView
-        android:id="@+id/informationText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:text="@string/information"
-        android:textSize="12sp"
-        app:layout_constraintStart_toStartOf="@+id/passwordChangeText"
-        app:layout_constraintTop_toBottomOf="@+id/horizonBar4" />
-
-      <Button
-        android:id="@+id/displayPrestoPayButton"
-        android:layout_width="0dp"
-        android:layout_height="64dp"
-        android:layout_marginTop="16dp"
-        android:alpha="0.2"
-        android:background="@drawable/clear_button_bg"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/informationText" />
-
-      <TextView
-        android:id="@+id/prestoPayText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/about_prestopay"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/horizonBar5"
-        app:layout_constraintStart_toStartOf="@+id/informationText"
-        app:layout_constraintTop_toTopOf="@+id/displayPrestoPayButton" />
 
       <Button
         android:id="@+id/displayHiddenGroupButton"
@@ -222,8 +122,9 @@
         android:alpha="0.2"
         android:background="@drawable/clear_button_bg"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/horizonBar5" />
+        app:layout_constraintTop_toBottomOf="@+id/horizonBar4" />
 
       <TextView
         android:id="@+id/groupHiddenText"
@@ -231,30 +132,9 @@
         android:layout_height="wrap_content"
         android:text="@string/hiddenGroups"
         android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="@+id/horizonBar6"
-        app:layout_constraintStart_toStartOf="@+id/prestoPayText"
-        app:layout_constraintTop_toBottomOf="@+id/horizonBar5" />
-
-      <Button
-        android:id="@+id/displayInviteButton"
-        android:layout_width="0dp"
-        android:layout_height="64dp"
-        android:alpha="0.2"
-        android:background="@drawable/clear_button_bg"
-        android:cursorVisible="true"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/horizonBar6" />
-
-      <TextView
-        android:id="@+id/inviteText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/invite_prestopay"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="@+id/displayInviteButton"
-        app:layout_constraintStart_toStartOf="@+id/groupHiddenText"
-        app:layout_constraintTop_toBottomOf="@+id/horizonBar6" />
+        app:layout_constraintBottom_toBottomOf="@+id/displayHiddenGroupButton"
+        app:layout_constraintStart_toStartOf="@+id/passwordChangeText"
+        app:layout_constraintTop_toTopOf="@+id/displayHiddenGroupButton" />
 
       <TextView
         android:id="@+id/logoutText"
@@ -264,8 +144,8 @@
         android:textColor="@color/ourTheme"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="@+id/logoutButton"
-        app:layout_constraintStart_toStartOf="@+id/inviteText"
-        app:layout_constraintTop_toBottomOf="@+id/displayInviteButton" />
+        app:layout_constraintStart_toStartOf="@+id/groupHiddenText"
+        app:layout_constraintTop_toBottomOf="@+id/displayHiddenGroupButton" />
 
       <Button
         android:id="@+id/logoutButton"
@@ -276,7 +156,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/horizonBar7" />
+        app:layout_constraintTop_toBottomOf="@+id/displayHiddenGroupButton" />
 
       <View
         android:id="@+id/horizonBar2"
