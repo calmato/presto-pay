@@ -88,13 +88,13 @@
       android:id="@+id/groupThumnail"
       android:layout_width="90dp"
       android:layout_height="90dp"
-      android:layout_marginTop="16dp"
+      android:layout_marginTop="24dp"
       android:background="@drawable/circle_theme_color"
       android:contentDescription="@string/icon"
       android:src="@drawable/ic_launcher_foreground"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="parent" />
+      app:layout_constraintTop_toBottomOf="@+id/textView12" />
 
     <EditText
       android:id="@+id/groupEditName"
@@ -151,6 +151,18 @@
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/groupEditAddFriend" />
+
+    <TextView
+      android:id="@+id/textView12"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="16dp"
+      android:layout_marginTop="24dp"
+      android:text="@string/group_edit"
+      android:textSize="24sp"
+      android:textStyle="bold"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent" />
 
   </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
