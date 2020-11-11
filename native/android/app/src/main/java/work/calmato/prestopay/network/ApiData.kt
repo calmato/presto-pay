@@ -47,7 +47,7 @@ data class CreateGroupProperty(
 @Parcelize
 data class EditGroup(
   val name: String,
-  val thumbnailUrl: String,
+  val thumbnail: String,
   val userIds: List<String>
 ) : Parcelable {}
 

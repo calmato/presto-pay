@@ -167,6 +167,11 @@
   <string name="delete_hidden_group">非表示グループリストから削除する</string>
   <string name="bad_internet_connection">通信状況を確認してください</string>
   <string name="skip">SKIP</string>
+  <string name="personal_edit">個人情報を編集</string>
+  <string name="mail">メール</string>
+  <string name="group_edit">グループ情報を編集</string>
+  <string name="select_member">メンバーを選択</string>
+  <string name="search_user">ユーザー名を検索</string>
   <string-array name="currency_array">
     <item>jpy</item>
     <item>usd</item>

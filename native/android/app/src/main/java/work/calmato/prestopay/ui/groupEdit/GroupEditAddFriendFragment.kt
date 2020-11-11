@@ -154,7 +154,7 @@ class GroupEditAddFriendFragment : Fragment() {
 
   private fun applyBackHome(response: GroupPropertyResponse?) {
     this.findNavController().navigate(
-      GroupEditAddFriendFragmentDirections.actionGroupEditAddFriendToGroupEditFragment(responseGroup)
+      GroupEditAddFriendFragmentDirections.actionGroupEditAddFriendToGroupEditFragment(response)
     )
   }
 
