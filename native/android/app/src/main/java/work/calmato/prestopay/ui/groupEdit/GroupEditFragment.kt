@@ -201,7 +201,6 @@ class GroupEditFragment : PermissionBase() {
     Api.retrofitService.editGroup("Bearer $id", editGroupProperty, groupId)
       .enqueue(object : Callback<EditGroup> {
         override fun onFailure(call: Call<EditGroup>, t: Throwable) {
-          Toast.makeText(activity, t.message, Toast.LENGTH_LONG).show()
         }
 
         override fun onResponse(
