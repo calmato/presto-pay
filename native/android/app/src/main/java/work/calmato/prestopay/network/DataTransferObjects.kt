@@ -55,6 +55,14 @@ data class NetworkGroupContainer(val groups: List<NetworkGroup>)
 @JsonClass(generateAdapter = true)
 data class NetworkPaymentContainer(val payments:List<NetworkPayment>)
 
+@JsonClass(generateAdapter = true)
+data class PaymentsResponse(
+  val networkPaymentContainer:NetworkPaymentContainer,
+  val currency: String
+//  ,
+//  @Json(name = "users")val users: Unit
+)
+
 fun NetworkFriend.asDomainModel(): UserProperty {
   return UserProperty(id, name, username, email, thumbnailUrl, checked)
 }

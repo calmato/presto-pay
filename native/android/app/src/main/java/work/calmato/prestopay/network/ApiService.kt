@@ -8,10 +8,11 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
 import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.*
 
-private const val BASE_URL = "https://api.presto-pay-stg.calmato.work/v1/"
+private const val BASE_URL = "https://api.presto-pay-dev.calmato.work/v1/"
 
 /**
  * Build the Moshi object that Retrofit will be using, making sure to add the Kotlin adapter for
@@ -150,7 +151,7 @@ interface ApiService {
   fun getPayments(
     @Header("Authorization") token: String,
     @Path("groupId") groupId: String
-  ): Deferred<NetworkPaymentContainer>
+  ): Deferred<PaymentsResponse>
 
   @PATCH("groups/{groupId}/payments-status/{paymentId}")
   fun completePayment(
