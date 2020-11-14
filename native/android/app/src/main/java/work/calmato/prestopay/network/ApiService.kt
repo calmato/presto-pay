@@ -5,13 +5,16 @@ import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import kotlinx.coroutines.Deferred
 import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.*
+import java.security.cert.X509Certificate
+import javax.net.ssl.SSLContext
+import javax.net.ssl.TrustManager
+import javax.net.ssl.X509TrustManager
 
-private const val BASE_URL = "https://api.presto-pay-stg.calmato.work/v1/"
+private const val BASE_URL = "https://api.presto-pay-dev.calmato.work/v1/"
 
 /**
  * Build the Moshi object that Retrofit will be using, making sure to add the Kotlin adapter for
@@ -21,12 +24,30 @@ private val moshi = Moshi.Builder()
   .add(KotlinJsonAdapterFactory())
   .build()
 
-private val client = OkHttpClient.Builder()
-  .addInterceptor(
-    HttpLoggingInterceptor()
-      .setLevel(HttpLoggingInterceptor.Level.BODY)
-  )
-  .build()
+fun getUnsafeOkHttpClient(): OkHttpClient {
+  val x509TrustManager = object: X509TrustManager {
+    override fun checkClientTrusted(chain: Array<out X509Certificate>?, authType: String?) {
+    }
+
+    override fun checkServerTrusted(chain: Array<out X509Certificate>?, authType: String?) {
+    }
+
+    override fun getAcceptedIssuers(): Array<X509Certificate> {
+      return arrayOf()
+    }
+  }
+
+  val trustManagers = arrayOf<TrustManager>(x509TrustManager)
+
+  val sslContext = SSLContext.getInstance("TLS")
+  sslContext.init(null, trustManagers, null)
+
+  val builder = OkHttpClient.Builder()
+  builder.sslSocketFactory(sslContext.socketFactory, x509TrustManager)
+  builder.hostnameVerifier { _, _ -> true }
+
+  return builder.build()
+}
 
 /**
  * Use the Retrofit builder to build a retrofit object using a Moshi converter with our Moshi
@@ -36,7 +57,7 @@ private val retrofit = Retrofit.Builder()
   .addConverterFactory(MoshiConverterFactory.create(moshi))
   .addCallAdapterFactory(CoroutineCallAdapterFactory())
   .baseUrl(BASE_URL)
-  .client(client)
+  .client(getUnsafeOkHttpClient())
   .build()
 
 interface ApiService {
