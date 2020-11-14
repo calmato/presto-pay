@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.SearchView
 import android.widget.TextView
 import android.widget.Toast
@@ -16,12 +15,12 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_add_friend.*
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentAddFriendBinding
 import work.calmato.prestopay.network.UserProperty
-import work.calmato.prestopay.util.*
+import work.calmato.prestopay.util.AdapterFriendPlane
+import work.calmato.prestopay.util.ViewModelFriendGroup
 
 class AddFriendFragment : Fragment() {
   private val viewModel: ViewModelFriendGroup by lazy {
@@ -98,11 +97,12 @@ class AddFriendFragment : Fragment() {
         val dialog: AlertDialog? = builder?.create()
         dialog?.show()
         val name = dialog?.findViewById<TextView>(R.id.username_dialog)
-        val thumbnail = dialog?.findViewById<ImageView>(R.id.thumbnail_dialog)
-        name!!.text = userProperty.name
-        if (userProperty.thumbnailUrl != null && userProperty.thumbnailUrl.isNotEmpty()) {
+        // TODO: サムネイルは大きさが統一されてないのでここでは修正する、ひとまずコメントアウトしておく。
+        //val thumbnail = dialog?.findViewById<ImageView>(R.id.thumbnail_dialog)
+        name!!.text = userProperty.username
+/*        if (userProperty.thumbnailUrl != null && userProperty.thumbnailUrl.isNotEmpty()) {
           Picasso.with(context).load(userProperty.thumbnailUrl).into(thumbnail)
-        }
+        }*/
         viewModel.itemIsClickedCompleted()
       }
     })

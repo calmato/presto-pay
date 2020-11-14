@@ -88,7 +88,7 @@ class GroupListHiddenFragment : Fragment() {
     })
   }
 
-  private fun navigateToGroupDetail(group:GroupPropertyResponse){
+  private fun navigateToGroupDetail(group: GroupPropertyResponse) {
     this.findNavController().navigate(
       GroupListHiddenFragmentDirections.actionGroupListHiddenToGroupDetail(group)
     )
@@ -170,15 +170,15 @@ class GroupListHiddenFragment : Fragment() {
           (viewHolder.itemView.height - deleteIcon!!.intrinsicHeight) / 2
 
         deleteIcon.setBounds(
-          itemView.left + iconMarginVertical,
+          itemView.right - iconMarginVertical - deleteIcon.intrinsicWidth,
           itemView.top + iconMarginVertical,
-          itemView.left + iconMarginVertical + deleteIcon.intrinsicWidth,
+          itemView.right - iconMarginVertical,
           itemView.bottom - iconMarginVertical
         )
         background.setBounds(
-          itemView.left,
+          itemView.right,
           itemView.top,
-          itemView.right + dX.toInt(),
+          itemView.left + dX.toInt(),
           itemView.bottom
         )
         background.draw(c)

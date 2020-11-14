@@ -44,21 +44,20 @@
         android:background="#F44336"
         android:paddingStart="8dp"
         android:paddingEnd="8dp"
-        android:text="@string/settle_up"
-        android:textColor="@color/design_default_color_on_secondary"
+        android:text="@string/settleup_group"
+        android:textColor="@color/design_default_color_on_primary"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.7"
-        app:layout_constraintStart_toEndOf="@+id/groupIcon"
-        app:layout_constraintTop_toTopOf="@+id/groupIcon" />
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/groupIcon" />
 
       <ImageView
         android:id="@+id/setting"
-        android:layout_width="43dp"
-        android:layout_height="43dp"
-        app:layout_constraintEnd_toStartOf="@+id/groupIcon"
-        app:layout_constraintHorizontal_bias="0.25"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/groupIcon"
         app:srcCompat="@drawable/ic_baseline_settings_24" />
 
@@ -67,12 +66,15 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="24dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/settleUp"
+        app:layout_constraintVertical_bias="0.0">
         app:layout_constraintTop_toBottomOf="@+id/chart">
 
         <androidx.recyclerview.widget.RecyclerView

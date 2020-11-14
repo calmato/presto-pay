@@ -110,7 +110,7 @@
   <string name="cancel">キャンセル</string>
   <string name="fill_friend_username">友達のユーザー名を入力してください</string>
   <string name="user_not_found">ユーザーが見つかりません</string>
-  <string name="add_friend_question">友だち追加しますか？</string>
+  <string name="add_friend_question">この友だち追加しますか？</string>
   <string name="group_member_restriction">グループメンバーは100人までです</string>
   <string name="group_name_restriction">1〜31文字のグループ名を入力してください</string>
   <string name="delete_friend">友達リストから削除する</string>
@@ -167,6 +167,15 @@
   <string name="delete_hidden_group">非表示グループリストから削除する</string>
   <string name="bad_internet_connection">通信状況を確認してください</string>
   <string name="skip">SKIP</string>
+  <string name="personal_edit">個人情報を編集</string>
+  <string name="mail">メール</string>
+  <string name="group_edit">グループ情報を編集</string>
+  <string name="select_member">メンバーを選択</string>
+  <string name="search_user">ユーザー名を検索</string>
+  <string name="グループ写真を変更" />
+  <string name="change_group_profile">グループ写真を変更</string>
+  <string name="精算する">to_settleup</string>
+  <string name="settleup_group">精算する</string>
   <string-array name="currency_array">
     <item>jpy</item>
     <item>usd</item>

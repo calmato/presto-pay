@@ -7,7 +7,6 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.BindingAdapter
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.list_item_add_payment_check.view.*
 import work.calmato.prestopay.R
 import work.calmato.prestopay.database.getAppDatabase
 import work.calmato.prestopay.network.*
@@ -27,7 +26,7 @@ fun ImageView.setThumbnail(item:UserProperty?){
 @BindingAdapter("username")
 fun TextView.setUserName(item:UserProperty?){
   item?.let {
-    text = item.name
+    text = item.username
   }
 }
 
