@@ -10,20 +10,20 @@ import work.calmato.prestopay.database.DatabaseGroup
 import work.calmato.prestopay.database.asPaymentModel
 import work.calmato.prestopay.network.*
 
-class PaymentRepository(private val database:AppDatabase,groupId: String) {
-  val payments:LiveData<List<PaymentPropertyGet>> =
-    Transformations.map(database.paymentDao.getPayments(groupId)){
+class PaymentRepository(private val database: AppDatabase, groupId: String) {
+  val payments: LiveData<List<PaymentPropertyGet>> =
+    Transformations.map(database.paymentDao.getPayments(groupId)) {
       it.asPaymentModel()
     }
-  val status:LiveData<DatabaseGroup> = database.groupDao.getLendingStatus(groupId)
+  val status: LiveData<DatabaseGroup> = database.groupDao.getLendingStatus(groupId)
 
-  suspend fun refreshPayments(id:String,groupId:String){
-    withContext(Dispatchers.IO){
-      val getPayments = Api.retrofitService.getPayments(id,groupId).await()
+  suspend fun refreshPayments(id: String, groupId: String) {
+    withContext(Dispatchers.IO) {
+      val getPayments = Api.retrofitService.getPayments(id, groupId).await()
       val paymentsList = NetworkPaymentContainer(getPayments.payments)
       database.paymentDao.deleteAll(groupId)
       database.paymentDao.insertAll(*paymentsList.asDatabaseModel())
-      database.groupDao.updateLendingStatus(getPayments.users.values.toList(),groupId)
+      database.groupDao.updateLendingStatus(getPayments.users.values.toList(), groupId)
     }
   }
 

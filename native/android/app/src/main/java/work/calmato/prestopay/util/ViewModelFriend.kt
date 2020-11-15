@@ -18,7 +18,7 @@ import work.calmato.prestopay.database.getAppDatabase
 import work.calmato.prestopay.network.*
 import work.calmato.prestopay.repository.FriendsRepository
 
-class ViewModelFriend(application:Application): AndroidViewModel(application) {
+class ViewModelFriend(application: Application) : AndroidViewModel(application) {
   private val _itemClicked = MutableLiveData<UserProperty>()
   val itemClicked: LiveData<UserProperty>
     get() = _itemClicked
@@ -89,7 +89,11 @@ class ViewModelFriend(application:Application): AndroidViewModel(application) {
     viewModelScope.launch {
       try {
         friendsRepository.addFriend(id, UserId(userId), userProperty)
-        Toast.makeText(activity, getApplication<Application>().resources.getString(R.string.add_friend_succeeded), Toast.LENGTH_SHORT).show()
+        Toast.makeText(
+          activity,
+          getApplication<Application>().resources.getString(R.string.add_friend_succeeded),
+          Toast.LENGTH_SHORT
+        ).show()
         _nowLoading.value = false
       } catch (e: java.lang.Exception) {
         Toast.makeText(activity, e.message, Toast.LENGTH_LONG).show()
@@ -113,15 +117,27 @@ class ViewModelFriend(application:Application): AndroidViewModel(application) {
               try {
                 viewModelScope.launch {
                   friendsRepository.deleteFriend(userId)
-                  Toast.makeText(activity, getApplication<Application>().resources.getString(R.string.delete_friend_succeeded), Toast.LENGTH_LONG).show()
+                  Toast.makeText(
+                    activity,
+                    getApplication<Application>().resources.getString(R.string.delete_friend_succeeded),
+                    Toast.LENGTH_LONG
+                  ).show()
                 }
               } catch (e: java.lang.Exception) {
-                Toast.makeText(activity, getApplication<Application>().resources.getString(R.string.delete_friend_failed), Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                  activity,
+                  getApplication<Application>().resources.getString(R.string.delete_friend_failed),
+                  Toast.LENGTH_LONG
+                ).show()
                 Log.i(ViewModelFriendGroup.TAG, "onResponse: ${e.message}")
               }
             }
           } else {
-            Toast.makeText(activity, getApplication<Application>().resources.getString(R.string.delete_friend_failed), Toast.LENGTH_LONG).show()
+            Toast.makeText(
+              activity,
+              getApplication<Application>().resources.getString(R.string.delete_friend_failed),
+              Toast.LENGTH_LONG
+            ).show()
           }
           _nowLoading.value = false
         }
@@ -140,10 +156,11 @@ class ViewModelFriend(application:Application): AndroidViewModel(application) {
     _navigateToHome.value = false
   }
 
-  private fun startRefreshingFriend(){
+  private fun startRefreshingFriend() {
     _refreshingFriend.value = true
   }
-  private fun endRefreshingFriend(){
+
+  private fun endRefreshingFriend() {
     _refreshingFriend.value = false
   }
 

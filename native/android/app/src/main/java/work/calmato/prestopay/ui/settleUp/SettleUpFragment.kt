@@ -54,7 +54,12 @@ class SettleUpFragment : Fragment() {
     setHasOptionsMenu(true)
     viewModel.setGroupInfo(SettleUpFragmentArgs.fromBundle(requireArguments()).groupDetail)
     lendingStatus = SettleUpFragmentArgs.fromBundle(requireArguments()).lendingStatus
-    inflateGraph(chart, lendingStatus.payers.map { it.name }, lendingStatus.payers.map { it.amount }, requireContext())
+    inflateGraph(
+      chart,
+      lendingStatus.payers.map { it.name },
+      lendingStatus.payers.map { it.amount },
+      requireContext()
+    )
     chart.isDoubleTapToZoomEnabled = false
     val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
     viewModel.setId(sharedPreferences.getString("token", "")!!)
@@ -89,13 +94,13 @@ class SettleUpFragment : Fragment() {
             resources.getString(R.string.fill_amount),
             Toast.LENGTH_LONG
           ).show()
-        } else if(username1.text.isNullOrEmpty() || username2.text.isNullOrEmpty()){
+        } else if (username1.text.isNullOrEmpty() || username2.text.isNullOrEmpty()) {
           Toast.makeText(
             requireContext(),
             resources.getString(R.string.choose_involved_users),
             Toast.LENGTH_LONG
           ).show()
-        } else{
+        } else {
           viewModel.setTotal(total.text.toString().toFloat())
           viewModel.setCurrency(currency.text.toString())
           viewModel.setThumbnail(encodeImage2Base64(thumbnail1))
