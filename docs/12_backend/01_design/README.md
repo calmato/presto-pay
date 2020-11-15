@@ -51,7 +51,6 @@
 | Tags           | タグ一覧         | ・Length(Array): 0 <= n <= 32<br/>・Length(Element): n <= 32 |
 | Images         | イメージ一覧     | ・Length(Array): 0 <= n <= 32<br/>・Format: base64             |
 | PaidAt         | 支払日時         | ・Required<br/>・Format: Datetime                            |
-| IsCompleted    | 支払い完了フラグ |                                                              |
 
 #### Payment - Payers
 
