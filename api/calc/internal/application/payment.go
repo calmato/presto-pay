@@ -3,7 +3,6 @@ package application
 import (
 	"context"
 	"encoding/base64"
-	"fmt"
 	"strings"
 
 	"github.com/calmato/presto-pay/api/calc/internal/application/request"
@@ -12,6 +11,7 @@ import (
 	"github.com/calmato/presto-pay/api/calc/internal/domain/exchange"
 	"github.com/calmato/presto-pay/api/calc/internal/domain/payment"
 	"github.com/calmato/presto-pay/api/calc/internal/domain/user"
+	"github.com/calmato/presto-pay/api/calc/lib/common"
 	"golang.org/x/xerrors"
 )
 
@@ -84,8 +84,6 @@ func (pa *paymentApplication) Index(
 	if ers.Rates[currency] == 0 {
 		currency = ers.Base
 	}
-
-	fmt.Println(ers)
 
 	// ユーザー毎の支払額合計作成
 	payers := map[string]*payment.Payer{}
@@ -169,7 +167,7 @@ func (pa *paymentApplication) Create(
 		ImageURLs:   imageURLs,
 		Payers:      payers,
 		IsCompleted: false,
-		PaidAt:      req.PaidAt,
+		PaidAt:      common.StringToTime(req.PaidAt),
 	}
 
 	if _, err = pa.paymentService.Create(ctx, p, groupID); err != nil {
@@ -227,7 +225,7 @@ func (pa *paymentApplication) Update(
 	p.Tags = req.Tags
 	p.Comment = req.Comment
 	p.ImageURLs = append(p.ImageURLs, imageURLs...)
-	p.PaidAt = req.PaidAt
+	p.PaidAt = common.StringToTime(req.PaidAt)
 
 	if _, err := pa.paymentService.Update(ctx, p, groupID); err != nil {
 		return nil, err

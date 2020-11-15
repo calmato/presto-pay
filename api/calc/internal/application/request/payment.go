@@ -1,7 +1,5 @@
 package request
 
-import "time"
-
 // PayerInPayment - 支払い者情報
 type PayerInPayment struct {
 	ID     string  `json:"id" vaidate:"required"`
@@ -17,7 +15,7 @@ type CreatePayment struct {
 	Tags           []string          `json:"tags" validate:"min=0,max=32,dive,max=32"`
 	Comment        string            `json:"comment" validate:"max=256"`
 	Images         []string          `json:"images" validate:"min=0,max=32"`
-	PaidAt         time.Time         `json:"paidAt" validate:"required,datetime"`
+	PaidAt         string            `json:"paidAt" validate:"required,datetime"`
 }
 
 // UpdatePayment - 支払い情報作成APIのリクエスト
@@ -29,7 +27,7 @@ type UpdatePayment struct {
 	Tags           []string          `json:"tags" validate:"min=0,max=32,dive,max=32"`
 	Comment        string            `json:"comment" validate:"max=256"`
 	Images         []string          `json:"images" validate:"min=0,max=32"`
-	PaidAt         time.Time         `json:"paidAt" validate:"required,datetime"`
+	PaidAt         string            `json:"paidAt" validate:"required,datetime"`
 }
 
 // UpdatePayerInPayment - ユーザー毎の支払い情報編集APIのリクエスト

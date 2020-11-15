@@ -93,10 +93,6 @@ func datetimeCheck(fl validator.FieldLevel) bool {
 		return true
 	}
 
-	if _, err := time.Parse(time.RFC3339, fl.Field().String()); err == nil {
-		return true
-	}
-
 	return false
 }
 
