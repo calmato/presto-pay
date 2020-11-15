@@ -68,7 +68,7 @@ func (gs *groupService) Show(ctx context.Context, groupID string) (*group.Group,
 	for _, userID := range g.UserIDs {
 		u, err := gs.apiClient.ShowUser(ctx, userID)
 		if err != nil {
-			return nil, domain.ErrorInDatastore.New(err)
+			return nil, err
 		}
 
 		us[userID] = u
@@ -100,8 +100,7 @@ func (gs *groupService) Create(ctx context.Context, g *group.Group) (*group.Grou
 	for _, userID := range g.UserIDs {
 		u, err := gs.apiClient.AddGroup(ctx, userID, g.ID)
 		if err != nil {
-			err = xerrors.Errorf("Failed to API Client: %w", err)
-			return nil, domain.ErrorInOtherAPI.New(err)
+			return nil, err
 		}
 
 		if u == nil || u.InstanceID == "" {
@@ -275,14 +274,9 @@ func (gs *groupService) RemoveUsers(
 func (gs *groupService) AddHiddenGroup(
 	ctx context.Context, groupID string,
 ) ([]*group.Group, []*group.Group, error) {
-	u, status, err := gs.apiClient.AddHiddenGroup(ctx, groupID)
+	u, err := gs.apiClient.AddHiddenGroup(ctx, groupID)
 	if err != nil {
-		if status == 409 {
-			return nil, nil, domain.AlreadyExistsInDatastore.New(err)
-		}
-
-		err = xerrors.Errorf("Failed to User API: %w", err)
-		return nil, nil, domain.ErrorInOtherAPI.New(err)
+		return nil, nil, err
 	}
 
 	groups := make([]*group.Group, 0)
@@ -308,14 +302,9 @@ func (gs *groupService) AddHiddenGroup(
 func (gs *groupService) RemoveHiddenGroup(
 	ctx context.Context, groupID string,
 ) ([]*group.Group, []*group.Group, error) {
-	u, status, err := gs.apiClient.RemoveHiddenGroup(ctx, groupID)
+	u, err := gs.apiClient.RemoveHiddenGroup(ctx, groupID)
 	if err != nil {
-		if status == 404 {
-			return nil, nil, domain.NotEqualRequestWithDatastore.New(err)
-		}
-
-		err = xerrors.Errorf("Failed to User API: %w", err)
-		return nil, nil, domain.ErrorInOtherAPI.New(err)
+		return nil, nil, err
 	}
 
 	groups := make([]*group.Group, 0)

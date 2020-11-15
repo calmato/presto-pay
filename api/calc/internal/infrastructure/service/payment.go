@@ -55,7 +55,7 @@ func (ps *paymentService) Index(ctx context.Context, groupID string, startAt str
 	for _, userID := range g.UserIDs {
 		u, err := ps.apiClient.ShowUser(ctx, userID)
 		if err != nil {
-			return nil, domain.ErrorInDatastore.New(err)
+			return nil, err
 		}
 
 		us[userID] = u
@@ -98,7 +98,7 @@ func (ps *paymentService) IndexByIsCompleted(
 	for _, userID := range g.UserIDs {
 		u, err := ps.apiClient.ShowUser(ctx, userID)
 		if err != nil {
-			return nil, domain.ErrorInDatastore.New(err)
+			return nil, err
 		}
 
 		us[userID] = u
