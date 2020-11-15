@@ -60,6 +60,10 @@ func requestLogging(c *gin.Context, reader io.Reader) {
 		params["thumbnail"] = logFilter
 	}
 
+	if params["images"] != nil {
+		params["images"] = logFilter
+	}
+
 	// ログの整形・出力
 	// message := ""
 	// for key, value := range params {
