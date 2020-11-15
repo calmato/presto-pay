@@ -27,7 +27,8 @@ import work.calmato.prestopay.util.*
 import java.text.SimpleDateFormat
 import java.util.*
 import androidx.lifecycle.Observer
-import kotlinx.android.synthetic.main.dialog_add_friend.*
+import kotlinx.android.synthetic.main.fragment_settle_up.chart
+import work.calmato.prestopay.network.NetworkPayerContainer
 
 class SettleUpFragment : Fragment() {
   private val viewModel: ViewModelAddPayment by lazy {
@@ -35,6 +36,7 @@ class SettleUpFragment : Fragment() {
   }
   lateinit var borrower: UserExpense
   lateinit var lender: UserExpense
+  lateinit var lendingStatus: NetworkPayerContainer
   private lateinit var doneButton: MenuItem
 
   override fun onCreateView(
@@ -51,6 +53,9 @@ class SettleUpFragment : Fragment() {
     super.onViewCreated(view, savedInstanceState)
     setHasOptionsMenu(true)
     viewModel.setGroupInfo(SettleUpFragmentArgs.fromBundle(requireArguments()).groupDetail)
+    lendingStatus = SettleUpFragmentArgs.fromBundle(requireArguments()).lendingStatus
+    inflateGraph(chart, lendingStatus.payers.map { it.name }, lendingStatus.payers.map { it.amount }, requireContext())
+    chart.isDoubleTapToZoomEnabled = false
     val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
     viewModel.setId(sharedPreferences.getString("token", "")!!)
     viewModel.getGroupDetail()

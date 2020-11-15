@@ -31,9 +31,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentGroupDetailBinding
-import work.calmato.prestopay.network.Api
-import work.calmato.prestopay.network.GroupPropertyResponse
-import work.calmato.prestopay.network.PaymentPropertyGet
+import work.calmato.prestopay.network.*
 import work.calmato.prestopay.util.AdapterPayment
 import work.calmato.prestopay.util.ViewModelGroup
 import work.calmato.prestopay.util.ViewModelPayment
@@ -144,7 +142,8 @@ class GroupDetailFragment : Fragment() {
     }
     settleUp.setOnClickListener {
       this.findNavController().navigate(
-        GroupDetailFragmentDirections.actionGroupDetailToSettleUp(groupDetail!!)
+        GroupDetailFragmentDirections.actionGroupDetailToSettleUp(groupDetail!!,
+          NetworkPayerContainer(viewModel.groupStatus!!.value!!.lendingStatus))
       )
     }
     requireActivity().onBackPressedDispatcher.addCallback(

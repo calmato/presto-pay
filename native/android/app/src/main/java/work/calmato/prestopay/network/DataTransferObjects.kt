@@ -1,7 +1,9 @@
 package work.calmato.prestopay.network
 
+import android.os.Parcelable
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import kotlinx.android.parcel.Parcelize
 import work.calmato.prestopay.database.DatabaseFriend
 import work.calmato.prestopay.database.DatabaseGroup
 import work.calmato.prestopay.database.DatabasePayment
@@ -54,6 +56,10 @@ data class NetworkGroupContainer(val groups: List<NetworkGroup>)
 
 @JsonClass(generateAdapter = true)
 data class NetworkPaymentContainer(val payments: List<NetworkPayment>)
+
+@Parcelize
+data class NetworkPayerContainer(val payers: List<NetworkPayer>) : Parcelable
+
 
 @JsonClass(generateAdapter = true)
 data class PaymentsResponse(

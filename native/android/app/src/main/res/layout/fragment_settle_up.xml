@@ -7,6 +7,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <com.github.mikephil.charting.charts.BarChart
+      android:id="@+id/chart"
+      android:layout_width="0dp"
+      android:layout_height="0dp"
+      app:layout_constraintBottom_toTopOf="@+id/total"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent" />
     <TextView
       android:id="@+id/currency"
       android:layout_width="wrap_content"
@@ -29,7 +37,7 @@
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent"
-      app:layout_constraintVertical_bias="0.4" />
+      app:layout_constraintVertical_bias="0.6" />
 
     <de.hdodenhof.circleimageview.CircleImageView
       android:id="@+id/thumbnail1"
