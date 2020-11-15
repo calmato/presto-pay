@@ -4,8 +4,10 @@ import (
 	"fmt"
 	"reflect"
 	"regexp"
+	"time"
 
 	"github.com/calmato/presto-pay/api/calc/internal/domain"
+	"github.com/calmato/presto-pay/api/calc/internal/domain/exchange"
 	"github.com/go-playground/validator/v10"
 )
 
@@ -26,6 +28,14 @@ func NewRequestValidator() RequestValidator {
 		return nil
 	}
 
+	if err := validate.RegisterValidation("datetime", datetimeCheck); err != nil {
+		return nil
+	}
+
+	if err := validate.RegisterValidation("currency", currencyCheck); err != nil {
+		return nil
+	}
+
 	return &requestValidator{
 		validate: *validate,
 	}
@@ -33,6 +43,7 @@ func NewRequestValidator() RequestValidator {
 
 const (
 	passwordString = "^[a-zA-Z0-9_!@#$_%^&*.?()-=+]*$"
+	datetimeString = "2006-01-02 15:04:05"
 )
 
 var (
@@ -75,6 +86,33 @@ func (rv *requestValidator) Run(i interface{}) []*domain.ValidationError {
 
 func passwordCheck(fl validator.FieldLevel) bool {
 	return passwordRegex.MatchString(fl.Field().String())
+}
+
+func datetimeCheck(fl validator.FieldLevel) bool {
+	if _, err := time.Parse(datetimeString, fl.Field().String()); err == nil {
+		return true
+	}
+
+	if _, err := time.Parse(time.RFC3339, fl.Field().String()); err == nil {
+		return true
+	}
+
+	return false
+}
+
+func currencyCheck(fl validator.FieldLevel) bool {
+	v := fl.Field().String()
+	if v == "" {
+		return false
+	}
+
+	for _, c := range exchange.Currencies {
+		if v == c {
+			return true
+		}
+	}
+
+	return false
 }
 
 func validationMessage(tag string, options ...string) string {
