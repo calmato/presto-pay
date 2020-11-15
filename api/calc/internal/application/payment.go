@@ -114,7 +114,7 @@ func (pa *paymentApplication) Index(
 			// 1つでも未支払いのものがあれば、IsPaidをfalseに変更
 			if !payer.IsPaid {
 				payers[payer.ID].IsPaid = false
-				payer.Amount = payer.Amount * -1
+				payer.Amount *= -1
 			}
 
 			// 為替レートの反映
@@ -158,58 +158,18 @@ func (pa *paymentApplication) Create(
 		imageURLs[i] = imageURL
 	}
 
-	total := 0.0
-	payers := make([]*payment.Payer, 0)
-	for _, payer := range req.PositivePayers {
-		p := &payment.Payer{
-			ID:     payer.ID,
-			Amount: payer.Amount,
-			IsPaid: true,
-		}
-
-		total += payer.Amount
-		payers = append(payers, p)
-	}
-
-	for _, payer := range req.NegativePayers {
-		p := &payment.Payer{
-			ID:     payer.ID,
-			Amount: payer.Amount,
-			IsPaid: false,
-		}
-
-		// PositivePayersとNegativePayers両方に同じユーザーいれてる場合あるらしいからそれの対策
-		// -> あればpにマージして配列の要素は削除
-		for i, v := range payers {
-			if v.ID != p.ID {
-				continue
-			}
-
-			amount := payers[i].Amount - p.Amount
-			if amount > 0 {
-				p.Amount = amount
-				p.IsPaid = true
-			} else {
-				p.Amount = amount * -1
-				p.IsPaid = false
-			}
-
-			payers = append(payers[:i], payers[i+1:]...)
-			break
-		}
-
-		payers = append(payers, p)
-	}
+	total, payers := collectPayers(req.PositivePayers, req.NegativePayers)
 
 	p := &payment.Payment{
-		Name:      req.Name,
-		Currency:  req.Currency,
-		Total:     total,
-		Tags:      req.Tags,
-		Comment:   req.Comment,
-		ImageURLs: imageURLs,
-		Payers:    payers,
-		PaidAt:    req.PaidAt,
+		Name:        req.Name,
+		Currency:    req.Currency,
+		Total:       total,
+		Tags:        req.Tags,
+		Comment:     req.Comment,
+		ImageURLs:   imageURLs,
+		Payers:      payers,
+		IsCompleted: false,
+		PaidAt:      req.PaidAt,
 	}
 
 	if _, err = pa.paymentService.Create(ctx, p, groupID); err != nil {
@@ -257,54 +217,13 @@ func (pa *paymentApplication) Update(
 		imageURLs[i] = imageURL
 	}
 
-	total := 0.0
-	payers := make([]*payment.Payer, 0)
-	for _, payer := range req.PositivePayers {
-		p := &payment.Payer{
-			ID:     payer.ID,
-			Amount: payer.Amount,
-			IsPaid: true,
-		}
-
-		total += p.Amount
-		payers = append(payers, p)
-	}
-
-	for _, payer := range req.NegativePayers {
-		p := &payment.Payer{
-			ID:     payer.ID,
-			Amount: payer.Amount,
-			IsPaid: false,
-		}
-
-		// PositivePayersとNegativePayers両方に同じユーザーいれてる場合あるらしいからそれの対策
-		// -> あればpにマージして配列の要素は削除
-		for i, v := range payers {
-			if v.ID != p.ID {
-				continue
-			}
-
-			amount := payers[i].Amount - p.Amount
-			if amount > 0 {
-				p.Amount = amount
-				p.IsPaid = true
-			} else {
-				p.Amount = amount * -1
-				p.IsPaid = false
-			}
-
-			payers = append(payers[:i], payers[i+1:]...)
-			break
-		}
-
-		payers = append(payers, p)
-	}
+	total, payers := collectPayers(req.PositivePayers, req.NegativePayers)
 
 	p.Name = req.Name
 	p.Currency = req.Currency
 	p.Total = total
 	p.Payers = payers
-	p.IsCompleted = req.IsCompleted
+	p.IsCompleted = len(req.NegativePayers) == 0
 	p.Tags = req.Tags
 	p.Comment = req.Comment
 	p.ImageURLs = append(p.ImageURLs, imageURLs...)
@@ -481,4 +400,54 @@ func getImageURL(ctx context.Context, pa *paymentApplication, image string) (str
 	}
 
 	return imageURL, nil
+}
+
+func collectPayers(pps []*request.PayerInPayment, nps []*request.PayerInPayment) (float64, []*payment.Payer) {
+	total := 0.0
+
+	// 支払済情報
+	ps := make([]*payment.Payer, 0)
+	for _, pp := range pps {
+		p := &payment.Payer{
+			ID:     pp.ID,
+			Amount: pp.Amount,
+			IsPaid: true,
+		}
+
+		total += p.Amount
+		ps = append(ps, p)
+	}
+
+	// 未支払い情報
+	for _, np := range nps {
+		p := &payment.Payer{
+			ID:     np.ID,
+			Amount: np.Amount,
+			IsPaid: false,
+		}
+
+		// PositivePayersとNegativePayers両方に同じユーザーいれてる場合あるらしいからそれの対策
+		// -> あればpにマージして配列の要素は削除
+		for i, v := range ps {
+			if v.ID != p.ID {
+				continue
+			}
+
+			amount := ps[i].Amount - p.Amount
+			if amount > 0 {
+				p.Amount = amount
+				p.IsPaid = true
+			} else {
+				p.Amount = amount * -1
+				p.IsPaid = false
+			}
+
+			ps = append(ps[:i], ps[i+1:]...)
+			break
+		}
+
+		ps = append(ps, p)
+	}
+
+	return total, ps
 }

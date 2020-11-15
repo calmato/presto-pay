@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"io/ioutil"
+	"log"
 	"net/http"
 
 	"github.com/calmato/presto-pay/api/calc/internal/domain"
@@ -172,7 +173,8 @@ func (c *Client) RemoveGroup(ctx context.Context, userID string, groupID string)
 		return nil, err
 	}
 
-	if _, err := getStatus(res); err != nil {
+	if status, err := getStatus(res); err != nil {
+		log.Println(status) // TODO: lintのエラーなくすため
 		return nil, err
 	}
 

@@ -20,7 +20,7 @@ func TestPaymentRequestValidation_CreatePayment(t *testing.T) {
 			Request: &request.CreatePayment{
 				Name:     "payment-test",
 				Currency: "dollar",
-				PositivePayers: []*request.PayerInCreatePayment{
+				PositivePayers: []*request.PayerInPayment{
 					{
 						ID:     "test-user01",
 						Amount: 100,
@@ -30,7 +30,7 @@ func TestPaymentRequestValidation_CreatePayment(t *testing.T) {
 						Amount: -100,
 					},
 				},
-				NegativePayers: []*request.PayerInCreatePayment{},
+				NegativePayers: []*request.PayerInPayment{},
 				Tags:           []string{},
 				Comment:        "",
 				Images:         []string{},
