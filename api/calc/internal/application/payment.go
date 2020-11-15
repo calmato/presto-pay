@@ -112,8 +112,9 @@ func (pa *paymentApplication) Index(
 			}
 
 			// 1つでも未支払いのものがあれば、IsPaidをfalseに変更
-			if payers[payer.ID].IsPaid && !payer.IsPaid {
+			if !payer.IsPaid {
 				payers[payer.ID].IsPaid = false
+				payer.Amount = payer.Amount * -1
 			}
 
 			// 為替レートの反映
