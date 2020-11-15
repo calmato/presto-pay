@@ -12,7 +12,6 @@ type PayerInCreatePayment struct {
 type CreatePayment struct {
 	Name           string                  `json:"name" validate:"required,max=64"`
 	Currency       string                  `json:"currency" validate:"required,currency"`
-	Total          float64                 `json:"total" validate:"required,gte=0,lt=999999"`
 	PositivePayers []*PayerInCreatePayment `json:"positivePayers" validate:"min=0,max=256"`
 	NegativePayers []*PayerInCreatePayment `json:"negativePayers" validate:"min=0,max=256"`
 	Tags           []string                `json:"tags" validate:"min=0,max=32,dive,max=32"`
@@ -32,7 +31,6 @@ type PayerInUpdatePayment struct {
 type UpdatePayment struct {
 	Name           string                  `json:"name" validate:"required,max=64"`
 	Currency       string                  `json:"currency" validate:"required,currency"`
-	Total          float64                 `json:"total" validate:"required,gte=0,lt=1048576"`
 	PositivePayers []*PayerInUpdatePayment `json:"positivePayers" validate:"min=0,max=256"`
 	NegativePayers []*PayerInUpdatePayment `json:"negativePayers" validate:"min=0,max=256"`
 	IsCompleted    bool                    `json:"isCompleted" validate:"oneof=true false"`
