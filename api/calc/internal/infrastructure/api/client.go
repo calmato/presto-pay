@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"net/http"
 
+	"github.com/calmato/presto-pay/api/calc/internal/domain"
 	"github.com/calmato/presto-pay/api/calc/internal/domain/user"
 	"github.com/calmato/presto-pay/api/calc/middleware"
 	"golang.org/x/xerrors"
@@ -18,8 +19,8 @@ type APIClient interface {
 	UserExists(ctx context.Context, userID string) (bool, error)
 	AddGroup(ctx context.Context, userID string, groupID string) (*user.User, error)
 	RemoveGroup(ctx context.Context, userID string, groupID string) (*user.User, error)
-	AddHiddenGroup(ctx context.Context, groupID string) (*user.User, int, error)
-	RemoveHiddenGroup(ctx context.Context, groupID string) (*user.User, int, error)
+	AddHiddenGroup(ctx context.Context, groupID string) (*user.User, error)
+	RemoveHiddenGroup(ctx context.Context, groupID string) (*user.User, error)
 }
 
 // Client - 他のAPI管理用の構造体
@@ -54,14 +55,8 @@ func (c *Client) Authentication(ctx context.Context) (*user.User, error) {
 		return nil, err
 	}
 
-	status, err := getStatus(res)
-	if err != nil {
+	if _, err := getStatus(res); err != nil {
 		return nil, err
-	}
-
-	// TODO: refactor
-	if status < 200 || status > 299 {
-		return nil, xerrors.New("Unknown error")
 	}
 
 	defer res.Body.Close()
@@ -196,67 +191,67 @@ func (c *Client) RemoveGroup(ctx context.Context, userID string, groupID string)
 }
 
 // AddHiddenGroup - 非公開のグループ一覧に追加
-func (c *Client) AddHiddenGroup(ctx context.Context, groupID string) (*user.User, int, error) {
+func (c *Client) AddHiddenGroup(ctx context.Context, groupID string) (*user.User, error) {
 	url := c.userAPIURL + "/internal/groups/" + groupID
 	req, _ := http.NewRequest("POST", url, nil)
 
 	if err := setHeader(ctx, req); err != nil {
-		return nil, 0, err
+		return nil, err
 	}
 
 	res, err := getResponse(req)
 	if err != nil {
-		return nil, 0, err
+		return nil, err
 	}
 
-	if status, err := getStatus(res); err != nil {
-		return nil, status, err
+	if _, err := getStatus(res); err != nil {
+		return nil, err
 	}
 
 	defer res.Body.Close()
 	body, err := ioutil.ReadAll(res.Body)
 	if err != nil {
-		return nil, 0, err
+		return nil, err
 	}
 
 	u := &user.User{}
 	if err = json.Unmarshal(body, u); err != nil {
-		return nil, 0, err
+		return nil, err
 	}
 
-	return u, 0, nil
+	return u, nil
 }
 
 // RemoveHiddenGroup - 非公開のグループ一覧から削除
-func (c *Client) RemoveHiddenGroup(ctx context.Context, groupID string) (*user.User, int, error) {
+func (c *Client) RemoveHiddenGroup(ctx context.Context, groupID string) (*user.User, error) {
 	url := c.userAPIURL + "/internal/groups/" + groupID
 	req, _ := http.NewRequest("DELETE", url, nil)
 
 	if err := setHeader(ctx, req); err != nil {
-		return nil, 0, err
+		return nil, err
 	}
 
 	res, err := getResponse(req)
 	if err != nil {
-		return nil, 0, err
+		return nil, err
 	}
 
-	if status, err := getStatus(res); err != nil {
-		return nil, status, err
+	if _, err := getStatus(res); err != nil {
+		return nil, err
 	}
 
 	defer res.Body.Close()
 	body, err := ioutil.ReadAll(res.Body)
 	if err != nil {
-		return nil, 0, err
+		return nil, err
 	}
 
 	u := &user.User{}
 	if err = json.Unmarshal(body, u); err != nil {
-		return nil, 0, err
+		return nil, err
 	}
 
-	return u, 0, nil
+	return u, nil
 }
 
 /*
@@ -296,9 +291,28 @@ func setHeader(ctx context.Context, req *http.Request) error {
 
 func getStatus(res *http.Response) (int, error) {
 	status := res.StatusCode
-	if status < 200 || status > 299 {
-		return status, xerrors.New("Failed to request to user api")
-	}
+	err := xerrors.New("Failed to request to user api")
 
-	return status, nil
+	switch {
+	// 200 - 399
+	case status >= 200 && status < 400:
+		return status, nil
+	// 400 - 499
+	case status == 400:
+		return status, domain.InvalidRequestValidation.New(err)
+	case status == 401:
+		return status, domain.Unauthorized.New(err)
+	case status == 403:
+		return status, domain.Forbidden.New(err)
+	case status == 404:
+		return status, domain.NotEqualRequestWithDatastore.New(err)
+	case status == 409:
+		return status, domain.AlreadyExistsInDatastore.New(err)
+	// 500 - 599
+	case status >= 500 && status < 600:
+		return status, domain.ErrorInOtherAPI.New(err)
+	// Other
+	default:
+		return status, domain.ErrorInOtherAPI.New(err)
+	}
 }
