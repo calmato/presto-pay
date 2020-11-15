@@ -157,7 +157,7 @@ func (pa *paymentApplication) Create(
 		imageURLs[i] = imageURL
 	}
 
-	total := 0
+	total := 0.0
 
 	payers := make([]*payment.Payer, 0)
 	for _, payer := range req.PositivePayers {
@@ -238,7 +238,7 @@ func (pa *paymentApplication) Update(
 		imageURLs[i] = imageURL
 	}
 
-	total := 0
+	total := 0.0
 
 	payers := make([]*payment.Payer, 0)
 	for _, payer := range req.PositivePayers {
