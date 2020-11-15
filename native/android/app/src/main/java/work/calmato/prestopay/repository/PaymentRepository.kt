@@ -7,6 +7,7 @@ import kotlinx.coroutines.withContext
 import work.calmato.prestopay.database.AppDatabase
 import work.calmato.prestopay.database.asPaymentModel
 import work.calmato.prestopay.network.Api
+import work.calmato.prestopay.network.NetworkPaymentContainer
 import work.calmato.prestopay.network.PaymentPropertyGet
 import work.calmato.prestopay.network.asDatabaseModel
 
@@ -18,7 +19,7 @@ class PaymentRepository(private val database:AppDatabase,groupId: String) {
 
   suspend fun refreshPayments(id:String,groupId:String){
     withContext(Dispatchers.IO){
-      val paymentsList = Api.retrofitService.getPayments(id,groupId).await().networkPaymentContainer
+      val paymentsList = NetworkPaymentContainer(Api.retrofitService.getPayments(id,groupId).await().payments)
       database.paymentDao.deleteAll(groupId)
       database.paymentDao.insertAll(*paymentsList.asDatabaseModel())
     }

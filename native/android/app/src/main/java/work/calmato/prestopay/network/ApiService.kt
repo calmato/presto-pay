@@ -5,6 +5,7 @@ import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import kotlinx.coroutines.Deferred
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -26,7 +27,7 @@ private val moshi = Moshi.Builder()
   .build()
 
 fun getUnsafeOkHttpClient(): OkHttpClient {
-  val x509TrustManager = object: X509TrustManager {
+  val x509TrustManager = object : X509TrustManager {
     override fun checkClientTrusted(chain: Array<out X509Certificate>?, authType: String?) {
     }
 
@@ -46,7 +47,10 @@ fun getUnsafeOkHttpClient(): OkHttpClient {
   val builder = OkHttpClient.Builder()
   builder.sslSocketFactory(sslContext.socketFactory, x509TrustManager)
   builder.hostnameVerifier { _, _ -> true }
-
+  builder.addInterceptor(
+    HttpLoggingInterceptor()
+      .setLevel(HttpLoggingInterceptor.Level.BODY)
+  )
   return builder.build()
 }
 
@@ -116,12 +120,12 @@ interface ApiService {
   @DELETE("groups/{groupId}/hidden")
   fun deleteHiddenGroup(
     @Header("Authorization") token: String, @Path("groupId") groupId: String
-  ) : Call<HiddenGroups>
+  ): Call<HiddenGroups>
 
   @DELETE("groups/{groupId}")
   fun deleteGroup(
     @Header("Authorization") token: String, @Path("groupId") groupId: String
-  ) : Call<Unit>
+  ): Call<Unit>
 
   @PATCH("auth")
   fun editAccount(
@@ -145,7 +149,7 @@ interface ApiService {
   @POST("groups/{groupId}/users")
   fun registerFriendToGroup(
     @Header("Authorization") token: String,
-    @Body userIds: Map<String,@JvmSuppressWildcards List<String>>,
+    @Body userIds: Map<String, @JvmSuppressWildcards List<String>>,
     @Path("groupId") groupId: String
   ):
     Call<GroupPropertyResponse>
@@ -179,14 +183,14 @@ interface ApiService {
     @Header("Authorization") token: String,
     @Path("groupId") groupId: String,
     @Path("paymentId") paymentId: String
-  ) : Call<Unit>
+  ): Call<Unit>
 
   @DELETE("groups/{groupId}/payments/{paymentId}")
   fun deletePayment(
     @Header("Authorization") token: String,
     @Path("groupId") groupId: String,
     @Path("paymentId") paymentId: String
-  ) : Call<Unit>
+  ): Call<Unit>
 
   @PATCH("groups/{groupId}/payments/{paymentId}")
   fun updatePayment(
@@ -194,7 +198,7 @@ interface ApiService {
     @Body editExpenseProperty: EditExpenseProperty,
     @Path("groupId") groupId: String,
     @Path("paymentId") paymentId: String
-  ) : Call<Unit>
+  ): Call<Unit>
 }
 
 /**

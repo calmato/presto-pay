@@ -57,7 +57,7 @@ data class NetworkPaymentContainer(val payments:List<NetworkPayment>)
 
 @JsonClass(generateAdapter = true)
 data class PaymentsResponse(
-  val networkPaymentContainer:NetworkPaymentContainer,
+  val payments:List<NetworkPayment>,
   val currency: String
 //  ,
 //  @Json(name = "users")val users: Unit
