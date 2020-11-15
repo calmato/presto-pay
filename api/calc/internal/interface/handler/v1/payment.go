@@ -1,6 +1,7 @@
 package v1
 
 import (
+	"math"
 	"net/http"
 
 	"github.com/calmato/presto-pay/api/calc/internal/application"
@@ -55,7 +56,7 @@ func (ph *apiV1PaymentHandler) Index(ctx *gin.Context) {
 			pr := &response.PayerInIndexPayments{
 				ID:     payer.ID,
 				Name:   payer.Name,
-				Amount: payer.Amount,
+				Amount: math.Abs(payer.Amount),
 			}
 
 			payersResponse[j] = pr

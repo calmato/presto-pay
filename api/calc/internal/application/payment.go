@@ -159,7 +159,6 @@ func (pa *paymentApplication) Create(
 	}
 
 	total := 0.0
-
 	payers := make([]*payment.Payer, 0)
 	for _, payer := range req.PositivePayers {
 		p := &payment.Payer{
@@ -168,8 +167,8 @@ func (pa *paymentApplication) Create(
 			IsPaid: true,
 		}
 
-		payers = append(payers, p)
 		total += payer.Amount
+		payers = append(payers, p)
 	}
 
 	for _, payer := range req.NegativePayers {
@@ -179,8 +178,27 @@ func (pa *paymentApplication) Create(
 			IsPaid: false,
 		}
 
+		// PositivePayersとNegativePayers両方に同じユーザーいれてる場合あるらしいからそれの対策
+		// -> あればpにマージして配列の要素は削除
+		for i, v := range payers {
+			if v.ID != p.ID {
+				continue
+			}
+
+			amount := payers[i].Amount - p.Amount
+			if amount > 0 {
+				p.Amount = amount
+				p.IsPaid = true
+			} else {
+				p.Amount = amount * -1
+				p.IsPaid = false
+			}
+
+			payers = append(payers[:i], payers[i+1:]...)
+			break
+		}
+
 		payers = append(payers, p)
-		total += payer.Amount
 	}
 
 	p := &payment.Payment{
@@ -240,7 +258,6 @@ func (pa *paymentApplication) Update(
 	}
 
 	total := 0.0
-
 	payers := make([]*payment.Payer, 0)
 	for _, payer := range req.PositivePayers {
 		p := &payment.Payer{
@@ -249,8 +266,8 @@ func (pa *paymentApplication) Update(
 			IsPaid: true,
 		}
 
+		total += p.Amount
 		payers = append(payers, p)
-		total += payer.Amount
 	}
 
 	for _, payer := range req.NegativePayers {
@@ -260,8 +277,27 @@ func (pa *paymentApplication) Update(
 			IsPaid: false,
 		}
 
+		// PositivePayersとNegativePayers両方に同じユーザーいれてる場合あるらしいからそれの対策
+		// -> あればpにマージして配列の要素は削除
+		for i, v := range payers {
+			if v.ID != p.ID {
+				continue
+			}
+
+			amount := payers[i].Amount - p.Amount
+			if amount > 0 {
+				p.Amount = amount
+				p.IsPaid = true
+			} else {
+				p.Amount = amount * -1
+				p.IsPaid = false
+			}
+
+			payers = append(payers[:i], payers[i+1:]...)
+			break
+		}
+
 		payers = append(payers, p)
-		total += payer.Amount
 	}
 
 	p.Name = req.Name
