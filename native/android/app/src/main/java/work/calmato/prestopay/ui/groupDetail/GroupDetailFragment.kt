@@ -24,6 +24,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_group_detail.*
+import kotlinx.android.synthetic.main.fragment_group_detail.chart
+import kotlinx.android.synthetic.main.fragment_payment_detail.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -35,6 +37,7 @@ import work.calmato.prestopay.network.PaymentPropertyGet
 import work.calmato.prestopay.util.AdapterPayment
 import work.calmato.prestopay.util.ViewModelGroup
 import work.calmato.prestopay.util.ViewModelPayment
+import work.calmato.prestopay.util.inflateGraph
 
 class GroupDetailFragment : Fragment() {
   private val viewModel: ViewModelPayment by lazy {
@@ -71,6 +74,12 @@ class GroupDetailFragment : Fragment() {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
+    viewModel.groupStatus?.observe(viewLifecycleOwner, Observer { list ->
+      list.lendingStatus.apply {
+        inflateGraph(chart, this.map { it.name }, this.map { it.amount }, requireContext())
+        chart.isDoubleTapToZoomEnabled = false
+      }
+    })
     viewModel.itemClicked.observe(viewLifecycleOwner, Observer {
       it?.apply {
         navigateToDetail(this)
@@ -130,7 +139,7 @@ class GroupDetailFragment : Fragment() {
     }
     floatingActionButton.setOnClickListener {
       this.findNavController().navigate(
-        GroupDetailFragmentDirections.actionGroupDetailToAddPayment(groupDetail!!,null)
+        GroupDetailFragmentDirections.actionGroupDetailToAddPayment(groupDetail!!, null)
       )
     }
     settleUp.setOnClickListener {
@@ -235,7 +244,7 @@ class GroupDetailFragment : Fragment() {
         background.setBounds(
           itemView.right,
           itemView.top,
-          itemView.left+ dX.toInt(),
+          itemView.left + dX.toInt(),
           itemView.bottom
         )
         background.draw(c)

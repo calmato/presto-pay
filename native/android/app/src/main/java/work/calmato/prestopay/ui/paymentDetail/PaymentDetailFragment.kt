@@ -54,7 +54,7 @@ class PaymentDetailFragment : PermissionBase() {
     val nonzeroPayers = paymentDetail.payers.filter { it.amount != 0f }
     inflateGraph(
       chart,
-      nonzeroPayers.map { it.name },
+      nonzeroPayers.map { it.name},
       nonzeroPayers.map { it.amount },
       requireContext()
     )

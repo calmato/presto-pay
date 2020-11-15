@@ -5,17 +5,17 @@ import android.app.Application
 import android.preference.PreferenceManager
 import android.util.Log
 import android.widget.Toast
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import work.calmato.prestopay.R
+import work.calmato.prestopay.database.DatabaseGroup
 import work.calmato.prestopay.database.getAppDatabase
+import work.calmato.prestopay.network.NetworkPayer
 import work.calmato.prestopay.network.PaymentPropertyGet
+import work.calmato.prestopay.repository.GroupsRepository
 import work.calmato.prestopay.repository.PaymentRepository
 
 class ViewModelPayment(application: Application) : AndroidViewModel(application) {
@@ -26,10 +26,12 @@ class ViewModelPayment(application: Application) : AndroidViewModel(application)
   private var viewModelJob = SupervisorJob()
   private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
   private val database = getAppDatabase(application)
-  private var paymentRepository:PaymentRepository? = null
+  private var paymentRepository: PaymentRepository? = null
+  private var groupRepository: GroupsRepository? = null
   private val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplication())
   private val id = sharedPreferences.getString("token", null)
-  var paymentsList:LiveData<List<PaymentPropertyGet>>? = null
+  var paymentsList: LiveData<List<PaymentPropertyGet>>? = null
+  var groupStatus: LiveData<DatabaseGroup>? = null
   private val _refreshing = MutableLiveData<Boolean>()
   val refreshing: LiveData<Boolean>
     get() = _refreshing
@@ -38,20 +40,21 @@ class ViewModelPayment(application: Application) : AndroidViewModel(application)
   val nowLoading: LiveData<Boolean>
     get() = _nowLoading
 
-  fun setInitPaymentList(groupId: String){
-    paymentRepository = PaymentRepository(database,groupId)
+  fun setInitPaymentList(groupId: String) {
+    paymentRepository = PaymentRepository(database, groupId)
+    groupRepository = GroupsRepository(database)
     paymentsList = paymentRepository!!.payments
-    Log.i("ViewModelPayment", "setInitPaymentList: ${paymentRepository!!.payments.value}")
+    groupStatus = paymentRepository!!.status
   }
 
   fun getPayments(groupId: String) {
     startRefreshing()
     viewModelScope.launch {
       try {
-      paymentRepository!!.refreshPayments(id!!, groupId)
+        paymentRepository!!.refreshPayments(id!!, groupId)
         Log.i("ViewModelPayment", "setInitPaymentList: ${paymentRepository!!.payments.value}")
-      endRefreshing()
-      } catch (e:java.lang.Exception){
+        endRefreshing()
+      } catch (e: java.lang.Exception) {
         Log.i("ViewModelPayment", "setInitPaymentList: ${e.message}")
         endRefreshing()
       }
@@ -91,11 +94,11 @@ class ViewModelPayment(application: Application) : AndroidViewModel(application)
     _refreshing.value = false
   }
 
-  fun itemIsClicked(payment : PaymentPropertyGet){
+  fun itemIsClicked(payment: PaymentPropertyGet) {
     _itemClicked.value = payment
   }
 
-  fun navigationCompleted(){
+  fun navigationCompleted() {
     _itemClicked.value = null
   }
 }

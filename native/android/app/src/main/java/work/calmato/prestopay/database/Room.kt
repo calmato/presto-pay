@@ -39,6 +39,9 @@ interface GroupDao {
 
   @Query("update databasegroup set lendingStatus=:lendingStatus where id=:groupId")
   fun updateLendingStatus(lendingStatus:List<NetworkPayer>,groupId: String )
+
+  @Query("select * from databasegroup where id=:groupId")
+  fun getLendingStatus(groupId: String):LiveData<DatabaseGroup>
 }
 
 @Dao

@@ -1,21 +1,21 @@
 package work.calmato.prestopay.repository
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import work.calmato.prestopay.database.AppDatabase
+import work.calmato.prestopay.database.DatabaseGroup
 import work.calmato.prestopay.database.asPaymentModel
-import work.calmato.prestopay.network.Api
-import work.calmato.prestopay.network.NetworkPaymentContainer
-import work.calmato.prestopay.network.PaymentPropertyGet
-import work.calmato.prestopay.network.asDatabaseModel
+import work.calmato.prestopay.network.*
 
 class PaymentRepository(private val database:AppDatabase,groupId: String) {
   val payments:LiveData<List<PaymentPropertyGet>> =
     Transformations.map(database.paymentDao.getPayments(groupId)){
       it.asPaymentModel()
     }
+  val status:LiveData<DatabaseGroup> = database.groupDao.getLendingStatus(groupId)
 
   suspend fun refreshPayments(id:String,groupId:String){
     withContext(Dispatchers.IO){
