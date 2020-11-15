@@ -14,11 +14,11 @@
 * Password
   * Regex: `^[a-zA-Z0-9_!@#$_%^&*.?()-=+]*$`
 
-* Datetime
-  * Regex: `2006-01-02 15:04:05`
-
 * Currency
   * Regex: `eur|usd|jpy|bgn|czk|dkk|gbp|huf|pln|ron|sek|chf|isk|nok|hrk|rub|try|aud|brl|cad|cny|hkd|idr|ils|inr|krw|mxn|myr|nzd|php|sgd|thb|zar`
+
+* Datetime
+  * Format: `2006-01-02 15:04:05`
 
 ## リクエスト値のバリデーション
 
