@@ -20,7 +20,6 @@ func TestPaymentRequestValidation_CreatePayment(t *testing.T) {
 			Request: &request.CreatePayment{
 				Name:     "payment-test",
 				Currency: "dollar",
-				Total:    12345,
 				PositivePayers: []*request.PayerInCreatePayment{
 					{
 						ID:     "test-user01",

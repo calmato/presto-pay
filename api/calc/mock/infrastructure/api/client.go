@@ -110,13 +110,12 @@ func (mr *MockAPIClientMockRecorder) RemoveGroup(ctx, userID, groupID interface{
 }
 
 // AddHiddenGroup mocks base method
-func (m *MockAPIClient) AddHiddenGroup(ctx context.Context, groupID string) (*user.User, int, error) {
+func (m *MockAPIClient) AddHiddenGroup(ctx context.Context, groupID string) (*user.User, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "AddHiddenGroup", ctx, groupID)
 	ret0, _ := ret[0].(*user.User)
-	ret1, _ := ret[1].(int)
-	ret2, _ := ret[2].(error)
-	return ret0, ret1, ret2
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
 }
 
 // AddHiddenGroup indicates an expected call of AddHiddenGroup
@@ -126,13 +125,12 @@ func (mr *MockAPIClientMockRecorder) AddHiddenGroup(ctx, groupID interface{}) *g
 }
 
 // RemoveHiddenGroup mocks base method
-func (m *MockAPIClient) RemoveHiddenGroup(ctx context.Context, groupID string) (*user.User, int, error) {
+func (m *MockAPIClient) RemoveHiddenGroup(ctx context.Context, groupID string) (*user.User, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "RemoveHiddenGroup", ctx, groupID)
 	ret0, _ := ret[0].(*user.User)
-	ret1, _ := ret[1].(int)
-	ret2, _ := ret[2].(error)
-	return ret0, ret1, ret2
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
 }
 
 // RemoveHiddenGroup indicates an expected call of RemoveHiddenGroup
