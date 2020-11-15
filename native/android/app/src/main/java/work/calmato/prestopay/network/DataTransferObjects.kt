@@ -1,7 +1,9 @@
 package work.calmato.prestopay.network
 
+import android.os.Parcelable
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import kotlinx.android.parcel.Parcelize
 import work.calmato.prestopay.database.DatabaseFriend
 import work.calmato.prestopay.database.DatabaseGroup
 import work.calmato.prestopay.database.DatabasePayment
@@ -21,7 +23,7 @@ data class NetworkGroup(
   val id: String,
   val name: String,
   val thumbnailUrl: String,
-  @Json(name = "userIds")val userIds: List<String>,
+  @Json(name = "userIds") val userIds: List<String>,
   val createdAt: String,
   val updatedAt: String,
   var selected: Boolean = false
@@ -29,21 +31,21 @@ data class NetworkGroup(
 
 @JsonClass(generateAdapter = true)
 data class NetworkPayment(
-  val id:String,
-  val groupId:String,
-  val name:String,
-  val currency:String,
-  val total:Float,
-  @Json(name = "payers")val payers:List<NetworkPayer>,
-  @Json(name = "postivePayers")val postivePayers:List<NetworkPayer>,
-  @Json(name = "negativePayers")val negativePayers:List<NetworkPayer>,
-  val isCompleted:Boolean,
-  @Json(name = "tags")val tags:List<String>?,
-  val comment:String?,
-  @Json(name = "imageUrls")val imageUrls:List<String>?,
-  val paidAt:String,
-  val createdAt:String,
-  val updatedAt:String
+  val id: String,
+  val groupId: String,
+  val name: String,
+  val currency: String,
+  val total: Float,
+  @Json(name = "payers") val payers: List<NetworkPayer>,
+  @Json(name = "postivePayers") val postivePayers: List<NetworkPayer>,
+  @Json(name = "negativePayers") val negativePayers: List<NetworkPayer>,
+  val isCompleted: Boolean,
+  @Json(name = "tags") val tags: List<String>?,
+  val comment: String?,
+  @Json(name = "imageUrls") val imageUrls: List<String>?,
+  val paidAt: String,
+  val createdAt: String,
+  val updatedAt: String
 )
 
 @JsonClass(generateAdapter = true)
@@ -53,7 +55,18 @@ data class NetworkFriendContainer(val users: List<NetworkFriend>)
 data class NetworkGroupContainer(val groups: List<NetworkGroup>)
 
 @JsonClass(generateAdapter = true)
-data class NetworkPaymentContainer(val payments:List<NetworkPayment>)
+data class NetworkPaymentContainer(val payments: List<NetworkPayment>)
+
+@Parcelize
+data class NetworkPayerContainer(val payers: List<NetworkPayer>) : Parcelable
+
+
+@JsonClass(generateAdapter = true)
+data class PaymentsResponse(
+  val payments: List<NetworkPayment>,
+  val currency: String,
+  @Json(name = "users") val users: Map<String, NetworkPayer>
+)
 
 fun NetworkFriend.asDomainModel(): UserProperty {
   return UserProperty(id, name, username, email, thumbnailUrl, checked)
@@ -63,8 +76,23 @@ fun NetworkGroup.asDomainModel(): GroupPropertyResponse {
   return GroupPropertyResponse(id, name, thumbnailUrl, userIds, createdAt, updatedAt, selected)
 }
 
-fun NetworkPayment.asDomainModel(): PaymentPropertyGet{
-  return PaymentPropertyGet(id, name, currency, total, payers, postivePayers, negativePayers, isCompleted,tags, comment, imageUrls, paidAt, createdAt, updatedAt)
+fun NetworkPayment.asDomainModel(): PaymentPropertyGet {
+  return PaymentPropertyGet(
+    id,
+    name,
+    currency,
+    total,
+    payers,
+    postivePayers,
+    negativePayers,
+    isCompleted,
+    tags,
+    comment,
+    imageUrls,
+    paidAt,
+    createdAt,
+    updatedAt
+  )
 }
 
 fun NetworkFriendContainer.asDomainModel(): List<UserProperty> {
@@ -94,7 +122,7 @@ fun NetworkGroupContainer.asDomainModel(): List<GroupPropertyResponse> {
   }
 }
 
-fun NetworkPaymentContainer.asDomainModel(): List<PaymentPropertyGet>{
+fun NetworkPaymentContainer.asDomainModel(): List<PaymentPropertyGet> {
   return payments.map {
     PaymentPropertyGet(
       id = it.id,
@@ -141,7 +169,7 @@ fun NetworkGroupContainer.asDatabaseModel(): Array<DatabaseGroup> {
   }.toTypedArray()
 }
 
-fun NetworkPaymentContainer.asDatabaseModel():Array<DatabasePayment>{
+fun NetworkPaymentContainer.asDatabaseModel(): Array<DatabasePayment> {
   return payments.map {
     DatabasePayment(
       id = it.id,

@@ -298,7 +298,7 @@ class ViewModelAddPayment(application: Application) : AndroidViewModel(applicati
 
   }
 
-  fun settleUp(borrower:UserExpense,lender:UserExpense) {
+  fun settleUp(borrower: UserExpense, lender: UserExpense) {
     val expenseProperty = CreateExpenseProperty(
       name = getApplication<Application>().resources.getString(R.string.settle_up),
       currency = currency.value!!,

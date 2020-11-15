@@ -27,7 +27,8 @@ data class DatabaseGroup(
   val thumbnailUrl: String,
   val userIds: List<String>,
   val createdAt: String,
-  val updateAt: String
+  val updateAt: String,
+  val lendingStatus: List<NetworkPayer> = listOf()
 )
 
 @Entity
@@ -53,17 +54,17 @@ data class DatabasePayment(
 @Entity
 data class DatabaseTag(
   @PrimaryKey
-  val name:String,
-  val imageId:Int,
-  var isSelected:Boolean = false
+  val name: String,
+  val imageId: Int,
+  var isSelected: Boolean = false
 )
 
 @Entity
 data class DatabaseNationalFlag(
   @PrimaryKey
-  val name:String,
-  val imageId:Int,
-  val fullName:String
+  val name: String,
+  val imageId: Int,
+  val fullName: String
 )
 
 
@@ -93,8 +94,8 @@ fun List<DatabaseGroup>.asGroupModel(): List<GroupPropertyResponse> {
   }
 }
 
-fun List<DatabasePayment>.asPaymentModel():List<PaymentPropertyGet>{
-  return map{
+fun List<DatabasePayment>.asPaymentModel(): List<PaymentPropertyGet> {
+  return map {
     PaymentPropertyGet(
       id = it.id,
       name = it.name,
@@ -114,27 +115,28 @@ fun List<DatabasePayment>.asPaymentModel():List<PaymentPropertyGet>{
   }
 }
 
-fun DatabaseTag.asTagModel():Tag{
+fun DatabaseTag.asTagModel(): Tag {
   return Tag(
-      name = this.name,
-      imageId = this.imageId,
-      isSelected = this.isSelected
-    )
+    name = this.name,
+    imageId = this.imageId,
+    isSelected = this.isSelected
+  )
 }
 
-fun DatabaseNationalFlag.asNationalFlagModel():NationalFlag{
+fun DatabaseNationalFlag.asNationalFlagModel(): NationalFlag {
   return NationalFlag(
     name = this.name,
     imageId = this.imageId,
     fullName = this.fullName
   )
 }
-class ListTypeConverter {
-    @TypeConverter
-    fun toString(userIds: List<String?>?): String? = userIds?.joinToString() ?: ""
 
-    @TypeConverter
-    fun toList(userIds: String): List<String> = listOf(userIds)
+class ListTypeConverter {
+  @TypeConverter
+  fun toString(userIds: List<String?>?): String? = userIds?.joinToString() ?: ""
+
+  @TypeConverter
+  fun toList(userIds: String): List<String> = listOf(userIds)
 }
 
 class ListPayerConverter {

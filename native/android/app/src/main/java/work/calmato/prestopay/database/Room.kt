@@ -3,6 +3,7 @@ package work.calmato.prestopay.database
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.room.*
+import work.calmato.prestopay.network.NetworkPayer
 
 @Dao
 interface FriendDao {
@@ -35,6 +36,12 @@ interface GroupDao {
 
   @Query("delete from databasegroup")
   fun deleteGroupAll()
+
+  @Query("update databasegroup set lendingStatus=:lendingStatus where id=:groupId")
+  fun updateLendingStatus(lendingStatus: List<NetworkPayer>, groupId: String)
+
+  @Query("select * from databasegroup where id=:groupId")
+  fun getLendingStatus(groupId: String): LiveData<DatabaseGroup>
 }
 
 @Dao
@@ -79,8 +86,8 @@ interface NationalFlagDao {
     DatabaseGroup::class,
     DatabasePayment::class,
     DatabaseTag::class,
-  DatabaseNationalFlag::class],
-  version = 10,
+    DatabaseNationalFlag::class],
+  version = 11,
   exportSchema = false
 )
 

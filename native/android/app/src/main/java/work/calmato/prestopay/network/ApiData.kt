@@ -191,9 +191,9 @@ data class Tag(
 
 @Parcelize
 data class NationalFlag(
-  val name:String,
-  val imageId:Int,
-  val fullName:String
+  val name: String,
+  val imageId: Int,
+  val fullName: String
 ) : Parcelable
 
 @Parcelize
@@ -215,7 +215,7 @@ data class PaymentCompleteResponse(
 @Parcelize
 data class PayerAddPayment(
   val id: String,
-  val name:String,
+  val name: String,
   val thumbnail: String,
   var amount: Float,
   var isPaid: Boolean
