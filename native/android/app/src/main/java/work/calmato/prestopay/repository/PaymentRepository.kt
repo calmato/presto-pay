@@ -19,9 +19,11 @@ class PaymentRepository(private val database:AppDatabase,groupId: String) {
 
   suspend fun refreshPayments(id:String,groupId:String){
     withContext(Dispatchers.IO){
-      val paymentsList = NetworkPaymentContainer(Api.retrofitService.getPayments(id,groupId).await().payments)
+      val getPayments = Api.retrofitService.getPayments(id,groupId).await()
+      val paymentsList = NetworkPaymentContainer(getPayments.payments)
       database.paymentDao.deleteAll(groupId)
       database.paymentDao.insertAll(*paymentsList.asDatabaseModel())
+      database.groupDao.updateLendingStatus(getPayments.users.values.toList(),groupId)
     }
   }
 

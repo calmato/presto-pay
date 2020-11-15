@@ -27,7 +27,8 @@ data class DatabaseGroup(
   val thumbnailUrl: String,
   val userIds: List<String>,
   val createdAt: String,
-  val updateAt: String
+  val updateAt: String,
+  val lendingStatus: List<NetworkPayer> = listOf()
 )
 
 @Entity
