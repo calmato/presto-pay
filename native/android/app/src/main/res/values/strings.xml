@@ -63,7 +63,7 @@
   <string name="email_address">Email address</string>
   <string name="description_reset_pass">にパスワードを変更するリンクを送信します。\n現在のパスワードを入力してください。</string>
   <string name="save_button"><u>保存</u></string>
-  <string name="passwordInformation">半角のアルファベットと数字両方を含む8~15文字</string>
+  <string name="passwordInformation">半角のアルファベットと数字両方を含む6~32文字</string>
   <string name="passwordConfirmInformation">同じパスワードを入力</string>
   <string name="now_loading">Now Loading …</string>
   <string name="amount">金額</string>
@@ -177,6 +177,7 @@
   <string name="精算する">to_settleup</string>
   <string name="settleup_group">精算する</string>
   <string name="amount_too_high">金額は100万未満まで有効です</string>
+  <string name="pass_at_least_6">6文字以上のパスワードを設定してください</string>
   <string-array name="currency_array">
     <item>jpy</item>
     <item>usd</item>
