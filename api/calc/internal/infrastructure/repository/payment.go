@@ -20,9 +20,9 @@ func NewPaymentRepository(fs *firestore.Firestore) payment.PaymentRepository {
 }
 
 func (pr *paymentRepository) Index(ctx context.Context, groupID string) ([]*payment.Payment, error) {
-	paymentCollection := getPaymentCollection(groupID)
+	pc := getPaymentCollection(groupID)
 
-	docs, err := pr.firestore.GetAllFirst(ctx, paymentCollection, "created_at", "desc", 50)
+	docs, err := pr.firestore.GetAllFirst(ctx, pc, "created_at", "desc", 50)
 	if err != nil {
 		return nil, err
 	}
@@ -45,9 +45,9 @@ func (pr *paymentRepository) Index(ctx context.Context, groupID string) ([]*paym
 func (pr *paymentRepository) IndexFromStartAt(
 	ctx context.Context, groupID string, startAt string,
 ) ([]*payment.Payment, error) {
-	paymentCollection := getPaymentCollection(groupID)
+	pc := getPaymentCollection(groupID)
 
-	docs, err := pr.firestore.GetAllFromStartAt(ctx, paymentCollection, "created_at", "desc", startAt, 50)
+	docs, err := pr.firestore.GetAllFromStartAt(ctx, pc, "created_at", "desc", startAt, 50)
 	if err != nil {
 		return nil, err
 	}
@@ -70,7 +70,7 @@ func (pr *paymentRepository) IndexFromStartAt(
 func (pr *paymentRepository) IndexByIsCompleted(
 	ctx context.Context, groupID string, isCompleted bool,
 ) ([]*payment.Payment, error) {
-	paymentCollection := getPaymentCollection(groupID)
+	pc := getPaymentCollection(groupID)
 
 	q := &firestore.Query{
 		Field:    "is_completed",
@@ -80,7 +80,7 @@ func (pr *paymentRepository) IndexByIsCompleted(
 
 	ps := make([]*payment.Payment, 0)
 
-	iter := pr.firestore.GetByQuery(ctx, paymentCollection, q)
+	iter := pr.firestore.GetByQuery(ctx, pc, q)
 	for {
 		doc, err := iter.Next()
 		if err == iterator.Done {
@@ -101,9 +101,9 @@ func (pr *paymentRepository) IndexByIsCompleted(
 }
 
 func (pr *paymentRepository) Show(ctx context.Context, groupID string, paymentID string) (*payment.Payment, error) {
-	paymentCollection := getPaymentCollection(groupID)
+	pc := getPaymentCollection(groupID)
 
-	doc, err := pr.firestore.Get(ctx, paymentCollection, paymentID)
+	doc, err := pr.firestore.Get(ctx, pc, paymentID)
 	if err != nil {
 		return nil, err
 	}
@@ -118,9 +118,9 @@ func (pr *paymentRepository) Show(ctx context.Context, groupID string, paymentID
 }
 
 func (pr *paymentRepository) Create(ctx context.Context, p *payment.Payment, groupID string) error {
-	paymentCollection := getPaymentCollection(groupID)
+	pc := getPaymentCollection(groupID)
 
-	if err := pr.firestore.Set(ctx, paymentCollection, p.ID, p); err != nil {
+	if err := pr.firestore.Set(ctx, pc, p.ID, p); err != nil {
 		return err
 	}
 
@@ -128,9 +128,9 @@ func (pr *paymentRepository) Create(ctx context.Context, p *payment.Payment, gro
 }
 
 func (pr *paymentRepository) Update(ctx context.Context, p *payment.Payment, groupID string) error {
-	paymentCollection := getPaymentCollection(groupID)
+	pc := getPaymentCollection(groupID)
 
-	if err := pr.firestore.Set(ctx, paymentCollection, p.ID, p); err != nil {
+	if err := pr.firestore.Set(ctx, pc, p.ID, p); err != nil {
 		return err
 	}
 
@@ -138,9 +138,9 @@ func (pr *paymentRepository) Update(ctx context.Context, p *payment.Payment, gro
 }
 
 func (pr *paymentRepository) Destroy(ctx context.Context, groupID string, paymentID string) error {
-	paymentCollection := getPaymentCollection(groupID)
+	pc := getPaymentCollection(groupID)
 
-	if err := pr.firestore.DeleteDoc(ctx, paymentCollection, paymentID); err != nil {
+	if err := pr.firestore.DeleteDoc(ctx, pc, paymentID); err != nil {
 		return err
 	}
 

@@ -21,39 +21,39 @@ func NewPaymentDomainValidation(ac api.APIClient) payment.PaymentDomainValidatio
 }
 
 func (pdv *paymentDomainValidation) Payment(ctx context.Context, p *payment.Payment) []*domain.ValidationError {
-	validationErrors := make([]*domain.ValidationError, 0)
+	ves := make([]*domain.ValidationError, 0)
 
 	if err := uniqueCheckTags(p.Tags); err != nil {
-		validationError := &domain.ValidationError{
+		ve := &domain.ValidationError{
 			Field:   "tags",
 			Message: domain.CustomUniqueMessage,
 		}
 
-		validationErrors = append(validationErrors, validationError)
+		ves = append(ves, ve)
 	}
 
 	if err := uniqueCheckPayers(p.Payers); err != nil {
-		validationError := &domain.ValidationError{
+		ve := &domain.ValidationError{
 			Field:   "payers",
 			Message: domain.CustomUniqueMessage,
 		}
 
-		validationErrors = append(validationErrors, validationError)
+		ves = append(ves, ve)
 	}
 
 	for _, payer := range p.Payers {
 		if !userIDExists(ctx, pdv.apiClient, payer.ID) {
-			validationError := &domain.ValidationError{
+			ve := &domain.ValidationError{
 				Field:   "payers",
 				Message: domain.CustomNotExistsMessage,
 			}
 
-			validationErrors = append(validationErrors, validationError)
+			ves = append(ves, ve)
 			break
 		}
 	}
 
-	return validationErrors
+	return ves
 }
 
 func uniqueCheckPayers(payers []*payment.Payer) error {
