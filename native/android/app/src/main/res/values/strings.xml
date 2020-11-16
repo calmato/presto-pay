@@ -111,8 +111,8 @@
   <string name="fill_friend_username">友達のユーザー名を入力してください</string>
   <string name="user_not_found">ユーザーが見つかりません</string>
   <string name="add_friend_question">この友だち追加しますか？</string>
-  <string name="group_member_restriction">グループメンバーは100人までです</string>
-  <string name="group_name_restriction">1〜31文字のグループ名を入力してください</string>
+  <string name="group_member_restriction">グループメンバーは64人までです</string>
+  <string name="group_name_restriction">1〜64文字のグループ名を入力してください</string>
   <string name="delete_friend">友達リストから削除する</string>
   <string name="delete_question">本当に削除しますか？</string>
   <string name="delete">削除する</string>
