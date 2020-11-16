@@ -10,7 +10,7 @@ import (
 )
 
 func TestPaymentRequestValidation_CreatePayment(t *testing.T) {
-	current := time.Now()
+	current := time.Now().Format("2006-01-02 15:04:05")
 
 	testCases := map[string]struct {
 		Request  *request.CreatePayment
@@ -19,9 +19,8 @@ func TestPaymentRequestValidation_CreatePayment(t *testing.T) {
 		"ok": {
 			Request: &request.CreatePayment{
 				Name:     "payment-test",
-				Currency: "dollar",
-				Total:    12345,
-				PositivePayers: []*request.PayerInCreatePayment{
+				Currency: "jpy",
+				PositivePayers: []*request.PayerInPayment{
 					{
 						ID:     "test-user01",
 						Amount: 100,
@@ -31,9 +30,9 @@ func TestPaymentRequestValidation_CreatePayment(t *testing.T) {
 						Amount: -100,
 					},
 				},
-				NegativePayers: []*request.PayerInCreatePayment{},
-				Tags:           []string{},
-				Comment:        "",
+				NegativePayers: []*request.PayerInPayment{},
+				Tags:           []string{"test"},
+				Comment:        "test comment",
 				Images:         []string{},
 				PaidAt:         current,
 			},

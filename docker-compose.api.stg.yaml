@@ -1,0 +1,61 @@
+version: '3.7'
+
+services:
+  # Application
+  proxy:
+    container_name: presto_pay_proxy
+    build:
+      context: ./infra/docker/envoy
+      dockerfile: Dockerfile_development
+    volumes:
+      - ./infra/envoy/development.yaml:/etc/envoy/envoy.yaml:cached
+    ports:
+      - 8080:8080
+      - 8081:9090
+    command: envoy -c /etc/envoy/envoy.yaml
+    restart: always
+
+  user_api:
+    container_name: presto_pay_user_api
+    build:
+      context: ./infra/docker/api/user
+      dockerfile: Dockerfile_development
+    working_dir: /go/src/github.com/calmato/presto-pay/api/user
+    volumes:
+      - ./api/user:/go/src/github.com/calmato/presto-pay/api/user:cached
+      - ./secrets:/secrets
+    environment:
+      - GOOGLE_APPLICATION_CREDENTIALS=${GOOGLE_APPLICATION_CREDENTIALS}
+      - GCP_STORAGE_BUCKET_NAME=${GCP_STORAGE_BUCKET_NAME}
+    command: realize start
+    restart: always
+
+  calc_api:
+    container_name: presto_pay_calc_api
+    build:
+      context: ./infra/docker/api/calc
+      dockerfile: Dockerfile_development
+    working_dir: /go/src/github.com/calmato/presto-pay/api/calc
+    volumes:
+      - ./api/calc:/go/src/github.com/calmato/presto-pay/api/calc:cached
+      - ./secrets:/secrets
+    environment:
+      - GOOGLE_APPLICATION_CREDENTIALS=${GOOGLE_APPLICATION_CREDENTIALS}
+      - GCP_STORAGE_BUCKET_NAME=${GCP_STORAGE_BUCKET_NAME}
+    command: realize start
+    restart: always
+
+  batch:
+    container_name: presto_pay_batch
+    build:
+      context: ./infra/docker/api/batch
+      dockerfile: Dockerfile_development
+    working_dir: /go/src/github.com/calmato/presto-pay/api/batch
+    volumes:
+      - ./api/batch:/go/src/github.com/calmato/presto-pay/api/batch:cached
+
+  redis:
+    container_name: presto_pay_redis
+    build:
+      context: ./infra/docker/redis
+    restart: always
