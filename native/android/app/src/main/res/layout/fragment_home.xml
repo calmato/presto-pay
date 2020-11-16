@@ -19,62 +19,31 @@
       android:layout_width="match_parent"
       android:layout_height="match_parent">
 
-      <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/nestedAmount"
-        android:layout_width="0dp"
+      <TextView
+        android:id="@+id/prestoPayList"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="72dp"
-        android:layout_marginEnd="24dp"
-        android:background="@drawable/layout_round"
-        android:paddingBottom="0dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.50"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:text="貸し借りのあるグループ一覧"
+        android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <TextView
-          android:id="@+id/amountText"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:text="@string/price"
-          android:textColor="@color/design_default_color_on_primary"
-          android:textSize="36sp"
-          android:textStyle="bold"
-          app:layout_constraintBottom_toBottomOf="parent"
-          app:layout_constraintEnd_toEndOf="parent"
-          app:layout_constraintStart_toStartOf="parent"
-          app:layout_constraintTop_toTopOf="parent"
-          app:layout_constraintVertical_bias="0.19999999" />
-
-        <TextView
-          android:id="@+id/lendBorrowText"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_marginBottom="8dp"
-          android:text="@string/lend"
-          android:textColor="@color/design_default_color_background"
-          android:textSize="18sp"
-          app:layout_constraintBottom_toBottomOf="parent"
-          app:layout_constraintEnd_toEndOf="parent"
-          app:layout_constraintStart_toStartOf="parent"
-          app:layout_constraintTop_toBottomOf="@+id/amountText" />
-      </androidx.constraintlayout.widget.ConstraintLayout>
+        app:layout_constraintTop_toTopOf="parent" />
 
       <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeContainer"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="24dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="16dp"
         app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/nestedAmount"
-        app:layout_constraintVertical_bias="1.0">
+        app:layout_constraintTop_toBottomOf="@+id/prestoPayList"
+        app:layout_constraintVertical_bias="0.0">
 
         <androidx.recyclerview.widget.RecyclerView
           android:id="@+id/groupHomeRecycle"
