@@ -13,5 +13,5 @@ MAILTO=root
 # |  |  |  |  |
 # *  *  *  *  * user-name  command to be executed
 0  *  *  *  * root       docker-compose -f /var/api/calmato/presto-pay/docker-compose.api.yaml run --rm batch go run main.go
-0  0  *  *  * root       cd /var/api/calmato/presto-pay; git pull origin master
+0  *  *  *  * root       cd /var/api/calmato/presto-pay; git pull origin master
 0  0  *  *  * root       certbot renew --post-hook "sh /var/api/bin/lb-update-certificate.sh"
