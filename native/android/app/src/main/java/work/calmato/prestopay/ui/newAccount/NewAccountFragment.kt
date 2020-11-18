@@ -33,7 +33,6 @@ import java.lang.Exception
 
 
 class NewAccountFragment : PermissionBase() {
-  var setThumbnail = false
 
   override fun onCreateView(
     inflater: LayoutInflater,

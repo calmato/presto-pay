@@ -33,20 +33,6 @@ class ViewModelUser(application: Application) : AndroidViewModel(application) {
       })
   }
 
-  /**
-   * Factory for constructing DevByteViewModel with parameter
-   */
-  class Factory(val app: Application) : ViewModelProvider.Factory {
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-      if (modelClass.isAssignableFrom(ViewModelUser::class.java)) {
-        @Suppress("UNCHECKED_CAST")
-        return ViewModelUser(app) as T
-      }
-
-      throw IllegalArgumentException("Unable to construct ViewModel")
-    }
-  }
-
   companion object {
     internal const val TAG = "ViewModelUser"
   }
