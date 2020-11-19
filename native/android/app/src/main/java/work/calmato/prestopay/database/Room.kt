@@ -25,7 +25,7 @@ interface FriendDao {
 
 @Dao
 interface GroupDao {
-  @Query("select * from databasegroup")
+  @Query("select * from databasegroup order by updateAt desc")
   fun getGroups(): LiveData<List<DatabaseGroup>>
 
   @Insert(onConflict = OnConflictStrategy.REPLACE)
