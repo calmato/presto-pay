@@ -63,6 +63,7 @@ func TestPaymentService_Create(t *testing.T) {
 
 		grm := mock_group.NewMockGroupRepository(ctrl)
 		grm.EXPECT().Show(ctx, testCase.GroupID).Return(g, nil)
+		grm.EXPECT().Update(ctx, g).Return(nil)
 
 		acm := mock_api.NewMockAPIClient(ctrl)
 		for _, payer := range testCase.Payment.Payers {
