@@ -6,18 +6,17 @@ import android.preference.PreferenceManager
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import work.calmato.prestopay.R
+import work.calmato.prestopay.database.DatabaseGroup
 import work.calmato.prestopay.database.getAppDatabase
 import work.calmato.prestopay.network.*
 import work.calmato.prestopay.repository.FriendsRepository
 import work.calmato.prestopay.repository.GroupsRepository
+import kotlin.concurrent.thread
 
 class ViewModelFriendGroup(application: Application) : AndroidViewModel(application) {
   private val _itemClicked = MutableLiveData<UserProperty>()
@@ -141,6 +140,17 @@ class ViewModelFriendGroup(application: Application) : AndroidViewModel(applicat
           response: Response<GroupPropertyResponse>
         ) {
           if (response.isSuccessful) {
+            val responseGroup = response.body()!!
+            thread {
+              database.groupDao.insertGroup(DatabaseGroup(
+                id = responseGroup.id,
+                name = responseGroup.name,
+                createdAt = responseGroup.createdAt,
+                thumbnailUrl = responseGroup.thumbnailUrl,
+                updateAt = responseGroup.updatedAt,
+                userIds = responseGroup.userIds
+              ))
+            }
             Toast.makeText(
               activity,
               getApplication<Application>().resources.getString(R.string.create_group_succeeded),

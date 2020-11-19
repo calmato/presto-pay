@@ -31,6 +31,9 @@ interface GroupDao {
   @Insert(onConflict = OnConflictStrategy.REPLACE)
   fun insertAll(vararg groups: DatabaseGroup)
 
+  @Insert(onConflict = OnConflictStrategy.REPLACE)
+  fun insertGroup(group: DatabaseGroup)
+
   @Query("delete from databasegroup where id = :groupId")
   fun deleteGroup(groupId: String)
 
