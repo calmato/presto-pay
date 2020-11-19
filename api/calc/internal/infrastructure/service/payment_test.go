@@ -6,6 +6,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/calmato/presto-pay/api/calc/internal/domain/group"
 	"github.com/calmato/presto-pay/api/calc/internal/domain/payment"
 	"github.com/calmato/presto-pay/api/calc/internal/domain/user"
 	mock_group "github.com/calmato/presto-pay/api/calc/mock/domain/group"
@@ -46,6 +47,11 @@ func TestPaymentService_Create(t *testing.T) {
 		ctrl := gomock.NewController(t)
 		defer ctrl.Finish()
 
+		// Defined variables
+		g := &group.Group{
+			ID: testCase.GroupID,
+		}
+
 		// Defined mocks
 		pdvm := mock_payment.NewMockPaymentDomainValidation(ctrl)
 		pdvm.EXPECT().Payment(ctx, testCase.Payment).Return(nil)
@@ -56,6 +62,7 @@ func TestPaymentService_Create(t *testing.T) {
 		pum := mock_payment.NewMockPaymentUploader(ctrl)
 
 		grm := mock_group.NewMockGroupRepository(ctrl)
+		grm.EXPECT().Show(ctx, testCase.GroupID).Return(g, nil)
 
 		acm := mock_api.NewMockAPIClient(ctrl)
 		for _, payer := range testCase.Payment.Payers {
