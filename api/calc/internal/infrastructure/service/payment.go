@@ -152,7 +152,7 @@ func (ps *paymentService) Create(ctx context.Context, p *payment.Payment, groupI
 		return nil, domain.Unknown.New(err, ves...)
 	}
 
-	// グループ情報取得 -> 存在性の検証:
+	// グループ情報取得 -> 存在性の検証
 	g, err := ps.groupRepository.Show(ctx, groupID)
 	if err != nil {
 		return nil, domain.ErrorInDatastore.New(err)
@@ -215,7 +215,7 @@ func (ps *paymentService) Update(ctx context.Context, p *payment.Payment, groupI
 		return nil, domain.Unknown.New(err, ves...)
 	}
 
-	// グループ情報取得 -> 存在性の検証:
+	// グループ情報取得 -> 存在性の検証
 	g, err := ps.groupRepository.Show(ctx, groupID)
 	if err != nil {
 		return nil, domain.ErrorInDatastore.New(err)
@@ -279,7 +279,7 @@ func (ps *paymentService) Update(ctx context.Context, p *payment.Payment, groupI
 func (ps *paymentService) UpdatePayer(
 	ctx context.Context, groupID string, paymentID string, payer *payment.Payer,
 ) (*payment.Payment, error) {
-	// グループ情報取得 -> 存在性の検証:
+	// グループ情報取得 -> 存在性の検証
 	g, err := ps.groupRepository.Show(ctx, groupID)
 	if err != nil {
 		return nil, domain.ErrorInDatastore.New(err)
@@ -349,7 +349,7 @@ func (ps *paymentService) UpdatePayer(
 }
 
 func (ps *paymentService) Destroy(ctx context.Context, groupID string, paymentID string) error {
-	// グループ情報取得 -> 存在性の検証:
+	// グループ情報取得 -> 存在性の検証
 	g, err := ps.groupRepository.Show(ctx, groupID)
 	if err != nil {
 		return domain.ErrorInDatastore.New(err)
