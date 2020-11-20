@@ -3,6 +3,7 @@ package application
 import (
 	"context"
 	"encoding/base64"
+	"math"
 	"strings"
 
 	"github.com/calmato/presto-pay/api/calc/internal/application/request"
@@ -408,7 +409,7 @@ func collectPayers(pps []*request.PayerInPayment, nps []*request.PayerInPayment)
 	for _, pp := range pps {
 		p := &payment.Payer{
 			ID:     pp.ID,
-			Amount: pp.Amount,
+			Amount: math.Abs(pp.Amount),
 			IsPaid: true,
 		}
 
@@ -420,7 +421,7 @@ func collectPayers(pps []*request.PayerInPayment, nps []*request.PayerInPayment)
 	for _, np := range nps {
 		p := &payment.Payer{
 			ID:     np.ID,
-			Amount: np.Amount,
+			Amount: math.Abs(np.Amount),
 			IsPaid: false,
 		}
 
