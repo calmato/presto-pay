@@ -104,7 +104,7 @@
       android:ems="10"
       android:hint="@string/groupName"
       android:inputType="textPersonName"
-      android:maxLength="31"
+      android:maxLength="32"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/changeProfilePicture3" />

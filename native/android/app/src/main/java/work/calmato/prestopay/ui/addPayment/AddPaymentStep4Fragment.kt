@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
+import android.text.InputFilter
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -76,7 +77,7 @@ class AddPaymentStep4Fragment : PermissionBase() {
     viewModel.paymentInfo?.also {
       // 支払い編集時はここに来る
       // 日付
-      inflateDate(it.paidAt.take(10).replace('-', '/', true))
+      inflateDate(it.paidAt)
       viewModel.setPaidAt(it.paidAt)
       calendar.visibility = ImageView.INVISIBLE
       calendarYear.visibility = TextView.VISIBLE
@@ -102,9 +103,9 @@ class AddPaymentStep4Fragment : PermissionBase() {
     } ?: run {
       // 新規作成時はここに来る
       val c = Calendar.getInstance()
-      inflateDate(SimpleDateFormat("yyyy/MM/dd", Locale.getDefault()).format(c.time))
-      val monthDate = calendarDate.text.split("/")
-      viewModel.setPaidAt("${calendarYear.text}-${monthDate[0]}-${monthDate[1]}T00:00:00.000Z")
+      val dateTime = SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.getDefault()).format(c.time)
+      inflateDate(dateTime)
+      viewModel.setPaidAt(dateTime)
     }
     chart.isDoubleTapToZoomEnabled = false
   }
@@ -115,8 +116,8 @@ class AddPaymentStep4Fragment : PermissionBase() {
       calendar.visibility = ImageView.INVISIBLE
       calendarYear.visibility = TextView.VISIBLE
       calendarDate.visibility = TextView.VISIBLE
-      val monthDate = calendarDate.text.split("/")
-      viewModel.setPaidAt("${calendarYear.text}-${monthDate[0]}-${monthDate[1]}T00:00:00.000Z")
+      val monthDate = calendarDate.text.split("-"," ")
+      viewModel.setPaidAt("${calendarYear.text}-${monthDate[0]}-${monthDate[1]} 00:00:00")
     }
     if (resultCode == Activity.RESULT_OK && requestCode == Constant.IMAGE_PICK_CODE) {
       cropImage(data?.data!!)
@@ -130,9 +131,9 @@ class AddPaymentStep4Fragment : PermissionBase() {
   }
 
   private fun inflateDate(yearDate: String?) {
-    val dateList = yearDate?.split("/")
+    val dateList = yearDate?.split("-"," ","T")
     calendarYear.text = dateList!![0]
-    val concatDate = dateList[1] + "/" + dateList[2]
+    val concatDate = dateList[1] + "-" + dateList[2]
     calendarDate.text = concatDate
   }
 
@@ -141,6 +142,7 @@ class AddPaymentStep4Fragment : PermissionBase() {
       AlertDialog.Builder(it)
     }
     val input = EditText(requireContext())
+    input.filters = arrayOf(InputFilter.LengthFilter(256))
     input.setBackgroundResource(android.R.color.transparent)
     viewModel.comment.value?.let {
       input.setText(it)

@@ -44,14 +44,16 @@ class UpdatePassLoginFragment : Fragment() {
         var textColor = Color.GRAY
 
         if (textLength != null) {
-          if (textLength < 8) {
+          if (textLength < 6) {
             textColor = Color.RED
           }
         }
         passwordInformation.setTextColor(textColor)
       }
+
       override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
       }
+
       override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
       }
     })
@@ -75,42 +77,69 @@ class UpdatePassLoginFragment : Fragment() {
   }
 
   private fun changePass() {
-    if(passEditText.text.isNotEmpty()&&passConfirmEditText.text.isNotEmpty()&&currentPassEdit.text.isNotEmpty()) {
-      val newPass = passEditText.text.toString()
-      if (newPass.equals(passConfirmEditText.text.toString())) {
-        val auth = FirebaseAuth.getInstance()
-        val user = auth.currentUser
-        val cred =
-          EmailAuthProvider.getCredential(user!!.email.toString(), currentPassEdit.text.toString())
-        startHttpConnection(changePassButton,nowLoading,requireContext())
-        user.reauthenticate(cred).addOnCompleteListener {
-          if (it.isSuccessful) {
-            user.updatePassword(newPass).addOnCompleteListener {
-              if (it.isSuccessful) {
-                Toast.makeText(requireContext(), resources.getString(R.string.password_changed), Toast.LENGTH_SHORT).show()
-                this.findNavController().navigate(
-                  UpdatePassLoginFragmentDirections.actionUpdatePassLoginFragmentToAccountHome()
-                )
-              } else {
-                Toast.makeText(
-                  requireContext(),
-                  it.exception!!.message.toString(),
-                  Toast.LENGTH_LONG
-                )
-                  .show()
-                finishHttpConnection(changePassButton,nowLoading)
+    if (passEditText.text.isNotEmpty() && passConfirmEditText.text.isNotEmpty() && currentPassEdit.text.isNotEmpty()) {
+      if (passEditText.text.toString().length >= 6) {
+        val newPass = passEditText.text.toString()
+        if (newPass.equals(passConfirmEditText.text.toString())) {
+          val auth = FirebaseAuth.getInstance()
+          val user = auth.currentUser
+          val cred =
+            EmailAuthProvider.getCredential(
+              user!!.email.toString(),
+              currentPassEdit.text.toString()
+            )
+          startHttpConnection(changePassButton, nowLoading, requireContext())
+          user.reauthenticate(cred).addOnCompleteListener {
+            if (it.isSuccessful) {
+              user.updatePassword(newPass).addOnCompleteListener {
+                if (it.isSuccessful) {
+                  Toast.makeText(
+                    requireContext(),
+                    resources.getString(R.string.password_changed),
+                    Toast.LENGTH_SHORT
+                  ).show()
+                  this.findNavController().navigate(
+                    UpdatePassLoginFragmentDirections.actionUpdatePassLoginFragmentToAccountHome()
+                  )
+                } else {
+                  Toast.makeText(
+                    requireContext(),
+                    it.exception!!.message.toString(),
+                    Toast.LENGTH_LONG
+                  )
+                    .show()
+                  finishHttpConnection(changePassButton, nowLoading)
+                }
               }
+            } else {
+              Toast.makeText(
+                requireContext(),
+                resources.getString(R.string.current_password_wrong),
+                Toast.LENGTH_LONG
+              ).show()
+              finishHttpConnection(changePassButton, nowLoading)
             }
-          } else {
-            Toast.makeText(requireContext(), resources.getString(R.string.current_password_wrong), Toast.LENGTH_LONG).show()
-            finishHttpConnection(changePassButton,nowLoading)
           }
+        } else {
+          Toast.makeText(
+            requireContext(),
+            resources.getString(R.string.password_doesnt_match),
+            Toast.LENGTH_LONG
+          ).show()
         }
       } else {
-        Toast.makeText(requireContext(), resources.getString(R.string.password_doesnt_match), Toast.LENGTH_LONG).show()
+        Toast.makeText(
+          requireContext(),
+          resources.getString(R.string.pass_at_least_6),
+          Toast.LENGTH_LONG
+        ).show()
       }
-    } else{
-      Toast.makeText(requireContext(), resources.getString(R.string.empty_form_exist), Toast.LENGTH_LONG).show()
+    } else {
+      Toast.makeText(
+        requireContext(),
+        resources.getString(R.string.empty_form_exist),
+        Toast.LENGTH_LONG
+      ).show()
     }
   }
 }

@@ -35,15 +35,16 @@
       android:layout_marginStart="32dp"
       android:layout_marginEnd="32dp"
       android:layout_marginBottom="8dp"
+      android:autofillHints=""
       android:ems="10"
       android:hint="@string/payment_name"
       android:inputType="textPersonName"
+      android:maxLength="64"
       android:textSize="24sp"
       android:windowSoftInputMode="adjustPan"
       app:layout_constraintBottom_toTopOf="@+id/amount"
       app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toStartOf="parent"
-      android:autofillHints="" />
+      app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
       android:id="@+id/amount"
