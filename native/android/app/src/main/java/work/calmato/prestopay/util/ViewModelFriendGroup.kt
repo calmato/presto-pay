@@ -171,48 +171,6 @@ class ViewModelFriendGroup(application: Application) : AndroidViewModel(applicat
       })
   }
 
-  fun deleteFriend(userId: String, activity: Activity) {
-    _nowLoading.value = true
-    Api.retrofitService.deleteFriend("Bearer ${id}", userId)
-      .enqueue(object : Callback<AccountResponse> {
-        override fun onFailure(call: Call<AccountResponse>, t: Throwable) {
-          Toast.makeText(activity, t.message, Toast.LENGTH_LONG).show()
-          _nowLoading.value = false
-        }
-
-        override fun onResponse(call: Call<AccountResponse>, response: Response<AccountResponse>) {
-          if (response.isSuccessful) {
-            coroutineScope.launch {
-              try {
-                viewModelScope.launch {
-                  friendsRepository.deleteFriend(userId)
-                  Toast.makeText(
-                    activity,
-                    getApplication<Application>().resources.getString(R.string.delete_friend_succeeded),
-                    Toast.LENGTH_LONG
-                  ).show()
-                }
-              } catch (e: java.lang.Exception) {
-                Toast.makeText(
-                  activity,
-                  getApplication<Application>().resources.getString(R.string.delete_friend_failed),
-                  Toast.LENGTH_LONG
-                ).show()
-                Log.i(TAG, "onResponse: ${e.message}")
-              }
-            }
-          } else {
-            Toast.makeText(
-              activity,
-              getApplication<Application>().resources.getString(R.string.delete_friend_failed),
-              Toast.LENGTH_LONG
-            ).show()
-          }
-          _nowLoading.value = false
-        }
-      })
-  }
-
   fun deleteFriendSwipe(friendId: String, activity: Activity) {
     _nowLoading.value = true
 
@@ -283,19 +241,6 @@ class ViewModelFriendGroup(application: Application) : AndroidViewModel(applicat
 
   private fun endRefreshingFriend() {
     _refreshingFriend.value = false
-  }
-
-  /**
-   * Factory for constructing DevByteViewModel with parameter
-   */
-  class Factory(val app: Application) : ViewModelProvider.Factory {
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-      if (modelClass.isAssignableFrom(ViewModelFriendGroup::class.java)) {
-        @Suppress("UNCHECKED_CAST")
-        return ViewModelFriendGroup(app) as T
-      }
-      throw IllegalArgumentException("Unable to construct viewmodel")
-    }
   }
 
   companion object {

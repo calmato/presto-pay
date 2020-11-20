@@ -1,17 +1,12 @@
 package work.calmato.prestopay.util
 
-import android.text.Editable
-import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.TextView
-import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.RecyclerView
 import work.calmato.prestopay.databinding.ListItemAddPaymentCheckBinding
 import work.calmato.prestopay.network.PayerAddPayment
 
-class AdapterAddPaymentCheck(private val onClickListener: OnClickListener?, val unit:String) :
+class AdapterAddPaymentCheck(private val onClickListener: OnClickListener?, val unit: String) :
   RecyclerView.Adapter<AdapterAddPaymentCheck.AddPaymentCheckViewHolder>() {
   var payers: List<PayerAddPayment> = emptyList()
     set(value) {

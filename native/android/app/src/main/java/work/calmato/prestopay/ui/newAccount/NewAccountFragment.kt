@@ -33,7 +33,6 @@ import java.lang.Exception
 
 
 class NewAccountFragment : PermissionBase() {
-  var setThumbnail = false
 
   override fun onCreateView(
     inflater: LayoutInflater,
@@ -52,11 +51,11 @@ class NewAccountFragment : PermissionBase() {
 
     passEditText.addTextChangedListener(object : TextWatcher {
       override fun afterTextChanged(s: Editable?) {
-        var textLength = s?.length
+        val textLength = s?.length
         var textColor = Color.GRAY
 
         if (textLength != null) {
-          if (textLength < 8) {
+          if (textLength < 6) {
             textColor = Color.RED
           }
         }
@@ -91,10 +90,7 @@ class NewAccountFragment : PermissionBase() {
 
     // buttonを押した時の処理を記述
     createAccountButton.setOnClickListener {
-      var thumbnails = ""
-      if (setThumbnail) {
-        thumbnails = encodeImage2Base64(thumbnailEdit)
-      }
+      val thumbnails = encodeImage2Base64(thumbnailEdit)
       val name = fullNameEditText.text.toString()
       val userName = userNameEditText.text.toString()
       val email = emailEditText.text.toString()

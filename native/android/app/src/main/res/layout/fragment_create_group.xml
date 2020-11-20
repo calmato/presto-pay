@@ -36,6 +36,7 @@
       android:hint="@string/register_group_name"
       android:importantForAutofill="no"
       android:inputType="textPersonName"
+      android:maxLength="64"
       android:textAlignment="center"
       android:textSize="24sp"
       app:layout_constraintEnd_toEndOf="parent"
