@@ -56,15 +56,21 @@ func (ph *apiV1PaymentHandler) Index(ctx *gin.Context) {
 			pr := &response.PayerInIndexPayments{
 				ID:     payer.ID,
 				Name:   payer.Name,
+				Amount: payer.Amount,
+			}
+
+			prAbs := &response.PayerInIndexPayments{
+				ID:     payer.ID,
+				Name:   payer.Name,
 				Amount: math.Abs(payer.Amount),
 			}
 
 			payersResponse[j] = pr
 
 			if payer.IsPaid {
-				positivePayersResponse = append(positivePayersResponse, pr)
+				positivePayersResponse = append(positivePayersResponse, prAbs)
 			} else {
-				negativePayersResponse = append(negativePayersResponse, pr)
+				negativePayersResponse = append(negativePayersResponse, prAbs)
 			}
 		}
 
