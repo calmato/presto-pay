@@ -7,6 +7,8 @@ import android.graphics.Color
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.view.*
+import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.findNavController
@@ -87,12 +89,14 @@ class AccountEditFragment : PermissionBase() {
     val email: String = mailEditText.text.toString()
     val id = sharedPreferences.getString("token", "")
     if (name != "" && userName != "" && email != "") {
-      startHttpConnection(requireView(), nowLoading, requireContext())
+      progressBarAccountEdit.visibility = ProgressBar.VISIBLE
+      frontViewAccountEdit.visibility = ImageView.VISIBLE
       val accountProperty = EditAccountProperty(name, userName, email, thumbnails)
       Api.retrofitService.editAccount("Bearer $id", accountProperty).enqueue(object :
         Callback<EditAccountResponse> {
         override fun onFailure(call: Call<EditAccountResponse>, t: Throwable) {
-          finishHttpConnection(requireView(), nowLoading)
+          progressBarAccountEdit.visibility = ProgressBar.GONE
+          frontViewAccountEdit.visibility = ImageView.GONE
           Toast.makeText(activity, t.message, Toast.LENGTH_LONG).show()
         }
 
@@ -126,7 +130,8 @@ class AccountEditFragment : PermissionBase() {
                 Toast.LENGTH_LONG
               ).show()
             }
-            finishHttpConnection(requireView(), nowLoading)
+            progressBarAccountEdit.visibility = ProgressBar.GONE
+            frontViewAccountEdit.visibility = ImageView.GONE
           }
         }
       })
