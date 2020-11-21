@@ -12,6 +12,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.content.res.AppCompatResources
@@ -56,6 +57,8 @@ class GroupFriendFragment : Fragment() {
         friends = it
       }
     })
+
+    progressBar.visibility = android.widget.ProgressBar.INVISIBLE
 
     viewModel.groupsList.observe(viewLifecycleOwner, Observer<List<GroupPropertyResponse>> {
       it?.apply {
@@ -145,6 +148,14 @@ class GroupFriendFragment : Fragment() {
       }
     })
 
+    frontView.visibility = ImageView.GONE
+
+    viewModel.changeFlag.observe(viewLifecycleOwner, Observer {
+      if (it) {
+        frontView.visibility = ImageView.GONE
+      }
+    })
+
     val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
     userNameText.text = sharedPreferences.getString("username", "")
     val thumbnailUrl = sharedPreferences.getString("thumbnailUrl", "")
@@ -199,6 +210,8 @@ class GroupFriendFragment : Fragment() {
           ?.setPositiveButton(
             resources.getString(R.string.delete),
             DialogInterface.OnClickListener { _, _ ->
+              progressBar.visibility = android.widget.ProgressBar.VISIBLE
+
               Api.retrofitService.deleteGroup(
                 "Bearer ${id}",
                 groups!![viewHolder.adapterPosition].id
@@ -213,6 +226,7 @@ class GroupFriendFragment : Fragment() {
                       groups!![viewHolder.adapterPosition].id,
                       requireActivity()
                     )
+                    progressBar.visibility = android.widget.ProgressBar.INVISIBLE
                   }
 
                   override fun onFailure(call: Call<Unit>, t: Throwable) {
@@ -294,6 +308,9 @@ class GroupFriendFragment : Fragment() {
           ?.setPositiveButton(
             resources.getString(R.string.delete),
             DialogInterface.OnClickListener { _, _ ->
+              frontView.visibility = ImageView.VISIBLE
+              progressBar.visibility = android.widget.ProgressBar.VISIBLE
+              viewModel.changeFlagStart()
               Api.retrofitService.deleteFriend(
                 "Bearer ${id}",
                 friends!![viewHolder.adapterPosition].id
@@ -308,11 +325,14 @@ class GroupFriendFragment : Fragment() {
                       friends!![viewHolder.adapterPosition].id,
                       requireActivity()
                     )
+                    viewModel.changeFlagCompleted()
+                    progressBar.visibility = android.widget.ProgressBar.INVISIBLE
                   }
 
                   override fun onFailure(call: Call<AccountResponse>, t: Throwable) {
                     Toast.makeText(activity, t.message, Toast.LENGTH_LONG).show()
                     Log.d(ViewModelGroup.TAG, t.message)
+                    viewModel.changeFlagCompleted()
                   }
                 })
             })

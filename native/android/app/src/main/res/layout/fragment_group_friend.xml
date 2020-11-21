@@ -2,7 +2,9 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools">
+
   <data>
+
     <variable
       name="viewModel"
       type="work.calmato.prestopay.util.ViewModelFriendGroup" />
@@ -11,6 +13,20 @@
   <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+
+    <ImageView
+      android:id="@+id/frontView"
+      android:layout_width="0dp"
+      android:layout_height="0dp"
+      android:clickable="true"
+      android:contentDescription="TODO"
+      android:elevation="4dp"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      app:srcCompat="@android:drawable/screen_background_dark_transparent" />
 
     <de.hdodenhof.circleimageview.CircleImageView
       android:id="@+id/thumbnail"
@@ -147,11 +163,13 @@
       app:layout_constraintHorizontal_bias="0.5"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/groupSwitcher">
-    <androidx.recyclerview.widget.RecyclerView
-      android:id="@+id/groupRecycleView"
-      android:layout_width="match_parent"
-      android:layout_height="0dp"
-      android:visibility="visible" />
+
+      <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/groupRecycleView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:visibility="visible" />
+
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -176,22 +194,26 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
+
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
       android:id="@+id/swipeContainer"
       android:layout_width="match_parent"
       android:layout_height="0dp"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintHorizontal_bias="0.5"
+      app:layout_constraintHorizontal_bias="0.0"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/friendSwitcher" >
-    <androidx.recyclerview.widget.RecyclerView
-      android:id="@+id/friendsRecycleView"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:visibility="visible" />
-  </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+      app:layout_constraintTop_toBottomOf="@+id/friendSwitcher">
+
+      <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/friendsRecycleView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible" />
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <TextView
       android:id="@+id/nowLoading"
@@ -200,6 +222,17 @@
       android:text="@string/now_loading"
       android:textSize="18sp"
       android:visibility="invisible"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent" />
+
+    <ProgressBar
+      android:id="@+id/progressBar"
+      style="?android:attr/progressBarStyle"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:elevation="8dp"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
