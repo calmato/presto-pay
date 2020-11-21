@@ -217,6 +217,9 @@ func (pa *paymentApplication) Update(
 	}
 
 	total, payers := collectPayers(req.PositivePayers, req.NegativePayers)
+	if req.Total > 0 {
+		total = req.Total
+	}
 
 	p.Name = req.Name
 	p.Currency = req.Currency
