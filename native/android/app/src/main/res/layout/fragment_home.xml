@@ -64,7 +64,10 @@
         android:layout_alignParentBottom="true"
         android:background="@color/ourTheme"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:menu="@menu/fooder" />
+        app:menu="@menu/fooder"
+        app:itemIconTint="@color/blackColor"
+        app:itemTextColor="@color/blackColor"
+        tools:layout_editor_absoluteX="16dp" />
 
       <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floatingActionButton"
