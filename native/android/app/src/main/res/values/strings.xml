@@ -178,6 +178,7 @@
   <string name="settleup_group">精算する</string>
   <string name="amount_too_high">金額は100万未満まで有効です</string>
   <string name="pass_at_least_6">6文字以上のパスワードを設定してください</string>
+  <string name="prestoPayList">貸し借りのあるグループ一覧</string>
   <string-array name="currency_array">
     <item>jpy</item>
     <item>usd</item>

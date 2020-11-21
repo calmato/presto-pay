@@ -10,6 +10,9 @@ interface FriendDao {
   @Query("select * from databasefriend")
   fun getFriends(): LiveData<List<DatabaseFriend>>
 
+  @Query("select * from databasefriend")
+  fun getFriendsList(): List<DatabaseFriend>?
+
   @Insert(onConflict = OnConflictStrategy.REPLACE)
   fun insertAll(vararg friends: DatabaseFriend)
 

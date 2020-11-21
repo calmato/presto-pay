@@ -20,36 +20,36 @@ func NewUserDomainValidation(ur user.UserRepository) user.UserDomainValidation {
 }
 
 func (udv *userDomainValidation) User(ctx context.Context, u *user.User) []*domain.ValidationError {
-	validationErrors := make([]*domain.ValidationError, 0)
+	ves := make([]*domain.ValidationError, 0)
 
 	if err := uniqueCheckEmail(ctx, udv.userRepository, u.ID, u.Email); err != nil {
-		validationError := &domain.ValidationError{
+		ve := &domain.ValidationError{
 			Field:   "email",
 			Message: domain.CustomUniqueMessage,
 		}
 
-		validationErrors = append(validationErrors, validationError)
+		ves = append(ves, ve)
 	}
 
 	if err := uniqueCheckUsername(ctx, udv.userRepository, u.ID, u.Username); err != nil {
-		validationError := &domain.ValidationError{
+		ve := &domain.ValidationError{
 			Field:   "username",
 			Message: domain.CustomUniqueMessage,
 		}
 
-		validationErrors = append(validationErrors, validationError)
+		ves = append(ves, ve)
 	}
 
 	if err := uniqueCheckGroupIDs(u.GroupIDs); err != nil {
-		validationError := &domain.ValidationError{
+		ve := &domain.ValidationError{
 			Field:   "groupIds",
 			Message: domain.CustomUniqueMessage,
 		}
 
-		validationErrors = append(validationErrors, validationError)
+		ves = append(ves, ve)
 	}
 
-	return validationErrors
+	return ves
 }
 
 func uniqueCheckEmail(ctx context.Context, ur user.UserRepository, id string, email string) error {

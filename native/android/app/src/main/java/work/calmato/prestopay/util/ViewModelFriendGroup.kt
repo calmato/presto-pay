@@ -12,6 +12,8 @@ import retrofit2.Callback
 import retrofit2.Response
 import work.calmato.prestopay.R
 import work.calmato.prestopay.database.DatabaseGroup
+import work.calmato.prestopay.database.DatabaseFriend
+import work.calmato.prestopay.database.asDomainModel
 import work.calmato.prestopay.database.getAppDatabase
 import work.calmato.prestopay.network.*
 import work.calmato.prestopay.repository.FriendsRepository
@@ -58,6 +60,9 @@ class ViewModelFriendGroup(application: Application) : AndroidViewModel(applicat
   private val groupsRepository = GroupsRepository(database)
   private val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplication())
   private val id = sharedPreferences.getString("token", null)
+  val friendsList = friendsRepository.friends
+  val groupsList = groupsRepository.groups
+  private var databaseFriends:List<DatabaseFriend>? = null
 
   fun userListView() {
     startRefreshingFriend()
@@ -85,20 +90,30 @@ class ViewModelFriendGroup(application: Application) : AndroidViewModel(applicat
     }
   }
 
-  val friendsList = friendsRepository.friends
-  val groupsList = groupsRepository.groups
+  fun getDatabaseFriendList(){
+    CoroutineScope(Dispatchers.IO).launch {
+      databaseFriends = database.friendDao.getFriendsList()
+    }
+  }
 
   fun getUserProperties(userName: String, activity: Activity) {
     _nowLoading.value = true
+    Log.i(TAG, "getUserProperties: ${friendsList}")
     coroutineScope.launch {
-      try {
-        _usersList.value =
-          Api.retrofitService.getPropertiesAsync("Bearer $id", userName).await().asDomainModel()
-        _nowLoading.value = false
-      } catch (e: Exception) {
-        Toast.makeText(activity, e.message, Toast.LENGTH_LONG).show()
-        _nowLoading.value = false
-      }
+        try {
+          val networkUsers =
+            Api.retrofitService.getPropertiesAsync("Bearer $id", userName).await().asDomainModel()
+          databaseFriends?.also {friends ->
+            _usersList.value = networkUsers.filter {
+              !friends.map { it.id }.contains(it.id)
+            }
+          } ?: run{
+            _usersList.value = networkUsers
+          }
+          _nowLoading.value = false
+        } catch (e: Exception) {
+          _nowLoading.value = false
+        }
     }
   }
 

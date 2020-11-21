@@ -152,11 +152,17 @@ func (ps *paymentService) Create(ctx context.Context, p *payment.Payment, groupI
 		return nil, domain.Unknown.New(err, ves...)
 	}
 
+	// グループ情報取得 -> 存在性の検証
+	g, err := ps.groupRepository.Show(ctx, groupID)
+	if err != nil {
+		return nil, domain.ErrorInDatastore.New(err)
+	}
+
 	// 支払い情報登録
 	current := time.Now()
 
 	p.ID = uuid.New().String()
-	p.GroupID = groupID
+	p.GroupID = g.ID
 	p.IsCompleted = false
 	p.CreatedAt = current
 	p.UpdatedAt = current
@@ -187,6 +193,14 @@ func (ps *paymentService) Create(ctx context.Context, p *payment.Payment, groupI
 		deviceTokens = append(deviceTokens, u.InstanceID)
 	}
 
+	// 支払い情報登録時を、グループの最終更新日時に変更
+	g.UpdatedAt = current
+
+	if err := ps.groupRepository.Update(ctx, g); err != nil {
+		err = xerrors.Errorf("Failed to Repository: %w", err)
+		return nil, domain.ErrorInDatastore.New(err)
+	}
+
 	if err := ps.notificationClient.Send(ctx, deviceTokens, p.Name, domain.CreatePaymentNotification); err != nil {
 		err = xerrors.Errorf("Failed to Firebase Cloud Messaging: %w", err)
 		return nil, domain.Unknown.New(err)
@@ -201,8 +215,14 @@ func (ps *paymentService) Update(ctx context.Context, p *payment.Payment, groupI
 		return nil, domain.Unknown.New(err, ves...)
 	}
 
+	// グループ情報取得 -> 存在性の検証
+	g, err := ps.groupRepository.Show(ctx, groupID)
+	if err != nil {
+		return nil, domain.ErrorInDatastore.New(err)
+	}
+
 	current := time.Now()
-	p.GroupID = groupID
+	p.GroupID = g.ID
 	p.UpdatedAt = current
 
 	// 支払い完了フラグの更新
@@ -229,6 +249,14 @@ func (ps *paymentService) Update(ctx context.Context, p *payment.Payment, groupI
 		return nil, domain.ErrorInDatastore.New(err)
 	}
 
+	// 支払い情報更新時を、グループの最終更新日時に変更
+	g.UpdatedAt = current
+
+	if err := ps.groupRepository.Update(ctx, g); err != nil {
+		err = xerrors.Errorf("Failed to Repository: %w", err)
+		return nil, domain.ErrorInDatastore.New(err)
+	}
+
 	// 支払い情報更新の通知
 	deviceTokens := []string{}
 	for _, payer := range p.Payers {
@@ -251,14 +279,20 @@ func (ps *paymentService) Update(ctx context.Context, p *payment.Payment, groupI
 func (ps *paymentService) UpdatePayer(
 	ctx context.Context, groupID string, paymentID string, payer *payment.Payer,
 ) (*payment.Payment, error) {
-	p, err := ps.paymentRepository.Show(ctx, groupID, paymentID)
+	// グループ情報取得 -> 存在性の検証
+	g, err := ps.groupRepository.Show(ctx, groupID)
+	if err != nil {
+		return nil, domain.ErrorInDatastore.New(err)
+	}
+
+	p, err := ps.paymentRepository.Show(ctx, g.ID, paymentID)
 	if err != nil {
 		err = xerrors.Errorf("Failed to Repository: %w", err)
 		return nil, domain.NotFound.New(err)
 	}
 
 	current := time.Now()
-	p.GroupID = groupID
+	p.GroupID = g.ID
 	p.UpdatedAt = current
 
 	// ユーザ毎の支払い情報更新
@@ -287,6 +321,14 @@ func (ps *paymentService) UpdatePayer(
 		return nil, domain.ErrorInDatastore.New(err)
 	}
 
+	// 支払い情報更新時を、グループの最終更新日時に変更
+	g.UpdatedAt = current
+
+	if err := ps.groupRepository.Update(ctx, g); err != nil {
+		err = xerrors.Errorf("Failed to Repository: %w", err)
+		return nil, domain.ErrorInDatastore.New(err)
+	}
+
 	// 支払い情報更新の通知
 	deviceTokens := []string{}
 	for _, payer := range p.Payers {
@@ -307,7 +349,23 @@ func (ps *paymentService) UpdatePayer(
 }
 
 func (ps *paymentService) Destroy(ctx context.Context, groupID string, paymentID string) error {
-	if err := ps.paymentRepository.Destroy(ctx, groupID, paymentID); err != nil {
+	// グループ情報取得 -> 存在性の検証
+	g, err := ps.groupRepository.Show(ctx, groupID)
+	if err != nil {
+		return domain.ErrorInDatastore.New(err)
+	}
+
+	if err := ps.paymentRepository.Destroy(ctx, g.ID, paymentID); err != nil {
+		err = xerrors.Errorf("Failed to Repository: %w", err)
+		return domain.ErrorInDatastore.New(err)
+	}
+
+	// 支払い情報更新時を、グループの最終更新日時に変更
+	current := time.Now()
+
+	g.UpdatedAt = current
+
+	if err := ps.groupRepository.Update(ctx, g); err != nil {
 		err = xerrors.Errorf("Failed to Repository: %w", err)
 		return domain.ErrorInDatastore.New(err)
 	}

@@ -23,30 +23,30 @@ func NewGroupDomainValidation(gr group.GroupRepository, ac api.APIClient) group.
 }
 
 func (gdv *groupDomainValidation) Group(ctx context.Context, g *group.Group) []*domain.ValidationError {
-	validationErrors := make([]*domain.ValidationError, 0)
+	ves := make([]*domain.ValidationError, 0)
 
 	if err := uniqueCheckUserIDs(g.UserIDs); err != nil {
-		validationError := &domain.ValidationError{
+		ve := &domain.ValidationError{
 			Field:   "userIds",
 			Message: domain.CustomUniqueMessage,
 		}
 
-		validationErrors = append(validationErrors, validationError)
+		ves = append(ves, ve)
 	}
 
 	for _, userID := range g.UserIDs {
 		if !userIDExists(ctx, gdv.apiClient, userID) {
-			validationError := &domain.ValidationError{
+			ve := &domain.ValidationError{
 				Field:   "userIds",
 				Message: domain.CustomNotExistsMessage,
 			}
 
-			validationErrors = append(validationErrors, validationError)
+			ves = append(ves, ve)
 			break
 		}
 	}
 
-	return validationErrors
+	return ves
 }
 
 func uniqueCheckUserIDs(userIDs []string) error {
