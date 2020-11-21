@@ -426,21 +426,20 @@ func collectPayers(pps []*request.PayerInPayment, nps []*request.PayerInPayment)
 		}
 
 		// PositivePayersとNegativePayers両方に同じユーザーいれてる場合あるらしいからそれの対策
-		i, ok := containPayers(p, ps)
-		if ok {
+		if i, ok := containPayers(p, ps); ok {
 			amount := ps[i].Amount - p.Amount
-			if amount > 0 {
-				p.Amount = amount
-				p.IsPaid = true
-			} else {
+			if amount < 0 {
 				p.Amount = amount * -1
 				p.IsPaid = false
+			} else {
+				p.Amount = amount
+				p.IsPaid = true
 			}
 
 			ps = append(ps[:i], ps[i+1:]...)
-		} else {
-			ps = append(ps, p)
 		}
+
+		ps = append(ps, p)
 	}
 
 	return total, ps
