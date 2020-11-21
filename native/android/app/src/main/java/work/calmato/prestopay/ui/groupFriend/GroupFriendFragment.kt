@@ -150,12 +150,6 @@ class GroupFriendFragment : Fragment() {
 
     frontView.visibility = ImageView.GONE
 
-    viewModel.changeFlag.observe(viewLifecycleOwner, Observer {
-      if (it) {
-        frontView.visibility = ImageView.GONE
-      }
-    })
-
     val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
     userNameText.text = sharedPreferences.getString("username", "")
     val thumbnailUrl = sharedPreferences.getString("thumbnailUrl", "")
@@ -210,6 +204,7 @@ class GroupFriendFragment : Fragment() {
           ?.setPositiveButton(
             resources.getString(R.string.delete),
             DialogInterface.OnClickListener { _, _ ->
+              frontView.visibility = ImageView.VISIBLE
               progressBar.visibility = android.widget.ProgressBar.VISIBLE
 
               Api.retrofitService.deleteGroup(
@@ -226,12 +221,14 @@ class GroupFriendFragment : Fragment() {
                       groups!![viewHolder.adapterPosition].id,
                       requireActivity()
                     )
+                    frontView.visibility = ImageView.GONE
                     progressBar.visibility = android.widget.ProgressBar.INVISIBLE
                   }
 
                   override fun onFailure(call: Call<Unit>, t: Throwable) {
                     Toast.makeText(activity, t.message, Toast.LENGTH_LONG).show()
                     Log.d(ViewModelGroup.TAG, t.message)
+                    frontView.visibility = ImageView.GONE
                   }
                 })
             })
@@ -310,7 +307,6 @@ class GroupFriendFragment : Fragment() {
             DialogInterface.OnClickListener { _, _ ->
               frontView.visibility = ImageView.VISIBLE
               progressBar.visibility = android.widget.ProgressBar.VISIBLE
-              viewModel.changeFlagStart()
               Api.retrofitService.deleteFriend(
                 "Bearer ${id}",
                 friends!![viewHolder.adapterPosition].id
@@ -325,14 +321,14 @@ class GroupFriendFragment : Fragment() {
                       friends!![viewHolder.adapterPosition].id,
                       requireActivity()
                     )
-                    viewModel.changeFlagCompleted()
+                    frontView.visibility = ImageView.GONE
                     progressBar.visibility = android.widget.ProgressBar.INVISIBLE
                   }
 
                   override fun onFailure(call: Call<AccountResponse>, t: Throwable) {
                     Toast.makeText(activity, t.message, Toast.LENGTH_LONG).show()
                     Log.d(ViewModelGroup.TAG, t.message)
-                    viewModel.changeFlagCompleted()
+                    frontView.visibility = ImageView.GONE
                   }
                 })
             })

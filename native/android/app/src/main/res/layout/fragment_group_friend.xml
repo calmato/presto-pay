@@ -14,19 +14,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
     <ImageView
       android:id="@+id/frontView"
       android:layout_width="0dp"
       android:layout_height="0dp"
       android:clickable="true"
-      android:contentDescription="TODO"
       android:elevation="4dp"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent"
-      app:srcCompat="@android:drawable/screen_background_dark_transparent" />
+      app:srcCompat="@android:drawable/screen_background_light_transparent" />
 
     <de.hdodenhof.circleimageview.CircleImageView
       android:id="@+id/thumbnail"

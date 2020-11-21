@@ -28,10 +28,6 @@ class ViewModelFriendGroup(application: Application) : AndroidViewModel(applicat
   val navigateToHome: LiveData<Boolean>
     get() = _navigateToHome
 
-  private val _changeFlag = MutableLiveData<Boolean>()
-  val changeFlag: LiveData<Boolean>
-    get() = _changeFlag
-
   private val _usersList = MutableLiveData<List<UserProperty>>()
   val usersList: LiveData<List<UserProperty>>
     get() = _usersList
@@ -255,14 +251,6 @@ class ViewModelFriendGroup(application: Application) : AndroidViewModel(applicat
 
   fun itemIsClickedCompleted() {
     _itemClicked.value = null
-  }
-
-  fun changeFlagStart() {
-    _changeFlag.value = false
-  }
-
-  fun changeFlagCompleted() {
-    _changeFlag.value = true
   }
 
   fun navigationCompleted() {
