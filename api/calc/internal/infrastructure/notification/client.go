@@ -27,6 +27,10 @@ func NewNotificationClient(cm *fcm.Messaging) NotificationClient {
 func (c *Client) Send(
 	ctx context.Context, deviceTokens []string, title string, body string,
 ) error {
+	if len(deviceTokens) == 0 {
+		return nil
+	}
+
 	message := &fcm.Data{
 		Title: title,
 		Body:  body,
