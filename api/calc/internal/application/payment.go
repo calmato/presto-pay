@@ -435,10 +435,10 @@ func collectPayers(pps []*request.PayerInPayment, nps []*request.PayerInPayment)
 			amount := ps[i].Amount - p.Amount
 			if amount > 0 {
 				p.Amount = amount
-				p.IsPaid = true
+				p.IsPaid = false
 			} else {
 				p.Amount = amount * -1
-				p.IsPaid = false
+				p.IsPaid = true
 			}
 
 			ps = append(ps[:i], ps[i+1:]...)
