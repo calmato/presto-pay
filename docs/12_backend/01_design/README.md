@@ -51,8 +51,8 @@
 | Name           | 支払い名         | ・Required<br/>・Length: n <= 64                             |
 | Currency       | 通貨             | ・Required<br/>・Format: Currency                            |
 | Comment        | 説明             | ・Length: n <= 256                                           |
-| PositivePayers | 支払い済ユーザー | ・Length(Array): 0 <= n <= 64                                |
-| NegativePayers | 未支払いユーザー | ・Length(Array): 0 <= n <= 64                                |
+| PositivePayers | 支払い済ユーザー | ・Length(Array): 1 <= n <= 64                                |
+| NegativePayers | 未支払いユーザー | ・Length(Array): 1 <= n <= 64                                |
 | Tags           | タグ一覧         | ・Length(Array): 0 <= n <= 32<br/>・Length(Element): n <= 32 |
 | Images         | イメージ一覧     | ・Length(Array): 0 <= n <= 32<br/>・Format: base64             |
 | PaidAt         | 支払日時         | ・Required<br/>・Format: Datetime                            |

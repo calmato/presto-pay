@@ -6,18 +6,19 @@ import android.preference.PreferenceManager
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import work.calmato.prestopay.R
+import work.calmato.prestopay.database.DatabaseGroup
+import work.calmato.prestopay.database.DatabaseFriend
+import work.calmato.prestopay.database.asDomainModel
 import work.calmato.prestopay.database.getAppDatabase
 import work.calmato.prestopay.network.*
 import work.calmato.prestopay.repository.FriendsRepository
 import work.calmato.prestopay.repository.GroupsRepository
+import kotlin.concurrent.thread
 
 class ViewModelFriendGroup(application: Application) : AndroidViewModel(application) {
   private val _itemClicked = MutableLiveData<UserProperty>()
@@ -59,6 +60,9 @@ class ViewModelFriendGroup(application: Application) : AndroidViewModel(applicat
   private val groupsRepository = GroupsRepository(database)
   private val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplication())
   private val id = sharedPreferences.getString("token", null)
+  val friendsList = friendsRepository.friends
+  val groupsList = groupsRepository.groups
+  private var databaseFriends:List<DatabaseFriend>? = null
 
   fun userListView() {
     startRefreshingFriend()
@@ -86,20 +90,30 @@ class ViewModelFriendGroup(application: Application) : AndroidViewModel(applicat
     }
   }
 
-  val friendsList = friendsRepository.friends
-  val groupsList = groupsRepository.groups
+  fun getDatabaseFriendList(){
+    CoroutineScope(Dispatchers.IO).launch {
+      databaseFriends = database.friendDao.getFriendsList()
+    }
+  }
 
   fun getUserProperties(userName: String, activity: Activity) {
     _nowLoading.value = true
+    Log.i(TAG, "getUserProperties: ${friendsList}")
     coroutineScope.launch {
-      try {
-        _usersList.value =
-          Api.retrofitService.getPropertiesAsync("Bearer $id", userName).await().asDomainModel()
-        _nowLoading.value = false
-      } catch (e: Exception) {
-        Toast.makeText(activity, e.message, Toast.LENGTH_LONG).show()
-        _nowLoading.value = false
-      }
+        try {
+          val networkUsers =
+            Api.retrofitService.getPropertiesAsync("Bearer $id", userName).await().asDomainModel()
+          databaseFriends?.also {friends ->
+            _usersList.value = networkUsers.filter {
+              !friends.map { it.id }.contains(it.id)
+            }
+          } ?: run{
+            _usersList.value = networkUsers
+          }
+          _nowLoading.value = false
+        } catch (e: Exception) {
+          _nowLoading.value = false
+        }
     }
   }
 
@@ -141,6 +155,17 @@ class ViewModelFriendGroup(application: Application) : AndroidViewModel(applicat
           response: Response<GroupPropertyResponse>
         ) {
           if (response.isSuccessful) {
+            val responseGroup = response.body()!!
+            thread {
+              database.groupDao.insertGroup(DatabaseGroup(
+                id = responseGroup.id,
+                name = responseGroup.name,
+                createdAt = responseGroup.createdAt,
+                thumbnailUrl = responseGroup.thumbnailUrl,
+                updateAt = responseGroup.updatedAt,
+                userIds = responseGroup.userIds
+              ))
+            }
             Toast.makeText(
               activity,
               getApplication<Application>().resources.getString(R.string.create_group_succeeded),
@@ -151,48 +176,6 @@ class ViewModelFriendGroup(application: Application) : AndroidViewModel(applicat
             Toast.makeText(
               activity,
               getApplication<Application>().resources.getString(R.string.create_group_failed),
-              Toast.LENGTH_LONG
-            ).show()
-          }
-          _nowLoading.value = false
-        }
-      })
-  }
-
-  fun deleteFriend(userId: String, activity: Activity) {
-    _nowLoading.value = true
-    Api.retrofitService.deleteFriend("Bearer ${id}", userId)
-      .enqueue(object : Callback<AccountResponse> {
-        override fun onFailure(call: Call<AccountResponse>, t: Throwable) {
-          Toast.makeText(activity, t.message, Toast.LENGTH_LONG).show()
-          _nowLoading.value = false
-        }
-
-        override fun onResponse(call: Call<AccountResponse>, response: Response<AccountResponse>) {
-          if (response.isSuccessful) {
-            coroutineScope.launch {
-              try {
-                viewModelScope.launch {
-                  friendsRepository.deleteFriend(userId)
-                  Toast.makeText(
-                    activity,
-                    getApplication<Application>().resources.getString(R.string.delete_friend_succeeded),
-                    Toast.LENGTH_LONG
-                  ).show()
-                }
-              } catch (e: java.lang.Exception) {
-                Toast.makeText(
-                  activity,
-                  getApplication<Application>().resources.getString(R.string.delete_friend_failed),
-                  Toast.LENGTH_LONG
-                ).show()
-                Log.i(TAG, "onResponse: ${e.message}")
-              }
-            }
-          } else {
-            Toast.makeText(
-              activity,
-              getApplication<Application>().resources.getString(R.string.delete_friend_failed),
               Toast.LENGTH_LONG
             ).show()
           }
@@ -271,19 +254,6 @@ class ViewModelFriendGroup(application: Application) : AndroidViewModel(applicat
 
   private fun endRefreshingFriend() {
     _refreshingFriend.value = false
-  }
-
-  /**
-   * Factory for constructing DevByteViewModel with parameter
-   */
-  class Factory(val app: Application) : ViewModelProvider.Factory {
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-      if (modelClass.isAssignableFrom(ViewModelFriendGroup::class.java)) {
-        @Suppress("UNCHECKED_CAST")
-        return ViewModelFriendGroup(app) as T
-      }
-      throw IllegalArgumentException("Unable to construct viewmodel")
-    }
   }
 
   companion object {

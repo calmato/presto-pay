@@ -28,7 +28,7 @@ func NewUserRepository(fa *authentication.Auth, fs *firestore.Firestore) user.Us
 }
 
 func (ur *userRepository) Authentication(ctx context.Context) (*user.User, error) {
-	userCollection := getUserCollection()
+	uc := getUserCollection()
 
 	t, err := getToken(ctx)
 	if err != nil {
@@ -42,7 +42,7 @@ func (ur *userRepository) Authentication(ctx context.Context) (*user.User, error
 
 	u := &user.User{}
 
-	doc, err := ur.firestore.Get(ctx, userCollection, uid)
+	doc, err := ur.firestore.Get(ctx, uc, uid)
 	if err == nil {
 		if err = doc.DataTo(u); err != nil {
 			return nil, err
@@ -69,7 +69,7 @@ func (ur *userRepository) Authentication(ctx context.Context) (*user.User, error
 		u.CreatedAt = current
 		u.UpdatedAt = current
 
-		if err = ur.firestore.Set(ctx, userCollection, u.ID, u); err != nil {
+		if err = ur.firestore.Set(ctx, uc, u.ID, u); err != nil {
 			return nil, err
 		}
 	}
@@ -78,11 +78,11 @@ func (ur *userRepository) Authentication(ctx context.Context) (*user.User, error
 }
 
 func (ur *userRepository) IndexByUsername(ctx context.Context, username string) ([]*user.User, error) {
-	userCollection := getUserCollection()
+	uc := getUserCollection()
 
 	usernameLower := strings.ToLower(username)
 
-	docs, err := ur.firestore.Search(ctx, userCollection, "username_lower", "asc", usernameLower, 50)
+	docs, err := ur.firestore.Search(ctx, uc, "username_lower", "asc", usernameLower, 50)
 	if err != nil {
 		return nil, err
 	}
@@ -105,11 +105,11 @@ func (ur *userRepository) IndexByUsername(ctx context.Context, username string) 
 func (ur *userRepository) IndexByUsernameFromStartAt(
 	ctx context.Context, username string, startAt string,
 ) ([]*user.User, error) {
-	userCollection := getUserCollection()
+	uc := getUserCollection()
 
 	usernameLower := strings.ToLower(username)
 
-	docs, err := ur.firestore.SearchFromStartAt(ctx, userCollection, "username_lower", "asc", usernameLower, startAt, 50)
+	docs, err := ur.firestore.SearchFromStartAt(ctx, uc, "username_lower", "asc", usernameLower, startAt, 50)
 	if err != nil {
 		return nil, err
 	}
@@ -130,7 +130,7 @@ func (ur *userRepository) IndexByUsernameFromStartAt(
 }
 
 func (ur *userRepository) ShowByUsername(ctx context.Context, username string) (*user.User, error) {
-	userCollection := getUserCollection()
+	uc := getUserCollection()
 
 	query := &firestore.Query{
 		Field:    "username",
@@ -140,7 +140,7 @@ func (ur *userRepository) ShowByUsername(ctx context.Context, username string) (
 
 	u := &user.User{}
 
-	iter := ur.firestore.GetByQuery(ctx, userCollection, query)
+	iter := ur.firestore.GetByQuery(ctx, uc, query)
 	for {
 		doc, err := iter.Next()
 		if err == iterator.Done {
@@ -161,7 +161,7 @@ func (ur *userRepository) ShowByUsername(ctx context.Context, username string) (
 }
 
 func (ur *userRepository) ShowByUserID(ctx context.Context, userID string) (*user.User, error) {
-	userCollection := getUserCollection()
+	uc := getUserCollection()
 
 	query := &firestore.Query{
 		Field:    "id",
@@ -171,7 +171,7 @@ func (ur *userRepository) ShowByUserID(ctx context.Context, userID string) (*use
 
 	u := &user.User{}
 
-	iter := ur.firestore.GetByQuery(ctx, userCollection, query)
+	iter := ur.firestore.GetByQuery(ctx, uc, query)
 	for {
 		doc, err := iter.Next()
 		if err == iterator.Done {
@@ -192,14 +192,14 @@ func (ur *userRepository) ShowByUserID(ctx context.Context, userID string) (*use
 }
 
 func (ur *userRepository) Create(ctx context.Context, u *user.User) error {
-	userCollection := getUserCollection()
+	uc := getUserCollection()
 
 	_, err := ur.auth.CreateUser(ctx, u.ID, u.Email, u.Password)
 	if err != nil {
 		return err
 	}
 
-	if err = ur.firestore.Set(ctx, userCollection, u.ID, u); err != nil {
+	if err = ur.firestore.Set(ctx, uc, u.ID, u); err != nil {
 		return err
 	}
 
@@ -207,7 +207,7 @@ func (ur *userRepository) Create(ctx context.Context, u *user.User) error {
 }
 
 func (ur *userRepository) Update(ctx context.Context, u *user.User) error {
-	userCollection := getUserCollection()
+	uc := getUserCollection()
 
 	au, err := ur.auth.GetUserByUID(ctx, u.ID)
 	if err != nil {
@@ -225,7 +225,7 @@ func (ur *userRepository) Update(ctx context.Context, u *user.User) error {
 		}
 	}
 
-	if err = ur.firestore.Set(ctx, userCollection, u.ID, u); err != nil {
+	if err = ur.firestore.Set(ctx, uc, u.ID, u); err != nil {
 		return err
 	}
 

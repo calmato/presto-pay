@@ -26,7 +26,7 @@ class DatePickerFragment:DialogFragment(),DatePickerDialog.OnDateSetListener {
 
   override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
     calendar.set(year,month,dayOfMonth)
-    val selectedDate = SimpleDateFormat("yyyy/MM/dd",Locale.getDefault()).format(calendar.time)
+    val selectedDate = SimpleDateFormat("yyyy-MM-dd hh:mm:ss",Locale.getDefault()).format(calendar.time)
     targetFragment?.onActivityResult(
       targetRequestCode,
       Activity.RESULT_OK,

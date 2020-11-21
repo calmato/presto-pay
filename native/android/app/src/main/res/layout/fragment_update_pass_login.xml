@@ -18,6 +18,7 @@
       android:ems="10"
       android:hint="@string/current_password"
       android:inputType="textPassword"
+      android:maxLength="32"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/textView11" />
@@ -45,7 +46,7 @@
       android:ems="10"
       android:hint="@string/new_password"
       android:inputType="textPassword"
-      android:maxLength="15"
+      android:maxLength="32"
       app:layout_constraintEnd_toEndOf="@+id/currentPassEdit"
       app:layout_constraintStart_toStartOf="@+id/currentPassEdit"
       app:layout_constraintTop_toBottomOf="@+id/currentPassEdit" />
@@ -59,7 +60,7 @@
       android:ems="10"
       android:hint="@string/confirm_new_password"
       android:inputType="textPassword"
-      android:maxLength="15"
+      android:maxLength="32"
       app:layout_constraintEnd_toEndOf="@+id/passEditText"
       app:layout_constraintStart_toStartOf="@+id/passEditText"
       app:layout_constraintTop_toBottomOf="@+id/passEditText" />

@@ -19,9 +19,9 @@ func NewGroupRepository(fs *firestore.Firestore) group.GroupRepository {
 }
 
 func (gr *groupRepository) Show(ctx context.Context, groupID string) (*group.Group, error) {
-	groupCollection := getGroupCollection()
+	gc := getGroupCollection()
 
-	doc, err := gr.firestore.Get(ctx, groupCollection, groupID)
+	doc, err := gr.firestore.Get(ctx, gc, groupID)
 	if err != nil {
 		return nil, err
 	}
@@ -36,9 +36,9 @@ func (gr *groupRepository) Show(ctx context.Context, groupID string) (*group.Gro
 }
 
 func (gr *groupRepository) Create(ctx context.Context, g *group.Group) error {
-	groupCollection := getGroupCollection()
+	gc := getGroupCollection()
 
-	if err := gr.firestore.Set(ctx, groupCollection, g.ID, g); err != nil {
+	if err := gr.firestore.Set(ctx, gc, g.ID, g); err != nil {
 		return err
 	}
 
@@ -46,9 +46,9 @@ func (gr *groupRepository) Create(ctx context.Context, g *group.Group) error {
 }
 
 func (gr *groupRepository) Update(ctx context.Context, g *group.Group) error {
-	groupCollection := getGroupCollection()
+	gc := getGroupCollection()
 
-	if err := gr.firestore.Set(ctx, groupCollection, g.ID, g); err != nil {
+	if err := gr.firestore.Set(ctx, gc, g.ID, g); err != nil {
 		return err
 	}
 
@@ -56,9 +56,9 @@ func (gr *groupRepository) Update(ctx context.Context, g *group.Group) error {
 }
 
 func (gr *groupRepository) Destroy(ctx context.Context, groupID string) error {
-	groupCollection := getGroupCollection()
+	gc := getGroupCollection()
 
-	if err := gr.firestore.DeleteDoc(ctx, groupCollection, groupID); err != nil {
+	if err := gr.firestore.DeleteDoc(ctx, gc, groupID); err != nil {
 		return err
 	}
 

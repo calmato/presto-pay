@@ -56,15 +56,21 @@ func (ph *apiV1PaymentHandler) Index(ctx *gin.Context) {
 			pr := &response.PayerInIndexPayments{
 				ID:     payer.ID,
 				Name:   payer.Name,
+				Amount: payer.Amount,
+			}
+
+			prAbs := &response.PayerInIndexPayments{
+				ID:     payer.ID,
+				Name:   payer.Name,
 				Amount: math.Abs(payer.Amount),
 			}
 
 			payersResponse[j] = pr
 
 			if payer.IsPaid {
-				positivePayersResponse = append(positivePayersResponse, pr)
+				positivePayersResponse = append(positivePayersResponse, prAbs)
 			} else {
-				negativePayersResponse = append(negativePayersResponse, pr)
+				negativePayersResponse = append(negativePayersResponse, prAbs)
 			}
 		}
 
@@ -181,17 +187,27 @@ func (ph *apiV1PaymentHandler) Update(ctx *gin.Context) {
 	positivePayers := make([]*response.PayerInUpdatePayment, 0)
 	negativePayers := make([]*response.PayerInUpdatePayment, 0)
 	for i, payer := range p.Payers {
-		pr := &response.PayerInUpdatePayment{
+		prAbs := &response.PayerInUpdatePayment{
 			ID:     payer.ID,
-			Amount: payer.Amount,
+			Amount: math.Abs(payer.Amount),
+		}
+
+		amount := prAbs.Amount
+		if !payer.IsPaid {
+			amount *= -1
+		}
+
+		pr := &response.PayerInUpdatePayment{
+			ID:     prAbs.ID,
+			Amount: amount,
 		}
 
 		payers[i] = pr
 
 		if payer.IsPaid {
-			positivePayers = append(positivePayers, pr)
+			positivePayers = append(positivePayers, prAbs)
 		} else {
-			negativePayers = append(negativePayers, pr)
+			negativePayers = append(negativePayers, prAbs)
 		}
 	}
 

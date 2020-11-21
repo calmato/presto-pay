@@ -3,6 +3,7 @@ package application
 import (
 	"context"
 	"encoding/base64"
+	"math"
 	"strings"
 
 	"github.com/calmato/presto-pay/api/calc/internal/application/request"
@@ -216,6 +217,9 @@ func (pa *paymentApplication) Update(
 	}
 
 	total, payers := collectPayers(req.PositivePayers, req.NegativePayers)
+	if req.Total > 0 {
+		total = req.Total
+	}
 
 	p.Name = req.Name
 	p.Currency = req.Currency
@@ -408,7 +412,7 @@ func collectPayers(pps []*request.PayerInPayment, nps []*request.PayerInPayment)
 	for _, pp := range pps {
 		p := &payment.Payer{
 			ID:     pp.ID,
-			Amount: pp.Amount,
+			Amount: math.Abs(pp.Amount),
 			IsPaid: true,
 		}
 
@@ -420,32 +424,36 @@ func collectPayers(pps []*request.PayerInPayment, nps []*request.PayerInPayment)
 	for _, np := range nps {
 		p := &payment.Payer{
 			ID:     np.ID,
-			Amount: np.Amount,
+			Amount: math.Abs(np.Amount),
 			IsPaid: false,
 		}
 
 		// PositivePayersとNegativePayers両方に同じユーザーいれてる場合あるらしいからそれの対策
-		// -> あればpにマージして配列の要素は削除
-		for i, v := range ps {
-			if v.ID != p.ID {
-				continue
-			}
-
+		if i, ok := containPayers(p, ps); ok {
 			amount := ps[i].Amount - p.Amount
-			if amount > 0 {
-				p.Amount = amount
-				p.IsPaid = true
-			} else {
+			if amount < 0 {
 				p.Amount = amount * -1
 				p.IsPaid = false
+			} else {
+				p.Amount = amount
+				p.IsPaid = true
 			}
 
 			ps = append(ps[:i], ps[i+1:]...)
-			break
 		}
 
 		ps = append(ps, p)
 	}
 
 	return total, ps
+}
+
+func containPayers(np *payment.Payer, ps []*payment.Payer) (int, bool) {
+	for i, p := range ps {
+		if np.ID == p.ID {
+			return i, true
+		}
+	}
+
+	return 0, false
 }

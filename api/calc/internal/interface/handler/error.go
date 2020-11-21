@@ -1,11 +1,8 @@
 package handler
 
 import (
-	"fmt"
-
 	"github.com/calmato/presto-pay/api/calc/internal/application/response"
 	"github.com/calmato/presto-pay/api/calc/internal/domain"
-	"github.com/calmato/presto-pay/api/calc/middleware"
 	"github.com/gin-gonic/gin"
 	log "github.com/sirupsen/logrus"
 )
@@ -25,7 +22,8 @@ func ErrorHandling(ctx *gin.Context, err error) {
 	res := getErrorResponse(err)
 
 	// Fluentへのログ転送
-	sendFluent(ctx, res)
+	// -> 今は使ってないからいったんコメントアウト
+	// sendFluent(ctx, res)
 
 	ctx.JSON(res.StatusCode, res)
 	ctx.Abort()
@@ -149,20 +147,21 @@ func getValidationErrorsInErrorReponse(err error) []*response.ValidationError {
 	return []*response.ValidationError{}
 }
 
-func sendFluent(c *gin.Context, res *response.ErrorResponse) {
-	logger := make(map[string]interface{})
-
-	errorCode := fmt.Sprint(res.ErrorCode)
-
-	validationErrors := make(map[string]string)
-	for _, ve := range res.ValidationErrors {
-		validationErrors[ve.Field] = ve.Message
-	}
-
-	logger["status"] = res.StatusCode
-	logger["code"] = errorCode
-	logger["errors"] = validationErrors
-	logger["path"] = c.Request.URL.Path
-
-	middleware.SendFluent("response", logger)
-}
+// -> 今は使ってないからいったんコメントアウト
+// func sendFluent(c *gin.Context, res *response.ErrorResponse) {
+// 	logger := make(map[string]interface{})
+//
+// 	errorCode := fmt.Sprint(res.ErrorCode)
+//
+// 	validationErrors := make(map[string]string)
+// 	for _, ve := range res.ValidationErrors {
+// 		validationErrors[ve.Field] = ve.Message
+// 	}
+//
+// 	logger["status"] = res.StatusCode
+// 	logger["code"] = errorCode
+// 	logger["errors"] = validationErrors
+// 	logger["path"] = c.Request.URL.Path
+//
+// 	middleware.SendFluent("response", logger)
+// }

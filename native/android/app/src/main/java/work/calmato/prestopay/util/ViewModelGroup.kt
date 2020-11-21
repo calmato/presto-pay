@@ -27,10 +27,6 @@ class ViewModelGroup(application: Application) : AndroidViewModel(application) {
   val itemClickedGroup: LiveData<GroupPropertyResponse>
     get() = _itemClickedGroup
 
-  private val _itemSwipedGroup = MutableLiveData<GroupPropertyResponse>()
-  val itemSwipedGroup: LiveData<GroupPropertyResponse>
-    get() = _itemClickedGroup
-
   private val _groupList = MutableLiveData<List<GroupPropertyResponse>>()
   val groupList: LiveData<List<GroupPropertyResponse>>
     get() = _groupList
@@ -45,9 +41,6 @@ class ViewModelGroup(application: Application) : AndroidViewModel(application) {
 
   // Create a Coroutine scope using a job to be able to cancel when needed
   private var viewModelGroupJob = SupervisorJob()
-
-  // the Coroutine runs using the Main (UI) dispatcher
-  private val coroutineScope = CoroutineScope(viewModelGroupJob + Dispatchers.Main)
 
   private val database = getAppDatabase(application)
   private val groupsRepository = GroupsRepository(database)
@@ -82,36 +75,12 @@ class ViewModelGroup(application: Application) : AndroidViewModel(application) {
     _itemClickedGroup.value = null
   }
 
-  fun itemIsClickedCompleted() {
-    _itemClickedGroup.value = null
-  }
-
   private fun startRefreshing() {
     _refreshing.value = true
   }
 
   fun endRefreshing() {
     _refreshing.value = false
-  }
-
-  fun deleteHiddenGroup(groupId: String, activity: Activity) {
-    var hiddenGroups: HiddenGroups? = null
-    _nowLoading.value = true
-    Api.retrofitService.deleteHiddenGroup("Bearer ${id}", groupId)
-      .enqueue(object : Callback<HiddenGroups> {
-        override fun onResponse(call: Call<HiddenGroups>, response: Response<HiddenGroups>) {
-          Log.d(TAG, response.body().toString())
-          hiddenGroups = response.body()
-          Log.d(TAG, hiddenGroups.toString())
-          _nowLoading.value = false
-        }
-
-        override fun onFailure(call: Call<HiddenGroups>, t: Throwable) {
-          Toast.makeText(activity, t.message, Toast.LENGTH_LONG).show()
-          Log.d(TAG, t.message)
-          _nowLoading.value = false
-        }
-      })
   }
 
   companion object {
