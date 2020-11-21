@@ -11,6 +11,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.databinding.DataBindingUtil
@@ -86,6 +87,9 @@ class GroupListHiddenFragment : Fragment() {
         navigateToGroupDetail(it)
       }
     })
+
+    frontView.visibility = ImageView.GONE
+    progressBar.visibility = android.widget.ProgressBar.INVISIBLE
   }
 
   private fun navigateToGroupDetail(group: GroupPropertyResponse) {
@@ -116,6 +120,8 @@ class GroupListHiddenFragment : Fragment() {
           ?.setPositiveButton(
             resources.getString(R.string.delete),
             DialogInterface.OnClickListener { _, _ ->
+              frontView.visibility = ImageView.VISIBLE
+              progressBar.visibility = android.widget.ProgressBar.VISIBLE
               Api.retrofitService.deleteGroup(
                 "Bearer ${id}",
                 hiddenGroups!!.hiddenGroups[viewHolder.adapterPosition].id
@@ -127,11 +133,14 @@ class GroupListHiddenFragment : Fragment() {
                   ) {
                     Log.d(ViewModelGroup.TAG, response.body().toString())
                     renderGroupListView()
+                    frontView.visibility = ImageView.GONE
+                    progressBar.visibility = android.widget.ProgressBar.INVISIBLE
                   }
 
                   override fun onFailure(call: Call<Unit>, t: Throwable) {
                     Toast.makeText(activity, t.message, Toast.LENGTH_LONG).show()
                     Log.d(ViewModelGroup.TAG, t.message)
+                    frontView.visibility = ImageView.GONE
                   }
                 })
             })
