@@ -432,7 +432,7 @@ func collectPayers(pps []*request.PayerInPayment, nps []*request.PayerInPayment)
 				continue
 			}
 
-			amount := ps[i].Amount - p.Amount
+			amount := p.Amount - ps[i].Amount
 			if amount > 0 {
 				p.Amount = amount
 				p.IsPaid = false
