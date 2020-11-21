@@ -59,6 +59,8 @@ services:
           memory: 128M
     command: realize start
     restart: always
+    depends_on:
+      - redis
 
   batch:
     container_name: presto_pay_batch
@@ -73,6 +75,8 @@ services:
         limits:
           cpus: '0.50'
           memory: 128M
+    depends_on:
+      - redis
 
   redis:
     container_name: presto_pay_redis
