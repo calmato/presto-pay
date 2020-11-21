@@ -12,6 +12,6 @@ MAILTO=root
 # |  |  |  |  .---- day of week (0 - 6) (Sunday=0 or 7) OR sun,mon,tue,wed,thu,fri,sat
 # |  |  |  |  |
 # *  *  *  *  * user-name  command to be executed
-0  *  *  *  * root       docker-compose -f /var/api/calmato/presto-pay/docker-compose.api.yaml run --rm batch go run main.go
+0  *  *  *  * root       docker-compose -f /var/api/calmato/presto-pay/docker-compose.api.stg.yaml run --rm batch go run main.go
 0  *  *  *  * root       cd /var/api/calmato/presto-pay; git pull origin master
 0  0  *  *  * root       certbot renew --post-hook "sh /var/api/bin/lb-update-certificate.sh"
