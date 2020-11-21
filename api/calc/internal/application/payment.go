@@ -426,27 +426,32 @@ func collectPayers(pps []*request.PayerInPayment, nps []*request.PayerInPayment)
 		}
 
 		// PositivePayersとNegativePayers両方に同じユーザーいれてる場合あるらしいからそれの対策
-		// -> あればpにマージして配列の要素は削除
-		for i, v := range ps {
-			if v.ID != p.ID {
-				continue
-			}
-
-			amount := p.Amount - ps[i].Amount
+		i, ok := containPayers(p, ps)
+		if ok {
+			amount := ps[i].Amount - p.Amount
 			if amount > 0 {
 				p.Amount = amount
-				p.IsPaid = false
+				p.IsPaid = true
 			} else {
 				p.Amount = amount * -1
-				p.IsPaid = true
+				p.IsPaid = false
 			}
 
 			ps = append(ps[:i], ps[i+1:]...)
-			break
+		} else {
+			ps = append(ps, p)
 		}
-
-		ps = append(ps, p)
 	}
 
 	return total, ps
+}
+
+func containPayers(np *payment.Payer, ps []*payment.Payer) (int, bool) {
+	for i, p := range ps {
+		if np.ID == p.ID {
+			return i, true
+		}
+	}
+
+	return 0, false
 }

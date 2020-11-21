@@ -10,8 +10,8 @@ type PayerInPayment struct {
 type CreatePayment struct {
 	Name           string            `json:"name" validate:"required,max=64"`
 	Currency       string            `json:"currency" validate:"required,currency"`
-	PositivePayers []*PayerInPayment `json:"positivePayers" validate:"min=0,max=64"`
-	NegativePayers []*PayerInPayment `json:"negativePayers" validate:"min=0,max=64"`
+	PositivePayers []*PayerInPayment `json:"positivePayers" validate:"min=1,max=64"`
+	NegativePayers []*PayerInPayment `json:"negativePayers" validate:"min=1,max=64"`
 	Tags           []string          `json:"tags" validate:"min=0,max=32,dive,max=32"`
 	Comment        string            `json:"comment" validate:"max=256"`
 	Images         []string          `json:"images" validate:"min=0,max=32"`
@@ -22,8 +22,8 @@ type CreatePayment struct {
 type UpdatePayment struct {
 	Name           string            `json:"name" validate:"required,max=64"`
 	Currency       string            `json:"currency" validate:"required,currency"`
-	PositivePayers []*PayerInPayment `json:"positivePayers" validate:"min=0,max=64"`
-	NegativePayers []*PayerInPayment `json:"negativePayers" validate:"min=0,max=64"`
+	PositivePayers []*PayerInPayment `json:"positivePayers" validate:"min=1,max=64"`
+	NegativePayers []*PayerInPayment `json:"negativePayers" validate:"min=1,max=64"`
 	Tags           []string          `json:"tags" validate:"min=0,max=32,dive,max=32"`
 	Comment        string            `json:"comment" validate:"max=256"`
 	Images         []string          `json:"images" validate:"min=0,max=32"`
