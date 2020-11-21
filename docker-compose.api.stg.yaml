@@ -16,7 +16,7 @@ services:
       resources:
         limits:
           cpus: '0.50'
-          memory: 128M
+          memory: 64M
     command: envoy -c /etc/envoy/envoy.yaml
     restart: always
 
@@ -36,7 +36,7 @@ services:
       resources:
         limits:
           cpus: '0.50'
-          memory: 128M
+          memory: 172M
     command: realize start
     restart: always
 
@@ -56,7 +56,7 @@ services:
       resources:
         limits:
           cpus: '0.50'
-          memory: 128M
+          memory: 172M
     command: realize start
     restart: always
     depends_on:
@@ -74,7 +74,7 @@ services:
       resources:
         limits:
           cpus: '0.50'
-          memory: 128M
+          memory: 172M
     depends_on:
       - redis
 
@@ -86,5 +86,5 @@ services:
       resources:
         limits:
           cpus: '0.50'
-          memory: 256M
+          memory: 128M
     restart: always
