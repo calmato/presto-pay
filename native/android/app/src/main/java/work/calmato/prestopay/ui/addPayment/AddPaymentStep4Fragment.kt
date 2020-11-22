@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
@@ -18,6 +19,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import com.yalantis.ucrop.UCrop
+import kotlinx.android.synthetic.main.fragment_add_payment.*
 import kotlinx.android.synthetic.main.fragment_add_payment_step4.*
 import kotlinx.android.synthetic.main.fragment_add_payment_step4.calendar
 import kotlinx.android.synthetic.main.fragment_add_payment_step4.calendarDate
@@ -70,9 +72,11 @@ class AddPaymentStep4Fragment : PermissionBase() {
     }
     buttonStep4.setOnClickListener {
       viewModel.setThumbnail(encodeImage2Base64(camera2))
-      startHttpConnection(buttonStep4, nowLoadingStep4, requireContext())
+      requireParentFragment().requireParentFragment().progressBarAddPayment.visibility = ProgressBar.VISIBLE
+      requireParentFragment().requireParentFragment().frontViewAddPayment.visibility = ImageView.VISIBLE
       viewModel.sendRequest()
-      finishHttpConnection(buttonStep4, nowLoadingStep4)
+      requireParentFragment().requireParentFragment().progressBarAddPayment.visibility = ProgressBar.GONE
+      requireParentFragment().requireParentFragment().frontViewAddPayment.visibility = ImageView.GONE
     }
     viewModel.paymentInfo?.also {
       // 支払い編集時はここに来る

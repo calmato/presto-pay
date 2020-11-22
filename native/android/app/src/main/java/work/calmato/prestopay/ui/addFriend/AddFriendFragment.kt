@@ -6,9 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.SearchView
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -91,19 +89,18 @@ class AddFriendFragment : Fragment() {
         builder?.setTitle(resources.getString(R.string.add_friend_question))
           ?.setPositiveButton(resources.getString(R.string.add),
             DialogInterface.OnClickListener { _, _ ->
+              progressBarAddFriend.visibility = ProgressBar.VISIBLE
+              frontViewAddFriend.visibility = ImageView.VISIBLE
               viewModel.addFriendApi(userProperty, requireActivity())
+              progressBarAddFriend.visibility = ProgressBar.GONE
+              frontViewAddFriend.visibility = ImageView.GONE
             })
           ?.setNegativeButton(resources.getString(R.string.cancel), null)
           ?.setView(R.layout.dialog_add_friend)
         val dialog: AlertDialog? = builder?.create()
         dialog?.show()
         val name = dialog?.findViewById<TextView>(R.id.username_dialog)
-        // TODO: サムネイルは大きさが統一されてないのでここでは修正する、ひとまずコメントアウトしておく。
-        //val thumbnail = dialog?.findViewById<ImageView>(R.id.thumbnail_dialog)
         name!!.text = userProperty.username
-/*        if (userProperty.thumbnailUrl != null && userProperty.thumbnailUrl.isNotEmpty()) {
-          Picasso.with(context).load(userProperty.thumbnailUrl).into(thumbnail)
-        }*/
         viewModel.itemIsClickedCompleted()
       }
     })
