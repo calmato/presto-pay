@@ -8,6 +8,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -181,7 +183,8 @@ class LoginFragment : Fragment() {
     Log.d(DEFAULT_TAG, "signInAccount:$email")
     // [START create_user_with_email]
     if (email != "" && password != "") {
-      startHttpConnection(loginButton, nowLoading, requireContext())
+      progressBarLogIn.visibility = ProgressBar.VISIBLE
+      frontViewLogIn.visibility = ImageView.VISIBLE
       auth.signInWithEmailAndPassword(email, password)
         .addOnCompleteListener { task ->
           if (task.isSuccessful) {
@@ -196,7 +199,6 @@ class LoginFragment : Fragment() {
             }
             updateUI(user, true)
           } else {
-            finishHttpConnection(loginButton, nowLoading)
             // If sign in fails, display a message to the user.
             Log.w(DEFAULT_TAG, "signInWithEmail:failure", task.exception)
             Toast.makeText(
@@ -205,6 +207,8 @@ class LoginFragment : Fragment() {
             ).show()
             updateUI(null, false)
           }
+          progressBarLogIn.visibility = ProgressBar.GONE
+          frontViewLogIn.visibility = ImageView.GONE
         }
     } else {
       Toast.makeText(

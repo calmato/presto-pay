@@ -7,6 +7,8 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -17,8 +19,6 @@ import kotlinx.android.synthetic.main.fragment_update_pass_login.*
 import kotlinx.android.synthetic.main.fragment_update_pass_login.passwordInformation
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentUpdatePassLoginBinding
-import work.calmato.prestopay.util.finishHttpConnection
-import work.calmato.prestopay.util.startHttpConnection
 
 class UpdatePassLoginFragment : Fragment() {
   override fun onCreateView(
@@ -88,7 +88,8 @@ class UpdatePassLoginFragment : Fragment() {
               user!!.email.toString(),
               currentPassEdit.text.toString()
             )
-          startHttpConnection(changePassButton, nowLoading, requireContext())
+          progressBarUpdatePassLogIn.visibility = ProgressBar.VISIBLE
+          frontViewUpdatePassLogIn.visibility = ImageView.VISIBLE
           user.reauthenticate(cred).addOnCompleteListener {
             if (it.isSuccessful) {
               user.updatePassword(newPass).addOnCompleteListener {
@@ -108,8 +109,9 @@ class UpdatePassLoginFragment : Fragment() {
                     Toast.LENGTH_LONG
                   )
                     .show()
-                  finishHttpConnection(changePassButton, nowLoading)
                 }
+                progressBarUpdatePassLogIn.visibility = ProgressBar.GONE
+                frontViewUpdatePassLogIn.visibility = ImageView.GONE
               }
             } else {
               Toast.makeText(
@@ -117,7 +119,6 @@ class UpdatePassLoginFragment : Fragment() {
                 resources.getString(R.string.current_password_wrong),
                 Toast.LENGTH_LONG
               ).show()
-              finishHttpConnection(changePassButton, nowLoading)
             }
           }
         } else {

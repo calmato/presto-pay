@@ -72,11 +72,7 @@ class AddPaymentStep4Fragment : PermissionBase() {
     }
     buttonStep4.setOnClickListener {
       viewModel.setThumbnail(encodeImage2Base64(camera2))
-      requireParentFragment().requireParentFragment().progressBarAddPayment.visibility = ProgressBar.VISIBLE
-      requireParentFragment().requireParentFragment().frontViewAddPayment.visibility = ImageView.VISIBLE
       viewModel.sendRequest()
-      requireParentFragment().requireParentFragment().progressBarAddPayment.visibility = ProgressBar.GONE
-      requireParentFragment().requireParentFragment().frontViewAddPayment.visibility = ImageView.GONE
     }
     viewModel.paymentInfo?.also {
       // 支払い編集時はここに来る
@@ -120,7 +116,7 @@ class AddPaymentStep4Fragment : PermissionBase() {
       calendar.visibility = ImageView.INVISIBLE
       calendarYear.visibility = TextView.VISIBLE
       calendarDate.visibility = TextView.VISIBLE
-      val monthDate = calendarDate.text.split("-"," ")
+      val monthDate = calendarDate.text.split("-", " ")
       viewModel.setPaidAt("${calendarYear.text}-${monthDate[0]}-${monthDate[1]} 00:00:00")
     }
     if (resultCode == Activity.RESULT_OK && requestCode == Constant.IMAGE_PICK_CODE) {
@@ -135,7 +131,7 @@ class AddPaymentStep4Fragment : PermissionBase() {
   }
 
   private fun inflateDate(yearDate: String?) {
-    val dateList = yearDate?.split("-"," ","T")
+    val dateList = yearDate?.split("-", " ", "T")
     calendarYear.text = dateList!![0]
     val concatDate = dateList[1] + "-" + dateList[2]
     calendarDate.text = concatDate

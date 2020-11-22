@@ -89,11 +89,7 @@ class AddFriendFragment : Fragment() {
         builder?.setTitle(resources.getString(R.string.add_friend_question))
           ?.setPositiveButton(resources.getString(R.string.add),
             DialogInterface.OnClickListener { _, _ ->
-              progressBarAddFriend.visibility = ProgressBar.VISIBLE
-              frontViewAddFriend.visibility = ImageView.VISIBLE
               viewModel.addFriendApi(userProperty, requireActivity())
-              progressBarAddFriend.visibility = ProgressBar.GONE
-              frontViewAddFriend.visibility = ImageView.GONE
             })
           ?.setNegativeButton(resources.getString(R.string.cancel), null)
           ?.setView(R.layout.dialog_add_friend)
@@ -102,6 +98,15 @@ class AddFriendFragment : Fragment() {
         val name = dialog?.findViewById<TextView>(R.id.username_dialog)
         name!!.text = userProperty.username
         viewModel.itemIsClickedCompleted()
+      }
+    })
+    viewModel.nowLoading.observe(viewLifecycleOwner, Observer {
+      if (it){
+        progressBarAddFriend.visibility = ProgressBar.VISIBLE
+        frontViewAddFriend.visibility = ImageView.VISIBLE
+      }else{
+        progressBarAddFriend.visibility = ProgressBar.GONE
+        frontViewAddFriend.visibility = ImageView.GONE
       }
     })
   }

@@ -5,6 +5,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -13,8 +15,6 @@ import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.fragment_reset_pass.*
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentResetPassBinding
-import work.calmato.prestopay.util.finishHttpConnection
-import work.calmato.prestopay.util.startHttpConnection
 
 class ResetPassFragment : Fragment() {
   override fun onCreateView(
@@ -34,7 +34,8 @@ class ResetPassFragment : Fragment() {
       if (!emailEditText.text.isEmpty()) {
         val auth = FirebaseAuth.getInstance()
         val emailAddress = emailEditText.text.toString()
-        startHttpConnection(sendMailButton,nowLoading,requireContext())
+        progressBarRestPass.visibility= ProgressBar.VISIBLE
+        frontViewResetPass.visibility = ImageView.VISIBLE
         auth.sendPasswordResetEmail(emailAddress).addOnCompleteListener { task ->
           if (task.isSuccessful) {
             sendEmail()
@@ -42,9 +43,10 @@ class ResetPassFragment : Fragment() {
               ResetPassFragmentDirections.actionResetPassFragmentToMailCheckFragment()
             )
           } else {
-            finishHttpConnection(sendMailButton,nowLoading)
             Log.d("Reset password", "Email is not sent")
           }
+          progressBarRestPass.visibility= ProgressBar.GONE
+          frontViewResetPass.visibility = ImageView.GONE
         }
       } else {
         Toast.makeText(requireContext(), resources.getString(R.string.fill_email), Toast.LENGTH_SHORT).show()

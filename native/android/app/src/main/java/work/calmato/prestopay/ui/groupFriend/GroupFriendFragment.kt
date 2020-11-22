@@ -137,16 +137,6 @@ class GroupFriendFragment : Fragment() {
         )
       )
     }
-    val animBlink = AnimationUtils.loadAnimation(requireContext(), R.anim.blink)
-    viewModel.nowLoading.observe(viewLifecycleOwner, Observer {
-      if (it) {
-        nowLoading.visibility = View.VISIBLE
-        nowLoading.startAnimation(animBlink)
-      } else {
-        nowLoading.clearAnimation()
-        nowLoading.visibility = View.INVISIBLE
-      }
-    })
 
     frontView.visibility = ImageView.GONE
     progressBar.visibility = android.widget.ProgressBar.INVISIBLE
