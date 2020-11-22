@@ -123,33 +123,41 @@ class GroupEditAddFriendFragment : Fragment() {
   }
 
   private fun sendRequest() {
-    var friendids: List<String> = friendListArg.filter { it.checked }.map { item -> item.id }
-    Api.retrofitService.registerFriendToGroup(
-      "Bearer $id",
-      mapOf("userIds" to friendids),
-      getGroupInfo!!.id
-    )
-      .enqueue(object : Callback<GroupPropertyResponse> {
-        override fun onFailure(call: Call<GroupPropertyResponse>, t: Throwable) {
-          Toast.makeText(activity, t.message, Toast.LENGTH_LONG).show()
-        }
-
-        override fun onResponse(
-          call: Call<GroupPropertyResponse>,
-          response: Response<GroupPropertyResponse>
-        ) {
-          if (response.isSuccessful) {
-            responseGroup = response.body()
-            applyBackHome(responseGroup)
-          } else {
-            Toast.makeText(
-              activity,
-              "グループに友達を追加できませんでした",
-              Toast.LENGTH_SHORT
-            )
+    val friends: List<String> = friendListArg.filter { it.checked }.map { item -> item.id }
+    if (friends.size + getGroupInfo!!.users.size <= 64) {
+      Api.retrofitService.registerFriendToGroup(
+        "Bearer $id",
+        mapOf("userIds" to friends),
+        getGroupInfo!!.id
+      )
+        .enqueue(object : Callback<GroupPropertyResponse> {
+          override fun onFailure(call: Call<GroupPropertyResponse>, t: Throwable) {
+            Toast.makeText(activity, t.message, Toast.LENGTH_LONG).show()
           }
-        }
-      })
+
+          override fun onResponse(
+            call: Call<GroupPropertyResponse>,
+            response: Response<GroupPropertyResponse>
+          ) {
+            if (response.isSuccessful) {
+              responseGroup = response.body()
+              applyBackHome(responseGroup)
+            } else {
+              Toast.makeText(
+                activity,
+                "グループに友達を追加できませんでした",
+                Toast.LENGTH_SHORT
+              )
+            }
+          }
+        })
+    } else {
+      Toast.makeText(
+        requireContext(),
+        resources.getString(R.string.group_member_restriction),
+        Toast.LENGTH_LONG
+      ).show()
+    }
   }
 
   private fun applyBackHome(response: GroupPropertyResponse?) {
