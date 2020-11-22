@@ -69,8 +69,8 @@ class CreateGroupFragment : PermissionBase() {
   private fun sendGroupInfo() {
     val thumbnailStr = encodeImage2Base64(thumbnailEdit)
     val groupName = groupName.text.toString()
-    if (groupName.length in 1..31) {
-      if (usersListToBeSent!!.users.size in 0..100) {
+    if (groupName.length in 1..64) {
+      if (usersListToBeSent!!.users.size in 0..64) {
         val groupProperty =
           CreateGroupProperty(groupName, thumbnailStr, usersListToBeSent!!.users.map { it.id })
         viewModel.createGroupApi(groupProperty, requireActivity())

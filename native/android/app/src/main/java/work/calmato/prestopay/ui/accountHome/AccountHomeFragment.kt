@@ -25,7 +25,6 @@ import work.calmato.prestopay.repository.GroupsRepository
 import work.calmato.prestopay.util.AdapterGroupPlane
 
 class AccountHomeFragment : Fragment() {
-  private var recycleGroupAdapter: AdapterGroupPlane? = null
   private lateinit var sharedPreferences: SharedPreferences
 
   override fun onCreateView(

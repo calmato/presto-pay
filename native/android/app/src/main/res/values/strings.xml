@@ -63,7 +63,7 @@
   <string name="email_address">Email address</string>
   <string name="description_reset_pass">にパスワードを変更するリンクを送信します。\n現在のパスワードを入力してください。</string>
   <string name="save_button"><u>保存</u></string>
-  <string name="passwordInformation">半角のアルファベットと数字両方を含む8~15文字</string>
+  <string name="passwordInformation">半角のアルファベットと数字両方を含む6~32文字</string>
   <string name="passwordConfirmInformation">同じパスワードを入力</string>
   <string name="now_loading">Now Loading …</string>
   <string name="amount">金額</string>
@@ -111,8 +111,8 @@
   <string name="fill_friend_username">友達のユーザー名を入力してください</string>
   <string name="user_not_found">ユーザーが見つかりません</string>
   <string name="add_friend_question">この友だち追加しますか？</string>
-  <string name="group_member_restriction">グループメンバーは100人までです</string>
-  <string name="group_name_restriction">1〜31文字のグループ名を入力してください</string>
+  <string name="group_member_restriction">グループメンバーは64人までです</string>
+  <string name="group_name_restriction">1〜64文字のグループ名を入力してください</string>
   <string name="delete_friend">友達リストから削除する</string>
   <string name="delete_question">本当に削除しますか？</string>
   <string name="delete">削除する</string>
@@ -176,6 +176,8 @@
   <string name="change_group_profile">グループ写真を変更</string>
   <string name="精算する">to_settleup</string>
   <string name="settleup_group">精算する</string>
+  <string name="amount_too_high">金額は100万未満まで有効です</string>
+  <string name="pass_at_least_6">6文字以上のパスワードを設定してください</string>
   <string name="prestoPayList">貸し借りのあるグループ一覧</string>
   <string-array name="currency_array">
     <item>jpy</item>

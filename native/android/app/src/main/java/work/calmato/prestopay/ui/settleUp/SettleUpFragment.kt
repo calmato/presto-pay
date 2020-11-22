@@ -65,8 +65,8 @@ class SettleUpFragment : Fragment() {
     viewModel.setId(sharedPreferences.getString("token", "")!!)
     viewModel.getGroupDetail()
     val c = Calendar.getInstance()
-    val date = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(c.time)
-    viewModel.setPaidAt("${date}T00:00:00.000Z")
+    val date = SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.getDefault()).format(c.time)
+    viewModel.setPaidAt(date)
     viewModel.getCountryList()
 
     thumbnail1.setOnClickListener {
@@ -162,7 +162,9 @@ class SettleUpFragment : Fragment() {
     val userRecycleAdapter =
       AdapterGrid(Users(viewModel.groupDetail.users), AdapterGrid.OnClickListener {
         name.text = it.name
-        Picasso.with(requireContext()).load(it.thumbnailUrl).into(thumbanil)
+        if (!it.thumbnailUrl.isNullOrEmpty()) {
+          Picasso.with(requireContext()).load(it.thumbnailUrl).into(thumbanil)
+        }
         if (status == 1) {
           lender = UserExpense(amount = 0f, id = it.id)
         } else {

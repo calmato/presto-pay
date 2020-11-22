@@ -42,7 +42,7 @@
       android:ems="10"
       android:hint="@string/name"
       android:inputType="textPersonName"
-      android:maxLength="31"
+      android:maxLength="32"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintHorizontal_bias="0.0"
       app:layout_constraintStart_toStartOf="parent"
@@ -56,7 +56,7 @@
       android:ems="10"
       android:hint="@string/username"
       android:inputType="textPersonName"
-      android:maxLength="31"
+      android:maxLength="32"
       app:layout_constraintEnd_toEndOf="@+id/nameEditText"
       app:layout_constraintStart_toStartOf="@+id/nameEditText"
       app:layout_constraintTop_toBottomOf="@+id/textView9" />
@@ -69,7 +69,7 @@
       android:ems="10"
       android:hint="@string/email"
       android:inputType="textEmailAddress"
-      android:maxLength="255"
+      android:maxLength="256"
       app:layout_constraintEnd_toEndOf="@+id/userNameEditText"
       app:layout_constraintStart_toStartOf="@+id/userNameEditText"
       app:layout_constraintTop_toBottomOf="@+id/textView10" />

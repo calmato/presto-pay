@@ -20,7 +20,7 @@ import work.calmato.prestopay.databinding.FragmentAddPaymentStep1Binding
 import work.calmato.prestopay.util.AdapterCurrency
 import work.calmato.prestopay.util.ViewModelAddPayment
 
-class AddPaymentStep1Fragment: Fragment() {
+class AddPaymentStep1Fragment : Fragment() {
   private val viewModel: ViewModelAddPayment by lazy {
     ViewModelProvider(requireParentFragment().requireParentFragment()).get(ViewModelAddPayment::class.java)
   }
@@ -31,7 +31,7 @@ class AddPaymentStep1Fragment: Fragment() {
     savedInstanceState: Bundle?
   ): View? {
     val binding: FragmentAddPaymentStep1Binding =
-      DataBindingUtil.inflate(inflater, R.layout.fragment_add_payment_step1, container,false)
+      DataBindingUtil.inflate(inflater, R.layout.fragment_add_payment_step1, container, false)
     return binding.root
   }
 
@@ -40,11 +40,17 @@ class AddPaymentStep1Fragment: Fragment() {
     viewModel.getCountryList()
     viewModel.setTag()
     buttonStep4.setOnClickListener {
-      if(paymentName.text.isNullOrEmpty()){
-        Toast.makeText(requireContext(),resources.getString(R.string.fill_expense_name),Toast.LENGTH_LONG).show()
-      }else if (amount.text.isNullOrEmpty()){
-        Toast.makeText(requireContext(),R.string.fill_total_amount,Toast.LENGTH_LONG).show()
-      } else{
+      if (paymentName.text.isNullOrEmpty()) {
+        Toast.makeText(
+          requireContext(),
+          resources.getString(R.string.fill_expense_name),
+          Toast.LENGTH_LONG
+        ).show()
+      } else if (amount.text.isNullOrEmpty()) {
+        Toast.makeText(requireContext(), R.string.fill_total_amount, Toast.LENGTH_LONG).show()
+      } else if (amount.text.toString().toFloat() >= 1000000) {
+        Toast.makeText(requireContext(), R.string.amount_too_high, Toast.LENGTH_LONG).show()
+      } else {
         viewModel.setPaymentName(paymentName.text.toString())
         viewModel.setTotal(amount.text.toString().toFloat())
         viewModel.setCurrency(currency.text.toString())

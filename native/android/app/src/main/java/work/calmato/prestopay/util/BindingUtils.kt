@@ -129,7 +129,7 @@ fun ImageView.setTag(item:PaymentPropertyGet?){
 @BindingAdapter("paymentDate")
 fun TextView.setDate(item:PaymentPropertyGet?){
   item?.let{
-    text = item.createdAt.split("T")[0]
+    text = item.paidAt.split(" ","T")[0]
   }
 }
 

@@ -203,7 +203,7 @@ func (gs *groupService) AddUsers(
 
 	if ves := gs.groupDomainValidation.Group(ctx, g); len(ves) > 0 {
 		err := xerrors.New("Failed to DomainValidation")
-		return nil, domain.Unknown.New(err, ves...)
+		return nil, domain.InvalidDomainValidation.New(err, ves...)
 	}
 
 	// Update Group
@@ -252,7 +252,7 @@ func (gs *groupService) RemoveUsers(
 
 	if ves := gs.groupDomainValidation.Group(ctx, g); len(ves) > 0 {
 		err := xerrors.New("Failed to DomainValidation")
-		return nil, domain.Unknown.New(err, ves...)
+		return nil, domain.InvalidDomainValidation.New(err, ves...)
 	}
 
 	// Update Group

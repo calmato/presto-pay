@@ -2,16 +2,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
   <item
     android:id="@+id/action_people"
-    android:title="@string/group_friend"
     android:icon="@drawable/ic_people_black_24dp"
-    android:enabled="true"/>
+    android:title="@string/group_friend" />
   <item
     android:id="@+id/dummy"
-    android:title=""
-    android:enabled="false"/>
+    android:enabled="false"
+    android:title="" />
   <item
-  android:id="@+id/action_person"
-  android:title="@string/account"
-  android:icon="@drawable/ic_person_black_24dp"
-  android:enabled="true"/>
+    android:id="@+id/action_person"
+    android:icon="@drawable/ic_person_black_24dp"
+    android:title="@string/account" />
 </menu>

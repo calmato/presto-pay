@@ -10,6 +10,9 @@ interface FriendDao {
   @Query("select * from databasefriend")
   fun getFriends(): LiveData<List<DatabaseFriend>>
 
+  @Query("select * from databasefriend")
+  fun getFriendsList(): List<DatabaseFriend>?
+
   @Insert(onConflict = OnConflictStrategy.REPLACE)
   fun insertAll(vararg friends: DatabaseFriend)
 
@@ -25,11 +28,14 @@ interface FriendDao {
 
 @Dao
 interface GroupDao {
-  @Query("select * from databasegroup")
+  @Query("select * from databasegroup order by updateAt desc")
   fun getGroups(): LiveData<List<DatabaseGroup>>
 
   @Insert(onConflict = OnConflictStrategy.REPLACE)
   fun insertAll(vararg groups: DatabaseGroup)
+
+  @Insert(onConflict = OnConflictStrategy.REPLACE)
+  fun insertGroup(group: DatabaseGroup)
 
   @Query("delete from databasegroup where id = :groupId")
   fun deleteGroup(groupId: String)
