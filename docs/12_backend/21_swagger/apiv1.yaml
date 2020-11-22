@@ -971,6 +971,9 @@ components:
               currency:
                 type: string
                 description: 通貨
+              total:
+                type: integer
+                description: 合計額
               positivePayers:
                 type: array
                 description: 支払済ユーザ一覧
