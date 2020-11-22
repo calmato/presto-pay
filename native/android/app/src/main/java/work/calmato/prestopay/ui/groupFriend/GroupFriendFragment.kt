@@ -58,6 +58,8 @@ class GroupFriendFragment : Fragment() {
       }
     })
 
+    progressBar.visibility = android.widget.ProgressBar.INVISIBLE
+
     viewModel.groupsList.observe(viewLifecycleOwner, Observer<List<GroupPropertyResponse>> {
       it?.apply {
         recycleGroupAdapter?.groupList = it
