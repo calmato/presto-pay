@@ -11,6 +11,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.content.res.AppCompatResources
@@ -24,14 +25,15 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_group_detail.*
-import kotlinx.android.synthetic.main.fragment_group_detail.chart
-import kotlinx.android.synthetic.main.fragment_payment_detail.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentGroupDetailBinding
-import work.calmato.prestopay.network.*
+import work.calmato.prestopay.network.Api
+import work.calmato.prestopay.network.GroupPropertyResponse
+import work.calmato.prestopay.network.NetworkPayerContainer
+import work.calmato.prestopay.network.PaymentPropertyGet
 import work.calmato.prestopay.util.AdapterPayment
 import work.calmato.prestopay.util.ViewModelGroup
 import work.calmato.prestopay.util.ViewModelPayment
@@ -118,6 +120,10 @@ class GroupDetailFragment : Fragment() {
     groupDetail?.thumbnailUrl?.let {
       Picasso.with(requireContext()).load(it).into(groupIcon)
     }
+
+    frontView.visibility = ImageView.GONE
+    progressBar.visibility = android.widget.ProgressBar.INVISIBLE
+
     bottom_navigation.setOnNavigationItemSelectedListener { item ->
       when (item.itemId) {
         R.id.action_person -> {
@@ -180,6 +186,8 @@ class GroupDetailFragment : Fragment() {
           ?.setPositiveButton(
             resources.getString(R.string.delete),
             DialogInterface.OnClickListener { _, _ ->
+              frontView.visibility = ImageView.VISIBLE
+              progressBar.visibility = android.widget.ProgressBar.VISIBLE
               Api.retrofitService.deletePayment(
                 "Bearer ${id}",
                 groupDetail!!.id,
@@ -195,11 +203,14 @@ class GroupDetailFragment : Fragment() {
                       payments!![viewHolder.adapterPosition].id,
                       requireActivity()
                     )
+                    frontView.visibility = ImageView.GONE
+                    progressBar.visibility = android.widget.ProgressBar.INVISIBLE
                   }
 
                   override fun onFailure(call: Call<Unit>, t: Throwable) {
                     Toast.makeText(activity, t.message, Toast.LENGTH_LONG).show()
                     Log.d(ViewModelGroup.TAG, t.message)
+                    frontView.visibility = ImageView.GONE
                   }
                 })
             })

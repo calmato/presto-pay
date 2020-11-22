@@ -149,6 +149,7 @@ class GroupFriendFragment : Fragment() {
     })
 
     frontView.visibility = ImageView.GONE
+    progressBar.visibility = android.widget.ProgressBar.INVISIBLE
 
     val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
     userNameText.text = sharedPreferences.getString("username", "")
