@@ -49,7 +49,7 @@ class AccountEditFragment : PermissionBase() {
     userNameEditText.setText(sharedPreferences.getString("username", ""))
     mailEditText.setText(sharedPreferences.getString("email", ""))
     val thumbnailUrl = sharedPreferences.getString("thumbnailUrl", "")
-    if (thumbnailUrl.isNotEmpty()) {
+    if (thumbnailUrl!!.isNotEmpty()) {
       Picasso.with(context).load(thumbnailUrl).into(thumbnailEdit)
     }
     setHasOptionsMenu(true)

@@ -73,7 +73,7 @@ class AccountHomeFragment : Fragment() {
     sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
     setUserNameText.text = sharedPreferences.getString("username", "")
     val thumbnailUrl = sharedPreferences.getString("thumbnailUrl", "")
-    if (thumbnailUrl.isNotEmpty()) {
+    if (thumbnailUrl!!.isNotEmpty()) {
       Picasso.with(context).load(thumbnailUrl).into(UserAccountThumnail)
     }
     // TODO: 通知の設定を実装する時はここを利用する

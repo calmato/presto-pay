@@ -8,7 +8,7 @@ apply plugin: 'com.google.firebase.firebase-perf'
 apply plugin: 'com.google.firebase.crashlytics'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 30
     buildToolsVersion "28.0.3"
 
     dataBinding {
@@ -18,7 +18,7 @@ android {
     defaultConfig {
         applicationId "work.calmato.prestopay"
         minSdkVersion 28
-        targetSdkVersion 28
+        targetSdkVersion 30
         versionCode 1
         versionName "1.0"
 
@@ -46,30 +46,29 @@ dependencies {
     kapt "android.arch.lifecycle:compiler:1.1.1"
     implementation 'androidx.room:room-runtime:2.2.5'
     kapt "android.arch.persistence.room:compiler:1.1.1"
-    def nav_version = "2.3.0-alpha05"
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'androidx.core:core-ktx:1.3.1'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
-    implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
-    implementation "androidx.navigation:navigation-dynamic-features-fragment:$nav_version"
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.4.10"
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'androidx.core:core-ktx:1.3.2'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+    implementation "androidx.navigation:navigation-fragment-ktx:2.3.1"
+    implementation "androidx.navigation:navigation-dynamic-features-fragment:2.3.1"
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
 
     // Testing Navigation
-    androidTestImplementation "androidx.navigation:navigation-testing:$nav_version"
-    implementation 'com.google.android.material:material:1.3.0-alpha02'
+    androidTestImplementation "androidx.navigation:navigation-testing:2.3.1"
+    implementation 'com.google.android.material:material:1.3.0-alpha03'
 
     //firebase
-    implementation 'com.google.firebase:firebase-analytics:17.4.4'
-    implementation 'com.google.firebase:firebase-auth:19.3.2'
-    implementation 'com.google.android.gms:play-services-auth:18.1.0'
-    implementation 'com.google.firebase:firebase-dynamic-links-ktx:19.1.0'
-    implementation 'com.google.firebase:firebase-analytics-ktx:17.4.4'
-    implementation 'com.google.firebase:firebase-crashlytics:17.1.1'
-    implementation 'com.google.firebase:firebase-perf:19.0.8'
-    implementation 'com.google.firebase:firebase-messaging:20.2.3'
+    implementation 'com.google.firebase:firebase-analytics:18.0.0'
+    implementation 'com.google.firebase:firebase-auth:20.0.1'
+    implementation 'com.google.android.gms:play-services-auth:19.0.0'
+    implementation 'com.google.firebase:firebase-dynamic-links-ktx:19.1.1'
+    implementation 'com.google.firebase:firebase-analytics-ktx:18.0.0'
+    implementation 'com.google.firebase:firebase-crashlytics:17.3.0'
+    implementation 'com.google.firebase:firebase-perf:19.0.10'
+    implementation 'com.google.firebase:firebase-messaging:21.0.0'
 
     //Twitter SDK
     implementation 'com.twitter.sdk.android:twitter-core:3.1.1'

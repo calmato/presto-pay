@@ -127,7 +127,7 @@ class ViewModelFriendGroup(application: Application) : AndroidViewModel(applicat
     val userId = userProperty.id
     viewModelScope.launch {
       try {
-        friendsRepository.addFriend(id, UserId(userId), userProperty)
+        friendsRepository.addFriend(id!!, UserId(userId), userProperty)
         Toast.makeText(
           activity,
           getApplication<Application>().resources.getString(R.string.add_friend_succeeded),

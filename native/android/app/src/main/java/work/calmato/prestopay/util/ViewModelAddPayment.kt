@@ -144,7 +144,7 @@ class ViewModelAddPayment(application: Application) : AndroidViewModel(applicati
           }
 
           override fun onFailure(call: Call<GetGroupDetail>, t: Throwable) {
-            Log.d("ViewModelAddPayment", t.message)
+            Log.d("ViewModelAddPayment", t.message?:"No message")
             _navigateToHome.value = true
           }
         })

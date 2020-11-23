@@ -55,7 +55,7 @@ class AddPaymentStep4Fragment : PermissionBase() {
       requireContext()
     )
     constraintDate2.setOnClickListener {
-      val datePickerFragment = DatePickerFragment()
+      val datePickerFragment = DatePickerFragment(requireContext())
       datePickerFragment.setTargetFragment(this, CODE)
       datePickerFragment.show(parentFragmentManager, "datePicker")
     }

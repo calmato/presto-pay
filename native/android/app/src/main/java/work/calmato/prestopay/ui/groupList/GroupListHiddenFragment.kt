@@ -139,7 +139,7 @@ class GroupListHiddenFragment : Fragment() {
 
                   override fun onFailure(call: Call<Unit>, t: Throwable) {
                     Toast.makeText(activity, t.message, Toast.LENGTH_LONG).show()
-                    Log.d(ViewModelGroup.TAG, t.message)
+                    Log.d(ViewModelGroup.TAG, t.message?:"No message")
                     frontView.visibility = ImageView.GONE
                   }
                 })
@@ -201,7 +201,7 @@ class GroupListHiddenFragment : Fragment() {
       Api.retrofitService.getHiddenGroups("Bearer $id")
         .enqueue(object : Callback<HiddenGroups> {
           override fun onFailure(call: Call<HiddenGroups>, t: Throwable) {
-            Log.d(ViewModelGroup.TAG, t.message)
+            Log.d(ViewModelGroup.TAG, t.message?:"No message")
           }
 
           override fun onResponse(call: Call<HiddenGroups>, response: Response<HiddenGroups>) {

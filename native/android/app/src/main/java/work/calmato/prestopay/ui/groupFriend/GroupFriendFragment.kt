@@ -154,7 +154,7 @@ class GroupFriendFragment : Fragment() {
     val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
     userNameText.text = sharedPreferences.getString("username", "")
     val thumbnailUrl = sharedPreferences.getString("thumbnailUrl", "")
-    if (thumbnailUrl.isNotEmpty()) {
+    if (thumbnailUrl!!.isNotEmpty()) {
       Picasso.with(context).load(thumbnailUrl).into(thumbnail)
     }
     groupSwitcher.setOnClickListener {
@@ -228,7 +228,7 @@ class GroupFriendFragment : Fragment() {
 
                   override fun onFailure(call: Call<Unit>, t: Throwable) {
                     Toast.makeText(activity, t.message, Toast.LENGTH_LONG).show()
-                    Log.d(ViewModelGroup.TAG, t.message)
+                    Log.d(ViewModelGroup.TAG, t.message?:"No message")
                     frontView.visibility = ImageView.GONE
                   }
                 })
@@ -328,7 +328,7 @@ class GroupFriendFragment : Fragment() {
 
                   override fun onFailure(call: Call<AccountResponse>, t: Throwable) {
                     Toast.makeText(activity, t.message, Toast.LENGTH_LONG).show()
-                    Log.d(ViewModelGroup.TAG, t.message)
+                    Log.d(ViewModelGroup.TAG, t.message?:"No message")
                     frontView.visibility = ImageView.GONE
                   }
                 })

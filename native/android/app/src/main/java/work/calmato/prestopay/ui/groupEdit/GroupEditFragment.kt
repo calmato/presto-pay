@@ -47,7 +47,7 @@ class GroupEditFragment : PermissionBase() {
         Api.retrofitService.getGroupDetail("Bearer $id", getGroupInfo!!.id)
           .enqueue(object : Callback<GetGroupDetail> {
             override fun onFailure(call: Call<GetGroupDetail>, t: Throwable) {
-              Log.d(ViewModelGroup.TAG, t.message)
+              Log.d(ViewModelGroup.TAG, t.message?:"No message")
             }
 
             override fun onResponse(
@@ -223,7 +223,7 @@ class GroupEditFragment : PermissionBase() {
         .enqueue(object : Callback<HiddenGroups> {
           override fun onFailure(call: Call<HiddenGroups>, t: Throwable) {
             Toast.makeText(activity, t.message, Toast.LENGTH_LONG).show()
-            Log.d(TAG, t.message)
+            Log.d(TAG, t.message?:"No message")
           }
 
           override fun onResponse(call: Call<HiddenGroups>, response: Response<HiddenGroups>) {
@@ -242,7 +242,7 @@ class GroupEditFragment : PermissionBase() {
         .enqueue(object : Callback<HiddenGroups> {
           override fun onFailure(call: Call<HiddenGroups>, t: Throwable) {
             Toast.makeText(activity, t.message, Toast.LENGTH_LONG).show()
-            Log.d(TAG, t.message)
+            Log.d(TAG, t.message?:"No message")
           }
 
           override fun onResponse(call: Call<HiddenGroups>, response: Response<HiddenGroups>) {

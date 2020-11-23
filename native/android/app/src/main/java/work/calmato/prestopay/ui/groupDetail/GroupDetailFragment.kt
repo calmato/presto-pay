@@ -209,7 +209,7 @@ class GroupDetailFragment : Fragment() {
 
                   override fun onFailure(call: Call<Unit>, t: Throwable) {
                     Toast.makeText(activity, t.message, Toast.LENGTH_LONG).show()
-                    Log.d(ViewModelGroup.TAG, t.message)
+                    Log.d(ViewModelGroup.TAG, t.message?:"No message")
                     frontView.visibility = ImageView.GONE
                   }
                 })

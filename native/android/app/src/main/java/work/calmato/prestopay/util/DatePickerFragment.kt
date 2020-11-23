@@ -3,6 +3,7 @@ package work.calmato.prestopay.util
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.Dialog
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.DatePicker
@@ -10,7 +11,7 @@ import androidx.fragment.app.DialogFragment
 import java.text.SimpleDateFormat
 import java.util.*
 
-class DatePickerFragment:DialogFragment(),DatePickerDialog.OnDateSetListener {
+class DatePickerFragment(val cont: Context):DialogFragment(),DatePickerDialog.OnDateSetListener {
   var calendar = Calendar.getInstance()
 
   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -21,7 +22,7 @@ class DatePickerFragment:DialogFragment(),DatePickerDialog.OnDateSetListener {
     val day = c.get(Calendar.DAY_OF_MONTH)
 
     // Create a new instance of DatePickerDialog and return it
-    return DatePickerDialog(activity, this, year, month, day)
+    return DatePickerDialog(cont, this, year, month, day)
   }
 
   override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
