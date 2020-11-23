@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
-import android.preference.PreferenceManager
 import android.util.Log
 import android.view.*
 import android.widget.Switch
@@ -14,6 +13,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
@@ -81,7 +81,7 @@ class GroupEditFragment : PermissionBase() {
     inflater: LayoutInflater,
     container: ViewGroup?,
     savedInstanceState: Bundle?
-  ): View? {
+  ): View {
     val binding: FragmentGroupEditBinding =
       DataBindingUtil.inflate(inflater, R.layout.fragment_group_edit, container, false)
     getGroupInfo = GroupEditFragmentArgs.fromBundle(requireArguments()).groupEditList
@@ -237,7 +237,6 @@ class GroupEditFragment : PermissionBase() {
           }
         })
     } else if (!mSwitch.isChecked && getGroupInfo!!.isHidden) {
-      // TODO 非表示のグループを表示にするApiリクエストをここに書く
       Api.retrofitService.deleteHiddenGroup("Bearer $id", groupId)
         .enqueue(object : Callback<HiddenGroups> {
           override fun onFailure(call: Call<HiddenGroups>, t: Throwable) {

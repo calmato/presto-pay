@@ -1,12 +1,10 @@
 package work.calmato.prestopay.ui.groupFriend
 
 import android.app.AlertDialog
-import android.content.DialogInterface
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.preference.PreferenceManager
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -21,6 +19,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -69,10 +68,10 @@ class GroupFriendFragment : Fragment() {
     val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
     id = sharedPreferences.getString("token", "")!!
 
-    val swipeToGroupDismissTouchHelper = getGroupSwipeToDismissTouchHelper(recycleGroupAdapter!!)
+    val swipeToGroupDismissTouchHelper = getGroupSwipeToDismissTouchHelper()
     swipeToGroupDismissTouchHelper.attachToRecyclerView(groupRecycleView)
 
-    val swipeToFriendDismissTouchHelper = getFriendSwipeToDismissTouchHelper(recycleAdapter!!)
+    val swipeToFriendDismissTouchHelper = getFriendSwipeToDismissTouchHelper()
     swipeToFriendDismissTouchHelper.attachToRecyclerView(friendsRecycleView)
   }
 
@@ -83,7 +82,7 @@ class GroupFriendFragment : Fragment() {
     inflater: LayoutInflater,
     container: ViewGroup?,
     savedInstanceState: Bundle?
-  ): View? {
+  ): View {
     val binding: FragmentGroupFriendBinding =
       DataBindingUtil.inflate(inflater, R.layout.fragment_group_friend, container, false)
 
@@ -133,7 +132,7 @@ class GroupFriendFragment : Fragment() {
     groupEditAddFriend.setOnClickListener {
       this.findNavController().navigate(
         GroupFriendFragmentDirections.actionGroupFriendFragmentToFriendListFragment(
-          Users(emptyList<UserProperty>())
+          Users(emptyList())
         )
       )
     }
@@ -183,7 +182,7 @@ class GroupFriendFragment : Fragment() {
     )
   }
 
-  private fun getGroupSwipeToDismissTouchHelper(adapter: RecyclerView.Adapter<AdapterGroupPlane.AddGroupViewHolder>) =
+  private fun getGroupSwipeToDismissTouchHelper() =
     ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(
       ItemTouchHelper.LEFT,
       ItemTouchHelper.LEFT
@@ -198,44 +197,44 @@ class GroupFriendFragment : Fragment() {
 
       //スワイプ時に実行
       override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-        val builder: AlertDialog.Builder? = requireActivity().let {
+        val builder: AlertDialog.Builder = requireActivity().let {
           AlertDialog.Builder(it)
         }
-        builder?.setMessage(resources.getString(R.string.delete_question))
+        builder.setMessage(resources.getString(R.string.delete_question))
           ?.setPositiveButton(
-            resources.getString(R.string.delete),
-            DialogInterface.OnClickListener { _, _ ->
-              frontView.visibility = ImageView.VISIBLE
-              progressBar.visibility = android.widget.ProgressBar.VISIBLE
+            resources.getString(R.string.delete)
+          ) { _, _ ->
+            frontView.visibility = ImageView.VISIBLE
+            progressBar.visibility = android.widget.ProgressBar.VISIBLE
 
-              Api.retrofitService.deleteGroup(
-                "Bearer ${id}",
-                groups!![viewHolder.adapterPosition].id
-              )
-                .enqueue(object : Callback<Unit> {
-                  override fun onResponse(
-                    call: Call<Unit>,
-                    response: Response<Unit>
-                  ) {
-                    Log.d(ViewModelGroup.TAG, response.body().toString())
-                    viewModel.deleteGroup(
-                      groups!![viewHolder.adapterPosition].id,
-                      requireActivity()
-                    )
-                    frontView.visibility = ImageView.GONE
-                    progressBar.visibility = android.widget.ProgressBar.INVISIBLE
-                  }
+            Api.retrofitService.deleteGroup(
+              "Bearer $id",
+              groups!![viewHolder.adapterPosition].id
+            )
+              .enqueue(object : Callback<Unit> {
+                override fun onResponse(
+                  call: Call<Unit>,
+                  response: Response<Unit>
+                ) {
+                  Log.d(ViewModelGroup.TAG, response.body().toString())
+                  viewModel.deleteGroup(
+                    groups!![viewHolder.adapterPosition].id,
+                    requireActivity()
+                  )
+                  frontView.visibility = ImageView.GONE
+                  progressBar.visibility = android.widget.ProgressBar.INVISIBLE
+                }
 
-                  override fun onFailure(call: Call<Unit>, t: Throwable) {
-                    Toast.makeText(activity, t.message, Toast.LENGTH_LONG).show()
-                    Log.d(ViewModelGroup.TAG, t.message?:"No message")
-                    frontView.visibility = ImageView.GONE
-                  }
-                })
-            })
+                override fun onFailure(call: Call<Unit>, t: Throwable) {
+                  Toast.makeText(activity, t.message, Toast.LENGTH_LONG).show()
+                  Log.d(ViewModelGroup.TAG, t.message ?: "No message")
+                  frontView.visibility = ImageView.GONE
+                }
+              })
+          }
           ?.setNegativeButton(resources.getString(R.string.cancel), null)
         recycleGroupAdapter?.notifyDataSetChanged()
-        val dialog: AlertDialog? = builder?.create()
+        val dialog: AlertDialog? = builder.create()
         dialog?.show()
       }
 
@@ -284,7 +283,7 @@ class GroupFriendFragment : Fragment() {
 
     })
 
-  private fun getFriendSwipeToDismissTouchHelper(adapter: RecyclerView.Adapter<AdapterFriendPlane.AddFriendViewHolder>) =
+  private fun getFriendSwipeToDismissTouchHelper() =
     ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(
       ItemTouchHelper.LEFT,
       ItemTouchHelper.LEFT
@@ -299,43 +298,43 @@ class GroupFriendFragment : Fragment() {
 
       //スワイプ時に実行
       override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-        val builder: AlertDialog.Builder? = requireActivity().let {
+        val builder: AlertDialog.Builder = requireActivity().let {
           AlertDialog.Builder(it)
         }
-        builder?.setMessage(resources.getString(R.string.delete_question))
+        builder.setMessage(resources.getString(R.string.delete_question))
           ?.setPositiveButton(
-            resources.getString(R.string.delete),
-            DialogInterface.OnClickListener { _, _ ->
-              frontView.visibility = ImageView.VISIBLE
-              progressBar.visibility = android.widget.ProgressBar.VISIBLE
-              Api.retrofitService.deleteFriend(
-                "Bearer ${id}",
-                friends!![viewHolder.adapterPosition].id
-              )
-                .enqueue(object : Callback<AccountResponse> {
-                  override fun onResponse(
-                    call: Call<AccountResponse>,
-                    response: Response<AccountResponse>
-                  ) {
-                    Log.d(ViewModelGroup.TAG, response.body().toString())
-                    viewModel.deleteFriendSwipe(
-                      friends!![viewHolder.adapterPosition].id,
-                      requireActivity()
-                    )
-                    frontView.visibility = ImageView.GONE
-                    progressBar.visibility = android.widget.ProgressBar.INVISIBLE
-                  }
+            resources.getString(R.string.delete)
+          ) { _, _ ->
+            frontView.visibility = ImageView.VISIBLE
+            progressBar.visibility = android.widget.ProgressBar.VISIBLE
+            Api.retrofitService.deleteFriend(
+              "Bearer $id",
+              friends!![viewHolder.adapterPosition].id
+            )
+              .enqueue(object : Callback<AccountResponse> {
+                override fun onResponse(
+                  call: Call<AccountResponse>,
+                  response: Response<AccountResponse>
+                ) {
+                  Log.d(ViewModelGroup.TAG, response.body().toString())
+                  viewModel.deleteFriendSwipe(
+                    friends!![viewHolder.adapterPosition].id,
+                    requireActivity()
+                  )
+                  frontView.visibility = ImageView.GONE
+                  progressBar.visibility = android.widget.ProgressBar.INVISIBLE
+                }
 
-                  override fun onFailure(call: Call<AccountResponse>, t: Throwable) {
-                    Toast.makeText(activity, t.message, Toast.LENGTH_LONG).show()
-                    Log.d(ViewModelGroup.TAG, t.message?:"No message")
-                    frontView.visibility = ImageView.GONE
-                  }
-                })
-            })
+                override fun onFailure(call: Call<AccountResponse>, t: Throwable) {
+                  Toast.makeText(activity, t.message, Toast.LENGTH_LONG).show()
+                  Log.d(ViewModelGroup.TAG, t.message ?: "No message")
+                  frontView.visibility = ImageView.GONE
+                }
+              })
+          }
           ?.setNegativeButton(resources.getString(R.string.cancel), null)
         recycleAdapter?.notifyDataSetChanged()
-        val dialog: AlertDialog? = builder?.create()
+        val dialog: AlertDialog? = builder.create()
         dialog?.show()
       }
 

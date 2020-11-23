@@ -1,7 +1,6 @@
 package work.calmato.prestopay.ui.groupList
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,14 +9,12 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_home.*
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentGroupListBinding
 import work.calmato.prestopay.network.GroupPropertyResponse
-import work.calmato.prestopay.network.Groups
 import work.calmato.prestopay.util.AdapterGroupPlane
 import work.calmato.prestopay.util.ViewModelGroup
 
@@ -50,7 +47,7 @@ class GroupListFragment : Fragment() {
     inflater: LayoutInflater,
     container: ViewGroup?,
     savedInstanceState: Bundle?
-  ): View? {
+  ): View {
     val binding: FragmentGroupListBinding =
       DataBindingUtil.inflate(inflater, R.layout.fragment_group_list, container, false)
 
@@ -110,10 +107,6 @@ class GroupListFragment : Fragment() {
     this.findNavController().navigate(
       GroupListFragmentDirections.actionGroupListFragmentToAddPayment(group,null)
     )
-  }
-
-  companion object {
-    private const val TAG = "GroupListFragment"
   }
 
 }

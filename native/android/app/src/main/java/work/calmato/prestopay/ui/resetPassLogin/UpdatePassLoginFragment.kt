@@ -25,7 +25,7 @@ class UpdatePassLoginFragment : Fragment() {
     inflater: LayoutInflater,
     container: ViewGroup?,
     savedInstanceState: Bundle?
-  ): View? {
+  ): View {
     val binding: FragmentUpdatePassLoginBinding = DataBindingUtil.inflate(
       inflater, R.layout.fragment_update_pass_login, container, false
     )
@@ -61,7 +61,7 @@ class UpdatePassLoginFragment : Fragment() {
       override fun afterTextChanged(s: Editable?) {
         var textColor = Color.GRAY
 
-        if (!passConfirmEditText.text.toString().equals(passEditText.text.toString())) {
+        if (passConfirmEditText.text.toString() != passEditText.text.toString()) {
           textColor = Color.RED
         }
         passwordConfirmInformation.setTextColor(textColor)
@@ -80,7 +80,7 @@ class UpdatePassLoginFragment : Fragment() {
     if (passEditText.text.isNotEmpty() && passConfirmEditText.text.isNotEmpty() && currentPassEdit.text.isNotEmpty()) {
       if (passEditText.text.toString().length >= 6) {
         val newPass = passEditText.text.toString()
-        if (newPass.equals(passConfirmEditText.text.toString())) {
+        if (newPass == passConfirmEditText.text.toString()) {
           val auth = FirebaseAuth.getInstance()
           val user = auth.currentUser
           val cred =
@@ -89,7 +89,7 @@ class UpdatePassLoginFragment : Fragment() {
               currentPassEdit.text.toString()
             )
           startHttpConnection(changePassButton, nowLoading, requireContext())
-          user.reauthenticate(cred).addOnCompleteListener {
+          user.reauthenticate(cred).addOnCompleteListener { it ->
             if (it.isSuccessful) {
               user.updatePassword(newPass).addOnCompleteListener {
                 if (it.isSuccessful) {

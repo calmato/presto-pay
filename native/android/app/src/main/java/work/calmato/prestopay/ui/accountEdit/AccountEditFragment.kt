@@ -5,11 +5,11 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
-import android.preference.PreferenceManager
 import android.view.*
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.findNavController
+import androidx.preference.PreferenceManager
 import com.squareup.picasso.Picasso
 import com.yalantis.ucrop.UCrop
 import kotlinx.android.synthetic.main.fragment_account_edit.*
@@ -31,7 +31,7 @@ class AccountEditFragment : PermissionBase() {
     inflater: LayoutInflater,
     container: ViewGroup?,
     savedInstanceState: Bundle?
-  ): View? {
+  ): View {
     val binding: FragmentAccountEditBindingImpl = DataBindingUtil.inflate(
       inflater, R.layout.fragment_account_edit, container, false
     )
@@ -110,7 +110,7 @@ class AccountEditFragment : PermissionBase() {
             navigateToAccountHome()
           } else {
             try {
-              val jObjError = JSONObject(response.errorBody()?.string()).getJSONArray("errors")
+              val jObjError = JSONObject(response.errorBody()?.string()?:"Failed").getJSONArray("errors")
               for (i in 0 until jObjError.length()) {
                 val errorMessage =
                   jObjError.getJSONObject(i).getString("field") + " " + jObjError.getJSONObject(

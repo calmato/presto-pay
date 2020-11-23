@@ -1,7 +1,6 @@
 package work.calmato.prestopay.ui.addFriend
 
 import android.app.AlertDialog
-import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -43,7 +42,7 @@ class AddFriendFragment : Fragment() {
     inflater: LayoutInflater,
     container: ViewGroup?,
     savedInstanceState: Bundle?
-  ): View? {
+  ): View {
     val binding: FragmentAddFriendBinding =
       DataBindingUtil.inflate(inflater, R.layout.fragment_add_friend, container, false)
     binding.lifecycleOwner = this
@@ -68,7 +67,7 @@ class AddFriendFragment : Fragment() {
       override fun onQueryTextChange(newText: String?): Boolean {
         if (newText != null) {
           if (newText.isNotEmpty()) {
-            viewModel.getUserProperties(newText, requireActivity())
+            viewModel.getUserProperties(newText)
           }
         }
         return true
@@ -85,17 +84,17 @@ class AddFriendFragment : Fragment() {
     })
     viewModel.itemClicked.observe(viewLifecycleOwner, Observer { userProperty ->
       if (null != userProperty) {
-        val builder: AlertDialog.Builder? = requireActivity().let {
+        val builder: AlertDialog.Builder = requireActivity().let {
           AlertDialog.Builder(it)
         }
-        builder?.setTitle(resources.getString(R.string.add_friend_question))
-          ?.setPositiveButton(resources.getString(R.string.add),
-            DialogInterface.OnClickListener { _, _ ->
-              viewModel.addFriendApi(userProperty, requireActivity())
-            })
+        builder.setTitle(resources.getString(R.string.add_friend_question))
+          ?.setPositiveButton(resources.getString(R.string.add)
+          ) { _, _ ->
+            viewModel.addFriendApi(userProperty, requireActivity())
+          }
           ?.setNegativeButton(resources.getString(R.string.cancel), null)
           ?.setView(R.layout.dialog_add_friend)
-        val dialog: AlertDialog? = builder?.create()
+        val dialog: AlertDialog? = builder.create()
         dialog?.show()
         val name = dialog?.findViewById<TextView>(R.id.username_dialog)
         // TODO: サムネイルは大きさが統一されてないのでここでは修正する、ひとまずコメントアウトしておく。

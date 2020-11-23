@@ -3,7 +3,6 @@ package work.calmato.prestopay.ui.accountHome
 import android.app.AlertDialog
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.preference.PreferenceManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +10,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import androidx.preference.PreferenceManager
 import com.google.firebase.auth.FirebaseAuth
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_account_home.*
@@ -22,7 +22,6 @@ import work.calmato.prestopay.database.getAppDatabase
 import work.calmato.prestopay.databinding.FragmentAccountHomeBindingImpl
 import work.calmato.prestopay.repository.FriendsRepository
 import work.calmato.prestopay.repository.GroupsRepository
-import work.calmato.prestopay.util.AdapterGroupPlane
 
 class AccountHomeFragment : Fragment() {
   private lateinit var sharedPreferences: SharedPreferences
@@ -31,7 +30,7 @@ class AccountHomeFragment : Fragment() {
     inflater: LayoutInflater,
     container: ViewGroup?,
     savedInstanceState: Bundle?
-  ): View? {
+  ): View {
     val binding: FragmentAccountHomeBindingImpl = DataBindingUtil.inflate(
       inflater, R.layout.fragment_account_home, container, false
     )
@@ -88,10 +87,10 @@ class AccountHomeFragment : Fragment() {
     val builder = AlertDialog.Builder(requireContext())
     builder.setTitle(resources.getString(R.string.logout))
     builder.setMessage(resources.getString(R.string.logout_confirmation))
-    builder.setPositiveButton(resources.getString(R.string.yes)) { dialog, which ->
+    builder.setPositiveButton(resources.getString(R.string.yes)) { _, _ ->
       logout()
     }
-    builder.setNegativeButton(resources.getString(R.string.no)) { dialog, which ->
+    builder.setNegativeButton(resources.getString(R.string.no)) { _, _ ->
     }
     val dialog: AlertDialog = builder.create()
     dialog.show()

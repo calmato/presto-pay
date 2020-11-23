@@ -2,7 +2,6 @@ package work.calmato.prestopay.ui.settleUp
 
 import android.app.AlertDialog
 import android.os.Bundle
-import android.preference.PreferenceManager
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.*
@@ -27,6 +26,7 @@ import work.calmato.prestopay.util.*
 import java.text.SimpleDateFormat
 import java.util.*
 import androidx.lifecycle.Observer
+import androidx.preference.PreferenceManager
 import kotlinx.android.synthetic.main.fragment_settle_up.chart
 import work.calmato.prestopay.network.NetworkPayerContainer
 
@@ -43,7 +43,7 @@ class SettleUpFragment : Fragment() {
     inflater: LayoutInflater,
     container: ViewGroup?,
     savedInstanceState: Bundle?
-  ): View? {
+  ): View {
     val binding: FragmentSettleUpBindingImpl =
       DataBindingUtil.inflate(inflater, R.layout.fragment_settle_up, container, false)
     return binding.root
@@ -126,7 +126,7 @@ class SettleUpFragment : Fragment() {
   }
 
   private fun showCurrencyDialog() {
-    val builder: AlertDialog.Builder? = requireActivity().let {
+    val builder: AlertDialog.Builder = requireActivity().let {
       AlertDialog.Builder(it)
     }
     val currencyRecycleAdapter = AdapterCurrency(AdapterCurrency.OnClickListener {
@@ -138,8 +138,8 @@ class SettleUpFragment : Fragment() {
       layoutManager = LinearLayoutManager(requireContext())
       adapter = currencyRecycleAdapter
     }
-    builder?.setView(recycleView)
-    val dialog: AlertDialog? = builder?.create()
+    builder.setView(recycleView)
+    val dialog: AlertDialog? = builder.create()
     dialog?.show()
     currency.addTextChangedListener(object : TextWatcher {
       override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -156,7 +156,7 @@ class SettleUpFragment : Fragment() {
   }
 
   private fun showUserDialog(thumbanil: ImageView, name: TextView, status: Int) {
-    val builder: AlertDialog.Builder? = requireActivity().let {
+    val builder: AlertDialog.Builder = requireActivity().let {
       AlertDialog.Builder(it)
     }
     val userRecycleAdapter =
@@ -176,8 +176,8 @@ class SettleUpFragment : Fragment() {
       layoutManager = GridLayoutManager(requireContext(), 3)
       adapter = userRecycleAdapter
     }
-    builder?.setView(recycleView)
-    val dialog: AlertDialog? = builder?.create()
+    builder.setView(recycleView)
+    val dialog: AlertDialog? = builder.create()
     dialog?.show()
     name.addTextChangedListener(object : TextWatcher {
       override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {

@@ -1,25 +1,16 @@
 package work.calmato.prestopay.util
 
-import android.app.Activity
 import android.app.Application
-import android.preference.PreferenceManager
 import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import androidx.preference.PreferenceManager
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import work.calmato.prestopay.database.getAppDatabase
-import work.calmato.prestopay.network.Api
 import work.calmato.prestopay.network.GroupPropertyResponse
-import work.calmato.prestopay.network.HiddenGroups
 import work.calmato.prestopay.repository.GroupsRepository
 
 class ViewModelGroup(application: Application) : AndroidViewModel(application) {

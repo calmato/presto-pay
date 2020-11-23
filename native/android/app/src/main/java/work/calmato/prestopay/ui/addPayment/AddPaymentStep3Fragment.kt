@@ -18,7 +18,7 @@ class AddPaymentStep3Fragment : Fragment()  {
     inflater: LayoutInflater,
     container: ViewGroup?,
     savedInstanceState: Bundle?
-  ): View? {
+  ): View {
     val binding: FragmentAddPaymentStep2Binding =
       DataBindingUtil.inflate(inflater, R.layout.fragment_add_payment_step2, container, false)
     binding.lifecycleOwner = this

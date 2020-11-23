@@ -37,7 +37,7 @@ class CreateGroupFragment : PermissionBase() {
   override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?,
     savedInstanceState: Bundle?
-  ): View? {
+  ): View {
     val binding: FragmentCreateGroupBinding =
       DataBindingUtil.inflate(inflater, R.layout.fragment_create_group, container, false)
     binding.lifecycleOwner = this

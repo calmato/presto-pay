@@ -197,10 +197,6 @@ class ViewModelAddPayment(application: Application) : AndroidViewModel(applicati
     _navigateToGroupDetail.value = null
   }
 
-  fun navigationToHomeCompleted() {
-    _navigateToHome.value = null
-  }
-
   fun setPositivePayers(payers: List<UserExpense>) {
     _editPaymentPositivePayers.value = payers
   }
@@ -303,8 +299,8 @@ class ViewModelAddPayment(application: Application) : AndroidViewModel(applicati
       name = getApplication<Application>().resources.getString(R.string.settle_up),
       currency = currency.value!!,
       total = total.value!!,
-      positivePayers = listOf<UserExpense>(lender),
-      negativePayers = listOf<UserExpense>(borrower),
+      positivePayers = listOf(lender),
+      negativePayers = listOf(borrower),
       tags = listOf(getApplication<Application>().resources.getString(R.string.settle_up)),
       comment = "",
       images = listOf(thumbnail.value!!),

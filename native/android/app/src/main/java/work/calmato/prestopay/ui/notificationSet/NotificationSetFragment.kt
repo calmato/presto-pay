@@ -14,7 +14,7 @@ class NotificationSetFragment:Fragment() {
     inflater: LayoutInflater,
     container: ViewGroup?,
     savedInstanceState: Bundle?
-  ): View? {
+  ): View {
     val binding: FragmentNotificationSetBinding = DataBindingUtil.inflate(
       inflater, R.layout.fragment_notification_set, container, false
     )
