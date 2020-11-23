@@ -46,8 +46,4 @@ class FriendsRepository(private val database: AppDatabase) {
       )
     }
   }
-
-  suspend fun deleteFriendAll() {
-    database.friendDao.deleteFriendAll()
-  }
 }
