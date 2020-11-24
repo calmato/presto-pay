@@ -17,7 +17,7 @@ android {
 
   defaultConfig {
     applicationId "work.calmato.prestopay"
-    minSdkVersion 28
+    minSdkVersion 21
     targetSdkVersion 30
     versionCode 1
     versionName "1.0"
@@ -80,7 +80,6 @@ dependencies {
   implementation 'com.squareup.retrofit2:retrofit:2.5.0'
   implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
   implementation 'com.squareup.okhttp3:okhttp:3.12.1'
-  implementation group: 'org.json', name: 'json', version: '20180813'
   implementation group: 'com.fasterxml.jackson.module', name: 'jackson-module-kotlin', version: '2.9.6'
   testImplementation 'junit:junit:4.13'
 
