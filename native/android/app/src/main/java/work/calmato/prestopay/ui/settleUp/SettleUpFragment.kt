@@ -27,6 +27,7 @@ import work.calmato.prestopay.util.*
 import java.text.SimpleDateFormat
 import java.util.*
 import androidx.lifecycle.Observer
+import androidx.preference.PreferenceManager
 import kotlinx.android.synthetic.main.fragment_create_group.*
 import kotlinx.android.synthetic.main.fragment_settle_up.chart
 import work.calmato.prestopay.network.NetworkPayerContainer
