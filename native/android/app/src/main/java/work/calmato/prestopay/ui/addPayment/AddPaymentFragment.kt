@@ -98,11 +98,11 @@ class AddPaymentFragment : Fragment() {
     )
     viewModel.nowLoading.observe(viewLifecycleOwner, Observer {
       if(it){
-        requireParentFragment().requireParentFragment().progressBarAddPayment.visibility = ProgressBar.VISIBLE
-        requireParentFragment().requireParentFragment().frontViewAddPayment.visibility = ImageView.VISIBLE
+        progressBarAddPayment.visibility = ProgressBar.VISIBLE
+        frontViewAddPayment.visibility = ImageView.VISIBLE
       }else{
-        requireParentFragment().requireParentFragment().progressBarAddPayment.visibility = ProgressBar.GONE
-        requireParentFragment().requireParentFragment().frontViewAddPayment.visibility = ImageView.GONE
+        progressBarAddPayment.visibility = ProgressBar.GONE
+        frontViewAddPayment.visibility = ImageView.GONE
 
       }
     })
