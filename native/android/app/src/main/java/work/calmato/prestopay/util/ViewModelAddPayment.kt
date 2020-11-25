@@ -144,7 +144,7 @@ class ViewModelAddPayment(application: Application) : AndroidViewModel(applicati
           }
 
           override fun onFailure(call: Call<GetGroupDetail>, t: Throwable) {
-            Log.d("ViewModelAddPayment", t.message)
+            Log.d("ViewModelAddPayment", t.message?:"No message")
             _navigateToHome.value = true
           }
         })
@@ -195,10 +195,6 @@ class ViewModelAddPayment(application: Application) : AndroidViewModel(applicati
 
   fun navigationCompleted() {
     _navigateToGroupDetail.value = null
-  }
-
-  fun navigationToHomeCompleted() {
-    _navigateToHome.value = null
   }
 
   fun setPositivePayers(payers: List<UserExpense>) {
@@ -303,8 +299,8 @@ class ViewModelAddPayment(application: Application) : AndroidViewModel(applicati
       name = getApplication<Application>().resources.getString(R.string.settle_up),
       currency = currency.value!!,
       total = total.value!!,
-      positivePayers = listOf<UserExpense>(lender),
-      negativePayers = listOf<UserExpense>(borrower),
+      positivePayers = listOf(lender),
+      negativePayers = listOf(borrower),
       tags = listOf(getApplication<Application>().resources.getString(R.string.settle_up)),
       comment = "",
       images = listOf(thumbnail.value!!),

@@ -72,29 +72,6 @@ fun NetworkFriend.asDomainModel(): UserProperty {
   return UserProperty(id, name, username, email, thumbnailUrl, checked)
 }
 
-fun NetworkGroup.asDomainModel(): GroupPropertyResponse {
-  return GroupPropertyResponse(id, name, thumbnailUrl, userIds, createdAt, updatedAt, selected)
-}
-
-fun NetworkPayment.asDomainModel(): PaymentPropertyGet {
-  return PaymentPropertyGet(
-    id,
-    name,
-    currency,
-    total,
-    payers,
-    postivePayers,
-    negativePayers,
-    isCompleted,
-    tags,
-    comment,
-    imageUrls,
-    paidAt,
-    createdAt,
-    updatedAt
-  )
-}
-
 fun NetworkFriendContainer.asDomainModel(): List<UserProperty> {
   return users.map {
     UserProperty(
@@ -104,41 +81,6 @@ fun NetworkFriendContainer.asDomainModel(): List<UserProperty> {
       email = it.email,
       thumbnailUrl = it.thumbnailUrl,
       checked = it.checked
-    )
-  }
-}
-
-fun NetworkGroupContainer.asDomainModel(): List<GroupPropertyResponse> {
-  return groups.map {
-    GroupPropertyResponse(
-      id = it.id,
-      name = it.name,
-      thumbnailUrl = it.thumbnailUrl,
-      userIds = it.userIds,
-      createdAt = it.createdAt,
-      updatedAt = it.updatedAt,
-      selected = it.selected
-    )
-  }
-}
-
-fun NetworkPaymentContainer.asDomainModel(): List<PaymentPropertyGet> {
-  return payments.map {
-    PaymentPropertyGet(
-      id = it.id,
-      name = it.name,
-      currency = it.currency,
-      total = it.total,
-      payers = it.payers,
-      positivePayers = it.postivePayers,
-      negativePayers = it.negativePayers,
-      isCompleted = it.isCompleted,
-      tags = it.tags,
-      comment = it.comment,
-      imageUrls = it.imageUrls,
-      paidAt = it.paidAt,
-      createdAt = it.createdAt,
-      updatedAt = it.updatedAt
     )
   }
 }

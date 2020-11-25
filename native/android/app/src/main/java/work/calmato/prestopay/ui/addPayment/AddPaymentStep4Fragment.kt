@@ -5,7 +5,6 @@ import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.text.InputFilter
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,8 +25,6 @@ import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentAddPaymentStep4Binding
 import work.calmato.prestopay.util.*
 import java.text.SimpleDateFormat
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import java.util.*
 
 class AddPaymentStep4Fragment : PermissionBase() {
@@ -40,7 +37,7 @@ class AddPaymentStep4Fragment : PermissionBase() {
     inflater: LayoutInflater,
     container: ViewGroup?,
     savedInstanceState: Bundle?
-  ): View? {
+  ): View {
     val binding: FragmentAddPaymentStep4Binding =
       DataBindingUtil.inflate(inflater, R.layout.fragment_add_payment_step4, container, false)
     return binding.root
@@ -55,7 +52,7 @@ class AddPaymentStep4Fragment : PermissionBase() {
       requireContext()
     )
     constraintDate2.setOnClickListener {
-      val datePickerFragment = DatePickerFragment()
+      val datePickerFragment = DatePickerFragment(requireContext())
       datePickerFragment.setTargetFragment(this, CODE)
       datePickerFragment.show(parentFragmentManager, "datePicker")
     }
@@ -74,17 +71,17 @@ class AddPaymentStep4Fragment : PermissionBase() {
       viewModel.sendRequest()
       finishHttpConnection(buttonStep4, nowLoadingStep4)
     }
-    viewModel.paymentInfo?.also {
+    viewModel.paymentInfo?.also { payment ->
       // 支払い編集時はここに来る
       // 日付
-      inflateDate(it.paidAt)
-      viewModel.setPaidAt(it.paidAt)
+      inflateDate(payment.paidAt)
+      viewModel.setPaidAt(payment.paidAt)
       calendar.visibility = ImageView.INVISIBLE
       calendarYear.visibility = TextView.VISIBLE
       calendarDate.visibility = TextView.VISIBLE
       //　タグ
       viewModel.tags.forEach { tag ->
-        if (it.tags!!.contains(tag.name)) {
+        if (payment.tags!!.contains(tag.name)) {
           tag.isSelected = true
         }
       }
@@ -94,11 +91,11 @@ class AddPaymentStep4Fragment : PermissionBase() {
         }[0].imageId)
       }
       // 写真
-      val images = it.imageUrls!![0].split(',')
+      val images = payment.imageUrls!![0].split(',')
       Picasso.with(requireContext()).load(images[images.lastIndex].trim()).into(camera2)
 
       // コメント
-      it.comment?.let { comment -> viewModel.setComment(comment) }
+      payment.comment?.let { comment -> viewModel.setComment(comment) }
 
     } ?: run {
       // 新規作成時はここに来る
@@ -138,7 +135,7 @@ class AddPaymentStep4Fragment : PermissionBase() {
   }
 
   private fun showCommentDialog() {
-    val builder: AlertDialog.Builder? = requireActivity().let {
+    val builder: AlertDialog.Builder = requireActivity().let {
       AlertDialog.Builder(it)
     }
     val input = EditText(requireContext())
@@ -148,7 +145,7 @@ class AddPaymentStep4Fragment : PermissionBase() {
       input.setText(it)
     }
 
-    builder?.setTitle(resources.getString(R.string.add_comment))
+    builder.setTitle(resources.getString(R.string.add_comment))
       ?.setPositiveButton(
         resources.getString(R.string.add)
       ) { _, _ ->
@@ -156,12 +153,12 @@ class AddPaymentStep4Fragment : PermissionBase() {
       }
       ?.setNegativeButton(resources.getString(R.string.cancel), null)
       ?.setView(input)
-    val dialog: AlertDialog? = builder?.create()
+    val dialog: AlertDialog? = builder.create()
     dialog?.show()
   }
 
   private fun showTagDialog() {
-    val builder: AlertDialog.Builder? = requireActivity().let {
+    val builder: AlertDialog.Builder = requireActivity().let {
       AlertDialog.Builder(it)
     }
     val tagRecycleAdapter = AdapterTag()
@@ -171,9 +168,9 @@ class AddPaymentStep4Fragment : PermissionBase() {
       layoutManager = GridLayoutManager(requireContext(), 3)
       adapter = tagRecycleAdapter
     }
-    builder?.setView(recycleView)
+    builder.setView(recycleView)
       ?.setPositiveButton(resources.getString(R.string.done), null)
-    val dialog: AlertDialog? = builder?.create()
+    val dialog: AlertDialog? = builder.create()
     dialog?.show()
   }
 }

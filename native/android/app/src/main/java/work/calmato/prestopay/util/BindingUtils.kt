@@ -89,12 +89,16 @@ fun TextView.setPaymentName(item:PaymentPropertyGet?){
 @BindingAdapter("paymentAmount","paymentCurrency")
 fun TextView.setPaymentAmount(amount:Float,currency:String){
   amount.let {
-    if(it > 0){
-      setTextColor(resources.getColor(R.color.positiveNumberColor,null))
-    } else if(it < 0){
-      setTextColor(resources.getColor(R.color.negativeNumberColor,null))
-    } else{
-      setTextColor(resources.getColor(R.color.clearButtonPressed,null))
+    when {
+        it > 0 -> {
+          setTextColor(resources.getColor(R.color.positiveNumberColor,null))
+        }
+        it < 0 -> {
+          setTextColor(resources.getColor(R.color.negativeNumberColor,null))
+        }
+        else -> {
+          setTextColor(resources.getColor(R.color.clearButtonPressed,null))
+        }
     }
     val output = it.toString() + currency
     text = output
@@ -176,13 +180,6 @@ fun ImageView.setAddPaymentThumbnail(item:PayerAddPayment?){
     if(it.isNotEmpty()){
       Picasso.with(context).load(it).into(this)
     }
-  }
-}
-
-@BindingAdapter("addPaymentAmount")
-fun TextView.setAddPaymentAmount(item:PayerAddPayment?){
-  item?.let {
-    text = ((item.amount * 100).roundToInt().toFloat() / 100).toString()
   }
 }
 

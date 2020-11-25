@@ -38,7 +38,7 @@ class NewAccountFragment : PermissionBase() {
     inflater: LayoutInflater,
     container: ViewGroup?,
     savedInstanceState: Bundle?
-  ): View? {
+  ): View {
     val binding: FragmentNewAccountBinding = DataBindingUtil.inflate(
       inflater, R.layout.fragment_new_account, container, false
     )
@@ -74,7 +74,7 @@ class NewAccountFragment : PermissionBase() {
       override fun afterTextChanged(s: Editable?) {
         var textColor = Color.GRAY
 
-        if (!passConfirmEditText.text.toString().equals(passEditText.text.toString())) {
+        if (passConfirmEditText.text.toString() != passEditText.text.toString()) {
           textColor = Color.RED
         }
         passwordConfirmInformation.setTextColor(textColor)
@@ -118,7 +118,7 @@ class NewAccountFragment : PermissionBase() {
                   navigateToLogin()
                 } else {
                   try {
-                    val jObjError = JSONObject(response.errorBody()?.string()).getJSONArray("errors")
+                    val jObjError = JSONObject(response.errorBody()?.string()!!).getJSONArray("errors")
                     for (i in 0 until jObjError.length()) {
                       val errorMessage =
                         jObjError.getJSONObject(i).getString("field") + " " + jObjError.getJSONObject(

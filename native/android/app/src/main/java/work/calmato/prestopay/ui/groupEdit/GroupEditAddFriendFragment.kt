@@ -1,7 +1,6 @@
 package work.calmato.prestopay.ui.groupEdit
 
 import android.os.Bundle
-import android.preference.PreferenceManager
 import android.view.*
 import android.widget.SearchView
 import android.widget.Toast
@@ -13,6 +12,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_group_edit_add_friend.*
@@ -29,6 +29,7 @@ import work.calmato.prestopay.network.GroupPropertyResponse
 import work.calmato.prestopay.network.UserProperty
 import work.calmato.prestopay.util.AdapterCheck
 import work.calmato.prestopay.util.ViewModelFriend
+import java.util.*
 
 class GroupEditAddFriendFragment : Fragment() {
   private val viewModel: ViewModelFriend by lazy {
@@ -46,7 +47,7 @@ class GroupEditAddFriendFragment : Fragment() {
     inflater: LayoutInflater,
     container: ViewGroup?,
     savedInstanceState: Bundle?
-  ): View? {
+  ): View {
     val binding: FragmentGroupEditAddFriendBinding =
       DataBindingUtil.inflate(inflater, R.layout.fragment_group_edit_add_friend, container, false)
     clickListener = AdapterCheck.OnClickListener { viewModel.itemIsClicked(it) }
@@ -64,13 +65,13 @@ class GroupEditAddFriendFragment : Fragment() {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    var groupMembers = getGroupInfo!!.users
+    val groupMembers = getGroupInfo!!.users
     val friends: LiveData<List<UserProperty>> =
       Transformations.map(getAppDatabase(requireContext()).friendDao.getFriends()) {
         it.asDomainModel()
       }
-    friends.observe(viewLifecycleOwner, Observer {
-      friendListArg = it.filter {
+    friends.observe(viewLifecycleOwner, Observer { friendList ->
+      friendListArg = friendList.filter {
         !groupMembers.contains(it)
       }
       recycleAdapter?.friendList = friendListArg
@@ -86,11 +87,11 @@ class GroupEditAddFriendFragment : Fragment() {
     searchFriend.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
       override fun onQueryTextChange(newText: String): Boolean {
         // text changed
-        if (newText.isNullOrBlank()) {
+        if (newText.isBlank()) {
           recycleAdapter?.friendList = friendListArg
         } else {
           recycleAdapter?.friendList = friendListArg.filter {
-            !groupMembers.contains(it) && it.name.toLowerCase().contains(newText)
+            !groupMembers.contains(it) && it.name.toLowerCase(Locale.ROOT).contains(newText)
           }
         }
         return false
@@ -147,7 +148,7 @@ class GroupEditAddFriendFragment : Fragment() {
                 activity,
                 "グループに友達を追加できませんでした",
                 Toast.LENGTH_SHORT
-              )
+              ).show()
             }
           }
         })

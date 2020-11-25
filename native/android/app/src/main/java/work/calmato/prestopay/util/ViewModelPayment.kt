@@ -2,10 +2,10 @@ package work.calmato.prestopay.util
 
 import android.app.Activity
 import android.app.Application
-import android.preference.PreferenceManager
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.*
+import androidx.preference.PreferenceManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -13,7 +13,6 @@ import kotlinx.coroutines.launch
 import work.calmato.prestopay.R
 import work.calmato.prestopay.database.DatabaseGroup
 import work.calmato.prestopay.database.getAppDatabase
-import work.calmato.prestopay.network.NetworkPayer
 import work.calmato.prestopay.network.PaymentPropertyGet
 import work.calmato.prestopay.repository.GroupsRepository
 import work.calmato.prestopay.repository.PaymentRepository

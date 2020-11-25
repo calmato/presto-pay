@@ -1,8 +1,6 @@
 package work.calmato.prestopay.ui.addPayment
 
 import android.os.Bundle
-import android.preference.PreferenceManager
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.preference.PreferenceManager
 import kotlinx.android.synthetic.main.fragment_add_payment.*
 import kotlinx.android.synthetic.main.fragment_add_payment.groupName
 import work.calmato.prestopay.R
@@ -32,7 +31,7 @@ class AddPaymentFragment : Fragment() {
     inflater: LayoutInflater,
     container: ViewGroup?,
     savedInstanceState: Bundle?
-  ): View? {
+  ): View {
     val binding: FragmentAddPaymentBindingImpl =
       DataBindingUtil.inflate(inflater, R.layout.fragment_add_payment, container, false)
     return binding.root

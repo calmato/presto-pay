@@ -1,17 +1,13 @@
 package work.calmato.prestopay.util
 
 import android.content.Context
-import android.preference.PreferenceManager
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.RecyclerView
 import work.calmato.prestopay.databinding.ListItemPaymentBinding
-import work.calmato.prestopay.databinding.ListItemPlaneBinding
 import work.calmato.prestopay.network.PaymentPropertyGet
-import java.lang.Math.round
-import kotlin.math.max
 import kotlin.math.roundToInt
-import kotlin.math.roundToLong
 
 class AdapterPayment(val context:Context, private val onClickListener: OnClickListener) : RecyclerView.Adapter<AdapterPayment.PaymentViewHolder>() {
   var paymentList: List<PaymentPropertyGet> = emptyList()

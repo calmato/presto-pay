@@ -1,19 +1,11 @@
 package work.calmato.prestopay.util
 
-import android.app.Activity
 import android.app.Application
-import android.preference.PreferenceManager
 import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import androidx.preference.PreferenceManager
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import work.calmato.prestopay.R
 import work.calmato.prestopay.database.getAppDatabase
 import work.calmato.prestopay.network.*
 import work.calmato.prestopay.repository.FriendsRepository

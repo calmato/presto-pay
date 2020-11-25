@@ -14,7 +14,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayoutMediator
-import kotlinx.android.synthetic.main.fragment_add_payment_step1.*
 import kotlinx.android.synthetic.main.fragment_add_payment_step2.*
 import kotlinx.android.synthetic.main.fragment_add_payment_step2_view_pager.*
 import work.calmato.prestopay.R
@@ -35,7 +34,7 @@ class AddPaymentStep2Fragment : Fragment() {
     inflater: LayoutInflater,
     container: ViewGroup?,
     savedInstanceState: Bundle?
-  ): View? {
+  ): View {
     val binding: FragmentAddPaymentStep2Binding =
       DataBindingUtil.inflate(inflater, R.layout.fragment_add_payment_step2, container, false)
     binding.lifecycleOwner = this
@@ -141,8 +140,8 @@ class EquallyDivideFragment(val position: Int,private val step:Int) : Fragment()
           recycleAdapterCheck.payers = payersList
           recycleAdapterCheck.amounts = amountList.map { it.amount }
           //　割り勘計算
-          viewModel.itemClicked.observe(viewLifecycleOwner, Observer {
-            it.isPaid = !it.isPaid
+          viewModel.itemClicked.observe(viewLifecycleOwner, Observer { payer ->
+            payer.isPaid = !payer.isPaid
             val num = payersList.filter { it.isPaid }.size
             payersList.mapIndexed { index, payer ->
               if (payer.isPaid) {

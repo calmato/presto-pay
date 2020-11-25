@@ -82,10 +82,6 @@ interface ApiService {
   fun getFriends(@Header("Authorization") token: String):
     Deferred<NetworkFriendContainer>
 
-  @GET("auth/friends")
-  fun getFriendsAsync(@Header("Authorization") token: String):
-    Deferred<Users>
-
   @GET("auth")
   fun getLoginUserInformation(
     @Header("Authorization") token: String

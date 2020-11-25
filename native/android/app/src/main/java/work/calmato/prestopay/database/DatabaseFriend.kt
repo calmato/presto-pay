@@ -87,7 +87,7 @@ fun List<DatabaseGroup>.asGroupModel(): List<GroupPropertyResponse> {
       id = it.id,
       name = it.name,
       thumbnailUrl = it.thumbnailUrl,
-      userIds = it.userIds as List<String>,
+      userIds = it.userIds,
       createdAt = it.createdAt,
       updatedAt = it.updateAt
     )
@@ -133,7 +133,7 @@ fun DatabaseNationalFlag.asNationalFlagModel(): NationalFlag {
 
 class ListTypeConverter {
   @TypeConverter
-  fun toString(userIds: List<String?>?): String? = userIds?.joinToString() ?: ""
+  fun toString(userIds: List<String?>?): String = userIds?.joinToString() ?: ""
 
   @TypeConverter
   fun toList(userIds: String): List<String> = listOf(userIds)

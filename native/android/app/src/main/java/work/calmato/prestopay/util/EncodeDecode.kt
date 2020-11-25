@@ -1,7 +1,6 @@
 package work.calmato.prestopay.util
 
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.util.Base64
 import android.widget.ImageView
 import androidx.core.graphics.drawable.toBitmap

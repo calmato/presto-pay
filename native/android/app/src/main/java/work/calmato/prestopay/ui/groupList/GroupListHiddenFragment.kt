@@ -1,12 +1,10 @@
 package work.calmato.prestopay.ui.groupList
 
 import android.app.AlertDialog
-import android.content.DialogInterface
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.preference.PreferenceManager
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -19,6 +17,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -51,7 +50,7 @@ class GroupListHiddenFragment : Fragment() {
     }
     val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
     id = sharedPreferences.getString("token", "")!!
-    val swipeToDismissTouchHelper = getSwipeToDismissTouchHelper(recycleGroupListAdapter!!)
+    val swipeToDismissTouchHelper = getSwipeToDismissTouchHelper()
     swipeToDismissTouchHelper.attachToRecyclerView(groupHiddenRecycle)
   }
 
@@ -61,7 +60,7 @@ class GroupListHiddenFragment : Fragment() {
     inflater: LayoutInflater,
     container: ViewGroup?,
     savedInstanceState: Bundle?
-  ): View? {
+  ): View {
     val binding: FragmentHiddenGroupListBinding =
       DataBindingUtil.inflate(inflater, R.layout.fragment_hidden_group_list, container, false)
 
@@ -98,7 +97,7 @@ class GroupListHiddenFragment : Fragment() {
     )
   }
 
-  private fun getSwipeToDismissTouchHelper(adapter: RecyclerView.Adapter<AdapterGroupPlane.AddGroupViewHolder>) =
+  private fun getSwipeToDismissTouchHelper() =
     ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(
       ItemTouchHelper.LEFT,
       ItemTouchHelper.LEFT
@@ -113,40 +112,40 @@ class GroupListHiddenFragment : Fragment() {
 
       //スワイプ時に実行
       override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-        val builder: AlertDialog.Builder? = requireActivity().let {
+        val builder: AlertDialog.Builder = requireActivity().let {
           AlertDialog.Builder(it)
         }
-        builder?.setMessage(resources.getString(R.string.delete_question))
+        builder.setMessage(resources.getString(R.string.delete_question))
           ?.setPositiveButton(
-            resources.getString(R.string.delete),
-            DialogInterface.OnClickListener { _, _ ->
-              frontView.visibility = ImageView.VISIBLE
-              progressBar.visibility = android.widget.ProgressBar.VISIBLE
-              Api.retrofitService.deleteGroup(
-                "Bearer ${id}",
-                hiddenGroups!!.hiddenGroups[viewHolder.adapterPosition].id
-              )
-                .enqueue(object : Callback<Unit> {
-                  override fun onResponse(
-                    call: Call<Unit>,
-                    response: Response<Unit>
-                  ) {
-                    Log.d(ViewModelGroup.TAG, response.body().toString())
-                    renderGroupListView()
-                    frontView.visibility = ImageView.GONE
-                    progressBar.visibility = android.widget.ProgressBar.INVISIBLE
-                  }
+            resources.getString(R.string.delete)
+          ) { _, _ ->
+            frontView.visibility = ImageView.VISIBLE
+            progressBar.visibility = android.widget.ProgressBar.VISIBLE
+            Api.retrofitService.deleteGroup(
+              "Bearer $id",
+              hiddenGroups!!.hiddenGroups[viewHolder.adapterPosition].id
+            )
+              .enqueue(object : Callback<Unit> {
+                override fun onResponse(
+                  call: Call<Unit>,
+                  response: Response<Unit>
+                ) {
+                  Log.d(ViewModelGroup.TAG, response.body().toString())
+                  renderGroupListView()
+                  frontView.visibility = ImageView.GONE
+                  progressBar.visibility = android.widget.ProgressBar.INVISIBLE
+                }
 
-                  override fun onFailure(call: Call<Unit>, t: Throwable) {
-                    Toast.makeText(activity, t.message, Toast.LENGTH_LONG).show()
-                    Log.d(ViewModelGroup.TAG, t.message)
-                    frontView.visibility = ImageView.GONE
-                  }
-                })
-            })
+                override fun onFailure(call: Call<Unit>, t: Throwable) {
+                  Toast.makeText(activity, t.message, Toast.LENGTH_LONG).show()
+                  Log.d(ViewModelGroup.TAG, t.message ?: "No message")
+                  frontView.visibility = ImageView.GONE
+                }
+              })
+          }
           ?.setNegativeButton(resources.getString(R.string.cancel), null)
         renderGroupListView()
-        val dialog: AlertDialog? = builder?.create()
+        val dialog: AlertDialog? = builder.create()
         dialog?.show()
       }
 
@@ -201,7 +200,7 @@ class GroupListHiddenFragment : Fragment() {
       Api.retrofitService.getHiddenGroups("Bearer $id")
         .enqueue(object : Callback<HiddenGroups> {
           override fun onFailure(call: Call<HiddenGroups>, t: Throwable) {
-            Log.d(ViewModelGroup.TAG, t.message)
+            Log.d(ViewModelGroup.TAG, t.message?:"No message")
           }
 
           override fun onResponse(call: Call<HiddenGroups>, response: Response<HiddenGroups>) {
