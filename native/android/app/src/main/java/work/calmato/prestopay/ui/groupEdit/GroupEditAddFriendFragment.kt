@@ -2,6 +2,8 @@ package work.calmato.prestopay.ui.groupEdit
 
 import android.os.Bundle
 import android.view.*
+import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.SearchView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
@@ -42,6 +44,7 @@ class GroupEditAddFriendFragment : Fragment() {
   private lateinit var friendListArg: List<UserProperty>
   private lateinit var clickListener: AdapterCheck.OnClickListener
   private lateinit var id: String
+  private lateinit var doneButton: MenuItem
 
   override fun onCreateView(
     inflater: LayoutInflater,
@@ -116,6 +119,11 @@ class GroupEditAddFriendFragment : Fragment() {
     inflater.inflate(R.menu.header_done, menu)
   }
 
+  override fun onPrepareOptionsMenu(menu: Menu) {
+    super.onPrepareOptionsMenu(menu)
+    doneButton = menu.getItem(0)
+  }
+
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
     when (item.itemId) {
       R.id.done -> sendRequest()
@@ -126,6 +134,9 @@ class GroupEditAddFriendFragment : Fragment() {
   private fun sendRequest() {
     val friends: List<String> = friendListArg.filter { it.checked }.map { item -> item.id }
     if (friends.size + getGroupInfo!!.users.size <= 64) {
+      doneButton.isEnabled = false
+      progressBarGroupEditAddFriend.visibility = ProgressBar.VISIBLE
+      frontViewgroupEditAddFriend.visibility = ImageView.VISIBLE
       Api.retrofitService.registerFriendToGroup(
         "Bearer $id",
         mapOf("userIds" to friends),
@@ -134,6 +145,9 @@ class GroupEditAddFriendFragment : Fragment() {
         .enqueue(object : Callback<GroupPropertyResponse> {
           override fun onFailure(call: Call<GroupPropertyResponse>, t: Throwable) {
             Toast.makeText(activity, t.message, Toast.LENGTH_LONG).show()
+            doneButton.isEnabled = true
+            progressBarGroupEditAddFriend.visibility = ProgressBar.GONE
+            frontViewgroupEditAddFriend.visibility = ImageView.GONE
           }
 
           override fun onResponse(
@@ -150,6 +164,9 @@ class GroupEditAddFriendFragment : Fragment() {
                 Toast.LENGTH_SHORT
               ).show()
             }
+            doneButton.isEnabled = true
+            progressBarGroupEditAddFriend.visibility = ProgressBar.GONE
+            frontViewgroupEditAddFriend.visibility = ImageView.GONE
           }
         })
     } else {

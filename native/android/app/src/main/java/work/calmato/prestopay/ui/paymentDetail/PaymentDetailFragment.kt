@@ -4,6 +4,8 @@ import android.app.AlertDialog
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.*
+import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.findNavController
@@ -80,6 +82,8 @@ class PaymentDetailFragment : PermissionBase() {
   }
 
   private fun sendRequest() {
+    progressBarPaymentDetail.visibility = ProgressBar.VISIBLE
+    frontViewPaymentDetail.visibility = ImageView.VISIBLE
     Api.retrofitService.completePayment(id, groupDetail.id, paymentDetail.id)
       .enqueue(object : Callback<Unit> {
         override fun onResponse(
@@ -92,10 +96,13 @@ class PaymentDetailFragment : PermissionBase() {
           } else {
             Toast.makeText(requireContext(), "精算登録に失敗しました", Toast.LENGTH_LONG).show()
           }
+          progressBarPaymentDetail.visibility = ProgressBar.GONE
+          frontViewPaymentDetail.visibility = ImageView.GONE
         }
 
         override fun onFailure(call: Call<Unit>, t: Throwable) {
-          Toast.makeText(requireContext(), t.message, Toast.LENGTH_LONG).show()
+          progressBarPaymentDetail.visibility = ProgressBar.GONE
+          frontViewPaymentDetail.visibility = ImageView.GONE
         }
       })
   }

@@ -6,6 +6,8 @@ import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.Switch
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
@@ -39,6 +41,7 @@ class GroupEditFragment : PermissionBase() {
   private var groupMembers: MutableList<UserProperty> = mutableListOf()
   private lateinit var id: String
   private var recycleAdapter: AdapterFriendPlane? = null
+  private lateinit var doneButton: MenuItem
 
   override fun onActivityCreated(savedInstanceState: Bundle?) {
     super.onActivityCreated(savedInstanceState)
@@ -125,40 +128,6 @@ class GroupEditFragment : PermissionBase() {
     if (getGroupInfo!!.isHidden) {
       hiddenSwitch.isChecked = true
     }
-    // TODO: Group上での友達の削除として対応できていないため実装する場合はここに記述する
-/*    viewModel.itemClicked.observe(viewLifecycleOwner, Observer {
-      if (null != it) {
-        val builder: AlertDialog.Builder? = requireActivity().let {
-          AlertDialog.Builder(it)
-        }
-        builder?.setView(R.layout.dialog_add_friend)
-          ?.setPositiveButton(
-            resources.getString(R.string.delete_friend),
-            DialogInterface.OnClickListener { _, _ ->
-              val builder2: AlertDialog.Builder? = requireActivity().let {
-                AlertDialog.Builder(it)
-              }
-              builder2?.setMessage(resources.getString(R.string.delete_question))
-                ?.setPositiveButton(
-                  resources.getString(R.string.delete),
-                  DialogInterface.OnClickListener { _, _ ->
-                    viewModel.deleteFriend(it.id, requireActivity())
-                  })
-                ?.setNegativeButton(resources.getString(R.string.cancel), null)
-              val dialog2: AlertDialog? = builder2?.create()
-              dialog2?.show()
-            })
-        val dialog: AlertDialog? = builder?.create()
-        dialog?.show()
-        val name = dialog?.findViewById<TextView>(R.id.username_dialog)
-        val thumbnail = dialog?.findViewById<ImageView>(R.id.thumbnail_dialog)
-        name!!.text = it.name
-        if (it.thumbnailUrl != null && it.thumbnailUrl.isNotEmpty()) {
-          Picasso.with(context).load(it.thumbnailUrl).into(thumbnail)
-        }
-        viewModel.itemIsClickedCompleted()
-      }
-    })*/
     setHasOptionsMenu(true)
   }
 
@@ -177,6 +146,11 @@ class GroupEditFragment : PermissionBase() {
 
   override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
     inflater.inflate(R.menu.header_done, menu)
+  }
+
+  override fun onPrepareOptionsMenu(menu: Menu) {
+    super.onPrepareOptionsMenu(menu)
+    doneButton = menu.getItem(0)
   }
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -198,9 +172,15 @@ class GroupEditFragment : PermissionBase() {
   }
 
   private fun execute(editGroupProperty: EditGroup, groupId: String) {
+    doneButton.isEnabled = false
+    progressBarGroupEdit.visibility = ProgressBar.VISIBLE
+    frontViewGroupEdit.visibility = ImageView.VISIBLE
     Api.retrofitService.editGroup("Bearer $id", editGroupProperty, groupId)
       .enqueue(object : Callback<EditGroup> {
         override fun onFailure(call: Call<EditGroup>, t: Throwable) {
+          doneButton.isEnabled = true
+          progressBarGroupEdit.visibility = ProgressBar.INVISIBLE
+          frontViewGroupEdit.visibility = ImageView.INVISIBLE
         }
 
         override fun onResponse(
@@ -214,6 +194,9 @@ class GroupEditFragment : PermissionBase() {
               Toast.LENGTH_SHORT
             ).show()
           }
+          doneButton.isEnabled = true
+          progressBarGroupEdit.visibility = ProgressBar.INVISIBLE
+          frontViewGroupEdit.visibility = ImageView.INVISIBLE
         }
       })
 

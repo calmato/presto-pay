@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
@@ -17,6 +18,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import com.yalantis.ucrop.UCrop
+import kotlinx.android.synthetic.main.fragment_add_payment.*
 import kotlinx.android.synthetic.main.fragment_add_payment_step4.*
 import kotlinx.android.synthetic.main.fragment_add_payment_step4.calendar
 import kotlinx.android.synthetic.main.fragment_add_payment_step4.calendarDate
@@ -67,9 +69,7 @@ class AddPaymentStep4Fragment : PermissionBase() {
     }
     buttonStep4.setOnClickListener {
       viewModel.setThumbnail(encodeImage2Base64(camera2))
-      startHttpConnection(buttonStep4, nowLoadingStep4, requireContext())
       viewModel.sendRequest()
-      finishHttpConnection(buttonStep4, nowLoadingStep4)
     }
     viewModel.paymentInfo?.also { payment ->
       // 支払い編集時はここに来る
@@ -113,7 +113,7 @@ class AddPaymentStep4Fragment : PermissionBase() {
       calendar.visibility = ImageView.INVISIBLE
       calendarYear.visibility = TextView.VISIBLE
       calendarDate.visibility = TextView.VISIBLE
-      val monthDate = calendarDate.text.split("-"," ")
+      val monthDate = calendarDate.text.split("-", " ")
       viewModel.setPaidAt("${calendarYear.text}-${monthDate[0]}-${monthDate[1]} 00:00:00")
     }
     if (resultCode == Activity.RESULT_OK && requestCode == Constant.IMAGE_PICK_CODE) {
@@ -128,7 +128,7 @@ class AddPaymentStep4Fragment : PermissionBase() {
   }
 
   private fun inflateDate(yearDate: String?) {
-    val dateList = yearDate?.split("-"," ","T")
+    val dateList = yearDate?.split("-", " ", "T")
     calendarYear.text = dateList!![0]
     val concatDate = dateList[1] + "-" + dateList[2]
     calendarDate.text = concatDate

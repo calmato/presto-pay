@@ -83,6 +83,10 @@ class ViewModelAddPayment(application: Application) : AndroidViewModel(applicati
   val editPaymentNegativePayers: LiveData<List<UserExpense>>
     get() = _editPaymentNegativePayers
 
+  private val _nowLoading = MutableLiveData<Boolean>()
+  val nowLoading: LiveData<Boolean>
+    get() = _nowLoading
+
   lateinit var countryList: List<NationalFlag>
   lateinit var groupDetail: GetGroupDetail
   private lateinit var id: String
@@ -206,6 +210,7 @@ class ViewModelAddPayment(application: Application) : AndroidViewModel(applicati
   }
 
   fun sendRequest() {
+    _nowLoading.value = true
     val positivePayers = _payersAddPayment.value!!.zip(lendersAddPayment.value!!) { x, y ->
       UserExpense(id = x.id, amount = y)
     }
@@ -234,18 +239,21 @@ class ViewModelAddPayment(application: Application) : AndroidViewModel(applicati
           ) {
             if (response.isSuccessful) {
               _navigateToGroupDetail.value = groupInfo
+              _nowLoading.value = false
             } else {
               Toast.makeText(
                 getApplication(),
                 response.message(),
                 Toast.LENGTH_LONG
               ).show()
+              _nowLoading.value = false
             }
           }
 
           override fun onFailure(call: Call<Unit>, t: Throwable) {
             Toast.makeText(getApplication(), t.message, Toast.LENGTH_LONG).show()
             Log.i("ViewModelAddPayment", "onFailure: ${t.message}")
+            _nowLoading.value = false
           }
 
         })
@@ -276,18 +284,21 @@ class ViewModelAddPayment(application: Application) : AndroidViewModel(applicati
           ) {
             if (response.isSuccessful) {
               _navigateToGroupDetail.value = groupInfo
+              _nowLoading.value = false
             } else {
               Toast.makeText(
                 getApplication(),
                 response.message(),
                 Toast.LENGTH_LONG
               ).show()
+              _nowLoading.value = false
             }
           }
 
           override fun onFailure(call: Call<Unit>, t: Throwable) {
             Toast.makeText(getApplication(), t.message, Toast.LENGTH_LONG).show()
             Log.i("ViewModelAddPayment", "onFailure: ${t.message}")
+            _nowLoading.value = false
           }
         })
     }
@@ -295,6 +306,7 @@ class ViewModelAddPayment(application: Application) : AndroidViewModel(applicati
   }
 
   fun settleUp(borrower: UserExpense, lender: UserExpense) {
+    _nowLoading.value = true
     val expenseProperty = CreateExpenseProperty(
       name = getApplication<Application>().resources.getString(R.string.settle_up),
       currency = currency.value!!,
@@ -314,18 +326,21 @@ class ViewModelAddPayment(application: Application) : AndroidViewModel(applicati
         ) {
           if (response.isSuccessful) {
             _navigateToGroupDetail.value = groupInfo
+            _nowLoading.value = false
           } else {
             Toast.makeText(
               getApplication(),
               response.message(),
               Toast.LENGTH_LONG
             ).show()
+            _nowLoading.value = false
           }
         }
 
         override fun onFailure(call: Call<Unit>, t: Throwable) {
           Toast.makeText(getApplication(), t.message, Toast.LENGTH_LONG).show()
           Log.i("ViewModelAddPayment", "onFailure: ${t.message}")
+          _nowLoading.value = false
         }
       })
   }

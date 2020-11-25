@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.ProgressBar
 import androidx.activity.OnBackPressedCallback
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -97,6 +99,8 @@ class AccountHomeFragment : Fragment() {
   }
 
   private fun logout() {
+    progressBarAccountHome.visibility = ProgressBar.VISIBLE
+    frontViewAccountHome.visibility = ImageView.VISIBLE
     // Firebase からサインアウト
     FirebaseAuth.getInstance().signOut()
 
@@ -112,5 +116,7 @@ class AccountHomeFragment : Fragment() {
     this.findNavController().navigate(
       AccountHomeFragmentDirections.actionAccountHomeToLoginFragment()
     )
+    progressBarAccountHome.visibility = ProgressBar.GONE
+    frontViewAccountHome.visibility = ImageView.GONE
   }
 }

@@ -9,12 +9,16 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.findNavController
 import com.yalantis.ucrop.UCrop
+import kotlinx.android.synthetic.main.fragment_account_edit.*
 import kotlinx.android.synthetic.main.fragment_new_account.*
 import kotlinx.android.synthetic.main.fragment_new_account.thumbnailEdit
+import kotlinx.android.synthetic.main.fragment_new_account.userNameEditText
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
@@ -27,8 +31,6 @@ import work.calmato.prestopay.network.AccountResponse
 import work.calmato.prestopay.util.Constant.Companion.IMAGE_PICK_CODE
 import work.calmato.prestopay.util.PermissionBase
 import work.calmato.prestopay.util.encodeImage2Base64
-import work.calmato.prestopay.util.finishHttpConnection
-import work.calmato.prestopay.util.startHttpConnection
 import java.lang.Exception
 
 
@@ -99,13 +101,15 @@ class NewAccountFragment : PermissionBase() {
 
       if (name != "" && userName != "" && email != "" && password != "" && passwordConfirmation != "") {
         if (password == passwordConfirmation || password.length >= 8) {
-          startHttpConnection(createAccountButton,nowLoading,requireContext())
+          progressBarNewAccount.visibility = ProgressBar.VISIBLE
+          frontViewNewAccount.visibility = ImageView.VISIBLE
           val accountProperty =
             NewAccountProperty(name, userName, email, thumbnails, password, passwordConfirmation)
           Api.retrofitService.createAccount(accountProperty)
             .enqueue(object : Callback<AccountResponse> {
               override fun onFailure(call: Call<AccountResponse>, t: Throwable) {
-                finishHttpConnection(createAccountButton,nowLoading)
+                progressBarNewAccount.visibility = ProgressBar.GONE
+                frontViewNewAccount.visibility = ImageView.GONE
                 Toast.makeText(activity, t.message, Toast.LENGTH_LONG).show()
               }
               override fun onResponse(
@@ -130,7 +134,8 @@ class NewAccountFragment : PermissionBase() {
                   }catch (e:Exception){
                     Toast.makeText(activity, resources.getString(R.string.failed_create_account), Toast.LENGTH_LONG).show()
                   }
-                  finishHttpConnection(createAccountButton,nowLoading)
+                  progressBarNewAccount.visibility = ProgressBar.GONE
+                  frontViewNewAccount.visibility = ImageView.GONE
                 }
               }
             })

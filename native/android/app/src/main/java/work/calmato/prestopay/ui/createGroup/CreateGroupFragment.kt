@@ -3,8 +3,11 @@ package work.calmato.prestopay.ui.createGroup
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
+import android.media.Image
 import android.os.Bundle
 import android.view.*
+import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.databinding.DataBindingUtil
@@ -115,9 +118,13 @@ class CreateGroupFragment : PermissionBase() {
     )
     viewModel.nowLoading.observe(viewLifecycleOwner, Observer {
       if (it) {
-        startHttpConnectionMenu(doneButton, nowLoading, requireContext())
+        doneButton.isEnabled = false
+        progressBarCreateGroup.visibility = ProgressBar.VISIBLE
+        frontViewCreateGroup.visibility = ImageView.VISIBLE
       } else {
-        finishHttpConnectionMenu(doneButton, nowLoading)
+        doneButton.isEnabled = true
+        progressBarCreateGroup.visibility = ProgressBar.GONE
+        frontViewCreateGroup.visibility = ImageView.GONE
       }
     })
   }

@@ -6,6 +6,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.*
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
@@ -27,6 +28,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import androidx.lifecycle.Observer
 import androidx.preference.PreferenceManager
+import kotlinx.android.synthetic.main.fragment_create_group.*
 import kotlinx.android.synthetic.main.fragment_settle_up.chart
 import work.calmato.prestopay.network.NetworkPayerContainer
 
@@ -83,6 +85,15 @@ class SettleUpFragment : Fragment() {
         SettleUpFragmentDirections.actionSettleUpToGroupDetail(viewModel.groupInfo)
       )
     })
+    viewModel.nowLoading.observe(viewLifecycleOwner, Observer {
+      if(it){
+        progresesBarSettleUp.visibility = ProgressBar.VISIBLE
+        frontViewSettleUp.visibility = ImageView.VISIBLE
+      } else{
+        progresesBarSettleUp.visibility = ProgressBar.GONE
+        frontViewSettleUp.visibility = ImageView.GONE
+      }
+    })
   }
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -106,9 +117,7 @@ class SettleUpFragment : Fragment() {
           viewModel.setThumbnail(encodeImage2Base64(thumbnail1))
           lender.amount = viewModel.total.value!!
           borrower.amount = viewModel.total.value!! * -1
-          startHttpConnectionMenu(doneButton, nowLoading, requireContext())
           viewModel.settleUp(borrower, lender)
-          finishHttpConnectionMenu(doneButton, nowLoading)
         }
       }
     }

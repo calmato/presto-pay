@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.databinding.DataBindingUtil
@@ -94,6 +96,16 @@ class AddPaymentFragment : Fragment() {
         }
       }
     )
+    viewModel.nowLoading.observe(viewLifecycleOwner, Observer {
+      if(it){
+        requireParentFragment().requireParentFragment().progressBarAddPayment.visibility = ProgressBar.VISIBLE
+        requireParentFragment().requireParentFragment().frontViewAddPayment.visibility = ImageView.VISIBLE
+      }else{
+        requireParentFragment().requireParentFragment().progressBarAddPayment.visibility = ProgressBar.GONE
+        requireParentFragment().requireParentFragment().frontViewAddPayment.visibility = ImageView.GONE
+
+      }
+    })
   }
 
   private fun goBack(group: GroupPropertyResponse) {
