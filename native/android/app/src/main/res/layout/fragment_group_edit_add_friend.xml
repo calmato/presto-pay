@@ -30,7 +30,7 @@
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent"
-      app:srcCompat="@android:drawable/screen_background_dark_transparent" />
+      app:srcCompat="@android:drawable/screen_background_light_transparent" />
 
     <SearchView
       android:id="@+id/searchFriend"
