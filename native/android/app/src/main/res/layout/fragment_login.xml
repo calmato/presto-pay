@@ -6,29 +6,12 @@
   <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#2BACFC"
     tools:context=".MainActivity">
-
-    <TextView
-      android:id="@+id/google_signin_button"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:fontFamily="sans-serif-medium"
-      android:text="@string/login_title"
-      android:textColor="@android:color/background_light"
-      android:textSize="32sp"
-      android:typeface="sans"
-      app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintHorizontal_bias="0.501"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="parent"
-      app:layout_constraintVertical_bias="0.789" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
       android:id="@+id/constraintLayout"
-      android:layout_width="399dp"
-      android:layout_height="564dp"
+      android:layout_width="0dp"
+      android:layout_height="0dp"
       android:background="#FFFFFF"
       android:backgroundTint="#FFFFFF"
       app:layout_constraintBottom_toBottomOf="parent"
@@ -89,14 +72,14 @@
         android:id="@+id/loginEmailField"
         android:layout_width="270dp"
         android:layout_height="47dp"
-        android:layout_marginTop="52dp"
+        android:layout_marginTop="90dp"
         android:layout_marginEnd="52dp"
+        android:autofillHints=""
         android:ems="10"
         android:hint="@string/email"
         android:inputType="textEmailAddress"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:autofillHints="" />
+        app:layout_constraintTop_toTopOf="parent" />
 
       <EditText
         android:id="@+id/loginPasswordField"
@@ -117,10 +100,11 @@
         android:id="@+id/loginMailIcon"
         android:layout_width="28dp"
         android:layout_height="28dp"
-        android:layout_marginTop="68dp"
+        android:layout_marginTop="100dp"
+        android:layout_marginEnd="3dp"
         android:src="@drawable/ic_mail"
         app:layout_constraintEnd_toStartOf="@+id/loginEmailField"
-        app:layout_constraintHorizontal_bias="0.795"
+        app:layout_constraintHorizontal_bias="0.803"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
