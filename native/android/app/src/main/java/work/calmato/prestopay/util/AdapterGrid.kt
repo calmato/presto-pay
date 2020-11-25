@@ -45,7 +45,7 @@ class AdapterGrid(private val mUserProperties: Users?, val onClickListener: OnCl
   }
 
   override fun getItemCount(): Int {
-    var returnInt: Int = 0
+    var returnInt = 0
     mUserProperties?.let {
       returnInt = it.users.size
     }

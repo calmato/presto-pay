@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
-import android.preference.PreferenceManager
 import android.util.Log
 import android.view.*
 import android.widget.ImageView
@@ -16,6 +15,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
@@ -50,7 +50,7 @@ class GroupEditFragment : PermissionBase() {
         Api.retrofitService.getGroupDetail("Bearer $id", getGroupInfo!!.id)
           .enqueue(object : Callback<GetGroupDetail> {
             override fun onFailure(call: Call<GetGroupDetail>, t: Throwable) {
-              Log.d(ViewModelGroup.TAG, t.message)
+              Log.d(ViewModelGroup.TAG, t.message?:"No message")
             }
 
             override fun onResponse(
@@ -84,7 +84,7 @@ class GroupEditFragment : PermissionBase() {
     inflater: LayoutInflater,
     container: ViewGroup?,
     savedInstanceState: Bundle?
-  ): View? {
+  ): View {
     val binding: FragmentGroupEditBinding =
       DataBindingUtil.inflate(inflater, R.layout.fragment_group_edit, container, false)
     getGroupInfo = GroupEditFragmentArgs.fromBundle(requireArguments()).groupEditList
@@ -206,7 +206,7 @@ class GroupEditFragment : PermissionBase() {
         .enqueue(object : Callback<HiddenGroups> {
           override fun onFailure(call: Call<HiddenGroups>, t: Throwable) {
             Toast.makeText(activity, t.message, Toast.LENGTH_LONG).show()
-            Log.d(TAG, t.message)
+            Log.d(TAG, t.message?:"No message")
           }
 
           override fun onResponse(call: Call<HiddenGroups>, response: Response<HiddenGroups>) {
@@ -224,7 +224,7 @@ class GroupEditFragment : PermissionBase() {
         .enqueue(object : Callback<HiddenGroups> {
           override fun onFailure(call: Call<HiddenGroups>, t: Throwable) {
             Toast.makeText(activity, t.message, Toast.LENGTH_LONG).show()
-            Log.d(TAG, t.message)
+            Log.d(TAG, t.message?:"No message")
           }
 
           override fun onResponse(call: Call<HiddenGroups>, response: Response<HiddenGroups>) {

@@ -12,6 +12,11 @@ services:
     ports:
       - 8080:8080
       - 8081:9090
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 64M
     command: envoy -c /etc/envoy/envoy.yaml
     restart: always
 
@@ -27,6 +32,11 @@ services:
     environment:
       - GOOGLE_APPLICATION_CREDENTIALS=${GOOGLE_APPLICATION_CREDENTIALS}
       - GCP_STORAGE_BUCKET_NAME=${GCP_STORAGE_BUCKET_NAME}
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 256M
     command: realize start
     restart: always
 
@@ -43,7 +53,14 @@ services:
       - GOOGLE_APPLICATION_CREDENTIALS=${GOOGLE_APPLICATION_CREDENTIALS}
       - GCP_STORAGE_BUCKET_NAME=${GCP_STORAGE_BUCKET_NAME}
     command: realize start
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 256M
     restart: always
+    depends_on:
+      - redis
 
   batch:
     container_name: presto_pay_batch
@@ -53,9 +70,21 @@ services:
     working_dir: /go/src/github.com/calmato/presto-pay/api/batch
     volumes:
       - ./api/batch:/go/src/github.com/calmato/presto-pay/api/batch:cached
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 192M
+    depends_on:
+      - redis
 
   redis:
     container_name: presto_pay_redis
     build:
       context: ./infra/docker/redis
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 64M
     restart: always

@@ -3,7 +3,6 @@ package work.calmato.prestopay.ui.login
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.preference.PreferenceManager
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -16,6 +15,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.preference.PreferenceManager
 import com.facebook.*
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
@@ -65,7 +65,7 @@ class LoginFragment : Fragment() {
     inflater: LayoutInflater,
     container: ViewGroup?,
     savedInstanceState: Bundle?
-  ): View? {
+  ): View {
     val binding: FragmentLoginBinding = DataBindingUtil.inflate(
       inflater, R.layout.fragment_login, container, false
     )
@@ -191,8 +191,8 @@ class LoginFragment : Fragment() {
             // Sign in success, update UI with the signed-in user's information
             Log.d(DEFAULT_TAG, "signInWithEmail:success")
             val user = auth.currentUser
-            user?.getIdToken(true)?.addOnCompleteListener(requireActivity()) { task ->
-              val idToken = task.result?.token
+            user?.getIdToken(true)?.addOnCompleteListener(requireActivity()) { thisTask ->
+              val idToken = thisTask.result?.token
               val editor = sharedPreferences.edit()
               editor.putString("token", idToken)
               editor.apply()
@@ -253,28 +253,12 @@ class LoginFragment : Fragment() {
     val pendingResultTask: Task<AuthResult>? = auth.pendingAuthResult
     if (pendingResultTask != null) {
       // There's something already here! Finish the sign-in for your user.
-      pendingResultTask.addOnSuccessListener(object : OnSuccessListener<AuthResult?> {
-        override fun onSuccess(p0: AuthResult?) {
-          updateUI(auth.currentUser, true)
-        }
-      })
-      pendingResultTask.addOnFailureListener(object : OnFailureListener {
-        override fun onFailure(p0: java.lang.Exception) {
-          Log.i("LoginFragment", "onFailure: ${p0.message}")
-        }
-      })
+      pendingResultTask.addOnSuccessListener(OnSuccessListener<AuthResult?> { updateUI(auth.currentUser, true) })
+      pendingResultTask.addOnFailureListener(OnFailureListener { p0 -> Log.i("LoginFragment", "onFailure: ${p0.message}") })
     } else {
       auth.startActivityForSignInWithProvider(/* activity= */ requireActivity(), provider.build())
-        .addOnSuccessListener(object : OnSuccessListener<AuthResult> {
-          override fun onSuccess(p0: AuthResult?) {
-            updateUI(auth.currentUser, true)
-          }
-        })
-        .addOnFailureListener(object : OnFailureListener {
-          override fun onFailure(p0: java.lang.Exception) {
-            Log.i("LoginFragment", "onFailure: ${p0.message}")
-          }
-        })
+        .addOnSuccessListener { updateUI(auth.currentUser, true) }
+        .addOnFailureListener { p0 -> Log.i("LoginFragment", "onFailure: ${p0.message}") }
     }
   }
 
@@ -364,7 +348,7 @@ class LoginFragment : Fragment() {
               val id = sharedPreferences.getString("token", null)
               GlobalScope.launch(Dispatchers.IO) {
                 try {
-                  Log.i("Ok", "setSharedPreferenceId: ${id}")
+                  Log.i("Ok", "setSharedPreferenceId: $id")
                   GroupsRepository(getAppDatabase(requireContext())).refreshGroups(id!!)
                   FriendsRepository(getAppDatabase(requireContext())).refreshFriends(id)
                   val userProperty =

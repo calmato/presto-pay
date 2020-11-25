@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import kotlinx.android.synthetic.main.fragment_mail_check.*
 import work.calmato.prestopay.R
@@ -17,7 +16,7 @@ class MailCheckFragment : Fragment() {
     inflater: LayoutInflater,
     container: ViewGroup?,
     savedInstanceState: Bundle?
-  ): View? {
+  ): View {
     val binding: FragmentMailCheckBinding = DataBindingUtil.inflate(
       inflater, R.layout.fragment_mail_check, container, false
     )

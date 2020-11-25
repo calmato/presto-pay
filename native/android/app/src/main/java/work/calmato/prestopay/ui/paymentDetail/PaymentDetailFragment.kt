@@ -3,13 +3,13 @@ package work.calmato.prestopay.ui.paymentDetail
 import android.app.AlertDialog
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.preference.PreferenceManager
 import android.view.*
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.findNavController
+import androidx.preference.PreferenceManager
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_payment_detail.*
 import retrofit2.Call
@@ -31,7 +31,7 @@ class PaymentDetailFragment : PermissionBase() {
     inflater: LayoutInflater,
     container: ViewGroup?,
     savedInstanceState: Bundle?
-  ): View? {
+  ): View {
     val binding: FragmentPaymentDetailBinding =
       DataBindingUtil.inflate(inflater, R.layout.fragment_payment_detail, container, false)
     paymentDetail = PaymentDetailFragmentArgs.fromBundle(requireArguments()).paymentPropertyGet
@@ -62,10 +62,10 @@ class PaymentDetailFragment : PermissionBase() {
     )
     chart.isDoubleTapToZoomEnabled = false
     completed.setOnClickListener {
-      val builder: AlertDialog.Builder? = requireActivity().let {
+      val builder: AlertDialog.Builder = requireActivity().let {
         AlertDialog.Builder(it)
       }
-      builder?.setTitle(resources.getString(R.string.paymentCompleteSetting))
+      builder.setTitle(resources.getString(R.string.paymentCompleteSetting))
         ?.setPositiveButton(resources.getString(R.string.yes)) { _, _ ->
           sendRequest()
         }
@@ -75,7 +75,7 @@ class PaymentDetailFragment : PermissionBase() {
             R.string.messagePaymentUncomplete
           )
         )
-      val dialog: AlertDialog? = builder?.create()
+      val dialog: AlertDialog? = builder.create()
       dialog?.show()
     }
     setHasOptionsMenu(true)
@@ -121,6 +121,3 @@ class PaymentDetailFragment : PermissionBase() {
     inflater.inflate(R.menu.header_edit, menu)
   }
 }
-
-
-

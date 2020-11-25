@@ -47,7 +47,7 @@ class FriendListFragment : Fragment() {
     inflater: LayoutInflater,
     container: ViewGroup?,
     savedInstanceState: Bundle?
-  ): View? {
+  ): View {
     val binding: FragmentFriendListBinding =
       DataBindingUtil.inflate(inflater, R.layout.fragment_friend_list, container, false)
     binding.lifecycleOwner = this

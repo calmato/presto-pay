@@ -11,12 +11,12 @@ data class UserProperty(
   val email: String,
   val thumbnailUrl: String?,
   var checked: Boolean = false
-) : Parcelable {}
+) : Parcelable
 
 @Parcelize
 data class Users(
   val users: List<UserProperty>
-) : Parcelable {}
+) : Parcelable
 
 data class UserId(
   val userId: String
@@ -25,31 +25,31 @@ data class UserId(
 @Parcelize
 data class Groups(
   val groups: List<GroupPropertyResponse>
-) : Parcelable {}
+) : Parcelable
 
 @Parcelize
 data class HiddenGroups(
   val hiddenGroups: List<GroupPropertyResponse>
-) : Parcelable {}
+) : Parcelable
 
 @Parcelize
 data class RegisterDeviceIdProperty(
   val instanceId: String
-) : Parcelable {}
+) : Parcelable
 
 @Parcelize
 data class CreateGroupProperty(
   val name: String,
   val thumbnail: String,
   val userIds: List<String>
-) : Parcelable {}
+) : Parcelable
 
 @Parcelize
 data class EditGroup(
   val name: String,
   val thumbnail: String,
   val userIds: List<String>
-) : Parcelable {}
+) : Parcelable
 
 @Parcelize
 data class CreateExpenseProperty(
@@ -62,7 +62,7 @@ data class CreateExpenseProperty(
   var comment: String?,
   var images: List<String>?,
   var paidAt: String?
-) : Parcelable {}
+) : Parcelable
 
 @Parcelize
 data class EditExpenseProperty(
@@ -76,13 +76,13 @@ data class EditExpenseProperty(
   var comment: String?,
   var images: List<String>?,
   var paidAt: String?
-) : Parcelable {}
+) : Parcelable
 
 @Parcelize
 data class UserExpense(
   val id: String,
   var amount: Float
-) : Parcelable {}
+) : Parcelable
 
 @Parcelize
 data class NetworkPayer(
@@ -101,7 +101,7 @@ data class GroupPropertyResponse(
   val updatedAt: String,
   var selected: Boolean = false,
   var isHidden: Boolean = false
-) : Parcelable {}
+) : Parcelable
 
 @Parcelize
 data class GetGroupDetail(
@@ -111,7 +111,7 @@ data class GetGroupDetail(
   val users: List<UserProperty>,
   val createdAt: String,
   val updatedAt: String
-) : Parcelable {}
+) : Parcelable
 
 @Parcelize
 data class PaymentPropertyGet(
@@ -129,7 +129,7 @@ data class PaymentPropertyGet(
   val paidAt: String,
   val createdAt: String,
   val updatedAt: String
-) : Parcelable {}
+) : Parcelable
 
 @Parcelize
 data class EditAccountProperty(
@@ -137,7 +137,7 @@ data class EditAccountProperty(
   val username: String,
   val email: String,
   val thumbnail: String
-) : Parcelable {}
+) : Parcelable
 
 @Parcelize
 data class EditAccountResponse(
@@ -150,7 +150,7 @@ data class EditAccountResponse(
   val friendIds: List<String>,
   val createdAt: String,
   val updatedAt: String
-) : Parcelable {}
+) : Parcelable
 
 @Parcelize
 data class NewAccountProperty(
@@ -176,13 +176,6 @@ data class AccountResponse(
 ) : Parcelable
 
 @Parcelize
-data class Payer(
-  val id: String,
-  val amount: Float,
-  val isPaid: Boolean
-) : Parcelable
-
-@Parcelize
 data class Tag(
   val name: String,
   val imageId: Int,
@@ -195,22 +188,6 @@ data class NationalFlag(
   val imageId: Int,
   val fullName: String
 ) : Parcelable
-
-@Parcelize
-data class PaymentCompleteResponse(
-  val id: String,
-  val name: String,
-  val currency: String,
-  val total: Float,
-  val payers: List<Payer>,
-  val isCompleted: Boolean,
-  val tags: List<String>?,
-  val comment: String?,
-  val imageUrls: List<String>?,
-  val paidAt: String,
-  val createdAt: String,
-  val updatedAt: String
-) : Parcelable {}
 
 @Parcelize
 data class PayerAddPayment(

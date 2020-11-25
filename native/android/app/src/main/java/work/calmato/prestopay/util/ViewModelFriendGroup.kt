@@ -2,10 +2,10 @@ package work.calmato.prestopay.util
 
 import android.app.Activity
 import android.app.Application
-import android.preference.PreferenceManager
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.*
+import androidx.preference.PreferenceManager
 import kotlinx.coroutines.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -13,7 +13,6 @@ import retrofit2.Response
 import work.calmato.prestopay.R
 import work.calmato.prestopay.database.DatabaseGroup
 import work.calmato.prestopay.database.DatabaseFriend
-import work.calmato.prestopay.database.asDomainModel
 import work.calmato.prestopay.database.getAppDatabase
 import work.calmato.prestopay.network.*
 import work.calmato.prestopay.repository.FriendsRepository
@@ -96,16 +95,16 @@ class ViewModelFriendGroup(application: Application) : AndroidViewModel(applicat
     }
   }
 
-  fun getUserProperties(userName: String, activity: Activity) {
+  fun getUserProperties(userName: String) {
     _nowLoading.value = true
-    Log.i(TAG, "getUserProperties: ${friendsList}")
+    Log.i(TAG, "getUserProperties: $friendsList")
     coroutineScope.launch {
         try {
           val networkUsers =
             Api.retrofitService.getPropertiesAsync("Bearer $id", userName).await().asDomainModel()
           databaseFriends?.also {friends ->
-            _usersList.value = networkUsers.filter {
-              !friends.map { it.id }.contains(it.id)
+            _usersList.value = networkUsers.filter { user ->
+              !friends.map { it.id }.contains(user.id)
             }
           } ?: run{
             _usersList.value = networkUsers
@@ -127,7 +126,7 @@ class ViewModelFriendGroup(application: Application) : AndroidViewModel(applicat
     val userId = userProperty.id
     viewModelScope.launch {
       try {
-        friendsRepository.addFriend(id, UserId(userId), userProperty)
+        friendsRepository.addFriend(id!!, UserId(userId), userProperty)
         Toast.makeText(
           activity,
           getApplication<Application>().resources.getString(R.string.add_friend_succeeded),
@@ -143,7 +142,7 @@ class ViewModelFriendGroup(application: Application) : AndroidViewModel(applicat
 
   fun createGroupApi(groupProperty: CreateGroupProperty, activity: Activity) {
     _nowLoading.value = true
-    Api.retrofitService.createGroup("Bearer ${id}", groupProperty)
+    Api.retrofitService.createGroup("Bearer $id", groupProperty)
       .enqueue(object : Callback<GroupPropertyResponse> {
         override fun onFailure(call: Call<GroupPropertyResponse>, t: Throwable) {
           Toast.makeText(activity, t.message, Toast.LENGTH_LONG).show()

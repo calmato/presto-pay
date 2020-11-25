@@ -1,12 +1,10 @@
 package work.calmato.prestopay.ui.groupDetail
 
 import android.app.AlertDialog
-import android.content.DialogInterface
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.preference.PreferenceManager
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -20,6 +18,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -52,7 +51,7 @@ class GroupDetailFragment : Fragment() {
     inflater: LayoutInflater,
     container: ViewGroup?,
     savedInstanceState: Bundle?
-  ): View? {
+  ): View {
     val binding: FragmentGroupDetailBinding =
       DataBindingUtil.inflate(inflater, R.layout.fragment_group_detail, container, false)
     binding.lifecycleOwner = this
@@ -100,7 +99,7 @@ class GroupDetailFragment : Fragment() {
       }
     })
 
-    val swipeToPaymentDismissTouchHelper = getSwipeToDismissTouchHelper(recycleAdapter!!)
+    val swipeToPaymentDismissTouchHelper = getSwipeToDismissTouchHelper()
     swipeToPaymentDismissTouchHelper.attachToRecyclerView(recyclerViewPayment)
 
     viewModel.refreshing.observe(viewLifecycleOwner, Observer {
@@ -164,7 +163,7 @@ class GroupDetailFragment : Fragment() {
     )
   }
 
-  private fun getSwipeToDismissTouchHelper(adapter: RecyclerView.Adapter<AdapterPayment.PaymentViewHolder>) =
+  private fun getSwipeToDismissTouchHelper() =
     ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(
       ItemTouchHelper.LEFT,
       ItemTouchHelper.LEFT
@@ -179,44 +178,44 @@ class GroupDetailFragment : Fragment() {
 
       //スワイプ時に実行
       override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-        val builder: AlertDialog.Builder? = requireActivity().let {
+        val builder: AlertDialog.Builder = requireActivity().let {
           AlertDialog.Builder(it)
         }
-        builder?.setMessage(resources.getString(R.string.delete_question))
+        builder.setMessage(resources.getString(R.string.delete_question))
           ?.setPositiveButton(
-            resources.getString(R.string.delete),
-            DialogInterface.OnClickListener { _, _ ->
-              frontView.visibility = ImageView.VISIBLE
-              progressBar.visibility = android.widget.ProgressBar.VISIBLE
-              Api.retrofitService.deletePayment(
-                "Bearer ${id}",
-                groupDetail!!.id,
-                payments!![viewHolder.adapterPosition].id
-              )
-                .enqueue(object : Callback<Unit> {
-                  override fun onResponse(
-                    call: Call<Unit>,
-                    response: Response<Unit>
-                  ) {
-                    Log.d(ViewModelGroup.TAG, response.body().toString())
-                    viewModel.deletePayment(
-                      payments!![viewHolder.adapterPosition].id,
-                      requireActivity()
-                    )
-                    frontView.visibility = ImageView.GONE
-                    progressBar.visibility = android.widget.ProgressBar.INVISIBLE
-                  }
+            resources.getString(R.string.delete)
+          ) { _, _ ->
+            frontView.visibility = ImageView.VISIBLE
+            progressBar.visibility = android.widget.ProgressBar.VISIBLE
+            Api.retrofitService.deletePayment(
+              "Bearer $id",
+              groupDetail!!.id,
+              payments!![viewHolder.adapterPosition].id
+            )
+              .enqueue(object : Callback<Unit> {
+                override fun onResponse(
+                  call: Call<Unit>,
+                  response: Response<Unit>
+                ) {
+                  Log.d(ViewModelGroup.TAG, response.body().toString())
+                  viewModel.deletePayment(
+                    payments!![viewHolder.adapterPosition].id,
+                    requireActivity()
+                  )
+                  frontView.visibility = ImageView.GONE
+                  progressBar.visibility = android.widget.ProgressBar.INVISIBLE
+                }
 
-                  override fun onFailure(call: Call<Unit>, t: Throwable) {
-                    Toast.makeText(activity, t.message, Toast.LENGTH_LONG).show()
-                    Log.d(ViewModelGroup.TAG, t.message)
-                    frontView.visibility = ImageView.GONE
-                  }
-                })
-            })
+                override fun onFailure(call: Call<Unit>, t: Throwable) {
+                  Toast.makeText(activity, t.message, Toast.LENGTH_LONG).show()
+                  Log.d(ViewModelGroup.TAG, t.message ?: "No message")
+                  frontView.visibility = ImageView.GONE
+                }
+              })
+          }
           ?.setNegativeButton(resources.getString(R.string.cancel), null)
         recycleAdapter?.notifyDataSetChanged()
-        val dialog: AlertDialog? = builder?.create()
+        val dialog: AlertDialog? = builder.create()
         dialog?.show()
       }
 

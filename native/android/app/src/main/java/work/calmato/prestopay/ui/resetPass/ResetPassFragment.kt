@@ -21,7 +21,7 @@ class ResetPassFragment : Fragment() {
     inflater: LayoutInflater,
     container: ViewGroup?,
     savedInstanceState: Bundle?
-  ): View? {
+  ): View {
     val binding: FragmentResetPassBinding = DataBindingUtil.inflate(
       inflater, R.layout.fragment_reset_pass, container, false
     )
@@ -31,7 +31,7 @@ class ResetPassFragment : Fragment() {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     sendMailButton.setOnClickListener {
-      if (!emailEditText.text.isEmpty()) {
+      if (emailEditText.text.isNotEmpty()) {
         val auth = FirebaseAuth.getInstance()
         val emailAddress = emailEditText.text.toString()
         progressBarRestPass.visibility= ProgressBar.VISIBLE
