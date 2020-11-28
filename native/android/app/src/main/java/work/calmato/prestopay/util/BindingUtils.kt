@@ -1,17 +1,20 @@
 package work.calmato.prestopay.util
 
-import android.widget.CheckBox
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.TextView
+import android.content.Context
+import android.util.Log
+import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.BindingAdapter
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import work.calmato.prestopay.R
 import work.calmato.prestopay.database.getAppDatabase
 import work.calmato.prestopay.network.*
 import work.calmato.prestopay.repository.TagRepository
 import kotlin.concurrent.thread
+import kotlin.math.absoluteValue
+import kotlin.math.round
 import kotlin.math.roundToInt
 
 @BindingAdapter("thumbnail")
@@ -202,3 +205,32 @@ fun TextView.setPaymentAmountCheck(item:Float?){
     this.text = item.toString()
   }
 }
+@BindingAdapter("networkPayerName")
+fun TextView.setSettleUpUserName(item:NetworkPayer?){
+  item?.let {
+    this.text = item.name
+  }
+}
+@BindingAdapter("networkPayerAmount")
+fun TextView.setSettleUpAmount(item:NetworkPayer?){
+  item?.let {
+    if (it.amount <= 0){
+      this.text = "${item.name}から${round(item.amount.absoluteValue).toInt()}円受け取る"
+    } else{
+      this.text = "${item.name}に${round(item.amount).toInt()}円返す"
+    }
+  }
+}
+
+@BindingAdapter("settleUpChild")
+fun RecyclerView.inflateSettleUp(item:NetworkPayerContainer?){
+  item?.let {
+    Log.i("BindingUtil", "inflateSettleUp: ${it.payers}")
+    val recyclerAdapter = AdapterSettleUpChild(it.payers)
+    this.apply {
+      layoutManager = LinearLayoutManager(context)
+      adapter = recyclerAdapter
+    }
+  }
+}
+

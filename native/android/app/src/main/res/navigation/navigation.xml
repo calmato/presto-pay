@@ -264,6 +264,9 @@
     <action
       android:id="@+id/action_groupDetail_to_settleUp"
       app:destination="@id/settleUp" />
+    <action
+      android:id="@+id/action_groupDetail_to_settleUpGroup"
+      app:destination="@id/settleUpGroup" />
   </fragment>
   <fragment
     android:id="@+id/paymentDetail"
@@ -306,7 +309,7 @@
   <fragment
     android:id="@+id/settleUp"
     android:name="work.calmato.prestopay.ui.settleUp.SettleUpFragment"
-    android:label="fragment_sttle_up"
+    android:label="fragment_settle_up"
     tools:layout="@layout/fragment_settle_up">
     <argument
       android:name="groupDetail"
@@ -318,6 +321,22 @@
       />
     <action
       android:id="@+id/action_settleUp_to_groupDetail"
+      app:destination="@id/groupDetail" />
+  </fragment>
+  <fragment
+    android:id="@+id/settleUpGroup"
+    android:name="work.calmato.prestopay.ui.settleUpGroup.SettleUpGroupFragment"
+    android:label="fragment_settle_up_group"
+    tools:layout="@layout/fragment_settle_up_group">
+    <argument
+      android:name="listNetworkPayer"
+      app:argType="work.calmato.prestopay.network.NetworkPayerContainer"
+      />
+    <argument
+      android:name="groupDetail"
+      app:argType="work.calmato.prestopay.network.GroupPropertyResponse"/>
+    <action
+      android:id="@+id/action_settleUpGroup_to_groupDetail"
       app:destination="@id/groupDetail" />
   </fragment>
 </navigation>
