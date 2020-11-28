@@ -11,6 +11,7 @@ import retrofit2.Response
 import work.calmato.prestopay.network.Api
 import work.calmato.prestopay.network.NetworkPayer
 import retrofit2.Call
+import kotlin.math.absoluteValue
 
 class ViewModelSettleUpGroup(application: Application) : AndroidViewModel(application) {
 
@@ -63,13 +64,15 @@ class ViewModelSettleUpGroup(application: Application) : AndroidViewModel(applic
    * @param j 未払いの人の[listToBeCalculated]でのインデックス
    * @param amount やりとりされる金額の絶対値
    */
-  private fun registerSettleUp(i: Int, j: Int, amount: Float) {
-    for (k in 1..2) {
+  private fun registerSettleUp(i: Int, j: Int, absAmount: Float) {
+    var amount = absAmount
+    for (k in 0..1) {
       val user1 = listOf(listToBeCalculated[i], listToBeCalculated[j])[k]
-      val user2 = listOf(listToBeCalculated[i], listToBeCalculated[j])[3 - k]
+      val user2 = listOf(listToBeCalculated[i], listToBeCalculated[j])[1-k]
       //    既にlistToBeSentに支払い情報がある場合
       if (listToBeSent.map { it.payerAddPayment.id }.contains(user1.id)) {
         val index1: Int = listToBeSent.map { it.payerAddPayment.id }.indexOf(user1.id)
+        listToBeSent[index1].payerAddPayment.amount += amount
         //   既にlistToBeSent内のlistPayerに支払い情報がある場合は単純に足す
         if (listToBeSent[index1].listPayer.map { it.id }.contains(user2.id)) {
           val index2 = listToBeSent[index1].listPayer.map { it.id }.indexOf(user2.id)
@@ -93,6 +96,7 @@ class ViewModelSettleUpGroup(application: Application) : AndroidViewModel(applic
           )
         )
       }
+      amount *= -1
     }
   }
 
@@ -101,7 +105,7 @@ class ViewModelSettleUpGroup(application: Application) : AndroidViewModel(applic
       (usersPaymentInfo.value!! as MutableList<NetworkPayer>).toMutableList()
     listToBeSent = mutableListOf()
 
-    while (listToBeCalculated.size > 0) {
+    whileLoop@while (listToBeCalculated.size > 0) {
       //    支払う金額と受け取る金額が一致しているユーザー2人がいれば、その2人の間で精算する
       forLoop@ for (i in listToBeCalculated.indices - 1) {
         for (j in i + 1 until listToBeCalculated.size) {
@@ -117,22 +121,22 @@ class ViewModelSettleUpGroup(application: Application) : AndroidViewModel(applic
           }
         }
       }
-
+      if(listToBeCalculated.size==0) {break@whileLoop}
       //    受け取る金額が最も多い人が支払いが最も多い人から受け取る
       val maxUserIdx =
         listToBeCalculated.indexOf( listToBeCalculated.maxBy { it.amount } )
       val minUserIdx =
         listToBeCalculated.indexOf( listToBeCalculated.minBy { it.amount } )
       // 受け取る金額のほうが支払いの絶対値より大きい時
-      if (listToBeCalculated[maxUserIdx].amount >= listToBeCalculated[minUserIdx].amount) {
-        registerSettleUp(maxUserIdx,minUserIdx,listToBeCalculated[minUserIdx].amount)
-        listToBeCalculated.removeAt(minUserIdx)
+      if (listToBeCalculated[maxUserIdx].amount >= listToBeCalculated[minUserIdx].amount.absoluteValue) {
+        registerSettleUp(maxUserIdx,minUserIdx,listToBeCalculated[minUserIdx].amount.absoluteValue)
         listToBeCalculated[maxUserIdx].amount += listToBeCalculated[minUserIdx].amount
+        listToBeCalculated.removeAt(minUserIdx)
       } else {
         // 支払い金額の絶対値ほうが受け取り金額より大きい時
         registerSettleUp(maxUserIdx,minUserIdx,listToBeCalculated[maxUserIdx].amount)
-        listToBeCalculated.removeAt(maxUserIdx)
         listToBeCalculated[minUserIdx].amount += listToBeCalculated[maxUserIdx].amount
+        listToBeCalculated.removeAt(maxUserIdx)
       }
     }
     return listToBeSent
