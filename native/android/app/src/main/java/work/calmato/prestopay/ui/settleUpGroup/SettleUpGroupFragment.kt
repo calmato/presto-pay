@@ -8,15 +8,17 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentSettleUpGroupBinding
+import work.calmato.prestopay.util.AdapterSettleUpGroup
 import work.calmato.prestopay.util.ViewModelSettleUpGroup
 
 class SettleUpGroupFragment : Fragment() {
   private val viewModel: ViewModelSettleUpGroup by lazy {
     ViewModelProvider(this).get(ViewModelSettleUpGroup::class.java)
   }
-
+  private var recycleAdapter: AdapterSettleUpGroup? = null
   override fun onCreateView(
     inflater: LayoutInflater,
     container: ViewGroup?,
@@ -25,12 +27,18 @@ class SettleUpGroupFragment : Fragment() {
     val binding: FragmentSettleUpGroupBinding =
       DataBindingUtil.inflate(inflater, R.layout.fragment_settle_up_group, container, false)
     binding.lifecycleOwner = this
+    recycleAdapter = AdapterSettleUpGroup()
+    binding.parentRecyclerView.apply {
+      layoutManager = LinearLayoutManager(context)
+      adapter = recycleAdapter
+    }
     return binding.root
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     viewModel.setUsersPaymentInfo(SettleUpGroupFragmentArgs.fromBundle(requireArguments()).listNetworkPayer.payers)
-    Log.i("SettleUpGroupFragment", "onViewCreated: ${viewModel.calcForSettleUp()}")
+    val settleUpList = viewModel.calcForSettleUp()
+    recycleAdapter?.settleUpList = settleUpList
   }
 }

@@ -1,11 +1,12 @@
 package work.calmato.prestopay.util
 
-import android.widget.CheckBox
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.TextView
+import android.content.Context
+import android.util.Log
+import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.BindingAdapter
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import work.calmato.prestopay.R
 import work.calmato.prestopay.database.getAppDatabase
@@ -200,5 +201,22 @@ fun EditText.setPaymentAmount(item:Float?){
 fun TextView.setPaymentAmountCheck(item:Float?){
   item?.let {
     this.text = item.toString()
+  }
+}
+@BindingAdapter("networkPayerName")
+fun TextView.setSettleUpUserName(item:NetworkPayer?){
+  item?.let {
+    this.text = item.name
+  }
+}
+@BindingAdapter("settleUpChild")
+fun RecyclerView.inflateSettleUp(item:NetworkPayerContainer?){
+  item?.let {
+    Log.i("BindingUtil", "inflateSettleUp: ${it.payers}")
+    val recyclerAdapter = AdapterSettleUpChild(it.payers)
+    this.apply {
+      layoutManager = LinearLayoutManager(context)
+      adapter = recyclerAdapter
+    }
   }
 }
