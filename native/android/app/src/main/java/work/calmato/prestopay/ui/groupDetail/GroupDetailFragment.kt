@@ -147,9 +147,14 @@ class GroupDetailFragment : Fragment() {
     }
     settleUp.setOnClickListener {
       this.findNavController().navigate(
-        GroupDetailFragmentDirections.actionGroupDetailToSettleUp(
-          groupDetail!!,
-          NetworkPayerContainer(viewModel.groupStatus!!.value!!.lendingStatus)
+//        GroupDetailFragmentDirections.actionGroupDetailToSettleUp(
+//          groupDetail!!,
+//          NetworkPayerContainer(viewModel.groupStatus!!.value!!.lendingStatus)
+//        )
+        GroupDetailFragmentDirections.actionGroupDetailToSettleUpGroup(
+          NetworkPayerContainer(
+            viewModel.groupStatus!!.value!!.lendingStatus
+          )
         )
       )
     }

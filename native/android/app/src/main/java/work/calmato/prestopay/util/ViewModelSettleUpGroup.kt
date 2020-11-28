@@ -11,7 +11,6 @@ import retrofit2.Response
 import work.calmato.prestopay.network.Api
 import work.calmato.prestopay.network.NetworkPayer
 import retrofit2.Call
-import kotlin.math.absoluteValue
 
 class ViewModelSettleUpGroup(application: Application) : AndroidViewModel(application) {
 
