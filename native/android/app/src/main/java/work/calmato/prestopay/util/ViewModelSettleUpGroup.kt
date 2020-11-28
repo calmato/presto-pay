@@ -38,6 +38,10 @@ class ViewModelSettleUpGroup(application: Application) : AndroidViewModel(applic
     _usersPaymentInfo.value = list
   }
 
+  fun doneNavigating(){
+    _navigateBack.value = false
+  }
+
   fun settleUpApi(groupId: String) {
     _nowLoading.value = true
     Api.retrofitService.settleUp("Bearer $id", groupId)

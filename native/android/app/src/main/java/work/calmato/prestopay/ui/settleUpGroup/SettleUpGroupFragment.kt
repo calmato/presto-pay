@@ -4,9 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.ProgressBar
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_settle_up_group.*
@@ -50,5 +54,24 @@ class SettleUpGroupFragment : Fragment() {
     settleUpButton.setOnClickListener {
       viewModel.settleUpApi(groupDetail.id)
     }
+    viewModel.nowLoading.observe(viewLifecycleOwner,Observer<Boolean>{
+      if(it){
+        settleUpButton.isEnabled = false
+        progressBarSettleUpGroup.visibility = ProgressBar.VISIBLE
+        frontViewSettleUpGroup.visibility = ImageView.VISIBLE
+      } else{
+        settleUpButton.isEnabled = true
+        progressBarSettleUpGroup.visibility = ProgressBar.GONE
+        frontViewSettleUpGroup.visibility = ImageView.GONE
+      }
+    })
+    viewModel.navigateBack.observe(viewLifecycleOwner,Observer<Boolean>{
+      if(it){
+        this.findNavController().navigate(
+          SettleUpGroupFragmentDirections.actionSettleUpGroupToGroupDetail(groupDetail)
+        )
+        viewModel.doneNavigating()
+      }
+    })
   }
 }

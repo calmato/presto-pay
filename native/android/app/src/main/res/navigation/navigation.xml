@@ -335,5 +335,8 @@
     <argument
       android:name="groupDetail"
       app:argType="work.calmato.prestopay.network.GroupPropertyResponse"/>
+    <action
+      android:id="@+id/action_settleUpGroup_to_groupDetail"
+      app:destination="@id/groupDetail" />
   </fragment>
 </navigation>
