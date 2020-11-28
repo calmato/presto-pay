@@ -53,6 +53,12 @@ func (udv *userDomainValidation) User(ctx context.Context, u *user.User) []*doma
 }
 
 func uniqueCheckEmail(ctx context.Context, ur user.UserRepository, id string, email string) error {
+	// 未登録ユーザの場合、バリデーションチェックはスキップ
+	if email == "" {
+		return nil
+	}
+
+	// 登録済みユーザの場合、バリデーションチェック
 	uid, _ := ur.GetUIDByEmail(ctx, email)
 	if uid == "" || id == uid {
 		return nil
@@ -62,6 +68,12 @@ func uniqueCheckEmail(ctx context.Context, ur user.UserRepository, id string, em
 }
 
 func uniqueCheckUsername(ctx context.Context, ur user.UserRepository, id string, username string) error {
+	// 未登録ユーザの場合、バリデーションチェックはスキップ
+	if username == "" {
+		return nil
+	}
+
+	// 登録済みユーザの場合、バリデーションチェック
 	u, _ := ur.ShowByUsername(ctx, username)
 	if u == nil || u.ID == "" {
 		return nil

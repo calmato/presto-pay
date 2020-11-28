@@ -139,6 +139,33 @@ func (us *userService) Create(ctx context.Context, u *user.User) (*user.User, er
 	return u, nil
 }
 
+func (us *userService) CreateUnauthorizedUser(ctx context.Context, u *user.User) (*user.User, error) {
+	if ves := us.userDomainValidation.User(ctx, u); len(ves) > 0 {
+		err := xerrors.New("Failed to DomainValidation")
+
+		if isContainCustomUniqueError(ves) {
+			return nil, domain.AlreadyExistsInDatastore.New(err, ves...)
+		}
+
+		return nil, domain.Unknown.New(err, ves...)
+	}
+
+	current := time.Now()
+
+	u.ID = uuid.New().String()
+	u.GroupIDs = make([]string, 0)
+	u.FriendIDs = make([]string, 0)
+	u.CreatedAt = current
+	u.UpdatedAt = current
+
+	if err := us.userRepository.Create(ctx, u); err != nil {
+		err = xerrors.Errorf("Failed to Repository: %w", err)
+		return nil, domain.ErrorInDatastore.New(err)
+	}
+
+	return u, nil
+}
+
 func (us *userService) Update(ctx context.Context, u *user.User) (*user.User, error) {
 	if ves := us.userDomainValidation.User(ctx, u); len(ves) > 0 {
 		err := xerrors.New("Failed to DomainValidation")
@@ -154,6 +181,29 @@ func (us *userService) Update(ctx context.Context, u *user.User) (*user.User, er
 
 	u.UsernameLower = strings.ToLower(u.Username)
 	u.Email = strings.ToLower(u.Email)
+	u.UpdatedAt = current
+
+	if err := us.userRepository.Update(ctx, u); err != nil {
+		err = xerrors.Errorf("Failed to Repository: %w", err)
+		return nil, domain.ErrorInDatastore.New(err)
+	}
+
+	return u, nil
+}
+
+func (us *userService) UpdateUnauthorizedUser(ctx context.Context, u *user.User) (*user.User, error) {
+	if ves := us.userDomainValidation.User(ctx, u); len(ves) > 0 {
+		err := xerrors.New("Failed to DomainValidation")
+
+		if isContainCustomUniqueError(ves) {
+			return nil, domain.AlreadyExistsInDatastore.New(err, ves...)
+		}
+
+		return nil, domain.Unknown.New(err, ves...)
+	}
+
+	current := time.Now()
+
 	u.UpdatedAt = current
 
 	if err := us.userRepository.Update(ctx, u); err != nil {
