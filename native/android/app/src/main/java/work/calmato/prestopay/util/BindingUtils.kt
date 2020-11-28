@@ -13,6 +13,8 @@ import work.calmato.prestopay.database.getAppDatabase
 import work.calmato.prestopay.network.*
 import work.calmato.prestopay.repository.TagRepository
 import kotlin.concurrent.thread
+import kotlin.math.absoluteValue
+import kotlin.math.round
 import kotlin.math.roundToInt
 
 @BindingAdapter("thumbnail")
@@ -209,6 +211,17 @@ fun TextView.setSettleUpUserName(item:NetworkPayer?){
     this.text = item.name
   }
 }
+@BindingAdapter("networkPayerAmount")
+fun TextView.setSettleUpAmount(item:NetworkPayer?){
+  item?.let {
+    if (it.amount <= 0){
+      this.text = "${item.name}から${round(item.amount.absoluteValue).toInt()}円受け取る"
+    } else{
+      this.text = "${item.name}に${round(item.amount).toInt()}円返す"
+    }
+  }
+}
+
 @BindingAdapter("settleUpChild")
 fun RecyclerView.inflateSettleUp(item:NetworkPayerContainer?){
   item?.let {
@@ -220,3 +233,4 @@ fun RecyclerView.inflateSettleUp(item:NetworkPayerContainer?){
     }
   }
 }
+

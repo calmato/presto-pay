@@ -75,8 +75,8 @@ class GroupDetailFragment : Fragment() {
     super.onViewCreated(view, savedInstanceState)
     viewModel.groupStatus?.observe(viewLifecycleOwner, Observer { list ->
       list.lendingStatus.apply {
-        inflateGraph(chart, this.map { it.name }, this.map { it.amount }, requireContext())
-        chart.isDoubleTapToZoomEnabled = false
+          inflateGraph(chart, this.map { it.name }, this.map { it.amount }, requireContext())
+          chart.isDoubleTapToZoomEnabled = false
       }
     })
     viewModel.itemClicked.observe(viewLifecycleOwner, Observer {

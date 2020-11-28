@@ -1,18 +1,19 @@
 package work.calmato.prestopay.ui.settleUpGroup
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentSettleUpGroupBinding
 import work.calmato.prestopay.util.AdapterSettleUpGroup
 import work.calmato.prestopay.util.ViewModelSettleUpGroup
+
 
 class SettleUpGroupFragment : Fragment() {
   private val viewModel: ViewModelSettleUpGroup by lazy {
@@ -31,6 +32,10 @@ class SettleUpGroupFragment : Fragment() {
     binding.parentRecyclerView.apply {
       layoutManager = LinearLayoutManager(context)
       adapter = recycleAdapter
+      addItemDecoration(DividerItemDecoration(
+        binding.parentRecyclerView.context,
+        DividerItemDecoration.VERTICAL
+      ))
     }
     return binding.root
   }

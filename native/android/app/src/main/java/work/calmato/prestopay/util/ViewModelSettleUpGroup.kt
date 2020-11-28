@@ -65,38 +65,40 @@ class ViewModelSettleUpGroup(application: Application) : AndroidViewModel(applic
    * @param amount やりとりされる金額の絶対値
    */
   private fun registerSettleUp(i: Int, j: Int, absAmount: Float) {
-    var amount = absAmount
-    for (k in 0..1) {
-      val user1 = listOf(listToBeCalculated[i], listToBeCalculated[j])[k]
-      val user2 = listOf(listToBeCalculated[i], listToBeCalculated[j])[1-k]
-      //    既にlistToBeSentに支払い情報がある場合
-      if (listToBeSent.map { it.payerAddPayment.id }.contains(user1.id)) {
-        val index1: Int = listToBeSent.map { it.payerAddPayment.id }.indexOf(user1.id)
-        listToBeSent[index1].payerAddPayment.amount += amount
-        //   既にlistToBeSent内のlistPayerに支払い情報がある場合は単純に足す
-        if (listToBeSent[index1].listPayer.map { it.id }.contains(user2.id)) {
-          val index2 = listToBeSent[index1].listPayer.map { it.id }.indexOf(user2.id)
-          listToBeSent[index1].listPayer[index2].amount += amount * -1
+    if(absAmount >= 0.05) {
+      var amount = absAmount
+      for (k in 0..1) {
+        val user1 = listOf(listToBeCalculated[i], listToBeCalculated[j])[k]
+        val user2 = listOf(listToBeCalculated[i], listToBeCalculated[j])[1 - k]
+        //    既にlistToBeSentに支払い情報がある場合
+        if (listToBeSent.map { it.payerAddPayment.id }.contains(user1.id)) {
+          val index1: Int = listToBeSent.map { it.payerAddPayment.id }.indexOf(user1.id)
+          listToBeSent[index1].payerAddPayment.amount += amount
+          //   既にlistToBeSent内のlistPayerに支払い情報がある場合は単純に足す
+          if (listToBeSent[index1].listPayer.map { it.id }.contains(user2.id)) {
+            val index2 = listToBeSent[index1].listPayer.map { it.id }.indexOf(user2.id)
+            listToBeSent[index1].listPayer[index2].amount += amount * -1
+          } else {
+            //   listToBeSent内のlistPayerに支払い情報がない場合は追加する
+            listToBeSent[index1].listPayer.add(
+              NetworkPayer(
+                user2.id,
+                user2.name,
+                amount * -1
+              )
+            )
+          }
         } else {
-          //   listToBeSent内のlistPayerに支払い情報がない場合は追加する
-          listToBeSent[index1].listPayer.add(
-            NetworkPayer(
-              user2.id,
-              user2.name,
-              amount * -1
+          //    既にlistToBeSentに支払い情報がない場合
+          listToBeSent.add(
+            PaymentInfoSettleUp(
+              NetworkPayer(user1.id, user1.name, amount),
+              mutableListOf(NetworkPayer(user2.id, user2.name, amount * -1))
             )
           )
         }
-      } else {
-        //    既にlistToBeSentに支払い情報がない場合
-        listToBeSent.add(
-          PaymentInfoSettleUp(
-            NetworkPayer(user1.id, user1.name, amount),
-            mutableListOf(NetworkPayer(user2.id, user2.name, amount * -1))
-          )
-        )
+        amount *= -1
       }
-      amount *= -1
     }
   }
 
