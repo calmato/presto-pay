@@ -332,5 +332,8 @@
       android:name="listNetworkPayer"
       app:argType="work.calmato.prestopay.network.NetworkPayerContainer"
       />
+    <argument
+      android:name="groupDetail"
+      app:argType="work.calmato.prestopay.network.GroupPropertyResponse"/>
   </fragment>
 </navigation>

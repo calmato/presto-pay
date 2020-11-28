@@ -196,7 +196,7 @@ interface ApiService {
     @Path("paymentId") paymentId: String
   ): Call<Unit>
 
-  @PATCH("/groups/{groupId}/payments-status")
+  @PATCH("groups/{groupId}/payments-status")
   fun settleUp(
     @Header("Authorization") token: String,
     @Path("groupId") groupId: String

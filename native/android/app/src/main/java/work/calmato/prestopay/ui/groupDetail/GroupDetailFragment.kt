@@ -154,7 +154,8 @@ class GroupDetailFragment : Fragment() {
         GroupDetailFragmentDirections.actionGroupDetailToSettleUpGroup(
           NetworkPayerContainer(
             viewModel.groupStatus!!.value!!.lendingStatus
-          )
+          ),
+          groupDetail!!
         )
       )
     }

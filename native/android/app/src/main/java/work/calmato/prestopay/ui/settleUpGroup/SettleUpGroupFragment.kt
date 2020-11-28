@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import kotlinx.android.synthetic.main.fragment_settle_up_group.*
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentSettleUpGroupBinding
 import work.calmato.prestopay.util.AdapterSettleUpGroup
@@ -43,7 +44,11 @@ class SettleUpGroupFragment : Fragment() {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     viewModel.setUsersPaymentInfo(SettleUpGroupFragmentArgs.fromBundle(requireArguments()).listNetworkPayer.payers)
+    val groupDetail = SettleUpGroupFragmentArgs.fromBundle(requireArguments()).groupDetail
     val settleUpList = viewModel.calcForSettleUp()
     recycleAdapter?.settleUpList = settleUpList
+    settleUpButton.setOnClickListener {
+      viewModel.settleUpApi(groupDetail.id)
+    }
   }
 }
