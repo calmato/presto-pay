@@ -44,6 +44,8 @@ func Router(reg *registry.Registry) *gin.Engine {
 
 		apiV1.POST("/users/check-email", reg.V1User.UniqueCheckEmail)
 		apiV1.POST("/users/check-username", reg.V1User.UniqueCheckUsername)
+
+		apiV1.PATCH("/users/:userID/unauthorized-user", reg.V1User.UpdateUnauthorizedUser)
 	}
 
 	// internal routes
@@ -55,7 +57,6 @@ func Router(reg *registry.Registry) *gin.Engine {
 		internal.DELETE("/users/:userID/groups/:groupID", reg.V1User.RemoveGroup)
 
 		internal.POST("/unauthorized-users", reg.V1User.CreateUnauthorizedUser)
-		internal.PATCH("/unauthorized-users/:userID", reg.V1User.UpdateUnauthorizedUser)
 
 		internal.POST("/groups/:groupID", reg.V1User.AddHiddenGroup)
 		internal.DELETE("/groups/:groupID", reg.V1User.RemoveHiddenGroup)

@@ -214,7 +214,8 @@ func (ua *userApplication) UpdateProfile(ctx context.Context, req *request.Updat
 func (ua *userApplication) UpdateUnauthorizedUser(
 	ctx context.Context, userID string, req *request.UpdateUnauthorizedUser,
 ) (*user.User, error) {
-	if _, err := ua.userService.Authentication(ctx); err != nil {
+	au, err := ua.userService.Authentication(ctx)
+	if err != nil {
 		return nil, domain.Unauthorized.New(err)
 	}
 
@@ -226,6 +227,18 @@ func (ua *userApplication) UpdateUnauthorizedUser(
 	u, err := ua.userService.Show(ctx, userID)
 	if err != nil {
 		return nil, err
+	}
+
+	// 未認証ユーザ -> usernameがnil && nameとthumbnailのみ
+	if u.Username != "" {
+		err := xerrors.New("Faled to Application")
+		return nil, domain.Forbidden.New(err)
+	}
+
+	// ログインユーザが所属するユーザーのみ変更できるように...
+	if contains := containsGroupID(au.GroupIDs, u.GroupIDs); !contains {
+		err := xerrors.New("Faled to Application")
+		return nil, domain.Forbidden.New(err)
 	}
 
 	thumbnailURL, err := getThumbnailURL(ctx, ua, req.Thumbnail)
@@ -484,4 +497,16 @@ func getThumbnailURL(ctx context.Context, ua *userApplication, thumbnail string)
 	}
 
 	return thumbnailURL, nil
+}
+
+func containsGroupID(authUserGroupIDs []string, unauthorizedUserGroupIDs []string) bool {
+	for _, i := range authUserGroupIDs {
+		for _, j := range unauthorizedUserGroupIDs {
+			if i == j {
+				return true
+			}
+		}
+	}
+
+	return false
 }
