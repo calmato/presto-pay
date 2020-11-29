@@ -27,7 +27,7 @@ type PaymentApplication interface {
 		ctx context.Context, req *request.UpdatePayerInPayment, groupID string, paymentID string, payerID string,
 	) (*payment.Payment, error)
 	UpdateStatus(ctx context.Context, groupID string, paymentID string) (*payment.Payment, error)
-	UpdateStatusAll(ctx context.Context, groupID string) ([]*payment.Payment, error)
+	UpdateStatusAll(ctx context.Context, groupID string) ([]*payment.Payment, map[string]*payment.Payer, string, error)
 	Destroy(ctx context.Context, groupID string, paymentID string) error
 }
 
@@ -87,7 +87,7 @@ func (pa *paymentApplication) Index(
 	}
 
 	// ユーザー毎の支払額合計作成
-	payers := map[string]*payment.Payer{}
+	pys := map[string]*payment.Payer{}
 	for _, p := range ps {
 		// 支払い情報に登録されている通貨情報を取得
 		currentRate := ers.Rates[p.Currency]
@@ -95,33 +95,33 @@ func (pa *paymentApplication) Index(
 			currentRate = ers.Rates[ers.Base]
 		}
 
-		for _, payer := range p.Payers {
-			if payer == nil {
+		for _, py := range p.Payers {
+			if py == nil {
 				continue
 			}
 
 			// 初期データを投入
-			if payers[payer.ID] == nil {
-				payers[payer.ID] = &payment.Payer{
-					ID:     payer.ID,
-					Name:   payer.Name,
+			if pys[py.ID] == nil {
+				pys[py.ID] = &payment.Payer{
+					ID:     py.ID,
+					Name:   py.Name,
 					Amount: 0,
 					IsPaid: true,
 				}
 			}
 
 			// 1つでも未支払いのものがあれば、IsPaidをfalseに変更
-			if !payer.IsPaid {
-				payers[payer.ID].IsPaid = false
-				payer.Amount *= -1
+			if !py.IsPaid {
+				pys[py.ID].IsPaid = false
+				py.Amount *= -1
 			}
 
 			// 為替レートの反映
-			payers[payer.ID].Amount += payer.Amount * ers.Rates[currency] / currentRate
+			pys[py.ID].Amount += py.Amount * ers.Rates[currency] / currentRate
 		}
 	}
 
-	return ps, payers, currency, err
+	return ps, pys, currency, err
 }
 
 func (pa *paymentApplication) Create(
@@ -304,38 +304,83 @@ func (pa *paymentApplication) UpdateStatus(
 }
 
 // UpdateStatusAll - グループ内の支払い情報全ての支払い完了フラグを完了に
-func (pa *paymentApplication) UpdateStatusAll(ctx context.Context, groupID string) ([]*payment.Payment, error) {
+func (pa *paymentApplication) UpdateStatusAll(
+	ctx context.Context, groupID string,
+) ([]*payment.Payment, map[string]*payment.Payer, string, error) {
 	u, err := pa.userService.Authentication(ctx)
 	if err != nil {
-		return nil, domain.Unauthorized.New(err)
+		return nil, nil, "", domain.Unauthorized.New(err)
 	}
 
 	contain, err := pa.userService.ContainsGroupID(ctx, u, groupID)
 	if err != nil {
-		return nil, err
+		return nil, nil, "", err
 	}
 
 	if !contain {
 		err := xerrors.New("Failed to Application")
-		return nil, domain.Forbidden.New(err)
+		return nil, nil, "", domain.Forbidden.New(err)
 	}
 
 	ps, err := pa.paymentService.IndexByIsCompleted(ctx, groupID, true) // TODO: refactor
 	if err != nil {
-		return nil, err
+		return nil, nil, "", err
 	}
 
 	for i, p := range ps {
 		p.IsCompleted = true
 
 		if _, err := pa.paymentService.Update(ctx, p, groupID); err != nil {
-			return nil, err
+			return nil, nil, "", err
 		}
 
 		ps[i] = p
 	}
 
-	return ps, nil
+	// 為替レート一覧のmapを作成
+	ers, err := pa.exchangeService.Index(ctx)
+	if err != nil {
+		return nil, nil, "", err
+	}
+
+	currency := ers.Base
+
+	// ユーザー毎の支払額合計作成
+	pys := map[string]*payment.Payer{}
+	for _, p := range ps {
+		// 支払い情報に登録されている通貨情報を取得
+		currentRate := ers.Rates[p.Currency]
+		if currentRate == 0 {
+			currentRate = ers.Rates[ers.Base]
+		}
+
+		for _, py := range p.Payers {
+			if py == nil {
+				continue
+			}
+
+			// 初期データを投入
+			if pys[py.ID] == nil {
+				pys[py.ID] = &payment.Payer{
+					ID:     py.ID,
+					Name:   py.Name,
+					Amount: 0,
+					IsPaid: true,
+				}
+			}
+
+			// 1つでも未支払いのものがあれば、IsPaidをfalseに変更
+			if !py.IsPaid {
+				pys[py.ID].IsPaid = false
+				py.Amount *= -1
+			}
+
+			// 為替レートの反映
+			pys[py.ID].Amount += py.Amount * ers.Rates[currency] / currentRate
+		}
+	}
+
+	return ps, pys, currency, nil
 }
 
 func (pa *paymentApplication) Destroy(ctx context.Context, groupID string, paymentID string) error {

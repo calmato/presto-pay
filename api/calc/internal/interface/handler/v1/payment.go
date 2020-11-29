@@ -47,19 +47,19 @@ func (ph *apiV1PaymentHandler) Index(ctx *gin.Context) {
 		return
 	}
 
-	paymentsResponse := make([]*response.PaymentInIndexPayments, len(payments))
+	paymentsResponse := make([]*response.PaymentInPayments, len(payments))
 	for i, payment := range payments {
-		payersResponse := make([]*response.PayerInIndexPayments, len(payment.Payers))
-		positivePayersResponse := make([]*response.PayerInIndexPayments, 0)
-		negativePayersResponse := make([]*response.PayerInIndexPayments, 0)
+		payersResponse := make([]*response.PayerInPayments, len(payment.Payers))
+		positivePayersResponse := make([]*response.PayerInPayments, 0)
+		negativePayersResponse := make([]*response.PayerInPayments, 0)
 		for j, payer := range payment.Payers {
-			pr := &response.PayerInIndexPayments{
+			pr := &response.PayerInPayments{
 				ID:     payer.ID,
 				Name:   payer.Name,
 				Amount: payer.Amount,
 			}
 
-			prAbs := &response.PayerInIndexPayments{
+			prAbs := &response.PayerInPayments{
 				ID:     payer.ID,
 				Name:   payer.Name,
 				Amount: math.Abs(payer.Amount),
@@ -74,7 +74,7 @@ func (ph *apiV1PaymentHandler) Index(ctx *gin.Context) {
 			}
 		}
 
-		paymentsResponse[i] = &response.PaymentInIndexPayments{
+		paymentsResponse[i] = &response.PaymentInPayments{
 			ID:             payment.ID,
 			GroupID:        payment.GroupID,
 			Name:           payment.Name,
@@ -93,16 +93,16 @@ func (ph *apiV1PaymentHandler) Index(ctx *gin.Context) {
 		}
 	}
 
-	usersResponse := map[string]*response.UserInIndexPayments{}
+	usersResponse := map[string]*response.UserInPayments{}
 	for id, payer := range payers {
-		usersResponse[id] = &response.UserInIndexPayments{
+		usersResponse[id] = &response.UserInPayments{
 			ID:     payer.ID,
 			Name:   payer.Name,
 			Amount: payer.Amount,
 		}
 	}
 
-	res := &response.IndexPayments{
+	res := &response.Payments{
 		Payments: paymentsResponse,
 		Users:    usersResponse,
 		Currency: currency,
@@ -286,55 +286,71 @@ func (ph *apiV1PaymentHandler) UpdateStatusAll(ctx *gin.Context) {
 	groupID := ctx.Params.ByName("groupID")
 
 	c := middleware.GinContextToContext(ctx)
-	ps, err := ph.paymentApplication.UpdateStatusAll(c, groupID)
+	payments, payers, currency, err := ph.paymentApplication.UpdateStatusAll(c, groupID)
 	if err != nil {
 		handler.ErrorHandling(ctx, err)
 		return
 	}
 
-	prs := make([]*response.UpdatePayment, len(ps))
-	for i, p := range ps {
-		payers := make([]*response.PayerInUpdatePayment, len(p.Payers))
-		positivePayers := make([]*response.PayerInUpdatePayment, 0)
-		negativePayers := make([]*response.PayerInUpdatePayment, 0)
-		for i, payer := range p.Payers {
-			pr := &response.PayerInUpdatePayment{
+	paymentsResponse := make([]*response.PaymentInPayments, len(payments))
+	for i, payment := range payments {
+		payersResponse := make([]*response.PayerInPayments, len(payment.Payers))
+		positivePayersResponse := make([]*response.PayerInPayments, 0)
+		negativePayersResponse := make([]*response.PayerInPayments, 0)
+		for j, payer := range payment.Payers {
+			pr := &response.PayerInPayments{
 				ID:     payer.ID,
+				Name:   payer.Name,
 				Amount: payer.Amount,
 			}
 
-			payers[i] = pr
+			prAbs := &response.PayerInPayments{
+				ID:     payer.ID,
+				Name:   payer.Name,
+				Amount: math.Abs(payer.Amount),
+			}
+
+			payersResponse[j] = pr
 
 			if payer.IsPaid {
-				positivePayers = append(positivePayers, pr)
+				positivePayersResponse = append(positivePayersResponse, prAbs)
 			} else {
-				negativePayers = append(negativePayers, pr)
+				negativePayersResponse = append(negativePayersResponse, prAbs)
 			}
 		}
 
-		pr := &response.UpdatePayment{
-			ID:             p.ID,
-			GroupID:        p.GroupID,
-			Name:           p.Name,
-			Currency:       p.Currency,
-			Total:          p.Total,
-			Payers:         payers,
-			PostivePayers:  positivePayers,
-			NegativePayers: negativePayers,
-			Tags:           p.Tags,
-			Comment:        p.Comment,
-			ImageURLs:      p.ImageURLs,
-			PaidAt:         p.PaidAt,
-			IsCompleted:    p.IsCompleted,
-			CreatedAt:      p.CreatedAt,
-			UpdatedAt:      p.UpdatedAt,
+		paymentsResponse[i] = &response.PaymentInPayments{
+			ID:             payment.ID,
+			GroupID:        payment.GroupID,
+			Name:           payment.Name,
+			Currency:       payment.Currency,
+			Total:          payment.Total,
+			Payers:         payersResponse,
+			PostivePayers:  positivePayersResponse,
+			NegativePayers: negativePayersResponse,
+			Tags:           payment.Tags,
+			Comment:        payment.Comment,
+			ImageURLs:      payment.ImageURLs,
+			PaidAt:         payment.PaidAt,
+			IsCompleted:    payment.IsCompleted,
+			CreatedAt:      payment.CreatedAt,
+			UpdatedAt:      payment.UpdatedAt,
 		}
-
-		prs[i] = pr
 	}
 
-	res := &response.UpdatePayments{
-		Payments: prs,
+	usersResponse := map[string]*response.UserInPayments{}
+	for id, payer := range payers {
+		usersResponse[id] = &response.UserInPayments{
+			ID:     payer.ID,
+			Name:   payer.Name,
+			Amount: payer.Amount,
+		}
+	}
+
+	res := &response.Payments{
+		Payments: paymentsResponse,
+		Users:    usersResponse,
+		Currency: currency,
 	}
 
 	ctx.JSON(http.StatusOK, res)
