@@ -16,6 +16,12 @@ type CreateUser struct {
 	PasswordConfirmation string `json:"passwordConfirmation" validate:"required,eqfield=Password"`
 }
 
+// CreateUnauthorizedUser - 未登録ユーザ作成APIのリクエスト
+type CreateUnauthorizedUser struct {
+	Name      string `json:"name" validate:"required,max=32"`
+	Thumbnail string `json:"thumbnail"`
+}
+
 // RegisterInstanceID - 端末のデバイスID登録APIのリクエスト
 type RegisterInstanceID struct {
 	InstanceID string `json:"instanceId" validate:"required"`
@@ -27,6 +33,12 @@ type UpdateProfile struct {
 	Username  string `json:"username" validate:"required,max=32"`
 	Email     string `json:"email" validate:"required,email,max=256"`
 	Thumbnail string `Json:"thumbnail"`
+}
+
+// UpdateUnauthorizedUser - 未登録ユーザ編集APIのリクエスト
+type UpdateUnauthorizedUser struct {
+	Name      string `json:"name" validate:"required,max=32"`
+	Thumbnail string `json:"thumbnail"`
 }
 
 // UpdateUserPassword - パスワード編集APIのリクエスト

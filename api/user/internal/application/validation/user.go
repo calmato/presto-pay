@@ -9,8 +9,10 @@ import (
 type UserRequestValidation interface {
 	IndexByUsername(req *request.IndexByUsername) []*domain.ValidationError
 	CreateUser(req *request.CreateUser) []*domain.ValidationError
+	CreateUnauthorizedUser(req *request.CreateUnauthorizedUser) []*domain.ValidationError
 	RegisterInstanceID(req *request.RegisterInstanceID) []*domain.ValidationError
 	UpdateProfile(req *request.UpdateProfile) []*domain.ValidationError
+	UpdateUnauthorizedUser(req *request.UpdateUnauthorizedUser) []*domain.ValidationError
 	UpdatePassword(req *request.UpdateUserPassword) []*domain.ValidationError
 	AddFriend(req *request.AddFriend) []*domain.ValidationError
 	UniqueCheckEmail(req *request.UniqueCheckUserEmail) []*domain.ValidationError
@@ -38,11 +40,19 @@ func (urv *userRequestValidation) CreateUser(req *request.CreateUser) []*domain.
 	return urv.validator.Run(req)
 }
 
+func (urv *userRequestValidation) CreateUnauthorizedUser(req *request.CreateUnauthorizedUser) []*domain.ValidationError {
+	return urv.validator.Run(req)
+}
+
 func (urv *userRequestValidation) RegisterInstanceID(req *request.RegisterInstanceID) []*domain.ValidationError {
 	return urv.validator.Run(req)
 }
 
 func (urv *userRequestValidation) UpdateProfile(req *request.UpdateProfile) []*domain.ValidationError {
+	return urv.validator.Run(req)
+}
+
+func (urv *userRequestValidation) UpdateUnauthorizedUser(req *request.UpdateUnauthorizedUser) []*domain.ValidationError {
 	return urv.validator.Run(req)
 }
 
