@@ -167,6 +167,11 @@ func (ps *paymentService) Create(ctx context.Context, p *payment.Payment, groupI
 	p.CreatedAt = current
 	p.UpdatedAt = current
 
+	if err := checkPaid(p, current); err != nil {
+		err = xerrors.Errorf("Failed to Payment Service: %w", err)
+		return nil, domain.Unknown.New(err)
+	}
+
 	if err := ps.paymentRepository.Create(ctx, p, groupID); err != nil {
 		err = xerrors.Errorf("Failed to Repository: %w", err)
 		return nil, domain.ErrorInDatastore.New(err)
@@ -174,8 +179,8 @@ func (ps *paymentService) Create(ctx context.Context, p *payment.Payment, groupI
 
 	// 支払い情報登録の通知
 	deviceTokens := []string{}
-	for _, payer := range p.Payers {
-		u, _ := ps.apiClient.ShowUser(ctx, payer.ID)
+	for _, py := range p.Payers {
+		u, _ := ps.apiClient.ShowUser(ctx, py.ID)
 		if u == nil || u.InstanceID == "" {
 			continue
 		}
@@ -211,27 +216,15 @@ func (ps *paymentService) Update(ctx context.Context, p *payment.Payment, groupI
 		return nil, domain.ErrorInDatastore.New(err)
 	}
 
+	// 支払い情報の更新
 	current := time.Now()
+
 	p.GroupID = g.ID
 	p.UpdatedAt = current
 
-	// 支払い完了フラグの更新
-	// - isCompletedがtrue -> isPaidをtrueに
-	// - isCompletedがfalse -> isPaidがすべてtrueなら、isCompletedをtrueに
-	if p.IsCompleted {
-		for i := 0; i < len(p.Payers); i++ {
-			p.Payers[i].IsPaid = true
-		}
-	} else {
-		for i, payer := range p.Payers {
-			if !payer.IsPaid {
-				break
-			}
-
-			if i == len(p.Payers)-1 {
-				p.IsCompleted = true
-			}
-		}
+	if err := checkPaid(p, current); err != nil {
+		err = xerrors.Errorf("Failed to Payment Service: %w", err)
+		return nil, domain.Unknown.New(err)
 	}
 
 	if err := ps.paymentRepository.Update(ctx, p, groupID); err != nil {
@@ -249,8 +242,8 @@ func (ps *paymentService) Update(ctx context.Context, p *payment.Payment, groupI
 
 	// 支払い情報更新の通知
 	deviceTokens := []string{}
-	for _, payer := range p.Payers {
-		u, _ := ps.apiClient.ShowUser(ctx, payer.ID)
+	for _, py := range p.Payers {
+		u, _ := ps.apiClient.ShowUser(ctx, py.ID)
 		if u == nil || u.InstanceID == "" {
 			continue
 		}
@@ -267,7 +260,7 @@ func (ps *paymentService) Update(ctx context.Context, p *payment.Payment, groupI
 }
 
 func (ps *paymentService) UpdatePayer(
-	ctx context.Context, groupID string, paymentID string, payer *payment.Payer,
+	ctx context.Context, p *payment.Payment, groupID string, payerID string, isPaid bool,
 ) (*payment.Payment, error) {
 	// グループ情報取得 -> 存在性の検証
 	g, err := ps.groupRepository.Show(ctx, groupID)
@@ -275,28 +268,30 @@ func (ps *paymentService) UpdatePayer(
 		return nil, domain.ErrorInDatastore.New(err)
 	}
 
-	p, err := ps.paymentRepository.Show(ctx, g.ID, paymentID)
-	if err != nil {
-		err = xerrors.Errorf("Failed to Repository: %w", err)
-		return nil, domain.NotFound.New(err)
-	}
-
+	// 支払い情報の更新
 	current := time.Now()
+
 	p.GroupID = g.ID
 	p.UpdatedAt = current
 
-	// ユーザ毎の支払い情報更新
-	for i, v := range p.Payers {
-		if v.ID != payer.ID {
+	// 対象ユーザーの支払い情報更新
+	for _, py := range p.Payers {
+		if payerID != py.ID {
 			continue
 		}
 
-		p.Payers[i].IsPaid = payer.IsPaid
+		if isPaid {
+			py.PaidAt = current
+		} else {
+			py.PaidAt = time.Time{}
+		}
+
+		break
 	}
 
 	// 支払い完了フラグの更新
-	for i, payer := range p.Payers {
-		if !payer.IsPaid {
+	for i, py := range p.Payers {
+		if py.PaidAt.IsZero() {
 			p.IsCompleted = false
 			break
 		}
@@ -371,4 +366,33 @@ func (ps *paymentService) UploadImage(ctx context.Context, data []byte) (string,
 	}
 
 	return imageURL, nil
+}
+
+// checkPaid - 支払い完了フラグの更新
+func checkPaid(p *payment.Payment, current time.Time) error {
+	// 支払い者全員を支払い完了に
+	if p.IsCompleted {
+		for _, py := range p.Payers {
+			if py.PaidAt.IsZero() {
+				py.PaidAt = current
+			}
+		}
+
+		return nil
+	}
+
+	// 各支払い者の支払い日時を更新
+	// -> 受け取る側: PaitAtがゼロ値の場合、支払い完了日時を追加
+	// -> 支払う側: PaidAtを一律ゼロ値に
+	for _, py := range p.Payers {
+		if py.IsPaid {
+			if py.PaidAt.IsZero() {
+				py.PaidAt = current
+			}
+		} else {
+			py.PaidAt = time.Time{}
+		}
+	}
+
+	return nil
 }
