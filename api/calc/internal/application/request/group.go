@@ -19,7 +19,17 @@ type AddUsersInGroup struct {
 	UserIDs []string `json:"userIds" validate:"max=64,unique"`
 }
 
+// AddUnauthorizedUsersInGroup - グループへ未登録ユーザー追加APIのリクエスト
+type AddUnauthorizedUsersInGroup struct {
+	UserIDs []string `json:"userIds" validate:"max=64,unique"`
+}
+
 // RemoveUsersInGroup - グループのユーザー削除APIのリクエスト
 type RemoveUsersInGroup struct {
+	UserIDs []string `json:"userIds" validate:"max=64,unique"`
+}
+
+// RemoveUnauthorizedUsersInGroup - グループへ未登録ユーザー削除APIのリクエスト
+type RemoveUnauthorizedUsersInGroup struct {
 	UserIDs []string `json:"userIds" validate:"max=64,unique"`
 }

@@ -10,7 +10,9 @@ type GroupRequestValidation interface {
 	CreateGroup(req *request.CreateGroup) []*domain.ValidationError
 	UpdateGroup(req *request.UpdateGroup) []*domain.ValidationError
 	AddUsersInGroup(req *request.AddUsersInGroup) []*domain.ValidationError
+	AddUnauthorizedUsersInGroup(req *request.AddUnauthorizedUsersInGroup) []*domain.ValidationError
 	RemoveUsersInGroup(req *request.RemoveUsersInGroup) []*domain.ValidationError
+	RemoveUnauthorizedUsersInGroup(req *request.RemoveUnauthorizedUsersInGroup) []*domain.ValidationError
 }
 
 type groupRequestValidation struct {
@@ -38,6 +40,18 @@ func (grv *groupRequestValidation) AddUsersInGroup(req *request.AddUsersInGroup)
 	return grv.validator.Run(req)
 }
 
+func (grv *groupRequestValidation) AddUnauthorizedUsersInGroup(
+	req *request.AddUnauthorizedUsersInGroup,
+) []*domain.ValidationError {
+	return grv.validator.Run(req)
+}
+
 func (grv *groupRequestValidation) RemoveUsersInGroup(req *request.RemoveUsersInGroup) []*domain.ValidationError {
+	return grv.validator.Run(req)
+}
+
+func (grv *groupRequestValidation) RemoveUnauthorizedUsersInGroup(
+	req *request.RemoveUnauthorizedUsersInGroup,
+) []*domain.ValidationError {
 	return grv.validator.Run(req)
 }
