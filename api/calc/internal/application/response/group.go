@@ -89,16 +89,6 @@ type RemoveUsersInGroup struct {
 	UpdatedAt    time.Time `json:"updatedAt"`
 }
 
-// RemoveUnauthorizedUsersInGroup - グループの未登録ユーザー削除APIのレスポンス
-type RemoveUnauthorizedUsersInGroup struct {
-	ID           string    `json:"id"`
-	Name         string    `json:"name"`
-	ThumbnailURL string    `json:"thumbnailUrl"`
-	UserIDs      []string  `json:"userIds"`
-	CreatedAt    time.Time `json:"createdAt"`
-	UpdatedAt    time.Time `json:"updatedAt"`
-}
-
 // HiddenGroup - グループ一覧取得APIのグループ情報
 type HiddenGroup struct {
 	ID           string    `json:"id"`
