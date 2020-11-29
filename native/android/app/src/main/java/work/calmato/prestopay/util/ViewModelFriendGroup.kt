@@ -1,6 +1,5 @@
 package work.calmato.prestopay.util
 
-import android.app.Activity
 import android.app.Application
 import android.util.Log
 import android.widget.Toast
@@ -121,31 +120,26 @@ class ViewModelFriendGroup(application: Application) : AndroidViewModel(applicat
     viewModelJob.cancel()
   }
 
-  fun addFriendApi(userProperty: UserProperty, activity: Activity) {
+  fun addFriendApi(userProperty: UserProperty) {
     _nowLoading.value = true
     val userId = userProperty.id
     viewModelScope.launch {
       try {
         friendsRepository.addFriend(id!!, UserId(userId), userProperty)
-        Toast.makeText(
-          activity,
-          getApplication<Application>().resources.getString(R.string.add_friend_succeeded),
-          Toast.LENGTH_SHORT
-        ).show()
         _nowLoading.value = false
       } catch (e: java.lang.Exception) {
-        Toast.makeText(activity, e.message, Toast.LENGTH_LONG).show()
+        Toast.makeText(getApplication(), e.message, Toast.LENGTH_LONG).show()
         _nowLoading.value = false
       }
     }
   }
 
-  fun createGroupApi(groupProperty: CreateGroupProperty, activity: Activity) {
+  fun createGroupApi(groupProperty: CreateGroupProperty) {
     _nowLoading.value = true
     Api.retrofitService.createGroup("Bearer $id", groupProperty)
       .enqueue(object : Callback<GroupPropertyResponse> {
         override fun onFailure(call: Call<GroupPropertyResponse>, t: Throwable) {
-          Toast.makeText(activity, t.message, Toast.LENGTH_LONG).show()
+          Toast.makeText(getApplication(), t.message, Toast.LENGTH_LONG).show()
           _nowLoading.value = false
         }
 
@@ -165,15 +159,10 @@ class ViewModelFriendGroup(application: Application) : AndroidViewModel(applicat
                 userIds = responseGroup.userIds
               ))
             }
-            Toast.makeText(
-              activity,
-              getApplication<Application>().resources.getString(R.string.create_group_succeeded),
-              Toast.LENGTH_SHORT
-            ).show()
             _navigateToHome.value = true
           } else {
             Toast.makeText(
-              activity,
+              getApplication(),
               getApplication<Application>().resources.getString(R.string.create_group_failed),
               Toast.LENGTH_LONG
             ).show()
@@ -183,7 +172,7 @@ class ViewModelFriendGroup(application: Application) : AndroidViewModel(applicat
       })
   }
 
-  fun deleteFriendSwipe(friendId: String, activity: Activity) {
+  fun deleteFriendSwipe(friendId: String) {
     _nowLoading.value = true
 
     coroutineScope.launch {
@@ -193,7 +182,7 @@ class ViewModelFriendGroup(application: Application) : AndroidViewModel(applicat
         }
       } catch (e: java.lang.Exception) {
         Toast.makeText(
-          activity,
+          getApplication(),
           getApplication<Application>().resources.getString(R.string.delete_friend_failed),
           Toast.LENGTH_LONG
         ).show()
@@ -203,7 +192,7 @@ class ViewModelFriendGroup(application: Application) : AndroidViewModel(applicat
     _nowLoading.value = false
   }
 
-  fun deleteGroup(groupId: String, activity: Activity) {
+  fun deleteGroup(groupId: String) {
     _nowLoading.value = true
 
     coroutineScope.launch {
@@ -213,7 +202,7 @@ class ViewModelFriendGroup(application: Application) : AndroidViewModel(applicat
         }
       } catch (e: java.lang.Exception) {
         Toast.makeText(
-          activity,
+          getApplication(),
           getApplication<Application>().resources.getString(R.string.delete_group_failed),
           Toast.LENGTH_LONG
         ).show()

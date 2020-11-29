@@ -208,8 +208,7 @@ class GroupFriendFragment : Fragment() {
                 ) {
                   Log.d(ViewModelGroup.TAG, response.body().toString())
                   viewModel.deleteGroup(
-                    groups!![viewHolder.adapterPosition].id,
-                    requireActivity()
+                    groups!![viewHolder.adapterPosition].id
                   )
                   frontView.visibility = ImageView.GONE
                   progressBar.visibility = android.widget.ProgressBar.INVISIBLE
@@ -308,8 +307,7 @@ class GroupFriendFragment : Fragment() {
                 ) {
                   Log.d(ViewModelGroup.TAG, response.body().toString())
                   viewModel.deleteFriendSwipe(
-                    friends!![viewHolder.adapterPosition].id,
-                    requireActivity()
+                    friends!![viewHolder.adapterPosition].id
                   )
                   frontView.visibility = ImageView.GONE
                   progressBar.visibility = android.widget.ProgressBar.INVISIBLE

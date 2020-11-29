@@ -1,6 +1,5 @@
 package work.calmato.prestopay.util
 
-import android.app.Activity
 import android.app.Application
 import android.util.Log
 import android.widget.Toast
@@ -15,14 +14,14 @@ class ViewModelUser(application: Application) : AndroidViewModel(application) {
   private val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplication())
 
 
-  fun registerDeviceId(registerDeviceIdProperty: RegisterDeviceIdProperty, activity: Activity) {
+  fun registerDeviceId(registerDeviceIdProperty: RegisterDeviceIdProperty) {
     val id = sharedPreferences.getString("token", null)
     val token = "Bearer $id"
     Api.retrofitService
       .registerDeviceId(token, registerDeviceIdProperty)
       .enqueue(object : Callback<AccountResponse> {
         override fun onFailure(call: Call<AccountResponse>, t: Throwable) {
-          Toast.makeText(activity, t.message, Toast.LENGTH_LONG).show()
+          Toast.makeText(getApplication(), t.message, Toast.LENGTH_LONG).show()
         }
 
         override fun onResponse(call: Call<AccountResponse>, response: Response<AccountResponse>) {

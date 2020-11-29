@@ -90,10 +90,7 @@ class PaymentDetailFragment : PermissionBase() {
           call: Call<Unit>,
           response: Response<Unit>
         ) {
-          if (response.isSuccessful) {
-            Toast.makeText(requireContext(), "精算登録しました", Toast.LENGTH_LONG).show()
-            requireActivity().onBackPressed()
-          } else {
+          if (!response.isSuccessful) {
             Toast.makeText(requireContext(), "精算登録に失敗しました", Toast.LENGTH_LONG).show()
           }
           progressBarPaymentDetail.visibility = ProgressBar.GONE

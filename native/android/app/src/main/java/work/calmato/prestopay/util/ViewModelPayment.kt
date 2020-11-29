@@ -1,6 +1,5 @@
 package work.calmato.prestopay.util
 
-import android.app.Activity
 import android.app.Application
 import android.util.Log
 import android.widget.Toast
@@ -60,7 +59,7 @@ class ViewModelPayment(application: Application) : AndroidViewModel(application)
     }
   }
 
-  fun deletePayment(paymentId: String, activity: Activity) {
+  fun deletePayment(paymentId: String) {
     _nowLoading.value = true
 
     coroutineScope.launch {
@@ -70,7 +69,7 @@ class ViewModelPayment(application: Application) : AndroidViewModel(application)
         }
       } catch (e: java.lang.Exception) {
         Toast.makeText(
-          activity,
+          getApplication(),
           getApplication<Application>().resources.getString(R.string.delete_friend_failed),
           Toast.LENGTH_LONG
         ).show()

@@ -331,7 +331,7 @@ class LoginFragment : Fragment() {
       val registerDeviceIdProperty = RegisterDeviceIdProperty(instanceId)
 
       // send instance_id to api
-      viewModel.registerDeviceId(registerDeviceIdProperty, requireActivity())
+      viewModel.registerDeviceId(registerDeviceIdProperty)
     })
   }
 
