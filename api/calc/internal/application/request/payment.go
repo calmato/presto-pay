@@ -32,5 +32,5 @@ type UpdatePayment struct {
 
 // UpdatePayerInPayment - ユーザー毎の支払い情報編集APIのリクエスト
 type UpdatePayerInPayment struct {
-	IsPaid bool `json:"isPaid" validate:"oneof=true false"`
+	IsPaid bool `json:"isPaid"`
 }

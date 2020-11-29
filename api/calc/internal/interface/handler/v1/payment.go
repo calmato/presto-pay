@@ -59,10 +59,17 @@ func (ph *apiV1PaymentHandler) Index(ctx *gin.Context) {
 				Amount: payer.Amount,
 			}
 
+			if payer.PaidAt.IsZero() {
+				pr.IsPaid = false
+			} else {
+				pr.IsPaid = true
+			}
+
 			prAbs := &response.PayerInPayment{
 				ID:     payer.ID,
 				Name:   payer.Name,
 				Amount: math.Abs(payer.Amount),
+				IsPaid: pr.IsPaid,
 			}
 
 			payersResponse[j] = pr
@@ -133,7 +140,14 @@ func (ph *apiV1PaymentHandler) Create(ctx *gin.Context) {
 	for i, payer := range p.Payers {
 		pr := &response.PayerInPayment{
 			ID:     payer.ID,
+			Name:   payer.Name,
 			Amount: payer.Amount,
+		}
+
+		if payer.PaidAt.IsZero() {
+			pr.IsPaid = false
+		} else {
+			pr.IsPaid = true
 		}
 
 		payers[i] = pr
@@ -189,7 +203,14 @@ func (ph *apiV1PaymentHandler) Update(ctx *gin.Context) {
 	for i, payer := range p.Payers {
 		pr := &response.PayerInPayment{
 			ID:     payer.ID,
+			Name:   payer.Name,
 			Amount: payer.Amount,
+		}
+
+		if payer.PaidAt.IsZero() {
+			pr.IsPaid = false
+		} else {
+			pr.IsPaid = true
 		}
 
 		payers[i] = pr
@@ -239,7 +260,14 @@ func (ph *apiV1PaymentHandler) UpdateStatus(ctx *gin.Context) {
 	for i, payer := range p.Payers {
 		pr := &response.PayerInPayment{
 			ID:     payer.ID,
+			Name:   payer.Name,
 			Amount: payer.Amount,
+		}
+
+		if payer.PaidAt.IsZero() {
+			pr.IsPaid = false
+		} else {
+			pr.IsPaid = true
 		}
 
 		payers[i] = pr
@@ -292,6 +320,12 @@ func (ph *apiV1PaymentHandler) UpdateStatusAll(ctx *gin.Context) {
 				ID:     payer.ID,
 				Name:   payer.Name,
 				Amount: payer.Amount,
+			}
+
+			if payer.PaidAt.IsZero() {
+				pr.IsPaid = false
+			} else {
+				pr.IsPaid = true
 			}
 
 			prAbs := &response.PayerInPayment{
@@ -370,7 +404,14 @@ func (ph *apiV1PaymentHandler) UpdatePayer(ctx *gin.Context) {
 	for i, payer := range p.Payers {
 		pr := &response.PayerInPayment{
 			ID:     payer.ID,
+			Name:   payer.Name,
 			Amount: payer.Amount,
+		}
+
+		if payer.PaidAt.IsZero() {
+			pr.IsPaid = false
+		} else {
+			pr.IsPaid = true
 		}
 
 		payers[i] = pr
