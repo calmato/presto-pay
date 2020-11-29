@@ -394,6 +394,33 @@ paths:
         '500':
           $ref: '#/components/responses/Unkown'
 
+  /groups/{groupId}/unauthorized-users:
+    post:
+      summary: グループ 認証なしのユーザー追加
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: groupId
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: グループUUID
+      requestBody:
+        $ref: '#/components/requestBodies/AddUnauthorizedUsersInGroup'
+      responses:
+        '200':
+          $ref: '#/components/responses/AddUsersInGroup'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/Unkown'
+
   /groups/{groupId}/hidden:
     post:
       summary: 非公開グループ追加
@@ -884,6 +911,27 @@ components:
                 description: ユーザーID一覧
                 items:
                   type: string
+
+    AddUnauthorizedUsersInGroup:
+      description: グループ 未認証のユーザー追加
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              users:
+                type: array
+                description: ユーザー一覧
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                      description: 表示名
+                    thumbnail:
+                      type: string
+                      description: サムネイル
 
     RemoveUsersInGroup:
       description: グループ ユーザー削除
