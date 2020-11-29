@@ -396,7 +396,7 @@ paths:
 
   /groups/{groupId}/unauthorized-users:
     post:
-      summary: グループ 認証なしのユーザー追加
+      summary: グループ 未登録ユーザー追加
       security:
         - BearerAuth: []
       parameters:
