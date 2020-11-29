@@ -46,17 +46,6 @@ func (us *userService) CreateUnauthorizedUser(
 	return u, nil
 }
 
-func (us *userService) UpdateUnauthorizedUser(
-	ctx context.Context, userID string, name string, thumbnail string,
-) (*user.User, error) {
-	u, err := us.apiClient.UpdateUnauthorizedUser(ctx, userID, name, thumbnail)
-	if err != nil {
-		return nil, err
-	}
-
-	return u, nil
-}
-
 func (us *userService) ContainsGroupID(ctx context.Context, u *user.User, groupID string) (bool, error) {
 	if u == nil {
 		err := xerrors.New("User is empty")
