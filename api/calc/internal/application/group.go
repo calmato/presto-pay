@@ -20,6 +20,9 @@ type GroupApplication interface {
 	Create(ctx context.Context, req *request.CreateGroup) (*group.Group, error)
 	Update(ctx context.Context, req *request.UpdateGroup, groupID string) (*group.Group, error)
 	AddUsers(ctx context.Context, req *request.AddUsersInGroup, groupID string) (*group.Group, error)
+	AddUnauthorizedUsers(
+		ctx context.Context, req *request.AddUnauthorizedUsersInGroup, groupID string,
+	) (*group.Group, error)
 	RemoveUsers(ctx context.Context, req *request.RemoveUsersInGroup, groupID string) (*group.Group, error)
 	AddHiddenGroup(ctx context.Context, groupID string) ([]*group.Group, []*group.Group, error)
 	RemoveHiddenGroup(ctx context.Context, groupID string) ([]*group.Group, []*group.Group, error)
@@ -191,6 +194,49 @@ func (ga *groupApplication) AddUsers(
 	}
 
 	g, err := ga.groupService.AddUsers(ctx, groupID, req.UserIDs)
+	if err != nil {
+		return nil, err
+	}
+
+	return g, nil
+}
+
+func (ga *groupApplication) AddUnauthorizedUsers(
+	ctx context.Context, req *request.AddUnauthorizedUsersInGroup, groupID string,
+) (*group.Group, error) {
+	au, err := ga.userService.Authentication(ctx)
+	if err != nil {
+		return nil, domain.Unauthorized.New(err)
+	}
+
+	contain, err := ga.userService.ContainsGroupID(ctx, au, groupID)
+	if err != nil {
+		return nil, err
+	}
+
+	if !contain {
+		err := xerrors.New("Failed to Application")
+		return nil, domain.Forbidden.New(err)
+	}
+
+	if ves := ga.groupRequestValidation.AddUnauthorizedUsersInGroup(req); len(ves) > 0 {
+		err := xerrors.New("Failed to RequestValidation")
+		return nil, domain.InvalidRequestValidation.New(err, ves...)
+	}
+
+	// Create UnauthorizedUsers
+	userIDs := make([]string, len(req.Users))
+	for i, u := range req.Users {
+		res, err := ga.userService.CreateUnauthorizedUser(ctx, u.Name, u.Thumbnail)
+		if err != nil {
+			return nil, err
+		}
+
+		userIDs[i] = res.ID
+	}
+
+	// Add UnauthorizedUsers in Group
+	g, err := ga.groupService.AddUsers(ctx, groupID, userIDs)
 	if err != nil {
 		return nil, err
 	}

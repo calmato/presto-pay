@@ -41,6 +41,7 @@ func Router(reg *registry.Registry) *gin.Engine {
 		groups := apiV1.Group("/groups/:groupID")
 		{
 			groups.POST("/users", reg.V1Group.AddUsers)
+			groups.POST("/unauthorized-users", reg.V1Group.AddUnauthorizedUsers)
 			groups.DELETE("/users", reg.V1Group.RemoveUsers)
 
 			groups.GET("/payments", reg.V1Payment.Index)
