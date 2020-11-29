@@ -109,6 +109,21 @@ func (mr *MockUserServiceMockRecorder) Create(ctx, u interface{}) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockUserService)(nil).Create), ctx, u)
 }
 
+// CreateUnauthorizedUser mocks base method
+func (m *MockUserService) CreateUnauthorizedUser(ctx context.Context, u *user.User) (*user.User, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CreateUnauthorizedUser", ctx, u)
+	ret0, _ := ret[0].(*user.User)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CreateUnauthorizedUser indicates an expected call of CreateUnauthorizedUser
+func (mr *MockUserServiceMockRecorder) CreateUnauthorizedUser(ctx, u interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateUnauthorizedUser", reflect.TypeOf((*MockUserService)(nil).CreateUnauthorizedUser), ctx, u)
+}
+
 // Update mocks base method
 func (m *MockUserService) Update(ctx context.Context, u *user.User) (*user.User, error) {
 	m.ctrl.T.Helper()
@@ -136,6 +151,21 @@ func (m *MockUserService) UpdatePassword(ctx context.Context, uid, password stri
 func (mr *MockUserServiceMockRecorder) UpdatePassword(ctx, uid, password interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdatePassword", reflect.TypeOf((*MockUserService)(nil).UpdatePassword), ctx, uid, password)
+}
+
+// UpdateUnauthorizedUser mocks base method
+func (m *MockUserService) UpdateUnauthorizedUser(ctx context.Context, u *user.User) (*user.User, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdateUnauthorizedUser", ctx, u)
+	ret0, _ := ret[0].(*user.User)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// UpdateUnauthorizedUser indicates an expected call of UpdateUnauthorizedUser
+func (mr *MockUserServiceMockRecorder) UpdateUnauthorizedUser(ctx, u interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateUnauthorizedUser", reflect.TypeOf((*MockUserService)(nil).UpdateUnauthorizedUser), ctx, u)
 }
 
 // UploadThumbnail mocks base method

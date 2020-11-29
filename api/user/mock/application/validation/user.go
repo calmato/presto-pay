@@ -62,6 +62,20 @@ func (mr *MockUserRequestValidationMockRecorder) CreateUser(req interface{}) *go
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateUser", reflect.TypeOf((*MockUserRequestValidation)(nil).CreateUser), req)
 }
 
+// CreateUnauthorizedUser mocks base method
+func (m *MockUserRequestValidation) CreateUnauthorizedUser(req *request.CreateUnauthorizedUser) []*domain.ValidationError {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CreateUnauthorizedUser", req)
+	ret0, _ := ret[0].([]*domain.ValidationError)
+	return ret0
+}
+
+// CreateUnauthorizedUser indicates an expected call of CreateUnauthorizedUser
+func (mr *MockUserRequestValidationMockRecorder) CreateUnauthorizedUser(req interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateUnauthorizedUser", reflect.TypeOf((*MockUserRequestValidation)(nil).CreateUnauthorizedUser), req)
+}
+
 // RegisterInstanceID mocks base method
 func (m *MockUserRequestValidation) RegisterInstanceID(req *request.RegisterInstanceID) []*domain.ValidationError {
 	m.ctrl.T.Helper()
@@ -88,6 +102,20 @@ func (m *MockUserRequestValidation) UpdateProfile(req *request.UpdateProfile) []
 func (mr *MockUserRequestValidationMockRecorder) UpdateProfile(req interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateProfile", reflect.TypeOf((*MockUserRequestValidation)(nil).UpdateProfile), req)
+}
+
+// UpdateUnauthorizedUser mocks base method
+func (m *MockUserRequestValidation) UpdateUnauthorizedUser(req *request.UpdateUnauthorizedUser) []*domain.ValidationError {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdateUnauthorizedUser", req)
+	ret0, _ := ret[0].([]*domain.ValidationError)
+	return ret0
+}
+
+// UpdateUnauthorizedUser indicates an expected call of UpdateUnauthorizedUser
+func (mr *MockUserRequestValidationMockRecorder) UpdateUnauthorizedUser(req interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateUnauthorizedUser", reflect.TypeOf((*MockUserRequestValidation)(nil).UpdateUnauthorizedUser), req)
 }
 
 // UpdatePassword mocks base method
