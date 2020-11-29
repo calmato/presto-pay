@@ -157,7 +157,7 @@ func (pa *paymentApplication) Create(
 		imageURLs[i] = imageURL
 	}
 
-	total, payers := collectPayers(req.PositivePayers, req.NegativePayers)
+	total, pys := collectPayers(req.PositivePayers, req.NegativePayers)
 
 	p := &payment.Payment{
 		Name:        req.Name,
@@ -166,7 +166,7 @@ func (pa *paymentApplication) Create(
 		Tags:        req.Tags,
 		Comment:     req.Comment,
 		ImageURLs:   imageURLs,
-		Payers:      payers,
+		Payers:      pys,
 		IsCompleted: false,
 		PaidAt:      common.StringToTime(req.PaidAt),
 	}
@@ -216,15 +216,12 @@ func (pa *paymentApplication) Update(
 		imageURLs[i] = imageURL
 	}
 
-	total, payers := collectPayers(req.PositivePayers, req.NegativePayers)
-	if req.Total > 0 {
-		total = req.Total
-	}
+	total, pys := collectPayers(req.PositivePayers, req.NegativePayers)
 
 	p.Name = req.Name
 	p.Currency = req.Currency
 	p.Total = total
-	p.Payers = payers
+	p.Payers = pys
 	p.IsCompleted = len(req.NegativePayers) == 0
 	p.Tags = req.Tags
 	p.Comment = req.Comment
@@ -261,13 +258,12 @@ func (pa *paymentApplication) UpdatePayer(
 		return nil, domain.Forbidden.New(err)
 	}
 
-	payer := &payment.Payer{
-		ID:     payerID,
-		IsPaid: req.IsPaid,
+	p, err := pa.paymentService.Show(ctx, groupID, paymentID)
+	if err != nil {
+		return nil, err
 	}
 
-	p, err := pa.paymentService.UpdatePayer(ctx, groupID, paymentID, payer)
-	if err != nil {
+	if _, err = pa.paymentService.UpdatePayer(ctx, p, groupID, payerID, req.IsPaid); err != nil {
 		return nil, err
 	}
 
@@ -298,10 +294,7 @@ func (pa *paymentApplication) UpdateStatus(
 		return nil, err
 	}
 
-	p.IsCompleted = !p.IsCompleted
-	for i := 0; i < len(p.Payers); i++ {
-		p.Payers[i].IsPaid = p.IsCompleted
-	}
+	p.IsCompleted = true
 
 	if _, err := pa.paymentService.Update(ctx, p, groupID); err != nil {
 		return nil, err
@@ -333,10 +326,7 @@ func (pa *paymentApplication) UpdateStatusAll(ctx context.Context, groupID strin
 	}
 
 	for i, p := range ps {
-		p.IsCompleted = !p.IsCompleted
-		for i := 0; i < len(p.Payers); i++ {
-			p.Payers[i].IsPaid = p.IsCompleted
-		}
+		p.IsCompleted = true
 
 		if _, err := pa.paymentService.Update(ctx, p, groupID); err != nil {
 			return nil, err
