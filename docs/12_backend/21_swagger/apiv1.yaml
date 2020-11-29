@@ -235,6 +235,31 @@ paths:
         '500':
           $ref: '#/components/responses/Unkown'
 
+  /users/{userId}/unauthorized-user:
+    patch:
+      summary: 未登録ユーザー情報編集
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: userId
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: ユーザーUUID
+      requestBody:
+        $ref: '#/components/requestBodies/UpdateUnauthorizedUser'
+      responses:
+        '200':
+          $ref: '#/components/responses/UnauthorizedUser'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/Unkown'
+
   /groups:
     get:
       summary: グループ一覧取得
@@ -854,6 +879,23 @@ components:
                 type: string
                 description: ユーザー名
 
+    UpdateUnauthorizedUser:
+      description: 未認証ユーザー編集APIのリクエスト
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+                description: 表示名
+              thumbnail:
+                type: string
+                description: サムネイル
+            required:
+              - name
+
     CreateGroup:
       description: グループ作成
       required: true
@@ -1452,6 +1494,32 @@ components:
                 items:
                   type: string
                   format: uuid
+              createdAt:
+                type: string
+                format: date-time
+                description: 作成日時
+              updatedAt:
+                type: string
+                format: date-time
+                description: 更新日時
+
+    UnauthorizedUser:
+      description: 未認証ユーザー情報取得APIのレスポンス
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              id:
+                type: string
+                format: uuid
+                description: ユーザーID
+              name:
+                type: string
+                description: 表示名
+              thumbnail:
+                type: string
+                description: サムネイルURL
               createdAt:
                 type: string
                 format: date-time
