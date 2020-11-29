@@ -22,7 +22,6 @@ type CreatePayment struct {
 type UpdatePayment struct {
 	Name           string            `json:"name" validate:"required,max=64"`
 	Currency       string            `json:"currency" validate:"required,currency"`
-	Total          float64           `json:"total" validate:"gte=0,lte=9999999"`
 	PositivePayers []*PayerInPayment `json:"positivePayers" validate:"min=1,max=64"`
 	NegativePayers []*PayerInPayment `json:"negativePayers" validate:"min=1,max=64"`
 	Tags           []string          `json:"tags" validate:"min=0,max=32,dive,max=32"`
@@ -33,5 +32,5 @@ type UpdatePayment struct {
 
 // UpdatePayerInPayment - ユーザー毎の支払い情報編集APIのリクエスト
 type UpdatePayerInPayment struct {
-	IsPaid bool `json:"isPaid" validate:"oneof=true false"`
+	IsPaid bool `json:"isPaid"`
 }

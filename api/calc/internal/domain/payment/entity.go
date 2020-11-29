@@ -16,15 +16,16 @@ type Payment struct {
 	Comment     string    `firestore:"comment"`      // コメント
 	ImageURLs   []string  `firestore:"image_urls"`   // 添付イメージURL一覧
 	PaidAt      time.Time `firestore:"paid_at"`      // 支払い日時
-	IsCompleted bool      `firestore:"is_completed"` // 支払い完了フラグ
+	IsCompleted bool      `firestore:"is_completed"` // 支払い完了フラグ (true: 全ての支払いが完了)
 	CreatedAt   time.Time `firestore:"created_at"`   // 作成日時
 	UpdatedAt   time.Time `firestore:"updated_at"`   // 更新日時
 }
 
 // Payer - 支払い者 エンティティ
 type Payer struct {
-	ID     string  `firestore:"id"`      // ユーザーID
-	Name   string  `firestore:"-"`       // ユーザー名
-	Amount float64 `firestore:"amount"`  // 支払い金額
-	IsPaid bool    `firestore:"is_paid"` // 支払い完了フラグ
+	ID     string    `firestore:"id"`      // ユーザーID
+	Name   string    `firestore:"-"`       // ユーザー名
+	Amount float64   `firestore:"amount"`  // 支払い金額
+	IsPaid bool      `firestore:"is_paid"` // 支払いフラグ (true: 受け取る側, false: 支払う側)
+	PaidAt time.Time `firestore:"paid_at"` // 支払い完了日時
 }
