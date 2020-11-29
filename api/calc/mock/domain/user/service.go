@@ -64,21 +64,6 @@ func (mr *MockUserServiceMockRecorder) CreateUnauthorizedUser(ctx, name, thumbna
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateUnauthorizedUser", reflect.TypeOf((*MockUserService)(nil).CreateUnauthorizedUser), ctx, name, thumbnail)
 }
 
-// UpdateUnauthorizedUser mocks base method
-func (m *MockUserService) UpdateUnauthorizedUser(ctx context.Context, userID, name, thumbnail string) (*user.User, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "UpdateUnauthorizedUser", ctx, userID, name, thumbnail)
-	ret0, _ := ret[0].(*user.User)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// UpdateUnauthorizedUser indicates an expected call of UpdateUnauthorizedUser
-func (mr *MockUserServiceMockRecorder) UpdateUnauthorizedUser(ctx, userID, name, thumbnail interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateUnauthorizedUser", reflect.TypeOf((*MockUserService)(nil).UpdateUnauthorizedUser), ctx, userID, name, thumbnail)
-}
-
 // ContainsGroupID mocks base method
 func (m *MockUserService) ContainsGroupID(ctx context.Context, u *user.User, groupID string) (bool, error) {
 	m.ctrl.T.Helper()
