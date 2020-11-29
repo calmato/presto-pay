@@ -305,8 +305,15 @@ func (ua *userApplication) AddGroup(ctx context.Context, userID string, groupID 
 
 	u.GroupIDs = append(u.GroupIDs, groupID)
 
-	if _, err := ua.userService.Update(ctx, u); err != nil {
-		return nil, err
+	// username == "" -> 未認証ユーザ
+	if u.Username == "" {
+		if _, err := ua.userService.UpdateUnauthorizedUser(ctx, u); err != nil {
+			return nil, err
+		}
+	} else {
+		if _, err := ua.userService.Update(ctx, u); err != nil {
+			return nil, err
+		}
 	}
 
 	return u, nil
