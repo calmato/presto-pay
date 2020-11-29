@@ -322,19 +322,17 @@ func (pa *paymentApplication) UpdateStatusAll(
 		return nil, nil, "", domain.Forbidden.New(err)
 	}
 
-	ps, err := pa.paymentService.IndexByIsCompleted(ctx, groupID, true) // TODO: refactor
+	ps, err := pa.paymentService.IndexByIsCompleted(ctx, groupID, false) // TODO: refactor
 	if err != nil {
 		return nil, nil, "", err
 	}
 
-	for i, p := range ps {
+	for _, p := range ps {
 		p.IsCompleted = true
 
 		if _, err := pa.paymentService.Update(ctx, p, groupID); err != nil {
 			return nil, nil, "", err
 		}
-
-		ps[i] = p
 	}
 
 	// 為替レート一覧のmapを作成
