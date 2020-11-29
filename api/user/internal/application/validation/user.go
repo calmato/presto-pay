@@ -40,7 +40,9 @@ func (urv *userRequestValidation) CreateUser(req *request.CreateUser) []*domain.
 	return urv.validator.Run(req)
 }
 
-func (urv *userRequestValidation) CreateUnauthorizedUser(req *request.CreateUnauthorizedUser) []*domain.ValidationError {
+func (urv *userRequestValidation) CreateUnauthorizedUser(
+	req *request.CreateUnauthorizedUser,
+) []*domain.ValidationError {
 	return urv.validator.Run(req)
 }
 
@@ -52,7 +54,9 @@ func (urv *userRequestValidation) UpdateProfile(req *request.UpdateProfile) []*d
 	return urv.validator.Run(req)
 }
 
-func (urv *userRequestValidation) UpdateUnauthorizedUser(req *request.UpdateUnauthorizedUser) []*domain.ValidationError {
+func (urv *userRequestValidation) UpdateUnauthorizedUser(
+	req *request.UpdateUnauthorizedUser,
+) []*domain.ValidationError {
 	return urv.validator.Run(req)
 }
 
