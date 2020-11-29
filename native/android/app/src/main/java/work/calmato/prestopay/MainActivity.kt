@@ -55,7 +55,7 @@ class MainActivity : AppCompatActivity() {
     val adLoader = AdLoader.Builder(this, "ca-app-pub-3940256099942544/6300978111")
       .forUnifiedNativeAd { ad: UnifiedNativeAd ->
         // Show the ad.
-        native_ad.setNativeAd(ad)
+//        native_ad.setNativeAd(ad)
       }
       .withAdListener(object : AdListener() {
         // AdListener callbacks like OnAdFailedToLoad, OnAdOpened, OnAdClicked and

@@ -44,7 +44,7 @@ class HomeFragment : Fragment() {
     clickListenerHomeGroup = AdapterGroupPlane.OnClickListener {
       viewModelGroup.itemIsClickedGroup(it)
     }
-    recycleGroupAdapter = AdapterGroupPlane(clickListenerHomeGroup)
+    recycleGroupAdapter = AdapterGroupPlane(clickListenerHomeGroup,requireActivity())
     binding.groupHomeRecycle.apply {
       layoutManager = LinearLayoutManager(context)
       adapter = recycleGroupAdapter

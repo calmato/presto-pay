@@ -8,13 +8,21 @@
       name="groupPropertyResponse"
       type="work.calmato.prestopay.network.GroupPropertyResponse" />
   </data>
-
   <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginStart="0dp"
     android:background="@color/tw__solid_white">
-
+    <com.google.android.ads.nativetemplates.TemplateView
+      android:id="@+id/native_ad"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      app:gnt_template_type="@layout/gnt_small_template_view"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      android:elevation="4dp"
+      android:visibility="gone"/>
     <de.hdodenhof.circleimageview.CircleImageView
       android:id="@+id/thumbnail"
       android:layout_width="40dp"
