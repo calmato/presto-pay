@@ -20,7 +20,6 @@ type APIClient interface {
 	ShowUser(ctx context.Context, userID string) (*user.User, error)
 	UserExists(ctx context.Context, userID string) (bool, error)
 	CreateUnauthorizedUser(ctx context.Context, name string, thumbnail string) (*user.User, error)
-	UpdateUnauthorizedUser(ctx context.Context, userID string, name string, thumbnail string) (*user.User, error)
 	AddGroup(ctx context.Context, userID string, groupID string) (*user.User, error)
 	RemoveGroup(ctx context.Context, userID string, groupID string) (*user.User, error)
 	AddHiddenGroup(ctx context.Context, groupID string) (*user.User, error)
@@ -136,44 +135,6 @@ func (c *Client) CreateUnauthorizedUser(ctx context.Context, name string, thumbn
 
 	url := c.userAPIURL + "/internal/unauthorized-users"
 	req, _ := http.NewRequest("POST", url, paramsReader)
-
-	if err := setHeader(ctx, req); err != nil {
-		return nil, err
-	}
-
-	res, err := getResponse(req)
-	if err != nil {
-		return nil, err
-	}
-
-	defer res.Body.Close()
-	body, err := ioutil.ReadAll(res.Body)
-	if err != nil {
-		return nil, err
-	}
-
-	u := &user.User{}
-	if err = json.Unmarshal(body, u); err != nil {
-		return nil, err
-	}
-
-	return u, nil
-}
-
-// UpdateUnauthorizedUser - 認証機能なしのユーザ作成
-func (c *Client) UpdateUnauthorizedUser(
-	ctx context.Context, userID string, name string, thumbnail string,
-) (*user.User, error) {
-	params := &updateUnauthorizedUserRequest{
-		Name:      name,
-		Thumbnail: thumbnail,
-	}
-
-	paramsByte, _ := json.Marshal(params)
-	paramsReader := bytes.NewReader(paramsByte)
-
-	url := c.userAPIURL + "/internal/unauthorized-users/" + userID
-	req, _ := http.NewRequest("PATCH", url, paramsReader)
 
 	if err := setHeader(ctx, req); err != nil {
 		return nil, err
