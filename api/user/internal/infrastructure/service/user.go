@@ -158,7 +158,7 @@ func (us *userService) CreateUnauthorizedUser(ctx context.Context, u *user.User)
 	u.CreatedAt = current
 	u.UpdatedAt = current
 
-	if err := us.userRepository.Create(ctx, u); err != nil {
+	if err := us.userRepository.CreateUnauthorizedUser(ctx, u); err != nil {
 		err = xerrors.Errorf("Failed to Repository: %w", err)
 		return nil, domain.ErrorInDatastore.New(err)
 	}
@@ -206,7 +206,7 @@ func (us *userService) UpdateUnauthorizedUser(ctx context.Context, u *user.User)
 
 	u.UpdatedAt = current
 
-	if err := us.userRepository.Update(ctx, u); err != nil {
+	if err := us.userRepository.UpdateUnauthorizedUser(ctx, u); err != nil {
 		err = xerrors.Errorf("Failed to Repository: %w", err)
 		return nil, domain.ErrorInDatastore.New(err)
 	}
