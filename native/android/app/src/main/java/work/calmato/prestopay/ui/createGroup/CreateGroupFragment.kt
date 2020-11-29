@@ -76,7 +76,7 @@ class CreateGroupFragment : PermissionBase() {
       if (usersListToBeSent!!.users.size in 0..64) {
         val groupProperty =
           CreateGroupProperty(groupName, thumbnailStr, usersListToBeSent!!.users.map { it.id })
-        viewModel.createGroupApi(groupProperty, requireActivity())
+        viewModel.createGroupApi(groupProperty)
       } else {
         Toast.makeText(
           requireContext(),

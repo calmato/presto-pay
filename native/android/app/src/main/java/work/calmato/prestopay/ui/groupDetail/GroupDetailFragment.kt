@@ -205,8 +205,7 @@ class GroupDetailFragment : Fragment() {
                 ) {
                   Log.d(ViewModelGroup.TAG, response.body().toString())
                   viewModel.deletePayment(
-                    payments!![viewHolder.adapterPosition].id,
-                    requireActivity()
+                    payments!![viewHolder.adapterPosition].id
                   )
                   frontView.visibility = ImageView.GONE
                   progressBar.visibility = android.widget.ProgressBar.INVISIBLE

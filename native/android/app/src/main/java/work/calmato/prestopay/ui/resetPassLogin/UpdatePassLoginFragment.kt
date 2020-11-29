@@ -94,11 +94,6 @@ class UpdatePassLoginFragment : Fragment() {
             if (it.isSuccessful) {
               user.updatePassword(newPass).addOnCompleteListener {
                 if (it.isSuccessful) {
-                  Toast.makeText(
-                    requireContext(),
-                    resources.getString(R.string.password_changed),
-                    Toast.LENGTH_SHORT
-                  ).show()
                   this.findNavController().navigate(
                     UpdatePassLoginFragmentDirections.actionUpdatePassLoginFragmentToAccountHome()
                   )

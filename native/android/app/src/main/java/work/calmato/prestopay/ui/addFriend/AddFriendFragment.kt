@@ -88,7 +88,7 @@ class AddFriendFragment : Fragment() {
         builder.setTitle(resources.getString(R.string.add_friend_question))
           ?.setPositiveButton(resources.getString(R.string.add)
           ) { _, _ ->
-            viewModel.addFriendApi(userProperty, requireActivity())
+            viewModel.addFriendApi(userProperty)
           }
           ?.setNegativeButton(resources.getString(R.string.cancel), null)
           ?.setView(R.layout.dialog_add_friend)
