@@ -47,19 +47,19 @@ func (ph *apiV1PaymentHandler) Index(ctx *gin.Context) {
 		return
 	}
 
-	paymentsResponse := make([]*response.PaymentInPayments, len(payments))
+	paymentsResponse := make([]*response.Payment, len(payments))
 	for i, payment := range payments {
-		payersResponse := make([]*response.PayerInPayments, len(payment.Payers))
-		positivePayersResponse := make([]*response.PayerInPayments, 0)
-		negativePayersResponse := make([]*response.PayerInPayments, 0)
+		payersResponse := make([]*response.PayerInPayment, len(payment.Payers))
+		positivePayersResponse := make([]*response.PayerInPayment, 0)
+		negativePayersResponse := make([]*response.PayerInPayment, 0)
 		for j, payer := range payment.Payers {
-			pr := &response.PayerInPayments{
+			pr := &response.PayerInPayment{
 				ID:     payer.ID,
 				Name:   payer.Name,
 				Amount: payer.Amount,
 			}
 
-			prAbs := &response.PayerInPayments{
+			prAbs := &response.PayerInPayment{
 				ID:     payer.ID,
 				Name:   payer.Name,
 				Amount: math.Abs(payer.Amount),
@@ -74,7 +74,7 @@ func (ph *apiV1PaymentHandler) Index(ctx *gin.Context) {
 			}
 		}
 
-		paymentsResponse[i] = &response.PaymentInPayments{
+		paymentsResponse[i] = &response.Payment{
 			ID:             payment.ID,
 			GroupID:        payment.GroupID,
 			Name:           payment.Name,
@@ -127,11 +127,11 @@ func (ph *apiV1PaymentHandler) Create(ctx *gin.Context) {
 		return
 	}
 
-	payers := make([]*response.PayerInCreatePayment, len(p.Payers))
-	positivePayers := make([]*response.PayerInCreatePayment, 0)
-	negativePayers := make([]*response.PayerInCreatePayment, 0)
+	payers := make([]*response.PayerInPayment, len(p.Payers))
+	positivePayers := make([]*response.PayerInPayment, 0)
+	negativePayers := make([]*response.PayerInPayment, 0)
 	for i, payer := range p.Payers {
-		pr := &response.PayerInCreatePayment{
+		pr := &response.PayerInPayment{
 			ID:     payer.ID,
 			Amount: payer.Amount,
 		}
@@ -145,7 +145,7 @@ func (ph *apiV1PaymentHandler) Create(ctx *gin.Context) {
 		}
 	}
 
-	res := &response.CreatePayment{
+	res := &response.Payment{
 		ID:             p.ID,
 		GroupID:        p.GroupID,
 		Name:           p.Name,
@@ -183,35 +183,25 @@ func (ph *apiV1PaymentHandler) Update(ctx *gin.Context) {
 		return
 	}
 
-	payers := make([]*response.PayerInUpdatePayment, len(p.Payers))
-	positivePayers := make([]*response.PayerInUpdatePayment, 0)
-	negativePayers := make([]*response.PayerInUpdatePayment, 0)
+	payers := make([]*response.PayerInPayment, len(p.Payers))
+	positivePayers := make([]*response.PayerInPayment, 0)
+	negativePayers := make([]*response.PayerInPayment, 0)
 	for i, payer := range p.Payers {
-		prAbs := &response.PayerInUpdatePayment{
+		pr := &response.PayerInPayment{
 			ID:     payer.ID,
-			Amount: math.Abs(payer.Amount),
-		}
-
-		amount := prAbs.Amount
-		if !payer.IsPaid {
-			amount *= -1
-		}
-
-		pr := &response.PayerInUpdatePayment{
-			ID:     prAbs.ID,
-			Amount: amount,
+			Amount: payer.Amount,
 		}
 
 		payers[i] = pr
 
 		if payer.IsPaid {
-			positivePayers = append(positivePayers, prAbs)
+			positivePayers = append(positivePayers, pr)
 		} else {
-			negativePayers = append(negativePayers, prAbs)
+			negativePayers = append(negativePayers, pr)
 		}
 	}
 
-	res := &response.UpdatePayment{
+	res := &response.Payment{
 		ID:             p.ID,
 		GroupID:        p.GroupID,
 		Name:           p.Name,
@@ -243,11 +233,11 @@ func (ph *apiV1PaymentHandler) UpdateStatus(ctx *gin.Context) {
 		return
 	}
 
-	payers := make([]*response.PayerInUpdatePayment, len(p.Payers))
-	positivePayers := make([]*response.PayerInUpdatePayment, 0)
-	negativePayers := make([]*response.PayerInUpdatePayment, 0)
+	payers := make([]*response.PayerInPayment, len(p.Payers))
+	positivePayers := make([]*response.PayerInPayment, 0)
+	negativePayers := make([]*response.PayerInPayment, 0)
 	for i, payer := range p.Payers {
-		pr := &response.PayerInUpdatePayment{
+		pr := &response.PayerInPayment{
 			ID:     payer.ID,
 			Amount: payer.Amount,
 		}
@@ -261,7 +251,7 @@ func (ph *apiV1PaymentHandler) UpdateStatus(ctx *gin.Context) {
 		}
 	}
 
-	res := &response.UpdatePayment{
+	res := &response.Payment{
 		ID:             p.ID,
 		GroupID:        p.GroupID,
 		Name:           p.Name,
@@ -292,19 +282,19 @@ func (ph *apiV1PaymentHandler) UpdateStatusAll(ctx *gin.Context) {
 		return
 	}
 
-	paymentsResponse := make([]*response.PaymentInPayments, len(payments))
+	paymentsResponse := make([]*response.Payment, len(payments))
 	for i, payment := range payments {
-		payersResponse := make([]*response.PayerInPayments, len(payment.Payers))
-		positivePayersResponse := make([]*response.PayerInPayments, 0)
-		negativePayersResponse := make([]*response.PayerInPayments, 0)
+		payersResponse := make([]*response.PayerInPayment, len(payment.Payers))
+		positivePayersResponse := make([]*response.PayerInPayment, 0)
+		negativePayersResponse := make([]*response.PayerInPayment, 0)
 		for j, payer := range payment.Payers {
-			pr := &response.PayerInPayments{
+			pr := &response.PayerInPayment{
 				ID:     payer.ID,
 				Name:   payer.Name,
 				Amount: payer.Amount,
 			}
 
-			prAbs := &response.PayerInPayments{
+			prAbs := &response.PayerInPayment{
 				ID:     payer.ID,
 				Name:   payer.Name,
 				Amount: math.Abs(payer.Amount),
@@ -319,7 +309,7 @@ func (ph *apiV1PaymentHandler) UpdateStatusAll(ctx *gin.Context) {
 			}
 		}
 
-		paymentsResponse[i] = &response.PaymentInPayments{
+		paymentsResponse[i] = &response.Payment{
 			ID:             payment.ID,
 			GroupID:        payment.GroupID,
 			Name:           payment.Name,
@@ -374,11 +364,11 @@ func (ph *apiV1PaymentHandler) UpdatePayer(ctx *gin.Context) {
 		return
 	}
 
-	payers := make([]*response.PayerInUpdatePayment, len(p.Payers))
-	positivePayers := make([]*response.PayerInUpdatePayment, 0)
-	negativePayers := make([]*response.PayerInUpdatePayment, 0)
+	payers := make([]*response.PayerInPayment, len(p.Payers))
+	positivePayers := make([]*response.PayerInPayment, 0)
+	negativePayers := make([]*response.PayerInPayment, 0)
 	for i, payer := range p.Payers {
-		pr := &response.PayerInUpdatePayment{
+		pr := &response.PayerInPayment{
 			ID:     payer.ID,
 			Amount: payer.Amount,
 		}
@@ -392,7 +382,7 @@ func (ph *apiV1PaymentHandler) UpdatePayer(ctx *gin.Context) {
 		}
 	}
 
-	res := &response.UpdatePayment{
+	res := &response.Payment{
 		ID:             p.ID,
 		GroupID:        p.GroupID,
 		Name:           p.Name,
