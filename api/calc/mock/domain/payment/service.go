@@ -110,18 +110,18 @@ func (mr *MockPaymentServiceMockRecorder) Update(ctx, p, groupID interface{}) *g
 }
 
 // UpdatePayer mocks base method
-func (m *MockPaymentService) UpdatePayer(ctx context.Context, groupID, paymentID string, payer *payment.Payer) (*payment.Payment, error) {
+func (m *MockPaymentService) UpdatePayer(ctx context.Context, p *payment.Payment, groupID, payerID string, isPaid bool) (*payment.Payment, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "UpdatePayer", ctx, groupID, paymentID, payer)
+	ret := m.ctrl.Call(m, "UpdatePayer", ctx, p, groupID, payerID, isPaid)
 	ret0, _ := ret[0].(*payment.Payment)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // UpdatePayer indicates an expected call of UpdatePayer
-func (mr *MockPaymentServiceMockRecorder) UpdatePayer(ctx, groupID, paymentID, payer interface{}) *gomock.Call {
+func (mr *MockPaymentServiceMockRecorder) UpdatePayer(ctx, p, groupID, payerID, isPaid interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdatePayer", reflect.TypeOf((*MockPaymentService)(nil).UpdatePayer), ctx, groupID, paymentID, payer)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdatePayer", reflect.TypeOf((*MockPaymentService)(nil).UpdatePayer), ctx, p, groupID, payerID, isPaid)
 }
 
 // Destroy mocks base method
