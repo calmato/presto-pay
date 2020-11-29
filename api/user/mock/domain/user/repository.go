@@ -123,6 +123,20 @@ func (mr *MockUserRepositoryMockRecorder) Create(ctx, u interface{}) *gomock.Cal
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockUserRepository)(nil).Create), ctx, u)
 }
 
+// CreateUnauthorizedUser mocks base method
+func (m *MockUserRepository) CreateUnauthorizedUser(ctx context.Context, u *user.User) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CreateUnauthorizedUser", ctx, u)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// CreateUnauthorizedUser indicates an expected call of CreateUnauthorizedUser
+func (mr *MockUserRepositoryMockRecorder) CreateUnauthorizedUser(ctx, u interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateUnauthorizedUser", reflect.TypeOf((*MockUserRepository)(nil).CreateUnauthorizedUser), ctx, u)
+}
+
 // Update mocks base method
 func (m *MockUserRepository) Update(ctx context.Context, u *user.User) error {
 	m.ctrl.T.Helper()
@@ -135,6 +149,20 @@ func (m *MockUserRepository) Update(ctx context.Context, u *user.User) error {
 func (mr *MockUserRepositoryMockRecorder) Update(ctx, u interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Update", reflect.TypeOf((*MockUserRepository)(nil).Update), ctx, u)
+}
+
+// UpdateUnauthorizedUser mocks base method
+func (m *MockUserRepository) UpdateUnauthorizedUser(ctx context.Context, u *user.User) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdateUnauthorizedUser", ctx, u)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// UpdateUnauthorizedUser indicates an expected call of UpdateUnauthorizedUser
+func (mr *MockUserRepositoryMockRecorder) UpdateUnauthorizedUser(ctx, u interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateUnauthorizedUser", reflect.TypeOf((*MockUserRepository)(nil).UpdateUnauthorizedUser), ctx, u)
 }
 
 // UpdatePassword mocks base method

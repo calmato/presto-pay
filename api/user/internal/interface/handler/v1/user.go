@@ -20,8 +20,10 @@ type APIV1UserHandler interface {
 	ShowInternal(ctx *gin.Context)
 	ShowProfile(ctx *gin.Context)
 	Create(ctx *gin.Context)
+	CreateUnauthorizedUser(ctx *gin.Context)
 	RegisterInstanceID(ctx *gin.Context)
 	UpdateProfile(ctx *gin.Context)
+	UpdateUnauthorizedUser(ctx *gin.Context)
 	UpdatePassword(ctx *gin.Context)
 	UniqueCheckEmail(ctx *gin.Context)
 	UniqueCheckUsername(ctx *gin.Context)
@@ -206,6 +208,31 @@ func (uh *apiV1UserHandler) Create(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, res)
 }
 
+func (uh *apiV1UserHandler) CreateUnauthorizedUser(ctx *gin.Context) {
+	req := &request.CreateUnauthorizedUser{}
+	if err := ctx.BindJSON(req); err != nil {
+		handler.ErrorHandling(ctx, domain.UnableParseJSON.New(err))
+		return
+	}
+
+	c := middleware.GinContextToContext(ctx)
+	u, err := uh.userApplication.CreateUnauthorizedUser(c, req)
+	if err != nil {
+		handler.ErrorHandling(ctx, err)
+		return
+	}
+
+	res := &response.CreateUnauthorizedUser{
+		ID:           u.ID,
+		Name:         u.Name,
+		ThumbnailURL: u.ThumbnailURL,
+		CreatedAt:    u.CreatedAt,
+		UpdatedAt:    u.UpdatedAt,
+	}
+
+	ctx.JSON(http.StatusOK, res)
+}
+
 func (uh *apiV1UserHandler) RegisterInstanceID(ctx *gin.Context) {
 	req := &request.RegisterInstanceID{}
 	if err := ctx.BindJSON(req); err != nil {
@@ -261,6 +288,33 @@ func (uh *apiV1UserHandler) UpdateProfile(ctx *gin.Context) {
 		FriendIDs:       u.FriendIDs,
 		CreatedAt:       u.CreatedAt,
 		UpdatedAt:       u.UpdatedAt,
+	}
+
+	ctx.JSON(http.StatusOK, res)
+}
+
+func (uh *apiV1UserHandler) UpdateUnauthorizedUser(ctx *gin.Context) {
+	userID := ctx.Params.ByName("userID")
+
+	req := &request.UpdateUnauthorizedUser{}
+	if err := ctx.BindJSON(req); err != nil {
+		handler.ErrorHandling(ctx, domain.UnableParseJSON.New(err))
+		return
+	}
+
+	c := middleware.GinContextToContext(ctx)
+	u, err := uh.userApplication.UpdateUnauthorizedUser(c, userID, req)
+	if err != nil {
+		handler.ErrorHandling(ctx, err)
+		return
+	}
+
+	res := &response.UpdateUnauthorizedUser{
+		ID:           u.ID,
+		Name:         u.Name,
+		ThumbnailURL: u.ThumbnailURL,
+		CreatedAt:    u.CreatedAt,
+		UpdatedAt:    u.UpdatedAt,
 	}
 
 	ctx.JSON(http.StatusOK, res)

@@ -20,8 +20,10 @@ type UserApplication interface {
 	Show(ctx context.Context, userID string) (*user.User, error)
 	ShowProfile(ctx context.Context) (*user.User, error)
 	Create(ctx context.Context, req *request.CreateUser) (*user.User, error)
+	CreateUnauthorizedUser(ctx context.Context, req *request.CreateUnauthorizedUser) (*user.User, error)
 	RegisterInstanceID(ctx context.Context, req *request.RegisterInstanceID) (*user.User, error)
 	UpdateProfile(ctx context.Context, req *request.UpdateProfile) (*user.User, error)
+	UpdateUnauthorizedUser(ctx context.Context, userID string, req *request.UpdateUnauthorizedUser) (*user.User, error)
 	UpdatePassword(ctx context.Context, req *request.UpdateUserPassword) (*user.User, error)
 	UniqueCheckEmail(ctx context.Context, req *request.UniqueCheckUserEmail) (bool, error)
 	UniqueCheckUsername(ctx context.Context, req *request.UniqueCheckUserUsername) (bool, error)
@@ -126,6 +128,35 @@ func (ua *userApplication) Create(ctx context.Context, req *request.CreateUser) 
 	return u, nil
 }
 
+func (ua *userApplication) CreateUnauthorizedUser(
+	ctx context.Context, req *request.CreateUnauthorizedUser,
+) (*user.User, error) {
+	if _, err := ua.userService.Authentication(ctx); err != nil {
+		return nil, domain.Unauthorized.New(err)
+	}
+
+	if ves := ua.userRequestValidation.CreateUnauthorizedUser(req); len(ves) > 0 {
+		err := xerrors.New("Failed to RequestValidation")
+		return nil, domain.InvalidRequestValidation.New(err, ves...)
+	}
+
+	thumbnailURL, err := getThumbnailURL(ctx, ua, req.Thumbnail)
+	if err != nil {
+		return nil, err
+	}
+
+	u := &user.User{
+		Name:         req.Name,
+		ThumbnailURL: thumbnailURL,
+	}
+
+	if _, err := ua.userService.CreateUnauthorizedUser(ctx, u); err != nil {
+		return nil, err
+	}
+
+	return u, nil
+}
+
 func (ua *userApplication) RegisterInstanceID(
 	ctx context.Context, req *request.RegisterInstanceID,
 ) (*user.User, error) {
@@ -174,6 +205,38 @@ func (ua *userApplication) UpdateProfile(ctx context.Context, req *request.Updat
 	u.ThumbnailURL = thumbnailURL
 
 	if _, err := ua.userService.Update(ctx, u); err != nil {
+		return nil, err
+	}
+
+	return u, nil
+}
+
+func (ua *userApplication) UpdateUnauthorizedUser(
+	ctx context.Context, userID string, req *request.UpdateUnauthorizedUser,
+) (*user.User, error) {
+	if _, err := ua.userService.Authentication(ctx); err != nil {
+		return nil, domain.Unauthorized.New(err)
+	}
+
+	if ves := ua.userRequestValidation.UpdateUnauthorizedUser(req); len(ves) > 0 {
+		err := xerrors.New("Failed to RequestValidation")
+		return nil, domain.InvalidRequestValidation.New(err, ves...)
+	}
+
+	u, err := ua.userService.Show(ctx, userID)
+	if err != nil {
+		return nil, err
+	}
+
+	thumbnailURL, err := getThumbnailURL(ctx, ua, req.Thumbnail)
+	if err != nil {
+		return nil, err
+	}
+
+	u.Name = req.Name
+	u.ThumbnailURL = thumbnailURL
+
+	if _, err := ua.userService.UpdateUnauthorizedUser(ctx, u); err != nil {
 		return nil, err
 	}
 

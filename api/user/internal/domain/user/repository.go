@@ -10,7 +10,9 @@ type UserRepository interface {
 	ShowByUsername(ctx context.Context, username string) (*User, error)
 	ShowByUserID(ctx context.Context, userID string) (*User, error)
 	Create(ctx context.Context, u *User) error
+	CreateUnauthorizedUser(ctx context.Context, u *User) error
 	Update(ctx context.Context, u *User) error
+	UpdateUnauthorizedUser(ctx context.Context, u *User) error
 	UpdatePassword(ctx context.Context, uid string, password string) error
 	GetUIDByEmail(ctx context.Context, email string) (string, error)
 }

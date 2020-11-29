@@ -206,6 +206,16 @@ func (ur *userRepository) Create(ctx context.Context, u *user.User) error {
 	return nil
 }
 
+func (ur *userRepository) CreateUnauthorizedUser(ctx context.Context, u *user.User) error {
+	uc := getUserCollection()
+
+	if err := ur.firestore.Set(ctx, uc, u.ID, u); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (ur *userRepository) Update(ctx context.Context, u *user.User) error {
 	uc := getUserCollection()
 
@@ -226,6 +236,16 @@ func (ur *userRepository) Update(ctx context.Context, u *user.User) error {
 	}
 
 	if err = ur.firestore.Set(ctx, uc, u.ID, u); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (ur *userRepository) UpdateUnauthorizedUser(ctx context.Context, u *user.User) error {
+	uc := getUserCollection()
+
+	if err := ur.firestore.Set(ctx, uc, u.ID, u); err != nil {
 		return err
 	}
 

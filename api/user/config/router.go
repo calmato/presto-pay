@@ -54,6 +54,9 @@ func Router(reg *registry.Registry) *gin.Engine {
 		internal.POST("/users/:userID/groups/:groupID", reg.V1User.AddGroup)
 		internal.DELETE("/users/:userID/groups/:groupID", reg.V1User.RemoveGroup)
 
+		internal.POST("/unauthorized-users", reg.V1User.CreateUnauthorizedUser)
+		internal.PATCH("/unauthorized-users/:userID", reg.V1User.UpdateUnauthorizedUser)
+
 		internal.POST("/groups/:groupID", reg.V1User.AddHiddenGroup)
 		internal.DELETE("/groups/:groupID", reg.V1User.RemoveHiddenGroup)
 	}

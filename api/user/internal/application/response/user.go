@@ -59,6 +59,15 @@ type CreateUser struct {
 	UpdatedAt       time.Time `json:"updatedAt"`
 }
 
+// CreateUnauthorizedUser - ユーザー登録APIのレスポンス
+type CreateUnauthorizedUser struct {
+	ID           string    `json:"id"`
+	Name         string    `json:"name"`
+	ThumbnailURL string    `json:"thumbnailUrl"`
+	CreatedAt    time.Time `json:"createdAt"`
+	UpdatedAt    time.Time `json:"updatedAt"`
+}
+
 // RegisterInstanccID - 端末のデバイスID登録APIのレスポンス
 type RegisterInstanccID struct {
 	ID              string    `json:"id"`
@@ -85,6 +94,15 @@ type UpdateProfile struct {
 	FriendIDs       []string  `json:"friendIds"`
 	CreatedAt       time.Time `json:"createdAt"`
 	UpdatedAt       time.Time `json:"updatedAt"`
+}
+
+// UpdateUnauthorizedUser - ユーザー登録APIのレスポンス
+type UpdateUnauthorizedUser struct {
+	ID           string    `json:"id"`
+	Name         string    `json:"name"`
+	ThumbnailURL string    `json:"thumbnailUrl"`
+	CreatedAt    time.Time `json:"createdAt"`
+	UpdatedAt    time.Time `json:"updatedAt"`
 }
 
 // AddGroup - グループ追加APIのレスポンス
