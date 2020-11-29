@@ -48,11 +48,6 @@ type createUnauthorizedUserRequest struct {
 	Thumbnail string `json:"thumbnail"`
 }
 
-type updateUnauthorizedUserRequest struct {
-	Name      string `json:"name"`
-	Thumbnail string `json:"thumbnail"`
-}
-
 /*
  * ###########################
  *  User API
