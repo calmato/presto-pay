@@ -493,7 +493,7 @@ paths:
 
   /groups/{groupId}/payments-status:
     patch:
-      summary: 支払い完了フラグ一括更新 (trueのみ)
+      summary: 支払い完了フラグ一括更新
       security:
         - BearerAuth: []
       parameters:
@@ -1817,6 +1817,9 @@ components:
                     amount:
                       type: integer
                       description: 支払い金額
+                    isPaid:
+                      type: boolean
+                      description: 支払い完了フラグ
               negativePayers:
                 type: array
                 description: 支払い者一覧
@@ -1828,6 +1831,9 @@ components:
                     amount:
                       type: integer
                       description: 支払い金額
+                    isPaid:
+                      type: boolean
+                      description: 支払い完了フラグ
               isCompleted:
                 type: boolean
                 description: 支払い完了フラグ
@@ -1898,6 +1904,9 @@ components:
                           amount:
                             type: integer
                             description: 支払い金額
+                          isPaid:
+                            type: boolean
+                            description: 支払い完了フラグ
                     positivePayers:
                       type: array
                       description: 支払い者一覧
@@ -1912,6 +1921,9 @@ components:
                           amount:
                             type: integer
                             description: 支払い金額
+                          isPaid:
+                            type: boolean
+                            description: 支払い完了フラグ
                     negativePayers:
                       type: array
                       description: 支払い者一覧
@@ -1926,6 +1938,9 @@ components:
                           amount:
                             type: integer
                             description: 支払い金額
+                          isPaid:
+                            type: boolean
+                            description: 支払い完了フラグ
                     isCompleted:
                       type: boolean
                       description: 支払い完了フラグ
