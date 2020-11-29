@@ -3,13 +3,36 @@
   xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto">
 
+<androidx.constraintlayout.widget.ConstraintLayout
+  android:layout_width="match_parent"
+  android:layout_height="match_parent">
 
   <fragment
     android:id="@+id/nav_host_fragment"
     android:name="androidx.navigation.fragment.NavHostFragment"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="0dp"
+    android:layout_height="0dp"
     app:defaultNavHost="true"
+    app:layout_constraintBottom_toTopOf="@+id/adView"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
     app:navGraph="@navigation/navigation" />
+
+<!--  TODO リリース時は広告IDをテスト用から実際用に変更する-->
+  <!--    app:adUnitId="ca-app-pub-3812118776211807/7938769424"-->
+  <com.google.android.gms.ads.AdView
+    android:id="@+id/adView"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_alignParentBottom="true"
+    android:layout_centerHorizontal="true"
+    android:visibility="gone"
+    app:adSize="BANNER"
+    app:adUnitId="ca-app-pub-3940256099942544/6300978111"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>
 
 </merge>
