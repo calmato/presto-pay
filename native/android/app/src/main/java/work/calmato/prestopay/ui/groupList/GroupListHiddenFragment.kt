@@ -68,7 +68,7 @@ class GroupListHiddenFragment : Fragment() {
     binding.viewModelGroup = viewModelGroup
 
     clickListener = AdapterGroupPlane.OnClickListener { viewModelGroup.itemIsClickedGroup(it) }
-    recycleGroupListAdapter = AdapterGroupPlane(clickListener,requireActivity())
+    recycleGroupListAdapter = AdapterGroupPlane(clickListener,requireActivity(),true)
 
     binding.root.findViewById<RecyclerView>(R.id.groupHiddenRecycle).apply {
       layoutManager = LinearLayoutManager(context)

@@ -14,26 +14,47 @@ import com.google.android.gms.ads.formats.NativeAdOptions
 import com.google.android.gms.ads.formats.UnifiedNativeAd
 import work.calmato.prestopay.databinding.ListGroupItemPlaneBinding
 import work.calmato.prestopay.network.GroupPropertyResponse
+import work.calmato.prestopay.repository.GroupsRepository
 
-class AdapterGroupPlane(val onClickListener: OnClickListener, val context:Context) :
+class AdapterGroupPlane(val onClickListener: OnClickListener, val context: Context, val isHidden:Boolean) :
   RecyclerView.Adapter<AdapterGroupPlane.AddGroupViewHolder>() {
   var groupList: List<GroupPropertyResponse> = emptyList()
     set(value) {
-      field = value
+      val rawData = value.toMutableList()
+      if(!isHidden){
+        val size = value.size
+        val divideNum = 7
+        for (i in 1..size/divideNum) {
+          rawData.add(
+            i * divideNum, GroupPropertyResponse(
+              "", "", "", listOf(), "", "",
+              selected = true,
+              isHidden = false
+            )
+          )
+        }
+        if(size<divideNum){
+          rawData.add(GroupPropertyResponse(
+            "", "", "", listOf(), "", "",
+            selected = true,
+            isHidden = false
+          ))
+        }
+      }
+      field = rawData
       notifyDataSetChanged()
     }
 
   override fun getItemCount(): Int = groupList.size
 
   override fun onBindViewHolder(holder: AddGroupViewHolder, position: Int) {
-    if(position%7 == 0 && position!=0){
+    if (groupList[position].selected) {
       holder.binding.nativeAd.visibility = ImageView.VISIBLE
       // Native ad
-      val adLoader = AdLoader.Builder(context, "ca-app-pub-3940256099942544/6300978111")
+      val adLoader = AdLoader.Builder(context, "ca-app-pub-3940256099942544/2247696110")
         .forUnifiedNativeAd { ad: UnifiedNativeAd ->
           // Show the ad.
           holder.binding.nativeAd.setNativeAd(ad)
-//        native_ad.setNativeAd(ad)
         }
         .withAdListener(object : AdListener() {
           // AdListener callbacks like OnAdFailedToLoad, OnAdOpened, OnAdClicked and
@@ -50,7 +71,7 @@ class AdapterGroupPlane(val onClickListener: OnClickListener, val context:Contex
         )
         .build()
       adLoader.loadAd(AdRequest.Builder().build())
-    }else{
+    } else {
       holder.binding.nativeAd.visibility = ImageView.GONE
       holder.binding.also {
         it.groupPropertyResponse = groupList[position]
