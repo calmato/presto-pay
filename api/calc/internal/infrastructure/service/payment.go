@@ -167,10 +167,7 @@ func (ps *paymentService) Create(ctx context.Context, p *payment.Payment, groupI
 	p.CreatedAt = current
 	p.UpdatedAt = current
 
-	if err := checkPaid(p, current); err != nil {
-		err = xerrors.Errorf("Failed to Payment Service: %w", err)
-		return nil, domain.Unknown.New(err)
-	}
+	checkPaid(p, current)
 
 	if err := ps.paymentRepository.Create(ctx, p, groupID); err != nil {
 		err = xerrors.Errorf("Failed to Repository: %w", err)
@@ -222,10 +219,7 @@ func (ps *paymentService) Update(ctx context.Context, p *payment.Payment, groupI
 	p.GroupID = g.ID
 	p.UpdatedAt = current
 
-	if err := checkPaid(p, current); err != nil {
-		err = xerrors.Errorf("Failed to Payment Service: %w", err)
-		return nil, domain.Unknown.New(err)
-	}
+	checkPaid(p, current)
 
 	if err := ps.paymentRepository.Update(ctx, p, groupID); err != nil {
 		err = xerrors.Errorf("Failed to Repository: %w", err)
@@ -369,7 +363,7 @@ func (ps *paymentService) UploadImage(ctx context.Context, data []byte) (string,
 }
 
 // checkPaid - 支払い完了フラグの更新
-func checkPaid(p *payment.Payment, current time.Time) error {
+func checkPaid(p *payment.Payment, current time.Time) {
 	// 支払い者全員を支払い完了に
 	if p.IsCompleted {
 		for _, py := range p.Payers {
@@ -377,8 +371,6 @@ func checkPaid(p *payment.Payment, current time.Time) error {
 				py.PaidAt = current
 			}
 		}
-
-		return nil
 	}
 
 	// 各支払い者の支払い日時を更新
@@ -393,6 +385,4 @@ func checkPaid(p *payment.Payment, current time.Time) error {
 			py.PaidAt = time.Time{}
 		}
 	}
-
-	return nil
 }
