@@ -35,6 +35,17 @@ func (us *userService) Authentication(ctx context.Context) (*user.User, error) {
 	return u, nil
 }
 
+func (us *userService) CreateUnauthorizedUser(
+	ctx context.Context, name string, thumbnail string,
+) (*user.User, error) {
+	u, err := us.apiClient.CreateUnauthorizedUser(ctx, name, thumbnail)
+	if err != nil {
+		return nil, err
+	}
+
+	return u, nil
+}
+
 func (us *userService) ContainsGroupID(ctx context.Context, u *user.User, groupID string) (bool, error) {
 	if u == nil {
 		err := xerrors.New("User is empty")

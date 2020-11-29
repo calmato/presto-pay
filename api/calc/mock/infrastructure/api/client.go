@@ -79,6 +79,21 @@ func (mr *MockAPIClientMockRecorder) UserExists(ctx, userID interface{}) *gomock
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UserExists", reflect.TypeOf((*MockAPIClient)(nil).UserExists), ctx, userID)
 }
 
+// CreateUnauthorizedUser mocks base method
+func (m *MockAPIClient) CreateUnauthorizedUser(ctx context.Context, name, thumbnail string) (*user.User, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CreateUnauthorizedUser", ctx, name, thumbnail)
+	ret0, _ := ret[0].(*user.User)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CreateUnauthorizedUser indicates an expected call of CreateUnauthorizedUser
+func (mr *MockAPIClientMockRecorder) CreateUnauthorizedUser(ctx, name, thumbnail interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateUnauthorizedUser", reflect.TypeOf((*MockAPIClient)(nil).CreateUnauthorizedUser), ctx, name, thumbnail)
+}
+
 // AddGroup mocks base method
 func (m *MockAPIClient) AddGroup(ctx context.Context, userID, groupID string) (*user.User, error) {
 	m.ctrl.T.Helper()

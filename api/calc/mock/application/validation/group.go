@@ -76,6 +76,20 @@ func (mr *MockGroupRequestValidationMockRecorder) AddUsersInGroup(req interface{
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AddUsersInGroup", reflect.TypeOf((*MockGroupRequestValidation)(nil).AddUsersInGroup), req)
 }
 
+// AddUnauthorizedUsersInGroup mocks base method
+func (m *MockGroupRequestValidation) AddUnauthorizedUsersInGroup(req *request.AddUnauthorizedUsersInGroup) []*domain.ValidationError {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "AddUnauthorizedUsersInGroup", req)
+	ret0, _ := ret[0].([]*domain.ValidationError)
+	return ret0
+}
+
+// AddUnauthorizedUsersInGroup indicates an expected call of AddUnauthorizedUsersInGroup
+func (mr *MockGroupRequestValidationMockRecorder) AddUnauthorizedUsersInGroup(req interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AddUnauthorizedUsersInGroup", reflect.TypeOf((*MockGroupRequestValidation)(nil).AddUnauthorizedUsersInGroup), req)
+}
+
 // RemoveUsersInGroup mocks base method
 func (m *MockGroupRequestValidation) RemoveUsersInGroup(req *request.RemoveUsersInGroup) []*domain.ValidationError {
 	m.ctrl.T.Helper()

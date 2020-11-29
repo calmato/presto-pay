@@ -52,31 +52,6 @@ paths:
         '500':
           $ref: '#/components/responses/Unkown'
 
-  /unauthorized-users/{userId}:
-    post:
-      summary: 未登録ユーザー追加
-      security:
-        - BearerAuth: []
-      parameters:
-        - in: path
-          name: userId
-          schema:
-            type: string
-            format: uuid
-          required: true
-          description: ユーザーUUID
-      requestBody:
-        $ref: '#/components/requestBodies/UpdateUnauthorizedUser'
-      responses:
-        '200':
-          $ref: '#/components/responses/UnauthorizedUser'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '409':
-          $ref: '#/components/responses/Conflict'
-        '500':
-          $ref: '#/components/responses/Unkown'
-
   /users/{userId}/groups/{groupId}:
     post:
       summary: ユーザー グループ追加
@@ -212,25 +187,8 @@ components:
                 type: string
 
   requestBodies:
-    CreateUser:
+    CreateUnauthorizedUser:
       description: 未認証ユーザー追加APIのリクエスト
-      required: true
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              name:
-                type: string
-                description: 表示名
-              thumbnail:
-                type: string
-                description: サムネイル
-            required:
-              - name
-
-    UpdateUser:
-      description: 未認証ユーザー編集APIのリクエスト
       required: true
       content:
         application/json:

@@ -20,6 +20,7 @@ type APIV1GroupHandler interface {
 	Create(ctx *gin.Context)
 	Update(ctx *gin.Context)
 	AddUsers(ctx *gin.Context)
+	AddUnauthorizedUsers(ctx *gin.Context)
 	RemoveUsers(ctx *gin.Context)
 	AddHiddenGroup(ctx *gin.Context)
 	RemoveHiddenGroup(ctx *gin.Context)
@@ -194,6 +195,34 @@ func (gh *apiV1GroupHandler) AddUsers(ctx *gin.Context) {
 	}
 
 	res := &response.AddUsersInGroup{
+		ID:           g.ID,
+		Name:         g.Name,
+		ThumbnailURL: g.ThumbnailURL,
+		UserIDs:      g.UserIDs,
+		CreatedAt:    g.CreatedAt,
+		UpdatedAt:    g.UpdatedAt,
+	}
+
+	ctx.JSON(http.StatusOK, res)
+}
+
+func (gh *apiV1GroupHandler) AddUnauthorizedUsers(ctx *gin.Context) {
+	groupID := ctx.Params.ByName("groupID")
+
+	req := &request.AddUnauthorizedUsersInGroup{}
+	if err := ctx.BindJSON(req); err != nil {
+		handler.ErrorHandling(ctx, domain.UnableParseJSON.New(err))
+		return
+	}
+
+	c := middleware.GinContextToContext(ctx)
+	g, err := gh.groupApplication.AddUnauthorizedUsers(c, req, groupID)
+	if err != nil {
+		handler.ErrorHandling(ctx, err)
+		return
+	}
+
+	res := &response.AddUnauthorizedUsersInGroup{
 		ID:           g.ID,
 		Name:         g.Name,
 		ThumbnailURL: g.ThumbnailURL,

@@ -69,6 +69,16 @@ type AddUsersInGroup struct {
 	UpdatedAt    time.Time `json:"updatedAt"`
 }
 
+// AddUnauthorizedUsersInGroup - グループへ未登録ユーザー追加APIのレスポンス
+type AddUnauthorizedUsersInGroup struct {
+	ID           string    `json:"id"`
+	Name         string    `json:"name"`
+	ThumbnailURL string    `json:"thumbnailUrl"`
+	UserIDs      []string  `json:"userIds"`
+	CreatedAt    time.Time `json:"createdAt"`
+	UpdatedAt    time.Time `json:"updatedAt"`
+}
+
 // RemoveUsersInGroup - グループのユーザー削除APIのレスポンス
 type RemoveUsersInGroup struct {
 	ID           string    `json:"id"`

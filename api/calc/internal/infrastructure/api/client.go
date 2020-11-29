@@ -1,6 +1,7 @@
 package api
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"io/ioutil"
@@ -18,6 +19,7 @@ type APIClient interface {
 	Authentication(ctx context.Context) (*user.User, error)
 	ShowUser(ctx context.Context, userID string) (*user.User, error)
 	UserExists(ctx context.Context, userID string) (bool, error)
+	CreateUnauthorizedUser(ctx context.Context, name string, thumbnail string) (*user.User, error)
 	AddGroup(ctx context.Context, userID string, groupID string) (*user.User, error)
 	RemoveGroup(ctx context.Context, userID string, groupID string) (*user.User, error)
 	AddHiddenGroup(ctx context.Context, groupID string) (*user.User, error)
@@ -34,6 +36,16 @@ func NewAPIClient(userAPIURL string) APIClient {
 	return &Client{
 		userAPIURL: userAPIURL,
 	}
+}
+
+/*
+ * ###########################
+ * Request
+ * ###########################
+ */
+type createUnauthorizedUserRequest struct {
+	Name      string `json:"name"`
+	Thumbnail string `json:"thumbnail"`
 }
 
 /*
@@ -89,6 +101,42 @@ func (c *Client) ShowUser(ctx context.Context, userID string) (*user.User, error
 	}
 
 	if _, err := getStatus(res); err != nil {
+		return nil, err
+	}
+
+	defer res.Body.Close()
+	body, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	u := &user.User{}
+	if err = json.Unmarshal(body, u); err != nil {
+		return nil, err
+	}
+
+	return u, nil
+}
+
+// CreateUnauthorizedUser - 認証機能なしのユーザ作成
+func (c *Client) CreateUnauthorizedUser(ctx context.Context, name string, thumbnail string) (*user.User, error) {
+	params := &createUnauthorizedUserRequest{
+		Name:      name,
+		Thumbnail: thumbnail,
+	}
+
+	paramsByte, _ := json.Marshal(params)
+	paramsReader := bytes.NewReader(paramsByte)
+
+	url := c.userAPIURL + "/internal/unauthorized-users"
+	req, _ := http.NewRequest("POST", url, paramsReader)
+
+	if err := setHeader(ctx, req); err != nil {
+		return nil, err
+	}
+
+	res, err := getResponse(req)
+	if err != nil {
 		return nil, err
 	}
 
