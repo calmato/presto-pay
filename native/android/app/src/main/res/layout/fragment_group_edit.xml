@@ -49,40 +49,29 @@
       android:id="@+id/groupEditAddFriend"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_marginStart="8dp"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/groupEditFriendFrame">
-
-      <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/imageView5"
-        android:layout_width="59dp"
-        android:layout_height="46dp"
-        android:layout_marginStart="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_baseline_group_add_24" />
 
       <TextView
         android:id="@+id/textView2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/add_member"
+        android:text="自分の友達からメンバーを追加"
         android:textAlignment="center"
         android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView5"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/imageView6"
-        app:layout_constraintStart_toEndOf="@+id/imageView5"
-        app:layout_constraintTop_toTopOf="@+id/imageView5" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
       <ImageView
         android:id="@+id/imageView6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView5"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/imageView5"
+        app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_baseline_chevron_right_24" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -103,12 +92,12 @@
       android:id="@+id/groupEditFriendFrame"
       android:layout_width="wrap_content"
       android:layout_height="30dp"
-      android:layout_marginTop="24dp"
       android:background="#CCCCCC"
       android:visibility="visible"
       app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.0"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/groupDisplay" />
+      app:layout_constraintTop_toTopOf="@+id/groupEditHorizon" />
 
     <de.hdodenhof.circleimageview.CircleImageView
       android:id="@+id/groupThumnail"
@@ -139,25 +128,25 @@
       android:id="@+id/groupDisplay"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_marginStart="32dp"
       android:layout_marginTop="24dp"
+      android:layout_marginEnd="16dp"
       android:text="@string/groupDisplayToggle"
       android:textSize="18sp"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/groupEditHorizon" />
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintTop_toTopOf="parent" />
 
     <Switch
       android:id="@+id/hiddenSwitch"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_marginStart="200dp"
+      android:layout_marginTop="8dp"
+      android:layout_marginEnd="16dp"
       android:background="@drawable/switch_bg"
       android:theme="@style/CustomSwitch"
       android:thumb="@drawable/switch_thumb"
       android:track="@drawable/switch_bg"
       app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toEndOf="@+id/groupDisplay"
-      app:layout_constraintTop_toTopOf="@+id/groupDisplay" />
+      app:layout_constraintTop_toBottomOf="@+id/groupDisplay" />
 
     <TextView
       android:id="@+id/groupEditFriendText"
@@ -177,7 +166,7 @@
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/groupEditAddFriend" />
+      app:layout_constraintTop_toBottomOf="@+id/addGroupSubUser" />
 
     <TextView
       android:id="@+id/textView12"
@@ -190,6 +179,37 @@
       android:textStyle="bold"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+      android:id="@+id/addGroupSubUser"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/groupEditAddFriend">
+
+      <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_baseline_chevron_right_24" />
+
+      <TextView
+        android:id="@+id/textView15"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="新規作成してメンバーを追加"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/imageView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
   </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
