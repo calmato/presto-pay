@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools">
+
+  <androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Button
+      android:id="@+id/unauthorizedAddButton"
+      android:layout_width="250dp"
+      android:layout_height="0dp"
+      android:layout_marginTop="16dp"
+      android:backgroundTint="#2BACFC"
+      android:fontFamily="sans-serif"
+      android:text="追加
+"
+      android:textColor="#FFFFFF"
+      app:layout_constraintBottom_toTopOf="@+id/view"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName"
+      tools:ignore="MissingConstraints" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+      android:id="@+id/unauthorizedThumbnail"
+      android:layout_width="85dp"
+      android:layout_height="85dp"
+      android:layout_marginTop="24dp"
+      android:background="@drawable/circle_theme_color"
+      android:backgroundTint="#4B000000"
+      android:contentDescription="@string/profile_photo"
+      android:padding="4dp"
+      android:src="@android:drawable/ic_menu_camera"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/textView17" />
+
+    <TextView
+      android:id="@+id/textView17"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="16dp"
+      android:layout_marginTop="24dp"
+      android:text="新規作成してメンバーを追加"
+      android:textSize="24sp"
+      android:textStyle="bold"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+      android:id="@+id/editTextTextPersonName"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="16dp"
+      android:ems="10"
+      android:hint="メンバー名を入力"
+      android:inputType="textPersonName"
+      android:textAlignment="center"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/unauthorizedThumbnail" />
+
+  </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -166,7 +166,7 @@
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/addGroupSubUser" />
+      app:layout_constraintTop_toBottomOf="@+id/addUnauthorizedUsers" />
 
     <TextView
       android:id="@+id/textView12"
@@ -181,7 +181,7 @@
       app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-      android:id="@+id/addGroupSubUser"
+      android:id="@+id/addUnauthorizedUsers"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
       app:layout_constraintEnd_toEndOf="parent"
