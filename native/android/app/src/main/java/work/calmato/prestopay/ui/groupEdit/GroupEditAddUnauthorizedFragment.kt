@@ -2,10 +2,7 @@ package work.calmato.prestopay.ui.groupEdit
 
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
@@ -61,12 +58,28 @@ class GroupEditAddUnauthorizedFragment : Fragment() {
     }
   }
 
+  override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+    inflater.inflate(R.menu.header_done, menu)
+  }
+
+  override fun onPrepareOptionsMenu(menu: Menu) {
+    super.onPrepareOptionsMenu(menu)
+    doneButton = menu.getItem(0)
+  }
+
+  override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    when (item.itemId) {
+      R.id.done -> sendRequest()
+    }
+    return super.onOptionsItemSelected(item)
+  }
+
   private fun sendRequest() {
-    val thumbnail = encodeImage2Base64(unauthorizedThumbnail)
     val accountName: String = unauthorizedAccountName.text.toString()
+    val thumbnail = encodeImage2Base64(unauthorizedThumbnail)
     if (accountName != "") {
       try {
-        val unauthorizedProperty = RegisterUnauthorizedProperty(thumbnail, accountName)
+        val unauthorizedProperty = RegisterUnauthorizedProperty(accountName, thumbnail)
         execute(unauthorizedProperty, getGroupInfo!!.id)
 
       } catch (e: IOException) {
@@ -78,19 +91,16 @@ class GroupEditAddUnauthorizedFragment : Fragment() {
   }
 
   private fun execute(registerUnauthorized: RegisterUnauthorizedProperty, groupId: String) {
-    //doneButton.isEnabled = false
     val unauthorizedList: List<RegisterUnauthorizedProperty> = listOf(registerUnauthorized)
     frontView.visibility = ImageView.VISIBLE
     progressBar.visibility = android.widget.ProgressBar.VISIBLE
     Api.retrofitService.registerUnauthorizedUsers(
       "Bearer $id",
-      mapOf("userIds" to unauthorizedList),
+      mapOf("users" to unauthorizedList),
       getGroupInfo!!.id
     )
       .enqueue(object : Callback<GroupPropertyResponse> {
         override fun onFailure(call: Call<GroupPropertyResponse>, t: Throwable) {
-          //doneButton.isEnabled = true
-          frontView.visibility = ImageView.GONE
           progressBar.visibility = android.widget.ProgressBar.INVISIBLE
         }
 
