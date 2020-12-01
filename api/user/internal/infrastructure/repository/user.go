@@ -285,8 +285,8 @@ func getToken(ctx context.Context) (string, error) {
 }
 
 // OAuth認証による初回User登録時、UIDの先頭16文字を取得
-// e.g.) 12345678-qwer-asdf-zxcv-uiophjklvbnm -> user12345678qwerasdf
+// e.g.) 12345678-qwer-asdf-zxcv-uiophjklvbnm -> 12345678qwerasdf
 func getName(uid string) string {
 	str := strings.Replace(uid, "-", "", -1)
-	return fmt.Sprintf("user%s", str[0:16])
+	return fmt.Sprintf("%s", str[0:16])
 }
