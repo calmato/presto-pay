@@ -8,7 +8,6 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.*
 import java.security.cert.X509Certificate
@@ -146,6 +145,14 @@ interface ApiService {
   fun registerFriendToGroup(
     @Header("Authorization") token: String,
     @Body userIds: Map<String, @JvmSuppressWildcards List<String>>,
+    @Path("groupId") groupId: String
+  ):
+    Call<GroupPropertyResponse>
+
+  @POST("groups/{groupId}/unauthorized-users")
+  fun registerUnauthorizedUsers(
+    @Header("Authorization") token: String,
+    @Body userIds: Map<String, @JvmSuppressWildcards List<RegisterUnauthorizedProperty>>,
     @Path("groupId") groupId: String
   ):
     Call<GroupPropertyResponse>

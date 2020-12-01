@@ -45,6 +45,17 @@ data class CreateGroupProperty(
 ) : Parcelable
 
 @Parcelize
+data class RegisterUnauthorized(
+  val users: List<RegisterUnauthorizedProperty>
+) : Parcelable
+
+@Parcelize
+data class RegisterUnauthorizedProperty(
+  val name: String,
+  val thumbnail: String
+) : Parcelable
+
+@Parcelize
 data class EditGroup(
   val name: String,
   val thumbnail: String,

@@ -29,6 +29,7 @@ import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentGroupEditBinding
 import work.calmato.prestopay.network.*
 import work.calmato.prestopay.util.*
+import java.io.IOException
 import kotlin.concurrent.thread
 
 class GroupEditFragment : PermissionBase() {
@@ -174,7 +175,7 @@ class GroupEditFragment : PermissionBase() {
     try {
       val editGroup = EditGroup(groupName, thumbnails, groupDetail!!.users.map { it.id })
       execute(editGroup, getGroupInfo!!.id)
-    } catch (e: Exception) {
+    } catch (e: IOException) {
       Log.d(TAG, "debug $e")
     }
   }
