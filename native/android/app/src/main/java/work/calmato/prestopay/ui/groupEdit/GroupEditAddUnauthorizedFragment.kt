@@ -138,7 +138,7 @@ class GroupEditAddUnauthorizedFragment : PermissionBase() {
     } else {
       limitSize = responseGroup!!.userIds.size
     }
-    if (limitSize <= 2) {
+    if (limitSize <= 64) {
       Api.retrofitService.registerUnauthorizedUsers(
         "Bearer $id",
         mapOf("users" to unauthorizedList),
@@ -187,7 +187,6 @@ class GroupEditAddUnauthorizedFragment : PermissionBase() {
       for (i in 0..(getGroupInfo!!.users.size - 1)) {
         idList.add(getGroupInfo!!.users[i].id)
       }
-      getGroupInfo!!.users[0].id
       responseGroup = GroupPropertyResponse(
         getGroupInfo!!.id, getGroupInfo!!.name,
         getGroupInfo!!.thumbnailUrl, idList, getGroupInfo!!.createdAt, getGroupInfo!!.updatedAt

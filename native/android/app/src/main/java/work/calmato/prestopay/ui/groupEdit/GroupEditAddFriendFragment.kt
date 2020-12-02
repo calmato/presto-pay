@@ -109,7 +109,7 @@ class GroupEditAddFriendFragment : Fragment() {
       viewLifecycleOwner,
       object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
-          sendRequest()
+          goBackScreen()
         }
       }
     )
@@ -126,7 +126,7 @@ class GroupEditAddFriendFragment : Fragment() {
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
     when (item.itemId) {
-      R.id.done -> sendRequest()
+      R.id.done -> goBackScreen()
     }
     return super.onOptionsItemSelected(item)
   }
@@ -156,7 +156,7 @@ class GroupEditAddFriendFragment : Fragment() {
           ) {
             if (response.isSuccessful) {
               responseGroup = response.body()
-              applyBackHome(responseGroup)
+              goBackScreen()
             } else {
               Toast.makeText(
                 activity,
@@ -178,13 +178,25 @@ class GroupEditAddFriendFragment : Fragment() {
     }
   }
 
-  private fun applyBackHome(response: GroupPropertyResponse?) {
+  private fun goBackScreen() {
+    if (responseGroup == null) {
+      var idList: MutableList<String> = mutableListOf()
+      for (i in 0..(getGroupInfo!!.users.size - 1)) {
+        idList.add(getGroupInfo!!.users[i].id)
+      }
+      responseGroup = GroupPropertyResponse(
+        getGroupInfo!!.id, getGroupInfo!!.name,
+        getGroupInfo!!.thumbnailUrl, idList, getGroupInfo!!.createdAt, getGroupInfo!!.updatedAt
+      )
+    }
     this.findNavController().navigate(
-      GroupEditAddFriendFragmentDirections.actionGroupEditAddFriendToGroupEditFragment(response)
+      GroupEditAddFriendFragmentDirections.actionGroupEditAddFriendToGroupEditFragment(
+        responseGroup
+      )
     )
   }
 
   companion object {
-    internal const val TAG = "GroupEditAddFeiend"
+    internal const val TAG = "GroupEditAddFriend"
   }
 }
