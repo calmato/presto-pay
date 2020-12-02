@@ -64,7 +64,7 @@ class GroupEditAddUnauthorizedFragment : PermissionBase() {
       sendRequest()
     }
 
-    unauthorizedThumbnail.setOnClickListener{
+    unauthorizedThumbnail.setOnClickListener {
       requestPermission()
     }
 
@@ -129,42 +129,56 @@ class GroupEditAddUnauthorizedFragment : PermissionBase() {
   }
 
   private fun execute(registerUnauthorized: RegisterUnauthorizedProperty) {
+    var limitSize: Int
     val unauthorizedList: List<RegisterUnauthorizedProperty> = listOf(registerUnauthorized)
     frontView.visibility = ImageView.VISIBLE
     progressBar.visibility = android.widget.ProgressBar.VISIBLE
-    Api.retrofitService.registerUnauthorizedUsers(
-      "Bearer $id",
-      mapOf("users" to unauthorizedList),
-      getGroupInfo!!.id
-    )
-      .enqueue(object : Callback<GroupPropertyResponse> {
-        override fun onFailure(call: Call<GroupPropertyResponse>, t: Throwable) {
-          progressBar.visibility = android.widget.ProgressBar.INVISIBLE
-        }
-
-        override fun onResponse(
-          call: Call<GroupPropertyResponse>,
-          response: Response<GroupPropertyResponse>
-        ) {
-          if (response.isSuccessful) {
-            responseGroup = response.body()
-            Toast.makeText(
-              activity,
-              "追加しました",
-              Toast.LENGTH_SHORT
-            ).show()
-          } else {
-            Toast.makeText(
-              activity,
-              "グループに友達を追加できませんでした",
-              Toast.LENGTH_SHORT
-            ).show()
+    if (responseGroup == null) {
+      limitSize = getGroupInfo!!.users.size
+    } else {
+      limitSize = responseGroup!!.userIds.size
+    }
+    if (limitSize <= 2) {
+      Api.retrofitService.registerUnauthorizedUsers(
+        "Bearer $id",
+        mapOf("users" to unauthorizedList),
+        getGroupInfo!!.id
+      )
+        .enqueue(object : Callback<GroupPropertyResponse> {
+          override fun onFailure(call: Call<GroupPropertyResponse>, t: Throwable) {
+            progressBar.visibility = android.widget.ProgressBar.INVISIBLE
           }
-          frontView.visibility = ImageView.GONE
-          progressBar.visibility = android.widget.ProgressBar.INVISIBLE
-        }
 
-      })
+          override fun onResponse(
+            call: Call<GroupPropertyResponse>,
+            response: Response<GroupPropertyResponse>
+          ) {
+            if (response.isSuccessful) {
+              responseGroup = response.body()
+              Toast.makeText(
+                activity,
+                "追加しました",
+                Toast.LENGTH_SHORT
+              ).show()
+            } else {
+              Toast.makeText(
+                activity,
+                "グループに友達を追加できませんでした",
+                Toast.LENGTH_SHORT
+              ).show()
+            }
+            frontView.visibility = ImageView.GONE
+            progressBar.visibility = android.widget.ProgressBar.INVISIBLE
+          }
+
+        })
+    } else {
+      Toast.makeText(
+        requireContext(),
+        resources.getString(R.string.group_member_restriction),
+        Toast.LENGTH_LONG
+      ).show()
+    }
   }
 
   private fun goBackScreen() {
@@ -179,7 +193,6 @@ class GroupEditAddUnauthorizedFragment : PermissionBase() {
         getGroupInfo!!.thumbnailUrl, idList, getGroupInfo!!.createdAt, getGroupInfo!!.updatedAt
       )
     }
-    Log.d(TAG, responseGroup.toString())
     this.findNavController().navigate(
       GroupEditAddUnauthorizedFragmentDirections.actionGroupEditAddUnauthorizedFragmentToGroupEditFragment(
         responseGroup
