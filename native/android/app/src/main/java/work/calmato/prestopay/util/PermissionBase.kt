@@ -73,6 +73,7 @@ open class PermissionBase :Fragment() {
       pickImageFromGallery()
     }
   }
+
   fun cropImage(uri: Uri) {
     val destination = Uri.fromFile(
       File(requireActivity().cacheDir, "IMG_" + System.currentTimeMillis())

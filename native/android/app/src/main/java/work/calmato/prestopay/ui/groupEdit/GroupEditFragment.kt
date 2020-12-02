@@ -125,7 +125,6 @@ class GroupEditFragment : PermissionBase() {
       requestPermission()
     }
 
-    // 戻るbuttonを押した時の処理
     requireActivity().onBackPressedDispatcher.addCallback(
       viewLifecycleOwner,
       object : OnBackPressedCallback(true) {

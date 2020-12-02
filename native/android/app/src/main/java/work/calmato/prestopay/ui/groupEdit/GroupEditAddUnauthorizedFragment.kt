@@ -1,5 +1,8 @@
 package work.calmato.prestopay.ui.groupEdit
 
+import android.app.Activity
+import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -7,9 +10,9 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.preference.PreferenceManager
+import com.yalantis.ucrop.UCrop
 import kotlinx.android.synthetic.main.fragment_group_edit_add_unauthorized.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -20,10 +23,12 @@ import work.calmato.prestopay.network.Api
 import work.calmato.prestopay.network.GetGroupDetail
 import work.calmato.prestopay.network.GroupPropertyResponse
 import work.calmato.prestopay.network.RegisterUnauthorizedProperty
+import work.calmato.prestopay.util.Constant
+import work.calmato.prestopay.util.PermissionBase
 import work.calmato.prestopay.util.encodeImage2Base64
 import java.io.IOException
 
-class GroupEditAddUnauthorizedFragment : Fragment() {
+class GroupEditAddUnauthorizedFragment : PermissionBase() {
   private lateinit var id: String
   private var getGroupInfo: GetGroupDetail? = null
   private var responseGroup: GroupPropertyResponse? = null
@@ -59,6 +64,10 @@ class GroupEditAddUnauthorizedFragment : Fragment() {
       sendRequest()
     }
 
+    unauthorizedThumbnail.setOnClickListener{
+      requestPermission()
+    }
+
     requireActivity().onBackPressedDispatcher.addCallback(
       viewLifecycleOwner,
       object : OnBackPressedCallback(true) {
@@ -84,6 +93,19 @@ class GroupEditAddUnauthorizedFragment : Fragment() {
       R.id.done -> goBackScreen()
     }
     return super.onOptionsItemSelected(item)
+  }
+
+  override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    super.onActivityResult(requestCode, resultCode, data)
+    if (resultCode == Activity.RESULT_OK && requestCode == Constant.IMAGE_PICK_CODE) {
+      cropImage(data?.data!!)
+    }
+    if (resultCode == Activity.RESULT_OK && requestCode == UCrop.REQUEST_CROP) {
+      val resultUri = UCrop.getOutput(data!!)
+      unauthorizedThumbnail.setImageURI(resultUri)
+      unauthorizedThumbnail.setBackgroundColor(Color.TRANSPARENT)
+      changeProfileUnauthorized.text = resources.getText(R.string.change_image)
+    }
   }
 
   private fun sendRequest() {
