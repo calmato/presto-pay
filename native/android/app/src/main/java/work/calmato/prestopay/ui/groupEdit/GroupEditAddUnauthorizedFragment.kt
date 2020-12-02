@@ -5,8 +5,10 @@ import android.util.Log
 import android.view.*
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.preference.PreferenceManager
 import kotlinx.android.synthetic.main.fragment_group_edit_add_unauthorized.*
 import retrofit2.Call
@@ -56,6 +58,15 @@ class GroupEditAddUnauthorizedFragment : Fragment() {
     unauthorizedAddButton.setOnClickListener {
       sendRequest()
     }
+
+    requireActivity().onBackPressedDispatcher.addCallback(
+      viewLifecycleOwner,
+      object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+          goBackScreen()
+        }
+      }
+    )
   }
 
   override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -68,29 +79,34 @@ class GroupEditAddUnauthorizedFragment : Fragment() {
   }
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    val backParameter = RegisterUnauthorizedProperty("", "")
     when (item.itemId) {
-      R.id.done -> sendRequest()
+      R.id.done -> goBackScreen()
     }
     return super.onOptionsItemSelected(item)
   }
 
   private fun sendRequest() {
-    val accountName: String = unauthorizedAccountName.text.toString()
+    val name: String = unauthorizedAccountName.text.toString()
     val thumbnail = encodeImage2Base64(unauthorizedThumbnail)
-    if (accountName != "") {
+    if (name != "") {
       try {
-        val unauthorizedProperty = RegisterUnauthorizedProperty(accountName, thumbnail)
-        execute(unauthorizedProperty, getGroupInfo!!.id)
+        val unauthorizedProperty = RegisterUnauthorizedProperty(name, thumbnail)
+        execute(unauthorizedProperty)
 
       } catch (e: IOException) {
         Log.d(TAG, "debug $e")
       }
     } else {
-      Toast.makeText(requireContext(), resources.getString(R.string.please_fill), Toast.LENGTH_SHORT).show()
+      Toast.makeText(
+        requireContext(),
+        resources.getString(R.string.please_fill),
+        Toast.LENGTH_SHORT
+      ).show()
     }
   }
 
-  private fun execute(registerUnauthorized: RegisterUnauthorizedProperty, groupId: String) {
+  private fun execute(registerUnauthorized: RegisterUnauthorizedProperty) {
     val unauthorizedList: List<RegisterUnauthorizedProperty> = listOf(registerUnauthorized)
     frontView.visibility = ImageView.VISIBLE
     progressBar.visibility = android.widget.ProgressBar.VISIBLE
@@ -127,6 +143,26 @@ class GroupEditAddUnauthorizedFragment : Fragment() {
         }
 
       })
+  }
+
+  private fun goBackScreen() {
+    if (responseGroup == null) {
+      var idList: MutableList<String> = mutableListOf()
+      for (i in 0..(getGroupInfo!!.users.size - 1)) {
+        idList.add(getGroupInfo!!.users[i].id)
+      }
+      getGroupInfo!!.users[0].id
+      responseGroup = GroupPropertyResponse(
+        getGroupInfo!!.id, getGroupInfo!!.name,
+        getGroupInfo!!.thumbnailUrl, idList, getGroupInfo!!.createdAt, getGroupInfo!!.updatedAt
+      )
+    }
+    Log.d(TAG, responseGroup.toString())
+    this.findNavController().navigate(
+      GroupEditAddUnauthorizedFragmentDirections.actionGroupEditAddUnauthorizedFragmentToGroupEditFragment(
+        responseGroup
+      )
+    )
   }
 
   companion object {

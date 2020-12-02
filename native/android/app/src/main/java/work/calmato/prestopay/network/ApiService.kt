@@ -70,12 +70,11 @@ interface ApiService {
   fun getPropertiesAsync(
     @Header("Authorization") token: String,
     @Query("username") username: String
-  ):
-    Deferred<NetworkFriendContainer>
+  ): Deferred<NetworkFriendContainer>
 
   @POST("auth/friends")
-  fun addFriend(@Header("Authorization") token: String, @Body userId: UserId):
-    Deferred<NetworkFriend>
+  fun addFriend(@Header("Authorization") token: String, @Body userId: UserId
+  ): Deferred<NetworkFriend>
 
   @GET("auth/friends")
   fun getFriends(@Header("Authorization") token: String):
@@ -93,8 +92,8 @@ interface ApiService {
   ): Call<AccountResponse>
 
   @GET("groups")
-  fun getGroups(@Header("Authorization") token: String):
-    Deferred<NetworkGroupContainer>
+  fun getGroups(@Header("Authorization") token: String
+  ): Deferred<NetworkGroupContainer>
 
   @GET("groups")
   fun getHiddenGroups(
@@ -126,54 +125,50 @@ interface ApiService {
   fun editAccount(
     @Header("Authorization") token: String,
     @Body accountProperty: EditAccountProperty
-  ):
-    Call<EditAccountResponse>
+  ): Call<EditAccountResponse>
 
   @POST("groups")
-  fun createGroup(@Header("Authorization") token: String, @Body userId: CreateGroupProperty):
-    Call<GroupPropertyResponse>
+  fun createGroup(@Header("Authorization") token: String, @Body userId: CreateGroupProperty
+  ): Call<GroupPropertyResponse>
 
   @PATCH("groups/{groupId}")
   fun editGroup(
     @Header("Authorization") token: String,
     @Body accountProperty: EditGroup,
     @Path("groupId") groupId: String
-  ):
-    Call<EditGroup>
+  ): Call<EditGroup>
+
+
 
   @POST("groups/{groupId}/users")
   fun registerFriendToGroup(
     @Header("Authorization") token: String,
     @Body userIds: Map<String, @JvmSuppressWildcards List<String>>,
     @Path("groupId") groupId: String
-  ):
-    Call<GroupPropertyResponse>
+  ): Call<GroupPropertyResponse>
 
   @POST("groups/{groupId}/unauthorized-users")
   fun registerUnauthorizedUsers(
     @Header("Authorization") token: String,
     @Body userIds: Map<String, @JvmSuppressWildcards List<RegisterUnauthorizedProperty>>,
     @Path("groupId") groupId: String
-  ):
-    Call<GroupPropertyResponse>
+  ): Call<GroupPropertyResponse>
 
   @POST("auth")
   fun createAccount(
     @Body accountProperty: NewAccountProperty
-  ):
-    Call<AccountResponse>
+  ): Call<AccountResponse>
 
   @DELETE("auth/friends/{userId}")
-  fun deleteFriend(@Header("Authorization") token: String, @Path("userId") userId: String):
-    Call<AccountResponse>
+  fun deleteFriend(@Header("Authorization") token: String, @Path("userId") userId: String
+  ): Call<AccountResponse>
 
   @POST("groups/{groupId}/payments")
   fun addExpense(
     @Header("Authorization") token: String,
     @Body createExpenseProperty: CreateExpenseProperty,
     @Path("groupId") groupId: String
-  ):
-    Call<Unit>
+  ): Call<Unit>
 
   @GET("groups/{groupId}/payments")
   fun getPayments(
@@ -207,7 +202,7 @@ interface ApiService {
   fun settleUp(
     @Header("Authorization") token: String,
     @Path("groupId") groupId: String
-  ) : Call<Unit>
+  ): Call<Unit>
 }
 
 /**

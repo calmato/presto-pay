@@ -46,8 +46,8 @@ data class CreateGroupProperty(
 
 @Parcelize
 data class RegisterUnauthorizedProperty(
-  val name: String,
-  val thumbnail: String
+  val name: String?,
+  val thumbnail: String?
 ) : Parcelable
 
 @Parcelize
