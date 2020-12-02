@@ -1,23 +1,18 @@
 package work.calmato.prestopay.util
 
 import android.content.Context
-import android.graphics.drawable.ColorDrawable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.ads.nativetemplates.NativeTemplateStyle
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdLoader
 import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.formats.NativeAd
 import com.google.android.gms.ads.formats.NativeAdOptions
 import com.google.android.gms.ads.formats.UnifiedNativeAd
-import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.ListGroupItemPlaneBinding
 import work.calmato.prestopay.network.GroupPropertyResponse
-import work.calmato.prestopay.repository.GroupsRepository
 
 class AdapterGroupPlane(
   val onClickListener: OnClickListener,
@@ -62,10 +57,6 @@ class AdapterGroupPlane(
       // Native ad
       val adLoader = AdLoader.Builder(context, "ca-app-pub-3940256099942544/2247696110")
         .forUnifiedNativeAd { ad: UnifiedNativeAd ->
-//          val style: NativeTemplateStyle =
-//            NativeTemplateStyle.Builder().withCallToActionTextSize(5f).build()
-          // Show the ad.
-//          holder.binding.nativeAd.setStyles(style)
           holder.binding.nativeAd.setNativeAd(ad)
         }
         .withAdListener(object : AdListener() {

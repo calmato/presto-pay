@@ -18,33 +18,6 @@
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent"
     app:navGraph="@navigation/navigation" />
-
-<!--  TODO リリース時は広告IDをテスト用から実際用に変更する-->
-  <!--    app:adUnitId="ca-app-pub-3812118776211807/7938769424"-->
-<!--  <com.google.android.gms.ads.AdView-->
-<!--    android:id="@+id/adView"-->
-<!--    android:layout_width="0dp"-->
-<!--    android:layout_height="wrap_content"-->
-<!--    android:layout_alignParentBottom="true"-->
-<!--    android:layout_centerHorizontal="true"-->
-<!--    android:visibility="gone"-->
-<!--    app:adSize="BANNER"-->
-<!--    app:adUnitId="ca-app-pub-3940256099942544/6300978111"-->
-<!--    app:layout_constraintBottom_toBottomOf="parent"-->
-<!--    app:layout_constraintEnd_toEndOf="parent"-->
-<!--    app:layout_constraintStart_toStartOf="parent" />-->
-
-
-<!--  <com.google.android.ads.nativetemplates.TemplateView-->
-<!--    android:id="@+id/native_ad"-->
-<!--    android:layout_width="match_parent"-->
-<!--    android:layout_height="wrap_content"-->
-<!--    app:gnt_template_type="@layout/gnt_small_template_view"-->
-<!--    app:layout_constraintBottom_toBottomOf="parent"-->
-<!--    app:layout_constraintEnd_toEndOf="parent"-->
-<!--    app:layout_constraintStart_toStartOf="parent" />-->
-  <!-- this attribute determines which template is used. The other option is
-   @layout/gnt_medium_template_view -->
 </androidx.constraintlayout.widget.ConstraintLayout>
 
 </merge>

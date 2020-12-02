@@ -76,7 +76,6 @@
               android:layout_marginBottom="8dp"
               android:background="@color/gnt_white"
               android:lines="1"
-              android:text="1234567890123456789012345"
               android:textColor="@color/gnt_gray"
               android:textSize="18sp"
               android:textStyle="bold"
