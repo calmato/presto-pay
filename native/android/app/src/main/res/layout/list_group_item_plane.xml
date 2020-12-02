@@ -45,7 +45,7 @@
         android:id="@+id/userName"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="8dp"
         android:gravity="center_vertical"
         android:textSize="24sp"
         app:groupName="@{groupPropertyResponse}"

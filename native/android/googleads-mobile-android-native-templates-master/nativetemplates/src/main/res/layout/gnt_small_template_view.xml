@@ -76,8 +76,9 @@
               android:layout_marginBottom="8dp"
               android:background="@color/gnt_white"
               android:lines="1"
+              android:text="1234567890123456789012345"
               android:textColor="@color/gnt_gray"
-              android:textSize="@dimen/gnt_text_size_large"
+              android:textSize="18sp"
               android:textStyle="bold"
               app:layout_constraintBottom_toBottomOf="parent"
               app:layout_constraintEnd_toStartOf="@+id/cta"
@@ -100,7 +101,7 @@
 
             <Button
               android:id="@+id/cta"
-              android:layout_width="60dp"
+              android:layout_width="50dp"
               android:layout_height="@dimen/gnt_no_size"
               android:background="@drawable/gnt_rounded_corners_shape"
               android:backgroundTint="@color/gnt_blue"
