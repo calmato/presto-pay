@@ -58,16 +58,25 @@ class GroupEditFragment : PermissionBase() {
               call: Call<GetGroupDetail>,
               response: Response<GetGroupDetail>
             ) {
-              Log.d(ViewModelGroup.TAG, response.body().toString())
-              groupDetail = response.body()
-              if (groupDetail?.thumbnailUrl!!.isNotEmpty()) {
-                Picasso.with(context).load(groupDetail!!.thumbnailUrl).into(groupThumnail)
+              if (response.isSuccessful) {
+                Log.d(ViewModelGroup.TAG, response.body().toString())
+                groupDetail = response.body()
+                if (groupDetail?.thumbnailUrl!!.isNotEmpty()) {
+                  Picasso.with(context).load(groupDetail!!.thumbnailUrl).into(groupThumnail)
+                }
+                groupEditName.setText(groupDetail?.name)
+                groupMembers.addAll(groupDetail!!.users)
+                viewModel.friendsList.observe(viewLifecycleOwner, Observer<List<UserProperty>> {
+                  recycleAdapter?.friendList = groupMembers
+                })
+              } else {
+                Toast.makeText(
+                  activity,
+                  resources.getString(R.string.bad_internet_connection),
+                  Toast.LENGTH_SHORT
+                ).show()
               }
-              groupEditName.setText(groupDetail?.name)
-              groupMembers.addAll(groupDetail!!.users)
-              viewModel.friendsList.observe(viewLifecycleOwner, Observer<List<UserProperty>> {
-                recycleAdapter?.friendList = groupMembers
-              })
+
             }
           })
       } catch (e: Exception) {

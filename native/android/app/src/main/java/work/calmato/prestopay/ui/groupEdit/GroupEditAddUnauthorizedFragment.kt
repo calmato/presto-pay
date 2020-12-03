@@ -182,21 +182,29 @@ class GroupEditAddUnauthorizedFragment : PermissionBase() {
   }
 
   private fun goBackScreen() {
-    if (responseGroup == null) {
-      var idList: MutableList<String> = mutableListOf()
-      for (i in 0..(getGroupInfo!!.users.size - 1)) {
-        idList.add(getGroupInfo!!.users[i].id)
+    if (getGroupInfo != null) {
+      if (responseGroup == null) {
+        var idList: MutableList<String> = mutableListOf()
+        for (i in 0..(getGroupInfo!!.users.size - 1)) {
+          idList.add(getGroupInfo!!.users[i].id)
+        }
+        responseGroup = GroupPropertyResponse(
+          getGroupInfo!!.id, getGroupInfo!!.name,
+          getGroupInfo!!.thumbnailUrl, idList, getGroupInfo!!.createdAt, getGroupInfo!!.updatedAt
+        )
       }
-      responseGroup = GroupPropertyResponse(
-        getGroupInfo!!.id, getGroupInfo!!.name,
-        getGroupInfo!!.thumbnailUrl, idList, getGroupInfo!!.createdAt, getGroupInfo!!.updatedAt
+      this.findNavController().navigate(
+        GroupEditAddUnauthorizedFragmentDirections.actionGroupEditAddUnauthorizedFragmentToGroupEditFragment(
+          responseGroup
+        )
       )
+    } else {
+      Toast.makeText(
+        activity,
+        resources.getString(R.string.bad_internet_connection),
+        Toast.LENGTH_SHORT
+      ).show()
     }
-    this.findNavController().navigate(
-      GroupEditAddUnauthorizedFragmentDirections.actionGroupEditAddUnauthorizedFragmentToGroupEditFragment(
-        responseGroup
-      )
-    )
   }
 
   companion object {
