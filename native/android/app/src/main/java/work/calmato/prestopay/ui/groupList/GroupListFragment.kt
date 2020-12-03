@@ -56,7 +56,7 @@ class GroupListFragment : Fragment() {
 
     clickListenerHomeGroup =
       AdapterGroupPlane.OnClickListener { viewModelGroup.itemIsClickedGroup(it) }
-    recycleGroupListAdapter = AdapterGroupPlane(clickListenerHomeGroup)
+    recycleGroupListAdapter = AdapterGroupPlane(clickListenerHomeGroup,requireActivity(),false)
     binding.groupChoiceRecycle.apply {
       layoutManager = LinearLayoutManager(context)
       adapter = recycleGroupListAdapter

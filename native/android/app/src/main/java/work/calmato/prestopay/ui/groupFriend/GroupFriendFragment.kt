@@ -92,7 +92,7 @@ class GroupFriendFragment : Fragment() {
     clickListener = AdapterFriendPlane.OnClickListener { viewModel.itemIsClicked(it) }
     clickListenerGroup = AdapterGroupPlane.OnClickListener { viewModel.itemIsClickedGroup(it) }
     recycleAdapter = AdapterFriendPlane(clickListener)
-    recycleGroupAdapter = AdapterGroupPlane(clickListenerGroup)
+    recycleGroupAdapter = AdapterGroupPlane(clickListenerGroup,requireActivity(),false)
     binding.friendsRecycleView.apply {
       layoutManager = LinearLayoutManager(context)
       adapter = recycleAdapter
