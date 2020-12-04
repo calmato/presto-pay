@@ -1,8 +1,10 @@
 package work.calmato.prestopay.util
 
-import android.content.Context
 import android.util.Log
-import android.widget.*
+import android.widget.CheckBox
+import android.widget.EditText
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,7 +17,6 @@ import work.calmato.prestopay.repository.TagRepository
 import kotlin.concurrent.thread
 import kotlin.math.absoluteValue
 import kotlin.math.round
-import kotlin.math.roundToInt
 
 @BindingAdapter("thumbnail")
 fun ImageView.setThumbnail(item:UserProperty?){
@@ -26,8 +27,15 @@ fun ImageView.setThumbnail(item:UserProperty?){
   }
 }
 
-@BindingAdapter("username")
+@BindingAdapter("name")
 fun TextView.setUserName(item:UserProperty?){
+  item?.let {
+    text = item.name
+  }
+}
+
+@BindingAdapter("username")
+fun TextView.setListUserName(item:UserProperty?){
   item?.let {
     text = item.username
   }

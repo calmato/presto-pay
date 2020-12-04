@@ -16,14 +16,14 @@ import kotlinx.android.synthetic.main.fragment_add_friend.*
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentAddFriendBinding
 import work.calmato.prestopay.network.UserProperty
-import work.calmato.prestopay.util.AdapterFriendPlane
+import work.calmato.prestopay.util.AdapterUserNamePlane
 import work.calmato.prestopay.util.ViewModelFriendGroup
 
 class AddFriendFragment : Fragment() {
   private val viewModel: ViewModelFriendGroup by lazy {
     ViewModelProvider(this).get(ViewModelFriendGroup::class.java)
   }
-  private var recycleAdapter: AdapterFriendPlane? = null
+  private var recycleAdapter: AdapterUserNamePlane? = null
 
   override fun onActivityCreated(savedInstanceState: Bundle?) {
     super.onActivityCreated(savedInstanceState)
@@ -34,7 +34,7 @@ class AddFriendFragment : Fragment() {
     })
   }
 
-  private lateinit var clickListener: AdapterFriendPlane.OnClickListener
+  private lateinit var clickListener: AdapterUserNamePlane.OnClickListener
 
   override fun onCreateView(
     inflater: LayoutInflater,
@@ -45,8 +45,8 @@ class AddFriendFragment : Fragment() {
       DataBindingUtil.inflate(inflater, R.layout.fragment_add_friend, container, false)
     binding.lifecycleOwner = this
     binding.viewModel = viewModel
-    clickListener = AdapterFriendPlane.OnClickListener { viewModel.itemIsClicked(it) }
-    recycleAdapter = AdapterFriendPlane(clickListener)
+    clickListener = AdapterUserNamePlane.OnClickListener { viewModel.itemIsClicked(it) }
+    recycleAdapter = AdapterUserNamePlane(clickListener)
     binding.root.findViewById<RecyclerView>(R.id.usersRecycleView).apply {
       layoutManager = LinearLayoutManager(context)
       adapter = recycleAdapter

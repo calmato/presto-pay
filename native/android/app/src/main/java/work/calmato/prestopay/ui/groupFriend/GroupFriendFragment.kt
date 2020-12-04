@@ -9,7 +9,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
@@ -141,7 +140,7 @@ class GroupFriendFragment : Fragment() {
     progressBar.visibility = android.widget.ProgressBar.INVISIBLE
 
     val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
-    userNameText.text = sharedPreferences.getString("username", "")
+    userNameText.text = sharedPreferences.getString("name", "")
     val thumbnailUrl = sharedPreferences.getString("thumbnailUrl", "")
     if (thumbnailUrl!!.isNotEmpty()) {
       Picasso.with(context).load(thumbnailUrl).into(thumbnail)

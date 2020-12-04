@@ -40,8 +40,8 @@
       app:layout_constraintStart_toEndOf="@+id/thumbnail"
       app:layout_constraintTop_toTopOf="@+id/thumbnail"
       app:layout_constraintVertical_bias="0.5"
-      app:username="@{userProperty}"
-      tools:text="userName" />
+      app:name="@{userProperty}"
+      tools:text="name" />
 
   </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

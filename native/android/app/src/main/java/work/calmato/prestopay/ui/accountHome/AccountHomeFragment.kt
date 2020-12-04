@@ -72,7 +72,7 @@ class AccountHomeFragment : Fragment() {
         }
       })
     sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
-    setUserNameText.text = sharedPreferences.getString("username", "")
+    setUserNameText.text = sharedPreferences.getString("name", "")
     val thumbnailUrl = sharedPreferences.getString("thumbnailUrl", "")
     if (thumbnailUrl!!.isNotEmpty()) {
       Picasso.with(context).load(thumbnailUrl).into(UserAccountThumnail)
