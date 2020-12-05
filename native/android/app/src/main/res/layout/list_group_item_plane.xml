@@ -13,36 +13,58 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginStart="0dp"
-    android:background="@color/tw__solid_white">
+    android:background="@color/tw__solid_white"
+    app:layout_constraintDimensionRatio="H,6:1">
 
-    <de.hdodenhof.circleimageview.CircleImageView
-      android:id="@+id/thumbnail"
-      android:layout_width="40dp"
-      android:layout_height="40dp"
+    <com.google.android.ads.nativetemplates.TemplateView
+      android:id="@+id/native_ad"
+      android:layout_width="0dp"
+      android:layout_height="match_parent"
+      android:elevation="4dp"
+      android:visibility="gone"
+      app:gnt_template_type="@layout/gnt_small_template_view"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+      android:layout_width="0dp"
+      android:layout_height="0dp"
       android:layout_marginStart="8dp"
-      android:layout_marginTop="2dp"
+      android:layout_marginTop="8dp"
+      android:layout_marginEnd="8dp"
       android:layout_marginBottom="8dp"
       app:layout_constraintBottom_toBottomOf="parent"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="parent"
-      app:layout_constraintVertical_bias="0.0"
-      app:thumbnailGroup="@{groupPropertyResponse}" />
-
-    <TextView
-      android:id="@+id/userName"
-      android:layout_width="0dp"
-      android:layout_height="40dp"
-      android:layout_marginStart="12dp"
-      android:layout_marginEnd="8dp"
-      android:textSize="24sp"
-      app:groupName="@{groupPropertyResponse}"
-      app:layout_constraintBottom_toBottomOf="@+id/thumbnail"
+      app:layout_constraintDimensionRatio="H,8:1"
       app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintHorizontal_bias="0.0"
-      app:layout_constraintStart_toEndOf="@+id/thumbnail"
-      app:layout_constraintTop_toTopOf="@+id/thumbnail"
-      app:layout_constraintVertical_bias="0.0"
-      tools:text="groupName" />
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent">
+
+      <TextView
+        android:id="@+id/userName"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:gravity="center_vertical"
+        android:textSize="24sp"
+        app:groupName="@{groupPropertyResponse}"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/thumbnail"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="groupName" />
+
+      <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/thumbnail"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="H,1:1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:thumbnailGroup="@{groupPropertyResponse}" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
   </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -1,2 +1,4 @@
+include ':nativetemplates'
 rootProject.name='PrestoPay'
 include ':app'
+project(':nativetemplates').projectDir = new File(rootDir, 'googleads-mobile-android-native-templates-master/nativetemplates/')

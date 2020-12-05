@@ -117,7 +117,9 @@ class GroupDetailFragment : Fragment() {
       }
     }
     groupDetail?.thumbnailUrl?.let {
-      Picasso.with(requireContext()).load(it).into(groupIcon)
+      if(!it.isNullOrEmpty()){
+        Picasso.with(requireContext()).load(it).into(groupIcon)
+      }
     }
 
     frontView.visibility = ImageView.GONE
