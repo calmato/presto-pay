@@ -25,7 +25,7 @@ services:
       - ./api/user:/go/src/github.com/calmato/presto-pay/api/user:cached
       - ./secrets:/secrets
     environment:
-      - GOOGLE_APPLICATION_CREDENTIALS=${GOOGLE_APPLICATION_CREDENTIALS}
+      - GCP_SERVICE_KEY_JSON=${GCP_SERVICE_KEY_JSON}
       - GCP_STORAGE_BUCKET_NAME=${GCP_STORAGE_BUCKET_NAME}
     command: realize start
     restart: always
