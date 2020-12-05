@@ -55,10 +55,17 @@
     * -> `secretsディレクトリ` にコピペしたファイル名に合わせて `GOOGLE_APPLICATION_CREDENTIALS`, `TERRAFORM_CREDENTIALS` を編集
 
 ```.env
-GOOGLE_APPLICATION_CREDENTIALS=/secrets/xxxxxx-firebase-adminsdk-xxxxxx.json
 TERRAFORM_CREDENTIALS=/secrets/xxxxxx-terraform-xxxxxx.json
 GCP_STORAGE_BUCKET_NAME=xxxxxx.appspot.com
 ```
+
+* secretディレクトリのファイルを.envへ書き込み
+
+> $ var=$(< ./secrets/[ファイル名])
+
+> $ sed -i -e "/^GCP_SERVICE_KEY_JSON=.*/d" .env
+
+> $ echo -E "GCP_SERVICE_KEY_JSON=${var}" >> .env
 
 ### コンテナの起動
 
