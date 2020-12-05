@@ -26,8 +26,7 @@ func v1PaymentInjection(
 
 	gr := repository.NewGroupRepository(fs)
 
-	er := repository.NewExchangeRepository(rdb)
-	es := service.NewExchangeService(er)
+	es := service.NewExchangeService(ac)
 
 	pr := repository.NewPaymentRepository(fs)
 	pdv := dv.NewPaymentDomainValidation(ac)

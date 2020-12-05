@@ -4,11 +4,13 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
 
 	"github.com/calmato/presto-pay/api/calc/internal/domain"
+	"github.com/calmato/presto-pay/api/calc/internal/domain/exchange"
 	"github.com/calmato/presto-pay/api/calc/internal/domain/user"
 	"github.com/calmato/presto-pay/api/calc/middleware"
 	"golang.org/x/xerrors"
@@ -24,6 +26,7 @@ type APIClient interface {
 	RemoveGroup(ctx context.Context, userID string, groupID string) (*user.User, error)
 	AddHiddenGroup(ctx context.Context, groupID string) (*user.User, error)
 	RemoveHiddenGroup(ctx context.Context, groupID string) (*user.User, error)
+	ShowExchangeRates(ctx context.Context) (*exchange.ExchangeRates, error)
 }
 
 // Client - 他のAPI管理用の構造体
@@ -302,6 +305,44 @@ func (c *Client) RemoveHiddenGroup(ctx context.Context, groupID string) (*user.U
 	}
 
 	return u, nil
+}
+
+/*
+ * ###########################
+ *  External API
+ * ###########################
+ */
+
+// ShowExchangeRates - 為替レート取得
+func (c *Client) ShowExchangeRates(ctx context.Context) (*exchange.ExchangeRates, error) {
+	url := "https://api.exchangeratesapi.io/latest?base=JPY"
+	req, _ := http.NewRequest("GET", url, nil)
+
+	res, err := getResponse(req)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, err := getStatus(res); err != nil {
+		return nil, err
+	}
+
+	defer res.Body.Close()
+	body, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	fmt.Printf("[debug] body: %v", body)
+
+	ers := &exchange.ExchangeRates{}
+	if err = json.Unmarshal(body, ers); err != nil {
+		return nil, err
+	}
+
+	fmt.Printf("[debug] body: %v", ers)
+
+	return ers, nil
 }
 
 /*

@@ -5,21 +5,22 @@ import (
 
 	"github.com/calmato/presto-pay/api/calc/internal/domain"
 	"github.com/calmato/presto-pay/api/calc/internal/domain/exchange"
+	"github.com/calmato/presto-pay/api/calc/internal/infrastructure/api"
 )
 
 type exchangeService struct {
-	exchangeRepository exchange.ExchangeRepository
+	apiClient api.APIClient
 }
 
 // NewExchangeService - ExchangeServiceの生成
-func NewExchangeService(er exchange.ExchangeRepository) exchange.ExchangeService {
+func NewExchangeService(ac api.APIClient) exchange.ExchangeService {
 	return &exchangeService{
-		exchangeRepository: er,
+		apiClient: ac,
 	}
 }
 
 func (es *exchangeService) Index(ctx context.Context) (*exchange.ExchangeRates, error) {
-	ers, err := es.exchangeRepository.Index(ctx)
+	ers, err := es.apiClient.ShowExchangeRates(ctx)
 	if err != nil {
 		return nil, domain.ErrorInDatastore.New(err)
 	}
@@ -30,22 +31,17 @@ func (es *exchangeService) Index(ctx context.Context) (*exchange.ExchangeRates, 
 func (es *exchangeService) Show(
 	ctx context.Context, baseCurrency string, currency string,
 ) (*exchange.Exchange, error) {
-	baseRate, date, err := es.exchangeRepository.Show(ctx, baseCurrency)
-	if err != nil {
-		return nil, domain.ErrorInDatastore.New(err)
-	}
-
-	rate, _, err := es.exchangeRepository.Show(ctx, currency)
+	ers, err := es.apiClient.ShowExchangeRates(ctx)
 	if err != nil {
 		return nil, domain.ErrorInDatastore.New(err)
 	}
 
 	e := &exchange.Exchange{
-		Date:         date,
-		BaseCurrency: baseCurrency,
-		BaseRate:     baseRate,
+		Date:         ers.Date,
+		BaseCurrency: ers.Base,
+		BaseRate:     ers.Rates[ers.Base],
 		Currency:     currency,
-		Rate:         rate,
+		Rate:         ers.Rates[currency],
 	}
 
 	return e, nil
