@@ -14,7 +14,6 @@ import (
 	"github.com/calmato/presto-pay/api/calc/middleware"
 	"github.com/calmato/presto-pay/api/calc/registry"
 	log "github.com/sirupsen/logrus"
-	"golang.org/x/oauth2/google"
 	"google.golang.org/api/option"
 )
 
@@ -36,12 +35,7 @@ func main() {
 
 	// Firebaseの初期化
 	// opt := option.WithCredentialsFile(e.GoogleApplicationCredentials)
-	credentials, err := google.CredentialsFromJSON(ctx, []byte(e.GCPServiceKeyJSON))
-	if err != nil {
-		panic(err)
-	}
-
-	opt := option.WithCredentials(credentials)
+	opt := option.WithCredentialsJSON([]byte(e.GCPServiceKeyJSON))
 
 	fb, err := firebase.InitializeApp(ctx, nil, opt)
 	if err != nil {
