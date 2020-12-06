@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -333,14 +332,10 @@ func (c *Client) ShowExchangeRates(ctx context.Context) (*exchange.ExchangeRates
 		return nil, err
 	}
 
-	fmt.Printf("[debug] body: %v", body)
-
 	ers := &exchange.ExchangeRates{}
 	if err = json.Unmarshal(body, ers); err != nil {
 		return nil, err
 	}
-
-	fmt.Printf("[debug] body: %v", ers)
 
 	return ers, nil
 }

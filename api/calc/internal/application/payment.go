@@ -81,7 +81,7 @@ func (pa *paymentApplication) Index(
 		return nil, nil, "", err
 	}
 
-	currency = strings.ToLower(currency)
+	currency = strings.ToUpper(currency)
 	if ers.Rates[currency] == 0 {
 		currency = ers.Base
 	}

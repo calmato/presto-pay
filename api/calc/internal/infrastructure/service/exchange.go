@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"strings"
 
 	"github.com/calmato/presto-pay/api/calc/internal/domain"
 	"github.com/calmato/presto-pay/api/calc/internal/domain/exchange"
@@ -36,12 +37,15 @@ func (es *exchangeService) Show(
 		return nil, domain.ErrorInDatastore.New(err)
 	}
 
+	bcu := strings.ToUpper(baseCurrency)
+	cu := strings.ToUpper(currency)
+
 	e := &exchange.Exchange{
 		Date:         ers.Date,
-		BaseCurrency: ers.Base,
-		BaseRate:     ers.Rates[ers.Base],
-		Currency:     currency,
-		Rate:         ers.Rates[currency],
+		BaseCurrency: bcu,
+		BaseRate:     ers.Rates[bcu],
+		Currency:     cu,
+		Rate:         ers.Rates[cu],
 	}
 
 	return e, nil
