@@ -1,0 +1,10 @@
+FROM nginx:1.19.5-alpine
+
+ENV LANG C.UTF-8
+ENV TZ Asia/Tokyo
+
+WORKDIR /root
+
+ADD ./infra/nginx/stg /etc/nginx/conf.d/
+
+EXPOSE 8080
