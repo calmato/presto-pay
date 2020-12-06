@@ -6,6 +6,7 @@ package mock_api
 
 import (
 	context "context"
+	exchange "github.com/calmato/presto-pay/api/calc/internal/domain/exchange"
 	user "github.com/calmato/presto-pay/api/calc/internal/domain/user"
 	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
@@ -152,4 +153,19 @@ func (m *MockAPIClient) RemoveHiddenGroup(ctx context.Context, groupID string) (
 func (mr *MockAPIClientMockRecorder) RemoveHiddenGroup(ctx, groupID interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RemoveHiddenGroup", reflect.TypeOf((*MockAPIClient)(nil).RemoveHiddenGroup), ctx, groupID)
+}
+
+// ShowExchangeRates mocks base method
+func (m *MockAPIClient) ShowExchangeRates(ctx context.Context) (*exchange.ExchangeRates, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ShowExchangeRates", ctx)
+	ret0, _ := ret[0].(*exchange.ExchangeRates)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ShowExchangeRates indicates an expected call of ShowExchangeRates
+func (mr *MockAPIClientMockRecorder) ShowExchangeRates(ctx interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ShowExchangeRates", reflect.TypeOf((*MockAPIClient)(nil).ShowExchangeRates), ctx)
 }
