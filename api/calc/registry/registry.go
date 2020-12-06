@@ -7,7 +7,6 @@ import (
 	"github.com/calmato/presto-pay/api/calc/lib/firebase/firestore"
 	"github.com/calmato/presto-pay/api/calc/lib/firebase/messaging"
 	"github.com/calmato/presto-pay/api/calc/lib/firebase/storage"
-	"github.com/calmato/presto-pay/api/calc/lib/redis"
 )
 
 // Registry - DIコンテナ
@@ -19,12 +18,11 @@ type Registry struct {
 
 // NewRegistry - internalディレクトリ配下のファイルを読み込み
 func NewRegistry(
-	fs *firestore.Firestore, cs *storage.Storage, cm *messaging.Messaging,
-	rdb *redis.Client, ac api.APIClient,
+	fs *firestore.Firestore, cs *storage.Storage, cm *messaging.Messaging, ac api.APIClient,
 ) *Registry {
 	health := healthInjection()
 	v1Group := v1GroupInjection(fs, cs, cm, ac)
-	v1Payment := v1PaymentInjection(fs, cs, cm, rdb, ac)
+	v1Payment := v1PaymentInjection(fs, cs, cm, ac)
 
 	return &Registry{
 		Health:    health,

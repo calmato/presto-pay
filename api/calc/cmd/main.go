@@ -10,7 +10,6 @@ import (
 	"github.com/calmato/presto-pay/api/calc/lib/firebase/firestore"
 	"github.com/calmato/presto-pay/api/calc/lib/firebase/messaging"
 	"github.com/calmato/presto-pay/api/calc/lib/firebase/storage"
-	"github.com/calmato/presto-pay/api/calc/lib/redis"
 	"github.com/calmato/presto-pay/api/calc/middleware"
 	"github.com/calmato/presto-pay/api/calc/registry"
 	log "github.com/sirupsen/logrus"
@@ -62,10 +61,10 @@ func main() {
 	}
 
 	// Redis Client
-	rdb, err := redis.NewClient(ctx, e.RedisHost, e.RedisPort, e.RedisDB)
-	if err != nil {
-		panic(err)
-	}
+	// rdb, err := redis.NewClient(ctx, e.RedisHost, e.RedisPort, e.RedisDB)
+	// if err != nil {
+	// 	panic(err)
+	// }
 
 	// API Client
 	ac := api.NewAPIClient(e.UserAPIURL)
@@ -78,7 +77,7 @@ func main() {
 		}
 	}()
 
-	reg := registry.NewRegistry(fs, cs, fcm, rdb, ac)
+	reg := registry.NewRegistry(fs, cs, fcm, ac)
 
 	// サーバ起動
 	r := config.Router(reg)
