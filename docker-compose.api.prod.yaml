@@ -16,7 +16,7 @@ services:
       resources:
         limits:
           cpus: '0.50'
-          memory: 64M
+          memory: 128M
     command: envoy -c /etc/envoy/envoy.yaml
     restart: always
 
@@ -58,33 +58,4 @@ services:
         limits:
           cpus: '0.50'
           memory: 256M
-    restart: always
-    depends_on:
-      - redis
-
-  batch:
-    container_name: presto_pay_batch
-    build:
-      context: ./infra/docker/api/batch
-      dockerfile: Dockerfile_development
-    working_dir: /go/src/github.com/calmato/presto-pay/api/batch
-    volumes:
-      - ./api/batch:/go/src/github.com/calmato/presto-pay/api/batch:cached
-    deploy:
-      resources:
-        limits:
-          cpus: '0.50'
-          memory: 192M
-    depends_on:
-      - redis
-
-  redis:
-    container_name: presto_pay_redis
-    build:
-      context: ./infra/docker/redis
-    deploy:
-      resources:
-        limits:
-          cpus: '0.50'
-          memory: 64M
     restart: always

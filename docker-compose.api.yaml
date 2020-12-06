@@ -13,7 +13,6 @@ services:
       - 8080:8080
       - 8081:9090
     command: envoy -c /etc/envoy/envoy.yaml
-    restart: always
 
   user_api:
     container_name: presto_pay_user_api
@@ -28,7 +27,6 @@ services:
       - GCP_SERVICE_KEY_JSON=${GCP_SERVICE_KEY_JSON}
       - GCP_STORAGE_BUCKET_NAME=${GCP_STORAGE_BUCKET_NAME}
     command: realize start
-    restart: always
 
   calc_api:
     container_name: presto_pay_calc_api
@@ -43,22 +41,6 @@ services:
       - GCP_SERVICE_KEY_JSON=${GCP_SERVICE_KEY_JSON}
       - GCP_STORAGE_BUCKET_NAME=${GCP_STORAGE_BUCKET_NAME}
     command: realize start
-    restart: always
-
-  batch:
-    container_name: presto_pay_batch
-    build:
-      context: ./infra/docker/api/batch
-      dockerfile: Dockerfile_development
-    working_dir: /go/src/github.com/calmato/presto-pay/api/batch
-    volumes:
-      - ./api/batch:/go/src/github.com/calmato/presto-pay/api/batch:cached
-
-  redis:
-    container_name: presto_pay_redis
-    build:
-      context: ./infra/docker/redis
-    restart: always
 
   swagger:
     container_name: presto_pay_swagger
@@ -70,21 +52,3 @@ services:
       - 8000:8080
     environment:
       SWAGGER_JSON: /swagger.yaml
-    restart: always
-
-  admin:
-    container_name: presto_pay_admin
-    build:
-      context: ./infra/docker/web/admin
-      dockerfile: Dockerfile_development
-    working_dir: /web/admin
-    volumes:
-      - ./web/admin:/web/admin:cached
-    ports:
-      - 8100:3000
-    environment:
-      - FIREBASE_API_KEY=${FIREBASE_API_KEY}
-      - FIREBASE_PROJECT_ID=${FIREBASE_PROJECT_ID}
-      - FIREBASE_MESSAGING_SENDER_ID=${FIREBASE_MESSAGING_SENDER_ID}
-    command: yarn dev -H 0.0.0.0 -p 3000
-    restart: always
