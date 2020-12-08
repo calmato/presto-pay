@@ -2,8 +2,9 @@ name: User API(Golang) Deploy to Staging
 on:
   push:
     paths:
+      - '.github/workflows/cd-user-api-stg.yaml'
       - 'api/user/**'
-      - 'infra/docker/api/user/Dockerfile'
+      - 'infra/docker/api/user/**'
       - 'infra/kubernetes/stg/default/**'
     branches:
       - master

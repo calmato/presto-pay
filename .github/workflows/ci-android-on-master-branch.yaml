@@ -2,8 +2,8 @@ name: Android Test with Firebase
 on:
   push:
     paths:
-      - 'native/android/**'
       - '.github/workflows/ci-android-on-master-branch.yaml'
+      - 'native/android/**'
     branches:
       - master
 

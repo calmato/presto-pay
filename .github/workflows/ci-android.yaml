@@ -2,8 +2,8 @@ name: Android Build and Test
 on:
   push:
     paths:
-      - 'native/android/**'
       - '.github/workflows/ci-android.yaml'
+      - 'native/android/**'
 
 env:
   ANDROID_SECRET: ${{ secrets.STG_ANDROID_SECRET }}

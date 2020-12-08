@@ -2,8 +2,9 @@ name: Calc API(Golang) Deploy to Staging
 on:
   push:
     paths:
+      - '.github/workflows/cd-calc-api-stg.yaml'
       - 'api/calc/**'
-      - 'infra/docker/api/calc/Dockerfile'
+      - 'infra/docker/api/calc/**'
       - 'infra/kubernetes/stg/default/**'
     branches:
       - master

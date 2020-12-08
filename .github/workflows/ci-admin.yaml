@@ -2,8 +2,8 @@ name: Admin(Nuxt.js) Build and Test
 on:
   push:
     paths:
-      - 'web/admin/**'
       - '.github/workflows/ci-admin.yaml'
+      - 'web/admin/**'
 
 jobs:
   build_and_test:

@@ -2,9 +2,9 @@ name: Reverse Proxy(Nginx) Deploy to Staging
 on:
   push:
     paths:
-      - '.github/workflows/cd-nginx.yaml'
+      - '.github/workflows/cd-nginx-stg.yaml'
       - 'infra/docker/reverse-proxy/**'
-      - 'infra/nginx/**'
+      - 'infra/nginx/stg/**'
     branches:
       - master
 

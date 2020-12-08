@@ -2,8 +2,8 @@ name: Calc API(Golang) Reviewdog
 on:
   pull_request:
     paths:
-      - 'api/calc/**'
       - '.github/workflows/ci-calc-api-reviewdog.yaml'
+      - 'api/calc/**'
 
 jobs:
   reviewdog:
