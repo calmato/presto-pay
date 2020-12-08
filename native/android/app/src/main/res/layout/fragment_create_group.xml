@@ -67,6 +67,7 @@
       android:textAlignment="center"
       android:textSize="24sp"
       app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.496"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/textView14" />
 

@@ -52,9 +52,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/thumbnail"
         app:layout_constraintTop_toTopOf="parent"
-        app:username="@{userProperty}"
+        app:name="@{userProperty}"
         tools:layout_editor_absoluteX="24dp"
-        tools:text="userName" />
+        tools:text="name" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
   </androidx.constraintlayout.widget.ConstraintLayout>

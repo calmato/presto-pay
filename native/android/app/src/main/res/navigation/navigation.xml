@@ -205,6 +205,22 @@
     <action
       android:id="@+id/action_groupEditFragment_to_groupEditAddFriend"
       app:destination="@id/groupEditAddFriend" />
+    <action
+      android:id="@+id/action_groupEditFragment_to_groupEditAddUnauthorizedFragment"
+      app:destination="@id/groupEditAddUnauthorizedFragment" />
+  </fragment>
+  <fragment
+    android:id="@+id/groupEditAddUnauthorizedFragment"
+    android:name="work.calmato.prestopay.ui.groupEdit.GroupEditAddUnauthorizedFragment"
+    android:label="fragment_group_edit_add_unauthorized"
+    tools:layout="@layout/fragment_group_edit_add_unauthorized">
+    <argument
+      android:name="groupEditList"
+      app:argType="work.calmato.prestopay.network.GetGroupDetail"
+      app:nullable="true" />
+    <action
+      android:id="@+id/action_groupEditAddUnauthorizedFragment_to_groupEditFragment"
+      app:destination="@id/groupEditFragment" />
   </fragment>
   <fragment
     android:id="@+id/groupEditAddFriend"

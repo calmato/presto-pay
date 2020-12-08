@@ -29,6 +29,7 @@ import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentGroupEditBinding
 import work.calmato.prestopay.network.*
 import work.calmato.prestopay.util.*
+import java.io.IOException
 import kotlin.concurrent.thread
 
 class GroupEditFragment : PermissionBase() {
@@ -50,23 +51,32 @@ class GroupEditFragment : PermissionBase() {
         Api.retrofitService.getGroupDetail("Bearer $id", getGroupInfo!!.id)
           .enqueue(object : Callback<GetGroupDetail> {
             override fun onFailure(call: Call<GetGroupDetail>, t: Throwable) {
-              Log.d(ViewModelGroup.TAG, t.message?:"No message")
+              Log.d(ViewModelGroup.TAG, t.message ?: "No message")
             }
 
             override fun onResponse(
               call: Call<GetGroupDetail>,
               response: Response<GetGroupDetail>
             ) {
-              Log.d(ViewModelGroup.TAG, response.body().toString())
-              groupDetail = response.body()
-              if (groupDetail?.thumbnailUrl!!.isNotEmpty()) {
-                Picasso.with(context).load(groupDetail!!.thumbnailUrl).into(groupThumnail)
+              if (response.isSuccessful) {
+                Log.d(ViewModelGroup.TAG, response.body().toString())
+                groupDetail = response.body()
+                if (groupDetail?.thumbnailUrl!!.isNotEmpty()) {
+                  Picasso.with(context).load(groupDetail!!.thumbnailUrl).into(groupThumnail)
+                }
+                groupEditName.setText(groupDetail?.name)
+                groupMembers.addAll(groupDetail!!.users)
+                viewModel.friendsList.observe(viewLifecycleOwner, Observer<List<UserProperty>> {
+                  recycleAdapter?.friendList = groupMembers
+                })
+              } else {
+                Toast.makeText(
+                  activity,
+                  resources.getString(R.string.bad_internet_connection),
+                  Toast.LENGTH_SHORT
+                ).show()
               }
-              groupEditName.setText(groupDetail?.name)
-              groupMembers.addAll(groupDetail!!.users)
-              viewModel.friendsList.observe(viewLifecycleOwner, Observer<List<UserProperty>> {
-                recycleAdapter?.friendList = groupMembers
-              })
+
             }
           })
       } catch (e: Exception) {
@@ -112,11 +122,18 @@ class GroupEditFragment : PermissionBase() {
       )
     }
 
+    addUnauthorizedUsers.setOnClickListener {
+      this.findNavController().navigate(
+        GroupEditFragmentDirections.actionGroupEditFragmentToGroupEditAddUnauthorizedFragment(
+          groupDetail
+        )
+      )
+    }
+
     groupThumnail.setOnClickListener {
       requestPermission()
     }
 
-    // 戻るbuttonを押した時の処理
     requireActivity().onBackPressedDispatcher.addCallback(
       viewLifecycleOwner,
       object : OnBackPressedCallback(true) {
@@ -166,7 +183,7 @@ class GroupEditFragment : PermissionBase() {
     try {
       val editGroup = EditGroup(groupName, thumbnails, groupDetail!!.users.map { it.id })
       execute(editGroup, getGroupInfo!!.id)
-    } catch (e: Exception) {
+    } catch (e: IOException) {
       Log.d(TAG, "debug $e")
     }
   }
@@ -206,7 +223,7 @@ class GroupEditFragment : PermissionBase() {
         .enqueue(object : Callback<HiddenGroups> {
           override fun onFailure(call: Call<HiddenGroups>, t: Throwable) {
             Toast.makeText(activity, t.message, Toast.LENGTH_LONG).show()
-            Log.d(TAG, t.message?:"No message")
+            Log.d(TAG, t.message ?: "No message")
           }
 
           override fun onResponse(call: Call<HiddenGroups>, response: Response<HiddenGroups>) {
@@ -224,7 +241,7 @@ class GroupEditFragment : PermissionBase() {
         .enqueue(object : Callback<HiddenGroups> {
           override fun onFailure(call: Call<HiddenGroups>, t: Throwable) {
             Toast.makeText(activity, t.message, Toast.LENGTH_LONG).show()
-            Log.d(TAG, t.message?:"No message")
+            Log.d(TAG, t.message ?: "No message")
           }
 
           override fun onResponse(call: Call<HiddenGroups>, response: Response<HiddenGroups>) {

@@ -68,7 +68,10 @@ class GroupEditAddFriendFragment : Fragment() {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    val groupMembers = getGroupInfo!!.users
+    var groupMembers: List<UserProperty> = mutableListOf()
+    if (getGroupInfo != null) {
+      groupMembers = getGroupInfo!!.users
+    }
     val friends: LiveData<List<UserProperty>> =
       Transformations.map(getAppDatabase(requireContext()).friendDao.getFriends()) {
         it.asDomainModel()
@@ -109,7 +112,7 @@ class GroupEditAddFriendFragment : Fragment() {
       viewLifecycleOwner,
       object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
-          sendRequest()
+          goBackScreen()
         }
       }
     )
@@ -126,7 +129,7 @@ class GroupEditAddFriendFragment : Fragment() {
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
     when (item.itemId) {
-      R.id.done -> sendRequest()
+      R.id.done -> goBackScreen()
     }
     return super.onOptionsItemSelected(item)
   }
@@ -156,7 +159,6 @@ class GroupEditAddFriendFragment : Fragment() {
           ) {
             if (response.isSuccessful) {
               responseGroup = response.body()
-              applyBackHome(responseGroup)
             } else {
               Toast.makeText(
                 activity,
@@ -167,6 +169,7 @@ class GroupEditAddFriendFragment : Fragment() {
             doneButton.isEnabled = true
             progressBarGroupEditAddFriend.visibility = ProgressBar.GONE
             frontViewgroupEditAddFriend.visibility = ImageView.GONE
+            goBackScreen()
           }
         })
     } else {
@@ -178,13 +181,33 @@ class GroupEditAddFriendFragment : Fragment() {
     }
   }
 
-  private fun applyBackHome(response: GroupPropertyResponse?) {
-    this.findNavController().navigate(
-      GroupEditAddFriendFragmentDirections.actionGroupEditAddFriendToGroupEditFragment(response)
-    )
+  private fun goBackScreen() {
+    if (getGroupInfo != null) {
+      if (responseGroup == null) {
+        var idList: MutableList<String> = mutableListOf()
+        for (i in 0..(getGroupInfo!!.users.size - 1)) {
+          idList.add(getGroupInfo!!.users[i].id)
+        }
+        responseGroup = GroupPropertyResponse(
+          getGroupInfo!!.id, getGroupInfo!!.name,
+          getGroupInfo!!.thumbnailUrl, idList, getGroupInfo!!.createdAt, getGroupInfo!!.updatedAt
+        )
+      }
+      this.findNavController().navigate(
+        GroupEditAddFriendFragmentDirections.actionGroupEditAddFriendToGroupEditFragment(
+          responseGroup
+        )
+      )
+    } else {
+      Toast.makeText(
+        activity,
+        resources.getString(R.string.bad_internet_connection),
+        Toast.LENGTH_SHORT
+      ).show()
+    }
   }
 
   companion object {
-    internal const val TAG = "GroupEditAddFeiend"
+    internal const val TAG = "GroupEditAddFriend"
   }
 }

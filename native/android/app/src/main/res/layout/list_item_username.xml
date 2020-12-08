@@ -12,40 +12,27 @@
   <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginStart="0dp">
-
-    <CheckBox
-      android:id="@+id/addFriendCheckBox"
-      android:layout_width="0dp"
-      android:layout_height="0dp"
-      android:gravity="center_vertical"
-      app:checkbox="@{userProperty}"
-      app:layout_constraintBottom_toBottomOf="parent"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintHorizontal_bias="0.0"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="parent"
-      app:layout_constraintVertical_bias="0.0" />
+    android:layout_marginStart="0dp"
+    android:background="@color/tw__solid_white">
 
     <de.hdodenhof.circleimageview.CircleImageView
       android:id="@+id/thumbnail"
       android:layout_width="40dp"
       android:layout_height="40dp"
-      android:layout_marginStart="32dp"
-      android:layout_marginTop="8dp"
-      android:layout_marginBottom="8dp"
+      android:layout_marginStart="8dp"
+      android:layout_marginTop="2dp"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent"
       app:layout_constraintVertical_bias="0.0"
-      app:srcCompat="@drawable/circle_theme_color"
       app:thumbnail="@{userProperty}" />
 
     <TextView
       android:id="@+id/userName"
       android:layout_width="0dp"
       android:layout_height="40dp"
-      android:layout_marginStart="8dp"
+      android:layout_marginStart="24dp"
+      android:layout_marginTop="2dp"
       android:layout_marginEnd="8dp"
       android:textSize="24sp"
       app:layout_constraintBottom_toBottomOf="@+id/thumbnail"
@@ -53,8 +40,8 @@
       app:layout_constraintStart_toEndOf="@+id/thumbnail"
       app:layout_constraintTop_toTopOf="@+id/thumbnail"
       app:layout_constraintVertical_bias="0.5"
-      app:name="@{userProperty}"
-      tools:text="name" />
+      app:username="@{userProperty}"
+      tools:text="username" />
 
   </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
