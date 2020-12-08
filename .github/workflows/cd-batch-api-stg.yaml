@@ -2,8 +2,9 @@ name: Batch(Golang) Deploy to Staging
 on:
   push:
     paths:
+      - '.github/workflows/cd-batch-api-stg.yaml'
       - 'api/batch/**'
-      - 'infra/docker/api/batch/Dockerfile'
+      - 'infra/docker/api/batch/**'
       - 'infra/kubernetes/stg/default/**'
     branches:
       - master

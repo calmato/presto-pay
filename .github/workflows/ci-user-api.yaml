@@ -2,8 +2,8 @@ name: User API(Golang) Build and Test
 on:
   push:
     paths:
-      - 'api/user/**'
       - '.github/workflows/ci-user-api.yaml'
+      - 'api/user/**'
 
 jobs:
   build_and_test:

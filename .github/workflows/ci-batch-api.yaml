@@ -2,8 +2,8 @@ name: Batch(Golang) Build and Test
 on:
   push:
     paths:
-      - 'api/batch'
       - '.github/workflows/ci-batch-api.yaml'
+      - 'api/batch/**'
 
 jobs:
   build_and_test:

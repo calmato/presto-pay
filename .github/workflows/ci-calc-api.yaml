@@ -2,8 +2,8 @@ name: Calc API(Golang) Build and Test
 on:
   push:
     paths:
-      - 'api/calc/**'
       - '.github/workflows/ci-calc-api.yaml'
+      - 'api/calc/**'
 
 jobs:
   build_and_test:

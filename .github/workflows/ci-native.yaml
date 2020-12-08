@@ -2,8 +2,8 @@ name: Native app Build and Test
 on:
   push:
     paths:
-      - 'native/react/**'
       - '.github/workflows/ci-native.yaml'
+      - 'native/react/**'
 
 # TODO: env for expo cli
 

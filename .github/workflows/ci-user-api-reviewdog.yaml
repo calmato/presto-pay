@@ -2,8 +2,8 @@ name: User API(Golang) Reviewdog
 on:
   pull_request:
     paths:
-      - 'api/user/**'
       - '.github/workflows/ci-user-api-reviewdog.yaml'
+      - 'api/user/**'
 
 jobs:
   reviewdog:

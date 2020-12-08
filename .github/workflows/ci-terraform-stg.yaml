@@ -2,8 +2,9 @@ name: Terraform(stg) Test
 on:
   push:
     paths:
-      - 'infra/terraform/modules/**'
       - '.github/workflows/ci-terraform.yaml'
+      - 'infra/terraform/examples/**'
+      - 'infra/terraform/modules/**'
   pull_request:
     paths:
       - 'infra/terraform/env/stg/**'
