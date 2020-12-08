@@ -1,0 +1,53 @@
+name: User API(Golang) Deploy to Production
+on:
+  push:
+    paths:
+      - '.github/workflows/cd-user-api-stg.yaml'
+      - 'api/user/**'
+      - 'infra/docker/api/user/**'
+    branches:
+      - master
+
+env:
+  GCP_PROJECT_ID: ${{ secrets.PROD_GCP_PROJECT_ID }}
+  GCP_REGION: ${{ secrets.PROD_GCP_REGION }}
+  GCR_HOSTNAME: asia.gcr.io
+  GCR_IMAGE_NAME: presto-pay-user-api
+  GCR_IMAGE_TAG: ${{ github.sha }}
+
+jobs:
+  deploy_image_for_stg:
+    name: Deploy container image to staging
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Setup gcloud CLI
+        uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+        with:
+          version: '281.0.0'
+          service_account_email: ${{ secrets.PROD_GCP_SA_EMAIL }}
+          service_account_key: ${{ secrets.PROD_GCP_SA_KEY }}
+          export_default_credentials: true
+
+      - name: Configure gcloud
+        run: |
+          gcloud config set project ${GCP_PROJECT_ID}
+          gcloud config set run/platform managed
+          gcloud config set run/region ${GCP_REGION}
+          gcloud auth configure-docker
+
+      - name: Docker Build
+        run: |
+          docker build -f ./infra/docker/api/user/Dockerfile -t ${GCR_HOSTNAME}/${GCP_PROJECT_ID}/${GCR_IMAGE_NAME} .
+
+      - name: Attached Tag
+        run: |
+          docker tag ${GCR_HOSTNAME}/${GCP_PROJECT_ID}/${GCR_IMAGE_NAME} ${GCR_HOSTNAME}/${GCP_PROJECT_ID}/${GCR_IMAGE_NAME}:latest
+          docker tag ${GCR_HOSTNAME}/${GCP_PROJECT_ID}/${GCR_IMAGE_NAME} ${GCR_HOSTNAME}/${GCP_PROJECT_ID}/${GCR_IMAGE_NAME}:${GCR_IMAGE_TAG}
+
+      - name: Push Google Cloud Registry for Staging
+        run: |
+          docker push ${GCR_HOSTNAME}/${GCP_PROJECT_ID}/${GCR_IMAGE_NAME}
