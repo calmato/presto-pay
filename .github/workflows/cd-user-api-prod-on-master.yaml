@@ -2,7 +2,7 @@ name: User API(Golang) Deploy to Production
 on:
   push:
     paths:
-      - '.github/workflows/cd-user-api-stg.yaml'
+      - '.github/workflows/cd-user-api-prod-on-master.yaml'
       - 'api/user/**'
       - 'infra/docker/api/user/**'
     branches:
