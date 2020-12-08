@@ -5,9 +5,6 @@ ENV TZ Asia/Tokyo
 
 WORKDIR /root
 
-RUN apk add --no-cache \
-      ca-certificates
-
 ADD ./infra/nginx/stg/default.conf /etc/nginx/conf.d/default.conf
 
 EXPOSE 8080
