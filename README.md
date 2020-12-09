@@ -15,8 +15,12 @@
 ![Terraform(stg) Test](https://github.com/calmato/presto-pay/workflows/Terraform(stg)%20Test/badge.svg)  
 
 ![Android Test with Firebase](https://github.com/calmato/presto-pay/workflows/Android%20Test%20with%20Firebase/badge.svg)  
-![User API(Golang) Deploy to Staging](https://github.com/calmato/presto-pay/workflows/User%20API(Golang)%20Deploy%20to%20Staging/badge.svg)
-![Calc API(Golang) Deploy to Staging](https://github.com/calmato/presto-pay/workflows/Calc%20API(Golang)%20Deploy%20to%20Staging/badge.svg)
+![Reverse Proxy(Nginx) Deploy to Staging](https://github.com/calmato/presto-pay/workflows/Reverse%20Proxy(Nginx)%20Deploy%20to%20Production/badge.svg)
+![Reverse Proxy(Nginx) Deploy to Staging](https://github.com/calmato/presto-pay/workflows/Reverse%20Proxy(Nginx)%20Deploy%20to%20Staging/badge.svg)  
+![User API(Golang) Deploy to Production](https://github.com/calmato/presto-pay/workflows/User%20API(Golang)%20Deploy%20to%20Production/badge.svg)
+![User API(Golang) Deploy to Staging](https://github.com/calmato/presto-pay/workflows/User%20API(Golang)%20Deploy%20to%20Staging/badge.svg)  
+![Calc API(Golang) Deploy to Production](https://github.com/calmato/presto-pay/workflows/Calc%20API(Golang)%20Deploy%20to%20Production/badge.svg)
+![Calc API(Golang) Deploy to Staging](https://github.com/calmato/presto-pay/workflows/Calc%20API(Golang)%20Deploy%20to%20Staging/badge.svg)  
 ![Batch(Golang) Deploy to Staging](https://github.com/calmato/presto-pay/workflows/Batch(Golang)%20Deploy%20to%20Staging/badge.svg)
 
 ## 各種設定
