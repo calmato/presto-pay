@@ -59,6 +59,7 @@ jobs:
 
   deploy_cloud_run_for_stg:
     name: Deploy container to Cloud Run in staging
+    needs: deploy_image_for_stg
     runs-on: ubuntu-latest
 
     steps:
