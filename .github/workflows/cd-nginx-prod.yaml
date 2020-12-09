@@ -1,4 +1,4 @@
-name: Reverse Proxy(Nginx) Deploy to Staging
+name: Reverse Proxy(Nginx) Deploy to Production
 on:
   push:
     paths:
@@ -17,7 +17,7 @@ env:
 
 jobs:
   deploy_image_for_stg:
-    name: Deploy container image to staging
+    name: Deploy container image to production
     runs-on: ubuntu-latest
 
     steps:
@@ -48,6 +48,6 @@ jobs:
           docker tag ${GCR_HOSTNAME}/${GCP_PROJECT_ID}/${GCR_IMAGE_NAME} ${GCR_HOSTNAME}/${GCP_PROJECT_ID}/${GCR_IMAGE_NAME}:latest
           docker tag ${GCR_HOSTNAME}/${GCP_PROJECT_ID}/${GCR_IMAGE_NAME} ${GCR_HOSTNAME}/${GCP_PROJECT_ID}/${GCR_IMAGE_NAME}:${GCR_IMAGE_TAG}
 
-      - name: Push Google Cloud Registry for Staging
+      - name: Push Google Cloud Registry for Production
         run: |
           docker push ${GCR_HOSTNAME}/${GCP_PROJECT_ID}/${GCR_IMAGE_NAME}
