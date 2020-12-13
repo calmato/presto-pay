@@ -11,6 +11,7 @@ import com.google.android.gms.ads.AdLoader
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.formats.NativeAdOptions
 import com.google.android.gms.ads.formats.UnifiedNativeAd
+import work.calmato.prestopay.BuildConfig
 import work.calmato.prestopay.databinding.ListGroupItemPlaneBinding
 import work.calmato.prestopay.network.GroupPropertyResponse
 
@@ -55,7 +56,8 @@ class AdapterGroupPlane(
     if (groupList[position].selected) {
       holder.binding.nativeAd.visibility = ImageView.VISIBLE
       // Native ad
-      val adLoader = AdLoader.Builder(context, "ca-app-pub-3940256099942544/2247696110")
+      val adKey = BuildConfig.AD_KEY
+      val adLoader = AdLoader.Builder(context, adKey)
         .forUnifiedNativeAd { ad: UnifiedNativeAd ->
           holder.binding.nativeAd.setNativeAd(ad)
         }
