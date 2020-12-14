@@ -22,10 +22,12 @@ android {
     versionCode 1
     versionName "1.0"
     testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-    Properties properties = new Properties()
-    properties.load(project.rootProject.file('local.properties').newDataInputStream())
-    def AD_KEY = properties.getProperty('ad_key')
-    buildConfigField("String", "AD_KEY", "\"${AD_KEY}\"")
+    if (project.rootProject.file('local.properties').exists()) {
+      Properties properties = new Properties()
+      properties.load(project.rootProject.file('local.properties').newDataInputStream())
+      def AD_KEY = properties.getProperty('ad_key')
+      buildConfigField("String", "AD_KEY", "\"${AD_KEY}\"")
+    }
   }
 
   buildTypes {
