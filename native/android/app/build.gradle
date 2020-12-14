@@ -28,6 +28,9 @@ android {
       properties.load(project.rootProject.file('local.properties').newDataInputStream())
       def AD_KEY = properties.getProperty('ad_key')
       buildConfigField("String", "AD_KEY", "\"${AD_KEY}\"")
+    } else{
+      def AD_KEY = "ad_key"
+      buildConfigField("String", "AD_KEY", "\"${AD_KEY}\"")
     }
   }
 
