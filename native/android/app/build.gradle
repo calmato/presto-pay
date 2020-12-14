@@ -22,6 +22,7 @@ android {
     versionCode 1
     versionName "1.0"
     testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    multiDexEnabled true
     if (project.rootProject.file('local.properties').exists()) {
       Properties properties = new Properties()
       properties.load(project.rootProject.file('local.properties').newDataInputStream())
