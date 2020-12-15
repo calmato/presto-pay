@@ -28,6 +28,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import work.calmato.prestopay.R
+import work.calmato.prestopay.database.DatabaseGroup
 import work.calmato.prestopay.databinding.FragmentGroupDetailBinding
 import work.calmato.prestopay.network.Api
 import work.calmato.prestopay.network.GroupPropertyResponse
@@ -65,7 +66,6 @@ class GroupDetailFragment : Fragment() {
       adapter = recycleAdapter
     }
     groupDetail = GroupDetailFragmentArgs.fromBundle(requireArguments()).groupDetail
-    viewModel.setInitPaymentList(groupDetail!!.id)
     val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
     id = sharedPreferences.getString("token", "")!!
     return binding.root
@@ -73,10 +73,17 @@ class GroupDetailFragment : Fragment() {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    viewModel.groupStatus?.observe(viewLifecycleOwner, Observer { list ->
-      list.lendingStatus.apply {
+    viewModel.setInitPaymentList(groupDetail!!.id)
+    viewModel.groupStatus?.value?.lendingStatus.apply {
+      this?.let { inflateGraph(chart, it.map { it.name }, this.map { it.amount }, requireContext()) }
+      chart.isDoubleTapToZoomEnabled = false
+    }
+
+    viewModel.groupStatus?.observe(viewLifecycleOwner, Observer<DatabaseGroup> { list ->
+      list?.let {
+        it.lendingStatus.apply {
           inflateGraph(chart, this.map { it.name }, this.map { it.amount }, requireContext())
-          chart.isDoubleTapToZoomEnabled = false
+        }
       }
     })
     viewModel.itemClicked.observe(viewLifecycleOwner, Observer {
