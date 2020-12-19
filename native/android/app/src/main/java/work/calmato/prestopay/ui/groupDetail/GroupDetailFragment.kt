@@ -27,6 +27,7 @@ import kotlinx.android.synthetic.main.fragment_group_detail.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import work.calmato.prestopay.MainActivity
 import work.calmato.prestopay.R
 import work.calmato.prestopay.database.DatabaseGroup
 import work.calmato.prestopay.databinding.FragmentGroupDetailBinding
@@ -66,8 +67,7 @@ class GroupDetailFragment : Fragment() {
       adapter = recycleAdapter
     }
     groupDetail = GroupDetailFragmentArgs.fromBundle(requireArguments()).groupDetail
-    val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
-    id = sharedPreferences.getString("token", "")!!
+    id = MainActivity.firebaseId
     return binding.root
   }
 

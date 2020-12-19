@@ -11,6 +11,7 @@ import retrofit2.Response
 import work.calmato.prestopay.network.Api
 import work.calmato.prestopay.network.NetworkPayer
 import retrofit2.Call
+import work.calmato.prestopay.MainActivity
 import kotlin.math.absoluteValue
 
 class ViewModelSettleUpGroup(application: Application) : AndroidViewModel(application) {
@@ -30,8 +31,7 @@ class ViewModelSettleUpGroup(application: Application) : AndroidViewModel(applic
   private lateinit var listToBeCalculated: MutableList<NetworkPayer>
   private lateinit var listToBeSent: MutableList<PaymentInfoSettleUp>
 
-  private val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplication())
-  private val id = sharedPreferences.getString("token", null)
+  private val id = MainActivity.firebaseId
 
 
   fun setUsersPaymentInfo(list: List<NetworkPayer>) {

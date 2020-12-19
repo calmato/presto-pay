@@ -1,10 +1,12 @@
 package work.calmato.prestopay
 
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
+import androidx.preference.PreferenceManager
 import com.google.android.gms.ads.*
 import com.google.android.gms.ads.formats.NativeAdOptions
 import com.google.android.gms.ads.formats.UnifiedNativeAd
@@ -13,6 +15,7 @@ import java.lang.Exception
 
 
 class MainActivity : AppCompatActivity() {
+  private lateinit var sharedPreferences: SharedPreferences
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
@@ -23,6 +26,7 @@ class MainActivity : AppCompatActivity() {
     refreshAdFlag.value = false
     nativeAdCountDownTimer()
     firebaseIdCountDownTimer()
+    sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
   }
   companion object {
     var nativeAd : UnifiedNativeAd? = null
@@ -77,6 +81,9 @@ class MainActivity : AppCompatActivity() {
           Log.i("MainActivity", "Token refreshing")
           FirebaseAuth.getInstance().currentUser?.getIdToken(true)?.addOnCompleteListener { it ->
             firebaseId = it.result.token!!
+            val editor = sharedPreferences.edit()
+            editor.putString("token", it.result.token)
+            editor.apply()
           }
           firebaseIdCountDownTimer()
         } catch(e:Exception){

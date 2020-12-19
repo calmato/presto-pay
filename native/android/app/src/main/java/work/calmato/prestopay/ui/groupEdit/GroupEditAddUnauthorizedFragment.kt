@@ -17,6 +17,7 @@ import kotlinx.android.synthetic.main.fragment_group_edit_add_unauthorized.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import work.calmato.prestopay.MainActivity
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentGroupEditAddUnauthorizedBinding
 import work.calmato.prestopay.network.Api
@@ -48,8 +49,7 @@ class GroupEditAddUnauthorizedFragment : PermissionBase() {
       )
     binding.lifecycleOwner = this
     getGroupInfo = GroupEditAddFriendFragmentArgs.fromBundle(requireArguments()).groupEditList
-    val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
-    id = sharedPreferences.getString("token", "")!!
+    id = MainActivity.firebaseId
     return binding.root
   }
 

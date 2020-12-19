@@ -18,6 +18,7 @@ import work.calmato.prestopay.databinding.FragmentPaymentDetailBinding
 import work.calmato.prestopay.util.PermissionBase
 import retrofit2.Callback
 import retrofit2.Response
+import work.calmato.prestopay.MainActivity
 import work.calmato.prestopay.network.*
 import work.calmato.prestopay.util.inflateGraph
 
@@ -25,7 +26,6 @@ import work.calmato.prestopay.util.inflateGraph
 class PaymentDetailFragment : PermissionBase() {
   private lateinit var paymentDetail: PaymentPropertyGet
   private lateinit var groupDetail: GroupPropertyResponse
-  private lateinit var sharedPreferences: SharedPreferences
   private lateinit var id: String
   override fun onCreateView(
     inflater: LayoutInflater,
@@ -42,8 +42,7 @@ class PaymentDetailFragment : PermissionBase() {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     setHasOptionsMenu(true)
-    sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
-    id = sharedPreferences.getString("token", "")!!
+    id = MainActivity.firebaseId
     date.text = paymentDetail.createdAt.split("T")[0]
     paymentDetail.imageUrls!![0].let {
       if (it.isNotEmpty()) {

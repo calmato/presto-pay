@@ -25,6 +25,7 @@ import kotlinx.android.synthetic.main.fragment_hidden_group_list.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import work.calmato.prestopay.MainActivity
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentHiddenGroupListBinding
 import work.calmato.prestopay.network.Api
@@ -48,8 +49,7 @@ class GroupListHiddenFragment : Fragment() {
     thread {
       renderGroupListView()
     }
-    val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
-    id = sharedPreferences.getString("token", "")!!
+    id = MainActivity.firebaseId
     val swipeToDismissTouchHelper = getSwipeToDismissTouchHelper()
     swipeToDismissTouchHelper.attachToRecyclerView(groupHiddenRecycle)
   }

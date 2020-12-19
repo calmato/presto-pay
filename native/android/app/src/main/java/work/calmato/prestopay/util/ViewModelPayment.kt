@@ -9,6 +9,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
+import work.calmato.prestopay.MainActivity
 import work.calmato.prestopay.R
 import work.calmato.prestopay.database.DatabaseGroup
 import work.calmato.prestopay.database.getAppDatabase
@@ -26,8 +27,7 @@ class ViewModelPayment(application: Application) : AndroidViewModel(application)
   private val database = getAppDatabase(application)
   private var paymentRepository: PaymentRepository? = null
   private var groupRepository: GroupsRepository? = null
-  private val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplication())
-  private val id = sharedPreferences.getString("token", null)
+  private val id = MainActivity.firebaseId
   var paymentsList: LiveData<List<PaymentPropertyGet>>? = null
   var groupStatus: LiveData<DatabaseGroup>? = null
   private val _refreshing = MutableLiveData<Boolean>()
@@ -49,7 +49,7 @@ class ViewModelPayment(application: Application) : AndroidViewModel(application)
     startRefreshing()
     viewModelScope.launch {
       try {
-        paymentRepository!!.refreshPayments(id!!, groupId)
+        paymentRepository!!.refreshPayments(id, groupId)
         Log.i("ViewModelPayment", "setInitPaymentList: ${paymentRepository!!.payments.value}")
         endRefreshing()
       } catch (e: java.lang.Exception) {
