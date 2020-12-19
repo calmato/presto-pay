@@ -38,6 +38,7 @@ import kotlinx.android.synthetic.main.fragment_login.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import work.calmato.prestopay.MainActivity
 import work.calmato.prestopay.R
 import work.calmato.prestopay.database.getAppDatabase
 import work.calmato.prestopay.databinding.FragmentLoginBinding
@@ -345,6 +346,7 @@ class LoginFragment : Fragment() {
               Log.i("Ok", "setSharedPreferenceToken: ${it.result.token}")
               editor.putString("token", it.result.token)
               editor.apply()
+              MainActivity.firebaseId = it.result.token!!
               val id = sharedPreferences.getString("token", null)
               GlobalScope.launch(Dispatchers.IO) {
                 try {

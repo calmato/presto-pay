@@ -8,6 +8,8 @@ import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.ads.*
 import com.google.android.gms.ads.formats.NativeAdOptions
 import com.google.android.gms.ads.formats.UnifiedNativeAd
+import com.google.firebase.auth.FirebaseAuth
+import java.lang.Exception
 
 
 class MainActivity : AppCompatActivity() {
@@ -20,10 +22,12 @@ class MainActivity : AppCompatActivity() {
     refreshAd()
     refreshAdFlag.value = false
     nativeAdCountDownTimer()
+    firebaseIdCountDownTimer()
   }
   companion object {
     var nativeAd : UnifiedNativeAd? = null
     var refreshAdFlag : MutableLiveData<Boolean> = MutableLiveData(true)
+    var firebaseId = ""
   }
 
   fun refreshAd() {
@@ -63,4 +67,24 @@ class MainActivity : AppCompatActivity() {
       }
     }.start()
   }
+
+  fun firebaseIdCountDownTimer(){
+    object : CountDownTimer(3000000, 1000) {
+      override fun onTick(millisUntilFinished: Long) {
+      }
+      override fun onFinish() {
+        try {
+          Log.i("MainActivity", "Token refreshing")
+          FirebaseAuth.getInstance().currentUser?.getIdToken(true)?.addOnCompleteListener { it ->
+            firebaseId = it.result.token!!
+          }
+          firebaseIdCountDownTimer()
+        } catch(e:Exception){
+          Log.i("MainActivity", "onFinish: ${e.message}")
+        }
+      }
+    }.start()
+  }
+
+
 }

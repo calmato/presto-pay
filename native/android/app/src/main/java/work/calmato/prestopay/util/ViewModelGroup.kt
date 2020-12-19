@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.preference.PreferenceManager
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
+import work.calmato.prestopay.MainActivity
 import work.calmato.prestopay.database.getAppDatabase
 import work.calmato.prestopay.network.GroupPropertyResponse
 import work.calmato.prestopay.repository.GroupsRepository
@@ -36,10 +37,10 @@ class ViewModelGroup(application: Application) : AndroidViewModel(application) {
   private val database = getAppDatabase(application)
   private val groupsRepository = GroupsRepository(database)
   private val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplication())
-  private var id = sharedPreferences.getString("token", null)
+  private var id = MainActivity.firebaseId//sharedPreferences.getString("token", null)
 
   fun groupListView() {
-    id = sharedPreferences.getString("token", null)
+    id = MainActivity.firebaseId//sharedPreferences.getString("token", null)
     viewModelScope.launch {
       try {
         startRefreshing()
