@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdLoader
@@ -55,10 +56,12 @@ class AdapterGroupPlane(
   override fun onBindViewHolder(holder: AddGroupViewHolder, position: Int) {
     if (groupList[position].selected) {
       holder.binding.nativeAd.visibility = ImageView.VISIBLE
+      holder.binding.normalLayout.visibility = ConstraintLayout.INVISIBLE
       if(MainActivity.nativeAd != null){
         holder.binding.nativeAd.setNativeAd(MainActivity.nativeAd)
       }
     } else {
+      holder.binding.normalLayout.visibility = ConstraintLayout.VISIBLE
       holder.binding.nativeAd.visibility = ImageView.GONE
       holder.binding.also {
         it.groupPropertyResponse = groupList[position]
