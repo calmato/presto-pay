@@ -8,14 +8,13 @@ import androidx.preference.PreferenceManager
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import work.calmato.prestopay.MainActivity
 import work.calmato.prestopay.network.*
 
 class ViewModelUser(application: Application) : AndroidViewModel(application) {
-  private val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplication())
-
 
   fun registerDeviceId(registerDeviceIdProperty: RegisterDeviceIdProperty) {
-    val id = sharedPreferences.getString("token", null)
+    val id = MainActivity.firebaseId
     val token = "Bearer $id"
     Api.retrofitService
       .registerDeviceId(token, registerDeviceIdProperty)

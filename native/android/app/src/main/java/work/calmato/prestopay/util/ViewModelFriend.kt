@@ -6,6 +6,7 @@ import androidx.lifecycle.*
 import androidx.preference.PreferenceManager
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
+import work.calmato.prestopay.MainActivity
 import work.calmato.prestopay.database.getAppDatabase
 import work.calmato.prestopay.network.*
 import work.calmato.prestopay.repository.FriendsRepository
@@ -28,14 +29,13 @@ class ViewModelFriend(application: Application) : AndroidViewModel(application) 
   private val database = getAppDatabase(application)
   private val friendsRepository = FriendsRepository(database)
 
-  private val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplication())
-  private val id = sharedPreferences.getString("token", null)
+  private val id = MainActivity.firebaseId
   val friendsList = friendsRepository.friends
   fun userListView() {
     startRefreshingFriend()
     viewModelScope.launch {
       try {
-        friendsRepository.refreshFriends(id!!)
+        friendsRepository.refreshFriends(id)
         endRefreshingFriend()
       } catch (e: java.lang.Exception) {
         Log.i("ViewModelFriend", "Trying to refresh id")

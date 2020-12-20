@@ -25,6 +25,7 @@ import kotlinx.android.synthetic.main.fragment_group_edit.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import work.calmato.prestopay.MainActivity
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentGroupEditBinding
 import work.calmato.prestopay.network.*
@@ -83,8 +84,7 @@ class GroupEditFragment : PermissionBase() {
         Log.d(TAG, "debug $e")
       }
     }
-    val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
-    id = sharedPreferences.getString("token", "")!!
+    id = MainActivity.firebaseId
 
   }
 

@@ -16,6 +16,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.preference.PreferenceManager
 import kotlinx.android.synthetic.main.fragment_add_payment.*
 import kotlinx.android.synthetic.main.fragment_add_payment.groupName
+import work.calmato.prestopay.MainActivity
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentAddPaymentBindingImpl
 import work.calmato.prestopay.network.GroupPropertyResponse
@@ -47,8 +48,7 @@ class AddPaymentFragment : Fragment() {
       viewModel.setPositivePayers(payments.positivePayers.map { UserExpense(it.id,it.amount) })
       viewModel.setNegativePayers(payments.negativePayers.map { UserExpense(it.id,it.amount) })
     }
-    val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
-    viewModel.setId(sharedPreferences.getString("token", "")!!)
+    viewModel.setId(MainActivity.firebaseId)
     viewModel.getGroupDetail()
     viewModel.groupName.observe(viewLifecycleOwner, Observer<String> {
       groupName.text = it

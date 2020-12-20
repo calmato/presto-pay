@@ -5,12 +5,14 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdLoader
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.formats.NativeAdOptions
 import com.google.android.gms.ads.formats.UnifiedNativeAd
+import work.calmato.prestopay.MainActivity
 import work.calmato.prestopay.databinding.ListGroupItemPlaneBinding
 import work.calmato.prestopay.network.GroupPropertyResponse
 
@@ -25,7 +27,7 @@ class AdapterGroupPlane(
       val rawData = value.toMutableList()
       if (!isHidden) {
         val size = value.size
-        val divideNum = 7
+        val divideNum = 6
         for (i in 1..size / divideNum) {
           rawData.add(
             i * divideNum, GroupPropertyResponse(
@@ -54,27 +56,12 @@ class AdapterGroupPlane(
   override fun onBindViewHolder(holder: AddGroupViewHolder, position: Int) {
     if (groupList[position].selected) {
       holder.binding.nativeAd.visibility = ImageView.VISIBLE
-      // Native ad
-      val adLoader = AdLoader.Builder(context, "ca-app-pub-3940256099942544/2247696110")
-        .forUnifiedNativeAd { ad: UnifiedNativeAd ->
-          holder.binding.nativeAd.setNativeAd(ad)
-        }
-        .withAdListener(object : AdListener() {
-          // AdListener callbacks like OnAdFailedToLoad, OnAdOpened, OnAdClicked and
-          // so on, can be overridden here.
-          override fun onAdFailedToLoad(errorCode: Int) {
-            Log.i("MainActivity", "onAdFailedToLoad: $errorCode")
-          }
-        })
-        .withNativeAdOptions(
-          NativeAdOptions.Builder()
-            // Methods in the NativeAdOptions.Builder class can be
-            // used here to specify individual options settings.
-            .build()
-        )
-        .build()
-      adLoader.loadAd(AdRequest.Builder().build())
+      holder.binding.normalLayout.visibility = ConstraintLayout.INVISIBLE
+      if(MainActivity.nativeAd != null){
+        holder.binding.nativeAd.setNativeAd(MainActivity.nativeAd)
+      }
     } else {
+      holder.binding.normalLayout.visibility = ConstraintLayout.VISIBLE
       holder.binding.nativeAd.visibility = ImageView.GONE
       holder.binding.also {
         it.groupPropertyResponse = groupList[position]

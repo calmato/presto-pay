@@ -46,7 +46,7 @@ interface GroupDao {
   @Query("update databasegroup set lendingStatus=:lendingStatus where id=:groupId")
   fun updateLendingStatus(lendingStatus: List<NetworkPayer>, groupId: String)
 
-  @Query("select * from databasegroup where id=:groupId")
+  @Query("select * from databasegroup where id=:groupId limit 1")
   fun getLendingStatus(groupId: String): LiveData<DatabaseGroup>
 }
 

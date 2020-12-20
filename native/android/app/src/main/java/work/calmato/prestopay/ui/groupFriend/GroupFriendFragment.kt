@@ -27,6 +27,7 @@ import kotlinx.android.synthetic.main.fragment_group_friend.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import work.calmato.prestopay.MainActivity
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentGroupFriendBinding
 import work.calmato.prestopay.network.*
@@ -64,8 +65,7 @@ class GroupFriendFragment : Fragment() {
         groups = it
       }
     })
-    val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
-    id = sharedPreferences.getString("token", "")!!
+    id = MainActivity.firebaseId
 
     val swipeToGroupDismissTouchHelper = getGroupSwipeToDismissTouchHelper()
     swipeToGroupDismissTouchHelper.attachToRecyclerView(groupRecycleView)
