@@ -38,12 +38,12 @@ class ResetPassFragment : Fragment() {
         frontViewResetPass.visibility = ImageView.VISIBLE
         auth.sendPasswordResetEmail(emailAddress).addOnCompleteListener { task ->
           if (task.isSuccessful) {
-            sendEmail()
             this.findNavController().navigate(
               ResetPassFragmentDirections.actionResetPassFragmentToMailCheckFragment()
             )
           } else {
             Log.d("Reset password", "Email is not sent")
+            Toast.makeText(requireContext(), "メールを送れませんでした", Toast.LENGTH_SHORT).show()
           }
           progressBarRestPass.visibility= ProgressBar.GONE
           frontViewResetPass.visibility = ImageView.GONE
@@ -54,15 +54,4 @@ class ResetPassFragment : Fragment() {
     }
   }
 
-  private fun sendEmail() {
-    val auth = FirebaseAuth.getInstance()
-    val emailAddress = emailEditText.text.toString()
-    auth.sendPasswordResetEmail(emailAddress).addOnCompleteListener { task ->
-      if (task.isSuccessful) {
-        Log.d("Reset password", "Email sent.")
-      } else {
-        Log.d("Reset password", "Email is not sent")
-      }
-    }
-  }
 }

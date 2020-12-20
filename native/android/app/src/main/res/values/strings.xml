@@ -53,6 +53,7 @@
   <string name="payment">支払い</string>
   <string name="register_new_payment">新しい支払いの登録</string>
   <string name="edit_payment">支払いの編集</string>
+  <string name="complete_payment">支払い完了済み</string>
   <string name="delete_payment">支払いの削除</string>
   <string name="group">グループ</string>
   <string name="friend">友達</string>
@@ -63,7 +64,7 @@
   <string name="email_address">Email address</string>
   <string name="description_reset_pass">にパスワードを変更するリンクを送信します。\n現在のパスワードを入力してください。</string>
   <string name="save_button"><u>保存</u></string>
-  <string name="passwordInformation">半角のアルファベットと数字両方を含む6~32文字</string>
+  <string name="passwordInformation">半角英数字6~32文字</string>
   <string name="passwordConfirmInformation">同じパスワードを入力</string>
   <string name="now_loading">Now Loading …</string>
   <string name="amount">金額</string>

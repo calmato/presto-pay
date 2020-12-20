@@ -1,7 +1,6 @@
 package work.calmato.prestopay.ui.paymentDetail
 
 import android.app.AlertDialog
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.*
 import android.widget.ImageView
@@ -9,17 +8,18 @@ import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.findNavController
-import androidx.preference.PreferenceManager
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_payment_detail.*
 import retrofit2.Call
-import work.calmato.prestopay.R
-import work.calmato.prestopay.databinding.FragmentPaymentDetailBinding
-import work.calmato.prestopay.util.PermissionBase
 import retrofit2.Callback
 import retrofit2.Response
 import work.calmato.prestopay.MainActivity
-import work.calmato.prestopay.network.*
+import work.calmato.prestopay.R
+import work.calmato.prestopay.databinding.FragmentPaymentDetailBinding
+import work.calmato.prestopay.network.Api
+import work.calmato.prestopay.network.GroupPropertyResponse
+import work.calmato.prestopay.network.PaymentPropertyGet
+import work.calmato.prestopay.util.PermissionBase
 import work.calmato.prestopay.util.inflateGraph
 
 
@@ -42,6 +42,9 @@ class PaymentDetailFragment : PermissionBase() {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     setHasOptionsMenu(true)
+    if (paymentDetail.isCompleted) {
+      completed.text = resources.getString(R.string.complete_payment)
+    }
     id = MainActivity.firebaseId
     date.text = paymentDetail.createdAt.split("T")[0]
     paymentDetail.imageUrls!![0].let {

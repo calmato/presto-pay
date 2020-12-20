@@ -49,8 +49,9 @@
       android:id="@+id/groupEditAddFriend"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
+      android:layout_marginTop="8dp"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/groupEditFriendFrame">
+      app:layout_constraintTop_toBottomOf="@+id/groupEditName">
 
       <TextView
         android:id="@+id/textView2"
@@ -75,29 +76,6 @@
         app:srcCompat="@drawable/ic_baseline_chevron_right_24" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <View
-      android:id="@+id/groupEditHorizon"
-      android:layout_width="wrap_content"
-      android:layout_height="1dp"
-      android:layout_marginTop="24dp"
-      android:background="#A4A7A7"
-      android:visibility="visible"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintHorizontal_bias="0.0"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/groupEditName" />
-
-    <View
-      android:id="@+id/groupEditFriendFrame"
-      android:layout_width="wrap_content"
-      android:layout_height="30dp"
-      android:background="#CCCCCC"
-      android:visibility="visible"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintHorizontal_bias="0.0"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="@+id/groupEditHorizon" />
 
     <de.hdodenhof.circleimageview.CircleImageView
       android:id="@+id/groupThumnail"
@@ -147,17 +125,6 @@
       android:track="@drawable/switch_bg"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/groupDisplay" />
-
-    <TextView
-      android:id="@+id/groupEditFriendText"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginStart="24dp"
-      android:text="@string/friend"
-      android:textSize="18sp"
-      app:layout_constraintBottom_toBottomOf="@+id/groupEditFriendFrame"
-      app:layout_constraintStart_toStartOf="@+id/groupEditFriendFrame"
-      app:layout_constraintTop_toTopOf="@+id/groupEditFriendFrame" />
 
     <androidx.recyclerview.widget.RecyclerView
       android:id="@+id/friendsRecycleView"

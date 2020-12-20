@@ -14,7 +14,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_group_edit_add_friend.*
@@ -129,7 +128,7 @@ class GroupEditAddFriendFragment : Fragment() {
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
     when (item.itemId) {
-      R.id.done -> goBackScreen()
+      R.id.done -> sendRequest()
     }
     return super.onOptionsItemSelected(item)
   }

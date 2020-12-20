@@ -35,15 +35,17 @@
 
     <TextView
       android:id="@+id/descriptionText"
-      android:layout_width="wrap_content"
+      android:layout_width="0dp"
       android:layout_height="wrap_content"
+      android:layout_marginStart="16dp"
+      android:layout_marginEnd="16dp"
       android:layout_marginBottom="16dp"
       android:text="@string/descriptionResetPassword"
       android:textColor="@android:color/background_dark"
       android:textSize="18sp"
       app:layout_constraintBottom_toTopOf="@+id/emailEditText"
-      app:layout_constraintEnd_toEndOf="@+id/emailEditText"
-      app:layout_constraintStart_toStartOf="@+id/emailEditText" />
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
       android:id="@+id/emailEditText"

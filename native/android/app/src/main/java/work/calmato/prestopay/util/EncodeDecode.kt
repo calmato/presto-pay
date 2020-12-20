@@ -10,7 +10,7 @@ import java.io.ByteArrayOutputStream
 fun encodeImage2Base64(thumbnail: ImageView): String {
   val bitmap: Bitmap = thumbnail.drawable.toBitmap()
   val baos = ByteArrayOutputStream()
-  bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+  bitmap.compress(Bitmap.CompressFormat.JPEG, 75, baos)
   val imageBytes: ByteArray = baos.toByteArray()
   return Base64.encodeToString(imageBytes, Base64.DEFAULT)
 }

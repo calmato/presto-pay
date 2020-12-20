@@ -16,7 +16,6 @@ import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.fragment_update_pass_login.*
-import kotlinx.android.synthetic.main.fragment_update_pass_login.passwordInformation
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentUpdatePassLoginBinding
 
@@ -114,6 +113,8 @@ class UpdatePassLoginFragment : Fragment() {
                 resources.getString(R.string.current_password_wrong),
                 Toast.LENGTH_LONG
               ).show()
+              progressBarUpdatePassLogIn.visibility = ProgressBar.GONE
+              frontViewUpdatePassLogIn.visibility = ImageView.GONE
             }
           }
         } else {
