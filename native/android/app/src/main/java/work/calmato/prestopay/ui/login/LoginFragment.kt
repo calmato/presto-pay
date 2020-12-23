@@ -156,6 +156,7 @@ class LoginFragment : Fragment() {
 
     setSharedPreferenceFlag.observe(viewLifecycleOwner, Observer {
       if (it) {
+        MainActivity.currency = sharedPreferences.getString("currency","JPY")!!
         navigateToHome()
       }
     })
