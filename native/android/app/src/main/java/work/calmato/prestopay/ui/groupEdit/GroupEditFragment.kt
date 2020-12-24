@@ -191,9 +191,7 @@ class GroupEditFragment : PermissionBase() {
     Api.retrofitService.editGroup("Bearer $id", editGroupProperty, groupId)
       .enqueue(object : Callback<GroupPropertyResponse> {
         override fun onFailure(call: Call<GroupPropertyResponse>, t: Throwable) {
-          doneButton.isEnabled = true
-          progressBarGroupEdit.visibility = ProgressBar.INVISIBLE
-          frontViewGroupEdit.visibility = ImageView.INVISIBLE
+          viewChange()
         }
 
         override fun onResponse(
@@ -206,9 +204,7 @@ class GroupEditFragment : PermissionBase() {
               "グループ情報を変更できませんでした",
               Toast.LENGTH_SHORT
             ).show()
-            progressBarGroupEdit.visibility = ProgressBar.INVISIBLE
-            frontViewGroupEdit.visibility = ImageView.INVISIBLE
-            doneButton.isEnabled = true
+            viewChange()
           } else {
             hiddenCheck(groupId)
           }
@@ -238,9 +234,7 @@ class GroupEditFragment : PermissionBase() {
           override fun onFailure(call: Call<HiddenGroups>, t: Throwable) {
             Toast.makeText(activity, t.message, Toast.LENGTH_LONG).show()
             Log.d(TAG, t.message ?: "No message")
-            progressBarGroupEdit.visibility = ProgressBar.INVISIBLE
-            frontViewGroupEdit.visibility = ImageView.INVISIBLE
-            doneButton.isEnabled = true
+            viewChange()
           }
 
           override fun onResponse(call: Call<HiddenGroups>, response: Response<HiddenGroups>) {
@@ -250,13 +244,9 @@ class GroupEditFragment : PermissionBase() {
                 "グループ情報を変更できませんでした",
                 Toast.LENGTH_SHORT
               ).show()
-              progressBarGroupEdit.visibility = ProgressBar.INVISIBLE
-              frontViewGroupEdit.visibility = ImageView.INVISIBLE
-              doneButton.isEnabled = true
+              viewChange()
             } else {
-              progressBarGroupEdit.visibility = ProgressBar.INVISIBLE
-              frontViewGroupEdit.visibility = ImageView.INVISIBLE
-              doneButton.isEnabled = true
+              viewChange()
               goBackScreen()
             }
           }
@@ -267,9 +257,7 @@ class GroupEditFragment : PermissionBase() {
           override fun onFailure(call: Call<HiddenGroups>, t: Throwable) {
             Toast.makeText(activity, t.message, Toast.LENGTH_LONG).show()
             Log.d(TAG, t.message ?: "No message")
-            progressBarGroupEdit.visibility = ProgressBar.INVISIBLE
-            frontViewGroupEdit.visibility = ImageView.INVISIBLE
-            doneButton.isEnabled = true
+            viewChange()
           }
 
           override fun onResponse(call: Call<HiddenGroups>, response: Response<HiddenGroups>) {
@@ -279,23 +267,23 @@ class GroupEditFragment : PermissionBase() {
                 "グループ情報を変更できませんでした",
                 Toast.LENGTH_SHORT
               ).show()
-              progressBarGroupEdit.visibility = ProgressBar.INVISIBLE
-              frontViewGroupEdit.visibility = ImageView.INVISIBLE
-              doneButton.isEnabled = true
+              viewChange()
             } else {
-              progressBarGroupEdit.visibility = ProgressBar.INVISIBLE
-              frontViewGroupEdit.visibility = ImageView.INVISIBLE
-              doneButton.isEnabled = true
+              viewChange()
               goBackHome()
             }
           }
         })
     } else {
-      progressBarGroupEdit.visibility = ProgressBar.INVISIBLE
-      frontViewGroupEdit.visibility = ImageView.INVISIBLE
-      doneButton.isEnabled = true
+      viewChange()
       goBackHome()
     }
+  }
+
+  private fun viewChange() {
+    progressBarGroupEdit.visibility = ProgressBar.INVISIBLE
+    frontViewGroupEdit.visibility = ImageView.INVISIBLE
+    doneButton.isEnabled = true
   }
 
   companion object {
