@@ -89,6 +89,11 @@ func (pa *paymentApplication) Index(
 	// ユーザー毎の支払額合計作成
 	pys := map[string]*payment.Payer{}
 	for _, p := range ps {
+		// 未支払いのもののみ取得
+		if p.IsCompleted {
+			continue
+		}
+
 		// 支払い情報に登録されている通貨情報を取得
 		currentRate := ers.Rates[p.Currency]
 		if currentRate == 0 {
