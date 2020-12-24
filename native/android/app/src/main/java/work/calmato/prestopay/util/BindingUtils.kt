@@ -10,10 +10,12 @@ import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
+import work.calmato.prestopay.MainActivity
 import work.calmato.prestopay.R
 import work.calmato.prestopay.database.getAppDatabase
 import work.calmato.prestopay.network.*
 import work.calmato.prestopay.repository.TagRepository
+import java.util.*
 import kotlin.concurrent.thread
 import kotlin.math.absoluteValue
 import kotlin.math.round
@@ -167,7 +169,7 @@ fun ImageView.setCountryImage(item:NationalFlag?){
 @BindingAdapter("countryCode")
 fun TextView.setCountryCode(item:NationalFlag?){
   item?.let {
-    text = item.name
+    text = item.name.toUpperCase(Locale.ROOT)
   }
 }
 
@@ -223,9 +225,10 @@ fun TextView.setSettleUpUserName(item:NetworkPayer?){
 fun TextView.setSettleUpAmount(item:NetworkPayer?){
   item?.let {
     if (it.amount <= 0){
-      this.text = "${item.name}から${round(item.amount.absoluteValue).toInt()}円受け取る"
+      this.text = "${item.name}から${round(item.amount.absoluteValue).toInt()}${MainActivity.currency.toUpperCase(
+        Locale.ROOT)}受け取る"
     } else{
-      this.text = "${item.name}に${round(item.amount).toInt()}円返す"
+      this.text = "${item.name}に${round(item.amount).toInt()}${MainActivity.currency.toUpperCase(Locale.ROOT)}返す"
     }
   }
 }

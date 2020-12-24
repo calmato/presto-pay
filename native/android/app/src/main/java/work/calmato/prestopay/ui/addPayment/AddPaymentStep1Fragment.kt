@@ -19,10 +19,12 @@ import kotlinx.android.synthetic.main.fragment_add_payment.*
 import kotlinx.android.synthetic.main.fragment_add_payment_step1.*
 import kotlinx.android.synthetic.main.fragment_add_payment_step1.currency
 import kotlinx.android.synthetic.main.fragment_add_payment_step1.paymentName
+import work.calmato.prestopay.MainActivity
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentAddPaymentStep1Binding
 import work.calmato.prestopay.util.AdapterCurrency
 import work.calmato.prestopay.util.ViewModelAddPayment
+import java.util.*
 
 class AddPaymentStep1Fragment : Fragment() {
   private val viewModel: ViewModelAddPayment by lazy {
@@ -43,6 +45,7 @@ class AddPaymentStep1Fragment : Fragment() {
     super.onViewCreated(view, savedInstanceState)
     viewModel.getCountryList()
     viewModel.setTag()
+    currency.text = MainActivity.currency.toUpperCase(Locale.ROOT)
     buttonStep4.setOnClickListener {
       when {
           paymentName.text.isNullOrEmpty() -> {
@@ -90,7 +93,7 @@ class AddPaymentStep1Fragment : Fragment() {
       AlertDialog.Builder(it)
     }
     val currencyRecycleAdapter = AdapterCurrency(AdapterCurrency.OnClickListener {
-      currency.text = it.name
+      currency.text = it.name.toUpperCase(Locale.ROOT)
     })
     currencyRecycleAdapter.countryList = viewModel.countryList
     val recycleView = RecyclerView(requireContext())

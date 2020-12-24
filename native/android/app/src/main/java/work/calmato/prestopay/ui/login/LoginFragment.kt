@@ -12,6 +12,9 @@ import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -61,6 +64,7 @@ class LoginFragment : Fragment() {
   private lateinit var googleSignInClient: GoogleSignInClient
   private lateinit var callbackManager: CallbackManager
   private lateinit var sharedPreferences: SharedPreferences
+  private val setSharedPreferenceFlag = MutableLiveData<Boolean>(false)
 
   override fun onCreateView(
     inflater: LayoutInflater,
@@ -149,6 +153,13 @@ class LoginFragment : Fragment() {
     twitterSingnIn.setOnClickListener {
       firebaseAuthWithTwitter()
     }
+
+    setSharedPreferenceFlag.observe(viewLifecycleOwner, Observer {
+      if (it) {
+        MainActivity.currency = sharedPreferences.getString("currency","JPY")!!
+        navigateToHome()
+      }
+    })
   }
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -254,8 +265,18 @@ class LoginFragment : Fragment() {
     val pendingResultTask: Task<AuthResult>? = auth.pendingAuthResult
     if (pendingResultTask != null) {
       // There's something already here! Finish the sign-in for your user.
-      pendingResultTask.addOnSuccessListener(OnSuccessListener<AuthResult?> { updateUI(auth.currentUser, true) })
-      pendingResultTask.addOnFailureListener(OnFailureListener { p0 -> Log.i("LoginFragment", "onFailure: ${p0.message}") })
+      pendingResultTask.addOnSuccessListener(OnSuccessListener<AuthResult?> {
+        updateUI(
+          auth.currentUser,
+          true
+        )
+      })
+      pendingResultTask.addOnFailureListener(OnFailureListener { p0 ->
+        Log.i(
+          "LoginFragment",
+          "onFailure: ${p0.message}"
+        )
+      })
     } else {
       auth.startActivityForSignInWithProvider(/* activity= */ requireActivity(), provider.build())
         .addOnSuccessListener { updateUI(auth.currentUser, true) }
@@ -288,14 +309,12 @@ class LoginFragment : Fragment() {
 
   private fun updateUI(user: FirebaseUser?, isFirstLogin: Boolean) {
     if (user != null) {
+      progressBarLogIn.visibility = ImageView.VISIBLE
+      frontViewLogIn.visibility = ImageView.VISIBLE
       // 認証用トークンの保存
       user.getIdToken(true)
       setSharedPreference()
 
-      // home pageの遷移
-      this.findNavController().navigate(
-        LoginFragmentDirections.actionLoginFragmentToHomeFragment()
-      )
       //最初のログインのみ実行される。　
       // トークンの情報が変更たときにFCM用デバイスIDを送信することで、ユーザーが権限を持っていることを確実にした。401帰ってきてたので。
 
@@ -307,7 +326,9 @@ class LoginFragment : Fragment() {
               sendFirebaseCloudMessageToken()
               lifecycleScope.launch(Dispatchers.IO) {
                 TagRepository(getAppDatabase(requireContext())).setTagDatabase(resources)
-                NationalFlagsRepository(getAppDatabase(requireContext())).setNationalFlagDatabase(resources)
+                NationalFlagsRepository(getAppDatabase(requireContext())).setNationalFlagDatabase(
+                  resources
+                )
               }
             }
           }
@@ -315,6 +336,13 @@ class LoginFragment : Fragment() {
 
       }
     }
+  }
+
+  private fun navigateToHome() {
+    // home pageの遷移
+    this.findNavController().navigate(
+      LoginFragmentDirections.actionLoginFragmentToHomeFragment()
+    )
   }
 
   // sendFirebaseCloudMessageToken register instance_id to api
@@ -361,7 +389,12 @@ class LoginFragment : Fragment() {
                   editor.putString("email", userProperty.email)
                   editor.putString("thumbnailUrl", userProperty.thumbnailUrl)
                   editor.apply()
+                  progressBarLogIn.visibility = ImageView.INVISIBLE
+                  frontViewLogIn.visibility = ImageView.INVISIBLE
+                  setSharedPreferenceFlag.postValue(true)
                 } catch (e: Exception) {
+                  progressBarLogIn.visibility = ImageView.INVISIBLE
+                  frontViewLogIn.visibility = ImageView.INVISIBLE
                   Log.i("LoginFragment", "setSharedPreference: ${e.message}")
                 }
               }

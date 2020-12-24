@@ -13,8 +13,10 @@ import work.calmato.prestopay.MainActivity
 import work.calmato.prestopay.R
 import work.calmato.prestopay.database.DatabaseGroup
 import work.calmato.prestopay.database.getAppDatabase
+import work.calmato.prestopay.network.NationalFlag
 import work.calmato.prestopay.network.PaymentPropertyGet
 import work.calmato.prestopay.repository.GroupsRepository
+import work.calmato.prestopay.repository.NationalFlagsRepository
 import work.calmato.prestopay.repository.PaymentRepository
 
 class ViewModelPayment(application: Application) : AndroidViewModel(application) {
@@ -38,6 +40,15 @@ class ViewModelPayment(application: Application) : AndroidViewModel(application)
   val nowLoading: LiveData<Boolean>
     get() = _nowLoading
 
+  private val _countryList = MutableLiveData<List<NationalFlag>>()
+  val countryList: LiveData<List<NationalFlag>>
+    get() = _countryList
+
+  fun getCountryList() {
+    CoroutineScope(Dispatchers.IO).launch {
+      _countryList.postValue(NationalFlagsRepository(getAppDatabase(getApplication())).nationalFlags)
+    }
+  }
   fun setInitPaymentList(groupId: String) {
     paymentRepository = PaymentRepository(database, groupId)
     groupRepository = GroupsRepository(database)

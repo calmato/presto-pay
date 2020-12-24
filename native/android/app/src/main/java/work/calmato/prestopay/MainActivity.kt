@@ -32,6 +32,7 @@ class MainActivity : AppCompatActivity() {
     var nativeAd : UnifiedNativeAd? = null
     var refreshAdFlag : MutableLiveData<Boolean> = MutableLiveData(true)
     var firebaseId = ""
+    var currency = ""
   }
 
   fun refreshAd() {
