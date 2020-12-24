@@ -5,6 +5,7 @@ import (
 	"encoding/base64"
 	"math"
 	"strings"
+	"time"
 
 	"github.com/calmato/presto-pay/api/calc/internal/application/request"
 	"github.com/calmato/presto-pay/api/calc/internal/application/validation"
@@ -294,7 +295,17 @@ func (pa *paymentApplication) UpdateStatus(
 		return nil, err
 	}
 
-	p.IsCompleted = true
+	p.IsCompleted = !p.IsCompleted
+
+	// IsCompleted == false: 支払う側のPaidAtを一律ゼロ値に
+	if !p.IsCompleted {
+		for _, py := range p.Payers {
+			// py.IsPaied == false: 支払う側
+			if !py.IsPaid {
+				py.PaidAt = time.Time{}
+			}
+		}
+	}
 
 	if _, err := pa.paymentService.Update(ctx, p, groupID); err != nil {
 		return nil, err
