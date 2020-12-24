@@ -136,7 +136,7 @@ interface ApiService {
     @Header("Authorization") token: String,
     @Body accountProperty: EditGroup,
     @Path("groupId") groupId: String
-  ): Call<EditGroup>
+  ): Call<GroupPropertyResponse>
 
 
 
