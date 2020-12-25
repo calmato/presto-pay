@@ -219,8 +219,6 @@ class LoginFragment : Fragment() {
             ).show()
             updateUI(null, false)
           }
-          progressBarLogIn.visibility = ProgressBar.GONE
-          frontViewLogIn.visibility = ImageView.GONE
         }
     } else {
       Toast.makeText(
@@ -335,6 +333,9 @@ class LoginFragment : Fragment() {
         }
 
       }
+    } else{
+      progressBarLogIn.visibility = ImageView.INVISIBLE
+      frontViewLogIn.visibility = ImageView.INVISIBLE
     }
   }
 
