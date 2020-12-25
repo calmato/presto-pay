@@ -14,7 +14,6 @@ import androidx.activity.OnBackPressedCallback
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -153,12 +152,14 @@ class LoginFragment : Fragment() {
       firebaseAuthWithTwitter()
     }
 
-    setSharedPreferenceFlag.observe(viewLifecycleOwner, Observer {
+    // TODO: ログインが正常に動いていたら、コメントアウトの実装を削除する
+
+/*    setSharedPreferenceFlag.observe(viewLifecycleOwner, Observer {
       if (it) {
-        MainActivity.currency = sharedPreferences.getString("currency","JPY")!!
+        MainActivity.currency = sharedPreferences.getString("currency", "JPY")!!
         navigateToHome()
       }
-    })
+    })*/
 
     requireActivity().onBackPressedDispatcher.addCallback(
       viewLifecycleOwner,
@@ -320,7 +321,7 @@ class LoginFragment : Fragment() {
       user.getIdToken(true)
       setSharedPreference()
 
-      //最初のログインのみ実行される。　
+      // 最初のログインのみ実行される。　
       // トークンの情報が変更たときにFCM用デバイスIDを送信することで、ユーザーが権限を持っていることを確実にした。401帰ってきてたので。
 
       sharedPreferences.registerOnSharedPreferenceChangeListener { _, key ->
@@ -340,7 +341,7 @@ class LoginFragment : Fragment() {
         }
 
       }
-    } else{
+    } else {
       progressBarLogIn.visibility = ImageView.INVISIBLE
       frontViewLogIn.visibility = ImageView.INVISIBLE
     }
@@ -405,6 +406,7 @@ class LoginFragment : Fragment() {
                   frontViewLogIn.visibility = ImageView.INVISIBLE
                   Log.i("LoginFragment", "setSharedPreference: ${e.message}")
                 }
+                navigateToHome()
               }
             }
           }
