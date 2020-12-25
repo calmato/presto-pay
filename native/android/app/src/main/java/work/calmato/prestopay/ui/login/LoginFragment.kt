@@ -398,15 +398,16 @@ class LoginFragment : Fragment() {
                   editor.putString("email", userProperty.email)
                   editor.putString("thumbnailUrl", userProperty.thumbnailUrl)
                   editor.apply()
-                  progressBarLogIn.visibility = ImageView.INVISIBLE
-                  frontViewLogIn.visibility = ImageView.INVISIBLE
-                  setSharedPreferenceFlag.postValue(true)
+                  
+                  // TODO: ログインが正常に動いていたら、コメントアウトの実装を削除する
+                  //setSharedPreferenceFlag.postValue(true)
+
+                  navigateToHome()
                 } catch (e: Exception) {
                   progressBarLogIn.visibility = ImageView.INVISIBLE
                   frontViewLogIn.visibility = ImageView.INVISIBLE
                   Log.i("LoginFragment", "setSharedPreference: ${e.message}")
                 }
-                navigateToHome()
               }
             }
           }
