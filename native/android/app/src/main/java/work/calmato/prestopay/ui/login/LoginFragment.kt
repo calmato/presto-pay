@@ -14,6 +14,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -154,12 +155,12 @@ class LoginFragment : Fragment() {
 
     // TODO: ログインが正常に動いていたら、コメントアウトの実装を削除する
 
-/*    setSharedPreferenceFlag.observe(viewLifecycleOwner, Observer {
+    setSharedPreferenceFlag.observe(viewLifecycleOwner, Observer {
       if (it) {
         MainActivity.currency = sharedPreferences.getString("currency", "JPY")!!
         navigateToHome()
       }
-    })*/
+    })
 
     requireActivity().onBackPressedDispatcher.addCallback(
       viewLifecycleOwner,
@@ -398,11 +399,8 @@ class LoginFragment : Fragment() {
                   editor.putString("email", userProperty.email)
                   editor.putString("thumbnailUrl", userProperty.thumbnailUrl)
                   editor.apply()
-                  
                   // TODO: ログインが正常に動いていたら、コメントアウトの実装を削除する
-                  //setSharedPreferenceFlag.postValue(true)
-
-                  navigateToHome()
+                  setSharedPreferenceFlag.postValue(true)
                 } catch (e: Exception) {
                   progressBarLogIn.visibility = ImageView.INVISIBLE
                   frontViewLogIn.visibility = ImageView.INVISIBLE
