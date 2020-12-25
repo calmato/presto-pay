@@ -153,8 +153,6 @@ class LoginFragment : Fragment() {
       firebaseAuthWithTwitter()
     }
 
-    // TODO: ログインが正常に動いていたら、コメントアウトの実装を削除する
-
     setSharedPreferenceFlag.observe(viewLifecycleOwner, Observer {
       if (it) {
         MainActivity.currency = sharedPreferences.getString("currency", "JPY")!!
@@ -379,34 +377,29 @@ class LoginFragment : Fragment() {
       if (it.isSuccessful) {
         val editor = sharedPreferences.edit()
         synchronized(sharedPreferences) {
-          FirebaseAuth.getInstance().currentUser?.getIdToken(true)?.addOnCompleteListener {
-            if (it.isSuccessful) {
-              Log.i("Ok", "setSharedPreferenceToken: ${it.result.token}")
-              editor.putString("token", it.result.token)
+          Log.i("Ok", "setSharedPreferenceToken: ${it.result.token}")
+          editor.putString("token", it.result.token)
+          editor.apply()
+          MainActivity.firebaseId = it.result.token!!
+          val id = sharedPreferences.getString("token", null)
+          GlobalScope.launch(Dispatchers.IO) {
+            try {
+              Log.i("Ok", "setSharedPreferenceId: $id")
+              GroupsRepository(getAppDatabase(requireContext())).refreshGroups(id!!)
+              FriendsRepository(getAppDatabase(requireContext())).refreshFriends(id)
+              val userProperty =
+                Api.retrofitService.getLoginUserInformation("Bearer $id").await()
+                  .asDomainModel()
+              editor.putString("name", userProperty.name)
+              editor.putString("username", userProperty.username)
+              editor.putString("email", userProperty.email)
+              editor.putString("thumbnailUrl", userProperty.thumbnailUrl)
               editor.apply()
-              MainActivity.firebaseId = it.result.token!!
-              val id = sharedPreferences.getString("token", null)
-              GlobalScope.launch(Dispatchers.IO) {
-                try {
-                  Log.i("Ok", "setSharedPreferenceId: $id")
-                  GroupsRepository(getAppDatabase(requireContext())).refreshGroups(id!!)
-                  FriendsRepository(getAppDatabase(requireContext())).refreshFriends(id)
-                  val userProperty =
-                    Api.retrofitService.getLoginUserInformation("Bearer $id").await()
-                      .asDomainModel()
-                  editor.putString("name", userProperty.name)
-                  editor.putString("username", userProperty.username)
-                  editor.putString("email", userProperty.email)
-                  editor.putString("thumbnailUrl", userProperty.thumbnailUrl)
-                  editor.apply()
-                  // TODO: ログインが正常に動いていたら、コメントアウトの実装を削除する
-                  setSharedPreferenceFlag.postValue(true)
-                } catch (e: Exception) {
-                  progressBarLogIn.visibility = ImageView.INVISIBLE
-                  frontViewLogIn.visibility = ImageView.INVISIBLE
-                  Log.i("LoginFragment", "setSharedPreference: ${e.message}")
-                }
-              }
+              setSharedPreferenceFlag.postValue(true)
+            } catch (e: Exception) {
+              progressBarLogIn.visibility = ImageView.INVISIBLE
+              frontViewLogIn.visibility = ImageView.INVISIBLE
+              Log.i("LoginFragment", "setSharedPreference: ${e.message}")
             }
           }
         }
