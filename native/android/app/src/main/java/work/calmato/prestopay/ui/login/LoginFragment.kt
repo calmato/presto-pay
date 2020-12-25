@@ -10,16 +10,19 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.preference.PreferenceManager
-import com.facebook.*
+import com.facebook.AccessToken
+import com.facebook.CallbackManager
+import com.facebook.FacebookCallback
+import com.facebook.FacebookException
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -28,15 +31,11 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.OnCompleteListener
-import com.google.firebase.auth.FacebookAuthProvider
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.auth.GoogleAuthProvider
-import com.google.firebase.iid.FirebaseInstanceId
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.*
+import com.google.firebase.iid.FirebaseInstanceId
 import kotlinx.android.synthetic.main.fragment_login.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -46,13 +45,13 @@ import work.calmato.prestopay.R
 import work.calmato.prestopay.database.getAppDatabase
 import work.calmato.prestopay.databinding.FragmentLoginBinding
 import work.calmato.prestopay.network.Api
-import work.calmato.prestopay.network.asDomainModel
 import work.calmato.prestopay.network.RegisterDeviceIdProperty
+import work.calmato.prestopay.network.asDomainModel
 import work.calmato.prestopay.repository.FriendsRepository
 import work.calmato.prestopay.repository.GroupsRepository
 import work.calmato.prestopay.repository.NationalFlagsRepository
 import work.calmato.prestopay.repository.TagRepository
-import work.calmato.prestopay.util.*
+import work.calmato.prestopay.util.ViewModelUser
 
 
 class LoginFragment : Fragment() {
@@ -160,6 +159,14 @@ class LoginFragment : Fragment() {
         navigateToHome()
       }
     })
+
+    requireActivity().onBackPressedDispatcher.addCallback(
+      viewLifecycleOwner,
+      object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+        }
+      }
+    )
   }
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
