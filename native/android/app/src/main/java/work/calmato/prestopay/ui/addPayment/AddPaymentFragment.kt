@@ -16,7 +16,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.preference.PreferenceManager
 import kotlinx.android.synthetic.main.fragment_add_payment.*
+import kotlinx.android.synthetic.main.fragment_add_payment.currency
 import kotlinx.android.synthetic.main.fragment_add_payment.groupName
+import kotlinx.android.synthetic.main.fragment_add_payment.paymentName
+import kotlinx.android.synthetic.main.fragment_add_payment_step1.*
 import work.calmato.prestopay.MainActivity
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentAddPaymentBindingImpl
@@ -45,13 +48,9 @@ class AddPaymentFragment : Fragment() {
     super.onViewCreated(view, savedInstanceState)
     viewModel.setGroupInfo(AddPaymentFragmentArgs.fromBundle(requireArguments()).group)
     AddPaymentFragmentArgs.fromBundle(requireArguments()).payment?.let {payments ->
-      progressBarAddPayment.visibility = ImageView.VISIBLE
-      frontViewAddPayment.visibility = ImageView.VISIBLE
       viewModel.setPaymentInfo(payments)
       viewModel.setPositivePayers(payments.positivePayers.map { UserExpense(it.id,it.amount) })
       viewModel.setNegativePayers(payments.negativePayers.map { UserExpense(it.id,it.amount) })
-      progressBarAddPayment.visibility = ImageView.INVISIBLE
-      frontViewAddPayment.visibility = ImageView.INVISIBLE
     }
     viewModel.setId(MainActivity.firebaseId)
     viewModel.getGroupDetail()
