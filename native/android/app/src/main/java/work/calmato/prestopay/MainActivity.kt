@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity() {
     Log.i("MainActivityRefresh", "refreshAd: ")
     nativeAd?.destroy()
     // Native ad
-    val adLoader = AdLoader.Builder(this, resources.getString(R.string.AD_KEY))
+    val adLoader = AdLoader.Builder(this, BuildConfig.AD_KEY)
       .forUnifiedNativeAd { ad: UnifiedNativeAd ->
         nativeAd = ad
         // Timer

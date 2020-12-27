@@ -11,13 +11,14 @@ import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.*
+import work.calmato.prestopay.BuildConfig
 import work.calmato.prestopay.R
 import java.security.cert.X509Certificate
 import javax.net.ssl.SSLContext
 import javax.net.ssl.TrustManager
 import javax.net.ssl.X509TrustManager
 
-private val BASE_URL = Resources.getSystem().getString(R.string.BASE_URL)
+private const val BASE_URL = BuildConfig.BASE_URL
 /**
  * Build the Moshi object that Retrofit will be using, making sure to add the Kotlin adapter for
  * full Kotlin compatibility.
