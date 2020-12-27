@@ -265,7 +265,7 @@ class ViewModelAddPayment(application: Application) : AndroidViewModel(applicati
       //　支払い編集
       val expenseProperty = EditExpenseProperty(
         name = paymentName.value!!,
-        currency = currency.value!!,
+        currency = currency.value!!.toLowerCase(),
         total = total.value!!,
         positivePayers = positivePayers.filter { it.amount != 0f },
         negativePayers = negativePayers.filter { it.amount != 0f },
