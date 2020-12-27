@@ -126,6 +126,8 @@ class ViewModelFriendGroup(application: Application) : AndroidViewModel(applicat
     viewModelScope.launch {
       try {
         friendsRepository.addFriend(id, UserId(userId), userProperty)
+        getDatabaseFriendList()
+        _usersList.value = _usersList.value?.filter { it != userProperty }
         _nowLoading.value = false
       } catch (e: java.lang.Exception) {
         Toast.makeText(getApplication(), e.message, Toast.LENGTH_LONG).show()

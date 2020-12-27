@@ -33,12 +33,24 @@
       android:fillViewport="true"
       app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
       app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.0"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="parent">
+      app:layout_constraintTop_toTopOf="parent"
+      app:layout_constraintVertical_bias="0.0">
 
       <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+          android:id="@+id/countryImageView"
+          android:layout_width="0dp"
+          android:layout_height="0dp"
+          android:layout_marginStart="16dp"
+          app:layout_constraintBottom_toBottomOf="@+id/setting"
+          app:layout_constraintDimensionRatio="1:1"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toTopOf="@+id/setting" />
 
         <de.hdodenhof.circleimageview.CircleImageView
           android:id="@+id/groupIcon"
@@ -54,13 +66,14 @@
 
         <TextView
           android:id="@+id/settleUp"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
+          android:layout_width="140dp"
+          android:layout_height="0dp"
           android:layout_marginTop="8dp"
-          android:background="#F44336"
+          android:background="#FF5252"
           android:paddingStart="8dp"
           android:paddingEnd="8dp"
           android:text="@string/settleup_group"
+          android:textAlignment="center"
           android:textColor="@color/design_default_color_on_primary"
           android:textSize="18sp"
           app:layout_constraintEnd_toEndOf="parent"
@@ -108,6 +121,15 @@
           app:layout_constraintHorizontal_bias="0.0"
           app:layout_constraintStart_toStartOf="parent"
           app:layout_constraintTop_toBottomOf="@+id/settleUp" />
+
+        <TextView
+          android:id="@+id/currency"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:textSize="18sp"
+          app:layout_constraintEnd_toEndOf="@+id/countryImageView"
+          app:layout_constraintStart_toStartOf="@+id/countryImageView"
+          app:layout_constraintTop_toBottomOf="@+id/countryImageView" />
       </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 
