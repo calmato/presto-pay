@@ -12,6 +12,7 @@ import com.google.android.gms.ads.AdLoader
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.formats.NativeAdOptions
 import com.google.android.gms.ads.formats.UnifiedNativeAd
+import work.calmato.prestopay.BuildConfig
 import work.calmato.prestopay.MainActivity
 import work.calmato.prestopay.databinding.ListGroupItemPlaneBinding
 import work.calmato.prestopay.network.GroupPropertyResponse

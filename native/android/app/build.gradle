@@ -21,8 +21,25 @@ android {
     targetSdkVersion 30
     versionCode 1
     versionName "1.0"
-
     testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    multiDexEnabled true
+    if (project.rootProject.file('local.properties').exists()) {
+      Properties properties = new Properties()
+      properties.load(project.rootProject.file('local.properties').newDataInputStream())
+      def AD_KEY = properties.getProperty("ad_key")
+      def BASE_URL = properties.getProperty("base_url")
+      def FACEBOOK_APP_ID = properties.getProperty("facebook_app_id")
+      def FACEBOOK_LOGIN_PROTOCOL_SCHEME = properties.getProperty("facebook_login_protocol_scheme")
+      buildConfigField("String", "AD_KEY", "\"${AD_KEY}\"")
+      buildConfigField("String", "BASE_URL","\"${BASE_URL}\"")
+      resValue("string", "FACEBOOK_APP_ID","${FACEBOOK_APP_ID}")
+      resValue("string", "FACEBOOK_LOGIN_PROTOCOL_SCHEME","${FACEBOOK_LOGIN_PROTOCOL_SCHEME}")
+    } else {
+      buildConfigField("String", "AD_KEY", '""')
+      buildConfigField("String", "BASE_URL",'""')
+      resValue("string", "FACEBOOK_APP_ID",'""')
+      resValue("string", "FACEBOOK_LOGIN_PROTOCOL_SCHEME",'""')
+    }
   }
 
   buildTypes {
