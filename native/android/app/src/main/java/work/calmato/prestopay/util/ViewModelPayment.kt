@@ -9,11 +9,14 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
+import work.calmato.prestopay.MainActivity
 import work.calmato.prestopay.R
 import work.calmato.prestopay.database.DatabaseGroup
 import work.calmato.prestopay.database.getAppDatabase
+import work.calmato.prestopay.network.NationalFlag
 import work.calmato.prestopay.network.PaymentPropertyGet
 import work.calmato.prestopay.repository.GroupsRepository
+import work.calmato.prestopay.repository.NationalFlagsRepository
 import work.calmato.prestopay.repository.PaymentRepository
 
 class ViewModelPayment(application: Application) : AndroidViewModel(application) {
@@ -26,8 +29,7 @@ class ViewModelPayment(application: Application) : AndroidViewModel(application)
   private val database = getAppDatabase(application)
   private var paymentRepository: PaymentRepository? = null
   private var groupRepository: GroupsRepository? = null
-  private val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplication())
-  private val id = sharedPreferences.getString("token", null)
+  private val id = MainActivity.firebaseId
   var paymentsList: LiveData<List<PaymentPropertyGet>>? = null
   var groupStatus: LiveData<DatabaseGroup>? = null
   private val _refreshing = MutableLiveData<Boolean>()
@@ -38,6 +40,15 @@ class ViewModelPayment(application: Application) : AndroidViewModel(application)
   val nowLoading: LiveData<Boolean>
     get() = _nowLoading
 
+  private val _countryList = MutableLiveData<List<NationalFlag>>()
+  val countryList: LiveData<List<NationalFlag>>
+    get() = _countryList
+
+  fun getCountryList() {
+    CoroutineScope(Dispatchers.IO).launch {
+      _countryList.postValue(NationalFlagsRepository(getAppDatabase(getApplication())).nationalFlags)
+    }
+  }
   fun setInitPaymentList(groupId: String) {
     paymentRepository = PaymentRepository(database, groupId)
     groupRepository = GroupsRepository(database)
@@ -49,7 +60,7 @@ class ViewModelPayment(application: Application) : AndroidViewModel(application)
     startRefreshing()
     viewModelScope.launch {
       try {
-        paymentRepository!!.refreshPayments(id!!, groupId)
+        paymentRepository!!.refreshPayments(id, groupId)
         Log.i("ViewModelPayment", "setInitPaymentList: ${paymentRepository!!.payments.value}")
         endRefreshing()
       } catch (e: java.lang.Exception) {

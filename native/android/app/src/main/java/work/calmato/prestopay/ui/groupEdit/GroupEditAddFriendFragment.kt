@@ -14,13 +14,13 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_group_edit_add_friend.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import work.calmato.prestopay.MainActivity
 import work.calmato.prestopay.R
 import work.calmato.prestopay.database.asDomainModel
 import work.calmato.prestopay.database.getAppDatabase
@@ -61,8 +61,7 @@ class GroupEditAddFriendFragment : Fragment() {
     }
     getGroupInfo = GroupEditAddFriendFragmentArgs.fromBundle(requireArguments()).groupEditList
     binding.lifecycleOwner = this
-    val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
-    id = sharedPreferences.getString("token", "")!!
+    id = MainActivity.firebaseId
     return binding.root
   }
 
@@ -129,7 +128,7 @@ class GroupEditAddFriendFragment : Fragment() {
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
     when (item.itemId) {
-      R.id.done -> goBackScreen()
+      R.id.done -> sendRequest()
     }
     return super.onOptionsItemSelected(item)
   }

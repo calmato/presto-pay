@@ -5,11 +5,14 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.content.res.AppCompatResources
@@ -27,16 +30,16 @@ import kotlinx.android.synthetic.main.fragment_group_detail.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import work.calmato.prestopay.MainActivity
 import work.calmato.prestopay.R
+import work.calmato.prestopay.database.DatabaseGroup
 import work.calmato.prestopay.databinding.FragmentGroupDetailBinding
 import work.calmato.prestopay.network.Api
 import work.calmato.prestopay.network.GroupPropertyResponse
 import work.calmato.prestopay.network.NetworkPayerContainer
 import work.calmato.prestopay.network.PaymentPropertyGet
-import work.calmato.prestopay.util.AdapterPayment
-import work.calmato.prestopay.util.ViewModelGroup
-import work.calmato.prestopay.util.ViewModelPayment
-import work.calmato.prestopay.util.inflateGraph
+import work.calmato.prestopay.util.*
+import java.util.*
 
 class GroupDetailFragment : Fragment() {
   private val viewModel: ViewModelPayment by lazy {
@@ -65,18 +68,43 @@ class GroupDetailFragment : Fragment() {
       adapter = recycleAdapter
     }
     groupDetail = GroupDetailFragmentArgs.fromBundle(requireArguments()).groupDetail
-    viewModel.setInitPaymentList(groupDetail!!.id)
-    val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
-    id = sharedPreferences.getString("token", "")!!
+    id = MainActivity.firebaseId
     return binding.root
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    viewModel.groupStatus?.observe(viewLifecycleOwner, Observer { list ->
-      list.lendingStatus.apply {
+    countryImageView.setOnClickListener {
+      showCurrencyDialog()
+    }
+    viewModel.getCountryList()
+    viewModel.setInitPaymentList(groupDetail!!.id)
+    viewModel.groupStatus?.value?.lendingStatus.apply {
+      this?.let {
+        inflateGraph(
+          chart,
+          it.map { it.name },
+          this.map { it.amount },
+          requireContext()
+        )
+      }
+      chart.isDoubleTapToZoomEnabled = false
+    }
+    currency.text = MainActivity.currency.toUpperCase(Locale.ROOT)
+    viewModel.countryList.observe(viewLifecycleOwner, Observer {
+      it?.let {
+        if (it.isNotEmpty()) {
+          Log.i("groupDetail", "onViewCreated: ${it}")
+          countryImageView.setBackgroundResource(it.filter { it.name.equals(MainActivity.currency,true)}[0].imageId)
+        }
+      }
+    })
+
+    viewModel.groupStatus?.observe(viewLifecycleOwner, Observer<DatabaseGroup> { list ->
+      list?.let {
+        it.lendingStatus.apply {
           inflateGraph(chart, this.map { it.name }, this.map { it.amount }, requireContext())
-          chart.isDoubleTapToZoomEnabled = false
+        }
       }
     })
     viewModel.itemClicked.observe(viewLifecycleOwner, Observer {
@@ -117,13 +145,13 @@ class GroupDetailFragment : Fragment() {
       }
     }
     groupDetail?.thumbnailUrl?.let {
-      if(!it.isNullOrEmpty()){
+      if (!it.isNullOrEmpty()) {
         Picasso.with(requireContext()).load(it).into(groupIcon)
       }
     }
 
     frontView.visibility = ImageView.GONE
-    progressBar.visibility = android.widget.ProgressBar.INVISIBLE
+    progressBar.visibility = ProgressBar.INVISIBLE
 
     bottom_navigation.setOnNavigationItemSelectedListener { item ->
       when (item.itemId) {
@@ -149,10 +177,6 @@ class GroupDetailFragment : Fragment() {
     }
     settleUp.setOnClickListener {
       this.findNavController().navigate(
-//        GroupDetailFragmentDirections.actionGroupDetailToSettleUp(
-//          groupDetail!!,
-//          NetworkPayerContainer(viewModel.groupStatus!!.value!!.lendingStatus)
-//        )
         GroupDetailFragmentDirections.actionGroupDetailToSettleUpGroup(
           NetworkPayerContainer(
             viewModel.groupStatus!!.value!!.lendingStatus
@@ -282,5 +306,43 @@ class GroupDetailFragment : Fragment() {
     this.findNavController().navigate(
       GroupDetailFragmentDirections.actionGroupDetailToHomeFragment()
     )
+  }
+
+  private fun showCurrencyDialog() {
+    val builder: AlertDialog.Builder = requireActivity().let {
+      AlertDialog.Builder(it)
+    }
+    val currencyRecycleAdapter = AdapterCurrency(AdapterCurrency.OnClickListener {
+      countryImageView.setBackgroundResource(it.imageId)
+      currency.text = it.name.toUpperCase(Locale.ROOT)
+    })
+    currencyRecycleAdapter.countryList = viewModel.countryList.value!!
+    val recycleView = RecyclerView(requireContext())
+    recycleView.apply {
+      layoutManager = LinearLayoutManager(requireContext())
+      adapter = currencyRecycleAdapter
+    }
+    builder.setView(recycleView)
+    val dialog: AlertDialog? = builder.create()
+    dialog?.show()
+    currency.addTextChangedListener(object : TextWatcher {
+      override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+      }
+
+      override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+        dialog?.dismiss()
+        MainActivity.currency = s.toString()
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
+        val editor = sharedPreferences.edit()
+        editor.putString("currency",s.toString())
+        editor.apply()
+        groupDetail?.let {
+          viewModel.getPayments(it.id)
+        }
+      }
+
+      override fun afterTextChanged(s: Editable?) {
+      }
+    })
   }
 }

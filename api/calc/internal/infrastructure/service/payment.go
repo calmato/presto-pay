@@ -371,6 +371,8 @@ func checkPaid(p *payment.Payment, current time.Time) {
 				py.PaidAt = current
 			}
 		}
+
+		return
 	}
 
 	// 各支払い者の支払い日時を更新

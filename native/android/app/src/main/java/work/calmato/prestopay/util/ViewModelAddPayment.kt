@@ -6,8 +6,9 @@ import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -16,7 +17,6 @@ import work.calmato.prestopay.database.getAppDatabase
 import work.calmato.prestopay.network.*
 import work.calmato.prestopay.repository.NationalFlagsRepository
 import work.calmato.prestopay.repository.TagRepository
-import java.lang.Exception
 
 class ViewModelAddPayment(application: Application) : AndroidViewModel(application) {
   private val _groupName = MutableLiveData<String>()
@@ -148,7 +148,7 @@ class ViewModelAddPayment(application: Application) : AndroidViewModel(applicati
           }
 
           override fun onFailure(call: Call<GetGroupDetail>, t: Throwable) {
-            Log.d("ViewModelAddPayment", t.message?:"No message")
+            Log.d("ViewModelAddPayment", t.message ?: "No message")
             _navigateToHome.value = true
           }
         })
@@ -222,7 +222,7 @@ class ViewModelAddPayment(application: Application) : AndroidViewModel(applicati
       //　新規作成
       val expenseProperty = CreateExpenseProperty(
         name = paymentName.value!!,
-        currency = currency.value!!,
+        currency = currency.value!!.toLowerCase(),
         total = total.value!!,
         positivePayers = positivePayers.filter { it.amount != 0f },
         negativePayers = negativePayers.filter { it.amount != 0f },
@@ -243,7 +243,7 @@ class ViewModelAddPayment(application: Application) : AndroidViewModel(applicati
             } else {
               Toast.makeText(
                 getApplication(),
-                response.message(),
+                getApplication<Application>().resources.getString(R.string.failed_register_new_expense),
                 Toast.LENGTH_LONG
               ).show()
               _nowLoading.value = false
@@ -251,7 +251,11 @@ class ViewModelAddPayment(application: Application) : AndroidViewModel(applicati
           }
 
           override fun onFailure(call: Call<Unit>, t: Throwable) {
-            Toast.makeText(getApplication(), t.message, Toast.LENGTH_LONG).show()
+            Toast.makeText(
+              getApplication(),
+              getApplication<Application>().resources.getString(R.string.failed_register_new_expense),
+              Toast.LENGTH_LONG
+            ).show()
             Log.i("ViewModelAddPayment", "onFailure: ${t.message}")
             _nowLoading.value = false
           }
@@ -261,7 +265,7 @@ class ViewModelAddPayment(application: Application) : AndroidViewModel(applicati
       //　支払い編集
       val expenseProperty = EditExpenseProperty(
         name = paymentName.value!!,
-        currency = currency.value!!,
+        currency = currency.value!!.toLowerCase(),
         total = total.value!!,
         positivePayers = positivePayers.filter { it.amount != 0f },
         negativePayers = negativePayers.filter { it.amount != 0f },
@@ -288,7 +292,7 @@ class ViewModelAddPayment(application: Application) : AndroidViewModel(applicati
             } else {
               Toast.makeText(
                 getApplication(),
-                response.message(),
+                getApplication<Application>().resources.getString(R.string.failed_register_new_expense),
                 Toast.LENGTH_LONG
               ).show()
               _nowLoading.value = false
@@ -296,7 +300,11 @@ class ViewModelAddPayment(application: Application) : AndroidViewModel(applicati
           }
 
           override fun onFailure(call: Call<Unit>, t: Throwable) {
-            Toast.makeText(getApplication(), t.message, Toast.LENGTH_LONG).show()
+            Toast.makeText(
+              getApplication(),
+              getApplication<Application>().resources.getString(R.string.failed_register_new_expense),
+              Toast.LENGTH_LONG
+            ).show()
             Log.i("ViewModelAddPayment", "onFailure: ${t.message}")
             _nowLoading.value = false
           }

@@ -19,6 +19,7 @@ import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import work.calmato.prestopay.MainActivity
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentAccountEditBindingImpl
 import work.calmato.prestopay.network.Api
@@ -87,7 +88,7 @@ class AccountEditFragment : PermissionBase() {
     val name: String = nameEditText.text.toString()
     val userName: String = userNameEditText.text.toString()
     val email: String = mailEditText.text.toString()
-    val id = sharedPreferences.getString("token", "")
+    val id = MainActivity.firebaseId
     if (name != "" && userName != "" && email != "") {
       item.isEnabled = false
       progressBarAccountEdit.visibility = ProgressBar.VISIBLE

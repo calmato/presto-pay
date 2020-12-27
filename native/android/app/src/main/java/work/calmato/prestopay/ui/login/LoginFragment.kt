@@ -10,13 +10,19 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.preference.PreferenceManager
-import com.facebook.*
+import com.facebook.AccessToken
+import com.facebook.CallbackManager
+import com.facebook.FacebookCallback
+import com.facebook.FacebookException
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -25,30 +31,27 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.OnCompleteListener
-import com.google.firebase.auth.FacebookAuthProvider
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.auth.GoogleAuthProvider
-import com.google.firebase.iid.FirebaseInstanceId
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.*
+import com.google.firebase.iid.FirebaseInstanceId
 import kotlinx.android.synthetic.main.fragment_login.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import work.calmato.prestopay.MainActivity
 import work.calmato.prestopay.R
 import work.calmato.prestopay.database.getAppDatabase
 import work.calmato.prestopay.databinding.FragmentLoginBinding
 import work.calmato.prestopay.network.Api
-import work.calmato.prestopay.network.asDomainModel
 import work.calmato.prestopay.network.RegisterDeviceIdProperty
+import work.calmato.prestopay.network.asDomainModel
 import work.calmato.prestopay.repository.FriendsRepository
 import work.calmato.prestopay.repository.GroupsRepository
 import work.calmato.prestopay.repository.NationalFlagsRepository
 import work.calmato.prestopay.repository.TagRepository
-import work.calmato.prestopay.util.*
+import work.calmato.prestopay.util.ViewModelUser
 
 
 class LoginFragment : Fragment() {
@@ -60,6 +63,7 @@ class LoginFragment : Fragment() {
   private lateinit var googleSignInClient: GoogleSignInClient
   private lateinit var callbackManager: CallbackManager
   private lateinit var sharedPreferences: SharedPreferences
+  private val setSharedPreferenceFlag = MutableLiveData<Boolean>(false)
 
   override fun onCreateView(
     inflater: LayoutInflater,
@@ -148,6 +152,21 @@ class LoginFragment : Fragment() {
     twitterSingnIn.setOnClickListener {
       firebaseAuthWithTwitter()
     }
+
+    setSharedPreferenceFlag.observe(viewLifecycleOwner, Observer {
+      if (it) {
+        MainActivity.currency = sharedPreferences.getString("currency", "JPY")!!
+        navigateToHome()
+      }
+    })
+
+    requireActivity().onBackPressedDispatcher.addCallback(
+      viewLifecycleOwner,
+      object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+        }
+      }
+    )
   }
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -207,8 +226,6 @@ class LoginFragment : Fragment() {
             ).show()
             updateUI(null, false)
           }
-          progressBarLogIn.visibility = ProgressBar.GONE
-          frontViewLogIn.visibility = ImageView.GONE
         }
     } else {
       Toast.makeText(
@@ -253,8 +270,18 @@ class LoginFragment : Fragment() {
     val pendingResultTask: Task<AuthResult>? = auth.pendingAuthResult
     if (pendingResultTask != null) {
       // There's something already here! Finish the sign-in for your user.
-      pendingResultTask.addOnSuccessListener(OnSuccessListener<AuthResult?> { updateUI(auth.currentUser, true) })
-      pendingResultTask.addOnFailureListener(OnFailureListener { p0 -> Log.i("LoginFragment", "onFailure: ${p0.message}") })
+      pendingResultTask.addOnSuccessListener(OnSuccessListener<AuthResult?> {
+        updateUI(
+          auth.currentUser,
+          true
+        )
+      })
+      pendingResultTask.addOnFailureListener(OnFailureListener { p0 ->
+        Log.i(
+          "LoginFragment",
+          "onFailure: ${p0.message}"
+        )
+      })
     } else {
       auth.startActivityForSignInWithProvider(/* activity= */ requireActivity(), provider.build())
         .addOnSuccessListener { updateUI(auth.currentUser, true) }
@@ -287,15 +314,13 @@ class LoginFragment : Fragment() {
 
   private fun updateUI(user: FirebaseUser?, isFirstLogin: Boolean) {
     if (user != null) {
+      progressBarLogIn.visibility = ImageView.VISIBLE
+      frontViewLogIn.visibility = ImageView.VISIBLE
       // 認証用トークンの保存
       user.getIdToken(true)
       setSharedPreference()
 
-      // home pageの遷移
-      this.findNavController().navigate(
-        LoginFragmentDirections.actionLoginFragmentToHomeFragment()
-      )
-      //最初のログインのみ実行される。　
+      // 最初のログインのみ実行される。　
       // トークンの情報が変更たときにFCM用デバイスIDを送信することで、ユーザーが権限を持っていることを確実にした。401帰ってきてたので。
 
       sharedPreferences.registerOnSharedPreferenceChangeListener { _, key ->
@@ -306,14 +331,26 @@ class LoginFragment : Fragment() {
               sendFirebaseCloudMessageToken()
               lifecycleScope.launch(Dispatchers.IO) {
                 TagRepository(getAppDatabase(requireContext())).setTagDatabase(resources)
-                NationalFlagsRepository(getAppDatabase(requireContext())).setNationalFlagDatabase(resources)
+                NationalFlagsRepository(getAppDatabase(requireContext())).setNationalFlagDatabase(
+                  resources
+                )
               }
             }
           }
         }
 
       }
+    } else {
+      progressBarLogIn.visibility = ImageView.INVISIBLE
+      frontViewLogIn.visibility = ImageView.INVISIBLE
     }
+  }
+
+  private fun navigateToHome() {
+    // home pageの遷移
+    this.findNavController().navigate(
+      LoginFragmentDirections.actionLoginFragmentToHomeFragment()
+    )
   }
 
   // sendFirebaseCloudMessageToken register instance_id to api
@@ -340,29 +377,29 @@ class LoginFragment : Fragment() {
       if (it.isSuccessful) {
         val editor = sharedPreferences.edit()
         synchronized(sharedPreferences) {
-          FirebaseAuth.getInstance().currentUser?.getIdToken(true)?.addOnCompleteListener {
-            if (it.isSuccessful) {
-              Log.i("Ok", "setSharedPreferenceToken: ${it.result.token}")
-              editor.putString("token", it.result.token)
+          Log.i("Ok", "setSharedPreferenceToken: ${it.result.token}")
+          editor.putString("token", it.result.token)
+          editor.apply()
+          MainActivity.firebaseId = it.result.token!!
+          val id = sharedPreferences.getString("token", null)
+          GlobalScope.launch(Dispatchers.IO) {
+            try {
+              Log.i("Ok", "setSharedPreferenceId: $id")
+              GroupsRepository(getAppDatabase(requireContext())).refreshGroups(id!!)
+              FriendsRepository(getAppDatabase(requireContext())).refreshFriends(id)
+              val userProperty =
+                Api.retrofitService.getLoginUserInformation("Bearer $id").await()
+                  .asDomainModel()
+              editor.putString("name", userProperty.name)
+              editor.putString("username", userProperty.username)
+              editor.putString("email", userProperty.email)
+              editor.putString("thumbnailUrl", userProperty.thumbnailUrl)
               editor.apply()
-              val id = sharedPreferences.getString("token", null)
-              GlobalScope.launch(Dispatchers.IO) {
-                try {
-                  Log.i("Ok", "setSharedPreferenceId: $id")
-                  GroupsRepository(getAppDatabase(requireContext())).refreshGroups(id!!)
-                  FriendsRepository(getAppDatabase(requireContext())).refreshFriends(id)
-                  val userProperty =
-                    Api.retrofitService.getLoginUserInformation("Bearer $id").await()
-                      .asDomainModel()
-                  editor.putString("name", userProperty.name)
-                  editor.putString("username", userProperty.username)
-                  editor.putString("email", userProperty.email)
-                  editor.putString("thumbnailUrl", userProperty.thumbnailUrl)
-                  editor.apply()
-                } catch (e: Exception) {
-                  Log.i("LoginFragment", "setSharedPreference: ${e.message}")
-                }
-              }
+              setSharedPreferenceFlag.postValue(true)
+            } catch (e: Exception) {
+              progressBarLogIn.visibility = ImageView.INVISIBLE
+              frontViewLogIn.visibility = ImageView.INVISIBLE
+              Log.i("LoginFragment", "setSharedPreference: ${e.message}")
             }
           }
         }

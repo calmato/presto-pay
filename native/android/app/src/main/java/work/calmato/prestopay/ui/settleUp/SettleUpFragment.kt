@@ -30,6 +30,7 @@ import androidx.lifecycle.Observer
 import androidx.preference.PreferenceManager
 import kotlinx.android.synthetic.main.fragment_create_group.*
 import kotlinx.android.synthetic.main.fragment_settle_up.chart
+import work.calmato.prestopay.MainActivity
 import work.calmato.prestopay.network.NetworkPayerContainer
 
 class SettleUpFragment : Fragment() {
@@ -63,8 +64,7 @@ class SettleUpFragment : Fragment() {
       requireContext()
     )
     chart.isDoubleTapToZoomEnabled = false
-    val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
-    viewModel.setId(sharedPreferences.getString("token", "")!!)
+    viewModel.setId(MainActivity.firebaseId)
     viewModel.getGroupDetail()
     val c = Calendar.getInstance()
     val date = SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.getDefault()).format(c.time)

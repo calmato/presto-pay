@@ -9,6 +9,7 @@ import kotlinx.coroutines.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import work.calmato.prestopay.MainActivity
 import work.calmato.prestopay.R
 import work.calmato.prestopay.database.DatabaseGroup
 import work.calmato.prestopay.database.DatabaseFriend
@@ -56,8 +57,7 @@ class ViewModelFriendGroup(application: Application) : AndroidViewModel(applicat
   private val database = getAppDatabase(application)
   private val friendsRepository = FriendsRepository(database)
   private val groupsRepository = GroupsRepository(database)
-  private val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplication())
-  private val id = sharedPreferences.getString("token", null)
+  private val id = MainActivity.firebaseId
   val friendsList = friendsRepository.friends
   val groupsList = groupsRepository.groups
   private var databaseFriends:List<DatabaseFriend>? = null
@@ -66,7 +66,7 @@ class ViewModelFriendGroup(application: Application) : AndroidViewModel(applicat
     startRefreshingFriend()
     viewModelScope.launch {
       try {
-        friendsRepository.refreshFriends(id!!)
+        friendsRepository.refreshFriends(id)
         endRefreshingFriend()
       } catch (e: java.lang.Exception) {
         Log.i(TAG, "Trying to refresh id")
@@ -79,7 +79,7 @@ class ViewModelFriendGroup(application: Application) : AndroidViewModel(applicat
     startRefreshingGroup()
     viewModelScope.launch {
       try {
-        groupsRepository.refreshGroups(id!!)
+        groupsRepository.refreshGroups(id)
         endRefreshingGroup()
       } catch (e: java.lang.Exception) {
         Log.i(TAG, "Trying to refresh id")
@@ -125,7 +125,9 @@ class ViewModelFriendGroup(application: Application) : AndroidViewModel(applicat
     val userId = userProperty.id
     viewModelScope.launch {
       try {
-        friendsRepository.addFriend(id!!, UserId(userId), userProperty)
+        friendsRepository.addFriend(id, UserId(userId), userProperty)
+        getDatabaseFriendList()
+        _usersList.value = _usersList.value?.filter { it != userProperty }
         _nowLoading.value = false
       } catch (e: java.lang.Exception) {
         Toast.makeText(getApplication(), e.message, Toast.LENGTH_LONG).show()

@@ -7,6 +7,7 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -14,11 +15,16 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.android.synthetic.main.fragment_add_payment.*
 import kotlinx.android.synthetic.main.fragment_add_payment_step1.*
+import kotlinx.android.synthetic.main.fragment_add_payment_step1.currency
+import kotlinx.android.synthetic.main.fragment_add_payment_step1.paymentName
+import work.calmato.prestopay.MainActivity
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentAddPaymentStep1Binding
 import work.calmato.prestopay.util.AdapterCurrency
 import work.calmato.prestopay.util.ViewModelAddPayment
+import java.util.*
 
 class AddPaymentStep1Fragment : Fragment() {
   private val viewModel: ViewModelAddPayment by lazy {
@@ -39,6 +45,7 @@ class AddPaymentStep1Fragment : Fragment() {
     super.onViewCreated(view, savedInstanceState)
     viewModel.getCountryList()
     viewModel.setTag()
+    currency.text = MainActivity.currency.toUpperCase(Locale.ROOT)
     buttonStep4.setOnClickListener {
       when {
           paymentName.text.isNullOrEmpty() -> {
@@ -72,6 +79,13 @@ class AddPaymentStep1Fragment : Fragment() {
       amount.setText(it.total.toString())
       currency.text = it.currency
     }
+    paymentName.setOnFocusChangeListener { view, b ->
+      if(b){
+        requireParentFragment().requireParentFragment().groupName.visibility = TextView.INVISIBLE
+      }else{
+        requireParentFragment().requireParentFragment().groupName.visibility = TextView.VISIBLE
+      }
+    }
   }
 
   private fun showCurrencyDialog() {
@@ -79,7 +93,7 @@ class AddPaymentStep1Fragment : Fragment() {
       AlertDialog.Builder(it)
     }
     val currencyRecycleAdapter = AdapterCurrency(AdapterCurrency.OnClickListener {
-      currency.text = it.name
+      currency.text = it.name.toUpperCase(Locale.ROOT)
     })
     currencyRecycleAdapter.countryList = viewModel.countryList
     val recycleView = RecyclerView(requireContext())

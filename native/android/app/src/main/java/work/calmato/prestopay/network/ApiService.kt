@@ -136,7 +136,7 @@ interface ApiService {
     @Header("Authorization") token: String,
     @Body accountProperty: EditGroup,
     @Path("groupId") groupId: String
-  ): Call<EditGroup>
+  ): Call<GroupPropertyResponse>
 
 
 
@@ -173,7 +173,8 @@ interface ApiService {
   @GET("groups/{groupId}/payments")
   fun getPayments(
     @Header("Authorization") token: String,
-    @Path("groupId") groupId: String
+    @Path("groupId") groupId: String,
+    @Query("currency") currency: String
   ): Deferred<PaymentsResponse>
 
   @PATCH("groups/{groupId}/payments-status/{paymentId}")

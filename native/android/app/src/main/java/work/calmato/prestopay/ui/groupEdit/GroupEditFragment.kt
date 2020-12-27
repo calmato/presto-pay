@@ -15,16 +15,15 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import com.yalantis.ucrop.UCrop
-import kotlinx.android.synthetic.main.fragment_friend_list.*
 import kotlinx.android.synthetic.main.fragment_group_edit.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import work.calmato.prestopay.MainActivity
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentGroupEditBinding
 import work.calmato.prestopay.network.*
@@ -48,6 +47,8 @@ class GroupEditFragment : PermissionBase() {
     super.onActivityCreated(savedInstanceState)
     thread {
       try {
+        progressBarGroupEdit.visibility = ProgressBar.VISIBLE
+        frontViewGroupEdit.visibility = ImageView.VISIBLE
         Api.retrofitService.getGroupDetail("Bearer $id", getGroupInfo!!.id)
           .enqueue(object : Callback<GetGroupDetail> {
             override fun onFailure(call: Call<GetGroupDetail>, t: Throwable) {
@@ -76,15 +77,15 @@ class GroupEditFragment : PermissionBase() {
                   Toast.LENGTH_SHORT
                 ).show()
               }
-
+              progressBarGroupEdit.visibility = ProgressBar.INVISIBLE
+              frontViewGroupEdit.visibility = ImageView.INVISIBLE
             }
           })
       } catch (e: Exception) {
         Log.d(TAG, "debug $e")
       }
     }
-    val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
-    id = sharedPreferences.getString("token", "")!!
+    id = MainActivity.firebaseId
 
   }
 
@@ -110,11 +111,6 @@ class GroupEditFragment : PermissionBase() {
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-    viewModel.refreshingFriend.observe(viewLifecycleOwner, Observer<Boolean> {
-      it?.apply {
-        swipeContainer.isRefreshing = it
-      }
-    })
 
     groupEditAddFriend.setOnClickListener {
       this.findNavController().navigate(
@@ -138,7 +134,7 @@ class GroupEditFragment : PermissionBase() {
       viewLifecycleOwner,
       object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
-          goBackHome()
+          goBackScreen()
         }
       }
     )
@@ -178,10 +174,10 @@ class GroupEditFragment : PermissionBase() {
   }
 
   private fun sendRequest() {
-    val thumbnails = encodeImage2Base64(groupThumnail)
+    val thumbnail = encodeImage2Base64(groupThumnail)
     val groupName: String = groupEditName.text.toString()
     try {
-      val editGroup = EditGroup(groupName, thumbnails, groupDetail!!.users.map { it.id })
+      val editGroup = EditGroup(groupName, thumbnail, groupDetail!!.users.map { it.id })
       execute(editGroup, getGroupInfo!!.id)
     } catch (e: IOException) {
       Log.d(TAG, "debug $e")
@@ -193,16 +189,14 @@ class GroupEditFragment : PermissionBase() {
     progressBarGroupEdit.visibility = ProgressBar.VISIBLE
     frontViewGroupEdit.visibility = ImageView.VISIBLE
     Api.retrofitService.editGroup("Bearer $id", editGroupProperty, groupId)
-      .enqueue(object : Callback<EditGroup> {
-        override fun onFailure(call: Call<EditGroup>, t: Throwable) {
-          doneButton.isEnabled = true
-          progressBarGroupEdit.visibility = ProgressBar.INVISIBLE
-          frontViewGroupEdit.visibility = ImageView.INVISIBLE
+      .enqueue(object : Callback<GroupPropertyResponse> {
+        override fun onFailure(call: Call<GroupPropertyResponse>, t: Throwable) {
+          viewChange()
         }
 
         override fun onResponse(
-          call: Call<EditGroup>,
-          response: Response<EditGroup>
+          call: Call<GroupPropertyResponse>,
+          response: Response<GroupPropertyResponse>
         ) {
           if (!response.isSuccessful) {
             Toast.makeText(
@@ -210,20 +204,37 @@ class GroupEditFragment : PermissionBase() {
               "グループ情報を変更できませんでした",
               Toast.LENGTH_SHORT
             ).show()
+            viewChange()
+          } else {
+            hiddenCheck(groupId)
           }
-          doneButton.isEnabled = true
-          progressBarGroupEdit.visibility = ProgressBar.INVISIBLE
-          frontViewGroupEdit.visibility = ImageView.INVISIBLE
         }
       })
 
+  }
+
+  private fun goBackScreen() {
+    this.findNavController().navigate(
+      GroupEditFragmentDirections.actionGroupEditFragmentToGroupDetail(getGroupInfo)
+    )
+  }
+
+  private fun goBackHome() {
+    this.findNavController().navigate(
+      GroupEditFragmentDirections.actionGroupEditFragmentToHomeFragment()
+    )
+  }
+
+  private fun hiddenCheck(groupId: String) {
     val mSwitch: Switch = hiddenSwitch
+    Log.d(TAG, mSwitch.toString())
     if (mSwitch.isChecked && !getGroupInfo!!.isHidden) {
       Api.retrofitService.addHiddenGroup("Bearer $id", groupId)
         .enqueue(object : Callback<HiddenGroups> {
           override fun onFailure(call: Call<HiddenGroups>, t: Throwable) {
             Toast.makeText(activity, t.message, Toast.LENGTH_LONG).show()
             Log.d(TAG, t.message ?: "No message")
+            viewChange()
           }
 
           override fun onResponse(call: Call<HiddenGroups>, response: Response<HiddenGroups>) {
@@ -233,6 +244,10 @@ class GroupEditFragment : PermissionBase() {
                 "グループ情報を変更できませんでした",
                 Toast.LENGTH_SHORT
               ).show()
+              viewChange()
+            } else {
+              viewChange()
+              goBackScreen()
             }
           }
         })
@@ -242,6 +257,7 @@ class GroupEditFragment : PermissionBase() {
           override fun onFailure(call: Call<HiddenGroups>, t: Throwable) {
             Toast.makeText(activity, t.message, Toast.LENGTH_LONG).show()
             Log.d(TAG, t.message ?: "No message")
+            viewChange()
           }
 
           override fun onResponse(call: Call<HiddenGroups>, response: Response<HiddenGroups>) {
@@ -251,20 +267,23 @@ class GroupEditFragment : PermissionBase() {
                 "グループ情報を変更できませんでした",
                 Toast.LENGTH_SHORT
               ).show()
+              viewChange()
+            } else {
+              viewChange()
+              goBackHome()
             }
           }
         })
+    } else {
+      viewChange()
+      goBackHome()
     }
-
-    this.findNavController().navigate(
-      GroupEditFragmentDirections.actionGroupEditFragmentToHomeFragment()
-    )
   }
 
-  private fun goBackHome() {
-    this.findNavController().navigate(
-      GroupEditFragmentDirections.actionGroupEditFragmentToGroupDetail(getGroupInfo)
-    )
+  private fun viewChange() {
+    progressBarGroupEdit.visibility = ProgressBar.INVISIBLE
+    frontViewGroupEdit.visibility = ImageView.INVISIBLE
+    doneButton.isEnabled = true
   }
 
   companion object {

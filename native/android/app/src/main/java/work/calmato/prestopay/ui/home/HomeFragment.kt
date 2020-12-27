@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_home.*
+import work.calmato.prestopay.MainActivity
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentHomeBinding
 import work.calmato.prestopay.network.GroupPropertyResponse
@@ -39,7 +40,6 @@ class HomeFragment : Fragment() {
 
     binding.lifecycleOwner = this
     binding.viewModelHome = viewModelGroup
-
     recycleGroupAdapter?.notifyDataSetChanged()
     clickListenerHomeGroup = AdapterGroupPlane.OnClickListener {
       viewModelGroup.itemIsClickedGroup(it)
@@ -55,6 +55,15 @@ class HomeFragment : Fragment() {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
+    MainActivity.refreshAdFlag.observe(viewLifecycleOwner,Observer<Boolean>{
+      if(!it){
+        recycleGroupAdapter?.notifyDataSetChanged()
+      }
+    })
+    if(MainActivity.refreshAdFlag.value == true){
+      (activity as MainActivity).refreshAd()
+    }
+
     viewModelGroup.itemClickedGroup.observe(viewLifecycleOwner, Observer {
       it?.apply {
         navigateToDetail(it)

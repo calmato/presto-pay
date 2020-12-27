@@ -7,128 +7,156 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
-      android:id="@+id/tagImage3"
-      android:layout_width="95dp"
-      android:layout_height="95dp"
-      android:contentDescription="@string/tag"
-      app:layout_constraintBottom_toBottomOf="@+id/constraintDate2"
-      app:layout_constraintEnd_toStartOf="@+id/camera2"
-      app:layout_constraintHorizontal_bias="0.5"
-      app:layout_constraintStart_toEndOf="@+id/constraintDate2"
-      app:layout_constraintTop_toTopOf="@+id/constraintDate2"
-      app:srcCompat="@drawable/ic_baseline_label_24" />
-
-    <ImageView
-      android:id="@+id/camera2"
-      android:layout_width="95dp"
-      android:layout_height="95dp"
-      android:contentDescription="@string/camera_icon"
-      android:src="@android:drawable/ic_menu_camera"
-      app:layout_constraintBottom_toBottomOf="@+id/constraintDate2"
-      app:layout_constraintEnd_toStartOf="@+id/comment2"
-      app:layout_constraintHorizontal_bias="0.5"
-      app:layout_constraintStart_toEndOf="@+id/tagImage3"
-      app:layout_constraintTop_toTopOf="@+id/constraintDate2"
-      app:layout_constraintVertical_bias="1.0" />
-
-    <ImageView
-      android:id="@+id/comment2"
-      android:layout_width="85dp"
-      android:layout_height="85dp"
-      android:contentDescription="@string/comment"
-      android:src="@drawable/ic_baseline_comment_24"
-      app:layout_constraintBottom_toBottomOf="@+id/constraintDate2"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintHorizontal_bias="0.5"
-      app:layout_constraintStart_toEndOf="@+id/camera2"
-      app:layout_constraintTop_toTopOf="@+id/constraintDate2" />
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-      android:id="@+id/constraintDate2"
-      android:layout_width="wrap_content"
-      android:layout_height="0dp"
-      android:layout_marginBottom="8dp"
-      app:layout_constraintBottom_toTopOf="@+id/buttonStep4"
-      app:layout_constraintEnd_toStartOf="@+id/tagImage3"
-      app:layout_constraintHorizontal_bias="0.5"
-      app:layout_constraintStart_toStartOf="parent">
-
-      <TextView
-        android:id="@+id/calendarYear"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:text="@string/year"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toTopOf="@+id/calendarDate"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintVertical_chainStyle="packed" />
-
-      <TextView
-        android:id="@+id/calendarDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/date"
-        android:textSize="24sp"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/calendar"
-        app:layout_constraintVertical_bias="0.6" />
-
-      <ImageView
-        android:id="@+id/calendar"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:contentDescription="@string/calendar"
-        android:src="@drawable/ic_baseline_calendar_today_24"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <TextView
-      android:id="@+id/step"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginStart="16dp"
-      android:layout_marginBottom="8dp"
-      android:text="@string/step4"
-      android:textSize="36sp"
-      app:layout_constraintBottom_toTopOf="@+id/camera2"
-      app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-      android:id="@+id/buttonStep4"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginEnd="16dp"
-      android:layout_marginBottom="16dp"
-      android:backgroundTint="@color/ourTheme"
-      android:text="@string/register_payment"
-      android:textColor="#FFFFFF"
-      android:textSize="24sp"
-      app:layout_constraintBottom_toBottomOf="parent"
-      app:layout_constraintEnd_toEndOf="parent" />
-
     <com.github.mikephil.charting.charts.BarChart
       android:id="@+id/chart"
       android:layout_width="0dp"
       android:layout_height="0dp"
       android:layout_marginStart="8dp"
-      android:layout_marginTop="8dp"
       android:layout_marginEnd="8dp"
-      android:layout_marginBottom="8dp"
-      app:layout_constraintBottom_toTopOf="@+id/step"
+      app:layout_constraintBottom_toTopOf="@+id/constraintLayout2"
       app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.5"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="parent" />
+      app:layout_constraintTop_toTopOf="parent"
+      app:layout_constraintVertical_chainStyle="spread"
+      app:layout_constraintVertical_weight="0.6" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+      android:id="@+id/constraintLayout2"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintVertical_weight="0.4">
+
+      <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/icons_constraint"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/buttonStep4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageView
+          android:id="@+id/comment2"
+          android:layout_width="0dp"
+          android:layout_height="0dp"
+          android:layout_marginStart="8dp"
+          android:layout_marginEnd="16dp"
+          android:contentDescription="@string/comment"
+          android:src="@drawable/ic_baseline_comment_24"
+          app:layout_constraintBottom_toBottomOf="parent"
+          app:layout_constraintDimensionRatio="1:1"
+          app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintHorizontal_bias="0.5"
+          app:layout_constraintStart_toEndOf="@+id/camera2"
+          app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+          android:id="@+id/tagImage3"
+          android:layout_width="0dp"
+          android:layout_height="0dp"
+          android:layout_marginStart="8dp"
+          android:contentDescription="@string/tag"
+          app:layout_constraintBottom_toBottomOf="@+id/camera2"
+          app:layout_constraintDimensionRatio="1:1"
+          app:layout_constraintEnd_toStartOf="@+id/camera2"
+          app:layout_constraintHorizontal_bias="0.5"
+          app:layout_constraintStart_toEndOf="@+id/constraintDate2"
+          app:layout_constraintTop_toTopOf="@+id/camera2"
+          app:srcCompat="@drawable/ic_baseline_label_24" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+          android:id="@+id/constraintDate2"
+          android:layout_width="0dp"
+          android:layout_height="0dp"
+          android:layout_marginStart="16dp"
+          app:layout_constraintBottom_toBottomOf="@+id/tagImage3"
+          app:layout_constraintDimensionRatio="1:1"
+          app:layout_constraintEnd_toStartOf="@+id/tagImage3"
+          app:layout_constraintHorizontal_bias="0.5"
+          app:layout_constraintHorizontal_chainStyle="packed"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toTopOf="@+id/tagImage3">
+
+          <TextView
+            android:id="@+id/calendarYear"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:text="@string/year"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toTopOf="@+id/calendarDate"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+          <TextView
+            android:id="@+id/calendarDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/date"
+            android:textSize="24sp"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/calendar"
+            app:layout_constraintVertical_bias="0.6" />
+
+          <ImageView
+            android:id="@+id/calendar"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:contentDescription="@string/calendar"
+            android:src="@drawable/ic_baseline_calendar_today_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <de.hdodenhof.circleimageview.CircleImageView
+          android:id="@+id/camera2"
+          android:layout_width="0dp"
+          android:layout_height="0dp"
+          android:layout_marginStart="8dp"
+          android:background="@drawable/circle_theme_color"
+          android:backgroundTint="#4B000000"
+          android:contentDescription="@string/camera_icon"
+          android:src="@android:drawable/ic_menu_camera"
+          app:layout_constraintBottom_toBottomOf="@+id/comment2"
+          app:layout_constraintDimensionRatio="1:1"
+          app:layout_constraintEnd_toStartOf="@+id/comment2"
+          app:layout_constraintHorizontal_bias="0.5"
+          app:layout_constraintStart_toEndOf="@+id/tagImage3"
+          app:layout_constraintTop_toTopOf="@+id/comment2" />
+      </androidx.constraintlayout.widget.ConstraintLayout>
+
+      <TextView
+        android:id="@+id/step"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="@string/step4"
+        android:textSize="36sp"
+        app:layout_constraintBottom_toTopOf="@+id/icons_constraint"
+        app:layout_constraintStart_toStartOf="parent" />
+
+      <Button
+        android:id="@+id/buttonStep4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="@color/ourTheme"
+        android:text="@string/register_payment"
+        android:textColor="#FFFFFF"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
   </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

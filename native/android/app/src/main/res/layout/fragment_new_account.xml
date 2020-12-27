@@ -7,6 +7,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <de.hdodenhof.circleimageview.CircleImageView
+      android:id="@+id/accountThumbnailEdit"
+      android:layout_width="85dp"
+      android:layout_height="85dp"
+      android:layout_marginTop="16dp"
+      android:background="@drawable/circle_theme_color"
+      android:backgroundTint="#4B000000"
+      android:contentDescription="@string/profile_photo"
+      android:src="@android:drawable/ic_menu_camera"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent" />
+
     <ProgressBar
       android:id="@+id/progressBarNewAccount"
       style="?android:attr/progressBarStyle"
@@ -45,20 +58,21 @@
       android:textColor="@android:color/white"
       android:textSize="18sp"
       app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintHorizontal_bias="1.0"
+      app:layout_constraintHorizontal_bias="0.0"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/passwordConfirmInformation" />
 
     <EditText
       android:id="@+id/passConfirmEditText"
-      android:layout_width="384dp"
-      android:layout_height="46dp"
-      android:layout_marginTop="8dp"
+      android:layout_width="0dp"
+      android:layout_height="0dp"
       android:autofillHints=""
       android:ems="10"
       android:hint="@string/password_confirm"
       android:inputType="textPassword"
       android:maxLength="15"
+      app:layout_constraintDimensionRatio="8:1"
+      app:layout_constraintEnd_toEndOf="@+id/passEditText"
       app:layout_constraintStart_toStartOf="@+id/passwordInformation"
       app:layout_constraintTop_toBottomOf="@+id/passwordInformation" />
 
@@ -67,91 +81,91 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginTop="16dp"
+      android:layout_marginBottom="16dp"
       android:text="@string/already_has_an_account"
       android:textSize="18sp"
+      app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/createAccountButton" />
+      app:layout_constraintTop_toBottomOf="@+id/createAccountButton"
+      app:layout_constraintVertical_bias="0.0" />
 
     <TextView
       android:id="@+id/editPhotoText"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_marginTop="16dp"
-      android:text="@string/upload_photo"
+      android:layout_marginTop="8dp"
+      android:text="@string/change_profile_photo"
+      android:textColor="@color/ourTheme"
       android:textSize="12sp"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/thumbnailEdit" />
-
-    <de.hdodenhof.circleimageview.CircleImageView
-      android:id="@+id/thumbnailEdit"
-      android:layout_width="94dp"
-      android:layout_height="81dp"
-      android:layout_marginTop="100dp"
-      android:background="@drawable/back"
-      android:contentDescription="@string/camera_icon"
-      android:padding="0dp"
-      android:src="@android:drawable/ic_menu_camera"
-      android:visibility="visible"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="parent" />
+      app:layout_constraintTop_toBottomOf="@+id/accountThumbnailEdit" />
 
 
     <EditText
       android:id="@+id/fullNameEditText"
       android:layout_width="0dp"
-      android:layout_height="wrap_content"
-      android:layout_marginTop="16dp"
+      android:layout_height="0dp"
+      android:layout_marginTop="8dp"
       android:autofillHints=""
       android:ems="10"
       android:hint="@string/name"
       android:inputType="textPersonName"
       android:maxLength="32"
+      app:layout_constraintBottom_toTopOf="@+id/userNameEditText"
+      app:layout_constraintDimensionRatio="8:1"
       app:layout_constraintEnd_toEndOf="@+id/userNameEditText"
-      app:layout_constraintHorizontal_bias="1.0"
+      app:layout_constraintHorizontal_bias="0.0"
       app:layout_constraintStart_toStartOf="@+id/userNameEditText"
       app:layout_constraintTop_toBottomOf="@+id/editPhotoText" />
 
     <EditText
       android:id="@+id/userNameEditText"
       android:layout_width="0dp"
-      android:layout_height="wrap_content"
-      android:layout_marginTop="8dp"
+      android:layout_height="0dp"
       android:autofillHints=""
       android:ems="10"
       android:hint="@string/username"
       android:inputType="textPersonName"
       android:maxLength="32"
+      app:layout_constraintBottom_toTopOf="@+id/emailEditText"
+      app:layout_constraintDimensionRatio="8:1"
       app:layout_constraintEnd_toEndOf="@+id/emailEditText"
-      app:layout_constraintHorizontal_bias="1.0"
+      app:layout_constraintHorizontal_bias="0.5"
       app:layout_constraintStart_toStartOf="@+id/emailEditText"
       app:layout_constraintTop_toBottomOf="@+id/fullNameEditText" />
 
     <EditText
       android:id="@+id/emailEditText"
       android:layout_width="0dp"
-      android:layout_height="wrap_content"
+      android:layout_height="0dp"
       android:autofillHints=""
       android:ems="10"
       android:hint="@string/email"
       android:inputType="textEmailAddress"
       android:maxLength="256"
+      app:layout_constraintBottom_toTopOf="@+id/passEditText"
+      app:layout_constraintDimensionRatio="8:1"
       app:layout_constraintEnd_toEndOf="@+id/passEditText"
+      app:layout_constraintHorizontal_bias="0.5"
       app:layout_constraintStart_toStartOf="@+id/passEditText"
       app:layout_constraintTop_toBottomOf="@+id/userNameEditText" />
 
     <EditText
       android:id="@+id/passEditText"
-      android:layout_width="383dp"
-      android:layout_height="50dp"
+      android:layout_width="0dp"
+      android:layout_height="0dp"
+      android:layout_marginStart="16dp"
+      android:layout_marginEnd="16dp"
       android:autofillHints=""
       android:ems="10"
       android:hint="@string/password"
       android:inputType="textPassword"
       android:maxLength="32"
+      app:layout_constraintDimensionRatio="8:1"
       app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.5"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/emailEditText" />
 
@@ -159,7 +173,6 @@
       android:id="@+id/passwordInformation"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_marginTop="8dp"
       android:text="@string/passwordInformation"
       app:layout_constraintStart_toStartOf="@+id/passEditText"
       app:layout_constraintTop_toBottomOf="@+id/passEditText" />
@@ -168,7 +181,6 @@
       android:id="@+id/passwordConfirmInformation"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_marginTop="8dp"
       android:text="@string/passwordConfirmInformation"
       app:layout_constraintStart_toStartOf="@+id/passConfirmEditText"
       app:layout_constraintTop_toBottomOf="@+id/passConfirmEditText" />
