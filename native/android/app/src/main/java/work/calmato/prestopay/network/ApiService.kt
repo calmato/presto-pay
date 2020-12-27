@@ -18,7 +18,7 @@ import javax.net.ssl.SSLContext
 import javax.net.ssl.TrustManager
 import javax.net.ssl.X509TrustManager
 
-private const val BASE_URL = BuildConfig.BASE_URL
+private val BASE_URL = BuildConfig.BASE_URL
 /**
  * Build the Moshi object that Retrofit will be using, making sure to add the Kotlin adapter for
  * full Kotlin compatibility.
