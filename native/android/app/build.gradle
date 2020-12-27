@@ -35,10 +35,10 @@ android {
       resValue("string", "FACEBOOK_APP_ID","${FACEBOOK_APP_ID}")
       resValue("string", "FACEBOOK_LOGIN_PROTOCOL_SCHEME","${FACEBOOK_LOGIN_PROTOCOL_SCHEME}")
     } else {
-      buildConfigField("String", "AD_KEY", "")
-      buildConfigField("String", "BASE_URL","")
-      resValue("string", "FACEBOOK_APP_ID","")
-      resValue("string", "FACEBOOK_LOGIN_PROTOCOL_SCHEME","")
+      buildConfigField("String", "AD_KEY", "NAN")
+      buildConfigField("String", "BASE_URL","NAN")
+      resValue("string", "FACEBOOK_APP_ID","NAN")
+      resValue("string", "FACEBOOK_LOGIN_PROTOCOL_SCHEME","NAN")
     }
   }
 
