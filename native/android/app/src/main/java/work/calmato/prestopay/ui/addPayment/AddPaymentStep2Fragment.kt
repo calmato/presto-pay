@@ -98,7 +98,7 @@ class EquallyDivideFragment(val position: Int,private val step:Int) : Fragment()
           viewModel.setLendersList(recycleAdapterCheck.amounts)
           navigateToStep3()
         }else if (step == STEP3) {
-          viewModel.setBorrowersList(recycleAdapterCheck.amounts.map { it * -1 })
+          viewModel.setBorrowersList(recycleAdapterCheck.amounts.map { it })
           navigateToStep4()
         }
       }
