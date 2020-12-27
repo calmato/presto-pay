@@ -1,5 +1,6 @@
 package work.calmato.prestopay.ui.addPayment
 
+import android.media.Image
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -15,7 +16,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.preference.PreferenceManager
 import kotlinx.android.synthetic.main.fragment_add_payment.*
+import kotlinx.android.synthetic.main.fragment_add_payment.currency
 import kotlinx.android.synthetic.main.fragment_add_payment.groupName
+import kotlinx.android.synthetic.main.fragment_add_payment.paymentName
+import kotlinx.android.synthetic.main.fragment_add_payment_step1.*
 import work.calmato.prestopay.MainActivity
 import work.calmato.prestopay.R
 import work.calmato.prestopay.databinding.FragmentAddPaymentBindingImpl

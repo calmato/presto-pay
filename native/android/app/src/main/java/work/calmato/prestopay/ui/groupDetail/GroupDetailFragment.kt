@@ -124,6 +124,10 @@ class GroupDetailFragment : Fragment() {
       it?.apply {
         recycleAdapter?.paymentList = it
         payments = it
+        if(it.isEmpty()){
+          settleUp.text = "支払い情報がありません"
+          settleUp.isEnabled = false
+        }
       }
     })
 

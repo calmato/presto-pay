@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -45,6 +46,12 @@ class AddPaymentStep1Fragment : Fragment() {
     super.onViewCreated(view, savedInstanceState)
     viewModel.getCountryList()
     viewModel.setTag()
+    buttonStep4.isEnabled = false
+    viewModel.payersAddPayment.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+      it?.let {
+        buttonStep4.isEnabled = true
+      }
+    })
     currency.text = MainActivity.currency.toUpperCase(Locale.ROOT)
     buttonStep4.setOnClickListener {
       when {
@@ -77,7 +84,7 @@ class AddPaymentStep1Fragment : Fragment() {
     viewModel.paymentInfo?.let {
       paymentName.setText(it.name)
       amount.setText(it.total.toString())
-      currency.text = it.currency
+      currency.text = it.currency.toUpperCase()
     }
     paymentName.setOnFocusChangeListener { view, b ->
       if(b){
