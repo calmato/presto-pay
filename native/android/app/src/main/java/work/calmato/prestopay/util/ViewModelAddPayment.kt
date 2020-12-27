@@ -6,8 +6,9 @@ import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -16,7 +17,6 @@ import work.calmato.prestopay.database.getAppDatabase
 import work.calmato.prestopay.network.*
 import work.calmato.prestopay.repository.NationalFlagsRepository
 import work.calmato.prestopay.repository.TagRepository
-import java.lang.Exception
 
 class ViewModelAddPayment(application: Application) : AndroidViewModel(application) {
   private val _groupName = MutableLiveData<String>()
@@ -222,7 +222,7 @@ class ViewModelAddPayment(application: Application) : AndroidViewModel(applicati
       //　新規作成
       val expenseProperty = CreateExpenseProperty(
         name = paymentName.value!!,
-        currency = currency.value!!,
+        currency = currency.value!!.toLowerCase(),
         total = total.value!!,
         positivePayers = positivePayers.filter { it.amount != 0f },
         negativePayers = negativePayers.filter { it.amount != 0f },
@@ -265,7 +265,7 @@ class ViewModelAddPayment(application: Application) : AndroidViewModel(applicati
       //　支払い編集
       val expenseProperty = EditExpenseProperty(
         name = paymentName.value!!,
-        currency = currency.value!!,
+        currency = currency.value!!.toLowerCase(),
         total = total.value!!,
         positivePayers = positivePayers.filter { it.amount != 0f },
         negativePayers = negativePayers.filter { it.amount != 0f },
