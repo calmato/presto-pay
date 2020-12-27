@@ -77,7 +77,7 @@ class AddPaymentStep1Fragment : Fragment() {
     viewModel.paymentInfo?.let {
       paymentName.setText(it.name)
       amount.setText(it.total.toString())
-      currency.text = it.currency
+      currency.text = it.currency.toUpperCase()
     }
     paymentName.setOnFocusChangeListener { view, b ->
       if(b){

@@ -75,7 +75,8 @@ class AddPaymentStep4Fragment : PermissionBase() {
       // 支払い編集時はここに来る
       // 日付
       inflateDate(payment.paidAt)
-      viewModel.setPaidAt(payment.paidAt)
+      val monthDate = calendarDate.text.split("-", " ")
+      viewModel.setPaidAt("${calendarYear.text}-${monthDate[0]}-${monthDate[1]} 00:00:00")
       calendar.visibility = ImageView.INVISIBLE
       calendarYear.visibility = TextView.VISIBLE
       calendarDate.visibility = TextView.VISIBLE
