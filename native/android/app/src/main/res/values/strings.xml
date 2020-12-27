@@ -181,6 +181,7 @@
   <string name="pass_at_least_6">6文字以上のパスワードを設定してください</string>
   <string name="prestoPayList">貸し借りのあるグループ一覧</string>
   <string name="next_step">次へ</string>
+  <string name="turn_off_air_plane_mode">機内モードをオフにしてくだい</string>
   <string-array name="currency_array">
     <item>jpy</item>
     <item>usd</item>
