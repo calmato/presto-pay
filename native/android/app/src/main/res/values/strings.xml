@@ -1,12 +1,4 @@
 <resources>
-  <string name="twitter_consumer_key" translatable="false">OAMOPD8qs87lILvuu2JGEHuFU</string>
-  <string name="twitter_consumer_secret" translatable="false">uuliUQSaxLZygMafGCzPE3xXLfY2RZrL26wmwSkNwHgFHV3Ab4</string>
-  <string name="facebook_app_id">583814478990192</string>
-  <string name="fb_login_protocol_scheme">fb583814478990192</string>
-  <!-- 本番環境のfacebookの設定
-  <string name="facebook_app_id">364100511683446</string>
-  <string name="fb_login_protocol_scheme">fb364100511683446</string>
-  -->
   <string name="app_name">PrestoPay</string>
   <string name="create_new_account">アカウントを作成</string>
   <string name="already_has_an_account" translatable="false">既にアカウントをお持ちの方</string>

@@ -76,7 +76,7 @@ func (pa *paymentApplication) Index(
 		return nil, nil, "", err
 	}
 
-	// 為替レート一覧のmapを作成
+	// 為替レート一覧のmapを作成 -> KeyはUpperケースでくる
 	ers, err := pa.exchangeService.Index(ctx)
 	if err != nil {
 		return nil, nil, "", err
@@ -96,7 +96,8 @@ func (pa *paymentApplication) Index(
 		}
 
 		// 支払い情報に登録されている通貨情報を取得
-		currentRate := ers.Rates[p.Currency]
+		pc := strings.ToUpper(p.Currency)
+		currentRate := ers.Rates[pc]
 		if currentRate == 0 {
 			currentRate = ers.Rates[ers.Base]
 		}
@@ -127,7 +128,7 @@ func (pa *paymentApplication) Index(
 		}
 	}
 
-	return ps, pys, currency, err
+	return ps, pys, strings.ToLower(currency), err
 }
 
 func (pa *paymentApplication) Create(

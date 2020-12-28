@@ -65,7 +65,7 @@ GCP_STORAGE_BUCKET_NAME=xxxxxx.appspot.com
 
 * secretディレクトリのファイルを.envへ書き込み
 
-> $ var=$(< ./secrets/[ファイル名])
+> $ var=$(jq -c < ./secrets/[ファイル名])
 
 > $ sed -i -e "/^GCP_SERVICE_KEY_JSON=.*/d" .env
 
