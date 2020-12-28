@@ -113,7 +113,7 @@ fun TextView.setPaymentAmount(amount:Float,currency:String){
           setTextColor(resources.getColor(R.color.clearButtonPressed,null))
         }
     }
-    val output = it.toString() + currency
+    val output = it.toString() + currency.toUpperCase()
     text = output
   }
 }
@@ -225,10 +225,10 @@ fun TextView.setSettleUpUserName(item:NetworkPayer?){
 fun TextView.setSettleUpAmount(item:NetworkPayer?){
   item?.let {
     if (it.amount <= 0){
-      this.text = "${item.name}から${round(item.amount.absoluteValue).toInt()}${MainActivity.currency.toUpperCase(
+      this.text = "${item.name}から${round(item.amount.absoluteValue * 100)/100}${MainActivity.currency.toUpperCase(
         Locale.ROOT)}受け取る"
     } else{
-      this.text = "${item.name}に${round(item.amount).toInt()}${MainActivity.currency.toUpperCase(Locale.ROOT)}返す"
+      this.text = "${item.name}に${round(item.amount * 100)/100}${MainActivity.currency.toUpperCase(Locale.ROOT)}返す"
     }
   }
 }

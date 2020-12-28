@@ -53,7 +53,7 @@ class PaymentDetailFragment : PermissionBase() {
       }
     }
     expenseName.text = paymentDetail.name
-    amount.text = paymentDetail.total.toString().plus(" ").plus(paymentDetail.currency)
+    amount.text = paymentDetail.total.toString().plus(" ").plus(paymentDetail.currency.toUpperCase())
     comment.text = paymentDetail.comment
     val nonzeroPayers = paymentDetail.payers.filter { it.amount != 0f }
     inflateGraph(
