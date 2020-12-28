@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.ProgressBar
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -24,6 +25,7 @@ import work.calmato.prestopay.database.getAppDatabase
 import work.calmato.prestopay.databinding.FragmentAccountHomeBindingImpl
 import work.calmato.prestopay.repository.FriendsRepository
 import work.calmato.prestopay.repository.GroupsRepository
+import work.calmato.prestopay.util.isOnline
 
 class AccountHomeFragment : Fragment() {
   private lateinit var sharedPreferences: SharedPreferences
@@ -86,16 +88,24 @@ class AccountHomeFragment : Fragment() {
   }
 
   private fun showAlertDialog() {
-    val builder = AlertDialog.Builder(requireContext())
-    builder.setTitle(resources.getString(R.string.logout))
-    builder.setMessage(resources.getString(R.string.logout_confirmation))
-    builder.setPositiveButton(resources.getString(R.string.yes)) { _, _ ->
-      logout()
+    if (isOnline(requireContext())) {
+      val builder = AlertDialog.Builder(requireContext())
+      builder.setTitle(resources.getString(R.string.logout))
+      builder.setMessage(resources.getString(R.string.logout_confirmation))
+      builder.setPositiveButton(resources.getString(R.string.yes)) { _, _ ->
+        logout()
+      }
+      builder.setNegativeButton(resources.getString(R.string.no)) { _, _ ->
+      }
+      val dialog: AlertDialog = builder.create()
+      dialog.show()
+    } else {
+      Toast.makeText(
+        requireContext(),
+        resources.getString(R.string.bad_internet_connection),
+        Toast.LENGTH_LONG
+      ).show()
     }
-    builder.setNegativeButton(resources.getString(R.string.no)) { _, _ ->
-    }
-    val dialog: AlertDialog = builder.create()
-    dialog.show()
   }
 
   private fun logout() {

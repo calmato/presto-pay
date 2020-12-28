@@ -336,17 +336,11 @@ class ViewModelAddPayment(application: Application) : AndroidViewModel(applicati
             _navigateToGroupDetail.value = groupInfo
             _nowLoading.value = false
           } else {
-            Toast.makeText(
-              getApplication(),
-              response.message(),
-              Toast.LENGTH_LONG
-            ).show()
             _nowLoading.value = false
           }
         }
 
         override fun onFailure(call: Call<Unit>, t: Throwable) {
-          Toast.makeText(getApplication(), t.message, Toast.LENGTH_LONG).show()
           Log.i("ViewModelAddPayment", "onFailure: ${t.message}")
           _nowLoading.value = false
         }

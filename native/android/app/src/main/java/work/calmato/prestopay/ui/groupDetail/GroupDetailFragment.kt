@@ -197,6 +197,9 @@ class GroupDetailFragment : Fragment() {
         }
       }
     )
+    if(!isOnline(requireContext())){
+      countryImageView.isEnabled = false
+    }
   }
 
   private fun getSwipeToDismissTouchHelper() =
@@ -233,18 +236,23 @@ class GroupDetailFragment : Fragment() {
                   call: Call<Unit>,
                   response: Response<Unit>
                 ) {
-                  Log.d(ViewModelGroup.TAG, response.body().toString())
-                  viewModel.deletePayment(
-                    payments!![viewHolder.adapterPosition].id
-                  )
+                  if(response.isSuccessful) {
+                    Log.d(ViewModelGroup.TAG, response.body().toString())
+                    viewModel.deletePayment(
+                      payments!![viewHolder.adapterPosition].id
+                    )
+                  } else {
+                    Toast.makeText(activity, resources.getString(R.string.failed_delete_payment), Toast.LENGTH_LONG).show()
+                  }
                   frontView.visibility = ImageView.GONE
                   progressBar.visibility = android.widget.ProgressBar.INVISIBLE
                 }
 
                 override fun onFailure(call: Call<Unit>, t: Throwable) {
-                  Toast.makeText(activity, t.message, Toast.LENGTH_LONG).show()
+                  Toast.makeText(activity, resources.getString(R.string.failed_delete_payment), Toast.LENGTH_LONG).show()
                   Log.d(ViewModelGroup.TAG, t.message ?: "No message")
                   frontView.visibility = ImageView.GONE
+                  progressBar.visibility = android.widget.ProgressBar.INVISIBLE
                 }
               })
           }

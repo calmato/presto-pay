@@ -52,6 +52,7 @@ import work.calmato.prestopay.repository.GroupsRepository
 import work.calmato.prestopay.repository.NationalFlagsRepository
 import work.calmato.prestopay.repository.TagRepository
 import work.calmato.prestopay.util.ViewModelUser
+import work.calmato.prestopay.util.isOnline
 
 
 class LoginFragment : Fragment() {
@@ -79,94 +80,104 @@ class LoginFragment : Fragment() {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
-    loginNewText.setOnClickListener {
-      this.findNavController().navigate(
-        LoginFragmentDirections.actionLoginFragmentToNewAccountFragment()
-      )
-    }
+    if (isOnline(requireContext())) {
+      loginNewText.setOnClickListener {
+        this.findNavController().navigate(
+          LoginFragmentDirections.actionLoginFragmentToNewAccountFragment()
+        )
+      }
 
-    auth = FirebaseAuth.getInstance()
+      auth = FirebaseAuth.getInstance()
 
-    //Google Oauth
-    val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-      .requestIdToken(getString(R.string.default_web_client_id))
-      .requestEmail()
-      .build()
+      //Google Oauth
+      val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+        .requestIdToken(getString(R.string.default_web_client_id))
+        .requestEmail()
+        .build()
 
-    googleSignInClient = GoogleSignIn.getClient(requireContext(), gso)
+      googleSignInClient = GoogleSignIn.getClient(requireContext(), gso)
 
 
-    //Facebook Oauth
-    facebookSingin?.setOnClickListener {
-      callbackManager = CallbackManager.Factory.create()
-      LoginManager.getInstance()
-        .logInWithReadPermissions(this, listOf("public_profile", "email"))
+      //Facebook Oauth
+      facebookSingin?.setOnClickListener {
+        callbackManager = CallbackManager.Factory.create()
+        LoginManager.getInstance()
+          .logInWithReadPermissions(this, listOf("public_profile", "email"))
 
-      LoginManager.getInstance().registerCallback(callbackManager,
-        object : FacebookCallback<LoginResult> {
-          override fun onSuccess(result: LoginResult?) {
-            Log.d(FACEBOOK_TAG, "facebook:onSuccess:$result")
-            if (result != null) {
-              handleFacebookAccessToken(result.accessToken)
-            } else {
-              Toast.makeText(
-                requireContext(), resources.getString(R.string.authorization_failed),
-                Toast.LENGTH_SHORT
-              ).show()
+        LoginManager.getInstance().registerCallback(callbackManager,
+          object : FacebookCallback<LoginResult> {
+            override fun onSuccess(result: LoginResult?) {
+              Log.d(FACEBOOK_TAG, "facebook:onSuccess:$result")
+              if (result != null) {
+                handleFacebookAccessToken(result.accessToken)
+              } else {
+                Toast.makeText(
+                  requireContext(), resources.getString(R.string.authorization_failed),
+                  Toast.LENGTH_SHORT
+                ).show()
+              }
             }
-          }
 
-          override fun onCancel() {
-            Log.d(FACEBOOK_TAG, "facebook:onCancel")
-            updateUI(null, false)
-          }
+            override fun onCancel() {
+              Log.d(FACEBOOK_TAG, "facebook:onCancel")
+              updateUI(null, false)
+            }
 
-          override fun onError(error: FacebookException?) {
-            Log.d(FACEBOOK_TAG, "facebook:onError", error)
-            updateUI(null, false)
-          }
-        })
-    }
-
-    //email password sign in
-    loginButton.setOnClickListener {
-      defaultSignIn(
-        loginEmailField.text.toString(),
-        loginPasswordField.text.toString()
-      )
-    }
-
-    googleSingnin.setOnClickListener {
-      googleSignIn()
-    }
-
-    //Auth check
-    val value = sharedPreferences.getString("token", null)
-    Log.d(DEFAULT_TAG, "token default: $value")
-
-    loginForgetText.setOnClickListener {
-      this.findNavController().navigate(
-        LoginFragmentDirections.actionLoginFragmentToResetPassFragment()
-      )
-    }
-    twitterSingnIn.setOnClickListener {
-      firebaseAuthWithTwitter()
-    }
-
-    setSharedPreferenceFlag.observe(viewLifecycleOwner, Observer {
-      if (it) {
-        MainActivity.currency = sharedPreferences.getString("currency", "JPY")!!
-        navigateToHome()
+            override fun onError(error: FacebookException?) {
+              Log.d(FACEBOOK_TAG, "facebook:onError", error)
+              updateUI(null, false)
+            }
+          })
       }
-    })
 
-    requireActivity().onBackPressedDispatcher.addCallback(
-      viewLifecycleOwner,
-      object : OnBackPressedCallback(true) {
-        override fun handleOnBackPressed() {
+      //email password sign in
+      loginButton.setOnClickListener {
+        defaultSignIn(
+          loginEmailField.text.toString(),
+          loginPasswordField.text.toString()
+        )
+      }
+
+      googleSingnin.setOnClickListener {
+        googleSignIn()
+      }
+
+      //Auth check
+      val value = sharedPreferences.getString("token", null)
+      Log.d(DEFAULT_TAG, "token default: $value")
+
+      loginForgetText.setOnClickListener {
+        this.findNavController().navigate(
+          LoginFragmentDirections.actionLoginFragmentToResetPassFragment()
+        )
+      }
+      twitterSingnIn.setOnClickListener {
+        firebaseAuthWithTwitter()
+      }
+
+      setSharedPreferenceFlag.observe(viewLifecycleOwner, Observer {
+        if (it) {
+          MainActivity.currency = sharedPreferences.getString("currency", "JPY")!!
+          navigateToHome()
         }
-      }
-    )
+      })
+
+      requireActivity().onBackPressedDispatcher.addCallback(
+        viewLifecycleOwner,
+        object : OnBackPressedCallback(true) {
+          override fun handleOnBackPressed() {
+          }
+        }
+      )
+    } else {
+      Toast.makeText(
+        requireContext(),
+        resources.getString(R.string.turn_off_air_plane_mode),
+        Toast.LENGTH_LONG
+      ).show()
+      MainActivity.currency = sharedPreferences.getString("currency", "JPY")!!
+      navigateToHome()
+    }
   }
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
