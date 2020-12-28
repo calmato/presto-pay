@@ -53,7 +53,7 @@ class PaymentDetailFragment : PermissionBase() {
       }
     }
     expenseName.text = paymentDetail.name
-    amount.text = paymentDetail.total.toString().plus(" ").plus(paymentDetail.currency)
+    amount.text = paymentDetail.total.toString().plus(" ").plus(paymentDetail.currency.toUpperCase())
     comment.text = paymentDetail.comment
     val nonzeroPayers = paymentDetail.payers.filter { it.amount != 0f }
     inflateGraph(
@@ -100,6 +100,7 @@ class PaymentDetailFragment : PermissionBase() {
         }
 
         override fun onFailure(call: Call<Unit>, t: Throwable) {
+          Toast.makeText(requireContext(), "精算登録に失敗しました", Toast.LENGTH_LONG).show()
           progressBarPaymentDetail.visibility = ProgressBar.GONE
           frontViewPaymentDetail.visibility = ImageView.GONE
         }

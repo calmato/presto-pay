@@ -1,6 +1,7 @@
 package work.calmato.prestopay.util
 
 import android.app.Application
+import android.content.res.Resources
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.*
@@ -130,7 +131,7 @@ class ViewModelFriendGroup(application: Application) : AndroidViewModel(applicat
         _usersList.value = _usersList.value?.filter { it != userProperty }
         _nowLoading.value = false
       } catch (e: java.lang.Exception) {
-        Toast.makeText(getApplication(), e.message, Toast.LENGTH_LONG).show()
+        Toast.makeText(getApplication(), getApplication<Application>().resources.getString(R.string.failed_add_friend), Toast.LENGTH_LONG).show()
         _nowLoading.value = false
       }
     }
@@ -141,7 +142,11 @@ class ViewModelFriendGroup(application: Application) : AndroidViewModel(applicat
     Api.retrofitService.createGroup("Bearer $id", groupProperty)
       .enqueue(object : Callback<GroupPropertyResponse> {
         override fun onFailure(call: Call<GroupPropertyResponse>, t: Throwable) {
-          Toast.makeText(getApplication(), t.message, Toast.LENGTH_LONG).show()
+          Toast.makeText(
+            getApplication(),
+            getApplication<Application>().resources.getString(R.string.create_group_failed),
+            Toast.LENGTH_LONG
+          ).show()
           _nowLoading.value = false
         }
 

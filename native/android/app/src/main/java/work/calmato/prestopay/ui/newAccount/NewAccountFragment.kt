@@ -110,7 +110,7 @@ class NewAccountFragment : PermissionBase() {
               override fun onFailure(call: Call<AccountResponse>, t: Throwable) {
                 progressBarNewAccount.visibility = ProgressBar.GONE
                 frontViewNewAccount.visibility = ImageView.GONE
-                Toast.makeText(activity, t.message, Toast.LENGTH_LONG).show()
+                Toast.makeText(activity, resources.getString(R.string.failed_create_account), Toast.LENGTH_LONG).show()
               }
 
               override fun onResponse(
@@ -128,25 +128,11 @@ class NewAccountFragment : PermissionBase() {
                     .show()
                   navigateToLogin()
                 } else {
-                  try {
-                    val jObjError =
-                      JSONObject(response.errorBody()?.string()!!).getJSONArray("errors")
-                    for (i in 0 until jObjError.length()) {
-                      val errorMessage =
-                        jObjError.getJSONObject(i)
-                          .getString("field") + " " + jObjError.getJSONObject(
-                          i
-                        )
-                          .getString("message")
-                      Toast.makeText(activity, errorMessage, Toast.LENGTH_LONG).show()
-                    }
-                  } catch (e: Exception) {
-                    Toast.makeText(
-                      activity,
-                      resources.getString(R.string.failed_create_account),
-                      Toast.LENGTH_LONG
-                    ).show()
-                  }
+                  Toast.makeText(
+                    activity,
+                    resources.getString(R.string.failed_create_account),
+                    Toast.LENGTH_LONG
+                  ).show()
                   progressBarNewAccount.visibility = ProgressBar.GONE
                   frontViewNewAccount.visibility = ImageView.GONE
                 }

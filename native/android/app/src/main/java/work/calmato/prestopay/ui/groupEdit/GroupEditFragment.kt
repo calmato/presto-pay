@@ -111,7 +111,10 @@ class GroupEditFragment : PermissionBase() {
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
+    if(!isOnline(requireContext())){
+      Toast.makeText(requireContext(),resources.getString(R.string.bad_internet_connection),Toast.LENGTH_LONG).show()
+      goBackScreen()
+    }
     groupEditAddFriend.setOnClickListener {
       this.findNavController().navigate(
         GroupEditFragmentDirections.actionGroupEditFragmentToGroupEditAddFriend(groupDetail)
@@ -232,7 +235,7 @@ class GroupEditFragment : PermissionBase() {
       Api.retrofitService.addHiddenGroup("Bearer $id", groupId)
         .enqueue(object : Callback<HiddenGroups> {
           override fun onFailure(call: Call<HiddenGroups>, t: Throwable) {
-            Toast.makeText(activity, t.message, Toast.LENGTH_LONG).show()
+            Toast.makeText(activity, "グループ情報を変更できませんでした", Toast.LENGTH_LONG).show()
             Log.d(TAG, t.message ?: "No message")
             viewChange()
           }
@@ -255,7 +258,7 @@ class GroupEditFragment : PermissionBase() {
       Api.retrofitService.deleteHiddenGroup("Bearer $id", groupId)
         .enqueue(object : Callback<HiddenGroups> {
           override fun onFailure(call: Call<HiddenGroups>, t: Throwable) {
-            Toast.makeText(activity, t.message, Toast.LENGTH_LONG).show()
+            Toast.makeText(activity,"グループ情報を変更できませんでした", Toast.LENGTH_LONG).show()
             Log.d(TAG, t.message ?: "No message")
             viewChange()
           }

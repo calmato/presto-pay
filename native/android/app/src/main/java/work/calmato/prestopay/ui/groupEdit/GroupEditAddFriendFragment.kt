@@ -146,7 +146,7 @@ class GroupEditAddFriendFragment : Fragment() {
       )
         .enqueue(object : Callback<GroupPropertyResponse> {
           override fun onFailure(call: Call<GroupPropertyResponse>, t: Throwable) {
-            Toast.makeText(activity, t.message, Toast.LENGTH_LONG).show()
+            Toast.makeText(activity, "グループに友達を追加できませんでした", Toast.LENGTH_LONG).show()
             doneButton.isEnabled = true
             progressBarGroupEditAddFriend.visibility = ProgressBar.GONE
             frontViewgroupEditAddFriend.visibility = ImageView.GONE

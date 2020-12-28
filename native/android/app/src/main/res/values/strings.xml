@@ -173,6 +173,10 @@
   <string name="pass_at_least_6">6文字以上のパスワードを設定してください</string>
   <string name="prestoPayList">貸し借りのあるグループ一覧</string>
   <string name="next_step">次へ</string>
+  <string name="turn_off_air_plane_mode">オフラインモードで実行します。\n通信をするにはアプリを再起動してください</string>
+  <string name="failed_delete_payment">支払い削除に失敗しました</string>
+  <string name="failed_change_pass">パスワードの変更に失敗しました</string>
+  <string name="failed_add_friend">友だち追加に失敗しました</string>
   <string-array name="currency_array">
     <item>jpy</item>
     <item>usd</item>

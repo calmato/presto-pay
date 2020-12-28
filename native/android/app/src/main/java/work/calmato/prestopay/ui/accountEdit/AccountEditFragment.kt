@@ -82,7 +82,7 @@ class AccountEditFragment : PermissionBase() {
     return super.onOptionsItemSelected(item)
   }
 
-  private fun sendRequest(item:MenuItem) {
+  private fun sendRequest(item: MenuItem) {
     //保存buttonを押した時の処理を記述
     val thumbnails = encodeImage2Base64(thumbnailEdit)
     val name: String = nameEditText.text.toString()
@@ -100,7 +100,11 @@ class AccountEditFragment : PermissionBase() {
           item.isEnabled = true
           progressBarAccountEdit.visibility = ProgressBar.GONE
           frontViewAccountEdit.visibility = ImageView.GONE
-          Toast.makeText(activity, t.message, Toast.LENGTH_LONG).show()
+          Toast.makeText(
+            activity,
+            resources.getString(R.string.failed_to_change_account_information),
+            Toast.LENGTH_LONG
+          ).show()
         }
 
         override fun onResponse(
@@ -116,27 +120,15 @@ class AccountEditFragment : PermissionBase() {
             editor.apply()
             navigateToAccountHome()
           } else {
-            try {
-              val jObjError = JSONObject(response.errorBody()?.string()?:"Failed").getJSONArray("errors")
-              for (i in 0 until jObjError.length()) {
-                val errorMessage =
-                  jObjError.getJSONObject(i).getString("field") + " " + jObjError.getJSONObject(
-                    i
-                  )
-                    .getString("message")
-                Toast.makeText(activity, errorMessage, Toast.LENGTH_LONG).show()
-              }
-            } catch (e: Exception) {
-              Toast.makeText(
-                activity,
-                resources.getString(R.string.failed_to_change_account_information),
-                Toast.LENGTH_LONG
-              ).show()
-            }
-            item.isEnabled = true
-            progressBarAccountEdit.visibility = ProgressBar.GONE
-            frontViewAccountEdit.visibility = ImageView.GONE
+            Toast.makeText(
+              activity,
+              resources.getString(R.string.failed_to_change_account_information),
+              Toast.LENGTH_LONG
+            ).show()
           }
+          item.isEnabled = true
+          progressBarAccountEdit.visibility = ProgressBar.GONE
+          frontViewAccountEdit.visibility = ImageView.GONE
         }
       })
     } else {

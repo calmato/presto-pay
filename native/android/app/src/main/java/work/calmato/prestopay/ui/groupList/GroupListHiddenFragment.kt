@@ -130,16 +130,23 @@ class GroupListHiddenFragment : Fragment() {
                   call: Call<Unit>,
                   response: Response<Unit>
                 ) {
-                  Log.d(ViewModelGroup.TAG, response.body().toString())
-                  renderGroupListView()
-                  frontView.visibility = ImageView.GONE
-                  progressBar.visibility = android.widget.ProgressBar.INVISIBLE
+                  if(response.isSuccessful){
+                    Log.d(ViewModelGroup.TAG, response.body().toString())
+                    renderGroupListView()
+                    frontView.visibility = ImageView.GONE
+                    progressBar.visibility = android.widget.ProgressBar.INVISIBLE
+                  } else {
+                    Toast.makeText(activity, resources.getString(R.string.delete_group_failed), Toast.LENGTH_LONG).show()
+                    frontView.visibility = ImageView.GONE
+                    progressBar.visibility = android.widget.ProgressBar.INVISIBLE
+                  }
                 }
 
                 override fun onFailure(call: Call<Unit>, t: Throwable) {
-                  Toast.makeText(activity, t.message, Toast.LENGTH_LONG).show()
-                  Log.d(ViewModelGroup.TAG, t.message ?: "No message")
+                  Toast.makeText(activity, resources.getString(R.string.delete_group_failed), Toast.LENGTH_LONG).show()
+                  Log.d(ViewModelGroup.TAG, resources.getString(R.string.delete_group_failed))
                   frontView.visibility = ImageView.GONE
+                  progressBar.visibility = android.widget.ProgressBar.INVISIBLE
                 }
               })
           }

@@ -99,7 +99,7 @@ class UpdatePassLoginFragment : Fragment() {
                 } else {
                   Toast.makeText(
                     requireContext(),
-                    it.exception!!.message.toString(),
+                    resources.getString(R.string.failed_change_pass),
                     Toast.LENGTH_LONG
                   )
                     .show()

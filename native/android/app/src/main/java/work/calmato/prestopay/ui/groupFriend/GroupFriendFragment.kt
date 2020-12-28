@@ -91,7 +91,7 @@ class GroupFriendFragment : Fragment() {
     clickListener = AdapterFriendPlane.OnClickListener { viewModel.itemIsClicked(it) }
     clickListenerGroup = AdapterGroupPlane.OnClickListener { viewModel.itemIsClickedGroup(it) }
     recycleAdapter = AdapterFriendPlane(clickListener)
-    recycleGroupAdapter = AdapterGroupPlane(clickListenerGroup,requireActivity(),false)
+    recycleGroupAdapter = AdapterGroupPlane(clickListenerGroup, requireActivity(), false)
     binding.friendsRecycleView.apply {
       layoutManager = LinearLayoutManager(context)
       adapter = recycleAdapter
@@ -205,18 +205,25 @@ class GroupFriendFragment : Fragment() {
                   call: Call<Unit>,
                   response: Response<Unit>
                 ) {
-                  Log.d(ViewModelGroup.TAG, response.body().toString())
-                  viewModel.deleteGroup(
-                    groups!![viewHolder.adapterPosition].id
-                  )
-                  frontView.visibility = ImageView.GONE
-                  progressBar.visibility = android.widget.ProgressBar.INVISIBLE
+                  if(response.isSuccessful) {
+                    Log.d(ViewModelGroup.TAG, response.body().toString())
+                    viewModel.deleteGroup(
+                      groups!![viewHolder.adapterPosition].id
+                    )
+                    frontView.visibility = ImageView.GONE
+                    progressBar.visibility = android.widget.ProgressBar.INVISIBLE
+                  } else {
+                    Toast.makeText(activity, resources.getString(R.string.delete_group_failed), Toast.LENGTH_LONG).show()
+                    frontView.visibility = ImageView.GONE
+                    progressBar.visibility = android.widget.ProgressBar.INVISIBLE
+                  }
                 }
 
                 override fun onFailure(call: Call<Unit>, t: Throwable) {
-                  Toast.makeText(activity, t.message, Toast.LENGTH_LONG).show()
+                  Toast.makeText(activity, resources.getString(R.string.delete_group_failed), Toast.LENGTH_LONG).show()
                   Log.d(ViewModelGroup.TAG, t.message ?: "No message")
                   frontView.visibility = ImageView.GONE
+                  progressBar.visibility = android.widget.ProgressBar.INVISIBLE
                 }
               })
           }
@@ -304,18 +311,31 @@ class GroupFriendFragment : Fragment() {
                   call: Call<AccountResponse>,
                   response: Response<AccountResponse>
                 ) {
-                  Log.d(ViewModelGroup.TAG, response.body().toString())
-                  viewModel.deleteFriendSwipe(
-                    friends!![viewHolder.adapterPosition].id
-                  )
-                  frontView.visibility = ImageView.GONE
-                  progressBar.visibility = android.widget.ProgressBar.INVISIBLE
+                  if (response.isSuccessful) {
+                    viewModel.deleteFriendSwipe(
+                      friends!![viewHolder.adapterPosition].id
+                    )
+                    frontView.visibility = ImageView.GONE
+                    progressBar.visibility = android.widget.ProgressBar.INVISIBLE
+                  } else {
+                    Toast.makeText(
+                      activity,
+                      resources.getString(R.string.delete_friend_failed),
+                      Toast.LENGTH_LONG
+                    ).show()
+                    frontView.visibility = ImageView.GONE
+                    progressBar.visibility = android.widget.ProgressBar.INVISIBLE
+                  }
                 }
 
                 override fun onFailure(call: Call<AccountResponse>, t: Throwable) {
-                  Toast.makeText(activity, t.message, Toast.LENGTH_LONG).show()
-                  Log.d(ViewModelGroup.TAG, t.message ?: "No message")
+                  Toast.makeText(
+                    activity,
+                    resources.getString(R.string.delete_friend_failed),
+                    Toast.LENGTH_LONG
+                  ).show()
                   frontView.visibility = ImageView.GONE
+                  progressBar.visibility = android.widget.ProgressBar.INVISIBLE
                 }
               })
           }

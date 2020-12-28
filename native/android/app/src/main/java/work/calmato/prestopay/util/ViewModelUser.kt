@@ -20,7 +20,7 @@ class ViewModelUser(application: Application) : AndroidViewModel(application) {
       .registerDeviceId(token, registerDeviceIdProperty)
       .enqueue(object : Callback<AccountResponse> {
         override fun onFailure(call: Call<AccountResponse>, t: Throwable) {
-          Toast.makeText(getApplication(), t.message, Toast.LENGTH_LONG).show()
+          Log.i("TAG", t.message ?: "")
         }
 
         override fun onResponse(call: Call<AccountResponse>, response: Response<AccountResponse>) {
