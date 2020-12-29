@@ -28,19 +28,18 @@ class AdapterGroupPlane(
       val rawData = value.toMutableList()
       if (!isHidden) {
         val size = value.size
-        val divideNum = 6
-        for (i in 1..size / divideNum) {
+        val adIdx = 4
+        if (size < adIdx) {
           rawData.add(
-            i * divideNum, GroupPropertyResponse(
+            GroupPropertyResponse(
               "", "", "", listOf(), "", "",
               selected = true,
               isHidden = false
             )
           )
-        }
-        if (size < divideNum) {
+        } else {
           rawData.add(
-            GroupPropertyResponse(
+            adIdx, GroupPropertyResponse(
               "", "", "", listOf(), "", "",
               selected = true,
               isHidden = false
