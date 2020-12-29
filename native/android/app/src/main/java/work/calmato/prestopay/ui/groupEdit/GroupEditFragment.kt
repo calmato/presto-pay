@@ -52,7 +52,6 @@ class GroupEditFragment : PermissionBase() {
         Api.retrofitService.getGroupDetail("Bearer $id", getGroupInfo!!.id)
           .enqueue(object : Callback<GetGroupDetail> {
             override fun onFailure(call: Call<GetGroupDetail>, t: Throwable) {
-              Log.d(ViewModelGroup.TAG, t.message ?: "No message")
             }
 
             override fun onResponse(
@@ -60,7 +59,6 @@ class GroupEditFragment : PermissionBase() {
               response: Response<GetGroupDetail>
             ) {
               if (response.isSuccessful) {
-                Log.d(ViewModelGroup.TAG, response.body().toString())
                 groupDetail = response.body()
                 if (groupDetail?.thumbnailUrl!!.isNotEmpty()) {
                   Picasso.with(context).load(groupDetail!!.thumbnailUrl).into(groupThumnail)
@@ -82,7 +80,6 @@ class GroupEditFragment : PermissionBase() {
             }
           })
       } catch (e: Exception) {
-        Log.d(TAG, "debug $e")
       }
     }
     id = MainActivity.firebaseId
@@ -183,7 +180,6 @@ class GroupEditFragment : PermissionBase() {
       val editGroup = EditGroup(groupName, thumbnail, groupDetail!!.users.map { it.id })
       execute(editGroup, getGroupInfo!!.id)
     } catch (e: IOException) {
-      Log.d(TAG, "debug $e")
     }
   }
 
@@ -230,13 +226,11 @@ class GroupEditFragment : PermissionBase() {
 
   private fun hiddenCheck(groupId: String) {
     val mSwitch: Switch = hiddenSwitch
-    Log.d(TAG, mSwitch.toString())
     if (mSwitch.isChecked && !getGroupInfo!!.isHidden) {
       Api.retrofitService.addHiddenGroup("Bearer $id", groupId)
         .enqueue(object : Callback<HiddenGroups> {
           override fun onFailure(call: Call<HiddenGroups>, t: Throwable) {
             Toast.makeText(activity, "グループ情報を変更できませんでした", Toast.LENGTH_LONG).show()
-            Log.d(TAG, t.message ?: "No message")
             viewChange()
           }
 
@@ -259,7 +253,6 @@ class GroupEditFragment : PermissionBase() {
         .enqueue(object : Callback<HiddenGroups> {
           override fun onFailure(call: Call<HiddenGroups>, t: Throwable) {
             Toast.makeText(activity,"グループ情報を変更できませんでした", Toast.LENGTH_LONG).show()
-            Log.d(TAG, t.message ?: "No message")
             viewChange()
           }
 

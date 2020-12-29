@@ -70,7 +70,6 @@ class ViewModelFriendGroup(application: Application) : AndroidViewModel(applicat
         friendsRepository.refreshFriends(id)
         endRefreshingFriend()
       } catch (e: java.lang.Exception) {
-        Log.i(TAG, "Trying to refresh id")
         endRefreshingFriend()
       }
     }
@@ -83,7 +82,6 @@ class ViewModelFriendGroup(application: Application) : AndroidViewModel(applicat
         groupsRepository.refreshGroups(id)
         endRefreshingGroup()
       } catch (e: java.lang.Exception) {
-        Log.i(TAG, "Trying to refresh id")
         endRefreshingGroup()
       }
     }
@@ -97,7 +95,6 @@ class ViewModelFriendGroup(application: Application) : AndroidViewModel(applicat
 
   fun getUserProperties(userName: String) {
     _nowLoading.value = true
-    Log.i(TAG, "getUserProperties: $friendsList")
     coroutineScope.launch {
         try {
           val networkUsers =
@@ -193,7 +190,6 @@ class ViewModelFriendGroup(application: Application) : AndroidViewModel(applicat
           getApplication<Application>().resources.getString(R.string.delete_friend_failed),
           Toast.LENGTH_LONG
         ).show()
-        Log.i(TAG, "onResponse: ${e.message}")
       }
     }
     _nowLoading.value = false
@@ -213,7 +209,6 @@ class ViewModelFriendGroup(application: Application) : AndroidViewModel(applicat
           getApplication<Application>().resources.getString(R.string.delete_group_failed),
           Toast.LENGTH_LONG
         ).show()
-        Log.i(TAG, "onResponse: ${e.message}")
       }
     }
     _nowLoading.value = false

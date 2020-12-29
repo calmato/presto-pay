@@ -131,7 +131,6 @@ class GroupListHiddenFragment : Fragment() {
                   response: Response<Unit>
                 ) {
                   if(response.isSuccessful){
-                    Log.d(ViewModelGroup.TAG, response.body().toString())
                     renderGroupListView()
                     frontView.visibility = ImageView.GONE
                     progressBar.visibility = android.widget.ProgressBar.INVISIBLE
@@ -144,7 +143,6 @@ class GroupListHiddenFragment : Fragment() {
 
                 override fun onFailure(call: Call<Unit>, t: Throwable) {
                   Toast.makeText(activity, resources.getString(R.string.delete_group_failed), Toast.LENGTH_LONG).show()
-                  Log.d(ViewModelGroup.TAG, resources.getString(R.string.delete_group_failed))
                   frontView.visibility = ImageView.GONE
                   progressBar.visibility = android.widget.ProgressBar.INVISIBLE
                 }
@@ -207,19 +205,15 @@ class GroupListHiddenFragment : Fragment() {
       Api.retrofitService.getHiddenGroups("Bearer $id")
         .enqueue(object : Callback<HiddenGroups> {
           override fun onFailure(call: Call<HiddenGroups>, t: Throwable) {
-            Log.d(ViewModelGroup.TAG, t.message?:"No message")
           }
 
           override fun onResponse(call: Call<HiddenGroups>, response: Response<HiddenGroups>) {
-            Log.d(TAG, response.body().toString())
             hiddenGroups = response.body()
-            Log.d(TAG, hiddenGroups.toString())
             recycleGroupListAdapter?.groupList = hiddenGroups?.hiddenGroups!!
             recycleGroupListAdapter?.notifyDataSetChanged()
           }
         })
     } catch (e: Exception) {
-      Log.d(TAG, "debug $e")
     }
   }
 

@@ -38,7 +38,6 @@ class ViewModelFriend(application: Application) : AndroidViewModel(application) 
         friendsRepository.refreshFriends(id)
         endRefreshingFriend()
       } catch (e: java.lang.Exception) {
-        Log.i("ViewModelFriend", "Trying to refresh id")
         endRefreshingFriend()
       }
     }

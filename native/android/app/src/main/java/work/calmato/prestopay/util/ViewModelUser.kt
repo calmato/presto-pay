@@ -20,12 +20,10 @@ class ViewModelUser(application: Application) : AndroidViewModel(application) {
       .registerDeviceId(token, registerDeviceIdProperty)
       .enqueue(object : Callback<AccountResponse> {
         override fun onFailure(call: Call<AccountResponse>, t: Throwable) {
-          Log.i("TAG", t.message ?: "")
         }
 
         override fun onResponse(call: Call<AccountResponse>, response: Response<AccountResponse>) {
           if (!response.isSuccessful) {
-            Log.i(TAG, "There is some error on onResponse")
           }
         }
       })

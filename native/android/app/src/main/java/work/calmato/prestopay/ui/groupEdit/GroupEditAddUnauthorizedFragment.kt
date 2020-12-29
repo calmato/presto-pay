@@ -117,7 +117,6 @@ class GroupEditAddUnauthorizedFragment : PermissionBase() {
         execute(unauthorizedProperty)
 
       } catch (e: IOException) {
-        Log.d(TAG, "debug $e")
       }
     } else {
       Toast.makeText(

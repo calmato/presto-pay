@@ -236,7 +236,6 @@ fun TextView.setSettleUpAmount(item:NetworkPayer?){
 @BindingAdapter("settleUpChild")
 fun RecyclerView.inflateSettleUp(item:NetworkPayerContainer?){
   item?.let {
-    Log.i("BindingUtil", "inflateSettleUp: ${it.payers}")
     val recyclerAdapter = AdapterSettleUpChild(it.payers)
     this.apply {
       layoutManager = LinearLayoutManager(context)

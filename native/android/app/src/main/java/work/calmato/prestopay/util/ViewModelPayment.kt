@@ -61,10 +61,8 @@ class ViewModelPayment(application: Application) : AndroidViewModel(application)
     viewModelScope.launch {
       try {
         paymentRepository!!.refreshPayments(id, groupId)
-        Log.i("ViewModelPayment", "setInitPaymentList: ${paymentRepository!!.payments.value}")
         endRefreshing()
       } catch (e: java.lang.Exception) {
-        Log.i("ViewModelPayment", "setInitPaymentList: ${e.message}")
         endRefreshing()
       }
     }
@@ -84,7 +82,6 @@ class ViewModelPayment(application: Application) : AndroidViewModel(application)
           getApplication<Application>().resources.getString(R.string.delete_friend_failed),
           Toast.LENGTH_LONG
         ).show()
-        Log.i(ViewModelFriendGroup.TAG, "onResponse: ${e.message}")
       }
     }
     _nowLoading.value = false

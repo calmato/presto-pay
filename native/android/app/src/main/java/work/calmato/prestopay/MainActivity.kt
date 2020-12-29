@@ -36,7 +36,6 @@ class MainActivity : AppCompatActivity() {
   }
 
   fun refreshAd() {
-    Log.i("MainActivityRefresh", "refreshAd: ")
     nativeAd?.destroy()
     // Native ad
     val adLoader = AdLoader.Builder(this, BuildConfig.AD_KEY)
@@ -50,7 +49,6 @@ class MainActivity : AppCompatActivity() {
         // AdListener callbacks like OnAdFailedToLoad, OnAdOpened, OnAdClicked and
         // so on, can be overridden here.
         override fun onAdFailedToLoad(errorCode: Int) {
-          Log.i("MainActivity", "onAdFailedToLoad: $errorCode")
         }
       })
       .withNativeAdOptions(
@@ -79,7 +77,6 @@ class MainActivity : AppCompatActivity() {
       }
       override fun onFinish() {
         try {
-          Log.i("MainActivity", "Token refreshing")
           FirebaseAuth.getInstance().currentUser?.getIdToken(true)?.addOnCompleteListener { it ->
             firebaseId = it.result.token!!
             val editor = sharedPreferences.edit()
@@ -88,7 +85,6 @@ class MainActivity : AppCompatActivity() {
           }
           firebaseIdCountDownTimer()
         } catch(e:Exception){
-          Log.i("MainActivity", "onFinish: ${e.message}")
         }
       }
     }.start()

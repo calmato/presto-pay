@@ -94,7 +94,6 @@ class GroupDetailFragment : Fragment() {
     viewModel.countryList.observe(viewLifecycleOwner, Observer {
       it?.let {
         if (it.isNotEmpty()) {
-          Log.i("groupDetail", "onViewCreated: ${it}")
           countryImageView.setBackgroundResource(it.filter { it.name.equals(MainActivity.currency,true)}[0].imageId)
         }
       }
@@ -237,7 +236,6 @@ class GroupDetailFragment : Fragment() {
                   response: Response<Unit>
                 ) {
                   if(response.isSuccessful) {
-                    Log.d(ViewModelGroup.TAG, response.body().toString())
                     viewModel.deletePayment(
                       payments!![viewHolder.adapterPosition].id
                     )
@@ -250,7 +248,6 @@ class GroupDetailFragment : Fragment() {
 
                 override fun onFailure(call: Call<Unit>, t: Throwable) {
                   Toast.makeText(activity, resources.getString(R.string.failed_delete_payment), Toast.LENGTH_LONG).show()
-                  Log.d(ViewModelGroup.TAG, t.message ?: "No message")
                   frontView.visibility = ImageView.GONE
                   progressBar.visibility = android.widget.ProgressBar.INVISIBLE
                 }

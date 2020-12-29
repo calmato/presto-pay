@@ -151,7 +151,6 @@ class EquallyDivideFragment(val position: Int,private val step:Int) : Fragment()
                 amountList[index].amount = 0f
               }
             }
-            Log.i("AddPaymentStep", "onViewCreated: $amountList")
             recycleAdapterCheck.amounts = amountList.map { it.amount }
           })
           recyckerViewPager.apply {
@@ -164,7 +163,6 @@ class EquallyDivideFragment(val position: Int,private val step:Int) : Fragment()
               if (step == STEP2) {
                 viewModel.setLendersList(recycleAdapterCheck.amounts)
                 navigateToStep3()
-                Log.i("AddPaymentStep", "onViewCreated: ${viewModel.payersAddPayment.value!!}")
               } else if (step == STEP3) {
                 viewModel.setBorrowersList(recycleAdapterCheck.amounts)
                 navigateToStep4()
@@ -215,7 +213,6 @@ class EquallyDivideFragment(val position: Int,private val step:Int) : Fragment()
               if (step== STEP2){
                 viewModel.setLendersList(recycleAdapterInputAmount2.amounts)
                 navigateToStep3()
-                Log.i("AddPaymentStep", "onViewCreated: ${viewModel.payersAddPayment.value!!}")
               }else if(step== STEP3){
                 viewModel.setBorrowersList(recycleAdapterInputAmount2.amounts)
                 navigateToStep4()
@@ -263,7 +260,6 @@ class EquallyDivideFragment(val position: Int,private val step:Int) : Fragment()
                 //ViewModel内の支払いデータに反映
                 viewModel.setLendersList(recycleAdapterInputAmount3.amounts.map { it * viewModel.total.value!! / 100 })
                 navigateToStep3()
-                Log.i("AddPaymentStep", "onViewCreated: ${recycleAdapterInputAmount3.amounts}")
               }else if(step== STEP3){
                 viewModel.setBorrowersList(recycleAdapterInputAmount3.amounts.map { it * viewModel.total.value!! / 100 })
                 navigateToStep4()

@@ -44,7 +44,6 @@ class ViewModelGroup(application: Application) : AndroidViewModel(application) {
         startRefreshing()
         groupsRepository.refreshGroups(id)
       } catch (e: java.lang.Exception) {
-        Log.i(TAG, "${e.message}")
         endRefreshing()
       }
     }

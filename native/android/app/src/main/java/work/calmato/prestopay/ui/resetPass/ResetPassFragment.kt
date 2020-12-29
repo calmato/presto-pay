@@ -42,7 +42,6 @@ class ResetPassFragment : Fragment() {
               ResetPassFragmentDirections.actionResetPassFragmentToMailCheckFragment()
             )
           } else {
-            Log.d("Reset password", "Email is not sent")
             Toast.makeText(requireContext(), "メールを送れませんでした", Toast.LENGTH_SHORT).show()
           }
           progressBarRestPass.visibility= ProgressBar.GONE

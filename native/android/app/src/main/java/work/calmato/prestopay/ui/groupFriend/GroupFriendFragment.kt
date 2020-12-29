@@ -206,7 +206,6 @@ class GroupFriendFragment : Fragment() {
                   response: Response<Unit>
                 ) {
                   if(response.isSuccessful) {
-                    Log.d(ViewModelGroup.TAG, response.body().toString())
                     viewModel.deleteGroup(
                       groups!![viewHolder.adapterPosition].id
                     )
@@ -221,7 +220,6 @@ class GroupFriendFragment : Fragment() {
 
                 override fun onFailure(call: Call<Unit>, t: Throwable) {
                   Toast.makeText(activity, resources.getString(R.string.delete_group_failed), Toast.LENGTH_LONG).show()
-                  Log.d(ViewModelGroup.TAG, t.message ?: "No message")
                   frontView.visibility = ImageView.GONE
                   progressBar.visibility = android.widget.ProgressBar.INVISIBLE
                 }
